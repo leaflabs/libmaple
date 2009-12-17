@@ -1,0 +1,675 @@
+Archive member included because of file (symbol)
+
+lib/libstm32.a(stm32f10x_flash.o)
+                              main.o (FLASH_SetLatency)
+lib/libstm32.a(stm32f10x_gpio.o)
+                              main.o (GPIO_Init)
+lib/libstm32.a(stm32f10x_nvic.o)
+                              main.o (NVIC_SetVectorTable)
+lib/libstm32.a(stm32f10x_rcc.o)
+                              main.o (RCC_DeInit)
+
+Allocating common symbols
+Common symbol       size              file
+
+HSEStartUpStatus    0x1               main.o
+GPIO_InitStructure  0x4               main.o
+
+Discarded input sections
+
+ .text          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .data          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .bss           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .init          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .fini          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .text          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .data          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .bss           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .init_array    0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .fini_array    0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .eh_frame      0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .jcr           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .text          0x00000000        0x0 main.o
+ .data          0x00000000        0x0 main.o
+ .bss           0x00000000        0x0 main.o
+ COMMON         0x00000000        0x0 main.o
+ .text          0x00000000        0x0 stm32f10x_it.o
+ .data          0x00000000        0x0 stm32f10x_it.o
+ .bss           0x00000000        0x0 stm32f10x_it.o
+ .text          0x00000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .data          0x00000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .bss           0x00000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .text          0x00000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .data          0x00000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .bss           0x00000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .text          0x00000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .data          0x00000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .bss           0x00000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .text          0x00000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .data          0x00000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .bss           0x00000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .rodata        0x00000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .text          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .data          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .bss           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .eh_frame      0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .jcr           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .text          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+ .data          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+ .bss           0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+ .init          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+ .fini          0x00000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+RAM              0x20000000         0x00005000         xrw
+FLASH            0x08000000         0x00020000         xr
+FLASHB1          0x00000000         0x00000000         xr
+EXTMEMB0         0x00000000         0x00000000         xr
+EXTMEMB1         0x00000000         0x00000000         xr
+EXTMEMB2         0x00000000         0x00000000         xr
+EXTMEMB3         0x00000000         0x00000000         xr
+*default*        0x00000000         0xffffffff
+
+Linker script and memory map
+
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+LOAD main.o
+LOAD stm32f10x_it.o
+LOAD lib/libstm32.a
+START GROUP
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3\libgcc.a
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/../../../../arm-none-eabi/lib\libc.a
+END GROUP
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+LOAD c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+                0x00000400                __Stack_Size = 0x400
+                0x00000400                PROVIDE (_Stack_Size, __Stack_Size)
+                0x20004c00                __Stack_Init = (_estack - __Stack_Size)
+                0x20004c00                PROVIDE (_Stack_Init, __Stack_Init)
+                0x00000100                _Minimum_Stack_Size = 0x100
+                0x00000000                PROVIDE (Undefined_Handler, 0x0)
+                0x00000000                PROVIDE (SWI_Handler, 0x0)
+                0x00000000                PROVIDE (IRQ_Handler, 0x0)
+                0x00000000                PROVIDE (Prefetch_Handler, 0x0)
+                0x00000000                PROVIDE (Abort_Handler, 0x0)
+                0x00000000                PROVIDE (FIQ_Handler, 0x0)
+                0x00000000                PROVIDE (NMIException, 0x0)
+                0x00000000                PROVIDE (HardFaultException, 0x0)
+                0x00000000                PROVIDE (MemManageException, 0x0)
+                0x00000000                PROVIDE (BusFaultException, 0x0)
+                0x00000000                PROVIDE (UsageFaultException, 0x0)
+                0x00000000                PROVIDE (SVCHandler, 0x0)
+                0x00000000                PROVIDE (DebugMonitor, 0x0)
+                0x00000000                PROVIDE (PendSVC, 0x0)
+                0x00000000                PROVIDE (SysTickHandler, 0x0)
+                0x00000000                PROVIDE (WWDG_IRQHandler, 0x0)
+                0x00000000                PROVIDE (PVD_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TAMPER_IRQHandler, 0x0)
+                0x00000000                PROVIDE (RTC_IRQHandler, 0x0)
+                0x00000000                PROVIDE (FLASH_IRQHandler, 0x0)
+                0x00000000                PROVIDE (RCC_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI0_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI1_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI2_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI3_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI4_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel1_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel2_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel3_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel4_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel5_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel6_IRQHandler, 0x0)
+                0x00000000                PROVIDE (DMAChannel7_IRQHandler, 0x0)
+                0x00000000                PROVIDE (ADC_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USB_HP_CAN_TX_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USB_LP_CAN_RX0_IRQHandler, 0x0)
+                0x00000000                PROVIDE (CAN_RX1_IRQHandler, 0x0)
+                0x00000000                PROVIDE (CAN_SCE_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI9_5_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM1_BRK_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM1_UP_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM1_TRG_COM_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM1_CC_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM2_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM3_IRQHandler, 0x0)
+                0x00000000                PROVIDE (TIM4_IRQHandler, 0x0)
+                0x00000000                PROVIDE (I2C1_EV_IRQHandler, 0x0)
+                0x00000000                PROVIDE (I2C1_ER_IRQHandler, 0x0)
+                0x00000000                PROVIDE (I2C2_EV_IRQHandler, 0x0)
+                0x00000000                PROVIDE (I2C2_ER_IRQHandler, 0x0)
+                0x00000000                PROVIDE (SPI1_IRQHandler, 0x0)
+                0x00000000                PROVIDE (SPI2_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USART1_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USART2_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USART3_IRQHandler, 0x0)
+                0x00000000                PROVIDE (EXTI15_10_IRQHandler, 0x0)
+                0x00000000                PROVIDE (RTCAlarm_IRQHandler, 0x0)
+                0x00000000                PROVIDE (USBWakeUp_IRQHandler, 0x0)
+                0x42000000                PERIPH_BB_BASE = 0x42000000
+                0x22000000                SRAM_BB_BASE = 0x22000000
+                0x20000000                SRAM_BASE = 0x20000000
+                0x40000000                PERIPH_BASE = 0x40000000
+                0x40022000                PROVIDE (FLASH_BASE, 0x40022000)
+                0x1ffff800                PROVIDE (OB_BASE, 0x1ffff800)
+                0x40000000                APB1PERIPH_BASE = PERIPH_BASE
+                0x40010000                APB2PERIPH_BASE = (PERIPH_BASE + 0x10000)
+                0x40020000                AHBPERIPH_BASE = (PERIPH_BASE + 0x20000)
+                0x40000000                PROVIDE (TIM2, (APB1PERIPH_BASE + 0x0))
+                0x40000400                PROVIDE (TIM3, (APB1PERIPH_BASE + 0x400))
+                0x40000800                PROVIDE (TIM4, (APB1PERIPH_BASE + 0x800))
+                0x40002800                PROVIDE (RTC, (APB1PERIPH_BASE + 0x2800))
+                0x40002c00                PROVIDE (WWDG, (APB1PERIPH_BASE + 0x2c00))
+                0x40003000                PROVIDE (IWDG, (APB1PERIPH_BASE + 0x3000))
+                0x40003800                PROVIDE (SPI2, (APB1PERIPH_BASE + 0x3800))
+                0x40004400                PROVIDE (USART2, (APB1PERIPH_BASE + 0x4400))
+                0x40004800                PROVIDE (USART3, (APB1PERIPH_BASE + 0x4800))
+                0x40005400                PROVIDE (I2C1, (APB1PERIPH_BASE + 0x5400))
+                0x40005800                PROVIDE (I2C2, (APB1PERIPH_BASE + 0x5800))
+                0x40006400                PROVIDE (CAN, (APB1PERIPH_BASE + 0x6400))
+                0x40006c00                PROVIDE (BKP, (APB1PERIPH_BASE + 0x6c00))
+                0x40007000                PROVIDE (PWR, (APB1PERIPH_BASE + 0x7000))
+                0x40010000                PROVIDE (AFIO, (APB2PERIPH_BASE + 0x0))
+                0x40010400                PROVIDE (EXTI, (APB2PERIPH_BASE + 0x400))
+                0x40010800                PROVIDE (GPIOA, (APB2PERIPH_BASE + 0x800))
+                0x40010c00                PROVIDE (GPIOB, (APB2PERIPH_BASE + 0xc00))
+                0x40011000                PROVIDE (GPIOC, (APB2PERIPH_BASE + 0x1000))
+                0x40011400                PROVIDE (GPIOD, (APB2PERIPH_BASE + 0x1400))
+                0x40011800                PROVIDE (GPIOE, (APB2PERIPH_BASE + 0x1800))
+                0x40012400                PROVIDE (ADC1, (APB2PERIPH_BASE + 0x2400))
+                0x40012800                PROVIDE (ADC2, (APB2PERIPH_BASE + 0x2800))
+                0x40012c00                PROVIDE (TIM1, (APB2PERIPH_BASE + 0x2c00))
+                0x40013000                PROVIDE (SPI1, (APB2PERIPH_BASE + 0x3000))
+                0x40013800                PROVIDE (USART1, (APB2PERIPH_BASE + 0x3800))
+                0x40020000                PROVIDE (DMA, (AHBPERIPH_BASE + 0x0))
+                0x40020008                PROVIDE (DMA_Channel1, (AHBPERIPH_BASE + 0x8))
+                0x4002001c                PROVIDE (DMA_Channel2, (AHBPERIPH_BASE + 0x1c))
+                0x40020030                PROVIDE (DMA_Channel3, (AHBPERIPH_BASE + 0x30))
+                0x40020044                PROVIDE (DMA_Channel4, (AHBPERIPH_BASE + 0x44))
+                0x40020058                PROVIDE (DMA_Channel5, (AHBPERIPH_BASE + 0x58))
+                0x4002006c                PROVIDE (DMA_Channel6, (AHBPERIPH_BASE + 0x6c))
+                0x40020080                PROVIDE (DMA_Channel7, (AHBPERIPH_BASE + 0x80))
+                0x40021000                PROVIDE (RCC, (AHBPERIPH_BASE + 0x1000))
+                0xe000e000                SCS_BASE = 0xe000e000
+                0xe000e010                PROVIDE (SysTick, (SCS_BASE + 0x10))
+                0xe000e100                PROVIDE (NVIC, (SCS_BASE + 0x100))
+                0xe000ed00                PROVIDE (SCB, (SCS_BASE + 0xd00))
+                0x20005000                _estack = 0x20005000
+
+.isr_vector     0x08000000        0x0
+                0x08000000                . = ALIGN (0x4)
+ *(.isr_vector)
+                0x08000000                . = ALIGN (0x4)
+
+.flashtext      0x08000000        0x0
+                0x08000000                . = ALIGN (0x4)
+ *(.flashtext)
+                0x08000000                . = ALIGN (0x4)
+
+.text           0x08000000        0x0
+                0x08000000                . = ALIGN (0x4)
+ *(.text)
+ *(.text.*)
+ *(.rodata)
+ *(.rodata*)
+ *(.glue_7)
+ .glue_7        0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .glue_7        0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .glue_7        0x08000000        0x0 main.o
+ .glue_7        0x08000000        0x0 stm32f10x_it.o
+ .glue_7        0x08000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .glue_7        0x08000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .glue_7        0x08000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .glue_7        0x08000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .glue_7        0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .glue_7        0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+ *(.glue_7t)
+ .glue_7t       0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .glue_7t       0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .glue_7t       0x08000000        0x0 main.o
+ .glue_7t       0x08000000        0x0 stm32f10x_it.o
+ .glue_7t       0x08000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .glue_7t       0x08000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .glue_7t       0x08000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .glue_7t       0x08000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .glue_7t       0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .glue_7t       0x08000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+                0x08000000                . = ALIGN (0x4)
+                0x08000000                _etext = .
+                0x08000000                _sidata = _etext
+
+.vfp11_veneer   0x20000000        0x0
+ .vfp11_veneer  0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .vfp11_veneer  0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .vfp11_veneer  0x20000000        0x0 main.o
+ .vfp11_veneer  0x20000000        0x0 stm32f10x_it.o
+ .vfp11_veneer  0x20000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .vfp11_veneer  0x20000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .vfp11_veneer  0x20000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .vfp11_veneer  0x20000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .vfp11_veneer  0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .vfp11_veneer  0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+
+.v4_bx          0x20000000        0x0
+ .v4_bx         0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .v4_bx         0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .v4_bx         0x20000000        0x0 main.o
+ .v4_bx         0x20000000        0x0 stm32f10x_it.o
+ .v4_bx         0x20000000        0x0 lib/libstm32.a(stm32f10x_flash.o)
+ .v4_bx         0x20000000        0x0 lib/libstm32.a(stm32f10x_gpio.o)
+ .v4_bx         0x20000000        0x0 lib/libstm32.a(stm32f10x_nvic.o)
+ .v4_bx         0x20000000        0x0 lib/libstm32.a(stm32f10x_rcc.o)
+ .v4_bx         0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .v4_bx         0x20000000        0x0 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+
+.data           0x20000000        0x0 load address 0x08000000
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _sdata = .
+ *(.data)
+ *(.data.*)
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _edata = .
+
+.bss            0x20000000        0x0
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _sbss = .
+ *(.bss)
+ *(COMMON)
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _ebss = .
+                0x20000000                PROVIDE (end, _ebss)
+                0x20000000                PROVIDE (_end, _ebss)
+
+._usrstack      0x20000000      0x100
+                0x20000000                . = ALIGN (0x4)
+                0x20000000                _susrstack = .
+                0x20000100                . = (. + _Minimum_Stack_Size)
+ *fill*         0x20000000      0x100 00
+                0x20000100                . = ALIGN (0x4)
+                0x20000100                _eusrstack = .
+
+.b1text
+ *(.b1text)
+ *(.b1rodata)
+ *(.b1rodata*)
+
+.eb0text
+ *(.eb0text)
+ *(.eb0rodata)
+ *(.eb0rodata*)
+
+.eb1text
+ *(.eb1text)
+ *(.eb1rodata)
+ *(.eb1rodata*)
+
+.eb2text
+ *(.eb2text)
+ *(.eb2rodata)
+ *(.eb2rodata*)
+
+.eb3text
+ *(.eb3text)
+ *(.eb3rodata)
+ *(.eb3rodata*)
+                0x20000100                __exidx_start = .
+                0x20000100                __exidx_end = .
+
+/DISCARD/
+ libc.a(*)
+ libm.a(*)
+ libgcc.a(*)
+
+.stab
+ *(.stab)
+
+.stabstr
+ *(.stabstr)
+
+.stab.excl
+ *(.stab.excl)
+
+.stab.exclstr
+ *(.stab.exclstr)
+
+.stab.index
+ *(.stab.index)
+
+.stab.indexstr
+ *(.stab.indexstr)
+
+.comment        0x00000000      0x102
+ *(.comment)
+ .comment       0x00000000       0x2b main.o
+ .comment       0x0000002b       0x2b stm32f10x_it.o
+ .comment       0x00000056       0x2b lib/libstm32.a(stm32f10x_flash.o)
+ .comment       0x00000081       0x2b lib/libstm32.a(stm32f10x_gpio.o)
+ .comment       0x000000ac       0x2b lib/libstm32.a(stm32f10x_nvic.o)
+ .comment       0x000000d7       0x2b lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug
+ *(.debug)
+
+.line
+ *(.line)
+
+.debug_srcinfo
+ *(.debug_srcinfo)
+
+.debug_sfnames
+ *(.debug_sfnames)
+
+.debug_aranges  0x00000000       0xc0
+ *(.debug_aranges)
+ .debug_aranges
+                0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x20 stm32f10x_it.o
+ .debug_aranges
+                0x00000040       0x20 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_aranges
+                0x00000060       0x20 lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_aranges
+                0x00000080       0x20 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_aranges
+                0x000000a0       0x20 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_pubnames
+                0x00000000      0xeb9
+ *(.debug_pubnames)
+ .debug_pubnames
+                0x00000000       0x7e main.o
+ .debug_pubnames
+                0x0000007e      0x63c stm32f10x_it.o
+ .debug_pubnames
+                0x000006ba       0x60 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_pubnames
+                0x0000071a      0x17b lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_pubnames
+                0x00000895      0x360 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_pubnames
+                0x00000bf5      0x2c4 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_info     0x00000000     0x344e
+ *(.debug_info .gnu.linkonce.wi.*)
+ .debug_info    0x00000000      0x45e main.o
+ .debug_info    0x0000045e      0xac7 stm32f10x_it.o
+ .debug_info    0x00000f25      0x275 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_info    0x0000119a      0x918 lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_info    0x00001ab2      0xd65 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_info    0x00002817      0xc37 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_abbrev   0x00000000      0x74a
+ *(.debug_abbrev)
+ .debug_abbrev  0x00000000      0x105 main.o
+ .debug_abbrev  0x00000105       0x52 stm32f10x_it.o
+ .debug_abbrev  0x00000157       0x93 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_abbrev  0x000001ea      0x1b4 lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_abbrev  0x0000039e      0x1f6 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_abbrev  0x00000594      0x1b6 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_line     0x00000000      0x6fb
+ *(.debug_line)
+ .debug_line    0x00000000       0xab main.o
+ .debug_line    0x000000ab      0x14f stm32f10x_it.o
+ .debug_line    0x000001fa       0x88 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_line    0x00000282      0x14c lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_line    0x000003ce      0x195 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_line    0x00000563      0x198 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_frame    0x00000000     0x1034
+ *(.debug_frame)
+ .debug_frame   0x00000000       0x84 main.o
+ .debug_frame   0x00000084      0x688 stm32f10x_it.o
+ .debug_frame   0x0000070c       0x64 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_frame   0x00000770      0x1f4 lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_frame   0x00000964      0x348 lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_frame   0x00000cac      0x388 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_str      0x00000000       0xfb
+ *(.debug_str)
+ .debug_str     0x00000000       0x58 lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_str     0x00000058       0x5b lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_str     0x000000b3       0x48 lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_loc      0x00000000     0x1d51
+ *(.debug_loc)
+ .debug_loc     0x00000000       0xc4 main.o
+ .debug_loc     0x000000c4      0xb97 stm32f10x_it.o
+ .debug_loc     0x00000c5b       0xa5 lib/libstm32.a(stm32f10x_flash.o)
+ .debug_loc     0x00000d00      0x39b lib/libstm32.a(stm32f10x_gpio.o)
+ .debug_loc     0x0000109b      0x5fa lib/libstm32.a(stm32f10x_nvic.o)
+ .debug_loc     0x00001695      0x6bc lib/libstm32.a(stm32f10x_rcc.o)
+
+.debug_macinfo
+ *(.debug_macinfo)
+
+.debug_weaknames
+ *(.debug_weaknames)
+
+.debug_funcnames
+ *(.debug_funcnames)
+
+.debug_typenames
+ *(.debug_typenames)
+
+.debug_varnames
+ *(.debug_varnames)
+OUTPUT(main.elf elf32-littlearm)
+
+.ARM.attributes
+                0x00000000       0x31
+ .ARM.attributes
+                0x00000000       0x14 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+ .ARM.attributes
+                0x00000014       0x2e c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+ .ARM.attributes
+                0x00000042       0x31 main.o
+ .ARM.attributes
+                0x00000073       0x31 stm32f10x_it.o
+ .ARM.attributes
+                0x000000a4       0x31 lib/libstm32.a(stm32f10x_flash.o)
+ .ARM.attributes
+                0x000000d5       0x31 lib/libstm32.a(stm32f10x_gpio.o)
+ .ARM.attributes
+                0x00000106       0x31 lib/libstm32.a(stm32f10x_nvic.o)
+ .ARM.attributes
+                0x00000137       0x31 lib/libstm32.a(stm32f10x_rcc.o)
+ .ARM.attributes
+                0x00000168       0x2c c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtend.o
+ .ARM.attributes
+                0x00000194       0x14 c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtn.o
+
+Cross Reference Table
+
+Symbol                                            File
+ADC1_2_IRQHandler                                 stm32f10x_it.o
+ADC3_IRQHandler                                   stm32f10x_it.o
+BusFaultException                                 stm32f10x_it.o
+CAN_RX1_IRQHandler                                stm32f10x_it.o
+CAN_SCE_IRQHandler                                stm32f10x_it.o
+DMA1_Channel1_IRQHandler                          stm32f10x_it.o
+DMA1_Channel2_IRQHandler                          stm32f10x_it.o
+DMA1_Channel3_IRQHandler                          stm32f10x_it.o
+DMA1_Channel4_IRQHandler                          stm32f10x_it.o
+DMA1_Channel5_IRQHandler                          stm32f10x_it.o
+DMA1_Channel6_IRQHandler                          stm32f10x_it.o
+DMA1_Channel7_IRQHandler                          stm32f10x_it.o
+DMA2_Channel1_IRQHandler                          stm32f10x_it.o
+DMA2_Channel2_IRQHandler                          stm32f10x_it.o
+DMA2_Channel3_IRQHandler                          stm32f10x_it.o
+DMA2_Channel4_5_IRQHandler                        stm32f10x_it.o
+DebugMonitor                                      stm32f10x_it.o
+Delay                                             main.o
+EXTI0_IRQHandler                                  stm32f10x_it.o
+EXTI15_10_IRQHandler                              stm32f10x_it.o
+EXTI1_IRQHandler                                  stm32f10x_it.o
+EXTI2_IRQHandler                                  stm32f10x_it.o
+EXTI3_IRQHandler                                  stm32f10x_it.o
+EXTI4_IRQHandler                                  stm32f10x_it.o
+EXTI9_5_IRQHandler                                stm32f10x_it.o
+FLASH_HalfCycleAccessCmd                          lib/libstm32.a(stm32f10x_flash.o)
+FLASH_IRQHandler                                  stm32f10x_it.o
+FLASH_PrefetchBufferCmd                           lib/libstm32.a(stm32f10x_flash.o)
+                                                  main.o
+FLASH_SetLatency                                  lib/libstm32.a(stm32f10x_flash.o)
+                                                  main.o
+FSMC_IRQHandler                                   stm32f10x_it.o
+GPIO_AFIODeInit                                   lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_DeInit                                       lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_EXTILineConfig                               lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_EventOutputCmd                               lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_EventOutputConfig                            lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_Init                                         lib/libstm32.a(stm32f10x_gpio.o)
+                                                  main.o
+GPIO_InitStructure                                main.o
+GPIO_PinLockConfig                                lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_PinRemapConfig                               lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_ReadInputData                                lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_ReadInputDataBit                             lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_ReadOutputData                               lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_ReadOutputDataBit                            lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_ResetBits                                    lib/libstm32.a(stm32f10x_gpio.o)
+                                                  main.o
+GPIO_SetBits                                      lib/libstm32.a(stm32f10x_gpio.o)
+                                                  main.o
+GPIO_StructInit                                   lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_Write                                        lib/libstm32.a(stm32f10x_gpio.o)
+GPIO_WriteBit                                     lib/libstm32.a(stm32f10x_gpio.o)
+HSEStartUpStatus                                  main.o
+HardFaultException                                stm32f10x_it.o
+I2C1_ER_IRQHandler                                stm32f10x_it.o
+I2C1_EV_IRQHandler                                stm32f10x_it.o
+I2C2_ER_IRQHandler                                stm32f10x_it.o
+I2C2_EV_IRQHandler                                stm32f10x_it.o
+MemManageException                                stm32f10x_it.o
+NMIException                                      stm32f10x_it.o
+NVIC_BASEPRICONFIG                                lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_ClearIRQChannelPendingBit                    lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_ClearSystemHandlerPendingBit                 lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_Configuration                                main.o
+NVIC_DeInit                                       lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GenerateCoreReset                            lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GenerateSystemReset                          lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetBASEPRI                                   lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetCPUID                                     lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetCurrentActiveHandler                      lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetCurrentPendingIRQChannel                  lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetFaultAddress                              lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetFaultHandlerSources                       lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetIRQChannelActiveBitStatus                 lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetIRQChannelPendingBitStatus                lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetSystemHandlerActiveBitStatus              lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_GetSystemHandlerPendingBitStatus             lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_Init                                         lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_PriorityGroupConfig                          lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_RESETFAULTMASK                               lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_RESETPRIMASK                                 lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SCBDeInit                                    lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SETFAULTMASK                                 lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SETPRIMASK                                   lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SetIRQChannelPendingBit                      lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SetSystemHandlerPendingBit                   lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SetVectorTable                               lib/libstm32.a(stm32f10x_nvic.o)
+                                                  main.o
+NVIC_StructInit                                   lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SystemHandlerConfig                          lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SystemHandlerPriorityConfig                  lib/libstm32.a(stm32f10x_nvic.o)
+NVIC_SystemLPConfig                               lib/libstm32.a(stm32f10x_nvic.o)
+PVD_IRQHandler                                    stm32f10x_it.o
+PendSVC                                           stm32f10x_it.o
+RCC_ADCCLKConfig                                  lib/libstm32.a(stm32f10x_rcc.o)
+RCC_AHBPeriphClockCmd                             lib/libstm32.a(stm32f10x_rcc.o)
+RCC_APB1PeriphClockCmd                            lib/libstm32.a(stm32f10x_rcc.o)
+RCC_APB1PeriphResetCmd                            lib/libstm32.a(stm32f10x_rcc.o)
+RCC_APB2PeriphClockCmd                            lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_APB2PeriphResetCmd                            lib/libstm32.a(stm32f10x_rcc.o)
+                                                  lib/libstm32.a(stm32f10x_gpio.o)
+RCC_AdjustHSICalibrationValue                     lib/libstm32.a(stm32f10x_rcc.o)
+RCC_BackupResetCmd                                lib/libstm32.a(stm32f10x_rcc.o)
+RCC_ClearFlag                                     lib/libstm32.a(stm32f10x_rcc.o)
+RCC_ClearITPendingBit                             lib/libstm32.a(stm32f10x_rcc.o)
+RCC_ClockSecuritySystemCmd                        lib/libstm32.a(stm32f10x_rcc.o)
+RCC_Configuration                                 main.o
+RCC_DeInit                                        lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_GetClocksFreq                                 lib/libstm32.a(stm32f10x_rcc.o)
+RCC_GetFlagStatus                                 lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_GetITStatus                                   lib/libstm32.a(stm32f10x_rcc.o)
+RCC_GetSYSCLKSource                               lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_HCLKConfig                                    lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_HSEConfig                                     lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_HSICmd                                        lib/libstm32.a(stm32f10x_rcc.o)
+RCC_IRQHandler                                    stm32f10x_it.o
+RCC_ITConfig                                      lib/libstm32.a(stm32f10x_rcc.o)
+RCC_LSEConfig                                     lib/libstm32.a(stm32f10x_rcc.o)
+RCC_LSICmd                                        lib/libstm32.a(stm32f10x_rcc.o)
+RCC_MCOConfig                                     lib/libstm32.a(stm32f10x_rcc.o)
+RCC_PCLK1Config                                   lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_PCLK2Config                                   lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_PLLCmd                                        lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_PLLConfig                                     lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_RTCCLKCmd                                     lib/libstm32.a(stm32f10x_rcc.o)
+RCC_RTCCLKConfig                                  lib/libstm32.a(stm32f10x_rcc.o)
+RCC_SYSCLKConfig                                  lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RCC_USBCLKConfig                                  lib/libstm32.a(stm32f10x_rcc.o)
+RCC_WaitForHSEStartUp                             lib/libstm32.a(stm32f10x_rcc.o)
+                                                  main.o
+RTCAlarm_IRQHandler                               stm32f10x_it.o
+RTC_IRQHandler                                    stm32f10x_it.o
+SDIO_IRQHandler                                   stm32f10x_it.o
+SPI1_IRQHandler                                   stm32f10x_it.o
+SPI2_IRQHandler                                   stm32f10x_it.o
+SPI3_IRQHandler                                   stm32f10x_it.o
+SVCHandler                                        stm32f10x_it.o
+SysTickHandler                                    stm32f10x_it.o
+TAMPER_IRQHandler                                 stm32f10x_it.o
+TIM1_BRK_IRQHandler                               stm32f10x_it.o
+TIM1_CC_IRQHandler                                stm32f10x_it.o
+TIM1_TRG_COM_IRQHandler                           stm32f10x_it.o
+TIM1_UP_IRQHandler                                stm32f10x_it.o
+TIM2_IRQHandler                                   stm32f10x_it.o
+TIM3_IRQHandler                                   stm32f10x_it.o
+TIM4_IRQHandler                                   stm32f10x_it.o
+TIM5_IRQHandler                                   stm32f10x_it.o
+TIM6_IRQHandler                                   stm32f10x_it.o
+TIM7_IRQHandler                                   stm32f10x_it.o
+TIM8_BRK_IRQHandler                               stm32f10x_it.o
+TIM8_CC_IRQHandler                                stm32f10x_it.o
+TIM8_TRG_COM_IRQHandler                           stm32f10x_it.o
+TIM8_UP_IRQHandler                                stm32f10x_it.o
+UART4_IRQHandler                                  stm32f10x_it.o
+UART5_IRQHandler                                  stm32f10x_it.o
+USART1_IRQHandler                                 stm32f10x_it.o
+USART2_IRQHandler                                 stm32f10x_it.o
+USART3_IRQHandler                                 stm32f10x_it.o
+USBWakeUp_IRQHandler                              stm32f10x_it.o
+USB_HP_CAN_TX_IRQHandler                          stm32f10x_it.o
+USB_LP_CAN_RX0_IRQHandler                         stm32f10x_it.o
+UsageFaultException                               stm32f10x_it.o
+WWDG_IRQHandler                                   stm32f10x_it.o
+_Jv_RegisterClasses                               c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+__BASEPRICONFIG                                   lib/libstm32.a(stm32f10x_nvic.o)
+__GetBASEPRI                                      lib/libstm32.a(stm32f10x_nvic.o)
+__RESETFAULTMASK                                  lib/libstm32.a(stm32f10x_nvic.o)
+__RESETPRIMASK                                    lib/libstm32.a(stm32f10x_nvic.o)
+__SETFAULTMASK                                    lib/libstm32.a(stm32f10x_nvic.o)
+__SETPRIMASK                                      lib/libstm32.a(stm32f10x_nvic.o)
+__deregister_frame_info                           c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+__dso_handle                                      c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+__register_frame_info                             c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crtbegin.o
+_fini                                             c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+_init                                             c:/program files/codesourcery/sourcery g++ lite/bin/../lib/gcc/arm-none-eabi/4.2.3/crti.o
+main                                              main.o

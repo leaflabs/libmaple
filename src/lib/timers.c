@@ -1,0 +1,114 @@
+#include "stm32f10x_rcc.h"
+#include "wiring.h"
+#include "timers.h"
+#include "util.h"
+
+typedef struct {
+    volatile uint16_t CR1;
+    uint16_t  RESERVED0;
+    volatile uint16_t CR2;
+    uint16_t  RESERVED1;
+    volatile uint16_t SMCR;
+    uint16_t  RESERVED2;
+    volatile uint16_t DIER;
+    uint16_t  RESERVED3;
+    volatile uint16_t SR;
+    uint16_t  RESERVED4;
+    volatile uint16_t EGR;
+    uint16_t  RESERVED5;
+    volatile uint16_t CCMR1;
+    uint16_t  RESERVED6;
+    volatile uint16_t CCMR2;
+    uint16_t  RESERVED7;
+    volatile uint16_t CCER;
+    uint16_t  RESERVED8;
+    volatile uint16_t CNT;
+    uint16_t  RESERVED9;
+    volatile uint16_t PSC;
+    uint16_t  RESERVED10;
+    volatile uint16_t ARR;
+    uint16_t  RESERVED11;
+    volatile uint16_t RCR;
+    uint16_t  RESERVED12;
+    volatile uint16_t CCR1;
+    uint16_t  RESERVED13;
+    volatile uint16_t CCR2;
+    uint16_t  RESERVED14;
+    volatile uint16_t CCR3;
+    uint16_t  RESERVED15;
+    volatile uint16_t CCR4;
+    uint16_t  RESERVED16;
+    volatile uint16_t BDTR;   // Not used in general purpose timers
+    uint16_t  RESERVED17;     // Not used in general purpose timers
+    volatile uint16_t DCR;
+    uint16_t  RESERVED18;
+    volatile uint16_t DMAR;
+    uint16_t  RESERVED19;
+} Timer;
+
+void timer_init(uint8_t timer_num, uint16_t prescale) {
+    Timer *timer;
+    uint32_t is_advanced = 0;
+
+    ASSERT(timer_num > 0 && timer_num <= 4);
+
+    switch(timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+        is_advanced = 1;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+        break;
+    }
+
+    timer->CR1 = ARPE;        // No clock division
+                              // Do not buffer auto-reload preload
+                              // Edge aligned
+                              // Upcounter
+                              // Do not stop counter at update event
+                              // Update events enabled (etc, see bits [1:2])
+                              // Counter disabled for now
+
+    timer->PSC = prescale;    // Prescaling by prescale (duh)
+    timer->ARR = 0xFFFF;      // Max reload cont
+
+    /* initialize all the channels to 50% duty cycle,
+     * TODO: none of them actually get output unless the gpio pin
+     * is set, this will probably consume a bit more power but
+     * we'll worry about that later. */
+    timer->CCR1   = 0x8FFF;     // PWM start value
+    timer->CCMR1 |= 0x68;       // PWM mode 1, enable preload register.
+    timer->CCER  |= 0x001;      // enable ch
+
+    timer->CCR2   = 0x8FFF;     // PWM start value
+    timer->CCMR1 |= (0x68 << 8);// PWM mode 1, enable preload register.
+    timer->CCER  |= 0x010;      // enable ch
+
+    timer->CCR3   = 0x8FFF;     // PWM start value
+    timer->CCMR2 |= 0x68;       // PWM mode 1, enable preload register.
+    timer->CCER  |= 0x100;      // enable ch
+
+    timer->CCR4   = 0x8FFF;     // PWM start value
+    timer->CCMR2 |= (0x68 << 8);// PWM mode 1, enable preload register.
+    timer->CCER  |= 0x1000;      // enable ch
+
+    /* Advanced timer?  */
+    if (is_advanced) {
+        timer->BDTR = 0x8000;     // moe enable
+    }
+
+    timer->DIER = 0;          // disable update interrupt
+    timer->EGR  = 1;          // Initialize update event and shadow registers
+    timer->CR1  |= 1;         // Enable timer
+}

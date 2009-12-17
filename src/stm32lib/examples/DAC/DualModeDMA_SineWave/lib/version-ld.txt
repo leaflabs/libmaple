@@ -1,0 +1,1 @@
+Linker scripts taken from RAISONANCE RKitARM for RIDE7 1.03.0004.

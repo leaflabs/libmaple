@@ -1,0 +1,5 @@
+#if __cplusplus
+}
+#endif
+
+#endif /* __STM32EXCEPTIONS_H */

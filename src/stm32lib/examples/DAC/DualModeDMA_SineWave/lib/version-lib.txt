@@ -1,0 +1,105 @@
+/******************** (C) COPYRIGHT 2007 STMicroelectronics ********************
+* File Name          : version.txt
+* Author             : MCD Application Team
+* Version            : V1.0
+* Date               : 10/08/2007
+* Description        : Version file for STM32F10x Firmware Library.
+********************************************************************************
+* THE PRESENT SOFTWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+* WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+* AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+* INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+* CONTENT OF SUCH SOFTWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+* INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+*******************************************************************************/
+
+* V1.0 - 10/08/2007
+====================
+ + Add template project with RIDE toolchain 
+
+ + In all stm32f10x_ppp.c and stm32f10x_conf.h files: change "assert" macro name 
+  to "assert_param"
+  Note: If you are using the FW Library V0.3 in your application and you want to
+        migrate to V1.0, you have to update your application’s “stm32f10x_conf.h”
+        file with the latest one (provided with V1.0).
+
+ + stm32f10x_conf.h
+   - Remove '#undef assert' 
+   - Change '#define DEBUG' by '#define DEBUG    1'
+ 
+ + stm32f10x_type.h
+   - Add new types: sc32, sc16, sc8, vsc32, vsc16 and vsc8  
+ 
+ + stm32f10x_it.c 
+    - Add basic fault exception handling: in "HardFaultException", "MemManageException",
+     "BusFaultException" and "UsageFaultException" ISR the following code was added:
+     /* Go to infinite loop when exception occurs */
+     while (1)
+     {
+     }
+
+ + stm32f10x_rcc.c
+    - "RCC_WaitForHSEStartUp()" function updated to resolve issue with high GNU 
+      compiler optimization 
+
+ + stm32f10x_gpio.h
+    - '#define GPIO_Remap1_CAN            ((u32)0x001D2000)' changed to 
+      '#define GPIO_Remap1_CAN            ((u32)0x001D4000)'
+    
+ + stm32f10x_rtc.c/.h
+   - "RTC_GetPrescaler" function removed
+
+ + stm32f10x_bkp.c/.h
+    - add "BKP_RTCOutputConfig()" function to allow to select the RTC output
+      source(Calib clock, RTC Alarm or RTC Second) to output on Tamper pin and
+      remove "BKP_RTCCalibrationClockOutputCmd()" function  
+       
+ + stm32f10x_can.h
+    - CAN synchronization jump width defines updated
+      - '#define CAN_SJW_0tq'   ==> '#define CAN_SJW_1tq' 
+      - '#define CAN_SJW_1tq'   ==> '#define CAN_SJW_2tq' 
+      - '#define CAN_SJW_2tq'   ==> '#define CAN_SJW_3tq' 
+      - '#define CAN_SJW_3tq'   ==> '#define CAN_SJW_4tq' 
+      
+ + stm32f10x_tim1.c/.h
+    - "TIM1_OCxNPolarityConfig(u16 TIM1_OCPolarity)" function: change parameter 
+      name to 'TIM1_OCNPolarity' 
+    - change 'TIM1_ICSelection_TRGI' by 'TIM1_ICSelection_TRC'
+
+ + stm32f10x_tim.c/.h
+    - change 'TIM_ICSelection_TRGI' by 'TIM_ICSelection_TRC'
+              
+ + examples
+    - ADC examples 3 & 4 updated    
+    - DEBUG example
+      - Example modified to support RIDE specific printf function implementation
+    - I2C example5
+      - i2c_ee.c: add the following function prototypes: "void GPIO_Configuration(void)"
+         add "void I2C_Configuration(void)"
+    - Add GPIO pin toggle example
+    - BKP, CAN, DMA, NVIC and I2C examples readme files updated
+    - Use decimal (instead of hexadecimal) values constants in TIM, TIM1 and
+      IWDG examples
+    - USART
+      - example 12
+        - USART3 ISR updated 
+        - Timeout define "SC_Receive_Timeout" updated to 0x4000
+      - example 7
+        - Example modified to support RIDE specific printf function implementation
+    - RTC example
+      - Example modified to support RIDE specific printf function implementation
+      - Change "BKP_RTCCalibrationClockOutputCmd()" function  by "RTC_ClockOutput()"
+      - LSI removed as RTC clock source
+    - IWDG example
+      - LSI frequency value changed from 32 KHz to 40 KHz  
+    - Update the STM32F10x evaluation board name from STM32F10x-EVAL to STM3210B-EVAL 
+
+   
+* V0.3 - 05/21/2007 
+====================
+  Created.
+  
+
+******************* (C) COPYRIGHT 2007 STMicroelectronics *****END OF FILE******
+
+

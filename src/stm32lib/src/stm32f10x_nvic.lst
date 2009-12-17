@@ -1,0 +1,1980 @@
+   1              		.syntax unified
+   2              		.cpu cortex-m3
+   3              		.fpu softvfp
+   4              		.eabi_attribute 20, 1
+   5              		.eabi_attribute 21, 1
+   6              		.eabi_attribute 23, 3
+   7              		.eabi_attribute 24, 1
+   8              		.eabi_attribute 25, 1
+   9              		.eabi_attribute 26, 1
+  10              		.eabi_attribute 30, 4
+  11              		.eabi_attribute 18, 4
+  12              		.thumb
+  13              		.file	"stm32f10x_nvic.c"
+  21              	.Ltext0:
+  22              		.align	2
+  23              		.global	NVIC_DeInit
+  24              		.thumb
+  25              		.thumb_func
+  27              	NVIC_DeInit:
+  28              	.LFB23:
+  29              		.file 1 "stm32lib/src/stm32f10x_nvic.c"
+   1:stm32lib/src/stm32f10x_nvic.c **** /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+   2:stm32lib/src/stm32f10x_nvic.c **** * File Name          : stm32f10x_nvic.c
+   3:stm32lib/src/stm32f10x_nvic.c **** * Author             : MCD Application Team
+   4:stm32lib/src/stm32f10x_nvic.c **** * Version            : V2.0.2
+   5:stm32lib/src/stm32f10x_nvic.c **** * Date               : 07/11/2008
+   6:stm32lib/src/stm32f10x_nvic.c **** * Description        : This file provides all the NVIC firmware functions.
+   7:stm32lib/src/stm32f10x_nvic.c **** ********************************************************************************
+   8:stm32lib/src/stm32f10x_nvic.c **** * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+   9:stm32lib/src/stm32f10x_nvic.c **** * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+  10:stm32lib/src/stm32f10x_nvic.c **** * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+  11:stm32lib/src/stm32f10x_nvic.c **** * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+  12:stm32lib/src/stm32f10x_nvic.c **** * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+  13:stm32lib/src/stm32f10x_nvic.c **** * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  14:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+  15:stm32lib/src/stm32f10x_nvic.c **** 
+  16:stm32lib/src/stm32f10x_nvic.c **** /* Includes ------------------------------------------------------------------*/
+  17:stm32lib/src/stm32f10x_nvic.c **** #include "stm32f10x_nvic.h"
+  18:stm32lib/src/stm32f10x_nvic.c **** 
+  19:stm32lib/src/stm32f10x_nvic.c **** /* Private typedef -----------------------------------------------------------*/
+  20:stm32lib/src/stm32f10x_nvic.c **** /* Private define ------------------------------------------------------------*/
+  21:stm32lib/src/stm32f10x_nvic.c **** #define AIRCR_VECTKEY_MASK    ((u32)0x05FA0000)
+  22:stm32lib/src/stm32f10x_nvic.c **** 
+  23:stm32lib/src/stm32f10x_nvic.c **** /* Private macro -------------------------------------------------------------*/
+  24:stm32lib/src/stm32f10x_nvic.c **** /* Private variables ---------------------------------------------------------*/
+  25:stm32lib/src/stm32f10x_nvic.c **** /* Private function prototypes -----------------------------------------------*/
+  26:stm32lib/src/stm32f10x_nvic.c **** /* Private functions ---------------------------------------------------------*/
+  27:stm32lib/src/stm32f10x_nvic.c **** 
+  28:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+  29:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_DeInit
+  30:stm32lib/src/stm32f10x_nvic.c **** * Description    : Deinitializes the NVIC peripheral registers to their default
+  31:stm32lib/src/stm32f10x_nvic.c **** *                  reset values.
+  32:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+  33:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+  34:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+  35:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+  36:stm32lib/src/stm32f10x_nvic.c **** void NVIC_DeInit(void)
+  37:stm32lib/src/stm32f10x_nvic.c **** {
+  30              		.loc 1 37 0
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  38:stm32lib/src/stm32f10x_nvic.c ****   u32 index = 0;
+  39:stm32lib/src/stm32f10x_nvic.c ****   
+  40:stm32lib/src/stm32f10x_nvic.c ****   NVIC->ICER[0] = 0xFFFFFFFF;
+  34              		.loc 1 40 0
+  35 0000 0B4B     		ldr	r3, .L4
+  36 0002 4FF0FF31 		mov	r1, #-1
+  41:stm32lib/src/stm32f10x_nvic.c ****   NVIC->ICER[1] = 0x0FFFFFFF;
+  37              		.loc 1 41 0
+  38 0006 6FF07042 		mvn	r2, #-268435456
+  39              		.loc 1 40 0
+  40 000a C3F88010 		str	r1, [r3, #128]
+  42:stm32lib/src/stm32f10x_nvic.c ****   NVIC->ICPR[0] = 0xFFFFFFFF;
+  43:stm32lib/src/stm32f10x_nvic.c ****   NVIC->ICPR[1] = 0x0FFFFFFF;
+  41              		.loc 1 43 0
+  42 000e 0020     		movs	r0, #0
+  43              	.LVL0:
+  44              		.loc 1 41 0
+  45 0010 C3F88420 		str	r2, [r3, #132]
+  46              		.loc 1 42 0
+  47 0014 C3F88011 		str	r1, [r3, #384]
+  48              		.loc 1 43 0
+  49 0018 C3F88421 		str	r2, [r3, #388]
+  50              	.L2:
+  44:stm32lib/src/stm32f10x_nvic.c ****   
+  45:stm32lib/src/stm32f10x_nvic.c ****   for(index = 0; index < 0x0F; index++)
+  46:stm32lib/src/stm32f10x_nvic.c ****   {
+  47:stm32lib/src/stm32f10x_nvic.c ****      NVIC->IPR[index] = 0x00000000;
+  51              		.loc 1 47 0
+  52 001c 00F1C001 		add	r1, r0, #192
+  53 0020 034B     		ldr	r3, .L4
+  54              		.loc 1 45 0
+  55 0022 0130     		adds	r0, r0, #1
+  56              		.loc 1 47 0
+  57 0024 0022     		movs	r2, #0
+  58              		.loc 1 45 0
+  59 0026 0F28     		cmp	r0, #15
+  60              		.loc 1 47 0
+  61 0028 43F82120 		str	r2, [r3, r1, lsl #2]
+  62              		.loc 1 45 0
+  63 002c F6D1     		bne	.L2
+  48:stm32lib/src/stm32f10x_nvic.c ****   } 
+  49:stm32lib/src/stm32f10x_nvic.c **** }
+  64              		.loc 1 49 0
+  65 002e 7047     		bx	lr
+  66              	.L5:
+  67              		.align	2
+  68              	.L4:
+  69 0030 00E100E0 		.word	-536813312
+  70              	.LFE23:
+  72              		.align	2
+  73              		.global	NVIC_SCBDeInit
+  74              		.thumb
+  75              		.thumb_func
+  77              	NVIC_SCBDeInit:
+  78              	.LFB24:
+  50:stm32lib/src/stm32f10x_nvic.c **** 
+  51:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+  52:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SCBDeInit
+  53:stm32lib/src/stm32f10x_nvic.c **** * Description    : Deinitializes the SCB peripheral registers to their default 
+  54:stm32lib/src/stm32f10x_nvic.c **** *                  reset values.
+  55:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+  56:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+  57:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+  58:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+  59:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SCBDeInit(void)
+  60:stm32lib/src/stm32f10x_nvic.c **** {
+  79              		.loc 1 60 0
+  80              		@ args = 0, pretend = 0, frame = 0
+  81              		@ frame_needed = 0, uses_anonymous_args = 0
+  82              		@ link register save eliminated.
+  61:stm32lib/src/stm32f10x_nvic.c ****   u32 index = 0x00;
+  62:stm32lib/src/stm32f10x_nvic.c ****   
+  63:stm32lib/src/stm32f10x_nvic.c ****   SCB->ICSR = 0x0A000000;
+  83              		.loc 1 63 0
+  84 0034 094A     		ldr	r2, .L8
+  85 0036 4FF02063 		mov	r3, #167772160
+  64:stm32lib/src/stm32f10x_nvic.c ****   SCB->VTOR = 0x00000000;
+  65:stm32lib/src/stm32f10x_nvic.c ****   SCB->AIRCR = AIRCR_VECTKEY_MASK;
+  86              		.loc 1 65 0
+  87 003a 0949     		ldr	r1, .L8+4
+  88              		.loc 1 63 0
+  89 003c 5360     		str	r3, [r2, #4]
+  90              		.loc 1 64 0
+  91 003e 03F17643 		add	r3, r3, #-167772160
+  92 0042 9360     		str	r3, [r2, #8]
+  93              		.loc 1 65 0
+  94 0044 D160     		str	r1, [r2, #12]
+  66:stm32lib/src/stm32f10x_nvic.c ****   SCB->SCR = 0x00000000;
+  95              		.loc 1 66 0
+  96 0046 1361     		str	r3, [r2, #16]
+  67:stm32lib/src/stm32f10x_nvic.c ****   SCB->CCR = 0x00000000;
+  97              		.loc 1 67 0
+  98 0048 5361     		str	r3, [r2, #20]
+  68:stm32lib/src/stm32f10x_nvic.c ****   for(index = 0; index < 0x03; index++)
+  69:stm32lib/src/stm32f10x_nvic.c ****   {
+  70:stm32lib/src/stm32f10x_nvic.c ****      SCB->SHPR[index] = 0;
+  99              		.loc 1 70 0
+ 100 004a 9361     		str	r3, [r2, #24]
+ 101 004c D361     		str	r3, [r2, #28]
+ 102 004e 1362     		str	r3, [r2, #32]
+  71:stm32lib/src/stm32f10x_nvic.c ****   }
+  72:stm32lib/src/stm32f10x_nvic.c ****   SCB->SHCSR = 0x00000000;
+ 103              		.loc 1 72 0
+ 104 0050 5362     		str	r3, [r2, #36]
+  73:stm32lib/src/stm32f10x_nvic.c ****   SCB->CFSR = 0xFFFFFFFF;
+ 105              		.loc 1 73 0
+ 106 0052 013B     		subs	r3, r3, #1
+ 107 0054 9362     		str	r3, [r2, #40]
+  74:stm32lib/src/stm32f10x_nvic.c ****   SCB->HFSR = 0xFFFFFFFF;
+ 108              		.loc 1 74 0
+ 109 0056 D362     		str	r3, [r2, #44]
+  75:stm32lib/src/stm32f10x_nvic.c ****   SCB->DFSR = 0xFFFFFFFF;
+ 110              		.loc 1 75 0
+ 111 0058 1363     		str	r3, [r2, #48]
+  76:stm32lib/src/stm32f10x_nvic.c **** }
+ 112              		.loc 1 76 0
+ 113 005a 7047     		bx	lr
+ 114              	.L9:
+ 115              		.align	2
+ 116              	.L8:
+ 117 005c 00ED00E0 		.word	-536810240
+ 118 0060 0000FA05 		.word	100270080
+ 119              	.LFE24:
+ 121              		.align	2
+ 122              		.global	NVIC_PriorityGroupConfig
+ 123              		.thumb
+ 124              		.thumb_func
+ 126              	NVIC_PriorityGroupConfig:
+ 127              	.LFB25:
+  77:stm32lib/src/stm32f10x_nvic.c **** 
+  78:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+  79:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_PriorityGroupConfig
+  80:stm32lib/src/stm32f10x_nvic.c **** * Description    : Configures the priority grouping: pre-emption priority
+  81:stm32lib/src/stm32f10x_nvic.c **** *                  and subpriority.
+  82:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_PriorityGroup: specifies the priority grouping bits
+  83:stm32lib/src/stm32f10x_nvic.c **** *                    length. This parameter can be one of the following values:
+  84:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_PriorityGroup_0: 0 bits for pre-emption priority
+  85:stm32lib/src/stm32f10x_nvic.c **** *                         4 bits for subpriority
+  86:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_PriorityGroup_1: 1 bits for pre-emption priority
+  87:stm32lib/src/stm32f10x_nvic.c **** *                         3 bits for subpriority
+  88:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_PriorityGroup_2: 2 bits for pre-emption priority
+  89:stm32lib/src/stm32f10x_nvic.c **** *                         2 bits for subpriority
+  90:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_PriorityGroup_3: 3 bits for pre-emption priority
+  91:stm32lib/src/stm32f10x_nvic.c **** *                         1 bits for subpriority
+  92:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_PriorityGroup_4: 4 bits for pre-emption priority
+  93:stm32lib/src/stm32f10x_nvic.c **** *                         0 bits for subpriority
+  94:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+  95:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+  96:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+  97:stm32lib/src/stm32f10x_nvic.c **** void NVIC_PriorityGroupConfig(u32 NVIC_PriorityGroup)
+  98:stm32lib/src/stm32f10x_nvic.c **** {
+ 128              		.loc 1 98 0
+ 129              		@ args = 0, pretend = 0, frame = 0
+ 130              		@ frame_needed = 0, uses_anonymous_args = 0
+ 131              		@ link register save eliminated.
+ 132              	.LVL1:
+  99:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 100:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_PRIORITY_GROUP(NVIC_PriorityGroup));
+ 101:stm32lib/src/stm32f10x_nvic.c ****   
+ 102:stm32lib/src/stm32f10x_nvic.c ****   /* Set the PRIGROUP[10:8] bits according to NVIC_PriorityGroup value */
+ 103:stm32lib/src/stm32f10x_nvic.c ****   SCB->AIRCR = AIRCR_VECTKEY_MASK | NVIC_PriorityGroup;
+ 133              		.loc 1 103 0
+ 134 0064 40F0BE60 		orr	r0, r0, #99614720
+ 135              	.LVL2:
+ 136 0068 024B     		ldr	r3, .L12
+ 137 006a 40F42020 		orr	r0, r0, #655360
+ 138 006e D860     		str	r0, [r3, #12]
+ 104:stm32lib/src/stm32f10x_nvic.c **** }
+ 139              		.loc 1 104 0
+ 140 0070 7047     		bx	lr
+ 141              	.L13:
+ 142 0072 00BF     		.align	2
+ 143              	.L12:
+ 144 0074 00ED00E0 		.word	-536810240
+ 145              	.LFE25:
+ 147              		.align	2
+ 148              		.global	NVIC_Init
+ 149              		.thumb
+ 150              		.thumb_func
+ 152              	NVIC_Init:
+ 153              	.LFB26:
+ 105:stm32lib/src/stm32f10x_nvic.c **** 
+ 106:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 107:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_Init
+ 108:stm32lib/src/stm32f10x_nvic.c **** * Description    : Initializes the NVIC peripheral according to the specified
+ 109:stm32lib/src/stm32f10x_nvic.c **** *                  parameters in the NVIC_InitStruct.
+ 110:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure
+ 111:stm32lib/src/stm32f10x_nvic.c **** *                    that contains the configuration information for the
+ 112:stm32lib/src/stm32f10x_nvic.c **** *                    specified NVIC peripheral.
+ 113:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 114:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 115:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 116:stm32lib/src/stm32f10x_nvic.c **** void NVIC_Init(NVIC_InitTypeDef* NVIC_InitStruct)
+ 117:stm32lib/src/stm32f10x_nvic.c **** {
+ 154              		.loc 1 117 0
+ 155              		@ args = 0, pretend = 0, frame = 0
+ 156              		@ frame_needed = 0, uses_anonymous_args = 0
+ 157              	.LVL3:
+ 158 0078 30B5     		push	{r4, r5, lr}
+ 159              	.LCFI0:
+ 118:stm32lib/src/stm32f10x_nvic.c ****   u32 tmppriority = 0x00, tmpreg = 0x00, tmpmask = 0x00;
+ 119:stm32lib/src/stm32f10x_nvic.c ****   u32 tmppre = 0, tmpsub = 0x0F;
+ 120:stm32lib/src/stm32f10x_nvic.c **** 
+ 121:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 122:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_FUNCTIONAL_STATE(NVIC_InitStruct->NVIC_IRQChannelCmd));
+ 123:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_IRQ_CHANNEL(NVIC_InitStruct->NVIC_IRQChannel));
+ 124:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_PREEMPTION_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority));  
+ 125:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_SUB_PRIORITY(NVIC_InitStruct->NVIC_IRQChannelSubPriority));
+ 126:stm32lib/src/stm32f10x_nvic.c ****     
+ 127:stm32lib/src/stm32f10x_nvic.c ****   if (NVIC_InitStruct->NVIC_IRQChannelCmd != DISABLE)
+ 160              		.loc 1 127 0
+ 161 007a C378     		ldrb	r3, [r0, #3]	@ zero_extendqisi2
+ 162 007c 90F800C0 		ldrb	ip, [r0, #0]	@ zero_extendqisi2
+ 163 0080 4BB3     		cbz	r3, .L15
+ 128:stm32lib/src/stm32f10x_nvic.c ****   {
+ 129:stm32lib/src/stm32f10x_nvic.c ****     /* Compute the Corresponding IRQ Priority --------------------------------*/    
+ 130:stm32lib/src/stm32f10x_nvic.c ****     tmppriority = (0x700 - (SCB->AIRCR & (u32)0x700))>> 0x08;
+ 164              		.loc 1 130 0
+ 165 0082 1A4B     		ldr	r3, .L18
+ 131:stm32lib/src/stm32f10x_nvic.c ****     tmppre = (0x4 - tmppriority);
+ 132:stm32lib/src/stm32f10x_nvic.c ****     tmpsub = tmpsub >> tmppriority;
+ 133:stm32lib/src/stm32f10x_nvic.c ****     
+ 134:stm32lib/src/stm32f10x_nvic.c ****     tmppriority = (u32)NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority << tmppre;
+ 166              		.loc 1 134 0
+ 167 0084 4178     		ldrb	r1, [r0, #1]	@ zero_extendqisi2
+ 168              		.loc 1 130 0
+ 169 0086 DA68     		ldr	r2, [r3, #12]
+ 135:stm32lib/src/stm32f10x_nvic.c ****     tmppriority |=  NVIC_InitStruct->NVIC_IRQChannelSubPriority & tmpsub;
+ 136:stm32lib/src/stm32f10x_nvic.c **** 
+ 137:stm32lib/src/stm32f10x_nvic.c ****     tmppriority = tmppriority << 0x04;
+ 138:stm32lib/src/stm32f10x_nvic.c ****     tmppriority = ((u32)tmppriority) << ((NVIC_InitStruct->NVIC_IRQChannel & (u8)0x03) * 0x08);
+ 139:stm32lib/src/stm32f10x_nvic.c ****     
+ 140:stm32lib/src/stm32f10x_nvic.c ****     tmpreg = NVIC->IPR[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)];
+ 170              		.loc 1 140 0
+ 171 0088 194D     		ldr	r5, .L18+4
+ 172              		.loc 1 130 0
+ 173 008a D243     		mvns	r2, r2
+ 174 008c C2F30222 		ubfx	r2, r2, #8, #3
+ 175              	.LVL4:
+ 176              		.loc 1 134 0
+ 177 0090 C2F10403 		rsb	r3, r2, #4
+ 178 0094 9940     		lsls	r1, r1, r3
+ 179              	.LVL5:
+ 180              		.loc 1 135 0
+ 181 0096 0F23     		movs	r3, #15
+ 182 0098 D340     		lsrs	r3, r3, r2
+ 183 009a 8278     		ldrb	r2, [r0, #2]	@ zero_extendqisi2
+ 184              		.loc 1 138 0
+ 185 009c 0CF00300 		and	r0, ip, #3
+ 186              	.LVL6:
+ 187              		.loc 1 135 0
+ 188 00a0 1340     		ands	r3, r3, r2
+ 189 00a2 0B43     		orrs	r3, r3, r1
+ 190              	.LVL7:
+ 191              		.loc 1 138 0
+ 192 00a4 C000     		lsls	r0, r0, #3
+ 193              		.loc 1 137 0
+ 194 00a6 1B01     		lsls	r3, r3, #4
+ 195              	.LVL8:
+ 141:stm32lib/src/stm32f10x_nvic.c ****     tmpmask = (u32)0xFF << ((NVIC_InitStruct->NVIC_IRQChannel & (u8)0x03) * 0x08);
+ 196              		.loc 1 141 0
+ 197 00a8 FF22     		movs	r2, #255
+ 198 00aa 8240     		lsls	r2, r2, r0
+ 199              	.LVL9:
+ 200              		.loc 1 138 0
+ 201 00ac 8340     		lsls	r3, r3, r0
+ 202              	.LVL10:
+ 203              		.loc 1 140 0
+ 204 00ae 4FEA9C04 		lsr	r4, ip, #2
+ 205 00b2 C034     		adds	r4, r4, #192
+ 206 00b4 55F82410 		ldr	r1, [r5, r4, lsl #2]
+ 207              	.LVL11:
+ 142:stm32lib/src/stm32f10x_nvic.c ****     tmpreg &= ~tmpmask;
+ 143:stm32lib/src/stm32f10x_nvic.c ****     tmppriority &= tmpmask;  
+ 144:stm32lib/src/stm32f10x_nvic.c ****     tmpreg |= tmppriority;
+ 208              		.loc 1 144 0
+ 209 00b8 1340     		ands	r3, r3, r2
+ 210              	.LVL12:
+ 211              		.loc 1 142 0
+ 212 00ba 21EA0201 		bic	r1, r1, r2
+ 213              	.LVL13:
+ 214              		.loc 1 144 0
+ 215 00be 0B43     		orrs	r3, r3, r1
+ 216              	.LVL14:
+ 145:stm32lib/src/stm32f10x_nvic.c **** 
+ 146:stm32lib/src/stm32f10x_nvic.c ****     NVIC->IPR[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)] = tmpreg;
+ 217              		.loc 1 146 0
+ 218 00c0 45F82430 		str	r3, [r5, r4, lsl #2]
+ 147:stm32lib/src/stm32f10x_nvic.c ****     
+ 148:stm32lib/src/stm32f10x_nvic.c ****     /* Enable the Selected IRQ Channels --------------------------------------*/
+ 149:stm32lib/src/stm32f10x_nvic.c ****     NVIC->ISER[(NVIC_InitStruct->NVIC_IRQChannel >> 0x05)] =
+ 219              		.loc 1 149 0
+ 220 00c4 0CF01F02 		and	r2, ip, #31
+ 221              	.LVL15:
+ 222 00c8 0123     		movs	r3, #1
+ 223              	.LVL16:
+ 224 00ca 9340     		lsls	r3, r3, r2
+ 225 00cc 4FEA5C11 		lsr	r1, ip, #5
+ 226 00d0 45F82130 		str	r3, [r5, r1, lsl #2]
+ 227 00d4 09E0     		b	.L17
+ 228              	.LVL17:
+ 229              	.L15:
+ 150:stm32lib/src/stm32f10x_nvic.c ****       (u32)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (u8)0x1F);
+ 151:stm32lib/src/stm32f10x_nvic.c ****   }
+ 152:stm32lib/src/stm32f10x_nvic.c ****   else
+ 153:stm32lib/src/stm32f10x_nvic.c ****   {
+ 154:stm32lib/src/stm32f10x_nvic.c ****     /* Disable the Selected IRQ Channels -------------------------------------*/
+ 155:stm32lib/src/stm32f10x_nvic.c ****     NVIC->ICER[(NVIC_InitStruct->NVIC_IRQChannel >> 0x05)] =
+ 230              		.loc 1 155 0
+ 231 00d6 0CF01F02 		and	r2, ip, #31
+ 232 00da 0123     		movs	r3, #1
+ 233 00dc 9340     		lsls	r3, r3, r2
+ 234 00de 4FEA5C11 		lsr	r1, ip, #5
+ 235 00e2 034A     		ldr	r2, .L18+4
+ 236 00e4 2031     		adds	r1, r1, #32
+ 237 00e6 42F82130 		str	r3, [r2, r1, lsl #2]
+ 238              	.L17:
+ 156:stm32lib/src/stm32f10x_nvic.c ****       (u32)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (u8)0x1F);
+ 157:stm32lib/src/stm32f10x_nvic.c ****   }
+ 158:stm32lib/src/stm32f10x_nvic.c **** }
+ 239              		.loc 1 158 0
+ 240 00ea 30BD     		pop	{r4, r5, pc}
+ 241              	.L19:
+ 242              		.align	2
+ 243              	.L18:
+ 244 00ec 00ED00E0 		.word	-536810240
+ 245 00f0 00E100E0 		.word	-536813312
+ 246              	.LFE26:
+ 248              		.align	2
+ 249              		.global	NVIC_StructInit
+ 250              		.thumb
+ 251              		.thumb_func
+ 253              	NVIC_StructInit:
+ 254              	.LFB27:
+ 159:stm32lib/src/stm32f10x_nvic.c **** 
+ 160:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 161:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_StructInit
+ 162:stm32lib/src/stm32f10x_nvic.c **** * Description    : Fills each NVIC_InitStruct member with its default value.
+ 163:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_InitStruct: pointer to a NVIC_InitTypeDef structure which
+ 164:stm32lib/src/stm32f10x_nvic.c **** *                    will be initialized.
+ 165:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 166:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 167:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 168:stm32lib/src/stm32f10x_nvic.c **** void NVIC_StructInit(NVIC_InitTypeDef* NVIC_InitStruct)
+ 169:stm32lib/src/stm32f10x_nvic.c **** {
+ 255              		.loc 1 169 0
+ 256              		@ args = 0, pretend = 0, frame = 0
+ 257              		@ frame_needed = 0, uses_anonymous_args = 0
+ 258              		@ link register save eliminated.
+ 259              	.LVL18:
+ 170:stm32lib/src/stm32f10x_nvic.c ****   /* NVIC_InitStruct members default value */
+ 171:stm32lib/src/stm32f10x_nvic.c ****   NVIC_InitStruct->NVIC_IRQChannel = 0x00;
+ 260              		.loc 1 171 0
+ 261 00f4 0023     		movs	r3, #0
+ 262 00f6 0370     		strb	r3, [r0, #0]
+ 172:stm32lib/src/stm32f10x_nvic.c ****   NVIC_InitStruct->NVIC_IRQChannelPreemptionPriority = 0x00;
+ 263              		.loc 1 172 0
+ 264 00f8 4370     		strb	r3, [r0, #1]
+ 173:stm32lib/src/stm32f10x_nvic.c ****   NVIC_InitStruct->NVIC_IRQChannelSubPriority = 0x00;
+ 265              		.loc 1 173 0
+ 266 00fa 8370     		strb	r3, [r0, #2]
+ 174:stm32lib/src/stm32f10x_nvic.c ****   NVIC_InitStruct->NVIC_IRQChannelCmd = DISABLE;
+ 267              		.loc 1 174 0
+ 268 00fc C370     		strb	r3, [r0, #3]
+ 175:stm32lib/src/stm32f10x_nvic.c **** }
+ 269              		.loc 1 175 0
+ 270 00fe 7047     		bx	lr
+ 271              	.LFE27:
+ 273              		.align	2
+ 274              		.global	NVIC_SETPRIMASK
+ 275              		.thumb
+ 276              		.thumb_func
+ 278              	NVIC_SETPRIMASK:
+ 279              	.LFB28:
+ 176:stm32lib/src/stm32f10x_nvic.c **** 
+ 177:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 178:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SETPRIMASK
+ 179:stm32lib/src/stm32f10x_nvic.c **** * Description    : Enables the PRIMASK priority: Raises the execution priority to 0.
+ 180:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 181:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 182:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 183:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 184:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SETPRIMASK(void)
+ 185:stm32lib/src/stm32f10x_nvic.c **** {
+ 280              		.loc 1 185 0
+ 281              		@ args = 0, pretend = 0, frame = 0
+ 282              		@ frame_needed = 0, uses_anonymous_args = 0
+ 283              		@ link register save eliminated.
+ 284              	.LBB4:
+ 285              	.LBB5:
+ 286              		.file 2 "stm32lib/inc/cortexm3_macro.h"
+   1:stm32lib/inc/cortexm3_macro.h **** #if 0
+   2:stm32lib/inc/cortexm3_macro.h **** /******************** (C) COPYRIGHT 2008 STMicroelectronics ********************
+   3:stm32lib/inc/cortexm3_macro.h **** * File Name          : cortexm3_macro.h
+   4:stm32lib/inc/cortexm3_macro.h **** * Author             : MCD Application Team
+   5:stm32lib/inc/cortexm3_macro.h **** * Version            : V2.0.2
+   6:stm32lib/inc/cortexm3_macro.h **** * Date               : 07/11/2008
+   7:stm32lib/inc/cortexm3_macro.h **** * Description        : Header file for cortexm3_macro.s.
+   8:stm32lib/inc/cortexm3_macro.h **** ********************************************************************************
+   9:stm32lib/inc/cortexm3_macro.h **** * THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
+  10:stm32lib/inc/cortexm3_macro.h **** * WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
+  11:stm32lib/inc/cortexm3_macro.h **** * AS A RESULT, STMICROELECTRONICS SHALL NOT BE HELD LIABLE FOR ANY DIRECT,
+  12:stm32lib/inc/cortexm3_macro.h **** * INDIRECT OR CONSEQUENTIAL DAMAGES WITH RESPECT TO ANY CLAIMS ARISING FROM THE
+  13:stm32lib/inc/cortexm3_macro.h **** * CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
+  14:stm32lib/inc/cortexm3_macro.h **** * INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
+  15:stm32lib/inc/cortexm3_macro.h **** *******************************************************************************/
+  16:stm32lib/inc/cortexm3_macro.h **** 
+  17:stm32lib/inc/cortexm3_macro.h **** /* Define to prevent recursive inclusion -------------------------------------*/
+  18:stm32lib/inc/cortexm3_macro.h **** #ifndef __CORTEXM3_MACRO_H
+  19:stm32lib/inc/cortexm3_macro.h **** #define __CORTEXM3_MACRO_H
+  20:stm32lib/inc/cortexm3_macro.h **** 
+  21:stm32lib/inc/cortexm3_macro.h **** /* Includes ------------------------------------------------------------------*/
+  22:stm32lib/inc/cortexm3_macro.h **** #include "stm32f10x_type.h"
+  23:stm32lib/inc/cortexm3_macro.h **** 
+  24:stm32lib/inc/cortexm3_macro.h **** /* Exported types ------------------------------------------------------------*/
+  25:stm32lib/inc/cortexm3_macro.h **** /* Exported constants --------------------------------------------------------*/
+  26:stm32lib/inc/cortexm3_macro.h **** /* Exported macro ------------------------------------------------------------*/
+  27:stm32lib/inc/cortexm3_macro.h **** /* Exported functions ------------------------------------------------------- */
+  28:stm32lib/inc/cortexm3_macro.h **** void __WFI(void);
+  29:stm32lib/inc/cortexm3_macro.h **** void __WFE(void);
+  30:stm32lib/inc/cortexm3_macro.h **** void __SEV(void);
+  31:stm32lib/inc/cortexm3_macro.h **** void __ISB(void);
+  32:stm32lib/inc/cortexm3_macro.h **** void __DSB(void);
+  33:stm32lib/inc/cortexm3_macro.h **** void __DMB(void);
+  34:stm32lib/inc/cortexm3_macro.h **** void __SVC(void);
+  35:stm32lib/inc/cortexm3_macro.h **** u32 __MRS_CONTROL(void);
+  36:stm32lib/inc/cortexm3_macro.h **** void __MSR_CONTROL(u32 Control);
+  37:stm32lib/inc/cortexm3_macro.h **** u32 __MRS_PSP(void);
+  38:stm32lib/inc/cortexm3_macro.h **** void __MSR_PSP(u32 TopOfProcessStack);
+  39:stm32lib/inc/cortexm3_macro.h **** u32 __MRS_MSP(void);
+  40:stm32lib/inc/cortexm3_macro.h **** void __MSR_MSP(u32 TopOfMainStack);
+  41:stm32lib/inc/cortexm3_macro.h **** void __RESETPRIMASK(void);
+  42:stm32lib/inc/cortexm3_macro.h **** void __SETPRIMASK(void);
+  43:stm32lib/inc/cortexm3_macro.h **** u32 __READ_PRIMASK(void);
+  44:stm32lib/inc/cortexm3_macro.h **** void __RESETFAULTMASK(void);
+  45:stm32lib/inc/cortexm3_macro.h **** void __SETFAULTMASK(void);
+  46:stm32lib/inc/cortexm3_macro.h **** u32 __READ_FAULTMASK(void);
+  47:stm32lib/inc/cortexm3_macro.h **** void __BASEPRICONFIG(u32 NewPriority);
+  48:stm32lib/inc/cortexm3_macro.h **** u32 __GetBASEPRI(void);
+  49:stm32lib/inc/cortexm3_macro.h **** u16 __REV_HalfWord(u16 Data);
+  50:stm32lib/inc/cortexm3_macro.h **** u32 __REV_Word(u32 Data);
+  51:stm32lib/inc/cortexm3_macro.h **** 
+  52:stm32lib/inc/cortexm3_macro.h **** #endif /* __CORTEXM3_MACRO_H */
+  53:stm32lib/inc/cortexm3_macro.h **** #endif
+  54:stm32lib/inc/cortexm3_macro.h **** 
+  55:stm32lib/inc/cortexm3_macro.h **** /******************* (C) COPYRIGHT 2008 STMicroelectronics *****END OF FILE****/
+  56:stm32lib/inc/cortexm3_macro.h **** 
+  57:stm32lib/inc/cortexm3_macro.h **** /******************** (C) COPYRIGHT 2008 Andreas Fritiofson ********************
+  58:stm32lib/inc/cortexm3_macro.h **** * File Name          : cortexm3_macro.h
+  59:stm32lib/inc/cortexm3_macro.h **** * Author             : Andreas Fritiofson
+  60:stm32lib/inc/cortexm3_macro.h **** * Version            : V1.0
+  61:stm32lib/inc/cortexm3_macro.h **** * Date               : 30/04/2008
+  62:stm32lib/inc/cortexm3_macro.h **** * Description        : Instruction wrappers for special Cortex-M3 instructions.
+  63:stm32lib/inc/cortexm3_macro.h **** ********************************************************************************
+  64:stm32lib/inc/cortexm3_macro.h **** Permission is hereby granted, free of charge, to any person obtaining a copy
+  65:stm32lib/inc/cortexm3_macro.h **** of this software and associated documentation files (the "Software"), to deal
+  66:stm32lib/inc/cortexm3_macro.h **** in the Software without restriction, including without limitation the rights
+  67:stm32lib/inc/cortexm3_macro.h **** to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  68:stm32lib/inc/cortexm3_macro.h **** copies of the Software, and to permit persons to whom the Software is
+  69:stm32lib/inc/cortexm3_macro.h **** furnished to do so, subject to the following conditions:
+  70:stm32lib/inc/cortexm3_macro.h **** 
+  71:stm32lib/inc/cortexm3_macro.h **** The above copyright notice and this permission notice shall be included in
+  72:stm32lib/inc/cortexm3_macro.h **** all copies or substantial portions of the Software.
+  73:stm32lib/inc/cortexm3_macro.h **** 
+  74:stm32lib/inc/cortexm3_macro.h **** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  75:stm32lib/inc/cortexm3_macro.h **** IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  76:stm32lib/inc/cortexm3_macro.h **** FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  77:stm32lib/inc/cortexm3_macro.h **** AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  78:stm32lib/inc/cortexm3_macro.h **** LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  79:stm32lib/inc/cortexm3_macro.h **** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+  80:stm32lib/inc/cortexm3_macro.h **** THE SOFTWARE.
+  81:stm32lib/inc/cortexm3_macro.h **** *******************************************************************************/
+  82:stm32lib/inc/cortexm3_macro.h **** 
+  83:stm32lib/inc/cortexm3_macro.h **** /* Define to prevent recursive inclusion -------------------------------------*/
+  84:stm32lib/inc/cortexm3_macro.h **** #ifndef __CORTEXM3_MACRO_H
+  85:stm32lib/inc/cortexm3_macro.h **** #define __CORTEXM3_MACRO_H
+  86:stm32lib/inc/cortexm3_macro.h **** 
+  87:stm32lib/inc/cortexm3_macro.h **** /* Includes ------------------------------------------------------------------*/
+  88:stm32lib/inc/cortexm3_macro.h **** #include "stm32f10x_type.h"
+  89:stm32lib/inc/cortexm3_macro.h **** 
+  90:stm32lib/inc/cortexm3_macro.h **** /* Exported types ------------------------------------------------------------*/
+  91:stm32lib/inc/cortexm3_macro.h **** /* Exported constants --------------------------------------------------------*/
+  92:stm32lib/inc/cortexm3_macro.h **** /* Exported macro ------------------------------------------------------------*/
+  93:stm32lib/inc/cortexm3_macro.h **** /* Exported functions ------------------------------------------------------- */
+  94:stm32lib/inc/cortexm3_macro.h **** static inline void __WFI(void) {
+  95:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "WFI \n" );
+  96:stm32lib/inc/cortexm3_macro.h **** }
+  97:stm32lib/inc/cortexm3_macro.h **** static inline void __WFE(void) {
+  98:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "WFE \n" );
+  99:stm32lib/inc/cortexm3_macro.h **** }
+ 100:stm32lib/inc/cortexm3_macro.h **** static inline void __SEV(void) {
+ 101:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "SEV \n" );
+ 102:stm32lib/inc/cortexm3_macro.h **** }
+ 103:stm32lib/inc/cortexm3_macro.h **** static inline void __ISB(void) {
+ 104:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "ISB \n" );
+ 105:stm32lib/inc/cortexm3_macro.h **** }
+ 106:stm32lib/inc/cortexm3_macro.h **** static inline void __DSB(void) {
+ 107:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "DSB \n" );
+ 108:stm32lib/inc/cortexm3_macro.h **** }
+ 109:stm32lib/inc/cortexm3_macro.h **** static inline void __DMB(void) {
+ 110:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "DMB \n" );
+ 111:stm32lib/inc/cortexm3_macro.h **** }
+ 112:stm32lib/inc/cortexm3_macro.h **** static inline void __SVC(void) {
+ 113:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "SVC 0x01 \n" );
+ 114:stm32lib/inc/cortexm3_macro.h **** }
+ 115:stm32lib/inc/cortexm3_macro.h **** static inline u32 __MRS_CONTROL(void) {
+ 116:stm32lib/inc/cortexm3_macro.h ****     u32 x;
+ 117:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MRS %0, control \n" : "=r" (x));
+ 118:stm32lib/inc/cortexm3_macro.h ****     return x;
+ 119:stm32lib/inc/cortexm3_macro.h **** }
+ 120:stm32lib/inc/cortexm3_macro.h **** static inline void __MSR_CONTROL(u32 Control) {
+ 121:stm32lib/inc/cortexm3_macro.h ****     asm volatile (
+ 122:stm32lib/inc/cortexm3_macro.h ****             "MSR control, %0 \n"
+ 123:stm32lib/inc/cortexm3_macro.h ****             "ISB \n"
+ 124:stm32lib/inc/cortexm3_macro.h ****             : : "r" (Control));
+ 125:stm32lib/inc/cortexm3_macro.h **** }
+ 126:stm32lib/inc/cortexm3_macro.h **** static inline u32 __MRS_PSP(void) {
+ 127:stm32lib/inc/cortexm3_macro.h ****     u32 x;
+ 128:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MRS %0, psp \n" : "=r" (x));
+ 129:stm32lib/inc/cortexm3_macro.h ****     return x;
+ 130:stm32lib/inc/cortexm3_macro.h **** }
+ 131:stm32lib/inc/cortexm3_macro.h **** static inline void __MSR_PSP(u32 TopOfProcessStack) {
+ 132:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MSR psp, %0 \n" : : "r" (TopOfProcessStack));
+ 133:stm32lib/inc/cortexm3_macro.h **** }
+ 134:stm32lib/inc/cortexm3_macro.h **** static inline u32 __MRS_MSP(void) {
+ 135:stm32lib/inc/cortexm3_macro.h ****     u32 x;
+ 136:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MRS %0, msp \n" : "=r" (x));
+ 137:stm32lib/inc/cortexm3_macro.h ****     return x;
+ 138:stm32lib/inc/cortexm3_macro.h **** }
+ 139:stm32lib/inc/cortexm3_macro.h **** static inline void __MSR_MSP(u32 TopOfMainStack) {
+ 140:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MSR msp, %0 \n" : : "r" (TopOfMainStack));
+ 141:stm32lib/inc/cortexm3_macro.h **** }
+ 142:stm32lib/inc/cortexm3_macro.h **** static inline void __SETPRIMASK(void) {
+ 143:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "CPSID i \n" );
+ 287              		.loc 2 143 0
+ 288              	@ 143 "stm32lib/inc/cortexm3_macro.h" 1
+ 289 0100 72B6     		CPSID i 
+ 290              	
+ 291              	@ 0 "" 2
+ 292              		.thumb
+ 293              	.LBE5:
+ 294              	.LBE4:
+ 186:stm32lib/src/stm32f10x_nvic.c ****   __SETPRIMASK();
+ 187:stm32lib/src/stm32f10x_nvic.c **** }
+ 295              		.loc 1 187 0
+ 296 0102 7047     		bx	lr
+ 297              	.LFE28:
+ 299              		.align	2
+ 300              		.global	NVIC_RESETPRIMASK
+ 301              		.thumb
+ 302              		.thumb_func
+ 304              	NVIC_RESETPRIMASK:
+ 305              	.LFB29:
+ 188:stm32lib/src/stm32f10x_nvic.c **** 
+ 189:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 190:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_RESETPRIMASK
+ 191:stm32lib/src/stm32f10x_nvic.c **** * Description    : Disables the PRIMASK priority.
+ 192:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 193:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 194:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 195:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 196:stm32lib/src/stm32f10x_nvic.c **** void NVIC_RESETPRIMASK(void)
+ 197:stm32lib/src/stm32f10x_nvic.c **** {
+ 306              		.loc 1 197 0
+ 307              		@ args = 0, pretend = 0, frame = 0
+ 308              		@ frame_needed = 0, uses_anonymous_args = 0
+ 309              		@ link register save eliminated.
+ 310              	.LBB8:
+ 311              	.LBB9:
+ 144:stm32lib/inc/cortexm3_macro.h **** }
+ 145:stm32lib/inc/cortexm3_macro.h **** static inline void __RESETPRIMASK(void) {
+ 146:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "CPSIE i \n" );
+ 312              		.loc 2 146 0
+ 313              	@ 146 "stm32lib/inc/cortexm3_macro.h" 1
+ 314 0104 62B6     		CPSIE i 
+ 315              	
+ 316              	@ 0 "" 2
+ 317              		.thumb
+ 318              	.LBE9:
+ 319              	.LBE8:
+ 198:stm32lib/src/stm32f10x_nvic.c ****   __RESETPRIMASK();
+ 199:stm32lib/src/stm32f10x_nvic.c **** }
+ 320              		.loc 1 199 0
+ 321 0106 7047     		bx	lr
+ 322              	.LFE29:
+ 324              		.align	2
+ 325              		.global	NVIC_SETFAULTMASK
+ 326              		.thumb
+ 327              		.thumb_func
+ 329              	NVIC_SETFAULTMASK:
+ 330              	.LFB30:
+ 200:stm32lib/src/stm32f10x_nvic.c **** 
+ 201:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 202:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SETFAULTMASK
+ 203:stm32lib/src/stm32f10x_nvic.c **** * Description    : Enables the FAULTMASK priority: Raises the execution priority to -1.
+ 204:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 205:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 206:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 207:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 208:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SETFAULTMASK(void)
+ 209:stm32lib/src/stm32f10x_nvic.c **** {
+ 331              		.loc 1 209 0
+ 332              		@ args = 0, pretend = 0, frame = 0
+ 333              		@ frame_needed = 0, uses_anonymous_args = 0
+ 334              		@ link register save eliminated.
+ 335              	.LBB12:
+ 336              	.LBB13:
+ 147:stm32lib/inc/cortexm3_macro.h **** }
+ 148:stm32lib/inc/cortexm3_macro.h **** static inline void __SETFAULTMASK(void) {
+ 149:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "CPSID f \n" );
+ 337              		.loc 2 149 0
+ 338              	@ 149 "stm32lib/inc/cortexm3_macro.h" 1
+ 339 0108 71B6     		CPSID f 
+ 340              	
+ 341              	@ 0 "" 2
+ 342              		.thumb
+ 343              	.LBE13:
+ 344              	.LBE12:
+ 210:stm32lib/src/stm32f10x_nvic.c ****   __SETFAULTMASK();
+ 211:stm32lib/src/stm32f10x_nvic.c **** }
+ 345              		.loc 1 211 0
+ 346 010a 7047     		bx	lr
+ 347              	.LFE30:
+ 349              		.align	2
+ 350              		.global	NVIC_RESETFAULTMASK
+ 351              		.thumb
+ 352              		.thumb_func
+ 354              	NVIC_RESETFAULTMASK:
+ 355              	.LFB31:
+ 212:stm32lib/src/stm32f10x_nvic.c **** 
+ 213:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 214:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_RESETFAULTMASK
+ 215:stm32lib/src/stm32f10x_nvic.c **** * Description    : Disables the FAULTMASK priority.
+ 216:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 217:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 218:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 219:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 220:stm32lib/src/stm32f10x_nvic.c **** void NVIC_RESETFAULTMASK(void)
+ 221:stm32lib/src/stm32f10x_nvic.c **** {
+ 356              		.loc 1 221 0
+ 357              		@ args = 0, pretend = 0, frame = 0
+ 358              		@ frame_needed = 0, uses_anonymous_args = 0
+ 359              		@ link register save eliminated.
+ 360              	.LBB16:
+ 361              	.LBB17:
+ 150:stm32lib/inc/cortexm3_macro.h **** }
+ 151:stm32lib/inc/cortexm3_macro.h **** static inline void __RESETFAULTMASK(void) {
+ 152:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "CPSIE f \n" );
+ 362              		.loc 2 152 0
+ 363              	@ 152 "stm32lib/inc/cortexm3_macro.h" 1
+ 364 010c 61B6     		CPSIE f 
+ 365              	
+ 366              	@ 0 "" 2
+ 367              		.thumb
+ 368              	.LBE17:
+ 369              	.LBE16:
+ 222:stm32lib/src/stm32f10x_nvic.c ****   __RESETFAULTMASK();
+ 223:stm32lib/src/stm32f10x_nvic.c **** }
+ 370              		.loc 1 223 0
+ 371 010e 7047     		bx	lr
+ 372              	.LFE31:
+ 374              		.align	2
+ 375              		.global	NVIC_BASEPRICONFIG
+ 376              		.thumb
+ 377              		.thumb_func
+ 379              	NVIC_BASEPRICONFIG:
+ 380              	.LFB32:
+ 224:stm32lib/src/stm32f10x_nvic.c **** 
+ 225:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 226:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_BASEPRICONFIG
+ 227:stm32lib/src/stm32f10x_nvic.c **** * Description    : The execution priority can be changed from 15 (lowest 
+ 228:stm32lib/src/stm32f10x_nvic.c ****                    configurable priority) to 1. Writing a zero  value will disable 
+ 229:stm32lib/src/stm32f10x_nvic.c **** *                  the mask of execution priority.
+ 230:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 231:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 232:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 233:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 234:stm32lib/src/stm32f10x_nvic.c **** void NVIC_BASEPRICONFIG(u32 NewPriority)
+ 235:stm32lib/src/stm32f10x_nvic.c **** {
+ 381              		.loc 1 235 0
+ 382              		@ args = 0, pretend = 0, frame = 0
+ 383              		@ frame_needed = 0, uses_anonymous_args = 0
+ 384              		@ link register save eliminated.
+ 385              	.LVL19:
+ 386              	.LBB20:
+ 387              	.LBB21:
+ 153:stm32lib/inc/cortexm3_macro.h **** }
+ 154:stm32lib/inc/cortexm3_macro.h **** static inline void __BASEPRICONFIG(u32 NewPriority) {
+ 155:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MSR basepri, %0 \n" : : "r" (NewPriority));
+ 388              		.loc 2 155 0
+ 389 0110 0001     		lsls	r0, r0, #4
+ 390              	.LVL20:
+ 391              	@ 155 "stm32lib/inc/cortexm3_macro.h" 1
+ 392 0112 80F31188 		MSR basepri, r0 
+ 393              	
+ 394              	@ 0 "" 2
+ 395              		.thumb
+ 396              	.LBE21:
+ 397              	.LBE20:
+ 236:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 237:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_BASE_PRI(NewPriority));
+ 238:stm32lib/src/stm32f10x_nvic.c ****   
+ 239:stm32lib/src/stm32f10x_nvic.c ****   __BASEPRICONFIG(NewPriority << 0x04);
+ 240:stm32lib/src/stm32f10x_nvic.c **** }
+ 398              		.loc 1 240 0
+ 399 0116 7047     		bx	lr
+ 400              	.LFE32:
+ 402              		.align	2
+ 403              		.global	NVIC_GetBASEPRI
+ 404              		.thumb
+ 405              		.thumb_func
+ 407              	NVIC_GetBASEPRI:
+ 408              	.LFB33:
+ 241:stm32lib/src/stm32f10x_nvic.c **** 
+ 242:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 243:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetBASEPRI
+ 244:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the BASEPRI mask value.
+ 245:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 246:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 247:stm32lib/src/stm32f10x_nvic.c **** * Return         : BASEPRI register value
+ 248:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 249:stm32lib/src/stm32f10x_nvic.c **** u32 NVIC_GetBASEPRI(void)
+ 250:stm32lib/src/stm32f10x_nvic.c **** {
+ 409              		.loc 1 250 0
+ 410              		@ args = 0, pretend = 0, frame = 0
+ 411              		@ frame_needed = 0, uses_anonymous_args = 0
+ 412              		@ link register save eliminated.
+ 413              	.LBB24:
+ 414              	.LBB25:
+ 156:stm32lib/inc/cortexm3_macro.h **** }
+ 157:stm32lib/inc/cortexm3_macro.h **** static inline u32 __GetBASEPRI(void) {
+ 158:stm32lib/inc/cortexm3_macro.h ****     u32 x;
+ 159:stm32lib/inc/cortexm3_macro.h ****     asm volatile ( "MRS %0, basepri_max \n" : "=r" (x));
+ 415              		.loc 2 159 0
+ 416              	@ 159 "stm32lib/inc/cortexm3_macro.h" 1
+ 417 0118 EFF31280 		MRS r0, basepri_max 
+ 418              	
+ 419              	@ 0 "" 2
+ 420              	.LVL21:
+ 421              	.LVL22:
+ 422              		.thumb
+ 423              	.LBE25:
+ 424              	.LBE24:
+ 251:stm32lib/src/stm32f10x_nvic.c ****   return (__GetBASEPRI());
+ 252:stm32lib/src/stm32f10x_nvic.c **** }
+ 425              		.loc 1 252 0
+ 426 011c 7047     		bx	lr
+ 427              	.LFE33:
+ 429 011e 00BF     		.align	2
+ 430              		.global	NVIC_GetCurrentPendingIRQChannel
+ 431              		.thumb
+ 432              		.thumb_func
+ 434              	NVIC_GetCurrentPendingIRQChannel:
+ 435              	.LFB34:
+ 253:stm32lib/src/stm32f10x_nvic.c **** 
+ 254:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 255:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetCurrentPendingIRQChannel
+ 256:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the current pending IRQ channel identifier.
+ 257:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 258:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 259:stm32lib/src/stm32f10x_nvic.c **** * Return         : Pending IRQ Channel Identifier.
+ 260:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 261:stm32lib/src/stm32f10x_nvic.c **** u16 NVIC_GetCurrentPendingIRQChannel(void)
+ 262:stm32lib/src/stm32f10x_nvic.c **** {
+ 436              		.loc 1 262 0
+ 437              		@ args = 0, pretend = 0, frame = 0
+ 438              		@ frame_needed = 0, uses_anonymous_args = 0
+ 439              		@ link register save eliminated.
+ 263:stm32lib/src/stm32f10x_nvic.c ****   return ((u16)((SCB->ICSR & (u32)0x003FF000) >> 0x0C));
+ 440              		.loc 1 263 0
+ 441 0120 024B     		ldr	r3, .L36
+ 442 0122 5868     		ldr	r0, [r3, #4]
+ 264:stm32lib/src/stm32f10x_nvic.c **** }
+ 443              		.loc 1 264 0
+ 444 0124 C0F30930 		ubfx	r0, r0, #12, #10
+ 445 0128 7047     		bx	lr
+ 446              	.L37:
+ 447 012a 00BF     		.align	2
+ 448              	.L36:
+ 449 012c 00ED00E0 		.word	-536810240
+ 450              	.LFE34:
+ 452              		.align	2
+ 453              		.global	NVIC_GetIRQChannelPendingBitStatus
+ 454              		.thumb
+ 455              		.thumb_func
+ 457              	NVIC_GetIRQChannelPendingBitStatus:
+ 458              	.LFB35:
+ 265:stm32lib/src/stm32f10x_nvic.c **** 
+ 266:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 267:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetIRQChannelPendingBitStatus
+ 268:stm32lib/src/stm32f10x_nvic.c **** * Description    : Checks whether the specified IRQ Channel pending bit is set
+ 269:stm32lib/src/stm32f10x_nvic.c **** *                  or not.
+ 270:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_IRQChannel: specifies the interrupt pending bit to check.
+ 271:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 272:stm32lib/src/stm32f10x_nvic.c **** * Return         : The new state of IRQ Channel pending bit(SET or RESET).
+ 273:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 274:stm32lib/src/stm32f10x_nvic.c **** ITStatus NVIC_GetIRQChannelPendingBitStatus(u8 NVIC_IRQChannel)
+ 275:stm32lib/src/stm32f10x_nvic.c **** {
+ 459              		.loc 1 275 0
+ 460              		@ args = 0, pretend = 0, frame = 0
+ 461              		@ frame_needed = 0, uses_anonymous_args = 0
+ 462              		@ link register save eliminated.
+ 463              	.LVL23:
+ 276:stm32lib/src/stm32f10x_nvic.c ****   ITStatus pendingirqstatus = RESET;
+ 277:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00;
+ 278:stm32lib/src/stm32f10x_nvic.c ****   
+ 279:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 280:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_IRQ_CHANNEL(NVIC_IRQChannel));
+ 281:stm32lib/src/stm32f10x_nvic.c ****   
+ 282:stm32lib/src/stm32f10x_nvic.c ****   tmp = ((u32)0x01 << (NVIC_IRQChannel & (u32)0x1F));
+ 464              		.loc 1 282 0
+ 465 0130 00F01F03 		and	r3, r0, #31
+ 466 0134 0122     		movs	r2, #1
+ 467 0136 9A40     		lsls	r2, r2, r3
+ 468              	.LVL24:
+ 283:stm32lib/src/stm32f10x_nvic.c **** 
+ 284:stm32lib/src/stm32f10x_nvic.c ****   if (((NVIC->ISPR[(NVIC_IRQChannel >> 0x05)]) & tmp) == tmp)
+ 469              		.loc 1 284 0
+ 470 0138 4009     		lsrs	r0, r0, #5
+ 471              	.LVL25:
+ 472 013a 054B     		ldr	r3, .L40
+ 473 013c 4030     		adds	r0, r0, #64
+ 474 013e 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 475 0142 1040     		ands	r0, r0, r2
+ 285:stm32lib/src/stm32f10x_nvic.c ****   {
+ 286:stm32lib/src/stm32f10x_nvic.c ****     pendingirqstatus = SET;
+ 287:stm32lib/src/stm32f10x_nvic.c ****   }
+ 288:stm32lib/src/stm32f10x_nvic.c ****   else
+ 289:stm32lib/src/stm32f10x_nvic.c ****   {
+ 290:stm32lib/src/stm32f10x_nvic.c ****     pendingirqstatus = RESET;
+ 291:stm32lib/src/stm32f10x_nvic.c ****   }
+ 292:stm32lib/src/stm32f10x_nvic.c ****   return pendingirqstatus;
+ 293:stm32lib/src/stm32f10x_nvic.c **** }
+ 476              		.loc 1 293 0
+ 477 0144 9042     		cmp	r0, r2
+ 478 0146 14BF     		ite	ne
+ 479 0148 0020     		movne	r0, #0
+ 480 014a 0120     		moveq	r0, #1
+ 481 014c 7047     		bx	lr
+ 482              	.L41:
+ 483 014e 00BF     		.align	2
+ 484              	.L40:
+ 485 0150 00E100E0 		.word	-536813312
+ 486              	.LFE35:
+ 488              		.align	2
+ 489              		.global	NVIC_SetIRQChannelPendingBit
+ 490              		.thumb
+ 491              		.thumb_func
+ 493              	NVIC_SetIRQChannelPendingBit:
+ 494              	.LFB36:
+ 294:stm32lib/src/stm32f10x_nvic.c **** 
+ 295:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 296:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SetIRQChannelPendingBit
+ 297:stm32lib/src/stm32f10x_nvic.c **** * Description    : Sets the NVIC’s interrupt pending bit.
+ 298:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_IRQChannel: specifies the interrupt pending bit to Set.
+ 299:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 300:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 301:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 302:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SetIRQChannelPendingBit(u8 NVIC_IRQChannel)
+ 303:stm32lib/src/stm32f10x_nvic.c **** {
+ 495              		.loc 1 303 0
+ 496              		@ args = 0, pretend = 0, frame = 0
+ 497              		@ frame_needed = 0, uses_anonymous_args = 0
+ 498              		@ link register save eliminated.
+ 499              	.LVL26:
+ 304:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 305:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_IRQ_CHANNEL(NVIC_IRQChannel));
+ 306:stm32lib/src/stm32f10x_nvic.c ****   
+ 307:stm32lib/src/stm32f10x_nvic.c ****   *(vu32*) 0xE000EF00 = (u32)NVIC_IRQChannel;
+ 500              		.loc 1 307 0
+ 501 0154 014B     		ldr	r3, .L44
+ 502 0156 1860     		str	r0, [r3, #0]
+ 308:stm32lib/src/stm32f10x_nvic.c **** }
+ 503              		.loc 1 308 0
+ 504 0158 7047     		bx	lr
+ 505              	.L45:
+ 506 015a 00BF     		.align	2
+ 507              	.L44:
+ 508 015c 00EF00E0 		.word	-536809728
+ 509              	.LFE36:
+ 511              		.align	2
+ 512              		.global	NVIC_ClearIRQChannelPendingBit
+ 513              		.thumb
+ 514              		.thumb_func
+ 516              	NVIC_ClearIRQChannelPendingBit:
+ 517              	.LFB37:
+ 309:stm32lib/src/stm32f10x_nvic.c **** 
+ 310:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 311:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_ClearIRQChannelPendingBit
+ 312:stm32lib/src/stm32f10x_nvic.c **** * Description    : Clears the NVIC’s interrupt pending bit.
+ 313:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_IRQChannel: specifies the interrupt pending bit to clear.
+ 314:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 315:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 316:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 317:stm32lib/src/stm32f10x_nvic.c **** void NVIC_ClearIRQChannelPendingBit(u8 NVIC_IRQChannel)
+ 318:stm32lib/src/stm32f10x_nvic.c **** {
+ 518              		.loc 1 318 0
+ 519              		@ args = 0, pretend = 0, frame = 0
+ 520              		@ frame_needed = 0, uses_anonymous_args = 0
+ 521              		@ link register save eliminated.
+ 522              	.LVL27:
+ 319:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 320:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_IRQ_CHANNEL(NVIC_IRQChannel));
+ 321:stm32lib/src/stm32f10x_nvic.c ****   
+ 322:stm32lib/src/stm32f10x_nvic.c ****   NVIC->ICPR[(NVIC_IRQChannel >> 0x05)] = (u32)0x01 << (NVIC_IRQChannel & (u32)0x1F);
+ 523              		.loc 1 322 0
+ 524 0160 4109     		lsrs	r1, r0, #5
+ 525 0162 0123     		movs	r3, #1
+ 526 0164 00F01F00 		and	r0, r0, #31
+ 527              	.LVL28:
+ 528 0168 8340     		lsls	r3, r3, r0
+ 529 016a 024A     		ldr	r2, .L48
+ 530 016c 6031     		adds	r1, r1, #96
+ 531 016e 42F82130 		str	r3, [r2, r1, lsl #2]
+ 323:stm32lib/src/stm32f10x_nvic.c **** }
+ 532              		.loc 1 323 0
+ 533 0172 7047     		bx	lr
+ 534              	.L49:
+ 535              		.align	2
+ 536              	.L48:
+ 537 0174 00E100E0 		.word	-536813312
+ 538              	.LFE37:
+ 540              		.align	2
+ 541              		.global	NVIC_GetCurrentActiveHandler
+ 542              		.thumb
+ 543              		.thumb_func
+ 545              	NVIC_GetCurrentActiveHandler:
+ 546              	.LFB38:
+ 324:stm32lib/src/stm32f10x_nvic.c **** 
+ 325:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 326:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetCurrentActiveHandler
+ 327:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the current active Handler (IRQ Channel and
+ 328:stm32lib/src/stm32f10x_nvic.c **** *                  SystemHandler) identifier.
+ 329:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 330:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 331:stm32lib/src/stm32f10x_nvic.c **** * Return         : Active Handler Identifier.
+ 332:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 333:stm32lib/src/stm32f10x_nvic.c **** u16 NVIC_GetCurrentActiveHandler(void)
+ 334:stm32lib/src/stm32f10x_nvic.c **** {
+ 547              		.loc 1 334 0
+ 548              		@ args = 0, pretend = 0, frame = 0
+ 549              		@ frame_needed = 0, uses_anonymous_args = 0
+ 550              		@ link register save eliminated.
+ 335:stm32lib/src/stm32f10x_nvic.c ****   return ((u16)(SCB->ICSR & (u32)0x3FF));
+ 551              		.loc 1 335 0
+ 552 0178 024B     		ldr	r3, .L52
+ 553 017a 5868     		ldr	r0, [r3, #4]
+ 336:stm32lib/src/stm32f10x_nvic.c **** }
+ 554              		.loc 1 336 0
+ 555 017c 8005     		lsls	r0, r0, #22
+ 556 017e 800D     		lsrs	r0, r0, #22
+ 557 0180 7047     		bx	lr
+ 558              	.L53:
+ 559 0182 00BF     		.align	2
+ 560              	.L52:
+ 561 0184 00ED00E0 		.word	-536810240
+ 562              	.LFE38:
+ 564              		.align	2
+ 565              		.global	NVIC_GetIRQChannelActiveBitStatus
+ 566              		.thumb
+ 567              		.thumb_func
+ 569              	NVIC_GetIRQChannelActiveBitStatus:
+ 570              	.LFB39:
+ 337:stm32lib/src/stm32f10x_nvic.c **** 
+ 338:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 339:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetIRQChannelActiveBitStatus
+ 340:stm32lib/src/stm32f10x_nvic.c **** * Description    : Checks whether the specified IRQ Channel active bit is set
+ 341:stm32lib/src/stm32f10x_nvic.c **** *                  or not.
+ 342:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_IRQChannel: specifies the interrupt active bit to check.
+ 343:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 344:stm32lib/src/stm32f10x_nvic.c **** * Return         : The new state of IRQ Channel active bit(SET or RESET).
+ 345:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 346:stm32lib/src/stm32f10x_nvic.c **** ITStatus NVIC_GetIRQChannelActiveBitStatus(u8 NVIC_IRQChannel)
+ 347:stm32lib/src/stm32f10x_nvic.c **** {
+ 571              		.loc 1 347 0
+ 572              		@ args = 0, pretend = 0, frame = 0
+ 573              		@ frame_needed = 0, uses_anonymous_args = 0
+ 574              		@ link register save eliminated.
+ 575              	.LVL29:
+ 348:stm32lib/src/stm32f10x_nvic.c ****   ITStatus activeirqstatus = RESET;
+ 349:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00;
+ 350:stm32lib/src/stm32f10x_nvic.c **** 
+ 351:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 352:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_IRQ_CHANNEL(NVIC_IRQChannel));
+ 353:stm32lib/src/stm32f10x_nvic.c ****   
+ 354:stm32lib/src/stm32f10x_nvic.c ****   tmp = ((u32)0x01 << (NVIC_IRQChannel & (u32)0x1F));
+ 576              		.loc 1 354 0
+ 577 0188 00F01F03 		and	r3, r0, #31
+ 578 018c 0122     		movs	r2, #1
+ 579 018e 9A40     		lsls	r2, r2, r3
+ 580              	.LVL30:
+ 355:stm32lib/src/stm32f10x_nvic.c **** 
+ 356:stm32lib/src/stm32f10x_nvic.c ****   if (((NVIC->IABR[(NVIC_IRQChannel >> 0x05)]) & tmp) == tmp )
+ 581              		.loc 1 356 0
+ 582 0190 4009     		lsrs	r0, r0, #5
+ 583              	.LVL31:
+ 584 0192 054B     		ldr	r3, .L56
+ 585 0194 8030     		adds	r0, r0, #128
+ 586 0196 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 587 019a 1040     		ands	r0, r0, r2
+ 357:stm32lib/src/stm32f10x_nvic.c ****   {
+ 358:stm32lib/src/stm32f10x_nvic.c ****     activeirqstatus = SET;
+ 359:stm32lib/src/stm32f10x_nvic.c ****   }
+ 360:stm32lib/src/stm32f10x_nvic.c ****   else
+ 361:stm32lib/src/stm32f10x_nvic.c ****   {
+ 362:stm32lib/src/stm32f10x_nvic.c ****     activeirqstatus = RESET;
+ 363:stm32lib/src/stm32f10x_nvic.c ****   }
+ 364:stm32lib/src/stm32f10x_nvic.c ****   return activeirqstatus;
+ 365:stm32lib/src/stm32f10x_nvic.c **** }
+ 588              		.loc 1 365 0
+ 589 019c 9042     		cmp	r0, r2
+ 590 019e 14BF     		ite	ne
+ 591 01a0 0020     		movne	r0, #0
+ 592 01a2 0120     		moveq	r0, #1
+ 593 01a4 7047     		bx	lr
+ 594              	.L57:
+ 595 01a6 00BF     		.align	2
+ 596              	.L56:
+ 597 01a8 00E100E0 		.word	-536813312
+ 598              	.LFE39:
+ 600              		.align	2
+ 601              		.global	NVIC_GetCPUID
+ 602              		.thumb
+ 603              		.thumb_func
+ 605              	NVIC_GetCPUID:
+ 606              	.LFB40:
+ 366:stm32lib/src/stm32f10x_nvic.c **** 
+ 367:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 368:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetCPUID
+ 369:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the ID number, the version number and the implementation
+ 370:stm32lib/src/stm32f10x_nvic.c **** *                  details of the Cortex-M3 core.
+ 371:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 372:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 373:stm32lib/src/stm32f10x_nvic.c **** * Return         : CPU ID.
+ 374:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 375:stm32lib/src/stm32f10x_nvic.c **** u32 NVIC_GetCPUID(void)
+ 376:stm32lib/src/stm32f10x_nvic.c **** {
+ 607              		.loc 1 376 0
+ 608              		@ args = 0, pretend = 0, frame = 0
+ 609              		@ frame_needed = 0, uses_anonymous_args = 0
+ 610              		@ link register save eliminated.
+ 377:stm32lib/src/stm32f10x_nvic.c ****   return (SCB->CPUID);
+ 611              		.loc 1 377 0
+ 612 01ac 014B     		ldr	r3, .L60
+ 613 01ae 1868     		ldr	r0, [r3, #0]
+ 378:stm32lib/src/stm32f10x_nvic.c **** }
+ 614              		.loc 1 378 0
+ 615 01b0 7047     		bx	lr
+ 616              	.L61:
+ 617 01b2 00BF     		.align	2
+ 618              	.L60:
+ 619 01b4 00ED00E0 		.word	-536810240
+ 620              	.LFE40:
+ 622              		.align	2
+ 623              		.global	NVIC_SetVectorTable
+ 624              		.thumb
+ 625              		.thumb_func
+ 627              	NVIC_SetVectorTable:
+ 628              	.LFB41:
+ 379:stm32lib/src/stm32f10x_nvic.c **** 
+ 380:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 381:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SetVectorTable
+ 382:stm32lib/src/stm32f10x_nvic.c **** * Description    : Sets the vector table location and Offset.
+ 383:stm32lib/src/stm32f10x_nvic.c **** * Input          : - NVIC_VectTab: specifies if the vector table is in RAM or
+ 384:stm32lib/src/stm32f10x_nvic.c **** *                    FLASH memory.
+ 385:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 386:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_VectTab_RAM
+ 387:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_VectTab_FLASH
+ 388:stm32lib/src/stm32f10x_nvic.c **** *                  - Offset: Vector Table base offset field. 
+ 389:stm32lib/src/stm32f10x_nvic.c **** *                            This value must be a multiple of 0x100.
+ 390:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 391:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 392:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 393:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SetVectorTable(u32 NVIC_VectTab, u32 Offset)
+ 394:stm32lib/src/stm32f10x_nvic.c **** { 
+ 629              		.loc 1 394 0
+ 630              		@ args = 0, pretend = 0, frame = 0
+ 631              		@ frame_needed = 0, uses_anonymous_args = 0
+ 632              		@ link register save eliminated.
+ 633              	.LVL32:
+ 395:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 396:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_VECTTAB(NVIC_VectTab));
+ 397:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_OFFSET(Offset));  
+ 398:stm32lib/src/stm32f10x_nvic.c ****    
+ 399:stm32lib/src/stm32f10x_nvic.c ****   SCB->VTOR = NVIC_VectTab | (Offset & (u32)0x1FFFFF80);
+ 634              		.loc 1 399 0
+ 635 01b8 21F06041 		bic	r1, r1, #-536870912
+ 636              	.LVL33:
+ 637 01bc 21F07F01 		bic	r1, r1, #127
+ 638 01c0 014B     		ldr	r3, .L64
+ 639 01c2 0143     		orrs	r1, r1, r0
+ 640 01c4 9960     		str	r1, [r3, #8]
+ 400:stm32lib/src/stm32f10x_nvic.c **** }
+ 641              		.loc 1 400 0
+ 642 01c6 7047     		bx	lr
+ 643              	.L65:
+ 644              		.align	2
+ 645              	.L64:
+ 646 01c8 00ED00E0 		.word	-536810240
+ 647              	.LFE41:
+ 649              		.align	2
+ 650              		.global	NVIC_GenerateSystemReset
+ 651              		.thumb
+ 652              		.thumb_func
+ 654              	NVIC_GenerateSystemReset:
+ 655              	.LFB42:
+ 401:stm32lib/src/stm32f10x_nvic.c **** 
+ 402:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 403:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GenerateSystemReset
+ 404:stm32lib/src/stm32f10x_nvic.c **** * Description    : Generates a system reset.
+ 405:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 406:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 407:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 408:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 409:stm32lib/src/stm32f10x_nvic.c **** void NVIC_GenerateSystemReset(void)
+ 410:stm32lib/src/stm32f10x_nvic.c **** {
+ 656              		.loc 1 410 0
+ 657              		@ args = 0, pretend = 0, frame = 0
+ 658              		@ frame_needed = 0, uses_anonymous_args = 0
+ 659              		@ link register save eliminated.
+ 411:stm32lib/src/stm32f10x_nvic.c ****   SCB->AIRCR = AIRCR_VECTKEY_MASK | (u32)0x04;
+ 660              		.loc 1 411 0
+ 661 01cc 014A     		ldr	r2, .L68
+ 662 01ce 024B     		ldr	r3, .L68+4
+ 663 01d0 DA60     		str	r2, [r3, #12]
+ 412:stm32lib/src/stm32f10x_nvic.c **** }
+ 664              		.loc 1 412 0
+ 665 01d2 7047     		bx	lr
+ 666              	.L69:
+ 667              		.align	2
+ 668              	.L68:
+ 669 01d4 0400FA05 		.word	100270084
+ 670 01d8 00ED00E0 		.word	-536810240
+ 671              	.LFE42:
+ 673              		.align	2
+ 674              		.global	NVIC_GenerateCoreReset
+ 675              		.thumb
+ 676              		.thumb_func
+ 678              	NVIC_GenerateCoreReset:
+ 679              	.LFB43:
+ 413:stm32lib/src/stm32f10x_nvic.c **** 
+ 414:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 415:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GenerateCoreReset
+ 416:stm32lib/src/stm32f10x_nvic.c **** * Description    : Generates a Core (Core + NVIC) reset.
+ 417:stm32lib/src/stm32f10x_nvic.c **** * Input          : None
+ 418:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 419:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 420:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 421:stm32lib/src/stm32f10x_nvic.c **** void NVIC_GenerateCoreReset(void)
+ 422:stm32lib/src/stm32f10x_nvic.c **** {
+ 680              		.loc 1 422 0
+ 681              		@ args = 0, pretend = 0, frame = 0
+ 682              		@ frame_needed = 0, uses_anonymous_args = 0
+ 683              		@ link register save eliminated.
+ 423:stm32lib/src/stm32f10x_nvic.c ****   SCB->AIRCR = AIRCR_VECTKEY_MASK | (u32)0x01;
+ 684              		.loc 1 423 0
+ 685 01dc 014A     		ldr	r2, .L72
+ 686 01de 024B     		ldr	r3, .L72+4
+ 687 01e0 DA60     		str	r2, [r3, #12]
+ 424:stm32lib/src/stm32f10x_nvic.c **** }
+ 688              		.loc 1 424 0
+ 689 01e2 7047     		bx	lr
+ 690              	.L73:
+ 691              		.align	2
+ 692              	.L72:
+ 693 01e4 0100FA05 		.word	100270081
+ 694 01e8 00ED00E0 		.word	-536810240
+ 695              	.LFE43:
+ 697              		.align	2
+ 698              		.global	NVIC_SystemLPConfig
+ 699              		.thumb
+ 700              		.thumb_func
+ 702              	NVIC_SystemLPConfig:
+ 703              	.LFB44:
+ 425:stm32lib/src/stm32f10x_nvic.c **** 
+ 426:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 427:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SystemLPConfig
+ 428:stm32lib/src/stm32f10x_nvic.c **** * Description    : Selects the condition for the system to enter low power mode.
+ 429:stm32lib/src/stm32f10x_nvic.c **** * Input          : - LowPowerMode: Specifies the new mode for the system to enter
+ 430:stm32lib/src/stm32f10x_nvic.c **** *                    low power mode.
+ 431:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 432:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_LP_SEVONPEND
+ 433:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_LP_SLEEPDEEP
+ 434:stm32lib/src/stm32f10x_nvic.c **** *                       - NVIC_LP_SLEEPONEXIT
+ 435:stm32lib/src/stm32f10x_nvic.c **** *                  - NewState: new state of LP condition.
+ 436:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be: ENABLE or DISABLE.
+ 437:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 438:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 439:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 440:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SystemLPConfig(u8 LowPowerMode, FunctionalState NewState)
+ 441:stm32lib/src/stm32f10x_nvic.c **** {
+ 704              		.loc 1 441 0
+ 705              		@ args = 0, pretend = 0, frame = 0
+ 706              		@ frame_needed = 0, uses_anonymous_args = 0
+ 707              		@ link register save eliminated.
+ 708              	.LVL34:
+ 442:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 443:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_LP(LowPowerMode));
+ 444:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState));  
+ 445:stm32lib/src/stm32f10x_nvic.c ****   
+ 446:stm32lib/src/stm32f10x_nvic.c ****   if (NewState != DISABLE)
+ 709              		.loc 1 446 0
+ 710 01ec 21B1     		cbz	r1, .L75
+ 447:stm32lib/src/stm32f10x_nvic.c ****   {
+ 448:stm32lib/src/stm32f10x_nvic.c ****     SCB->SCR |= LowPowerMode;
+ 711              		.loc 1 448 0
+ 712 01ee 054A     		ldr	r2, .L79
+ 713 01f0 1369     		ldr	r3, [r2, #16]
+ 714 01f2 40EA0303 		orr	r3, r0, r3
+ 715 01f6 03E0     		b	.L78
+ 716              	.L75:
+ 449:stm32lib/src/stm32f10x_nvic.c ****   }
+ 450:stm32lib/src/stm32f10x_nvic.c ****   else
+ 451:stm32lib/src/stm32f10x_nvic.c ****   {
+ 452:stm32lib/src/stm32f10x_nvic.c ****     SCB->SCR &= (u32)(~(u32)LowPowerMode);
+ 717              		.loc 1 452 0
+ 718 01f8 024A     		ldr	r2, .L79
+ 719 01fa 1369     		ldr	r3, [r2, #16]
+ 720 01fc 23EA0003 		bic	r3, r3, r0
+ 721              	.L78:
+ 722 0200 1361     		str	r3, [r2, #16]
+ 453:stm32lib/src/stm32f10x_nvic.c ****   }
+ 454:stm32lib/src/stm32f10x_nvic.c **** }
+ 723              		.loc 1 454 0
+ 724 0202 7047     		bx	lr
+ 725              	.L80:
+ 726              		.align	2
+ 727              	.L79:
+ 728 0204 00ED00E0 		.word	-536810240
+ 729              	.LFE44:
+ 731              		.align	2
+ 732              		.global	NVIC_SystemHandlerConfig
+ 733              		.thumb
+ 734              		.thumb_func
+ 736              	NVIC_SystemHandlerConfig:
+ 737              	.LFB45:
+ 455:stm32lib/src/stm32f10x_nvic.c **** 
+ 456:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 457:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SystemHandlerConfig
+ 458:stm32lib/src/stm32f10x_nvic.c **** * Description    : Enables or disables the specified System Handlers.
+ 459:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler to be enabled
+ 460:stm32lib/src/stm32f10x_nvic.c **** *                    or disabled.
+ 461:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 462:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 463:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 464:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_UsageFault
+ 465:stm32lib/src/stm32f10x_nvic.c **** *                  - NewState: new state of  specified System Handlers.
+ 466:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be: ENABLE or DISABLE.
+ 467:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 468:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 469:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 470:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SystemHandlerConfig(u32 SystemHandler, FunctionalState NewState)
+ 471:stm32lib/src/stm32f10x_nvic.c **** {
+ 738              		.loc 1 471 0
+ 739              		@ args = 0, pretend = 0, frame = 0
+ 740              		@ frame_needed = 0, uses_anonymous_args = 0
+ 741              		@ link register save eliminated.
+ 742              	.LVL35:
+ 472:stm32lib/src/stm32f10x_nvic.c ****   u32 tmpreg = 0x00;
+ 473:stm32lib/src/stm32f10x_nvic.c **** 
+ 474:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 475:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_CONFIG_SYSTEM_HANDLER(SystemHandler));
+ 476:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_FUNCTIONAL_STATE(NewState)); 
+ 477:stm32lib/src/stm32f10x_nvic.c ****   
+ 478:stm32lib/src/stm32f10x_nvic.c ****   tmpreg =  (u32)0x01 << (SystemHandler & (u32)0x1F);
+ 743              		.loc 1 478 0
+ 744 0208 00F01F00 		and	r0, r0, #31
+ 745              	.LVL36:
+ 746 020c 0123     		movs	r3, #1
+ 747 020e 13FA00F0 		lsls	r0, r3, r0
+ 748              	.LVL37:
+ 479:stm32lib/src/stm32f10x_nvic.c **** 
+ 480:stm32lib/src/stm32f10x_nvic.c ****   if (NewState != DISABLE)
+ 749              		.loc 1 480 0
+ 750 0212 21B1     		cbz	r1, .L82
+ 481:stm32lib/src/stm32f10x_nvic.c ****   {
+ 482:stm32lib/src/stm32f10x_nvic.c ****     SCB->SHCSR |= tmpreg;
+ 751              		.loc 1 482 0
+ 752 0214 054A     		ldr	r2, .L86
+ 753 0216 536A     		ldr	r3, [r2, #36]
+ 754 0218 40EA0303 		orr	r3, r0, r3
+ 755 021c 03E0     		b	.L85
+ 756              	.L82:
+ 483:stm32lib/src/stm32f10x_nvic.c ****   }
+ 484:stm32lib/src/stm32f10x_nvic.c ****   else
+ 485:stm32lib/src/stm32f10x_nvic.c ****   {
+ 486:stm32lib/src/stm32f10x_nvic.c ****     SCB->SHCSR &= ~tmpreg;
+ 757              		.loc 1 486 0
+ 758 021e 034A     		ldr	r2, .L86
+ 759 0220 536A     		ldr	r3, [r2, #36]
+ 760 0222 23EA0003 		bic	r3, r3, r0
+ 761              	.L85:
+ 762 0226 5362     		str	r3, [r2, #36]
+ 487:stm32lib/src/stm32f10x_nvic.c ****   }
+ 488:stm32lib/src/stm32f10x_nvic.c **** }
+ 763              		.loc 1 488 0
+ 764 0228 7047     		bx	lr
+ 765              	.L87:
+ 766 022a 00BF     		.align	2
+ 767              	.L86:
+ 768 022c 00ED00E0 		.word	-536810240
+ 769              	.LFE45:
+ 771              		.align	2
+ 772              		.global	NVIC_SystemHandlerPriorityConfig
+ 773              		.thumb
+ 774              		.thumb_func
+ 776              	NVIC_SystemHandlerPriorityConfig:
+ 777              	.LFB46:
+ 489:stm32lib/src/stm32f10x_nvic.c **** 
+ 490:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 491:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SystemHandlerPriorityConfig
+ 492:stm32lib/src/stm32f10x_nvic.c **** * Description    : Configures the specified System Handlers priority.
+ 493:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler to be
+ 494:stm32lib/src/stm32f10x_nvic.c **** *                    enabled or disabled.
+ 495:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 496:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 497:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 498:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_UsageFault
+ 499:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SVCall
+ 500:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_DebugMonitor
+ 501:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_PSV
+ 502:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SysTick
+ 503:stm32lib/src/stm32f10x_nvic.c **** *                  - SystemHandlerPreemptionPriority: new priority group of the
+ 504:stm32lib/src/stm32f10x_nvic.c **** *                    specified system handlers.
+ 505:stm32lib/src/stm32f10x_nvic.c **** *                  - SystemHandlerSubPriority: new sub priority of the specified
+ 506:stm32lib/src/stm32f10x_nvic.c **** *                    system handlers.
+ 507:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 508:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 509:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 510:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SystemHandlerPriorityConfig(u32 SystemHandler, u8 SystemHandlerPreemptionPriority,
+ 511:stm32lib/src/stm32f10x_nvic.c ****                                       u8 SystemHandlerSubPriority)
+ 512:stm32lib/src/stm32f10x_nvic.c **** {
+ 778              		.loc 1 512 0
+ 779              		@ args = 0, pretend = 0, frame = 0
+ 780              		@ frame_needed = 0, uses_anonymous_args = 0
+ 781              	.LVL38:
+ 782 0230 30B5     		push	{r4, r5, lr}
+ 783              	.LCFI1:
+ 513:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp1 = 0x00, tmp2 = 0xFF, handlermask = 0x00;
+ 514:stm32lib/src/stm32f10x_nvic.c ****   u32 tmppriority = 0x00;
+ 515:stm32lib/src/stm32f10x_nvic.c **** 
+ 516:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 517:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_PRIORITY_SYSTEM_HANDLER(SystemHandler));
+ 518:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_PREEMPTION_PRIORITY(SystemHandlerPreemptionPriority));  
+ 519:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_NVIC_SUB_PRIORITY(SystemHandlerSubPriority));
+ 520:stm32lib/src/stm32f10x_nvic.c ****     
+ 521:stm32lib/src/stm32f10x_nvic.c ****   tmppriority = (0x700 - (SCB->AIRCR & (u32)0x700))>> 0x08;
+ 784              		.loc 1 521 0
+ 785 0232 114D     		ldr	r5, .L90
+ 786 0234 EB68     		ldr	r3, [r5, #12]
+ 787 0236 DB43     		mvns	r3, r3
+ 788 0238 C3F30223 		ubfx	r3, r3, #8, #3
+ 789              	.LVL39:
+ 522:stm32lib/src/stm32f10x_nvic.c ****   tmp1 = (0x4 - tmppriority);
+ 523:stm32lib/src/stm32f10x_nvic.c ****   tmp2 = tmp2 >> tmppriority;
+ 524:stm32lib/src/stm32f10x_nvic.c ****     
+ 525:stm32lib/src/stm32f10x_nvic.c ****   tmppriority = (u32)SystemHandlerPreemptionPriority << tmp1;
+ 790              		.loc 1 525 0
+ 791 023c C3F10404 		rsb	r4, r3, #4
+ 792 0240 A140     		lsls	r1, r1, r4
+ 793              	.LVL40:
+ 526:stm32lib/src/stm32f10x_nvic.c ****   tmppriority |=  SystemHandlerSubPriority & tmp2;
+ 794              		.loc 1 526 0
+ 795 0242 FF24     		movs	r4, #255
+ 796 0244 34FA03F3 		lsrs	r3, r4, r3
+ 797 0248 1A40     		ands	r2, r2, r3
+ 798              	.LVL41:
+ 799 024a 0A43     		orrs	r2, r2, r1
+ 800              	.LVL42:
+ 527:stm32lib/src/stm32f10x_nvic.c **** 
+ 528:stm32lib/src/stm32f10x_nvic.c ****   tmppriority = tmppriority << 0x04;
+ 529:stm32lib/src/stm32f10x_nvic.c ****   tmp1 = SystemHandler & (u32)0xC0;
+ 530:stm32lib/src/stm32f10x_nvic.c ****   tmp1 = tmp1 >> 0x06; 
+ 801              		.loc 1 530 0
+ 802 024c C0F38111 		ubfx	r1, r0, #6, #2
+ 803              	.LVL43:
+ 531:stm32lib/src/stm32f10x_nvic.c ****   tmp2 = (SystemHandler >> 0x08) & (u32)0x03;
+ 532:stm32lib/src/stm32f10x_nvic.c ****   tmppriority = tmppriority << (tmp2 * 0x08);
+ 804              		.loc 1 532 0
+ 805 0250 C0F30120 		ubfx	r0, r0, #8, #2
+ 806              	.LVL44:
+ 807 0254 C000     		lsls	r0, r0, #3
+ 533:stm32lib/src/stm32f10x_nvic.c ****   handlermask = (u32)0xFF << (tmp2 * 0x08);
+ 534:stm32lib/src/stm32f10x_nvic.c ****   
+ 535:stm32lib/src/stm32f10x_nvic.c ****   SCB->SHPR[tmp1] &= ~handlermask;
+ 808              		.loc 1 535 0
+ 809 0256 8440     		lsls	r4, r4, r0
+ 810              		.loc 1 528 0
+ 811 0258 1201     		lsls	r2, r2, #4
+ 812              	.LVL45:
+ 536:stm32lib/src/stm32f10x_nvic.c ****   SCB->SHPR[tmp1] |= tmppriority;
+ 813              		.loc 1 536 0
+ 814 025a 8240     		lsls	r2, r2, r0
+ 815              	.LVL46:
+ 816              		.loc 1 535 0
+ 817 025c 0631     		adds	r1, r1, #6
+ 818              	.LVL47:
+ 819 025e 55F82130 		ldr	r3, [r5, r1, lsl #2]
+ 820 0262 23EA0403 		bic	r3, r3, r4
+ 821 0266 45F82130 		str	r3, [r5, r1, lsl #2]
+ 822              		.loc 1 536 0
+ 823 026a 55F82130 		ldr	r3, [r5, r1, lsl #2]
+ 824 026e 1A43     		orrs	r2, r2, r3
+ 825 0270 45F82120 		str	r2, [r5, r1, lsl #2]
+ 537:stm32lib/src/stm32f10x_nvic.c **** }
+ 826              		.loc 1 537 0
+ 827 0274 30BD     		pop	{r4, r5, pc}
+ 828              	.L91:
+ 829 0276 00BF     		.align	2
+ 830              	.L90:
+ 831 0278 00ED00E0 		.word	-536810240
+ 832              	.LFE46:
+ 834              		.align	2
+ 835              		.global	NVIC_GetSystemHandlerPendingBitStatus
+ 836              		.thumb
+ 837              		.thumb_func
+ 839              	NVIC_GetSystemHandlerPendingBitStatus:
+ 840              	.LFB47:
+ 538:stm32lib/src/stm32f10x_nvic.c **** 
+ 539:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 540:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetSystemHandlerPendingBitStatus
+ 541:stm32lib/src/stm32f10x_nvic.c **** * Description    : Checks whether the specified System handlers pending bit is
+ 542:stm32lib/src/stm32f10x_nvic.c **** *                  set or not.
+ 543:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler pending bit to
+ 544:stm32lib/src/stm32f10x_nvic.c **** *                    check.
+ 545:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 546:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 547:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 548:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SVCall
+ 549:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 550:stm32lib/src/stm32f10x_nvic.c **** * Return         : The new state of System Handler pending bit(SET or RESET).
+ 551:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 552:stm32lib/src/stm32f10x_nvic.c **** ITStatus NVIC_GetSystemHandlerPendingBitStatus(u32 SystemHandler)
+ 553:stm32lib/src/stm32f10x_nvic.c **** {
+ 841              		.loc 1 553 0
+ 842              		@ args = 0, pretend = 0, frame = 0
+ 843              		@ frame_needed = 0, uses_anonymous_args = 0
+ 844              		@ link register save eliminated.
+ 845              	.LVL48:
+ 554:stm32lib/src/stm32f10x_nvic.c ****   ITStatus bitstatus  = RESET;
+ 555:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00, tmppos = 0x00;
+ 556:stm32lib/src/stm32f10x_nvic.c **** 
+ 557:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 558:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_GET_PENDING_SYSTEM_HANDLER(SystemHandler));
+ 559:stm32lib/src/stm32f10x_nvic.c ****   
+ 560:stm32lib/src/stm32f10x_nvic.c ****   tmppos = (SystemHandler >> 0x0A);
+ 561:stm32lib/src/stm32f10x_nvic.c ****   tmppos &= (u32)0x0F;
+ 562:stm32lib/src/stm32f10x_nvic.c **** 
+ 563:stm32lib/src/stm32f10x_nvic.c ****   tmppos = (u32)0x01 << tmppos;
+ 846              		.loc 1 563 0
+ 847 027c C0F38320 		ubfx	r0, r0, #10, #4
+ 848              	.LVL49:
+ 849 0280 0123     		movs	r3, #1
+ 850 0282 8340     		lsls	r3, r3, r0
+ 851              	.LVL50:
+ 564:stm32lib/src/stm32f10x_nvic.c **** 
+ 565:stm32lib/src/stm32f10x_nvic.c ****   tmp = SCB->SHCSR & tmppos;
+ 852              		.loc 1 565 0
+ 853 0284 044A     		ldr	r2, .L94
+ 854 0286 506A     		ldr	r0, [r2, #36]
+ 855 0288 03EA0000 		and	r0, r3, r0
+ 566:stm32lib/src/stm32f10x_nvic.c **** 
+ 567:stm32lib/src/stm32f10x_nvic.c ****   if (tmp == tmppos)
+ 568:stm32lib/src/stm32f10x_nvic.c ****   {
+ 569:stm32lib/src/stm32f10x_nvic.c ****     bitstatus = SET;
+ 570:stm32lib/src/stm32f10x_nvic.c ****   }
+ 571:stm32lib/src/stm32f10x_nvic.c ****   else
+ 572:stm32lib/src/stm32f10x_nvic.c ****   {
+ 573:stm32lib/src/stm32f10x_nvic.c ****     bitstatus = RESET;
+ 574:stm32lib/src/stm32f10x_nvic.c ****   }
+ 575:stm32lib/src/stm32f10x_nvic.c ****   return bitstatus;
+ 576:stm32lib/src/stm32f10x_nvic.c **** }
+ 856              		.loc 1 576 0
+ 857 028c 9842     		cmp	r0, r3
+ 858 028e 14BF     		ite	ne
+ 859 0290 0020     		movne	r0, #0
+ 860 0292 0120     		moveq	r0, #1
+ 861 0294 7047     		bx	lr
+ 862              	.L95:
+ 863 0296 00BF     		.align	2
+ 864              	.L94:
+ 865 0298 00ED00E0 		.word	-536810240
+ 866              	.LFE47:
+ 868              		.align	2
+ 869              		.global	NVIC_SetSystemHandlerPendingBit
+ 870              		.thumb
+ 871              		.thumb_func
+ 873              	NVIC_SetSystemHandlerPendingBit:
+ 874              	.LFB48:
+ 577:stm32lib/src/stm32f10x_nvic.c **** 
+ 578:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 579:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_SetSystemHandlerPendingBit
+ 580:stm32lib/src/stm32f10x_nvic.c **** * Description    : Sets System Handler pending bit.
+ 581:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler pending bit
+ 582:stm32lib/src/stm32f10x_nvic.c **** *                    to be set.
+ 583:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 584:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_NMI
+ 585:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_PSV
+ 586:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SysTick
+ 587:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 588:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 589:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 590:stm32lib/src/stm32f10x_nvic.c **** void NVIC_SetSystemHandlerPendingBit(u32 SystemHandler)
+ 591:stm32lib/src/stm32f10x_nvic.c **** {
+ 875              		.loc 1 591 0
+ 876              		@ args = 0, pretend = 0, frame = 0
+ 877              		@ frame_needed = 0, uses_anonymous_args = 0
+ 878              		@ link register save eliminated.
+ 879              	.LVL51:
+ 592:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00;
+ 593:stm32lib/src/stm32f10x_nvic.c **** 
+ 594:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 595:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_SET_PENDING_SYSTEM_HANDLER(SystemHandler));
+ 596:stm32lib/src/stm32f10x_nvic.c ****   
+ 597:stm32lib/src/stm32f10x_nvic.c ****   /* Get the System Handler pending bit position */
+ 598:stm32lib/src/stm32f10x_nvic.c ****   tmp = SystemHandler & (u32)0x1F;
+ 599:stm32lib/src/stm32f10x_nvic.c ****   /* Set the corresponding System Handler pending bit */
+ 600:stm32lib/src/stm32f10x_nvic.c ****   SCB->ICSR |= ((u32)0x01 << tmp);
+ 880              		.loc 1 600 0
+ 881 029c 00F01F00 		and	r0, r0, #31
+ 882              	.LVL52:
+ 883 02a0 0123     		movs	r3, #1
+ 884 02a2 8340     		lsls	r3, r3, r0
+ 885 02a4 024A     		ldr	r2, .L98
+ 886 02a6 5168     		ldr	r1, [r2, #4]
+ 887 02a8 0B43     		orrs	r3, r3, r1
+ 888 02aa 5360     		str	r3, [r2, #4]
+ 601:stm32lib/src/stm32f10x_nvic.c **** }
+ 889              		.loc 1 601 0
+ 890 02ac 7047     		bx	lr
+ 891              	.L99:
+ 892 02ae 00BF     		.align	2
+ 893              	.L98:
+ 894 02b0 00ED00E0 		.word	-536810240
+ 895              	.LFE48:
+ 897              		.align	2
+ 898              		.global	NVIC_ClearSystemHandlerPendingBit
+ 899              		.thumb
+ 900              		.thumb_func
+ 902              	NVIC_ClearSystemHandlerPendingBit:
+ 903              	.LFB49:
+ 602:stm32lib/src/stm32f10x_nvic.c **** 
+ 603:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 604:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_ClearSystemHandlerPendingBit
+ 605:stm32lib/src/stm32f10x_nvic.c **** * Description    : Clears System Handler pending bit.
+ 606:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler pending bit to
+ 607:stm32lib/src/stm32f10x_nvic.c **** *                    be clear.
+ 608:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 609:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_PSV
+ 610:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SysTick
+ 611:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 612:stm32lib/src/stm32f10x_nvic.c **** * Return         : None
+ 613:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 614:stm32lib/src/stm32f10x_nvic.c **** void NVIC_ClearSystemHandlerPendingBit(u32 SystemHandler)
+ 615:stm32lib/src/stm32f10x_nvic.c **** {
+ 904              		.loc 1 615 0
+ 905              		@ args = 0, pretend = 0, frame = 0
+ 906              		@ frame_needed = 0, uses_anonymous_args = 0
+ 907              		@ link register save eliminated.
+ 908              	.LVL53:
+ 616:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00;
+ 617:stm32lib/src/stm32f10x_nvic.c **** 
+ 618:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 619:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_CLEAR_SYSTEM_HANDLER(SystemHandler));
+ 620:stm32lib/src/stm32f10x_nvic.c ****   
+ 621:stm32lib/src/stm32f10x_nvic.c ****   /* Get the System Handler pending bit position */
+ 622:stm32lib/src/stm32f10x_nvic.c ****   tmp = SystemHandler & (u32)0x1F;
+ 623:stm32lib/src/stm32f10x_nvic.c ****   /* Clear the corresponding System Handler pending bit */
+ 624:stm32lib/src/stm32f10x_nvic.c ****   SCB->ICSR |= ((u32)0x01 << (tmp - 0x01));
+ 909              		.loc 1 624 0
+ 910 02b4 00F01F00 		and	r0, r0, #31
+ 911              	.LVL54:
+ 912 02b8 0138     		subs	r0, r0, #1
+ 913 02ba 0123     		movs	r3, #1
+ 914 02bc 8340     		lsls	r3, r3, r0
+ 915 02be 024A     		ldr	r2, .L102
+ 916 02c0 5168     		ldr	r1, [r2, #4]
+ 917 02c2 0B43     		orrs	r3, r3, r1
+ 918 02c4 5360     		str	r3, [r2, #4]
+ 625:stm32lib/src/stm32f10x_nvic.c **** }
+ 919              		.loc 1 625 0
+ 920 02c6 7047     		bx	lr
+ 921              	.L103:
+ 922              		.align	2
+ 923              	.L102:
+ 924 02c8 00ED00E0 		.word	-536810240
+ 925              	.LFE49:
+ 927              		.align	2
+ 928              		.global	NVIC_GetSystemHandlerActiveBitStatus
+ 929              		.thumb
+ 930              		.thumb_func
+ 932              	NVIC_GetSystemHandlerActiveBitStatus:
+ 933              	.LFB50:
+ 626:stm32lib/src/stm32f10x_nvic.c **** 
+ 627:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 628:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetSystemHandlerActiveBitStatus
+ 629:stm32lib/src/stm32f10x_nvic.c **** * Description    : Checks whether the specified System handlers active bit is
+ 630:stm32lib/src/stm32f10x_nvic.c **** *                  set or not.
+ 631:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler active bit to
+ 632:stm32lib/src/stm32f10x_nvic.c **** *                    check.
+ 633:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 634:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 635:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 636:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_UsageFault
+ 637:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SVCall
+ 638:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_DebugMonitor
+ 639:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_PSV
+ 640:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_SysTick
+ 641:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 642:stm32lib/src/stm32f10x_nvic.c **** * Return         : The new state of System Handler active bit(SET or RESET).
+ 643:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 644:stm32lib/src/stm32f10x_nvic.c **** ITStatus NVIC_GetSystemHandlerActiveBitStatus(u32 SystemHandler)
+ 645:stm32lib/src/stm32f10x_nvic.c **** {
+ 934              		.loc 1 645 0
+ 935              		@ args = 0, pretend = 0, frame = 0
+ 936              		@ frame_needed = 0, uses_anonymous_args = 0
+ 937              		@ link register save eliminated.
+ 938              	.LVL55:
+ 646:stm32lib/src/stm32f10x_nvic.c ****   ITStatus bitstatus  = RESET;
+ 647:stm32lib/src/stm32f10x_nvic.c **** 
+ 648:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00, tmppos = 0x00;
+ 649:stm32lib/src/stm32f10x_nvic.c **** 
+ 650:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 651:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_GET_ACTIVE_SYSTEM_HANDLER(SystemHandler));
+ 652:stm32lib/src/stm32f10x_nvic.c ****   
+ 653:stm32lib/src/stm32f10x_nvic.c ****   tmppos = (SystemHandler >> 0x0E) & (u32)0x0F;
+ 654:stm32lib/src/stm32f10x_nvic.c **** 
+ 655:stm32lib/src/stm32f10x_nvic.c ****   tmppos = (u32)0x01 << tmppos;
+ 939              		.loc 1 655 0
+ 940 02cc C0F38330 		ubfx	r0, r0, #14, #4
+ 941              	.LVL56:
+ 942 02d0 0123     		movs	r3, #1
+ 943 02d2 8340     		lsls	r3, r3, r0
+ 944              	.LVL57:
+ 656:stm32lib/src/stm32f10x_nvic.c **** 
+ 657:stm32lib/src/stm32f10x_nvic.c ****   tmp = SCB->SHCSR & tmppos;
+ 945              		.loc 1 657 0
+ 946 02d4 044A     		ldr	r2, .L106
+ 947 02d6 506A     		ldr	r0, [r2, #36]
+ 948 02d8 03EA0000 		and	r0, r3, r0
+ 658:stm32lib/src/stm32f10x_nvic.c **** 
+ 659:stm32lib/src/stm32f10x_nvic.c ****   if (tmp == tmppos)
+ 660:stm32lib/src/stm32f10x_nvic.c ****   {
+ 661:stm32lib/src/stm32f10x_nvic.c ****     bitstatus = SET;
+ 662:stm32lib/src/stm32f10x_nvic.c ****   }
+ 663:stm32lib/src/stm32f10x_nvic.c ****   else
+ 664:stm32lib/src/stm32f10x_nvic.c ****   {
+ 665:stm32lib/src/stm32f10x_nvic.c ****     bitstatus = RESET;
+ 666:stm32lib/src/stm32f10x_nvic.c ****   }
+ 667:stm32lib/src/stm32f10x_nvic.c ****   return bitstatus;
+ 668:stm32lib/src/stm32f10x_nvic.c **** }
+ 949              		.loc 1 668 0
+ 950 02dc 9842     		cmp	r0, r3
+ 951 02de 14BF     		ite	ne
+ 952 02e0 0020     		movne	r0, #0
+ 953 02e2 0120     		moveq	r0, #1
+ 954 02e4 7047     		bx	lr
+ 955              	.L107:
+ 956 02e6 00BF     		.align	2
+ 957              	.L106:
+ 958 02e8 00ED00E0 		.word	-536810240
+ 959              	.LFE50:
+ 961              		.align	2
+ 962              		.global	NVIC_GetFaultHandlerSources
+ 963              		.thumb
+ 964              		.thumb_func
+ 966              	NVIC_GetFaultHandlerSources:
+ 967              	.LFB51:
+ 669:stm32lib/src/stm32f10x_nvic.c **** 
+ 670:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 671:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetFaultHandlerSources
+ 672:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the system fault handlers sources.
+ 673:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler to get its fault
+ 674:stm32lib/src/stm32f10x_nvic.c **** *                    sources.
+ 675:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 676:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_HardFault
+ 677:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 678:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 679:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_UsageFault
+ 680:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_DebugMonitor
+ 681:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 682:stm32lib/src/stm32f10x_nvic.c **** * Return         : Source of the fault handler.
+ 683:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 684:stm32lib/src/stm32f10x_nvic.c **** u32 NVIC_GetFaultHandlerSources(u32 SystemHandler)
+ 685:stm32lib/src/stm32f10x_nvic.c **** {
+ 968              		.loc 1 685 0
+ 969              		@ args = 0, pretend = 0, frame = 0
+ 970              		@ frame_needed = 0, uses_anonymous_args = 0
+ 971              		@ link register save eliminated.
+ 972              	.LVL58:
+ 686:stm32lib/src/stm32f10x_nvic.c ****   u32 faultsources = 0x00;
+ 687:stm32lib/src/stm32f10x_nvic.c ****   u32 tmpreg = 0x00, tmppos = 0x00;
+ 688:stm32lib/src/stm32f10x_nvic.c **** 
+ 689:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 690:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_FAULT_SOURCE_SYSTEM_HANDLER(SystemHandler));
+ 691:stm32lib/src/stm32f10x_nvic.c ****   
+ 692:stm32lib/src/stm32f10x_nvic.c ****   tmpreg = (SystemHandler >> 0x12) & (u32)0x03;
+ 973              		.loc 1 692 0
+ 974 02ec C0F38143 		ubfx	r3, r0, #18, #2
+ 975              	.LVL59:
+ 693:stm32lib/src/stm32f10x_nvic.c ****   tmppos = (SystemHandler >> 0x14) & (u32)0x03;
+ 694:stm32lib/src/stm32f10x_nvic.c **** 
+ 695:stm32lib/src/stm32f10x_nvic.c ****   if (tmpreg == 0x00)
+ 976              		.loc 1 695 0
+ 977 02f0 13B9     		cbnz	r3, .L109
+ 696:stm32lib/src/stm32f10x_nvic.c ****   {
+ 697:stm32lib/src/stm32f10x_nvic.c ****     faultsources = SCB->HFSR;
+ 978              		.loc 1 697 0
+ 979 02f2 0B4B     		ldr	r3, .L114
+ 980              	.LVL60:
+ 981 02f4 D86A     		ldr	r0, [r3, #44]
+ 982              	.LVL61:
+ 983 02f6 11E0     		b	.L110
+ 984              	.LVL62:
+ 985              	.L109:
+ 698:stm32lib/src/stm32f10x_nvic.c ****   }
+ 699:stm32lib/src/stm32f10x_nvic.c ****   else if (tmpreg == 0x01)
+ 986              		.loc 1 699 0
+ 987 02f8 012B     		cmp	r3, #1
+ 988 02fa 0DD1     		bne	.L111
+ 700:stm32lib/src/stm32f10x_nvic.c ****   {
+ 701:stm32lib/src/stm32f10x_nvic.c ****     faultsources = SCB->CFSR >> (tmppos * 0x08);
+ 989              		.loc 1 701 0
+ 990 02fc 084B     		ldr	r3, .L114
+ 991              	.LVL63:
+ 992              		.loc 1 693 0
+ 993 02fe C0F30151 		ubfx	r1, r0, #20, #2
+ 994              	.LVL64:
+ 995              		.loc 1 701 0
+ 996 0302 9A6A     		ldr	r2, [r3, #40]
+ 997 0304 CB00     		lsls	r3, r1, #3
+ 998 0306 32FA03F0 		lsrs	r0, r2, r3
+ 999              	.LVL65:
+ 702:stm32lib/src/stm32f10x_nvic.c ****     if (tmppos != 0x02)
+ 1000              		.loc 1 702 0
+ 1001 030a 0229     		cmp	r1, #2
+ 703:stm32lib/src/stm32f10x_nvic.c ****     {
+ 704:stm32lib/src/stm32f10x_nvic.c ****       faultsources &= (u32)0x0F;
+ 1002              		.loc 1 704 0
+ 1003 030c 14BF     		ite	ne
+ 1004 030e 00F00F00 		andne	r0, r0, #15
+ 1005              	.LVL66:
+ 705:stm32lib/src/stm32f10x_nvic.c ****     }
+ 706:stm32lib/src/stm32f10x_nvic.c ****     else
+ 707:stm32lib/src/stm32f10x_nvic.c ****     {
+ 708:stm32lib/src/stm32f10x_nvic.c ****       faultsources &= (u32)0xFF;
+ 1006              		.loc 1 708 0
+ 1007 0312 00F0FF00 		andeq	r0, r0, #255
+ 1008 0316 01E0     		b	.L110
+ 1009              	.LVL67:
+ 1010              	.L111:
+ 709:stm32lib/src/stm32f10x_nvic.c ****     }
+ 710:stm32lib/src/stm32f10x_nvic.c ****   }
+ 711:stm32lib/src/stm32f10x_nvic.c ****   else
+ 712:stm32lib/src/stm32f10x_nvic.c ****   {
+ 713:stm32lib/src/stm32f10x_nvic.c ****     faultsources = SCB->DFSR;
+ 1011              		.loc 1 713 0
+ 1012 0318 014B     		ldr	r3, .L114
+ 1013              	.LVL68:
+ 1014 031a 186B     		ldr	r0, [r3, #48]
+ 1015              	.LVL69:
+ 1016              	.L110:
+ 1017              	.LVL70:
+ 714:stm32lib/src/stm32f10x_nvic.c ****   }
+ 715:stm32lib/src/stm32f10x_nvic.c ****   return faultsources;
+ 716:stm32lib/src/stm32f10x_nvic.c **** }
+ 1018              		.loc 1 716 0
+ 1019 031c 7047     		bx	lr
+ 1020              	.L115:
+ 1021 031e 00BF     		.align	2
+ 1022              	.L114:
+ 1023 0320 00ED00E0 		.word	-536810240
+ 1024              	.LFE51:
+ 1026              		.align	2
+ 1027              		.global	NVIC_GetFaultAddress
+ 1028              		.thumb
+ 1029              		.thumb_func
+ 1031              	NVIC_GetFaultAddress:
+ 1032              	.LFB52:
+ 717:stm32lib/src/stm32f10x_nvic.c **** 
+ 718:stm32lib/src/stm32f10x_nvic.c **** /*******************************************************************************
+ 719:stm32lib/src/stm32f10x_nvic.c **** * Function Name  : NVIC_GetFaultAddress
+ 720:stm32lib/src/stm32f10x_nvic.c **** * Description    : Returns the address of the location that generated a fault
+ 721:stm32lib/src/stm32f10x_nvic.c **** *                  handler.
+ 722:stm32lib/src/stm32f10x_nvic.c **** * Input          : - SystemHandler: specifies the system handler to get its
+ 723:stm32lib/src/stm32f10x_nvic.c **** *                    fault address.
+ 724:stm32lib/src/stm32f10x_nvic.c **** *                    This parameter can be one of the following values:
+ 725:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_MemoryManage
+ 726:stm32lib/src/stm32f10x_nvic.c **** *                       - SystemHandler_BusFault
+ 727:stm32lib/src/stm32f10x_nvic.c **** * Output         : None
+ 728:stm32lib/src/stm32f10x_nvic.c **** * Return         : Fault address.
+ 729:stm32lib/src/stm32f10x_nvic.c **** *******************************************************************************/
+ 730:stm32lib/src/stm32f10x_nvic.c **** u32 NVIC_GetFaultAddress(u32 SystemHandler)
+ 731:stm32lib/src/stm32f10x_nvic.c **** {
+ 1033              		.loc 1 731 0
+ 1034              		@ args = 0, pretend = 0, frame = 0
+ 1035              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1036              		@ link register save eliminated.
+ 1037              	.LVL71:
+ 732:stm32lib/src/stm32f10x_nvic.c ****   u32 faultaddress = 0x00;
+ 733:stm32lib/src/stm32f10x_nvic.c ****   u32 tmp = 0x00;
+ 734:stm32lib/src/stm32f10x_nvic.c **** 
+ 735:stm32lib/src/stm32f10x_nvic.c ****   /* Check the parameters */
+ 736:stm32lib/src/stm32f10x_nvic.c ****   assert_param(IS_FAULT_ADDRESS_SYSTEM_HANDLER(SystemHandler));
+ 737:stm32lib/src/stm32f10x_nvic.c ****   
+ 738:stm32lib/src/stm32f10x_nvic.c ****   tmp = (SystemHandler >> 0x16) & (u32)0x01;
+ 739:stm32lib/src/stm32f10x_nvic.c **** 
+ 740:stm32lib/src/stm32f10x_nvic.c ****   if (tmp == 0x00)
+ 1038              		.loc 1 740 0
+ 1039 0324 10F4800F 		tst	r0, #4194304
+ 741:stm32lib/src/stm32f10x_nvic.c ****   {
+ 742:stm32lib/src/stm32f10x_nvic.c ****     faultaddress = SCB->MMFAR;
+ 1040              		.loc 1 742 0
+ 1041 0328 0BBF     		itete	eq
+ 1042 032a 024B     		ldreq	r3, .L120
+ 743:stm32lib/src/stm32f10x_nvic.c ****   }
+ 744:stm32lib/src/stm32f10x_nvic.c ****   else
+ 745:stm32lib/src/stm32f10x_nvic.c ****   {
+ 746:stm32lib/src/stm32f10x_nvic.c ****     faultaddress = SCB->BFAR;
+ 1043              		.loc 1 746 0
+ 1044 032c 014B     		ldrne	r3, .L120
+ 1045              		.loc 1 742 0
+ 1046 032e 586B     		ldreq	r0, [r3, #52]
+ 1047              	.LVL72:
+ 1048              		.loc 1 746 0
+ 1049 0330 986B     		ldrne	r0, [r3, #56]
+ 1050              	.LVL73:
+ 747:stm32lib/src/stm32f10x_nvic.c ****   }
+ 748:stm32lib/src/stm32f10x_nvic.c ****   return faultaddress;
+ 749:stm32lib/src/stm32f10x_nvic.c **** }
+ 1051              		.loc 1 749 0
+ 1052 0332 7047     		bx	lr
+ 1053              	.L121:
+ 1054              		.align	2
+ 1055              	.L120:
+ 1056 0334 00ED00E0 		.word	-536810240
+ 1057              	.LFE52:
+ 1335              	.Letext0:
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f10x_nvic.c
+     /tmp/ccCAjlzC.s:22     .text:00000000 $t
+     /tmp/ccCAjlzC.s:27     .text:00000000 NVIC_DeInit
+     /tmp/ccCAjlzC.s:69     .text:00000030 $d
+     /tmp/ccCAjlzC.s:72     .text:00000034 $t
+     /tmp/ccCAjlzC.s:77     .text:00000034 NVIC_SCBDeInit
+     /tmp/ccCAjlzC.s:117    .text:0000005c $d
+     /tmp/ccCAjlzC.s:121    .text:00000064 $t
+     /tmp/ccCAjlzC.s:126    .text:00000064 NVIC_PriorityGroupConfig
+     /tmp/ccCAjlzC.s:144    .text:00000074 $d
+     /tmp/ccCAjlzC.s:147    .text:00000078 $t
+     /tmp/ccCAjlzC.s:152    .text:00000078 NVIC_Init
+     /tmp/ccCAjlzC.s:244    .text:000000ec $d
+     /tmp/ccCAjlzC.s:248    .text:000000f4 $t
+     /tmp/ccCAjlzC.s:253    .text:000000f4 NVIC_StructInit
+     /tmp/ccCAjlzC.s:278    .text:00000100 NVIC_SETPRIMASK
+     /tmp/ccCAjlzC.s:304    .text:00000104 NVIC_RESETPRIMASK
+     /tmp/ccCAjlzC.s:329    .text:00000108 NVIC_SETFAULTMASK
+     /tmp/ccCAjlzC.s:354    .text:0000010c NVIC_RESETFAULTMASK
+     /tmp/ccCAjlzC.s:379    .text:00000110 NVIC_BASEPRICONFIG
+     /tmp/ccCAjlzC.s:407    .text:00000118 NVIC_GetBASEPRI
+     /tmp/ccCAjlzC.s:434    .text:00000120 NVIC_GetCurrentPendingIRQChannel
+     /tmp/ccCAjlzC.s:449    .text:0000012c $d
+     /tmp/ccCAjlzC.s:452    .text:00000130 $t
+     /tmp/ccCAjlzC.s:457    .text:00000130 NVIC_GetIRQChannelPendingBitStatus
+     /tmp/ccCAjlzC.s:485    .text:00000150 $d
+     /tmp/ccCAjlzC.s:488    .text:00000154 $t
+     /tmp/ccCAjlzC.s:493    .text:00000154 NVIC_SetIRQChannelPendingBit
+     /tmp/ccCAjlzC.s:508    .text:0000015c $d
+     /tmp/ccCAjlzC.s:511    .text:00000160 $t
+     /tmp/ccCAjlzC.s:516    .text:00000160 NVIC_ClearIRQChannelPendingBit
+     /tmp/ccCAjlzC.s:537    .text:00000174 $d
+     /tmp/ccCAjlzC.s:540    .text:00000178 $t
+     /tmp/ccCAjlzC.s:545    .text:00000178 NVIC_GetCurrentActiveHandler
+     /tmp/ccCAjlzC.s:561    .text:00000184 $d
+     /tmp/ccCAjlzC.s:564    .text:00000188 $t
+     /tmp/ccCAjlzC.s:569    .text:00000188 NVIC_GetIRQChannelActiveBitStatus
+     /tmp/ccCAjlzC.s:597    .text:000001a8 $d
+     /tmp/ccCAjlzC.s:600    .text:000001ac $t
+     /tmp/ccCAjlzC.s:605    .text:000001ac NVIC_GetCPUID
+     /tmp/ccCAjlzC.s:619    .text:000001b4 $d
+     /tmp/ccCAjlzC.s:622    .text:000001b8 $t
+     /tmp/ccCAjlzC.s:627    .text:000001b8 NVIC_SetVectorTable
+     /tmp/ccCAjlzC.s:646    .text:000001c8 $d
+     /tmp/ccCAjlzC.s:649    .text:000001cc $t
+     /tmp/ccCAjlzC.s:654    .text:000001cc NVIC_GenerateSystemReset
+     /tmp/ccCAjlzC.s:669    .text:000001d4 $d
+     /tmp/ccCAjlzC.s:673    .text:000001dc $t
+     /tmp/ccCAjlzC.s:678    .text:000001dc NVIC_GenerateCoreReset
+     /tmp/ccCAjlzC.s:693    .text:000001e4 $d
+     /tmp/ccCAjlzC.s:697    .text:000001ec $t
+     /tmp/ccCAjlzC.s:702    .text:000001ec NVIC_SystemLPConfig
+     /tmp/ccCAjlzC.s:728    .text:00000204 $d
+     /tmp/ccCAjlzC.s:731    .text:00000208 $t
+     /tmp/ccCAjlzC.s:736    .text:00000208 NVIC_SystemHandlerConfig
+     /tmp/ccCAjlzC.s:768    .text:0000022c $d
+     /tmp/ccCAjlzC.s:771    .text:00000230 $t
+     /tmp/ccCAjlzC.s:776    .text:00000230 NVIC_SystemHandlerPriorityConfig
+     /tmp/ccCAjlzC.s:831    .text:00000278 $d
+     /tmp/ccCAjlzC.s:834    .text:0000027c $t
+     /tmp/ccCAjlzC.s:839    .text:0000027c NVIC_GetSystemHandlerPendingBitStatus
+     /tmp/ccCAjlzC.s:865    .text:00000298 $d
+     /tmp/ccCAjlzC.s:868    .text:0000029c $t
+     /tmp/ccCAjlzC.s:873    .text:0000029c NVIC_SetSystemHandlerPendingBit
+     /tmp/ccCAjlzC.s:894    .text:000002b0 $d
+     /tmp/ccCAjlzC.s:897    .text:000002b4 $t
+     /tmp/ccCAjlzC.s:902    .text:000002b4 NVIC_ClearSystemHandlerPendingBit
+     /tmp/ccCAjlzC.s:924    .text:000002c8 $d
+     /tmp/ccCAjlzC.s:927    .text:000002cc $t
+     /tmp/ccCAjlzC.s:932    .text:000002cc NVIC_GetSystemHandlerActiveBitStatus
+     /tmp/ccCAjlzC.s:958    .text:000002e8 $d
+     /tmp/ccCAjlzC.s:961    .text:000002ec $t
+     /tmp/ccCAjlzC.s:966    .text:000002ec NVIC_GetFaultHandlerSources
+     /tmp/ccCAjlzC.s:1023   .text:00000320 $d
+     /tmp/ccCAjlzC.s:1026   .text:00000324 $t
+     /tmp/ccCAjlzC.s:1031   .text:00000324 NVIC_GetFaultAddress
+     /tmp/ccCAjlzC.s:1056   .text:00000334 $d
+
+NO UNDEFINED SYMBOLS

@@ -1,0 +1,11 @@
+wait_halt
+sleep 10
+#poll
+#sleep 10
+stm32x mass_erase 0
+sleep 10
+flash write_image flash
+sleep 10
+reset run
+sleep 10
+shutdown

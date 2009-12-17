@@ -1,0 +1,2 @@
+
+	.size	__cs3_interrupt_vector_lanchon_stm32, . - __cs3_interrupt_vector_lanchon_stm32

@@ -1,6 +1,8 @@
 #include <inttypes.h>
 #include "usb.h"
 
+BootVectTable* bootVect = ((BootVectTable*) BOOTLOADER_VECT_TABLE);
+
 void usb_lpIRQHandler(void)
 {
   typedef void (*funcPtr)(void);
@@ -42,15 +44,24 @@ void usb_PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
 
 void usb_serialWriteStr(const char* outStr) {
   u8 offset=0;
-  while ((outStr[offset] != 0)
+  BootVectTable *bootVector = ((BootVectTable*)BOOTLOADER_VECT_TABLE);
+
+  while ((outStr[offset] != '\0')
 	 && (offset < USB_SERIAL_BUF_SIZE)) {
     offset++;
   }
 
-  while (_GetEPTxCount(USB_SERIAL_ENDP_TX) > 0) {}
+  delay(offset*1);
 
-  usb_userToPMABufferCopy(outStr,USB_SERIAL_ENDP_TXADDR,offset);
+  bootVector->serial_count_in = (u32*) &offset;
+  usb_userToPMABufferCopy((u8*)outStr,USB_SERIAL_ENDP_TXADDR,offset);
   _SetEPTxCount(USB_SERIAL_ENDP_TX,offset);
   _SetEPTxValid(USB_SERIAL_ENDP_TX);
+
 }
 
+uint8_t usb_serialGetRecvLen() {
+  uint8_t count_out = _GetEPRxCount(USB_SERIAL_ENDP_RX);
+  _SetEPRxValid(USB_SERIAL_ENDP_RX);
+  return count_out;
+}

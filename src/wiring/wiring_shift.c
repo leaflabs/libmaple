@@ -1,5 +1,3 @@
-/* copied straight from arduino/wiring_shift.c  */
-
 /*
   wiring_shift.c - shiftOut() function
   Part of Arduino - http://www.arduino.cc/

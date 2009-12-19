@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:39:48
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file ext_interrupts.c
+ *
+ *  @brief Wiring-like interface for external interrupts
+ */
+
 #include "wiring.h"
 #include "exti.h"
 #include "ext_interrupts.h"
@@ -25,7 +50,6 @@ static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
 };
 
 
-
 /**
  *  @brief Attach an interrupt handler to be triggered on a given
  *  transition on the pin. Runs in interrupt context
@@ -36,23 +60,38 @@ static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
  *
  *  @sideeffect Registers a handler
  */
-int attachInterrupt(uint8_t pin, void (*handler)(void), uint8_t mode) {
+int attachInterrupt(uint8_t pin, voidFuncPtr handler, ExtInterruptTriggerMode mode) {
+    uint8_t outMode;
     /* Parameter checking  */
     if (pin >= NR_MAPLE_PINS) {
         return EXT_INTERRUPT_INVALID_PIN;
     }
 
     if (!handler) {
+        ASSERT(0);
         return EXT_INTERRUPT_INVALID_FUNCTION;
     }
 
-    if (!(mode < NR_EXTI_MODES)) {
-        return EXT_INTERRUPT_INVALID_MODE;
+    switch (mode) {
+    case RISING:
+        outMode = EXTI_RISING;
+        break;
+    case FALLING:
+        outMode = EXTI_FALLING;
+        break;
+    case CHANGE:
+        outMode = EXTI_RISING_FALLING;
+        break;
+    default:
+        ASSERT(0);
+        return EXT_INTERRUPT_INVALID_MODE;;
     }
 
-    exti_attach_interrupt(PIN_TO_EXTI_CHANNEL[pin].channel, 
+    exti_attach_interrupt(PIN_TO_EXTI_CHANNEL[pin].channel,
                           PIN_TO_EXTI_CHANNEL[pin].port,
                           handler, mode);
+
+    return 0;
 }
 
 int detachInterrupt(uint8_t pin) {

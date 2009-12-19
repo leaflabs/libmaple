@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:38:10
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file timers.h
+ *
+ *  @brief Timer prototypes and various definitions
+ */
+
 /* Note to self:
  * The timer clock frequencies are automatically fixed by hardware.
  * There are two cases:
@@ -91,6 +116,7 @@ typedef volatile uint32_t* TimerCCR;
  *      prescale  ->  {1-65535}
  * */
 void timer_init(uint8_t, uint16_t);
+void timers_disable(void);
 
 /* Turn on PWM with duty_cycle on the specified channel in timer.
  * This function takes in a pointer to the corresponding CCR

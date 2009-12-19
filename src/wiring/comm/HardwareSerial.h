@@ -12,47 +12,37 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Created: 12/18/09 02:35:49
+ *  Created: 12/19/09 05:45:37 EST
  *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
  *
  * ****************************************************************************/
 
 /**
- *  @file gpio.c
+ *  @file HardwareSerial.h
  *
- *  @brief GPIO initialization routine
+ *  @brief 
  */
 
-#ifndef _GPIO_H_
-#define _GPIO_H_
+#ifndef _HARDWARESERIAL_H_
+#define _HARDWARESERIAL_H_
 
+#include "Print.h"
+
+class HardwareSerial : public Print {
+    private:
+        uint8 usartNum;
+    public:
+        HardwareSerial(uint8_t);
+        void begin(uint32_t);
+        uint32 available(void);
+        uint8_t read(void);
+        void flush(void);
+        virtual void write(unsigned char);
+        using Print::write;
+};
+
+extern HardwareSerial Serial1;
+extern HardwareSerial Serial2;
+extern HardwareSerial Serial3;
 #endif
-#include "libmaple.h"
-#include "stm32f10x_rcc.h"
-#include "gpio.h"
 
-void gpio_init(void) {
-   /* Turn on clocks for GPIO  */
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
-                          RCC_APB2Periph_GPIOB |
-                          RCC_APB2Periph_GPIOC |
-                          RCC_APB2Periph_AFIO, 
-                          ENABLE);
-}
-
-void gpio_set_mode(GPIO_Port* port, uint8_t gpio_pin, uint8_t mode) {
-    uint32_t tmp;
-    uint32_t shift = POS(gpio_pin % 8);
-    GPIOReg CR;
-
-    ASSERT(port);
-    ASSERT(gpio_pin < 16);
-
-    CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
-
-    tmp = *CR;
-    tmp &= POS_MASK(shift);
-    tmp |= mode << shift;
-
-    *CR = tmp;
-}

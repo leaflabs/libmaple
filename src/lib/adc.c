@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:34:47
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file adc.c
+ *
+ *  @brief Analog to digital converter routines
+ */
+
 #include "stm32f10x_rcc.h"
 #include "adc.h"
 #include <stdio.h>
@@ -49,6 +74,7 @@ void adc_init(void) {
     ADC_SQR1 = 0;
 
     /* Up the sample conversion time to 55.5 cycles/sec, see note above  */
+    /* TODO: fix magic numbers  */
     ADC_SMPR1 = 0xB6DB6D;
     ADC_SMPR2 = 0x2DB6DB6D;
 
@@ -66,3 +92,6 @@ void adc_init(void) {
 }
 
 
+void adc_disable(void) {
+    CR2_ADON_BIT = 0;
+}

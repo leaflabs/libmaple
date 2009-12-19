@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:40:56
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file io.h
+ *
+ *  @brief 
+ */
+
 #ifndef _IO_H
 #define _IO_H
 
@@ -67,6 +92,31 @@ extern "C"{
 #define A14  D26
 #define A15  D11
 
+typedef enum WiringPinMode {
+    OUTPUT,
+    INPUT,
+    INPUT_PULLUP,
+    INPUT_PULLDOWN,
+    INPUT_FLOATING,
+    PWM
+} WiringPinMode;
+
+#if 0
+typedef enum PinMode {
+    INPUT_FLOATING,
+    INPUT_ANALOG,
+    INPUT_DIGITAL,
+    INPUT_PULLDOWN,
+    INPUT_PULLUP,
+    INPUT,
+    OUTPUT,
+    PWM,
+    SERIAL,
+    SPI,
+    I2C,
+} PinMode;
+#endif
+
 /* Set pin to mode
  * pinMode(pin, mode):
  *     pin -> {0-38, D0-D39, A0-16}
@@ -81,7 +131,7 @@ extern "C"{
  */
 void pinMode(uint8_t, uint8_t);
 
-/* 
+/*
  * Writes VALUE to digital pin[0-38]
  * digitalWrite(pin, value):
  *     pin -> {0-38, D0-D39, A0-16}
@@ -91,13 +141,13 @@ void digitalWrite(uint8_t, uint8_t);
 
 /* Read a digital value from pin, the pin mode must be set to
  * {INPUT, INPUT_PULLUP, INPUT_PULLDOWN}
- * digitalRead(pin)        
+ * digitalRead(pin)
  *     pin -> {0-38, D0-D39, A0-16}
  */
 uint32_t digitalRead(uint8_t);
 
 /* Read an analog value from pin, the pin mode must be set
- * to INPUT_ANALOG 
+ * to INPUT_ANALOG
  * analogRead(pin)
  *     pin -> {A0-A16}
  *     */

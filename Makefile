@@ -64,7 +64,9 @@ CSRC = lib/systick.c                        \
 	   lib/stm32f10x_it.c 		    \
 	   lib/exti.c 			    \
 	   lib/gpio.c 			    \
+	   lib/nvic.c 			    \
 	   lib/usart.c 			    \
+	   lib/util.c			    \
 	   lib/usb.c                        \
 	   wiring/wiring.c 		    \
 	   wiring/wiring_shift.c            \
@@ -76,10 +78,9 @@ CSRC = lib/systick.c                        \
 
 CSRC += $(STM32SRCS)
 
-CPPSRC = lib/util.cpp \
-	 wiring/math.cpp \
+CPPSRC = wiring/math.cpp \
 	 wiring/Print.cpp \
-	 wiring/comm/Serial.cpp \
+	 wiring/comm/HardwareSerial.cpp \
 	 main.cpp
 
 # i really have no idea what i'm doing

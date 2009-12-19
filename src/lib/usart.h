@@ -1,7 +1,30 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:38:35
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file usart.h
+ *
+ *  @brief USART Definitions
+ */
+
 #ifndef _USART_H_
 #define _USART_H_
-#include <inttypes.h>
-#include <util.h>
 
 /* Transmit procedure:
  * 1.  Enable the USART by writing the UE bit in USART_CR1 register to 1.
@@ -77,50 +100,24 @@
  * 921600  923.076 2.4375          0.16%     4.875          0.16%
  * 225000  2250    1               0%        2              0%
  *
- * USART_BRR[15:4] = mantissa
- * USART_BRR[3:0] = fraction
- * 111010
- * 0110
  * */
 #define NR_USARTS           0x3
-
-//#define USART1_BASE         0x40013800
-//#define USART2_BASE         0x40004400
-//#define USART3_BASE         0x40004800
-
-#define USART_UE            BIT(13)
-#define USART_M             BIT(12)
-#define USART_TE            BIT(3)
-#define USART_TXE           BIT(7)
-#define USART_STOP_BITS_1   BIT_MASK_SHIFT(0b0, 12)
-#define USART_STOP_BITS_05  BIT_MASK_SHIFT(0b01, 12)
-#define USART_STOP_BITS_2   BIT_MASK_SHIFT(0b02, 12)
-#define USART_STOP_BITS_15  BIT_MASK_SHIFT(0b02, 12)
-
-#define USART1_CLK          72000000UL
-#define USART2_CLK          36000000UL
-#define USART3_CLK          36000000UL
-
-#define B9600_MANTISSA      0xEA
-#define B9600_FRACTION      0x06
-
-
-typedef struct usart_port {
-    volatile uint32_t SR;
-    volatile uint32_t DR;
-    volatile uint32_t BRR;
-    volatile uint32_t CR1;
-    volatile uint32_t CR2;
-    volatile uint32_t CR3;
-    volatile uint32_t GTPR;
-} usart_port;
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-int32_t usart_init(uint8_t);
+#define USART_MAX_BAUD      225000
 
+void usart_init(uint8 usart_num, uint32 baud);
+void usart_disable(uint8 usart_num);
+
+void usart_putstr(uint8 usart_num, const char*);
+void usart_putudec(uint8 usart_num, uint32 val);
+void usart_putc(uint8 usart_num, uint8 ch);
+
+uint32 usart_data_available(uint8 usart_num);
+uint8 usart_getc(uint8 usart_num);
 
 #ifdef __cplusplus
 } // extern "C"

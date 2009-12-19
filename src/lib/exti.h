@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:35:33
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file exti.h
+ *
+ *  @brief External interrupt control prototypes and defines
+ */
+
 #ifndef _EXTI_H_
 #define _EXTI_H_
 
@@ -26,14 +51,14 @@
  *
  * RM0008, page 107: "PD0, PD1 cannot be used for external interrupt/event generation
  * on 36, 48, 64-bin packages."
- * 
+ *
  * ----------------------------------------------------------------------------
  * Pin to EXTI Line Mappings:
- * EXTI0          EXTI1          EXTI2           EXTI3             EXTI4  
+ * EXTI0          EXTI1          EXTI2           EXTI3             EXTI4
  * ----------------------------------------------------------------------------
  * D2/PA0         D3/PA1         D1/PA2          D0/A6/PA3         D10/A10/PA4
  * D26/EXT7/PB0   D27/EXT8/PB1   D16/A2/PC2      D17/A3/PC3        D18/A4/PC4
- * D14/A0/PC0     D15/PC1        D25/EXT5/PD2 
+ * D14/A0/PC0     D15/PC1        D25/EXT5/PD2
  *
  * EXTI5          EXTI6          EXTI7           EXTI8             EXTI9
  * ----------------------------------------------------------------------------
@@ -53,7 +78,7 @@
  * D22/EXT3/PC15
  *
  *
- * The 16 EXTI interrupts are mapped to 7 interrupt handlers. 
+ * The 16 EXTI interrupts are mapped to 7 interrupt handlers.
  *
  * EXTI Lines to Interrupt Mapping:
  * EXTI0 -> EXTI0
@@ -64,7 +89,7 @@
  * EXTI[5-9] -> EXT9_5
  * EXTI[10-15] -> EXT15_10
  *
- * 
+ *
  * */
 
 #define NR_EXTI_CHANNELS         16
@@ -83,21 +108,6 @@
 #define AFIO_EXTICR2    (AFIO_EVCR + 0x0C)
 #define AFIO_EXTICR3    (AFIO_EVCR + 0x10)
 #define AFIO_EXTICR4    (AFIO_EVCR + 0x14)
-
-#define NVIC_EXTI1_OFFSET   (NVIC_ISER0 + 0x07)
-#define NVIC_EXTI9_5_OFFSET (NVIC_ISER0 + 0x17)
-
-/* NVIC Interrupt Enable registers  */
-#define NVIC_ISER0          0xE000E100
-#define NVIC_ISER1          0xE000E104
-#define NVIC_ISER2          0xE000E108
-#define NVIC_ISER3          0xE000E10C
-
-/* NVIC Interrupt Clear registers  */
-#define NVIC_ICER0          0xE000E180
-#define NVIC_ICER1          0xE000E184
-#define NVIC_ICER2          0xE000E188
-#define NVIC_ICER3          0xE000E18C
 
 #define EXTI_RISING                     0
 #define EXTI_FALLING                    1
@@ -125,7 +135,6 @@
 #define EXTI_CONFIG_PORTC 2
 #define EXTI_CONFIG_PORTD 3
 
-typedef void (*voidFuncPtr)(void);
 
 #ifdef __cplusplus
 extern "C"{

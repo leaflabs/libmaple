@@ -98,14 +98,14 @@ void Print::print(double n)
 
 void Print::println(void)
 {
-  print('\r');
-  print('\n');  
+//  print('\r');
+  print('\n');
 }
 
 void Print::println(char c)
 {
   print(c);
-  println();  
+  println();
 }
 
 void Print::println(const char c[])
@@ -135,13 +135,13 @@ void Print::println(unsigned int n)
 void Print::println(long n)
 {
   print(n);
-  println();  
+  println();
 }
 
 void Print::println(unsigned long n)
 {
   print(n);
-  println();  
+  println();
 }
 
 void Print::println(long n, int base)
@@ -160,13 +160,13 @@ void Print::println(double n)
 
 void Print::printNumber(unsigned long n, uint8_t base)
 {
-  unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars. 
+  unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars.
   unsigned long i = 0;
 
   if (n == 0) {
     print('0');
     return;
-  } 
+  }
 
   while (n > 0) {
     buf[i++] = n % base;
@@ -179,8 +179,8 @@ void Print::printNumber(unsigned long n, uint8_t base)
       'A' + buf[i - 1] - 10));
 }
 
-void Print::printFloat(double number, uint8_t digits) 
-{ 
+void Print::printFloat(double number, uint8_t digits)
+{
   // Handle negative numbers
   if (number < 0.0)
   {
@@ -192,7 +192,7 @@ void Print::printFloat(double number, uint8_t digits)
   double rounding = 0.5;
   for (uint8_t i=0; i<digits; ++i)
     rounding /= 10.0;
-  
+
   number += rounding;
 
   // Extract the integer part of the number and print it
@@ -202,7 +202,7 @@ void Print::printFloat(double number, uint8_t digits)
 
   // Print the decimal point, but only if there are digits beyond
   if (digits > 0)
-    print("."); 
+    print(".");
 
   // Extract digits from the remainder one at a time
   while (digits-- > 0)
@@ -210,6 +210,6 @@ void Print::printFloat(double number, uint8_t digits)
     remainder *= 10.0;
     int toPrint = int(remainder);
     print(toPrint);
-    remainder -= toPrint; 
-  } 
+    remainder -= toPrint;
+  }
 }

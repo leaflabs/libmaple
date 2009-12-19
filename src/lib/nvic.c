@@ -12,47 +12,30 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Created: 12/18/09 02:35:49
+ *  Created: 12/18/09 02:36:19
  *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
  *
  * ****************************************************************************/
 
 /**
- *  @file gpio.c
+ *  @file nvic.c
  *
- *  @brief GPIO initialization routine
+ *  @brief Nested interrupt controller routines
  */
 
-#ifndef _GPIO_H_
-#define _GPIO_H_
-
-#endif
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
-#include "gpio.h"
+#include "nvic.h"
+#include "systick.h"
 
-void gpio_init(void) {
-   /* Turn on clocks for GPIO  */
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
-                          RCC_APB2Periph_GPIOB |
-                          RCC_APB2Periph_GPIOC |
-                          RCC_APB2Periph_AFIO, 
-                          ENABLE);
+void nvic_disable_interrupts(void) {
+    /* Turn off all interrupts  */
+    REG_SET(NVIC_ICER0, 0xFFFFFFFF);
+    REG_SET(NVIC_ICER1, 0xFFFFFFFF);
+
+    /* Turn off systick exception  */
+    REG_CLEAR_BIT(SYSTICK_CSR, 0);
 }
 
-void gpio_set_mode(GPIO_Port* port, uint8_t gpio_pin, uint8_t mode) {
-    uint32_t tmp;
-    uint32_t shift = POS(gpio_pin % 8);
-    GPIOReg CR;
-
-    ASSERT(port);
-    ASSERT(gpio_pin < 16);
-
-    CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
-
-    tmp = *CR;
-    tmp &= POS_MASK(shift);
-    tmp |= mode << shift;
-
-    *CR = tmp;
+void nvic_set_vector_table(uint32_t *addr, uint32_t offset) {
+//    SCB->VTOR = NVIC_VectTab | (Offset & (u32)0x1FFFFF80);
 }

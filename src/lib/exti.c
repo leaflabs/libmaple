@@ -1,5 +1,31 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:35:22
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file exti.c
+ *
+ *  @brief External interrupt control routines
+ */
+
+#include "libmaple.h"
 #include "exti.h"
-#include "util.h"
+#include "nvic.h"
 
 volatile static voidFuncPtr exti_handlers[NR_EXTI_CHANNELS];
 
@@ -22,7 +48,7 @@ void EXTI0_IRQHandler(void) {
         exti_handlers[EXTI0]();
     }
 
-    /* Clear pending bit*/    
+    /* Clear pending bit*/
     clear_pending(EXTI0);
 }
 
@@ -33,7 +59,7 @@ void EXTI1_IRQHandler(void) {
         exti_handlers[EXTI1]();
     }
 
-    /* Clear pending bit*/    
+    /* Clear pending bit*/
     clear_pending(EXTI1);
 }
 
@@ -44,7 +70,7 @@ void EXTI2_IRQHandler(void) {
         exti_handlers[EXTI2]();
     }
 
-    /* Clear pending bit*/    
+    /* Clear pending bit*/
     clear_pending(EXTI2);
 }
 
@@ -55,7 +81,7 @@ void EXTI3_IRQHandler(void) {
         exti_handlers[EXTI3]();
     }
 
-    /* Clear pending bit*/    
+    /* Clear pending bit*/
     clear_pending(EXTI3);
 }
 
@@ -66,7 +92,7 @@ void EXTI4_IRQHandler(void) {
         exti_handlers[EXTI4]();
     }
 
-    /* Clear pending bit*/    
+    /* Clear pending bit*/
     clear_pending(EXTI4);
 }
 
@@ -80,6 +106,7 @@ void EXTI9_5_IRQHandler(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 5; i++) {
         if (pending & 0x1) {
+            ASSERT(exti_handlers[EXTI5 + i]);
             exti_handlers[EXTI5 + i]();
             clear_pending(EXTI5 + i);
         }
@@ -97,6 +124,7 @@ void EXTI15_10_IRQHandler(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 6; i++) {
         if (pending & 0x1) {
+            ASSERT(exti_handlers[EXTI10 + i]);
             exti_handlers[EXTI10 + i]();
             clear_pending(EXTI10 + i);
         }
@@ -110,6 +138,7 @@ void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, u
     ASSERT(port < NR_EXTI_PORTS);
     ASSERT(mode < NR_EXTI_MODES);
     ASSERT(EXTI0 == 0);
+    ASSERT(handler);
 
     /* Note: All of the following code assumes that EXTI0 = 0  */
 
@@ -128,7 +157,7 @@ void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, u
     case EXTI7:
         REG_SET_MASK(AFIO_EXTICR2, BIT_MASK_SHIFT(port, (channel-4)*4));
         break;
-        
+
     case EXTI8:
     case EXTI9:
     case EXTI10:
@@ -225,7 +254,7 @@ void exti_detach_interrupt(uint8_t channel) {
     case EXTI7:
     case EXTI8:
     case EXTI9:
-        /* Are there any other channels enabled? 
+        /* Are there any other channels enabled?
          * If so, don't disable the interrupt handler */
         if (GET_BITS(REG_GET(EXTI_IMR), 5, 9) == 0) {
             REG_SET(NVIC_ICER0, BIT(23));
@@ -237,7 +266,7 @@ void exti_detach_interrupt(uint8_t channel) {
     case EXTI13:
     case EXTI14:
     case EXTI15:
-        /* Are there any other channels enabled? 
+        /* Are there any other channels enabled?
          * If so, don't disable the interrupt handler */
         if (GET_BITS(REG_GET(EXTI_IMR), 10, 15) == 0) {
             REG_SET(NVIC_ICER1, BIT(8));

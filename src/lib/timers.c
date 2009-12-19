@@ -1,7 +1,31 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:37:54
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file timers.c
+ *
+ *  @brief General timer routines
+ */
+
+#include "libmaple.h"
 #include "stm32f10x_rcc.h"
-#include "wiring.h"
 #include "timers.h"
-#include "util.h"
 
 typedef struct {
     volatile uint16_t CR1;
@@ -111,4 +135,20 @@ void timer_init(uint8_t timer_num, uint16_t prescale) {
     timer->DIER = 0;          // disable update interrupt
     timer->EGR  = 1;          // Initialize update event and shadow registers
     timer->CR1  |= 1;         // Enable timer
+}
+
+void timers_disable(void) {
+    Timer *timer;
+    int i;
+    Timer *timers[4] = {
+        (Timer*)TIMER1_BASE,
+        (Timer*)TIMER2_BASE,
+        (Timer*)TIMER3_BASE,
+        (Timer*)TIMER4_BASE,
+    };
+
+    for (i = 0; i < 4; i++) {
+        timer = timers[i];
+        timer->CR1 = 0;
+    }
 }

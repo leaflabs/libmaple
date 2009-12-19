@@ -1,9 +1,33 @@
-#include <inttypes.h>
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:41:47
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file wiring.c
+ *
+ *  @brief
+ */
+
+#include "wiring.h"
 #include "stm32f10x_flash.h"
 #include "stm32f10x_rcc.h"
 #include "stm32f10x_map.h"
 #include "stm32f10x_nvic.h"
-#include "wiring.h"
 #include "systick.h"
 #include "gpio.h"
 
@@ -26,7 +50,7 @@ void init(void) {
    /* off for debug  */
 //   adc_init();
 
-//   timer_init(1, 1);
+   timer_init(1, 1);
 //   timer_init(2, 1);
 //   timer_init(3, 1);
 //   timer_init(4, 1);

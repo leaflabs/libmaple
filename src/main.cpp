@@ -1,17 +1,6 @@
-#include "stm32f10x_map.h"
-#include "stm32f10x_lib.h"
-#include "stm32f10x_flash.h"
-#include "stm32f10x_usart.h"
-#include "Serial.h"
-#include "timers.h"
 #include "wiring.h"
-#include "util.h"
-#include "systick.h"
-#include "adc.h"
-#include "gpio.h"
-#include "pwm.h"
-#include "ext_interrupts.h"
-#include "usart.h"
+#include "HardwareSerial.h"
+#include "math.h"
 #include "usb.h"
 
 void setup();
@@ -19,21 +8,17 @@ void loop();
 
 int ledPin = 13;
 
+
 void setup()
 {
-//    Serial1.begin(9600);
-//    Serial1.println("setup start");
-
-//    pinMode(ledPin, OUTPUT);
-    pinMode(1, GPIO_MODE_AF_OUTPUT_PP);
-    pinMode(0, INPUT);
-
     pinMode(ledPin, OUTPUT);
+    Serial2.begin(9600);
+    Serial2.println("setup start");
 
-//    usart_init(2);
+    pinMode(6, PWM);
+    pwmWrite(6, 0x8000);
 
-
-//    Serial1.println("setup end");
+    Serial2.println("setup end");
 }
 
 int toggle = 0;
@@ -50,8 +35,7 @@ void loop() {
 }
 
 
-int main(void)
-{
+int main(void) {
     init();
     setup();
 
@@ -61,13 +45,10 @@ int main(void)
     return 0;
 }
 
-
-/* Implemented:
- * void pinMode(pin, mode) 
- * void digitalWrite(pin, value)
- * uint32_t digitalRead(pin)
- * uint32_t analogRead(pin)
- * void randomSeed(seed)
- * long random(max)
- * long random(min, max)
+/* Required for C++ hackery */
+/* TODO: This really shouldn't go here... move it later
  * */
+extern "C" void __cxa_pure_virtual(void) {
+    while(1)
+        ;
+}

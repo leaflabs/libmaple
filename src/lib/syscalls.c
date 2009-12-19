@@ -1,5 +1,5 @@
+#include "libmaple.h"
 #include <sys/stat.h>
-#include "stm32f10x_usart.h"
 
 /* _end is set in the linker command file */
 extern caddr_t _end;
@@ -72,8 +72,9 @@ int _lseek(int fd, off_t pos, int whence)
 
 unsigned char getch(void)
 {
-    while (!(USART2->SR & USART_FLAG_RXNE));
-    return USART2->DR;
+//    while (!(USART2->SR & USART_FLAG_RXNE));
+//    return USART2->DR;
+    return 0;
 }
 
 
@@ -86,10 +87,10 @@ int _read(int fd, char *buf, size_t cnt)
 
 void putch(unsigned char c)
 {
-    if (c == '\n') putch('\r');
+//    if (c == '\n') putch('\r');
 
-    while (!(USART2->SR & USART_FLAG_TXE));
-    USART2->DR = c;
+//    while (!(USART2->SR & USART_FLAG_TXE));
+//    USART2->DR = c;
 }
 
 void cgets(char *s, int bufsize)

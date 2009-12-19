@@ -1,15 +1,19 @@
 #ifndef _WIRING_H_
 #define _WIRING_H_
 
-#include <inttypes.h>
+#include "libmaple.h"
 #include "timers.h"
 #include "io.h"
 #include "binary.h"
+#include "bits.h"
 #include "time.h"
+#include "pwm.h"
+#include "ext_interrupts.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif
+
 
 #define MAPLE 1
 #define NR_MAPLE_PINS   14 // temporary
@@ -38,12 +42,10 @@ extern "C"{
 #define bit(b) (1UL << (b))
 
 
-typedef uint8_t boolean;
-typedef uint8_t byte;
+typedef uint8 boolean;
+typedef uint8 byte;
 
 void init(void);
-
-
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
 void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, byte val);
 

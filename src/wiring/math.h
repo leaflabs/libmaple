@@ -1,5 +1,5 @@
-#ifndef _MAPLE_MATH_H_
-#define _MAPLE_MATH_H_
+#ifndef _MATH_H_
+#define _MATH_H_
 
 void randomSeed(unsigned int);
 long random(long);

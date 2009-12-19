@@ -1,3 +1,28 @@
+/* *****************************************************************************
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *  Created: 12/18/09 02:35:10
+ *  Copyright (c) 2009 Perry L. Hung. All rights reserved.
+ *
+ * ****************************************************************************/
+
+/**
+ *  @file adc.h
+ *
+ *  @brief ADC prototypes and defines
+ */
+
 #ifndef _ADC_H_
 #define _ADC_H_
 #include <inttypes.h>
@@ -40,6 +65,7 @@ extern "C"{
 
 /* Initialize ADC1 to do one-shot conversions  */
 void adc_init(void);
+void adc_disable(void);
 
 /* Perform a single conversion on ADC[0-16],
  * PRECONDITIONS:

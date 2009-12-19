@@ -114,9 +114,9 @@ __STM32DefaultExceptionHandler:
 	.weak	USB_HP_CAN_TX_IRQHandler
 	.globl	USB_HP_CAN_TX_IRQHandler
 	.set	USB_HP_CAN_TX_IRQHandler, __STM32DefaultExceptionHandler
-	.weak	USB_LP_CAN_RX0_IRQHandler
-	.globl	USB_LP_CAN_RX0_IRQHandler
-	.set	USB_LP_CAN_RX0_IRQHandler, __STM32DefaultExceptionHandler
+	.weak	usb_lpIRQHandler
+	.globl	usb_lpIRQHandler
+	.set	usb_lpIRQHandler, __STM32DefaultExceptionHandler
 	.weak	CAN_RX1_IRQHandler
 	.globl	CAN_RX1_IRQHandler
 	.set	CAN_RX1_IRQHandler, __STM32DefaultExceptionHandler

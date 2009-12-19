@@ -42,7 +42,7 @@ __cs3_interrupt_vector_lanchon_stm32:
 	.long	DMAChannel7_IRQHandler
 	.long	ADC_IRQHandler
 	.long	USB_HP_CAN_TX_IRQHandler
-	.long	USB_LP_CAN_RX0_IRQHandler
+	.long	usb_lpIRQHandler
 	.long	CAN_RX1_IRQHandler
 	.long	CAN_SCE_IRQHandler
 	.long	EXTI9_5_IRQHandler

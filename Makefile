@@ -33,15 +33,17 @@ INCLUDES = -Isrc/stm32lib/inc \
 	   -Isrc/wiring \
 	   -Isrc/wiring/comm
 
+DEFFLAGS=VECT_TAB_BASE
 CFLAGS  =  -I./ $(INCLUDES) -c \
            -Os\
            -g -mcpu=cortex-m3 -mthumb  -march=armv7-m -nostdlib \
-           -ffunction-sections -fdata-sections -Wl,--gc-sections
-
+           -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	   -D$(DEFFLAGS)
 
 CPPFLAGS = -fno-rtti -fno-exceptions -Wall
 
-LFLAGS  = -Tstm32conf/lanchon-stm32.ld -L stm32conf/lanchon-stm32 \
+LINKER=lanchon-stm32.ld
+LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
           -mcpu=cortex-m3 -mthumb -Xlinker \
           --gc-sections --print-gc-sections --march=armv7-m -Wall
 
@@ -63,6 +65,7 @@ CSRC = lib/systick.c                        \
 	   lib/exti.c 			    \
 	   lib/gpio.c 			    \
 	   lib/usart.c 			    \
+	   lib/usb.c                        \
 	   wiring/wiring.c 		    \
 	   wiring/wiring_shift.c            \
 	   wiring/wiring_analog.c           \

@@ -26,6 +26,9 @@ extern "C"{
 #define LSBFIRST 0
 #define MSBFIRST 1
 
+#define USER_ADDR_ROM 0x08005000
+#define USER_ADDR_RAM 0x20000C00
+
 #define lowByte(w) ((w) & 0xff)
 #define highByte(w) ((w) >> 8)
 #define bitRead(value, bit) (((value) >> (bit)) & 0x01)

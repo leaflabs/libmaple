@@ -160,6 +160,11 @@ $(BUILD_PATH)/main.bin: $(BUILD_PATH)/$(PROJECT).out
 install: $(BUILD_PATH)/main.bin
 	openocd -f stm32conf/flash.cfg
 
+program:
+	dfu-util -a0 -d 0110:1001 -D build/main.bin -R
+programFlash:
+	dfu-util -a1 -d 0110:1001 -D build/main.bin -R
+
 run: $(BUILD_PATH)/main.bin
 	openocd -f stm32conf/run.cfg
 

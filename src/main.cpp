@@ -7,7 +7,16 @@ void setup();
 void loop();
 
 int ledPin = 13;
+uint8_t bytes_in;
 
+BootVectTable* mapleVect;
+
+void usb_tx_cb(void) {
+}
+
+void usb_rx_cb(void) {
+  bytes_in = usb_serialGetRecvLen();
+}
 
 void setup()
 {
@@ -19,7 +28,12 @@ void setup()
     pwmWrite(6, 0x8000);
 
     Serial2.println("setup end");
+
+    mapleVect = (BootVectTable*)(BOOTLOADER_VECT_TABLE);
+    mapleVect->serial_tx_cb = usb_tx_cb;
+    mapleVect->serial_rx_cb = usb_rx_cb;
 }
+
 
 int toggle = 0;
 
@@ -28,10 +42,16 @@ void loop() {
     toggle ^= 1;
     digitalWrite(ledPin, toggle);
     delay(1000);
+    usb_serialWriteStr("blink...\n");
 
-    usb_userToPMABufferCopy((u8*)testMsg,USB_SERIAL_ENDP_TXADDR,8);
-    _SetEPTxCount(USB_SERIAL_ENDP_TX,8);
-    _SetEPTxValid(USB_SERIAL_ENDP_TX);
+    if (bytes_in > 0) {
+      int i;
+      for (i=0;i<bytes_in;i++) {
+	usb_serialWriteStr("b,");
+      }
+      bytes_in = 0;
+      usb_serialWriteStr("\n");
+    }
 }
 
 

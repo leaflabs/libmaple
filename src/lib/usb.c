@@ -1,5 +1,5 @@
-#include "usb.h"
 #include <inttypes.h>
+#include "usb.h"
 
 void usb_lpIRQHandler(void)
 {
@@ -10,7 +10,7 @@ void usb_lpIRQHandler(void)
   ptrToUsbISR();
 }
 
-void UserToPMABufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
+void usb_userToPMABufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
 {
   u32 n = (wNBytes + 1) >> 1;   /* n = (wNBytes + 1) / 2 */
   u32 i, temp1, temp2;
@@ -27,7 +27,7 @@ void UserToPMABufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
     }
 }
 
-void PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
+void usb_PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
 {
   u32 n = (wNBytes + 1) >> 1;/* /2*/
   u32 i;
@@ -40,7 +40,7 @@ void PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
     }
 }
 
-void serialWriteStr(char* outStr) {
+void usb_serialWriteStr(const char* outStr) {
   u8 offset=0;
   while ((outStr[offset] != 0)
 	 && (offset < USB_SERIAL_BUF_SIZE)) {
@@ -49,7 +49,7 @@ void serialWriteStr(char* outStr) {
 
   while (_GetEPTxCount(USB_SERIAL_ENDP_TX) > 0) {}
 
-  UserToPMABufferCopy(outStr,USB_SERIAL_ENDP_TXADDR,offset);
+  usb_userToPMABufferCopy(outStr,USB_SERIAL_ENDP_TXADDR,offset);
   _SetEPTxCount(USB_SERIAL_ENDP_TX,offset);
   _SetEPTxValid(USB_SERIAL_ENDP_TX);
 }

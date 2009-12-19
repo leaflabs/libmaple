@@ -12,6 +12,7 @@
 #include "pwm.h"
 #include "ext_interrupts.h"
 #include "usart.h"
+#include "usb.h"
 
 void setup();
 void loop();
@@ -37,10 +38,15 @@ void setup()
 
 int toggle = 0;
 
+char* testMsg = "0123456\n";
 void loop() {
     toggle ^= 1;
     digitalWrite(ledPin, toggle);
-    delay(100);
+    delay(1000);
+
+    usb_userToPMABufferCopy((u8*)testMsg,USB_SERIAL_ENDP_TXADDR,8);
+    _SetEPTxCount(USB_SERIAL_ENDP_TX,8);
+    _SetEPTxValid(USB_SERIAL_ENDP_TX);
 }
 
 

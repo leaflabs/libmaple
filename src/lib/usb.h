@@ -6,7 +6,7 @@
 #include "cortexm3_macro.h"
 #include "usb_regs.h"
 
-#ifdef __cpluscplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -18,16 +18,12 @@ extern "C" {
 #define USB_SERIAL_BUF_SIZE       (0x40)
 
 void usb_lpIRQHandler(void);  
-void usb_userToPMABufferCopy(uint8_t  *pbUsrBuf,
-			     uint16_t *wPMABufAddr,
-			     uint16_t *wNBytes);
-void usb_PMABToUserufferCopy(uint8_t  *pbUsrBuf,
-			     uint16_t *wPMABufAddr,
-			     uint16_t *wNBytes);
-void usb_serialWriteStr(char* str);
+void usb_userToPMABufferCopy(u8  *pbUsrBuf,u16 wPMABufAddr,u16 wNBytes);
+void usb_PMAToUserBufferCopy(u8  *pbUsrBuf,u16 wPMABufAddr,u16 wNBytes);
+void usb_serialWriteStr(const char *outStr);
 
 
-#ifdef __cpluscplus
+#ifdef __cplusplus
 } // extern "C"
 #endif
 #endif //_USB_H

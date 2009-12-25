@@ -3,9 +3,6 @@
 #include "math.h"
 #include "usb.h"
 
-void setup();
-void loop();
-
 int ledPin = 13;
 uint8_t bytes_in;
 
@@ -26,6 +23,7 @@ void setup()
 
     pinMode(6, PWM);
     pwmWrite(6, 0x8000);
+    pinMode(7, OUTPUT);
 
     Serial2.println("setup end");
 
@@ -37,8 +35,9 @@ void setup()
 
 int toggle = 0;
 
-char* testMsg = "0123456\n";
-void loop() {
+const char* testMsg = "hello world!\n";
+
+static inline void loop() {
     toggle ^= 1;
     digitalWrite(ledPin, toggle);
     delay(1000);

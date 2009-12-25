@@ -27,6 +27,7 @@
 #include "HardwareSerial.h"
 #include "usart.h"
 #include "gpio.h"
+#include "timers.h"
 
 #define USART1_TX_PORT             GPIOA_BASE
 #define USART1_TX_PIN              9
@@ -75,6 +76,8 @@ void HardwareSerial::begin(uint32_t baud) {
     case 2:
         gpio_set_mode(USART2_TX_PORT, USART2_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
         gpio_set_mode(USART2_RX_PORT, USART2_RX_PIN, GPIO_MODE_INPUT_FLOATING);
+        /* Turn off any pwm  */
+        timers_disable_channel(2, 3);
         break;
     case 3:
         gpio_set_mode(USART3_TX_PORT, USART3_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);

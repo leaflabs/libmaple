@@ -41,6 +41,20 @@ void delay(unsigned long ms);
 /* Delay for us microseconds  */
 void delayMicroseconds(uint32_t us);
 
+#if 0
+static inline void delay_us(uint32 us) {
+    us *= 12;
+    asm volatile("mov  r0, %[us]        \n\t"
+                 "subs r0, #2 \n\t"
+"1:                                    \n\t"
+                  "subs r0, r0, #1           \n\t"
+                  "bne 1b"
+                 :
+                 : [us] "r" (us)
+                 : "r0", "cc");
+
+}
+#endif
 #ifdef __cplusplus
 } // extern "C"
 #endif

@@ -152,3 +152,40 @@ void timers_disable(void) {
         timer->CR1 = 0;
     }
 }
+
+void timers_disable_channel(uint8 timer_num, uint8 channel) {
+    Timer *timer;
+    switch (timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        break;
+    default:
+        ASSERT(0);
+    }
+
+    switch (channel) {
+    case 1:
+        timer->CCER &= ~(0x1);
+        break;
+    case 2:
+        timer->CCER &= ~(0x10);
+        break;
+    case 3:
+        timer->CCER &= ~(0x100);
+        break;
+    case 4:
+        timer->CCER &= ~(0x1000);
+        break;
+    default:
+        ASSERT(0);
+    }
+}

@@ -58,25 +58,17 @@
 #define GPIO_MODE_INPUT_PD          (0x02 << 2)
 #define GPIO_MODE_INPUT_PU          (0x02 << 2)
 
-//#define INPUT_ANALOG                GPIO_MODE_INPUT_ANALOG
-//#define INPUT_DIGITAL               GPIO_MODE_INPUT_FLOATING
-//#define INPUT_FLOATING              GPIO_MODE_INPUT_FLOATING
-//#define INPUT_PULLDOWN              GPIO_MODE_INPUT_PD
-//#define INPUT_PULLUP                GPIO_MODE_INPUT_PU
-//#define INPUT                       GPIO_MODE_INPUT_FLOATING
-//#define OUTPUT                      GPIO_MODE_OUTPUT_PP
-
 typedef struct {
-    volatile uint32_t CRL;      // Port configuration register low
-    volatile uint32_t CRH;      // Port configuration register high
-    volatile uint32_t IDR;      // Port input data register
-    volatile uint32_t ODR;      // Port output data register
-    volatile uint32_t BSRR;     // Port bit set/reset register
-    volatile uint32_t BRR;      // Port bit reset register
-    volatile uint32_t LCKR;     // Port configuration lock register
+    volatile uint32 CRL;      // Port configuration register low
+    volatile uint32 CRH;      // Port configuration register high
+    volatile uint32 IDR;      // Port input data register
+    volatile uint32 ODR;      // Port output data register
+    volatile uint32 BSRR;     // Port bit set/reset register
+    volatile uint32 BRR;      // Port bit reset register
+    volatile uint32 LCKR;     // Port configuration lock register
 } GPIO_Port;
 
-typedef volatile uint32_t* GPIOReg;
+typedef volatile uint32* GPIOReg;
 
 #define POS_MASK(shift) (~(0xF << shift))
 #define POS(val)        (val << 2)
@@ -86,9 +78,9 @@ extern "C"{
 #endif
 
 void gpio_init(void);
-void gpio_set_mode(GPIO_Port* port, uint8_t gpio_pin, uint8_t mode);
+void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode);
 
-static inline void gpio_write_bit(GPIO_Port *port, uint8_t gpio_pin, uint8_t val) {
+static inline void gpio_write_bit(GPIO_Port *port, uint8 gpio_pin, uint8 val) {
     if (val){
         port->BSRR = BIT(gpio_pin);
     } else {

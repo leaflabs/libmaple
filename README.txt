@@ -7,22 +7,10 @@
  * D15 is mapped to pin number 38. This is to retain compatiblity with the
  * Arduino API, where digitalWrite() on pins 14-19 map to analog A0-A5
  *
- * Fix serial/timer 
- * Add external itnerrupts
- * Redo serial api
- *
- * Order some shields
- * buy some toner
- * LARW BOOK
- *
- *
- * wtf is smba/smbal?
- * serial.print
- *
- * 5v tolerance
  *
  * TODO:
  * Using OSC32_IN/OSC32_OUT pins as GPIO ports PC14/PC15 152/995
+ * Runtime check for AF collisions on pins (eg serial and pwm).
  * */
 
 /* 51 GPIOs in general

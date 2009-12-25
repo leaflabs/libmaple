@@ -23,10 +23,6 @@
  *  @brief GPIO initialization routine
  */
 
-#ifndef _GPIO_H_
-#define _GPIO_H_
-
-#endif
 #include "libmaple.h"
 #include "stm32f10x_rcc.h"
 #include "gpio.h"
@@ -36,11 +32,11 @@ void gpio_init(void) {
    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
                           RCC_APB2Periph_GPIOB |
                           RCC_APB2Periph_GPIOC |
-                          RCC_APB2Periph_AFIO, 
+                          RCC_APB2Periph_AFIO,
                           ENABLE);
 }
 
-void gpio_set_mode(GPIO_Port* port, uint8_t gpio_pin, uint8_t mode) {
+void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode) {
     uint32_t tmp;
     uint32_t shift = POS(gpio_pin % 8);
     GPIOReg CR;

@@ -1,8 +1,6 @@
 #include <inttypes.h>
 #include "usb.h"
 
-BootVectTable* bootVect = ((BootVectTable*) BOOTLOADER_VECT_TABLE);
-
 void usb_lpIRQHandler(void)
 {
   typedef void (*funcPtr)(void);
@@ -60,8 +58,26 @@ void usb_serialWriteStr(const char* outStr) {
 
 }
 
+void usb_serialWriteChar(unsigned char ch) {
+  BootVectTable *bootVector = ((BootVectTable*)BOOTLOADER_VECT_TABLE);
+
+  delay(1);
+
+  *(bootVector->serial_count_in) = 1;
+  usb_userToPMABufferCopy((u8*)(&ch),USB_SERIAL_ENDP_TXADDR,1);
+  _SetEPTxCount(USB_SERIAL_ENDP_TX,1);
+  _SetEPTxValid(USB_SERIAL_ENDP_TX);
+
+}
+
 uint8_t usb_serialGetRecvLen() {
-  uint8_t count_out = _GetEPRxCount(USB_SERIAL_ENDP_RX);
-  _SetEPRxValid(USB_SERIAL_ENDP_RX);
+  uint8_t count_out =_GetEPRxCount(USB_SERIAL_ENDP_RX); 
   return count_out;
 }
+
+void usb_copyRecvBuffer(unsigned char* dest, uint8_t len) {
+  ASSERT(len < USB_SERIAL_BUF_SIZE);
+  usb_PMAToUserBufferCopy((u8*)(dest),USB_SERIAL_ENDP_RXADDR,len);
+  _SetEPRxValid(USB_SERIAL_ENDP_RX);
+}
+

@@ -7,7 +7,14 @@
 int ledPin = 13;
 uint8_t bytes_in;
 
-HardwareUsb Usb;
+BootVectTable* mapleVect;
+
+void usb_tx_cb(void) {
+}
+
+void usb_rx_cb(void) {
+  bytes_in = usb_serialGetRecvLen();
+}
 
 void setup()
 {
@@ -21,28 +28,30 @@ void setup()
 
     Serial2.println("setup end");
 
-    Usb.begin();
-    Usb.flush();
+    mapleVect = (BootVectTable*)(BOOTLOADER_VECT_TABLE);
+    mapleVect->serial_tx_cb = usb_tx_cb;
+    mapleVect->serial_rx_cb = usb_rx_cb;
 }
+
 
 int toggle = 0;
 
 const char* testMsg = "hello world!\n";
-const char x = 'a';
+
 static inline void loop() {
     toggle ^= 1;
     digitalWrite(ledPin, toggle);
-    delay(50);
+    delay(1000);
+    usb_serialWriteStr("blink...\n");
 
-    uint8_t numBytes=Usb.available();
-    
-    if (numBytes > 0) {
-      while (numBytes-->0) {
-	Usb.print(Usb.read());
+    if (bytes_in > 0) {
+      int i;
+      for (i=0;i<bytes_in;i++) {
+	usb_serialWriteStr("b,");
       }
+      bytes_in = 0;
+      usb_serialWriteStr("\n");
     }
-
-    Usb.flush();
 }
 
 

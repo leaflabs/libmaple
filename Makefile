@@ -81,7 +81,8 @@ CSRC += $(STM32SRCS)
 CPPSRC = wiring/math.cpp \
 	 wiring/Print.cpp \
 	 wiring/comm/HardwareSerial.cpp \
-	 main.cpp
+	 wiring/comm/HardwareUsb.cpp \
+	 example_main.cpp
 
 # i really have no idea what i'm doing
 meep += $(CSRC)

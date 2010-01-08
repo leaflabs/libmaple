@@ -1,19 +1,22 @@
 #include "wiring.h"
 #include "HardwareSerial.h"
-#include "math.h"
+#include "wiring_math.h"
 #include "usb.h"
 
 int ledPin = 13;
 int toggle=0;
 void setup() {
-  pinMode(ledPin,OUTPUT);
+//    pinMode(ledPin,OUTPUT);
+//    Serial2.begin(9600);
 }
 
 void loop() {
-  digitalWrite(ledPin,HIGH);
-  delay(200);
-  digitalWrite(ledPin,LOW);
-  delay(200);
+    asm volatile("nop");
+//    digitalWrite(ledPin,HIGH);
+//    delay(200);
+//    digitalWrite(ledPin,LOW);
+//    delay(200);
+//    Serial2.println("Hello world");
 }
 
 int main(void) {

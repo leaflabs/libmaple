@@ -1,5 +1,7 @@
-#ifndef _MATH_H_
-#define _MATH_H_
+#ifndef _WIRING_MATH_H_
+#define _WIRING_MATH_H_
+
+#include <math.h>
 
 void randomSeed(unsigned int);
 long random(long);

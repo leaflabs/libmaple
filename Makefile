@@ -78,7 +78,7 @@ CSRC = lib/systick.c                        \
 
 CSRC += $(STM32SRCS)
 
-CPPSRC = wiring/math.cpp \
+CPPSRC = wiring/wiring_math.cpp \
 	 wiring/Print.cpp \
 	 wiring/comm/HardwareSerial.cpp \
 	 wiring/comm/HardwareUsb.cpp \

@@ -103,8 +103,6 @@ MSG_ASSEMBLING = Assembling:
 MSG_CLEANING = Cleaning project:
 MSG_FLASH = Creating load file for Flash:
 
-$(BUILD_PATH):
-	mkdir -p build
 
 _COBJ =  $(moop:.c=.o)
 _CPPOBJ =  $(boop:.cpp=.o)
@@ -112,6 +110,7 @@ COBJ = $(patsubst %, $(BUILD_PATH)/%,$(_COBJ))
 CPPOBJ = $(patsubst %, $(BUILD_PATH)/%,$(_CPPOBJ))
 
 .PHONY: run cscope clean info
+
 
 info:
 	@echo "Maple library help"
@@ -127,6 +126,9 @@ info:
 	@echo "	   program_jtag:  Upload code to flash via jtag"
 
 all: info
+
+$(BUILD_PATH):
+	mkdir -p build
 
 $(OUTDIRS):
 	@echo Making directory $@

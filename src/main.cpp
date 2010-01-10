@@ -6,17 +6,14 @@
 int ledPin = 13;
 int toggle=0;
 void setup() {
-//    pinMode(ledPin,OUTPUT);
-//    Serial2.begin(9600);
+    pinMode(ledPin,OUTPUT);
 }
 
 void loop() {
-    asm volatile("nop");
-//    digitalWrite(ledPin,HIGH);
-//    delay(200);
-//    digitalWrite(ledPin,LOW);
-//    delay(200);
-//    Serial2.println("Hello world");
+    digitalWrite(ledPin, HIGH);
+    delay(1000);
+    digitalWrite(ledPin,LOW);
+    delay(1000);
 }
 
 int main(void) {

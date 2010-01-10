@@ -7,13 +7,13 @@ STM_SRC = stm32lib/src
 STM_CONF = stm32conf/flash.conf
 
 # ARM/GNU toolchain parameters
-CC  = arm-none-eabi-gcc
-CPP = arm-none-eabi-g++
-LD  = arm-none-eabi-ld -v
-AR  = arm-none-eabi-ar
-AS  = arm-none-eabi-as
-CP  = arm-none-eabi-objcopy
-OD  = arm-none-eabi-objdump
+CC  := arm-none-eabi-gcc
+CPP := arm-none-eabi-g++
+LD  := arm-none-eabi-ld -v
+AR  := arm-none-eabi-ar
+AS  := arm-none-eabi-as
+CP  := arm-none-eabi-objcopy
+OD  := arm-none-eabi-objdump
 
 BUILD_PATH = build
 LIB_PATH = lib
@@ -33,7 +33,8 @@ INCLUDES = -Isrc/stm32lib/inc \
 	   -Isrc/wiring \
 	   -Isrc/wiring/comm
 
-DEFFLAGS=VECT_TAB_BASE
+# default is to upload to flash
+#DEFFLAGS = VECT_TAB_BASE
 CFLAGS  =  -I./ $(INCLUDES) -c \
            -Os\
            -g -mcpu=cortex-m3 -mthumb  -march=armv7-m -nostdlib \
@@ -42,7 +43,7 @@ CFLAGS  =  -I./ $(INCLUDES) -c \
 
 CPPFLAGS = -fno-rtti -fno-exceptions -Wall
 
-LINKER=lanchon-stm32.ld
+#LINKER=lanchon-stm32.ld
 LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
           -mcpu=cortex-m3 -mthumb -Xlinker \
           --gc-sections --print-gc-sections --march=armv7-m -Wall
@@ -82,7 +83,7 @@ CPPSRC = wiring/wiring_math.cpp \
 	 wiring/Print.cpp \
 	 wiring/comm/HardwareSerial.cpp \
 	 wiring/comm/HardwareUsb.cpp \
-	 example_main.cpp
+	 main.cpp
 
 # i really have no idea what i'm doing
 meep += $(CSRC)
@@ -102,9 +103,6 @@ MSG_ASSEMBLING = Assembling:
 MSG_CLEANING = Cleaning project:
 MSG_FLASH = Creating load file for Flash:
 
-# output directories
-all: $(BUILD_PATH)/main.bin
-
 $(BUILD_PATH):
 	mkdir -p build
 
@@ -113,13 +111,20 @@ _CPPOBJ =  $(boop:.cpp=.o)
 COBJ = $(patsubst %, $(BUILD_PATH)/%,$(_COBJ))
 CPPOBJ = $(patsubst %, $(BUILD_PATH)/%,$(_CPPOBJ))
 
+.PHONY: install run cscope clean info
 
-.PHONY: test install run cscope clean
+info:
+	@echo "Maple library help"
+	@echo "------------------:"
+	@echo "Compile targets:"
+	@echo "	   ram:   Compile sketch code for RAM"
+	@echo "	   flash: Compile sketch code for flash"
+	@echo ""
+	@echo "Programming targets:"
+	@echo "	   program_ram:   Upload code to RAM"
+	@echo "	   program_flash: Upload code to RAM"
 
-test: $(CSRC_)
-	@echo help
-	@echo $(moop)
-	@echo done
+all: info
 
 $(OUTDIRS):
 	@echo Making directory $@
@@ -129,11 +134,13 @@ $(OUTDIRS):
 # actual build rules
 $(COBJ) : $(BUILD_PATH)/%.o : %.c
 	@echo $(MSG_COMPILING) $<
+	@echo $(PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@echo
 
 $(CPPOBJ) : $(BUILD_PATH)/%.o : %.cpp
 	@echo $(MSG_COMPILING) $<
+	@echo $(PATH)
 	$(CPP) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 	@echo
 
@@ -157,13 +164,23 @@ $(BUILD_PATH)/main.bin: $(BUILD_PATH)/$(PROJECT).out
 	@echo "Final Size:"
 	arm-none-eabi-size $<
 
+ram: DEFFLAGS := VECT_TAB_RAM
+ram: LINKER := lanchon-stm32-user-ram.ld
+ram: $(BUILD_PATH)/main.bin
+	@echo "RAM build"
+
+flash: DEFFLAGS := VECT_TAB_BASE
+flash: LINKER := lanchon-stm32-user-rom.ld
+flash: $(BUILD_PATH)/main.bin
+	@echo "Flash build"
 
 install: $(BUILD_PATH)/main.bin
 	openocd -f stm32conf/flash.cfg
 
-program:
+program_ram: ram 
 	dfu-util -a0 -d 0110:1001 -D build/main.bin -R
-programFlash:
+
+program_flash: flash
 	dfu-util -a1 -d 0110:1001 -D build/main.bin -R
 
 run: $(BUILD_PATH)/main.bin

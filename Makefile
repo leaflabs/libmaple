@@ -111,18 +111,20 @@ _CPPOBJ =  $(boop:.cpp=.o)
 COBJ = $(patsubst %, $(BUILD_PATH)/%,$(_COBJ))
 CPPOBJ = $(patsubst %, $(BUILD_PATH)/%,$(_CPPOBJ))
 
-.PHONY: install run cscope clean info
+.PHONY: run cscope clean info
 
 info:
 	@echo "Maple library help"
 	@echo "------------------:"
 	@echo "Compile targets:"
-	@echo "	   ram:   Compile sketch code for RAM"
-	@echo "	   flash: Compile sketch code for flash"
+	@echo "	   ram:   Compile sketch code for RAM to be loaded over the bootloader"
+	@echo "	   flash: Compile sketch code for flash to be loaded over the bootloader"
+	@echo "	   flash: Compile sketch code for flash to be loaded over JTAG"
 	@echo ""
 	@echo "Programming targets:"
-	@echo "	   program_ram:   Upload code to RAM"
-	@echo "	   program_flash: Upload code to RAM"
+	@echo "	   program_ram:   Upload code to RAM via bootloader"
+	@echo "	   program_flash: Upload code to flash via bootloader"
+	@echo "	   program_jtag:  Upload code to flash via jtag"
 
 all: info
 
@@ -143,7 +145,6 @@ $(CPPOBJ) : $(BUILD_PATH)/%.o : %.cpp
 	@echo $(PATH)
 	$(CPP) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 	@echo
-
 
 # targets
 $(BUILD_PATH)/$(PROJECT).out: $(OUTDIRS) $(COBJ) $(CPPOBJ)
@@ -169,19 +170,25 @@ ram: LINKER := lanchon-stm32-user-ram.ld
 ram: $(BUILD_PATH)/main.bin
 	@echo "RAM build"
 
-flash: DEFFLAGS := VECT_TAB_BASE
+flash: DEFFLAGS := VECT_TAB_ROM
 flash: LINKER := lanchon-stm32-user-rom.ld
 flash: $(BUILD_PATH)/main.bin
 	@echo "Flash build"
 
-install: $(BUILD_PATH)/main.bin
-	openocd -f stm32conf/flash.cfg
+jtag: DEFFLAGS := VECT_TAB_BASE
+jtag: LINKER := lanchon-stm32.ld
+jtag: $(BUILD_PATH)/main.bin
+	@echo "JTAG build"
 
 program_ram: ram 
 	dfu-util -a0 -d 0110:1001 -D build/main.bin -R
 
 program_flash: flash
 	dfu-util -a1 -d 0110:1001 -D build/main.bin -R
+
+program_jtag: jtag
+	openocd -f stm32conf/flash.cfg
+
 
 run: $(BUILD_PATH)/main.bin
 	openocd -f stm32conf/run.cfg
@@ -192,5 +199,5 @@ cscope:
 
 clean:
 	rm -f *.hex *.o
-	rm -rf build/*
+	rm -rf build
 

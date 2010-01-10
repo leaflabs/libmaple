@@ -194,7 +194,7 @@ run: $(BUILD_PATH)/main.bin
 
 cscope:
 	rm -rf *.cscope
-	find . -iname "*.[hcs]" | grep -v examples | xargs cscope -R -b
+	find . ../bootloader -iname "*.[hcs]" | grep -v examples | xargs cscope -R -b
 
 clean:
 	rm -f *.hex *.o

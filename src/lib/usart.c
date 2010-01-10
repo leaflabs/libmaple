@@ -86,7 +86,7 @@ void USART2_IRQHandler(void) {
 /* Don't overrun your buffer, seriously  */
 void USART3_IRQHandler(void) {
     /* Read the data  */
-    ring_buf3.buf[ring_buf2.tail++] = (uint8_t)(((usart_port*)(USART3_BASE))->DR);
+    ring_buf3.buf[ring_buf3.tail++] = (uint8_t)(((usart_port*)(USART3_BASE))->DR);
     ring_buf3.tail %= USART_RECV_BUF_SIZE;
 }
 
@@ -124,12 +124,14 @@ void usart_init(uint8 usart_num, uint32 baud) {
         ring_buf = &ring_buf2;
         clk_speed = USART2_CLK;
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+        REG_SET(NVIC_ISER1, BIT(6));
         break;
     case 3:
         port = (usart_port*)USART3_BASE;
         ring_buf = &ring_buf3;
         clk_speed = USART3_CLK;
         RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+        REG_SET(NVIC_ISER1, BIT(7));
         break;
     default:
         /* should never get here  */
@@ -153,8 +155,6 @@ void usart_init(uint8 usart_num, uint32 baud) {
                 USART_RE          |    // receiver enable
                 USART_RXNEIE;          // receive interrupt enable
 
-    /* Turn it on in the nvic  */
-    REG_SET(NVIC_ISER1, BIT(6));
 
     /* Enable the USART and set mode to 8n1 */
     port->CR1 |= USART_UE;

@@ -4,28 +4,34 @@
 #include "HardwareUsb.h"
 #include "usb.h"
 
-//HardwareUsb USB;
+HardwareUsb USB;
 
 int ledPin = 13;
 void setup() {
     pinMode(ledPin,OUTPUT);
-    Serial2.begin(9600);
+//    Serial2.begin(9600);
     Serial3.begin(9600);
+    Serial3.println("hello");
 }
 
 volatile int toggle = 1;
 
+char c;
 void loop() {
     digitalWrite(ledPin, toggle);
     toggle ^= 1;
     delay(500);
 //    USB.print(millis());
+//    Serial3.println("hello");
 //    USB.println("\r");
-    Serial2.print(millis(), DEC);
-    Serial3.print(millis(), DEC);
-    Serial3.print(": ");
-//    Serial3.print(USB.available(), DEC);
-    Serial3.println();
+//    Serial2.print(millis(), DEC);
+//    Serial2.print(": ");
+//    Serial2.print(USB.available(), DEC);
+//    Serial2.println();
+    if (Serial3.available()){
+        c = Serial3.read();
+        Serial3.print(c);
+    }
 }
 
 int main(void) {

@@ -118,7 +118,7 @@ info:
 	@echo "Compile targets:"
 	@echo "	   ram:   Compile sketch code for RAM to be loaded over the bootloader"
 	@echo "	   flash: Compile sketch code for flash to be loaded over the bootloader"
-	@echo "	   flash: Compile sketch code for flash to be loaded over JTAG"
+	@echo "	   jtag:  Compile sketch code for flash to be loaded over JTAG"
 	@echo ""
 	@echo "Programming targets:"
 	@echo "	   program_ram:   Upload code to RAM via bootloader"

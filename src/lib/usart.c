@@ -83,7 +83,12 @@ void USART2_IRQHandler(void) {
     ring_buf2.buf[ring_buf2.tail++] = (uint8_t)(((usart_port*)(USART2_BASE))->DR);
     ring_buf2.tail %= USART_RECV_BUF_SIZE;
 }
-
+/* Don't overrun your buffer, seriously  */
+void USART3_IRQHandler(void) {
+    /* Read the data  */
+    ring_buf3.buf[ring_buf2.tail++] = (uint8_t)(((usart_port*)(USART3_BASE))->DR);
+    ring_buf3.tail %= USART_RECV_BUF_SIZE;
+}
 
 /**
  *  @brief Enable a USART in single buffer transmission mode, multibuffer
@@ -124,6 +129,7 @@ void usart_init(uint8 usart_num, uint32 baud) {
         port = (usart_port*)USART3_BASE;
         ring_buf = &ring_buf3;
         clk_speed = USART3_CLK;
+        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
         break;
     default:
         /* should never get here  */

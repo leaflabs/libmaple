@@ -109,16 +109,15 @@ _CPPOBJ =  $(boop:.cpp=.o)
 COBJ = $(patsubst %, $(BUILD_PATH)/%,$(_COBJ))
 CPPOBJ = $(patsubst %, $(BUILD_PATH)/%,$(_CPPOBJ))
 
-.PHONY: run cscope clean info
-
+.PHONY: run cscope clean info program_ram program_flash program_jtag
 
 info:
 	@echo "Maple library help"
 	@echo "------------------:"
 	@echo "Compile targets:"
-	@echo "	   ram:   Compile sketch code for RAM to be loaded over the bootloader"
-	@echo "	   flash: Compile sketch code for flash to be loaded over the bootloader"
-	@echo "	   jtag:  Compile sketch code for flash to be loaded over JTAG"
+	@echo "	   ram:           Compile sketch code for RAM to be loaded over the bootloader"
+	@echo "	   flash:         Compile sketch code for flash to be loaded over the bootloader"
+	@echo "	   jtag:          Compile sketch code for flash to be loaded over JTAG"
 	@echo ""
 	@echo "Programming targets:"
 	@echo "	   program_ram:   Upload code to RAM via bootloader"
@@ -138,13 +137,11 @@ $(OUTDIRS):
 # actual build rules
 $(COBJ) : $(BUILD_PATH)/%.o : %.c
 	@echo $(MSG_COMPILING) $<
-	@echo $(PATH)
 	$(CC) $(CFLAGS) -c $< -o $@
 	@echo
 
 $(CPPOBJ) : $(BUILD_PATH)/%.o : %.cpp
 	@echo $(MSG_COMPILING) $<
-	@echo $(PATH)
 	$(CPP) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 	@echo
 

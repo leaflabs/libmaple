@@ -76,6 +76,11 @@ typedef struct usart_port {
     volatile uint32 GTPR;     // Guard time and prescaler register
 } usart_port;
 
+void USART1_IRQHandler(void) {
+    /* Read the data  */
+    ring_buf1.buf[ring_buf1.tail++] = (uint8_t)(((usart_port*)(USART1_BASE))->DR);
+    ring_buf1.tail %= USART_RECV_BUF_SIZE;
+}
 
 /* Don't overrun your buffer, seriously  */
 void USART2_IRQHandler(void) {
@@ -118,6 +123,8 @@ void usart_init(uint8 usart_num, uint32 baud) {
         port = (usart_port*)USART1_BASE;
         ring_buf = &ring_buf1;
         clk_speed = USART1_CLK;
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+        REG_SET(NVIC_ISER1, BIT(5));
         break;
     case 2:
         port = (usart_port*)USART2_BASE;

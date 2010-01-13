@@ -72,6 +72,8 @@ void HardwareSerial::begin(uint32_t baud) {
     case 1:
         gpio_set_mode(USART1_TX_PORT, USART1_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
         gpio_set_mode(USART1_RX_PORT, USART1_RX_PIN, GPIO_MODE_INPUT_FLOATING);
+        /* Turn off any pwm  */
+        timers_disable_channel(1, 2);
         break;
     case 2:
         gpio_set_mode(USART2_TX_PORT, USART2_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);

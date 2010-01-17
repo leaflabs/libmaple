@@ -7,6 +7,10 @@
  * D15 is mapped to pin number 38. This is to retain compatiblity with the
  * Arduino API, where digitalWrite() on pins 14-19 map to analog A0-A5
  *
+ * TODO:
+ * Enable all GPIOs for digitalWrite(), analogRead(), digitalRead(),
+ * Enable all three USARTs
+ * Documentation
  *
  * TODO:
  * Using OSC32_IN/OSC32_OUT pins as GPIO ports PC14/PC15 152/995
@@ -28,6 +32,12 @@
  * PC12                   DISC
  * PD0                    OSC_IN
  * PD1                    OSC_OUT
+ *
+
+ * silkscreen changes:
+ * check labels
+ * add revision number
+ *
  *
  * */
 /* Pin           STM32 PIN   ADC     Timer          I2C        UART        SPI          F/T

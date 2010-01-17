@@ -150,6 +150,7 @@ void timers_disable(void) {
     for (i = 0; i < 4; i++) {
         timer = timers[i];
         timer->CR1 = 0;
+        timer->CCER = 0;
     }
 }
 

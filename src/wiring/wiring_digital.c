@@ -58,15 +58,33 @@ static const PinGPIOMapping PIN_TO_GPIO[NR_MAPLE_PINS] = {
     {GPIOA_BASE,  7},                          // D11/PA7
     {GPIOA_BASE,  6},                          // D12/PA6
     {GPIOA_BASE,  5},                          // D13/PA5
-/* for later  */
-#if 0
-    {GPIOC_BASE,  0},                          // D14/A0/PC0
-    {GPIOC_BASE,  1},                          // D15/A1/PC1
-    {GPIOC_BASE,  2},                          // D16/A2/PC2
-    {GPIOC_BASE,  3},                          // D17/A3/PC3
-    {GPIOC_BASE,  4},                          // D18/A4/PC4
-    {GPIOC_BASE,  5},                          // D19/A5/PC5
-#endif
+    {GPIOB_BASE,  8},                          // D14/PB8
+    /* Little header  */
+    {GPIOC_BASE,  0},                          // D15/PC0
+    {GPIOC_BASE,  1},                          // D16/PC1
+    {GPIOC_BASE,  2},                          // D17/PC2
+    {GPIOC_BASE,  3},                          // D18/PC3
+    {GPIOC_BASE,  4},                          // D19/PC4
+    {GPIOC_BASE,  5},                          // D20/PC5
+    /* External header  */
+    {GPIOC_BASE, 13},                          // D21/PC13
+    {GPIOC_BASE, 14},                          // D22/PC14
+    {GPIOC_BASE, 15},                          // D23/PC15
+    {GPIOB_BASE,  9},                          // D24/PB9
+    {GPIOD_BASE,  2},                          // D25/PD2
+    {GPIOC_BASE, 10},                          // D26/PC10
+    {GPIOB_BASE,  0},                          // D27/PB0
+    {GPIOB_BASE,  1},                          // D28/PB1
+    {GPIOB_BASE, 10},                          // D29/PB10
+    {GPIOB_BASE, 11},                          // D30/PB11
+    {GPIOB_BASE, 12},                          // D31/PB12
+    {GPIOB_BASE, 13},                          // D32/PB13
+    {GPIOB_BASE, 14},                          // D33/PB14
+    {GPIOB_BASE, 15},                          // D34/PB15
+    {GPIOC_BASE,  6},                          // D35/PC6
+    {GPIOC_BASE,  7},                          // D36/PC7
+    {GPIOC_BASE,  8},                          // D37/PC8
+    {GPIOC_BASE,  9},                          // D38/PC9
 };
 
 void pinMode(uint8_t pin, WiringPinMode mode) {
@@ -96,7 +114,6 @@ void pinMode(uint8_t pin, WiringPinMode mode) {
         ASSERT(0);
         return;
     }
-
 
     gpio_set_mode(PIN_TO_GPIO[pin].port, PIN_TO_GPIO[pin].pin, outputMode);
 }

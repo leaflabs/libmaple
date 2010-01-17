@@ -16,7 +16,7 @@ extern "C"{
 
 
 #define MAPLE 1
-#define NR_MAPLE_PINS   14 // temporary
+#define NR_MAPLE_PINS   39 // temporary
 
 #define HIGH 0x1
 #define LOW  0x0

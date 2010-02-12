@@ -15,6 +15,9 @@ AS  := arm-none-eabi-as
 CP  := arm-none-eabi-objcopy
 OD  := arm-none-eabi-objdump
 
+#todo: use an OS switch here to grab a different bin
+DFU = ../dfu-util/bin/linux/dfu-util
+
 BUILD_PATH = build
 LIB_PATH = lib
 COMM_PATH = comm
@@ -180,10 +183,10 @@ jtag: $(BUILD_PATH)/main.bin
 	@echo "JTAG build"
 
 program_ram: ram 
-	dfu-util -a0 -d 0110:1001 -D build/main.bin -R
+	$(DFU) -a0 -d 0110:1001 -D build/main.bin -R
 
 program_flash: flash
-	dfu-util -a1 -d 0110:1001 -D build/main.bin -R
+	$(DFU) -a1 -d 0110:1001 -D build/main.bin -R
 
 program_jtag: jtag
 	openocd -f stm32conf/flash.cfg

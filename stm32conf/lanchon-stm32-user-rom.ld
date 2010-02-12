@@ -134,6 +134,14 @@ SECTIONS
     . = ALIGN(8);
     _etext = .;
   } >rom
+
+/* expose a custom rom only section */
+  .USER_FLASH :
+  {
+    *(.USER_FLASH)
+  } >rom
+
+
   /* __cs3_region_end_rom is deprecated */
   __cs3_region_end_rom = __cs3_region_start_rom + LENGTH(rom);
   __cs3_region_size_rom = LENGTH(rom);

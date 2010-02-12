@@ -5,6 +5,8 @@
 #include "usb.h"
 
 int ledPin = 13;
+HardwareUsb Usb;
+
 void setup() {
     pinMode(ledPin, OUTPUT);
 }
@@ -13,7 +15,8 @@ int toggle = 1;
 void loop() {
     digitalWrite(ledPin, toggle);
     toggle ^= 1;
-    delay(100);
+    delay(1000);
+    Usb.println("hello world!");
 }
 
 int main(void) {

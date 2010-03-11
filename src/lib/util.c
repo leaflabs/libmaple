@@ -75,6 +75,10 @@ void _fail(const char* file, int line, const char* exp) {
     /* Turn on the error LED  */
     gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
 
+    /* Turn the USB interrupt back on so the bootloader keeps on functioning  */
+    nvic_enable_interrupt(NVIC_INT_USBHP);
+    nvic_enable_interrupt(NVIC_INT_USBLP);
+
     /* Error fade  */
     while (1) {
         if (CC == TOP_CNT)  {

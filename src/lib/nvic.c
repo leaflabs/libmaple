@@ -36,6 +36,24 @@ void nvic_disable_interrupts(void) {
     REG_CLEAR_BIT(SYSTICK_CSR, 0);
 }
 
+
 void nvic_set_vector_table(uint32_t *addr, uint32_t offset) {
 //    SCB->VTOR = NVIC_VectTab | (Offset & (u32)0x1FFFFF80);
+}
+
+
+/**
+ *  @brief turn on interrupt number n
+ *  @param[in] n interrupt number
+ */
+void nvic_enable_interrupt(uint32 n) {
+    if (n >= NVIC_NR_INTERRUPTS) {
+        return;
+    }
+
+    if (n < 32) {
+        REG_SET_BIT(NVIC_ISER0, n);
+    } else {
+        REG_SET_BIT(NVIC_ISER1, n - 32);
+    }
 }

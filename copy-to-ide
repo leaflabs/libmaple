@@ -1,0 +1,70 @@
+#!/bin/sh
+
+# This hackish script copies the necessary library files into the Maple IDE
+# repository.
+
+# Change this
+DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
+
+ARCH=`uname -a`
+
+FILES="
+    stm32lib/src/stm32f10x_flash.c    
+    stm32lib/src/stm32f10x_nvic.c     
+    stm32lib/src/stm32f10x_rcc.c      
+    stm32lib/inc/stm32f10x_nvic.h
+    stm32lib/inc/stm32f10x_rcc.h
+    stm32lib/inc/stm32f10x_flash.h
+    lib/systick.c                     
+    lib/timers.c                      
+    lib/adc.c                         
+    lib/syscalls.c                    
+    lib/stm32f10x_it.c                
+    lib/exti.c                        
+    lib/gpio.c                        
+    lib/nvic.c                        
+    lib/usart.c                       
+    lib/util.c                        
+    lib/usb.h
+    lib/usb.c                         
+    lib/timers.h
+    lib/gpio.h
+    lib/nvic.h
+    lib/systick.h
+    lib/util.h
+    lib/adc.h
+    lib/usb_regs.h
+    lib/exti.h
+    lib/usart.h
+    lib/stm32f10x_conf.h
+    lib/bootVect.h
+    lib/libmaple.h
+    lib/libmaple_types.h
+    wiring/bits.h
+    wiring/comm/HardwareUsb.h
+    wiring/comm/HardwareSerial.h
+    wiring/io.h
+    wiring/wiring.h
+    wiring/WProgram.h
+    wiring/Print.h
+    wiring/pwm.h
+    wiring/binary.h
+    wiring/wiring_math.h
+    wiring/ext_interrupts.h
+    wiring/time.h
+    wiring/wiring.c                   
+    wiring/wiring_shift.c             
+    wiring/wiring_analog.c            
+    wiring/time.c                     
+    wiring/pwm.c                      
+    wiring/ext_interrupts.c           
+    wiring/wiring_digital.c           
+    wiring/wiring_math.cpp            
+    wiring/Print.cpp                  
+    wiring/comm/HardwareSerial.cpp    
+    wiring/comm/HardwareUsb.cpp       
+    main.cxx"
+
+cd src
+cp -v $FILES $DEST
+

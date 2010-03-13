@@ -9,12 +9,39 @@ DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
 ARCH=`uname -a`
 
 FILES="
+    stm32lib/inc/cortexm3_macro.h
     stm32lib/src/stm32f10x_flash.c    
     stm32lib/src/stm32f10x_nvic.c     
     stm32lib/src/stm32f10x_rcc.c      
     stm32lib/inc/stm32f10x_nvic.h
     stm32lib/inc/stm32f10x_rcc.h
     stm32lib/inc/stm32f10x_flash.h
+    stm32lib/inc/stm32f10x_adc.h
+    stm32lib/inc/stm32f10x_fsmc.h
+    stm32lib/inc/stm32f10x_dac.h
+    stm32lib/inc/stm32f10x_rtc.h
+    stm32lib/inc/stm32f10x_spi.h
+    stm32lib/inc/stm32f10x_pwr.h
+    stm32lib/inc/stm32f10x_iwdg.h
+    stm32lib/inc/stm32f10x_exti.h
+    stm32lib/inc/stm32f10x_bkp.h
+    stm32lib/inc/stm32f10x_i2c.h
+    stm32lib/inc/stm32f10x_dma.h
+    stm32lib/inc/stm32f10x_gpio.h
+    stm32lib/inc/stm32f10x_nvic.h
+    stm32lib/inc/stm32f10x_wwdg.h
+    stm32lib/inc/stm32f10x_lib.h
+    stm32lib/inc/stm32f10x_type.h
+    stm32lib/inc/stm32f10x_usart.h
+    stm32lib/inc/stm32f10x_tim.h
+    stm32lib/inc/stm32f10x_can.h
+    stm32lib/inc/stm32f10x_sdio.h
+    stm32lib/inc/stm32f10x_flash.h
+    stm32lib/inc/stm32f10x_dbgmcu.h
+    stm32lib/inc/stm32f10x_systick.h
+    stm32lib/inc/stm32f10x_crc.h
+    stm32lib/inc/stm32f10x_rcc.h
+    stm32lib/inc/stm32f10x_map.h
     lib/systick.c                     
     lib/timers.c                      
     lib/adc.c                         
@@ -65,6 +92,17 @@ FILES="
     wiring/comm/HardwareUsb.cpp       
     main.cxx"
 
+# First see if this folder exists
+if !(test -d $DEST/lanchon-stm32)
+then
+    mkdir $DEST/lanchon-stm32
+fi
+
+# Then copy over linker files
+cp -v stm32conf/* $DEST
+cp -v stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
+
+# Finally the source files
 cd src
 cp -v $FILES $DEST
 

@@ -94,28 +94,14 @@ extern "C"{
 
 typedef enum WiringPinMode {
     OUTPUT,
+    OUTPUT_OPEN_DRAIN,
     INPUT,
+    INPUT_ANALOG,
     INPUT_PULLUP,
     INPUT_PULLDOWN,
     INPUT_FLOATING,
     PWM
 } WiringPinMode;
-
-#if 0
-typedef enum PinMode {
-    INPUT_FLOATING,
-    INPUT_ANALOG,
-    INPUT_DIGITAL,
-    INPUT_PULLDOWN,
-    INPUT_PULLUP,
-    INPUT,
-    OUTPUT,
-    PWM,
-    SERIAL,
-    SPI,
-    I2C,
-} PinMode;
-#endif
 
 /* Set pin to mode
  * pinMode(pin, mode):

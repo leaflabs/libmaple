@@ -97,10 +97,15 @@ void pinMode(uint8_t pin, WiringPinMode mode) {
     case OUTPUT:
         outputMode = GPIO_MODE_OUTPUT_PP;
         break;
+    case OUTPUT_OPEN_DRAIN:
+        outputMode = GPIO_MODE_OUTPUT_OD;
+        break;
     case INPUT:
     case INPUT_FLOATING:
         outputMode = GPIO_MODE_INPUT_FLOATING;
         break;
+    case INPUT_ANALOG:
+        outputMode = GPIO_MODE_INPUT_ANALOG;
     case INPUT_PULLUP:
         outputMode = GPIO_MODE_INPUT_PU;
         break;

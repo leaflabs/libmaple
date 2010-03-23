@@ -27,6 +27,8 @@
 #define _IO_H
 
 #include <inttypes.h>
+#include "gpio.h"
+#include "adc.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -75,23 +77,6 @@ extern "C"{
 #define D38  38
 #define D39  39
 
-#define A0   D14
-#define A1   D15
-#define A2   D16
-#define A3   D17
-#define A4   D18
-#define A5   D19
-#define A6   D0
-#define A7   D1
-#define A8   D2
-#define A9   D3
-#define A10  D10
-#define A11  D11
-#define A12  D12
-#define A13  D13
-#define A14  D26
-#define A15  D11
-
 typedef enum WiringPinMode {
     OUTPUT,
     OUTPUT_OPEN_DRAIN,
@@ -102,6 +87,16 @@ typedef enum WiringPinMode {
     INPUT_FLOATING,
     PWM
 } WiringPinMode;
+
+typedef struct PinMapping {
+    GPIO_Port *port;
+    uint32 pin;
+    uint32 adc;
+    TimerCCR timer_channel;
+} PinMapping;
+
+#define ADC_INVALID       0xFFFFFFFF
+#define TIMER_INVALID     (TimerCCR)0xFFFFFFFF
 
 /* Set pin to mode
  * pinMode(pin, mode):

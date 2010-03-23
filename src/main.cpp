@@ -4,18 +4,18 @@
 #include "HardwareUsb.h"
 #include "usb.h"
 
-int ledPin = 13;
-HardwareUsb Usb;
+#define TEST_PIN 13
 
 void setup() {
-    pinMode(ledPin, OUTPUT);
+    pinMode(TEST_PIN, OUTPUT);
 }
 
 int toggle = 1;
+
 void loop() {
-    digitalWrite(ledPin, toggle);
+    digitalWrite(TEST_PIN, toggle);
     toggle ^= 1;
-    delay(1000);
+    delay(100);
 }
 
 int main(void) {

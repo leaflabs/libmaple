@@ -14,7 +14,6 @@
 extern "C"{
 #endif
 
-
 #define MAPLE 1
 #define NR_MAPLE_PINS   39 // temporary
 

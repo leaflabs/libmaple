@@ -15,8 +15,15 @@ AS  := arm-none-eabi-as
 CP  := arm-none-eabi-objcopy
 OD  := arm-none-eabi-objdump
 
-#todo: use an OS switch here to grab a different bin
-DFU = ../dfu-util/bin/linux/dfu-util
+# Platform detection
+ARCH = $(shell uname -m)
+OS = $(shell uname)
+
+ifeq ($(OS),Linux)
+	DFU = dfu-util
+else
+	DFU = ../dfu-util/bin/linux/dfu-util
+endif
 
 BUILD_PATH = build
 LIB_PATH = lib

@@ -1,0 +1,24 @@
+
+Instructions to Compile for ARM Targets
+----------------------------------------
+The Codesourcery g++ compiler for arm platforms is required. It is based on gcc
+(they push changes into gcc a couple times a year), get the latest EABI version
+from:
+
+    http://www.codesourcery.com/sgpp/lite/arm
+
+Note: grab the linux binaries for targeting the EABI platform; there are also
+linux binaries for targeting the linux platform).
+
+I unzip the archive ("TAR") version into a place like
+~/bin/arm-gcc-codesourcery and then add the bin/ directory within that to my
+$PATH in ~/.profile, then check that arm-none-eabi-gcc and others are in my
+path.
+
+You will also need to have dfu-util installed (on Linux) or compiled and placed
+in a folder "dfu-util/" at the same level as the maple-library folder (macosx
+and windows).
+
+Write your program using src/main.cpp as the entry point. Then just 'make' and follow the directions!
+
+

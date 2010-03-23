@@ -12,60 +12,40 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
- *  Created: 03/23/10 01:31:15
+ *  Created: 03/23/10 01:40:50
  *  Copyright (c) 2010 Perry L. Hung. All rights reserved.
  *
  * ****************************************************************************/
 
 /**
- *  @file example_main.cpp
+ *  @file example_main_blinky.cpp
  *
- *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2 and
- *  the USB virtual COM port, and turns on PWM on pin 2
+ *  @brief Example main.cpp. Blinks the LED, pin 13
  */
 
-#ifndef _EXAMPLE_MAIN_H_
-#define _EXAMPLE_MAIN_H_
+#ifndef _EXAMPLE_MAIN_BLINKY_H_
+#define _EXAMPLE_MAIN_BLINKY_H_
 
 #endif
 #include "wiring.h"
 #include "HardwareSerial.h"
+#include "wiring_math.h"
 #include "HardwareUsb.h"
-#include "math.h"
 #include "usb.h"
 
-uint8_t bytes_in;
+#define TEST_PIN 13
 
-#define LED_PIN 13
-#define PWM_PIN  2
-
-HardwareUsb Usb;
-
-void setup()
-{
-    /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
-
-    /* Send a message out USART2  */
-    Serial2.begin(9600);
-    Serial2.println("Hello world!");
-
-    /* Turn on PWM on pin PWM_PIN */
-    pinMode(PWM_PIN, PWM);
-    pwmWrite(PWM_PIN, 0x8000);
-
-    /* Send a message out the USB virtual com port  */
-    Usb.println("Hello world!");
+void setup() {
+    pinMode(TEST_PIN, OUTPUT);
 }
 
-int toggle = 0;
+int toggle = 1;
 
 void loop() {
+    digitalWrite(TEST_PIN, toggle);
     toggle ^= 1;
-    digitalWrite(LED_PIN, toggle);
     delay(100);
 }
-
 
 int main(void) {
     init();

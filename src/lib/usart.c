@@ -306,13 +306,13 @@ uint32 usart_data_available(uint8 usart_num) {
 
 
 /**
- *  @brief Output a character out the uart
+ *  @brief Output a byte out the uart
  *
  *  @param[in] usart_num usart number to output on
- *  @param[in] ch character to send
+ *  @param[in] byte byte to send
  *
  */
-void usart_putc(uint8 usart_num, uint8 ch) {
+void usart_putc(uint8 usart_num, uint8 byte) {
     ASSERT((usart_num <= NR_USARTS) && (usart_num > 0));
     usart_port *port;
 
@@ -331,11 +331,11 @@ void usart_putc(uint8 usart_num, uint8 ch) {
         ASSERT(0);
     }
 
-    if (ch == '\n') {
-        usart_putc(usart_num, '\r');
-    }
+//    if (ch == '\n') {
+//        usart_putc(usart_num, '\r');
+//    }
 
-    port->DR = ch;
+    port->DR = byte;
 
     /* Wait for transmission to complete  */
     while ((port->SR & USART_TXE) == 0)

@@ -16,7 +16,6 @@ void loop() {
     digitalWrite(ledPin, toggle);
     toggle ^= 1;
     delay(1000);
-    Usb.println("hello world!");
 }
 
 int main(void) {

@@ -98,7 +98,7 @@ void Print::print(double n)
 
 void Print::println(void)
 {
-//  print('\r');
+  print('\r');
   print('\n');
 }
 

@@ -23,7 +23,6 @@
  *  @brief Analog to digital converter routines
  */
 
-#include "stm32f10x_rcc.h"
 #include "adc.h"
 #include <stdio.h>
 #include <inttypes.h>
@@ -60,14 +59,14 @@
 
 void adc_init(void) {
     /* PCLK2 is the APB2 clock */
-    RCC_ADCCLKConfig(RCC_PCLK2_Div6);
+//    RCC_ADCCLKConfig(RCC_PCLK2_Div6);
 
     /* Enable ADC1 clock so that we can talk to it */
-    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
+//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
 
     /* Put everything back to power-on defaults */
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, ENABLE);
-    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, DISABLE);
+//    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, ENABLE);
+//    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, DISABLE);
 
     ADC_CR1  = 0;
     ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;  // Software triggers conversions

@@ -24,7 +24,7 @@
  */
 
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
+#include "rcc.h"
 #include "timers.h"
 
 typedef struct {
@@ -79,20 +79,21 @@ void timer_init(uint8_t timer_num, uint16_t prescale) {
     switch(timer_num) {
     case 1:
         timer = (Timer*)TIMER1_BASE;
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM1, ENABLE);
+//        rcc_enable(RCC_TIMER1);
         is_advanced = 1;
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+//        rcc_enable(RCC_TIMER2);
+        //RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+//        rcc_enable(RCC_TIMER3);
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
-        RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+ //       rcc_enable(RCC_TIMER4);
         break;
     }
 

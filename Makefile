@@ -65,8 +65,7 @@ ODFLAGS = -S
 MAIN=main.c
 
 STM32SRCS = $(STM_SRC)/stm32f10x_flash.c    \
-	    $(STM_SRC)/stm32f10x_nvic.c     \
-	    $(STM_SRC)/stm32f10x_rcc.c
+	    $(STM_SRC)/stm32f10x_nvic.c
 
 CSRC = lib/systick.c                        \
 	   lib/timers.c                     \
@@ -79,6 +78,7 @@ CSRC = lib/systick.c                        \
 	   lib/usart.c 			    \
 	   lib/util.c			    \
 	   lib/usb.c                        \
+	   lib/rcc.c                        \
 	   wiring/wiring.c 		    \
 	   wiring/wiring_shift.c            \
 	   wiring/wiring_analog.c           \

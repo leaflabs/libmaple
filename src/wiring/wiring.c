@@ -25,7 +25,6 @@
 
 #include "wiring.h"
 #include "stm32f10x_flash.h"
-#include "stm32f10x_rcc.h"
 #include "stm32f10x_map.h"
 #include "stm32f10x_nvic.h"
 #include "systick.h"
@@ -35,12 +34,12 @@ void RCC_Configuration(void);
 void NVIC_Configuration(void);
 
 void init(void) {
-   RCC_Configuration();
-   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
-                          RCC_APB2Periph_GPIOB |
-                          RCC_APB2Periph_GPIOC |
-                          RCC_APB2Periph_AFIO
-                        , ENABLE);
+//   RCC_Configuration();
+//   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
+//                          RCC_APB2Periph_GPIOB |
+//                          RCC_APB2Periph_GPIOC |
+//                          RCC_APB2Periph_AFIO
+//                        , ENABLE);
    NVIC_Configuration();
 
    systick_init();
@@ -69,6 +68,7 @@ void NVIC_Configuration(void) {
 }
 
 
+#if 0
 void RCC_Configuration(void) {
    ErrorStatus HSEStartUpStatus;
    /* RCC system reset(for debug purpose) */
@@ -114,3 +114,4 @@ void RCC_Configuration(void) {
           ;
    }
 }
+#endif

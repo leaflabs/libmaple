@@ -13,6 +13,7 @@
 #define    RCC_TIMER4
 
 void rcc_enable(uint32 p);
+void rcc_init(void);
 
 #endif
 

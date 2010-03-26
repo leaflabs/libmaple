@@ -665,7 +665,7 @@ typedef struct
 #define DMA2_Channel3_BASE    (AHBPERIPH_BASE + 0x0430)
 #define DMA2_Channel4_BASE    (AHBPERIPH_BASE + 0x0444)
 #define DMA2_Channel5_BASE    (AHBPERIPH_BASE + 0x0458)
-#define RCC_BASE              (AHBPERIPH_BASE + 0x1000)
+//#define RCC_BASE              (AHBPERIPH_BASE + 0x1000)
 #define CRC_BASE              (AHBPERIPH_BASE + 0x3000)
 
 /* Flash registers base address */

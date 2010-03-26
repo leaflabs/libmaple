@@ -54,6 +54,12 @@
 
 #define REG_GET(reg)                    *(volatile uint32_t*)(reg)
 
+#define __set_bits(addr, mask)          *(volatile uint32_t*)(addr) |= (uint32_t)(mask)
+#define __clear_bits(addr, mask)        (*(volatile uint32_t*)(addr) &= (uint32_t)~(mask))
+#define __get_bits(addr, mask)          (*(volatile uint32_t*)(addr) & (uint32_t)(mask))
+
+#define __read(reg)                     *(volatile uint32_t*)(reg)
+#define __write(reg, value)             *(volatile uint32_t*)(reg) = (value)
 
 #ifdef __cplusplus
 extern "C"{

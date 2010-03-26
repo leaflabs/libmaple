@@ -35,74 +35,74 @@
 
 
 static void set_ahb_prescaler(uint32_t divider) {
-    uint32_t tmp = __read(RCC_CFGR);
+   uint32_t tmp = __read(RCC_CFGR);
 
-    switch (divider) {
-    case SYSCLK_DIV_1:
-        tmp &= ~HPRE;
-        tmp |= SYSCLK_DIV_1;
-        break;
-    default:
-        ASSERT(0);
-    }
+   switch (divider) {
+   case SYSCLK_DIV_1:
+      tmp &= ~HPRE;
+      tmp |= SYSCLK_DIV_1;
+      break;
+   default:
+      ASSERT(0);
+   }
 
-    __write(RCC_CFGR, tmp);
+   __write(RCC_CFGR, tmp);
 }
 
 static void set_apb1_prescaler(uint32_t divider) {
-    uint32_t tmp = __read(RCC_CFGR);
+   uint32_t tmp = __read(RCC_CFGR);
 
-    switch (divider) {
-    case HCLK_DIV_2:
-        tmp &= ~PPRE;
-        tmp |= HCLK_DIV_2;
-        break;
-    default:
-        ASSERT(0);
-    }
+   switch (divider) {
+   case HCLK_DIV_2:
+      tmp &= ~PPRE;
+      tmp |= HCLK_DIV_2;
+      break;
+   default:
+      ASSERT(0);
+   }
 
-    __write(RCC_CFGR, tmp);
+   __write(RCC_CFGR, tmp);
 }
 
 static void set_apb2_prescaler(uint32_t divider) {
-    uint32_t tmp = __read(RCC_CFGR);
+   uint32_t tmp = __read(RCC_CFGR);
 
-    switch (divider) {
-    case HCLK_DIV_1:
-        break;
-    default:
-        ASSERT(0);
-    }
+   switch (divider) {
+   case HCLK_DIV_1:
+      break;
+   default:
+      ASSERT(0);
+   }
 }
 
 static void pll_init(void) {
-    uint32_t tmp;
+   uint32_t tmp;
 
-    /* set pll multiplier to 9 */
-    tmp = __read(RCC_CFGR);
-    tmp &= ~PLLMUL;
-    tmp |= PLL_MUL_9;
+   /* set pll multiplier to 9 */
+   tmp = __read(RCC_CFGR);
+   tmp &= ~PLLMUL;
+   tmp |= PLL_MUL_9;
 
-    /* set pll clock to be hse */
-    tmp |= PLL_INPUT_CLK_HSE;
-    __write(RCC_CFGR, tmp);
+   /* set pll clock to be hse */
+   tmp |= PLL_INPUT_CLK_HSE;
+   __write(RCC_CFGR, tmp);
 
-    /* turn on the pll  */
-    __set_bits(RCC_CR, PLLON);
+   /* turn on the pll  */
+   __set_bits(RCC_CR, PLLON);
 
-    while(!__get_bits(RCC_CR, PLLRDY)) {
-        asm volatile("nop");
-    }
+   while(!__get_bits(RCC_CR, PLLRDY)) {
+      asm volatile("nop");
+   }
 
-    /* select pll for system clock source  */
-    tmp = __read(RCC_CFGR);
-    tmp &= ~0x3;
-    tmp |= 0x2;
-    __write(RCC_CFGR, tmp);
+   /* select pll for system clock source  */
+   tmp = __read(RCC_CFGR);
+   tmp &= ~0x3;
+   tmp |= 0x2;
+   __write(RCC_CFGR, tmp);
 
-    while (__get_bits(RCC_CFGR, 0x00000008) != 0x8) {
-        asm volatile("nop");
-    }
+   while (__get_bits(RCC_CFGR, 0x00000008) != 0x8) {
+      asm volatile("nop");
+   }
 }
 
 
@@ -112,26 +112,26 @@ void rcc_enable(uint32 p) {
 void rcc_init(void) {
 
 
-__set_bits(RCC_CR, HSEON);
+   __set_bits(RCC_CR, HSEON);
 
-    while (!HSERDY) {
-        asm volatile("nop");
-    }
+   while (!HSERDY) {
+      asm volatile("nop");
+   }
 
-      /* Enable Prefetch Buffer */
-      FLASH_PrefetchBufferCmd( (u32)FLASH_PrefetchBuffer_Enable);
+   /* Enable Prefetch Buffer */
+   FLASH_PrefetchBufferCmd( (u32)FLASH_PrefetchBuffer_Enable);
 
-      /* Flash 2 wait state */
-      FLASH_SetLatency(FLASH_Latency_2);
+   /* Flash 2 wait state */
+   FLASH_SetLatency(FLASH_Latency_2);
 
-      set_ahb_prescaler(SYSCLK_DIV_1);
-      set_apb1_prescaler(HCLK_DIV_2);
-      set_apb2_prescaler(HCLK_DIV_1);
+   set_ahb_prescaler(SYSCLK_DIV_1);
+   set_apb1_prescaler(HCLK_DIV_2);
+   set_apb2_prescaler(HCLK_DIV_1);
 
    pll_init();
 
-    __set_bits(RCC_APB2ENR, BIT(2));
-    __set_bits(RCC_APB2ENR, BIT(3));
-    __set_bits(RCC_APB2ENR, BIT(4));
-    __set_bits(RCC_APB2ENR, BIT(5));
+   __set_bits(RCC_APB2ENR, BIT(2));
+   __set_bits(RCC_APB2ENR, BIT(3));
+   __set_bits(RCC_APB2ENR, BIT(4));
+   __set_bits(RCC_APB2ENR, BIT(5));
 }

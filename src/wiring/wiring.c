@@ -35,7 +35,7 @@ void RCC_Configuration(void);
 void NVIC_Configuration(void);
 
 void init(void) {
-    rcc_init();
+   rcc_init();
    NVIC_Configuration();
 
    systick_init();
@@ -52,14 +52,14 @@ void init(void) {
 
 void NVIC_Configuration(void) {
 #ifdef VECT_TAB_ROM
-  NVIC_SetVectorTable(USER_ADDR_ROM, 0x0);
+   NVIC_SetVectorTable(USER_ADDR_ROM, 0x0);
 #warning writing to ROM
 #elif defined VECT_TAB_RAM
-  NVIC_SetVectorTable(USER_ADDR_RAM, 0x0);
+   NVIC_SetVectorTable(USER_ADDR_RAM, 0x0);
 #warning writing to RAM
 #else // VECT_TAB_BASE
    /* Set the Vector Table base location at 0x08000000 */
-  NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
+   NVIC_SetVectorTable(NVIC_VectTab_FLASH, 0x0);
 #endif
 }
 

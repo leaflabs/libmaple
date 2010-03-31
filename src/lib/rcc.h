@@ -11,7 +11,7 @@
 #define RCC_CR                 (RCC_BASE + 0x0)
 #define RCC_CFGR               (RCC_BASE + 0x4)
 #define RCC_CIR                (RCC_BASE + 0x8)
-#define RCC_APB2STR            (RCC_BASE + 0xC)
+#define RCC_APB2RSTR           (RCC_BASE + 0xC)
 #define RCC_APB1RSTR           (RCC_BASE + 0x10)
 #define RCC_AHBENR             (RCC_BASE + 0x14)
 #define RCC_APB2ENR            (RCC_BASE + 0x18)
@@ -24,6 +24,7 @@
 #define HSEON                  BIT(16)
 #define HSERDY                 *(volatile uint32_t*)(BITBAND_PERI(RCC_CR + 2, 0))
 
+#define ADCPRE                 0x0000C000
 #define HPRE                   0x000000F0
 #define PPRE2                  0x00003800  // apb2 high speed prescaler
 #define PPRE1                  0x00000700  // apb1 low-speed prescaler
@@ -34,6 +35,7 @@
 #define SYSCLK_DIV_1           (0x0 << 4)
 #define HCLK_DIV_1             0
 #define HCLK_DIV_2             0x00000400
+#define PCLK2_DIV_2            0x00008000
 
 #define PLLRDY                 BIT(25)
 #define PLLON                  BIT(24)
@@ -42,6 +44,18 @@
 #define RCC_CFGR_SWS           0x00000003
 #define RCC_CFGR_SWS_PLL       0x00000002
 
+/* APB2 reset bits  */
+#define RCC_APB2RSTR_USART1RST   BIT(14)
+#define RCC_APB2RSTR_SPI1RST     BIT(12)
+#define RCC_APB2RSTR_TIM1RST     BIT(11)
+#define RCC_APB2RSTR_ADC2RST     BIT(10)
+#define RCC_APB2RSTR_ADC1RST     BIT(9)
+#define RCC_APB2RSTR_IOERST      BIT(6)
+#define RCC_APB2RSTR_IODRST      BIT(5)
+#define RCC_APB2RSTR_IOCRST      BIT(4)
+#define RCC_APB2RSTR_IOBRST      BIT(3)
+#define RCC_APB2RSTR_IOARST      BIT(2)
+#define RCC_APB2RSTR_AFIORST     BIT(0)
 
 /* APB2 peripheral clock enable bits  */
 #define RCC_APB2ENR_USART1EN   BIT(14)
@@ -78,7 +92,15 @@
 #define rcc_enable_clk_usart2()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_USART2EN)
 #define rcc_enable_clk_usart3()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_USART3EN)
 
+#define rcc_enable_clk_adc1()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_ADC1EN)
+
+#define rcc_reset_adc1()          { __set_bits(RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);   \
+                                    __clear_bits(RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST); \
+                                  }
+
+
 void rcc_init(void);
+void rcc_set_adc_prescaler(uint32_t divider);
 
 #endif
 

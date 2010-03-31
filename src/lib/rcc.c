@@ -1,3 +1,10 @@
+/**
+ *  @file rcc.c
+ *
+ *  @brief Implements pretty much only the basic clock setup on the maple,
+ *  exposes a handful of clock enable/disable and peripheral reset commands.
+ */
+
 #include "libmaple.h"
 #include "rcc.h"
 #include "stm32f10x_flash.h"
@@ -83,15 +90,6 @@ static void hse_init(void) {
    }
 }
 
-
-void rcc_enable_clock(uint32 p) {
-   switch(p) {
-   default:
-      ASSERT(0);
-      break;
-   }
-}
-
 void rcc_init(void) {
    hse_init();
 
@@ -105,6 +103,11 @@ void rcc_init(void) {
    set_ahb_prescaler(SYSCLK_DIV_1);
    set_apb1_prescaler(HCLK_DIV_2);
    set_apb2_prescaler(HCLK_DIV_1);
-
    pll_init();
+}
+
+void rcc_set_adc_prescaler(uint32_t divider) {
+   uint32_t cfgr = __read(RCC_CFGR);
+   cfgr &= ~ADCPRE;
+   __write(RCC_CFGR, cfgr | PCLK2_DIV_2);
 }

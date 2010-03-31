@@ -23,9 +23,9 @@
  *  @brief Analog to digital converter routines
  */
 
+#include "libmaple.h"
+#include "rcc.h"
 #include "adc.h"
-#include <stdio.h>
-#include <inttypes.h>
 
 /* The ADC input clock is generated from PCLK2/APB2 divided by a prescaler
  * and it must not exceed 14MHz.
@@ -58,15 +58,9 @@
  * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
 
 void adc_init(void) {
-    /* PCLK2 is the APB2 clock */
-//    RCC_ADCCLKConfig(RCC_PCLK2_Div6);
-
-    /* Enable ADC1 clock so that we can talk to it */
-//    RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1, ENABLE);
-
-    /* Put everything back to power-on defaults */
-//    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, ENABLE);
-//    RCC_APB2PeriphResetCmd(RCC_APB2Periph_ADC1, DISABLE);
+   rcc_set_adc_prescaler(PCLK2_DIV_2);
+   rcc_enable_clk_adc1();
+   rcc_reset_adc1();
 
     ADC_CR1  = 0;
     ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;  // Software triggers conversions

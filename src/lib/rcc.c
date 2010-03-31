@@ -2,122 +2,100 @@
 #include "rcc.h"
 #include "stm32f10x_flash.h"
 
-#define RCC_BASE               0x40021000
-#define RCC_CR                 (RCC_BASE + 0x0)
-#define RCC_CFGR               (RCC_BASE + 0x4)
-#define RCC_CIR                (RCC_BASE + 0x8)
-#define RCC_APB2STR            (RCC_BASE + 0xC)
-#define RCC_APB1RSTR           (RCC_BASE + 0x10)
-#define RCC_AHBENR             (RCC_BASE + 0x14)
-#define RCC_APB2ENR            (RCC_BASE + 0x18)
-#define RCC_APB1ENR            (RCC_BASE + 0x1C)
-#define RCC_BDCR               (RCC_BASE + 0x20)
-#define RCC_CSR                (RCC_BASE + 0x24)
-#define RCC_AHBSTR             (RCC_BASE + 0x28)
-#define RCC_CFGR2              (RCC_BASE + 0x2C))
-
-#define HSEON                 BIT(16)
-
-#define HSERDY            *(volatile uint32_t*)(BITBAND_PERI(RCC_CR + 2, 0))
-
-#define HPRE                          0x000000F0
-#define PPRE                          0x00000700
-#define PLLMUL                        0x002C0000
-#define PLL_MUL_9                     0x001C0000
-#define PLLSRC                        BIT(16)
-#define SYSCLK_DIV_1                  (0x0 << 4)
-#define HCLK_DIV_1                    0
-#define HCLK_DIV_2                    0x00000400
-
-#define PLLRDY                       BIT(25)
-#define PLLON                         BIT(24)
-#define PLL_INPUT_CLK_HSE             BIT(16)
-
-
 static void set_ahb_prescaler(uint32_t divider) {
-   uint32_t tmp = __read(RCC_CFGR);
+   uint32_t cfgr = __read(RCC_CFGR);
+
+   cfgr &= ~HPRE;
 
    switch (divider) {
    case SYSCLK_DIV_1:
-      tmp &= ~HPRE;
-      tmp |= SYSCLK_DIV_1;
+      cfgr |= SYSCLK_DIV_1;
       break;
    default:
       ASSERT(0);
    }
 
-   __write(RCC_CFGR, tmp);
+   __write(RCC_CFGR, cfgr);
 }
 
 static void set_apb1_prescaler(uint32_t divider) {
-   uint32_t tmp = __read(RCC_CFGR);
+   uint32_t cfgr = __read(RCC_CFGR);
+
+   cfgr &= ~PPRE1;
 
    switch (divider) {
    case HCLK_DIV_2:
-      tmp &= ~PPRE;
-      tmp |= HCLK_DIV_2;
+      cfgr |= HCLK_DIV_2;
       break;
    default:
       ASSERT(0);
    }
 
-   __write(RCC_CFGR, tmp);
+   __write(RCC_CFGR, cfgr);
 }
 
 static void set_apb2_prescaler(uint32_t divider) {
-   uint32_t tmp = __read(RCC_CFGR);
+   uint32_t cfgr = __read(RCC_CFGR);
+
+   cfgr &= ~PPRE2;
 
    switch (divider) {
    case HCLK_DIV_1:
+      cfgr |= HCLK_DIV_1;
       break;
    default:
       ASSERT(0);
    }
+
+   __write(RCC_CFGR, cfgr);
 }
 
+/* FIXME: magic numbers  */
 static void pll_init(void) {
-   uint32_t tmp;
+   uint32_t cfgr;
 
-   /* set pll multiplier to 9 */
-   tmp = __read(RCC_CFGR);
-   tmp &= ~PLLMUL;
-   tmp |= PLL_MUL_9;
+   cfgr = __read(RCC_CFGR);
+   cfgr &= (~PLLMUL | PLL_INPUT_CLK_HSE);
 
-   /* set pll clock to be hse */
-   tmp |= PLL_INPUT_CLK_HSE;
-   __write(RCC_CFGR, tmp);
+   /* pll multiplier 9, input clock hse */
+   __write(RCC_CFGR, cfgr | PLL_MUL_9 | PLL_INPUT_CLK_HSE);
 
-   /* turn on the pll  */
+   /* enable pll  */
    __set_bits(RCC_CR, PLLON);
-
    while(!__get_bits(RCC_CR, PLLRDY)) {
       asm volatile("nop");
    }
 
    /* select pll for system clock source  */
-   tmp = __read(RCC_CFGR);
-   tmp &= ~0x3;
-   tmp |= 0x2;
-   __write(RCC_CFGR, tmp);
+   cfgr = __read(RCC_CFGR);
+   cfgr &= ~RCC_CFGR_SWS;
+   __write(RCC_CFGR, cfgr | RCC_CFGR_SWS_PLL);
 
    while (__get_bits(RCC_CFGR, 0x00000008) != 0x8) {
       asm volatile("nop");
    }
 }
 
-
-void rcc_enable(uint32 p) {
-}
-
-void rcc_init(void) {
-
-
+static void hse_init(void) {
    __set_bits(RCC_CR, HSEON);
-
    while (!HSERDY) {
       asm volatile("nop");
    }
+}
 
+
+void rcc_enable_clock(uint32 p) {
+   switch(p) {
+   default:
+      ASSERT(0);
+      break;
+   }
+}
+
+void rcc_init(void) {
+   hse_init();
+
+   /* Leave this here for now...  */
    /* Enable Prefetch Buffer */
    FLASH_PrefetchBufferCmd( (u32)FLASH_PrefetchBuffer_Enable);
 
@@ -129,9 +107,4 @@ void rcc_init(void) {
    set_apb2_prescaler(HCLK_DIV_1);
 
    pll_init();
-
-   __set_bits(RCC_APB2ENR, BIT(2));
-   __set_bits(RCC_APB2ENR, BIT(3));
-   __set_bits(RCC_APB2ENR, BIT(4));
-   __set_bits(RCC_APB2ENR, BIT(5));
 }

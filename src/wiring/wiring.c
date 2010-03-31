@@ -31,19 +31,14 @@
 #include "systick.h"
 #include "gpio.h"
 
-void RCC_Configuration(void);
 void NVIC_Configuration(void);
 
 void init(void) {
    rcc_init();
    NVIC_Configuration();
-
    systick_init();
-
    gpio_init();
-
    adc_init();
-
    timer_init(1, 1);
    timer_init(2, 1);
    timer_init(3, 1);

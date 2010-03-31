@@ -24,8 +24,9 @@
  */
 
 #include "libmaple.h"
-#include "usart.h"
+#include "rcc.h"
 #include "nvic.h"
+#include "usart.h"
 
 #define USART1_BASE         0x40013800
 #define USART2_BASE         0x40004400
@@ -122,21 +123,21 @@ void usart_init(uint8 usart_num, uint32 baud) {
         port = (usart_port*)USART1_BASE;
         ring_buf = &ring_buf1;
         clk_speed = USART1_CLK;
-//        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1, ENABLE);
+        rcc_enable_clk_usart1();
         REG_SET(NVIC_ISER1, BIT(5));
         break;
     case 2:
         port = (usart_port*)USART2_BASE;
         ring_buf = &ring_buf2;
         clk_speed = USART2_CLK;
-//        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2, ENABLE);
+        rcc_enable_clk_usart2();
         REG_SET(NVIC_ISER1, BIT(6));
         break;
     case 3:
         port = (usart_port*)USART3_BASE;
         ring_buf = &ring_buf3;
         clk_speed = USART3_CLK;
-//        RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3, ENABLE);
+        rcc_enable_clk_usart3();
         REG_SET(NVIC_ISER1, BIT(7));
         break;
     default:

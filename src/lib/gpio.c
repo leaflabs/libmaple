@@ -24,17 +24,15 @@
  */
 
 #include "libmaple.h"
-#include "stm32f10x_rcc.h"
+#include "rcc.h"
 #include "gpio.h"
 
 void gpio_init(void) {
-   /* Turn on clocks for GPIO  */
-//   RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA |
-//                          RCC_APB2Periph_GPIOB |
-//                          RCC_APB2Periph_GPIOC |
-//                          RCC_APB2Periph_GPIOD |
-//                          RCC_APB2Periph_AFIO,
-//                          ENABLE);
+   rcc_enable_clk_gpioa();
+   rcc_enable_clk_gpiob();
+   rcc_enable_clk_gpioc();
+   rcc_enable_clk_gpiod();
+   rcc_enable_clk_afio();
 }
 
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode) {

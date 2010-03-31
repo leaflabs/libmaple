@@ -2,8 +2,6 @@
 # Project name
 PROJECT=maple
 
-# STM Library prefix
-STM_SRC = stm32lib/src
 STM_CONF = stm32conf/flash.conf
 
 # ARM/GNU toolchain parameters
@@ -28,14 +26,12 @@ endif
 BUILD_PATH = build
 LIB_PATH = libmaple
 
-OUTDIRS = $(BUILD_PATH)/$(STM_SRC) \
-	  $(BUILD_PATH)/$(LIB_PATH)\
+OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
 	  $(BUILD_PATH)/core \
 	  $(BUILD_PATH)/core/comm
 
 
 INCLUDES = -I$(LIB_PATH) \
-	   -Istm32lib/inc \
 	   -I./ \
 	   -Icore \
 	   -Icore/comm

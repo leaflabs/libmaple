@@ -26,26 +26,23 @@ else
 endif
 
 BUILD_PATH = build
-LIB_PATH = lib
-COMM_PATH = comm
+LIB_PATH = libmaple
 
-OUTDIRS = $(BUILD_PATH)/src/$(STM_SRC) \
-	  $(BUILD_PATH)/src/$(LIB_PATH)\
-	  $(BUILD_PATH)/src/comm \
-	  $(BUILD_PATH)/src/wiring \
-	  $(BUILD_PATH)/src/wiring/comm
+OUTDIRS = $(BUILD_PATH)/$(STM_SRC) \
+	  $(BUILD_PATH)/$(LIB_PATH)\
+	  $(BUILD_PATH)/core \
+	  $(BUILD_PATH)/core/comm
 
 
-INCLUDES = -Isrc/stm32lib/inc \
-	   -Isrc/$(LIB_PATH) \
-	   -Isrc/$(COMM_PATH) \
-	   -Isrc/ \
-	   -Isrc/wiring \
-	   -Isrc/wiring/comm
+INCLUDES = -Istm32lib/inc \
+	   -I$(LIB_PATH) \
+	   -I./ \
+	   -Icore \
+	   -Icore/comm
 
 # default is to upload to flash
 #DEFFLAGS = VECT_TAB_BASE
-CFLAGS  =  -I./ $(INCLUDES) -c \
+CFLAGS  =  $(INCLUDES) -c \
            -Os\
            -g -mcpu=cortex-m3 -mthumb  -march=armv7-m -nostdlib \
            -ffunction-sections -fdata-sections -Wl,--gc-sections \
@@ -61,45 +58,45 @@ LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
 CPFLAGS = -v -Obinary
 ODFLAGS = -S
 
-# main ource file
+# main source file
 MAIN=main.c
 
 STM32SRCS = $(STM_SRC)/stm32f10x_flash.c    \
 	    $(STM_SRC)/stm32f10x_nvic.c     \
 	    $(STM_SRC)/stm32f10x_rcc.c
 
-CSRC = lib/systick.c                        \
-	   lib/timers.c                     \
-	   lib/adc.c 		            \
-	   lib/syscalls.c 		    \
-	   lib/stm32f10x_it.c 		    \
-	   lib/exti.c 			    \
-	   lib/gpio.c 			    \
-	   lib/nvic.c 			    \
-	   lib/usart.c 			    \
-	   lib/util.c			    \
-	   lib/usb.c                        \
-	   wiring/wiring.c 		    \
-	   wiring/wiring_shift.c            \
-	   wiring/wiring_analog.c           \
-	   wiring/time.c 		    \
-	   wiring/pwm.c 		    \
-	   wiring/ext_interrupts.c          \
-	   wiring/wiring_digital.c
+CSRC = libmaple/systick.c                        \
+	   libmaple/timers.c                     \
+	   libmaple/adc.c 		            \
+	   libmaple/syscalls.c 		    \
+	   libmaple/stm32f10x_it.c 		    \
+	   libmaple/exti.c 			    \
+	   libmaple/gpio.c 			    \
+	   libmaple/nvic.c 			    \
+	   libmaple/usart.c 			    \
+	   libmaple/util.c			    \
+	   libmaple/usb.c                        \
+	   core/wiring.c 		    \
+	   core/wiring_shift.c            \
+	   core/wiring_analog.c           \
+	   core/time.c 		    \
+	   core/pwm.c 		    \
+	   core/ext_interrupts.c          \
+	   core/wiring_digital.c
 
 CSRC += $(STM32SRCS)
 
-CPPSRC = wiring/wiring_math.cpp \
-	 wiring/Print.cpp \
-	 wiring/comm/HardwareSerial.cpp \
-	 wiring/comm/HardwareUsb.cpp \
+CPPSRC = core/wiring_math.cpp \
+	 core/Print.cpp \
+	 core/comm/HardwareSerial.cpp \
+	 core/comm/HardwareUsb.cpp \
 	 main.cpp
 
 # i really have no idea what i'm doing
 meep += $(CSRC)
-moop = $(patsubst %, src/%, $(meep))
+moop = $(patsubst %, %, $(meep))
 beep = $(CPPSRC)
-boop = $(patsubst %, src/%, $(beep))
+boop = $(patsubst %, %, $(beep))
 
 # English
 MSG_ERRORS_NONE = Errors: none
@@ -122,17 +119,18 @@ CPPOBJ = $(patsubst %, $(BUILD_PATH)/%,$(_CPPOBJ))
 .PHONY: run cscope clean info program_ram program_flash program_jtag
 
 info:
-	@echo "Maple library help"
-	@echo "------------------:"
+	@echo ""
+	@echo "libmaple Makefile help"
+	@echo "----------------------"
 	@echo "Compile targets:"
-	@echo "	   ram:           Compile sketch code for RAM to be loaded over the bootloader"
-	@echo "	   flash:         Compile sketch code for flash to be loaded over the bootloader"
-	@echo "	   jtag:          Compile sketch code for flash to be loaded over JTAG"
+	@echo "  ram:    Compile sketch code for RAM to be loaded over the bootloader"
+	@echo "  flash:  Compile sketch code for flash to be loaded over the bootloader"
+	@echo "  jtag:   Compile sketch code for flash to be loaded over JTAG"
 	@echo ""
 	@echo "Programming targets:"
-	@echo "	   program_ram:   Upload code to RAM via bootloader"
-	@echo "	   program_flash: Upload code to flash via bootloader"
-	@echo "	   program_jtag:  Upload code to flash via jtag"
+	@echo "  program_ram:   Upload code to RAM via bootloader"
+	@echo "  program_flash: Upload code to flash via bootloader"
+	@echo "  program_jtag:  Upload code to flash via jtag"
 
 all: info
 

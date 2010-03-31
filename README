@@ -1,6 +1,49 @@
 
+                   _ _ _                           _      
+                  | (_) |__  _ __ ___   __ _ _ __ | | ___ 
+                  | | | '_ \| '_ ` _ \ / _` | '_ \| |/ _ \
+                  | | | |_) | | | | | | (_| | |_) | |  __/
+                  |_|_|_.__/|_| |_| |_|\__,_| .__/|_|\___|
+                                            |_|               by leaflabs!
+
+
+
+The latest version of this repository can be found at:
+http://github.com/leaflabs/libmaple
+
+libmaple Repo Layout
+------------------------------------------------------------------------------
+/LICENSE
+    Licensing and copyright information
+
+/main.cpp.example
+    main.cpp is required for a successful build but is non-existant by default;
+    use this file as a template for building your program. By default just 
+    blinks an LED.
+
+/build/
+    Binary output
+
+/stm32conf/
+    Linker scripts
+
+/libmaple/
+    Lowest level definitions, routines, macros, and functions. This is the meat
+    of the library.
+
+/core/
+    Extra wrappers and functionality around the lower level code which is 
+    useful for programming in the IDE.
+
+/exapmles/
+    
+
+/stm32lib/
+    The "standard" library given away by STM; to be removed ASAP.
+
+
 Instructions to Compile for ARM Targets
-----------------------------------------
+------------------------------------------------------------------------------
 The Codesourcery g++ compiler for arm platforms is required. It is based on gcc
 (they push changes into gcc a couple times a year), get the latest EABI version
 from:

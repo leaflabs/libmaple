@@ -3,7 +3,6 @@
 
 #include <inttypes.h>
 #include "util.h"
-#include "cortexm3_macro.h"
 #include "usb_regs.h"
 #include "bootVect.h"
 

@@ -6,8 +6,8 @@
  */
 
 #include "libmaple.h"
+#include "flash.h"
 #include "rcc.h"
-#include "stm32f10x_flash.h"
 
 static void set_ahb_prescaler(uint32_t divider) {
    uint32_t cfgr = __read(RCC_CFGR);
@@ -95,10 +95,10 @@ void rcc_init(void) {
 
    /* Leave this here for now...  */
    /* Enable Prefetch Buffer */
-   FLASH_PrefetchBufferCmd( (u32)FLASH_PrefetchBuffer_Enable);
+   flash_enable_prefetch();
 
    /* Flash 2 wait state */
-   FLASH_SetLatency(FLASH_Latency_2);
+   flash_set_latency();
 
    set_ahb_prescaler(SYSCLK_DIV_1);
    set_apb1_prescaler(HCLK_DIV_2);

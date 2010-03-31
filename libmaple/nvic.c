@@ -38,7 +38,7 @@ void nvic_disable_interrupts(void) {
 
 
 void nvic_set_vector_table(uint32_t *addr, uint32_t offset) {
-//    SCB->VTOR = NVIC_VectTab | (Offset & (u32)0x1FFFFF80);
+   __write(SCB_VTOR, (uint32_t)addr | (offset & 0x1FFFFF80));
 }
 
 
@@ -57,3 +57,5 @@ void nvic_enable_interrupt(uint32 n) {
         REG_SET_BIT(NVIC_ISER1, n - 32);
     }
 }
+
+

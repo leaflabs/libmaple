@@ -34,8 +34,8 @@ OUTDIRS = $(BUILD_PATH)/$(STM_SRC) \
 	  $(BUILD_PATH)/core/comm
 
 
-INCLUDES = -Istm32lib/inc \
-	   -I$(LIB_PATH) \
+INCLUDES = -I$(LIB_PATH) \
+	   -Istm32lib/inc \
 	   -I./ \
 	   -Icore \
 	   -Icore/comm
@@ -61,30 +61,27 @@ ODFLAGS = -S
 # main source file
 MAIN=main.c
 
-STM32SRCS = $(STM_SRC)/stm32f10x_flash.c    \
-	    $(STM_SRC)/stm32f10x_nvic.c
+CSRC = libmaple/systick.c              \
+       libmaple/timers.c               \
+       libmaple/adc.c 	               \
+       libmaple/syscalls.c 	       \
+       libmaple/stm32f10x_it.c         \
+       libmaple/exti.c 	               \
+       libmaple/gpio.c 	               \
+       libmaple/nvic.c 	               \
+       libmaple/usart.c 	       \
+       libmaple/util.c	               \
+       libmaple/usb.c                  \
+       libmaple/rcc.c                  \
+       libmaple/flash.c                \
+       core/wiring.c 	               \
+       core/wiring_shift.c             \
+       core/wiring_analog.c            \
+       core/time.c 		       \
+       core/pwm.c 		       \
+       core/ext_interrupts.c           \
+       core/wiring_digital.c
 
-CSRC = libmaple/systick.c                        \
-	   libmaple/timers.c                     \
-	   libmaple/adc.c 		            \
-	   libmaple/syscalls.c 		    \
-	   libmaple/stm32f10x_it.c 		    \
-	   libmaple/exti.c 			    \
-	   libmaple/gpio.c 			    \
-	   libmaple/nvic.c 			    \
-	   libmaple/usart.c 			    \
-	   libmaple/util.c			    \
-	   libmaple/usb.c                        \
-	   libmaple/rcc.c                        \
-	   core/wiring.c 		    \
-	   core/wiring_shift.c            \
-	   core/wiring_analog.c           \
-	   core/time.c 		    \
-	   core/pwm.c 		    \
-	   core/ext_interrupts.c          \
-	   core/wiring_digital.c
-
-CSRC += $(STM32SRCS)
 
 CPPSRC = core/wiring_math.cpp \
 	 core/Print.cpp \

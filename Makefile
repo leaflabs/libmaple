@@ -27,6 +27,7 @@ BUILD_PATH = build
 LIB_PATH = libmaple
 
 OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
+	  $(BUILD_PATH)/$(LIB_PATH)\
 	  $(BUILD_PATH)/core \
 	  $(BUILD_PATH)/core/comm
 
@@ -77,7 +78,6 @@ CSRC = libmaple/systick.c              \
        core/pwm.c 		       \
        core/ext_interrupts.c           \
        core/wiring_digital.c
-
 
 CPPSRC = core/wiring_math.cpp \
 	 core/Print.cpp \

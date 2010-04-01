@@ -34,8 +34,8 @@ HardwareUsb::HardwareUsb(void) {
   rx_buffer_offset_out = 0;
 }
 
-uint8_t HardwareUsb::read(void) {
-  uint8_t outVal = rx_buffer[rx_buffer_offset_out++];
+uint8 HardwareUsb::read(void) {
+  uint8 outVal = rx_buffer[rx_buffer_offset_out++];
 
 #if 1
   if (rx_buffer_offset_out == rx_buffer_offset_in) {
@@ -46,7 +46,7 @@ uint8_t HardwareUsb::read(void) {
   return outVal;
 }
 
-uint8_t HardwareUsb::available(void) {
+uint8 HardwareUsb::available(void) {
   ASSERT(rx_buffer_offset_out >= 0);
   //  return rx_buffer_offset+1;
   //  return usb_serialGetRecvLen();
@@ -70,7 +70,7 @@ void HardwareUsb::usb_rx_cb(void) {
    BootVectTable *vectTable = (BootVectTable*)(BOOTLOADER_VECT_TABLE);
    HardwareUsb *thisPtr = (HardwareUsb*) vectTable->usb_local_obj_ptr;
 
-   uint8_t numBytes = usb_serialGetRecvLen();
+   uint8 numBytes = usb_serialGetRecvLen();
 
 #if 0
    /* ONE-SHOT-TO-READ Version (buffer cleared on next recv interrupt */

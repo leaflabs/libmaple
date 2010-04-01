@@ -32,10 +32,10 @@ class HardwareSerial : public Print {
     private:
         uint8 usartNum;
     public:
-        HardwareSerial(uint8_t);
-        void begin(uint32_t);
+        HardwareSerial(uint8);
+        void begin(uint32);
         uint32 available(void);
-        uint8_t read(void);
+        uint8 read(void);
         void flush(void);
         virtual void write(unsigned char);
         using Print::write;

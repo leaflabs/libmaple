@@ -78,20 +78,20 @@ typedef struct usart_port {
 
 void USART1_IRQHandler(void) {
     /* Read the data  */
-    ring_buf1.buf[ring_buf1.tail++] = (uint8_t)(((usart_port*)(USART1_BASE))->DR);
+    ring_buf1.buf[ring_buf1.tail++] = (uint8)(((usart_port*)(USART1_BASE))->DR);
     ring_buf1.tail %= USART_RECV_BUF_SIZE;
 }
 
 /* Don't overrun your buffer, seriously  */
 void USART2_IRQHandler(void) {
     /* Read the data  */
-    ring_buf2.buf[ring_buf2.tail++] = (uint8_t)(((usart_port*)(USART2_BASE))->DR);
+    ring_buf2.buf[ring_buf2.tail++] = (uint8)(((usart_port*)(USART2_BASE))->DR);
     ring_buf2.tail %= USART_RECV_BUF_SIZE;
 }
 /* Don't overrun your buffer, seriously  */
 void USART3_IRQHandler(void) {
     /* Read the data  */
-    ring_buf3.buf[ring_buf3.tail++] = (uint8_t)(((usart_port*)(USART3_BASE))->DR);
+    ring_buf3.buf[ring_buf3.tail++] = (uint8)(((usart_port*)(USART3_BASE))->DR);
     ring_buf3.tail %= USART_RECV_BUF_SIZE;
 }
 
@@ -156,7 +156,7 @@ void usart_init(uint8 usart_num, uint32 baud) {
     fractional_part = integer_part - (100 * (tmp >> 4));
     tmp |= (((fractional_part * 16) + 50) / 100) & ((uint8)0x0F);
 
-    port->BRR = (uint16_t)tmp;
+    port->BRR = (uint16)tmp;
 
     port->CR1 = USART_TE          |    // transmitter enable
                 USART_RE          |    // receiver enable

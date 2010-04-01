@@ -88,7 +88,7 @@ const PinMapping PIN_MAP[NR_MAPLE_PINS] = {
     {GPIOC_BASE,  9, ADC_INVALID,  TIMER_INVALID}  // D38/PC9
 };
 
-void pinMode(uint8_t pin, WiringPinMode mode) {
+void pinMode(uint8 pin, WiringPinMode mode) {
     uint8 outputMode;
 
     if (pin >= NR_MAPLE_PINS)
@@ -125,14 +125,14 @@ void pinMode(uint8_t pin, WiringPinMode mode) {
 }
 
 
-uint32_t digitalRead(uint8_t pin) {
+uint32 digitalRead(uint8 pin) {
     if (pin >= NR_MAPLE_PINS)
         return 0;
 
     return (PIN_MAP[pin].port->IDR & BIT(PIN_MAP[pin].pin)) ? 1 : 0;
 }
 
-void digitalWrite(uint8_t pin, uint8_t val) {
+void digitalWrite(uint8 pin, uint8 val) {
     if (pin >= NR_MAPLE_PINS)
         return;
 

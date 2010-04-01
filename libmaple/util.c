@@ -40,10 +40,10 @@
 
 /* Error assert + fade */
 void _fail(const char* file, int line, const char* exp) {
-    int32_t  slope   = 1;
-    int32_t CC      = 0x0000;
-    int32_t TOP_CNT = 0x02FF;
-    int32_t i       = 0;
+    int32  slope   = 1;
+    uint32 CC      = 0x0000;
+    uint32 TOP_CNT = 0x02FF;
+    uint32 i       = 0;
 
     /* Turn off interrupts */
     nvic_disable_interrupts();

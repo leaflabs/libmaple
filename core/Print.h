@@ -20,7 +20,6 @@
 #ifndef Print_h
 #define Print_h
 
-#include <inttypes.h>
 #include <stdio.h> // for size_t
 
 #define DEC 10
@@ -32,15 +31,15 @@
 class Print
 {
   private:
-    void printNumber(unsigned long, uint8_t);
-    void printFloat(double, uint8_t);
+    void printNumber(unsigned long, uint8);
+    void printFloat(double, uint8);
   public:
-    virtual void write(uint8_t) = 0;
+    virtual void write(uint8) = 0;
     virtual void write(const char *str);
-    virtual void write(const uint8_t *buffer, size_t size);
+    virtual void write(const uint8 *buffer, uint32 size);
     void print(char);
     void print(const char[]);
-    void print(uint8_t);
+    void print(uint8);
     void print(int);
     void print(unsigned int);
     void print(long);
@@ -50,7 +49,7 @@ class Print
     void println(void);
     void println(char);
     void println(const char[]);
-    void println(uint8_t);
+    void println(uint8);
     void println(int);
     void println(unsigned int);
     void println(long);

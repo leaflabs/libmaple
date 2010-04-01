@@ -28,8 +28,8 @@
 #include "ext_interrupts.h"
 
 typedef struct ExtiInfo {
-    uint8_t channel;
-    uint8_t port;
+    uint8 channel;
+    uint8 port;
 } ExtiInfo;
 
 static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
@@ -60,8 +60,8 @@ static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
  *
  *  @sideeffect Registers a handler
  */
-int attachInterrupt(uint8_t pin, voidFuncPtr handler, ExtInterruptTriggerMode mode) {
-    uint8_t outMode;
+int attachInterrupt(uint8 pin, voidFuncPtr handler, ExtInterruptTriggerMode mode) {
+    uint8 outMode;
     /* Parameter checking  */
     if (pin >= NR_MAPLE_PINS) {
         return EXT_INTERRUPT_INVALID_PIN;
@@ -94,7 +94,7 @@ int attachInterrupt(uint8_t pin, voidFuncPtr handler, ExtInterruptTriggerMode mo
     return 0;
 }
 
-int detachInterrupt(uint8_t pin) {
+int detachInterrupt(uint8 pin) {
     if (!(pin < NR_MAPLE_PINS)) {
         return EXT_INTERRUPT_INVALID_PIN;
     }

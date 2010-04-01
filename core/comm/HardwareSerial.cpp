@@ -44,14 +44,14 @@
 #define USART3_RX_PORT             GPIOB_BASE
 #define USART3_RX_PIN              11
 
-HardwareSerial::HardwareSerial(uint8_t usartNum) {
+HardwareSerial::HardwareSerial(uint8 usartNum) {
     ASSERT(usartNum == 1 ||
            usartNum == 2 ||
            usartNum == 3);
     this->usartNum = usartNum;
 }
 
-uint8_t HardwareSerial::read(void) {
+uint8 HardwareSerial::read(void) {
     return usart_getc(usartNum);
 }
 
@@ -64,7 +64,7 @@ void HardwareSerial::write(unsigned char ch) {
     usart_putc(usartNum, ch);
 }
 
-void HardwareSerial::begin(uint32_t baud) {
+void HardwareSerial::begin(uint32 baud) {
     ASSERT(!(baud > USART_MAX_BAUD));
 
     /* Set appropriate pin modes  */

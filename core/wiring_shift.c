@@ -24,7 +24,7 @@
 
 #include "wiring.h"
 
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, byte val)
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 val)
 {
     int i;
 

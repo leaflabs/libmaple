@@ -30,9 +30,9 @@
 #define CYCLES_PER_MICROSECOND  72
 #define FUDGE                   42
 
-extern volatile uint32_t systick_timer_millis;
+extern volatile uint32 systick_timer_millis;
 
-unsigned long millis() {
+uint32 millis() {
    unsigned long m;
    m = systick_timer_millis;
    return m;
@@ -49,9 +49,9 @@ void delay(unsigned long ms)
 
 
 #if 1
-void delayMicroseconds(uint32_t us) {
-    uint32_t target;
-    uint32_t last, cur, count;
+void delayMicroseconds(uint32 us) {
+    uint32 target;
+    uint32 last, cur, count;
     /* fudge factor hacky hack hack for function overhead  */
     target = us * CYCLES_PER_MICROSECOND - FUDGE;
 

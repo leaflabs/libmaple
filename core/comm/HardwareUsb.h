@@ -33,13 +33,13 @@ class HardwareUsb : public Print {
 	static void usb_rx_cb(void);
 	static void usb_tx_cb(void);
 	unsigned char rx_buffer[USB_SERIAL_BUF_SIZE];
-	int8_t rx_buffer_offset_out;
-	int8_t rx_buffer_offset_in;
+	int8 rx_buffer_offset_out;
+	int8 rx_buffer_offset_in;
     public:
         HardwareUsb(void);
 	void begin();
-	uint8_t available(void);
-	uint8_t read(void);
+	uint8 available(void);
+	uint8 read(void);
 	void flush(void);
 	virtual void write(unsigned char);
 	using Print::write;

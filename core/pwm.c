@@ -30,7 +30,7 @@
 
 extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
-void pwmWrite(uint8_t pin, uint16_t duty_cycle) {
+void pwmWrite(uint8 pin, uint16 duty_cycle) {
     TimerCCR ccr;
 
     if (pin >= NR_MAPLE_PINS) {

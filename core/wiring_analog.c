@@ -31,7 +31,7 @@ extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
 /* Assumes that the ADC has been initialized and
  * that the pin is set to ANALOG_INPUT */
-uint32_t analogRead(uint8_t pin) {
+uint32 analogRead(uint8 pin) {
     if (pin >= NR_ANALOG_PINS)
         return 0;
 

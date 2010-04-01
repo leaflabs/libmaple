@@ -37,15 +37,14 @@ enum ExtInterruptError {
     EXT_INTERRUPT_INVALID_PIN =      (-1),
     EXT_INTERRUPT_INVALID_FUNCTION = (-2),
     EXT_INTERRUPT_INVALID_MODE =     (-3),
-
 };
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-int attachInterrupt(uint8_t pin, voidFuncPtr, ExtInterruptTriggerMode mode);
-int detachInterrupt(uint8_t pin);
+int attachInterrupt(uint8 pin, voidFuncPtr, ExtInterruptTriggerMode mode);
+int detachInterrupt(uint8 pin);
 
 #ifdef __cplusplus
 }

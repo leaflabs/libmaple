@@ -98,8 +98,8 @@ void EXTI4_IRQHandler(void) {
 
 void EXTI9_5_IRQHandler(void) {
     /* Figure out which channel it came from  */
-    uint32_t pending;
-    uint32_t i;
+    uint32 pending;
+    uint32 i;
     pending = REG_GET(EXTI_PR);
     pending = GET_BITS(pending, 5, 9);
 
@@ -116,8 +116,8 @@ void EXTI9_5_IRQHandler(void) {
 
 void EXTI15_10_IRQHandler(void) {
     /* Figure out which channel it came from  */
-    uint32_t pending;
-    uint32_t i;
+    uint32 pending;
+    uint32 i;
     pending = REG_GET(EXTI_PR);
     pending = GET_BITS(pending, 10, 15);
 
@@ -133,7 +133,7 @@ void EXTI15_10_IRQHandler(void) {
 }
 
 
-void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, uint8_t mode) {
+void exti_attach_interrupt(uint8 channel, uint8 port, voidFuncPtr handler, uint8 mode) {
     ASSERT(channel < NR_EXTI_CHANNELS);
     ASSERT(port < NR_EXTI_PORTS);
     ASSERT(mode < NR_EXTI_MODES);
@@ -227,7 +227,7 @@ void exti_attach_interrupt(uint8_t channel, uint8_t port, voidFuncPtr handler, u
 }
 
 
-void exti_detach_interrupt(uint8_t channel) {
+void exti_detach_interrupt(uint8 channel) {
     ASSERT(channel < NR_EXTI_CHANNELS);
     ASSERT(EXTI0 == 0);
     /* Is this interrupt actually on?  */

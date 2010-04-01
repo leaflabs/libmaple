@@ -26,7 +26,6 @@
 #ifndef _EXTI_H_
 #define _EXTI_H_
 
-#include <inttypes.h>
 /* Notes:
  *
  * To generate the interrupt, the interrupt line should be configured and
@@ -140,8 +139,8 @@
 extern "C"{
 #endif
 
-void exti_attach_interrupt(uint8_t, uint8_t, voidFuncPtr, uint8_t);
-void exti_detach_interrupt(uint8_t);
+void exti_attach_interrupt(uint8, uint8, voidFuncPtr, uint8);
+void exti_detach_interrupt(uint8);
 
 #ifdef __cplusplus
 } // extern "C"

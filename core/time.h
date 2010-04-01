@@ -30,16 +30,16 @@
 extern "C"{
 #endif
 /* Returns time since boot in milliseconds  */
-uint32_t millis(void);
+uint32 millis(void);
 
 /* Time in microseconds since boot  */
-uint32_t micros(void);
+uint32 micros(void);
 
 /* Delay for ms milliseconds  */
 void delay(unsigned long ms);
 
 /* Delay for us microseconds  */
-void delayMicroseconds(uint32_t us);
+void delayMicroseconds(uint32 us);
 
 #if 0
 static inline void delay_us(uint32 us) {

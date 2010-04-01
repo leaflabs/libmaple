@@ -23,7 +23,7 @@
 #ifndef _BOOTVECT_H_
 #define _BOOTVECT_H_
 
-#define BOOTLOADER_VECT_TABLE ((uint32_t*)0x20000000)
+#define BOOTLOADER_VECT_TABLE ((uint32*)0x20000000)
 
 #ifdef __cplusplus
 extern "C"{
@@ -35,12 +35,12 @@ typedef struct {
   FuncPtr serial_tx_cb;
   FuncPtr serial_rx_cb;
   FuncPtr serial_linecoding_cb;
-  uint32_t* serial_count_in;
-  uint32_t* serial_count_out;
-  uint8_t* serial_buffer_out;
+  uint32* serial_count_in;
+  uint32* serial_count_out;
+  uint8* serial_buffer_out;
   void* linecoding;
-  uint8_t major_rev;
-  uint8_t minor_rev;
+  uint8 major_rev;
+  uint8 minor_rev;
   void* usb_device_ptr;
   void* usb_local_obj_ptr;
 } BootVectTable;

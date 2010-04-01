@@ -28,7 +28,7 @@
 
 #define MILLIS_INC 1
 
-volatile uint32_t systick_timer_millis = 0;
+volatile uint32 systick_timer_millis = 0;
 
 void systick_init(void) {
     /* Set the reload counter to tick every 1ms  */

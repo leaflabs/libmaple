@@ -22,7 +22,7 @@
 #define RCC_CFGR2              (RCC_BASE + 0x2C))
 
 #define HSEON                  BIT(16)
-#define HSERDY                 *(volatile uint32_t*)(BITBAND_PERI(RCC_CR + 2, 0))
+#define HSERDY                 *(volatile uint32*)(BITBAND_PERI(RCC_CR + 2, 0))
 
 #define ADCPRE                 0x0000C000
 #define HPRE                   0x000000F0
@@ -100,7 +100,7 @@
 
 
 void rcc_init(void);
-void rcc_set_adc_prescaler(uint32_t divider);
+void rcc_set_adc_prescaler(uint32 divider);
 
 #endif
 

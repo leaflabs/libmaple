@@ -26,7 +26,6 @@
 #ifndef _IO_H
 #define _IO_H
 
-#include <inttypes.h>
 #include "gpio.h"
 #include "adc.h"
 
@@ -110,7 +109,7 @@ typedef struct PinMapping {
  *         OUTPUT_OPEN_DRAIN
  *     }
  */
-void pinMode(uint8_t, uint8_t);
+void pinMode(uint8, uint8);
 
 /*
  * Writes VALUE to digital pin[0-38]
@@ -118,21 +117,21 @@ void pinMode(uint8_t, uint8_t);
  *     pin -> {0-38, D0-D39, A0-16}
  *     value -> LOW, HIGH;
 */
-void digitalWrite(uint8_t, uint8_t);
+void digitalWrite(uint8, uint8);
 
 /* Read a digital value from pin, the pin mode must be set to
  * {INPUT, INPUT_PULLUP, INPUT_PULLDOWN}
  * digitalRead(pin)
  *     pin -> {0-38, D0-D39, A0-16}
  */
-uint32_t digitalRead(uint8_t);
+uint32 digitalRead(uint8);
 
 /* Read an analog value from pin, the pin mode must be set
  * to INPUT_ANALOG
  * analogRead(pin)
  *     pin -> {A0-A16}
  *     */
-uint32_t analogRead(uint8_t);
+uint32 analogRead(uint8);
 
 #ifdef __cplusplus
 } // extern "C"

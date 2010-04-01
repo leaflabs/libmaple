@@ -28,51 +28,51 @@
 #include "timers.h"
 
 typedef struct {
-    volatile uint16_t CR1;
-    uint16_t  RESERVED0;
-    volatile uint16_t CR2;
-    uint16_t  RESERVED1;
-    volatile uint16_t SMCR;
-    uint16_t  RESERVED2;
-    volatile uint16_t DIER;
-    uint16_t  RESERVED3;
-    volatile uint16_t SR;
-    uint16_t  RESERVED4;
-    volatile uint16_t EGR;
-    uint16_t  RESERVED5;
-    volatile uint16_t CCMR1;
-    uint16_t  RESERVED6;
-    volatile uint16_t CCMR2;
-    uint16_t  RESERVED7;
-    volatile uint16_t CCER;
-    uint16_t  RESERVED8;
-    volatile uint16_t CNT;
-    uint16_t  RESERVED9;
-    volatile uint16_t PSC;
-    uint16_t  RESERVED10;
-    volatile uint16_t ARR;
-    uint16_t  RESERVED11;
-    volatile uint16_t RCR;
-    uint16_t  RESERVED12;
-    volatile uint16_t CCR1;
-    uint16_t  RESERVED13;
-    volatile uint16_t CCR2;
-    uint16_t  RESERVED14;
-    volatile uint16_t CCR3;
-    uint16_t  RESERVED15;
-    volatile uint16_t CCR4;
-    uint16_t  RESERVED16;
-    volatile uint16_t BDTR;   // Not used in general purpose timers
-    uint16_t  RESERVED17;     // Not used in general purpose timers
-    volatile uint16_t DCR;
-    uint16_t  RESERVED18;
-    volatile uint16_t DMAR;
-    uint16_t  RESERVED19;
+    volatile uint16 CR1;
+    uint16  RESERVED0;
+    volatile uint16 CR2;
+    uint16  RESERVED1;
+    volatile uint16 SMCR;
+    uint16  RESERVED2;
+    volatile uint16 DIER;
+    uint16  RESERVED3;
+    volatile uint16 SR;
+    uint16  RESERVED4;
+    volatile uint16 EGR;
+    uint16  RESERVED5;
+    volatile uint16 CCMR1;
+    uint16  RESERVED6;
+    volatile uint16 CCMR2;
+    uint16  RESERVED7;
+    volatile uint16 CCER;
+    uint16  RESERVED8;
+    volatile uint16 CNT;
+    uint16  RESERVED9;
+    volatile uint16 PSC;
+    uint16  RESERVED10;
+    volatile uint16 ARR;
+    uint16  RESERVED11;
+    volatile uint16 RCR;
+    uint16  RESERVED12;
+    volatile uint16 CCR1;
+    uint16  RESERVED13;
+    volatile uint16 CCR2;
+    uint16  RESERVED14;
+    volatile uint16 CCR3;
+    uint16  RESERVED15;
+    volatile uint16 CCR4;
+    uint16  RESERVED16;
+    volatile uint16 BDTR;   // Not used in general purpose timers
+    uint16  RESERVED17;     // Not used in general purpose timers
+    volatile uint16 DCR;
+    uint16  RESERVED18;
+    volatile uint16 DMAR;
+    uint16  RESERVED19;
 } Timer;
 
-void timer_init(uint8_t timer_num, uint16_t prescale) {
+void timer_init(uint8 timer_num, uint16 prescale) {
     Timer *timer;
-    uint32_t is_advanced = 0;
+    uint32 is_advanced = 0;
 
     ASSERT(timer_num > 0 && timer_num <= 4);
 

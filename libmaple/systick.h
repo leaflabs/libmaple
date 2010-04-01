@@ -50,8 +50,8 @@ extern "C"{
 
 void systick_init(void);
 
-static inline uint32_t systick_get_count(void) {
-    return (uint32_t)*(volatile uint32*)SYSTICK_CNT;
+static inline uint32 systick_get_count(void) {
+    return (uint32)*(volatile uint32*)SYSTICK_CNT;
 }
 
 #ifdef __cplusplus

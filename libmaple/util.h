@@ -26,7 +26,6 @@
 /* Generally "useful" utility procedures  */
 #ifndef _UTIL_H_
 #define _UTIL_H_
-#include <inttypes.h>
 
 #define MAPLE_DEBUG 1
 
@@ -34,7 +33,7 @@
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
 /* Return bits m to n of x  */
-#define GET_BITS(x, m, n) ((((uint32_t)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+#define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
 /* Bit-banding macros  */
 #define BITBAND_SRAM_REF   0x20000000
@@ -46,20 +45,20 @@
 
 #define COUNTFLAG *((volatile unsigned char*) (BITBAND_PERI(SYSTICK_CSR,2)))
 
-#define REG_SET(reg, val)               (*(volatile uint32_t*)(reg)  = (val))
-#define REG_SET_BIT(reg, bit)           (*(volatile uint32_t*)(reg) |= BIT(bit))
-#define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32_t*)(reg) &= ~BIT(bit))
-#define REG_SET_MASK(reg, mask)         (*(volatile uint32_t*)(reg) |= (uint32_t)(mask))
-#define REG_CLEAR_MASK(reg, mask)       (*(volatile uint32_t*)(reg) &= (uint32_t)~(mask))
+#define REG_SET(reg, val)               (*(volatile uint32*)(reg)  = (val))
+#define REG_SET_BIT(reg, bit)           (*(volatile uint32*)(reg) |= BIT(bit))
+#define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32*)(reg) &= ~BIT(bit))
+#define REG_SET_MASK(reg, mask)         (*(volatile uint32*)(reg) |= (uint32)(mask))
+#define REG_CLEAR_MASK(reg, mask)       (*(volatile uint32*)(reg) &= (uint32)~(mask))
 
-#define REG_GET(reg)                    *(volatile uint32_t*)(reg)
+#define REG_GET(reg)                    *(volatile uint32*)(reg)
 
-#define __set_bits(addr, mask)          *(volatile uint32_t*)(addr) |= (uint32_t)(mask)
-#define __clear_bits(addr, mask)        (*(volatile uint32_t*)(addr) &= (uint32_t)~(mask))
-#define __get_bits(addr, mask)          (*(volatile uint32_t*)(addr) & (uint32_t)(mask))
+#define __set_bits(addr, mask)          *(volatile uint32*)(addr) |= (uint32)(mask)
+#define __clear_bits(addr, mask)        (*(volatile uint32*)(addr) &= (uint32)~(mask))
+#define __get_bits(addr, mask)          (*(volatile uint32*)(addr) & (uint32)(mask))
 
-#define __read(reg)                     *(volatile uint32_t*)(reg)
-#define __write(reg, value)             *(volatile uint32_t*)(reg) = (value)
+#define __read(reg)                     *(volatile uint32*)(reg)
+#define __write(reg, value)             *(volatile uint32*)(reg) = (value)
 
 #ifdef __cplusplus
 extern "C"{

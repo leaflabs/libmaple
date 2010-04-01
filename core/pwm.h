@@ -30,7 +30,7 @@
 extern "C"{
 #endif
 
-void pwmWrite(uint8_t, uint16_t);
+void pwmWrite(uint8, uint16);
 
 #ifdef __cplusplus
 }

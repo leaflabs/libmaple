@@ -17,7 +17,7 @@ void usb_userToPMABufferCopy(uint8  *pbUsrBuf,uint16 wPMABufAddr,uint16 wNBytes)
 void usb_PMAToUserBufferCopy(uint8  *pbUsrBuf,uint16 wPMABufAddr,uint16 wNBytes);
 void usb_serialWriteStr(const char *outStr);
 void usb_serialWriteChar(unsigned char ch);
-uint8_t usb_serialGetRecvLen();
+uint8 usb_serialGetRecvLen();
 void usb_copyRecvBuffer(unsigned char* dest, uint8 len);
 
 #ifdef __cplusplus

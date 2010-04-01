@@ -45,8 +45,8 @@ typedef uint8 boolean;
 typedef uint8 byte;
 
 void init(void);
-unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout);
-void shiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t bitOrder, byte val);
+unsigned long pulseIn(uint8 pin, uint8 state, unsigned long timeout);
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
 
 
 #ifdef __cplusplus

@@ -7,7 +7,7 @@ void usb_lpIRQHandler(void)
 {
   typedef void (*funcPtr)(void);
   
-  const uint32_t usbIsrAddr = *(uint32_t*)(USB_ISR_ADDR);
+  const uint32 usbIsrAddr = *(uint32*)(USB_ISR_ADDR);
   void (*ptrToUsbISR)(void) = (funcPtr) usbIsrAddr;
   ptrToUsbISR();
 }

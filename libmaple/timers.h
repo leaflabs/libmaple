@@ -73,13 +73,12 @@
 
 #ifndef _TIMERS_H_
 #define _TIMERS_H_
-#include  <inttypes.h>
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-typedef volatile uint32_t* TimerCCR;
+typedef volatile uint32* TimerCCR;
 
 #define TIMER1_BASE        0x40012C00
 #define TIMER2_BASE        0x40000000
@@ -111,11 +110,11 @@ typedef volatile uint32_t* TimerCCR;
 
 
 /* Turn on timer with prescale as the divisor
- * void timer_init(uint32_t timer, uint16_t prescale)
+ * void timer_init(uint32 timer, uint16 prescale)
  *      timer     ->  {1-4}
  *      prescale  ->  {1-65535}
  * */
-void timer_init(uint8_t, uint16_t);
+void timer_init(uint8, uint16);
 void timers_disable(void);
 void timers_disable_channel(uint8, uint8);
 
@@ -124,7 +123,7 @@ void timers_disable_channel(uint8, uint8);
  * register for the pin cause it saves pwmWrite() a couple of
  * cycles.
  *
- * void timer_pwm(uint8_t channel, uint8_t duty_cycle);
+ * void timer_pwm(uint8 channel, uint8 duty_cycle);
  *      channel    -> {TIMERx_CHn_CCR}
  *      duty_cycle -> {0-65535}
  *
@@ -132,7 +131,7 @@ void timers_disable_channel(uint8, uint8);
  *      pin has been set to alternate function output
  *      timer has been initialized
  */
-static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16_t duty_cycle) {
+static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16 duty_cycle) {
     *CCR = duty_cycle;
 }
 

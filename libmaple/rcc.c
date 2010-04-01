@@ -9,8 +9,8 @@
 #include "flash.h"
 #include "rcc.h"
 
-static void set_ahb_prescaler(uint32_t divider) {
-   uint32_t cfgr = __read(RCC_CFGR);
+static void set_ahb_prescaler(uint32 divider) {
+   uint32 cfgr = __read(RCC_CFGR);
 
    cfgr &= ~HPRE;
 
@@ -25,8 +25,8 @@ static void set_ahb_prescaler(uint32_t divider) {
    __write(RCC_CFGR, cfgr);
 }
 
-static void set_apb1_prescaler(uint32_t divider) {
-   uint32_t cfgr = __read(RCC_CFGR);
+static void set_apb1_prescaler(uint32 divider) {
+   uint32 cfgr = __read(RCC_CFGR);
 
    cfgr &= ~PPRE1;
 
@@ -41,8 +41,8 @@ static void set_apb1_prescaler(uint32_t divider) {
    __write(RCC_CFGR, cfgr);
 }
 
-static void set_apb2_prescaler(uint32_t divider) {
-   uint32_t cfgr = __read(RCC_CFGR);
+static void set_apb2_prescaler(uint32 divider) {
+   uint32 cfgr = __read(RCC_CFGR);
 
    cfgr &= ~PPRE2;
 
@@ -59,7 +59,7 @@ static void set_apb2_prescaler(uint32_t divider) {
 
 /* FIXME: magic numbers  */
 static void pll_init(void) {
-   uint32_t cfgr;
+   uint32 cfgr;
 
    cfgr = __read(RCC_CFGR);
    cfgr &= (~PLLMUL | PLL_INPUT_CLK_HSE);
@@ -106,8 +106,8 @@ void rcc_init(void) {
    pll_init();
 }
 
-void rcc_set_adc_prescaler(uint32_t divider) {
-   uint32_t cfgr = __read(RCC_CFGR);
+void rcc_set_adc_prescaler(uint32 divider) {
+   uint32 cfgr = __read(RCC_CFGR);
    cfgr &= ~ADCPRE;
    __write(RCC_CFGR, cfgr | PCLK2_DIV_2);
 }

@@ -36,8 +36,8 @@ void gpio_init(void) {
 }
 
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode) {
-    uint32_t tmp;
-    uint32_t shift = POS(gpio_pin % 8);
+    uint32 tmp;
+    uint32 shift = POS(gpio_pin % 8);
     GPIOReg CR;
 
     ASSERT(port);

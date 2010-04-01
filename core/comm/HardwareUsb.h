@@ -22,6 +22,7 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
+/**
  *  @brief Wiring like serial api to USB virtual COM
  */
 

@@ -27,7 +27,6 @@ BUILD_PATH = build
 LIB_PATH = libmaple
 
 OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
-	  $(BUILD_PATH)/$(LIB_PATH)\
 	  $(BUILD_PATH)/core \
 	  $(BUILD_PATH)/core/comm
 

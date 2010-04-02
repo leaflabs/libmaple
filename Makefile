@@ -62,7 +62,7 @@ CSRC = libmaple/systick.c              \
        libmaple/timers.c               \
        libmaple/adc.c 	               \
        libmaple/syscalls.c 	       \
-       libmaple/stm32f10x_it.c         \
+       libmaple/exc.c                  \
        libmaple/exti.c 	               \
        libmaple/gpio.c 	               \
        libmaple/nvic.c 	               \

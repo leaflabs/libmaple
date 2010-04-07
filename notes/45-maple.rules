@@ -1,0 +1,6 @@
+BUS!="usb", ACTION!="add", SUBSYSTEM!=="usb_device", GOTO="maple_rules_end"
+
+SYSFS{idProduct}=="1001", SYSFS{idVendor}=="0110", MODE="664", GROUP="plugdev"
+SYSFS{idProduct}=="1002", SYSFS{idVendor}=="0110", MODE="664", GROUP="plugdev"
+
+LABEL="maple_rules_end" 

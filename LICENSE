@@ -10,7 +10,7 @@ CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 
 -------------------------------------------------------------------------------
-Unless otherwise noted in the header, all code in /libmaple/ are copyright
+Unless otherwise noted in the header, all code in /libmaple/ is copyright
 LeafLabs LLC and are released under the MIT License:
 
 Copyright (c) 2009-2010 LeafLabs LLC
@@ -34,5 +34,26 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 See http://creativecommons.org/licenses/MIT/ for more information.
+
+-------------------------------------------------------------------------------
+Some of files in /stm32conf/ were written by 'lanchon' and posted in the
+STMicroelectronics forum at:
+
+https://my.st.com/public/STe2ecommunities/mcu/Lists/ARM%20CortexM3%20STM32/flat.aspx?RootFolder=/public/STe2ecommunities/mcu/Lists/ARM%20CortexM3%20STM32/STM32%20CC%2B%2B%20build%20environment%20using%20CodeSourcery%20Sourcery%20G%2B%2B&currentviews=18152
+
+These files are stated to be in the public domain. Other files in /stm32conf/
+are from CodeSourcery, Inc with the following notice:
+
+Copyright (c) 2006, 2007 CodeSourcery Inc
+
+The authors hereby grant permission to use, copy, modify, distribute,
+and license this software and its documentation for any purpose, provided
+that existing copyright notices are retained in all copies and that this
+notice is included verbatim in any distributions. No written agreement,
+license, or royalty fee is required for any of the authorized uses.
+Modifications to this software may be copyrighted by their authors
+and need not follow the licensing terms described here, provided that
+the new terms are clearly indicated on the first page of each file where
+they apply.
 
 -------------------------------------------------------------------------------

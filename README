@@ -35,12 +35,13 @@ libmaple Repo Layout
     Extra wrappers and functionality around the lower level code which is 
     useful for programming in the IDE.
 
-/exapmles/
+/examples/
+    What it sounds like. Copy these to /main.cpp to compile them.
     
-
-/stm32lib/
-    The "standard" library given away by STM; to be removed ASAP.
-
+/notes/
+    Unstructured text notes that may be useful. The 45-maple.rules udev file
+    can be placed in /etc/udev/rules.d/ on compatible linux machines to allow
+    non-root access to the Maple USB device for uploading.
 
 Instructions to Compile for ARM Targets
 ------------------------------------------------------------------------------
@@ -62,6 +63,6 @@ You will also need to have dfu-util installed (on Linux) or compiled and placed
 in a folder "dfu-util/" at the same level as the maple-library folder (macosx
 and windows).
 
-Write your program using src/main.cpp as the entry point. Then just 'make' and follow the directions!
-
+Write your program using /main.cpp as the entry point. Then just 'make' and
+follow the directions!
 

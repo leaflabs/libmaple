@@ -129,6 +129,10 @@ info:
 
 all: info
 
+tags:
+	etags `find . -name "*.c" -o -name "*.cpp" -o -name "*.h"`
+	@echo "Made TAGS file for EMACS code browsing"
+
 $(BUILD_PATH):
 	mkdir -p build
 

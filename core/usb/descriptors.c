@@ -1,5 +1,6 @@
 /* insert license */
 
+
 #include "descriptors.h"
 
 USB_Descriptor_Device usbVcomDescriptor_Device = {
@@ -118,5 +119,43 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    bmAttributes:          EP_TYPE_BULK,
    wMaxPacketSize:        VCOM_TX_EPSIZE,
    bInterval:             0x00
-   },
+   }
 };
+
+/* 
+   String Identifiers:
+
+   we may choose to specify any or none of the following string
+   identifiers:
+  
+   iManufacturer:    LeafLabs
+   iProduct:         Maple R3
+   iSerialNumber:    NONE
+   iConfiguration:   NONE
+   iInterface(CCI):  NONE
+   iInterface(DCI):  NONE
+
+   additionally we must provide the unicode language identifier,
+   which is 0x0409 for US English
+*/
+
+USB_Descriptor_String usbVcomDescriptor_LangID = 
+  {
+  bLength: USB_DESCRIPTOR_STRING_LEN(1),
+  bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,
+  bString: 0x0409
+  };
+
+USB_Descriptor_String usbVcomDescriptor_iManufacturer = 
+  {
+  bLength: USB_DESCRIPTOR_STRING_LEN(8),
+  bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,
+  bString: L"LeafLabs"
+  };
+
+USB_Descriptor_String usbVcomDescriptor_iProduct = 
+  {
+  bLength: USB_DESCRIPTOR_STRING_LEN(8),
+  bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,
+  bString: L"Maple R3"
+  };

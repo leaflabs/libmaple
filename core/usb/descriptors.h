@@ -18,6 +18,8 @@
     uint8 Data[DataSize];			\
   }
 
+#define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
+
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -78,7 +80,13 @@ typedef struct {
   USB_Descriptor_Interface            DCI_Interface;
   USB_Descriptor_Endpoint             DataOutEndpoint;
   USB_Descriptor_Endpoint             DataInEndpoint;
-} USB_Descriptor_Configuration;
+}USB_Descriptor_Configuration;
+ 
+typedef struct {
+  uint8          bLength;
+  uint8          bDescriptorType;
+  uint16         bString[];
+} USB_Descriptor_String;
 
 
 #if defined(__cplusplus)

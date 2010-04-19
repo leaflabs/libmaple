@@ -4,10 +4,25 @@
 
 
 #include "usb_lib.h"
+#include "config.h"
 
 #if defined(__cplusplus)
   extern "C" {
 #endif
+
+#define USB_DESCRIPTOR_TYPE_DEVICE        0x01
+#define USB_DESCRIPTOR_TYPE_CONFIGURATION 0x02
+#define USB_DESCRIPTOR_TYPE_STRING        0x03
+#define USB_DESCRIPTOR_TYPE_INTERFACE     0x04
+#define USB_DESCRIPTOR_TYPE_ENDPOINT      0x05
+
+#define USB_CONFIG_ATTR_BUSPOWERED        0b10000000
+#define USB_CONFIG_ATTR_SELFPOWERED       0b11000000
+
+#define EP_TYPE_INTERRUPT                 0x03
+#define EP_TYPE_BULK                      0x02
+
+#define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
 
 #define CDC_FUCNTIONAL_DESCRIPTOR(DataSize)	\
   struct					\
@@ -17,8 +32,6 @@
     uint8 SubType;				\
     uint8 Data[DataSize];			\
   }
-
-#define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
 
 typedef struct {
   uint8                 bLength;

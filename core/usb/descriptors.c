@@ -14,8 +14,8 @@ USB_Descriptor_Device usbVcomDescriptor_Device = {
  idVendor:             VCOM_ID_VENDOR,
  idProduct:            VCOM_ID_PRODUCT,
  bcdDevice:            0x0200,
- iManufacturer:        0x00,
- iProduct:             0x00,
+ iManufacturer:        0x01,
+ iProduct:             0x02,
  iSerialNumber:        0x00,
  bNumConfigurations:   0x01
 };
@@ -30,7 +30,7 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    bConfigurationValue:       0x01,
    iConfiguration:            0x00,
    bmAttributes:              (USB_CONFIG_ATTR_BUSPOWERED | USB_CONFIG_ATT_SELF_POWERED),
-   bMaxPower:                 USB_CONFIG_POWER_MA(100)
+   bMaxPower:                 USB_CONFIG_MAX_POWER
    },
 
  CCI_Interface:
@@ -82,9 +82,9 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    {
    bLength:                 sizeof(USB_Descriptor_Endpoint),
    bDescriptorType:         USB_DESCRIPTOR_TYPE_ENDPOINT,
-   bEndpointAddress:        CDC_NOTIFICATION_EPNUM,
+   bEndpointAddress:        VCOM_NOTIFICATION_EPNUM,
    bmAttributes:            EP_TYPE_INTERRUPT,
-   wMaxPacketSize:          CDC_NOTIFICATION_EPSIZE,
+   wMaxPacketSize:          VCOM_NOTIFICATION_EPSIZE,
    bInterval:               0xFF
    },
 

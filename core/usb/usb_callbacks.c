@@ -29,12 +29,26 @@ USB_Line_Coding line_coding = {
  datatype:    0x08
 };
 
+uint8 vcomBufferTx[VCOM_TX_SIZE];
+uint8 vcomBufferRx[VCOM_RX_SIZE];
+uint8 countTx = 0;
+uint8 countRx = 0;
+
 void vcomDataTxCb(void) {
   /* do whatever after data has been sent to host */
+  countTx = 0;
 }
 
 void vcomDataRxCb(void) {
   /* do whatever after data has been received from host */
+  countRx = GetEPRxCount(VCOM_RX_ENDP);
+  PMAToUserBufferCopy(vcomBufferRx,VCOM_RX_ADDR,countRx);
+  SetEPRxValid(VCOM_RX_ENDP);
+
+  countTx = countRx;
+  UserToPMABufferCopy(vcomBufferRx,VCOM_TX_ADDR,countTx);
+  SetEPTxCount(VCOM_TX_ENDP,countTx);
+  SetEPTxValid(VCOM_TX_ENDP);
 }
 
 void vcomManagementCb(void) {
@@ -49,7 +63,8 @@ u8* vcomGetSetLineCoding(uint16 length) {
   return (uint8*)&line_coding;
 }
 
-void vcomSetLineSate(uint16 wValue);
+void vcomSetLineSate(uint16 wValue) {
+}
 
 void usbInit(void) {
   pInformation->Current_Configuration = 0;
@@ -151,6 +166,7 @@ RESULT usbNoDataSetup(u8 request) {
       return USB_SUCCESS;
     case (SET_CONTROL_LINE_STATE):
       /* handle the control line status signal (reset?) */
+      vcomSetLineState();
       return USB_SUCCESS;
     }
   }

@@ -133,8 +133,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
 uint32 digitalRead(uint8 pin) {
     if (pin >= NR_MAPLE_PINS)
         return 0;
-
-    return (PIN_MAP[pin].port->IDR & BIT(PIN_MAP[pin].pin)) ? 1 : 0;
+    return gpio_read_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin);
 }
 
 void digitalWrite(uint8 pin, uint8 val) {

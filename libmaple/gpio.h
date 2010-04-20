@@ -93,6 +93,10 @@ static inline void gpio_write_bit(GPIO_Port *port, uint8 gpio_pin, uint8 val) {
     }
 }
 
+static inline uint32 gpio_read_bit(GPIO_Port *port, uint8 gpio_pin) {
+   return (port->IDR & BIT(gpio_pin) ? 1 : 0);
+}
+
 #ifdef __cplusplus
 } // extern "C"
 #endif

@@ -32,9 +32,14 @@
 #include "wiring.h"
 #include "HardwareSerial.h"
 #include "math.h"
+#include "usb.h"
+
+uint8_t bytes_in;
 
 #define LED_PIN 13
 #define PWM_PIN  2
+
+HardwareUsb Usb;
 
 void setup()
 {
@@ -48,6 +53,9 @@ void setup()
     /* Turn on PWM on pin PWM_PIN */
     pinMode(PWM_PIN, PWM);
     pwmWrite(PWM_PIN, 0x8000);
+
+    /* Send a message out the USB virtual com port  */
+    Usb.println("Hello world!");
 }
 
 int toggle = 0;

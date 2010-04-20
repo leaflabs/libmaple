@@ -122,6 +122,8 @@ typedef volatile uint32* TimerCCR;
 void timer_init(uint8, uint16);
 void timers_disable(void);
 void timers_disable_channel(uint8, uint8);
+void timers_set_prescaler(uint32 timer_num, uint16 prescale);
+void timers_set_reload(uint32 timer_num, uint16 max_reload);
 
 /* Turn on PWM with duty_cycle on the specified channel in timer.
  * This function takes in a pointer to the corresponding CCR
@@ -139,6 +141,7 @@ void timers_disable_channel(uint8, uint8);
 static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16 duty_cycle) {
     *CCR = duty_cycle;
 }
+
 
 #ifdef __cplusplus
 } // extern "C"

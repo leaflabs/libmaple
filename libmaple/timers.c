@@ -142,6 +142,49 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     timer->CR1  |= 1;         // Enable timer
 }
 
+void timers_set_prescaler(uint32 timer_num, uint16 prescale) {
+    Timer *timer;
+    ASSERT(timer_num > 0 && timer_num <= 4);
+
+    switch(timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        break;
+    }
+    timer->PSC = prescale;
+}
+
+void timers_set_reload(uint32 timer_num, uint16 max_reload) {
+    Timer *timer;
+    ASSERT(timer_num > 0 && timer_num <= 4);
+
+    switch(timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        break;
+    }
+    timer->ARR = max_reload;
+}
+
+
 void timers_disable(void) {
     Timer *timer;
     int i;

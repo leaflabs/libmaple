@@ -50,10 +50,8 @@ void init(void) {
 void nvic_init(void) {
 #ifdef VECT_TAB_ROM
    nvic_set_vector_table(USER_ADDR_ROM, 0x0);
-#warning writing to ROM
 #elif defined VECT_TAB_RAM
    nvic_set_vector_table(USER_ADDR_RAM, 0x0);
-#warning writing to RAM
 #else // VECT_TAB_BASE
    /* Set the Vector Table base location at 0x08000000 */
    nvic_set_vector_table(((uint32)0x08000000), 0x0);

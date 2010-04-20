@@ -31,10 +31,11 @@
 
 #include "wiring.h"
 #include "HardwareSerial.h"
+#include "HardwareUsb.h"
 #include "math.h"
 #include "usb.h"
 
-uint8_t bytes_in;
+uint8 bytes_in;
 
 #define LED_PIN 13
 #define PWM_PIN  2

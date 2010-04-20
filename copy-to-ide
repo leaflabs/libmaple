@@ -8,89 +8,58 @@ DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
 
 ARCH=`uname -a`
 
-FILES="
-    stm32libmaple/inc/cortexm3_macro.h
-    stm32libmaple/src/stm32f10x_flash.c    
-    stm32libmaple/src/stm32f10x_nvic.c     
-    stm32libmaple/src/stm32f10x_rcc.c      
-    stm32libmaple/inc/stm32f10x_nvic.h
-    stm32libmaple/inc/stm32f10x_rcc.h
-    stm32libmaple/inc/stm32f10x_flash.h
-    stm32libmaple/inc/stm32f10x_adc.h
-    stm32libmaple/inc/stm32f10x_fsmc.h
-    stm32libmaple/inc/stm32f10x_dac.h
-    stm32libmaple/inc/stm32f10x_rtc.h
-    stm32libmaple/inc/stm32f10x_spi.h
-    stm32libmaple/inc/stm32f10x_pwr.h
-    stm32libmaple/inc/stm32f10x_iwdg.h
-    stm32libmaple/inc/stm32f10x_exti.h
-    stm32libmaple/inc/stm32f10x_bkp.h
-    stm32libmaple/inc/stm32f10x_i2c.h
-    stm32libmaple/inc/stm32f10x_dma.h
-    stm32libmaple/inc/stm32f10x_gpio.h
-    stm32libmaple/inc/stm32f10x_nvic.h
-    stm32libmaple/inc/stm32f10x_wwdg.h
-    stm32libmaple/inc/stm32f10x_lib.h
-    stm32libmaple/inc/stm32f10x_type.h
-    stm32libmaple/inc/stm32f10x_usart.h
-    stm32libmaple/inc/stm32f10x_tim.h
-    stm32libmaple/inc/stm32f10x_can.h
-    stm32libmaple/inc/stm32f10x_sdio.h
-    stm32libmaple/inc/stm32f10x_flash.h
-    stm32libmaple/inc/stm32f10x_dbgmcu.h
-    stm32libmaple/inc/stm32f10x_systick.h
-    stm32libmaple/inc/stm32f10x_crc.h
-    stm32libmaple/inc/stm32f10x_rcc.h
-    stm32libmaple/inc/stm32f10x_map.h
-    libmaple/systick.c                     
-    libmaple/timers.c                      
-    libmaple/adc.c                         
-    libmaple/syscalls.c                    
-    libmaple/stm32f10x_it.c                
-    libmaple/exti.c                        
-    libmaple/gpio.c                        
-    libmaple/nvic.c                        
-    libmaple/usart.c                       
-    libmaple/util.c                        
-    libmaple/usb.h
-    libmaple/usb.c                         
-    libmaple/timers.h
-    libmaple/gpio.h
-    libmaple/nvic.h
-    libmaple/systick.h
-    libmaple/util.h
+FILES="libmaple/adc.c
     libmaple/adc.h
-    libmaple/usb_regs.h
-    libmaple/exti.h
-    libmaple/usart.h
-    libmaple/stm32f10x_conf.h
     libmaple/bootVect.h
+    libmaple/exc.c
+    libmaple/exti.c
+    libmaple/exti.h
+    libmaple/flash.c
+    libmaple/flash.h
+    libmaple/gpio.c
+    libmaple/gpio.h
     libmaple/libmaple.h
     libmaple/libmaple_types.h
-    core/bits.h
-    core/comm/HardwareUsb.h
-    core/comm/HardwareSerial.h
-    core/io.h
-    core/wiring.h
-    core/WProgram.h
-    core/Print.h
-    core/pwm.h
+    libmaple/nvic.c
+    libmaple/nvic.h
+    libmaple/rcc.c
+    libmaple/rcc.h
+    libmaple/syscalls.c
+    libmaple/systick.c
+    libmaple/systick.h
+    libmaple/timers.c
+    libmaple/timers.h
+    libmaple/usart.c
+    libmaple/usart.h
+    libmaple/usb.c
+    libmaple/usb.h
+    libmaple/usb_regs.h
+    libmaple/util.c
+    libmaple/util.h
     core/binary.h
-    core/wiring_math.h
+    core/bits.h
+    core/ext_interrupts.c
     core/ext_interrupts.h
+    core/io.h
+    core/main.cxx
+    core/Print.cpp
+    core/Print.h
+    core/pwm.c
+    core/pwm.h
+    core/time.c
     core/time.h
-    core/wiring.c                   
-    core/wiring_shift.c             
-    core/wiring_analog.c            
-    core/time.c                     
-    core/pwm.c                      
-    core/ext_interrupts.c           
-    core/wiring_digital.c           
-    core/wiring_math.cpp            
-    core/Print.cpp                  
-    core/comm/HardwareSerial.cpp    
-    core/comm/HardwareUsb.cpp       
-    core/main.cxx"
+    core/wiring_analog.c
+    core/wiring.c
+    core/wiring_digital.c
+    core/wiring.h
+    core/wiring_math.cpp
+    core/wiring_math.h
+    core/wiring_shift.c
+    core/WProgram.h
+    core/comm/HardwareSerial.cpp
+    core/comm/HardwareSerial.h
+    core/comm/HardwareUsb.cpp
+    core/comm/HardwareUsb.h"
 
 # First see if this folder exists
 if !(test -d $DEST/lanchon-stm32)

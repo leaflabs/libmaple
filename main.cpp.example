@@ -25,26 +25,16 @@
 /**
  *  @file example_main.cpp
  *
- *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2 and
- *  the USB virtual COM port, and turns on PWM on pin 2
+ *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2
+ *  and turns on PWM on pin 2
  */
 
-#ifndef _EXAMPLE_MAIN_H_
-#define _EXAMPLE_MAIN_H_
-
-#endif
 #include "wiring.h"
 #include "HardwareSerial.h"
-#include "HardwareUsb.h"
 #include "math.h"
-#include "usb.h"
-
-uint8_t bytes_in;
 
 #define LED_PIN 13
 #define PWM_PIN  2
-
-HardwareUsb Usb;
 
 void setup()
 {
@@ -58,9 +48,6 @@ void setup()
     /* Turn on PWM on pin PWM_PIN */
     pinMode(PWM_PIN, PWM);
     pwmWrite(PWM_PIN, 0x8000);
-
-    /* Send a message out the USB virtual com port  */
-    Usb.println("Hello world!");
 }
 
 int toggle = 0;

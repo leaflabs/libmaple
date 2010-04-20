@@ -19,7 +19,9 @@ Current Status:
     dependence, and when a new USB core library is written (to nix ST dependence) changes will likely
     have to be made to virtual com application code. Ideally, the new core library should mimick the 
     form of MyUSB (LUFA), since this library (USB for AVR) is growing in popularity and in example 
-    applications. 
+    applications. Additionally, the usb lib here relies on low level hardware functions that were 
+    just ripped out of the bootloader code (for simplicity) but clearly this should be replaced with 
+    direct accesses to functions provided elsewhere in libmaple.
 
     The virtual com port serves two important purposes. 1) is allows serial data transfers between
     user sketches an a host computer. 2) is allows the host machine to issue a system reset by 

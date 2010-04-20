@@ -3,7 +3,7 @@
 
 #include "descriptors.h"
 
-USB_Descriptor_Device usbVcomDescriptor_Device = {
+const USB_Descriptor_Device usbVcomDescriptor_Device = {
  bLength:              sizeof(USB_Descriptor_Device), 
  bDescriptorType:      USB_DESCRIPTOR_TYPE_DEVICE,
  bcdUSB:               0x0200,
@@ -20,7 +20,7 @@ USB_Descriptor_Device usbVcomDescriptor_Device = {
  bNumConfigurations:   0x01
 };
 
-USB_Descriptor_Configuration usbVcomDescriptor_Config = {
+const USB_Descriptor_Configuration usbVcomDescriptor_Config = {
  Header:
    {
    bLength:                   sizeof(USB_Descriptor_Config_Header),
@@ -82,7 +82,7 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    {
    bLength:                 sizeof(USB_Descriptor_Endpoint),
    bDescriptorType:         USB_DESCRIPTOR_TYPE_ENDPOINT,
-   bEndpointAddress:        VCOM_NOTIFICATION_EPNUM,
+   bEndpointAddress:        (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_NOTIFICATION_EPNUM),
    bmAttributes:            EP_TYPE_INTERRUPT,
    wMaxPacketSize:          VCOM_NOTIFICATION_EPSIZE,
    bInterval:               0xFF
@@ -105,7 +105,7 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    {
    bLength:               sizeof(USB_Descriptor_Endpoint),
    bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
-   bEndpointAddress:      VCOM_RX_EPNUM,
+   bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_OUT | VCOM_RX_EPNUM),
    bmAttributes:          EP_TYPE_BULK,
    wMaxPacketSize:        VCOM_RX_EPSIZE,
    bInterval:             0x00
@@ -115,7 +115,7 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    {
    bLength:               sizeof(USB_Descriptor_Endpoint),
    bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
-   bEndpointAddress:      VCOM_TX_EPNUM,
+   bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_TX_EPNUM),
    bmAttributes:          EP_TYPE_BULK,
    wMaxPacketSize:        VCOM_TX_EPSIZE,
    bInterval:             0x00
@@ -139,21 +139,21 @@ USB_Descriptor_Configuration usbVcomDescriptor_Config = {
    which is 0x0409 for US English
 */
 
-USB_Descriptor_String usbVcomDescriptor_LangID = 
+const USB_Descriptor_String usbVcomDescriptor_LangID = 
   {
   bLength: USB_DESCRIPTOR_STRING_LEN(1),
   bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,
   bString: 0x0409
   };
 
-USB_Descriptor_String usbVcomDescriptor_iManufacturer = 
+const USB_Descriptor_String usbVcomDescriptor_iManufacturer = 
   {
   bLength: USB_DESCRIPTOR_STRING_LEN(8),
   bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,
   bString: L"LeafLabs"
   };
 
-USB_Descriptor_String usbVcomDescriptor_iProduct = 
+const USB_Descriptor_String usbVcomDescriptor_iProduct = 
   {
   bLength: USB_DESCRIPTOR_STRING_LEN(8),
   bDescriptorType: USB_DESCRIPTOR_TYPE_STRING,

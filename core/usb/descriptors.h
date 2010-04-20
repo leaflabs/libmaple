@@ -22,6 +22,9 @@
 #define EP_TYPE_INTERRUPT                 0x03
 #define EP_TYPE_BULK                      0x02
 
+#define USB_DESCRIPTOR_ENDPOINT_IN        0x80
+#define USB_DESCRIPTOR_ENDPOINT_OUT       0x00
+
 #define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
 
 #define CDC_FUCNTIONAL_DESCRIPTOR(DataSize)	\
@@ -101,6 +104,11 @@ typedef struct {
   uint16         bString[];
 } USB_Descriptor_String;
 
+extern const USB_Descriptor_Device usbVcomDescriptor_Device;
+extern const USB_Descriptor_Config usbVcomDescriptor_Config;
+extern const USB_Descriptor_String usbVcomDescriptor_LandID;
+extern const USB_Descriptor_String usbVcomDescriptor_iManufacturer;
+extern const USB_Descriptor_String usbVcomDescriptor_iProduct;
 
 #if defined(__cplusplus)
   }

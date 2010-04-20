@@ -1,24 +1,51 @@
-#ifndef _USB_H_
-#define _USB_H_
+/* insert license */
 
-#define USB_ISR_ADDR              (0x08000090)
-#define USB_SERIAL_ENDP_TXADDR    ((uint32) 0xC0)
-#define USB_SERIAL_ENDP_RXADDR    ((uint32) 0x110)
-#define USB_SERIAL_ENDP_TX        ((uint16) 0x1)
-#define USB_SERIAL_ENDP_RX        ((uint16) 0x3)
-#define USB_SERIAL_BUF_SIZE       (0x40)
+#ifndef __USB_H_
+#define __USB_H_
+
+#include "usb_config.h"
+#include "usb_callbacks.h"
+#include "usb_lib.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-void usb_lpIRQHandler(void);
-void usb_userToPMABufferCopy(uint8  *pbUsrBuf,uint16 wPMABufAddr,uint16 wNBytes);
-void usb_PMAToUserBufferCopy(uint8  *pbUsrBuf,uint16 wPMABufAddr,uint16 wNBytes);
-void usb_serialWriteStr(const char *outStr);
-void usb_serialWriteChar(unsigned char ch);
-uint8_t usb_serialGetRecvLen();
-void usb_copyRecvBuffer(unsigned char* dest, uint8 len);
+typedef enum 
+  {
+    RESUME_EXTERNAL,
+    RESUME_INTERNAL,
+    RESUME_LATER,
+    RESUME_WAIT,
+    RESUME_START,
+    RESUME_ON,
+    RESUME_OFF,
+    RESUME_ESOF
+  } RESUME_STATE;
+
+typedef enum 
+  {
+    UNCONNECTED,
+    ATTACHED,
+    POWERED,
+    SUSPENDED,
+    ADDRESSED,
+    CONFIGURED
+  } DEVICE_STATE;
+
+  void setupUSB(void);
+  void usbSuspend(void);
+  void usbResumeInit(void);
+  void usbResume(RESUME_STATE);
+  
+  RESULT usbPowerOn(void);
+  RESULT usbPowerOff(void);
+  
+  void usbDsbISR(void);
+  void usbEnbISR(void);
+
+  /* overloaded ISR routine, this is the main usb ISR */
+  void usb_lpIRQHandler(void);
 
 #ifdef __cplusplus
 } // extern "C"

@@ -65,7 +65,7 @@ extern "C"{
 #define CR2_SWSTART_BIT          *(volatile uint32*)(BITBAND_PERI(ADC_BASE+0x8 + 2, 6))
 #define SR_EOC_BIT               *(volatile uint32*)(BITBAND_PERI(ADC_BASE+0, 1))
 
-#define NR_ANALOG_PINS           16
+#define NR_ANALOG_PINS           29
 
 /* Initialize ADC1 to do one-shot conversions  */
 void adc_init(void);

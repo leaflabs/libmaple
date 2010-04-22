@@ -44,14 +44,15 @@ void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode) {
    uint32 tmp;
    uint32 shift = POS(gpio_pin % 8);
    GPIOReg CR;
-   uint32 pullup = 0;
 
    ASSERT(port);
    ASSERT(gpio_pin < 16);
 
    if (mode == GPIO_MODE_INPUT_PU) {
-      pullup = 1;
+      port->ODR |= BIT(gpio_pin);
       mode = CNF_INPUT_PD;
+   } else if (mode == GPIO_MODE_INPUT_PD) {
+      port->ODR &= ~BIT(gpio_pin);
    }
 
    CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
@@ -62,6 +63,4 @@ void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode) {
 
    *CR = tmp;
 
-   if (pullup)
-      port->ODR = BIT(gpio_pin);
 }

@@ -70,6 +70,7 @@ CSRC = libmaple/systick.c              \
        libmaple/usb.c                  \
        libmaple/rcc.c                  \
        libmaple/flash.c                \
+       libmaple/spi.c                  \
        core/wiring.c 	               \
        core/wiring_shift.c             \
        core/wiring_analog.c            \

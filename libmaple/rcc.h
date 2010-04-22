@@ -100,6 +100,10 @@
 #define RCC_APB1ENR_TIM4EN     BIT(2)
 #define RCC_APB1ENR_USART2EN   BIT(17)
 #define RCC_APB1ENR_USART3EN   BIT(18)
+#define RCC_APB1ENR_SPI2EN     BIT(14)
+
+#define rcc_enable_clk_spi1()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_SPI1EN)
+#define rcc_enable_clk_spi2()     __set_bits(RCC_APB1ENR, RCC_APB1ENR_SPI2EN)
 
 #define rcc_enable_clk_timer1()   __set_bits(RCC_APB2ENR, RCC_APB2ENR_TIM1EN)
 #define rcc_enable_clk_timer2()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_TIM2EN)

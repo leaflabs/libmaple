@@ -40,19 +40,28 @@ void gpio_init(void) {
    rcc_enable_clk_afio();
 }
 
-void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, uint8 mode) {
-    uint32 tmp;
-    uint32 shift = POS(gpio_pin % 8);
-    GPIOReg CR;
+void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode) {
+   uint32 tmp;
+   uint32 shift = POS(gpio_pin % 8);
+   GPIOReg CR;
+   uint32 pullup = 0;
 
-    ASSERT(port);
-    ASSERT(gpio_pin < 16);
+   ASSERT(port);
+   ASSERT(gpio_pin < 16);
 
-    CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
+   if (mode == GPIO_MODE_INPUT_PU) {
+      pullup = 1;
+      mode = CNF_INPUT_PD;
+   }
 
-    tmp = *CR;
-    tmp &= POS_MASK(shift);
-    tmp |= mode << shift;
+   CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
 
-    *CR = tmp;
+   tmp = *CR;
+   tmp &= POS_MASK(shift);
+   tmp |= mode << shift;
+
+   *CR = tmp;
+
+   if (pullup)
+      port->ODR = BIT(gpio_pin);
 }

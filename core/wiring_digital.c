@@ -112,6 +112,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         break;
     case INPUT_ANALOG:
         outputMode = GPIO_MODE_INPUT_ANALOG;
+        break;
     case INPUT_PULLUP:
         outputMode = GPIO_MODE_INPUT_PU;
         break;

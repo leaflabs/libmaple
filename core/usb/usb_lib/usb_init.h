@@ -17,6 +17,10 @@
 #ifndef __USB_INIT_H
 #define __USB_INIT_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
@@ -43,6 +47,10 @@ extern USER_STANDARD_REQUESTS *pUser_Standard_Requests;
 
 extern u16	SaveState ;
 extern u16 wInterrupt_Mask;
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* __USB_INIT_H */
 

@@ -25,8 +25,7 @@
 #ifndef __HARDWARE_H
 #define __HARDWARE_H
 
-#include "stm32f10x_type.h"
-#include "cortexm3_macro.h"
+#include "usb_type.h"
 
 /* macro'd register and peripheral definitions */
 #define RCC   ((u32)0x40021000)
@@ -74,6 +73,9 @@
 #define SET_REG(addr,val) *(vu32*)(addr)=val
 #define GET_REG(addr)     *(vu32*)(addr)
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
 /* todo: there must be some major misunderstanding in how we access regs. The direct access approach (GET_REG)
    causes the usb init to fail upon trying to activate RCC_APB1 |= 0x00800000. However, using the struct approach
@@ -111,7 +113,7 @@ typedef struct {
   u8 NVIC_IRQChannel;
   u8 NVIC_IRQChannelPreemptionPriority;
   u8 NVIC_IRQChannelSubPriority;
-  bool NVIC_IRQChannelCmd; /* TRUE for enable */
+  USB_Bool NVIC_IRQChannelCmd; /* TRUE for enable */
 } NVIC_InitTypeDef;
 
 typedef struct {
@@ -141,5 +143,9 @@ void setupCLK      (void);
 
 void nvicInit        (NVIC_InitTypeDef*);
 void nvicDisableInterrupts(void);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif

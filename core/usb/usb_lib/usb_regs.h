@@ -19,6 +19,10 @@
 
 /* Includes ------------------------------------------------------------------*/
 /* Exported types ------------------------------------------------------------*/
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 typedef enum _EP_DBUF_DIR
 {
   /* double buffered endpoint direction */
@@ -613,6 +617,10 @@ EP_DBUF_DIR GetEPDblBufDir(u8 /*bEpNum*/);
 void FreeUserBuffer(u8 bEpNum/*bEpNum*/, u8 bDir);
 u16 ToWord(u8, u8);
 u16 ByteSwap(u16);
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* __USB_REGS_H */
 

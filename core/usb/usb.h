@@ -3,9 +3,9 @@
 #ifndef __USB_H_
 #define __USB_H_
 
-#include "usb_config.h"
-#include "usb_callbacks.h"
+
 #include "usb_lib.h"
+#include "libmaple.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,6 +33,8 @@ typedef enum
     CONFIGURED
   } DEVICE_STATE;
 
+  extern volatile uint32 bDeviceState;
+
   void setupUSB(void);
   void usbSuspend(void);
   void usbResumeInit(void);
@@ -47,7 +49,10 @@ typedef enum
   /* overloaded ISR routine, this is the main usb ISR */
   void usb_lpIRQHandler(void);
 
+  void usbSendHello(void);
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
 #endif //_USB_H

@@ -28,13 +28,17 @@ LIB_PATH = libmaple
 
 OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
 	  $(BUILD_PATH)/wirish \
-	  $(BUILD_PATH)/wirish/comm
+	  $(BUILD_PATH)/wirish/comm \
+	  $(BUILD_PATH)/wirish/usb \
+	  $(BUILD_PATH)/wirish/usb_lib
 
 
 INCLUDES = -I$(LIB_PATH) \
 	   -I./ \
 	   -Iwirish \
-	   -Iwirish/comm
+	   -Iwirish/comm \
+	   -Iwirish/usb \
+	   -Iwirish/usb_lib 
 
 # default is to upload to flash
 #DEFFLAGS = VECT_TAB_BASE
@@ -78,6 +82,15 @@ CSRC = libmaple/systick.c                \
        wirish/pwm.c 		         \
        wirish/ext_interrupts.c           \
        wirish/wirish_digital.c
+       wirish/usb/usb.c		       \
+       wirish/usb/usb_callbacks.c        \
+       wirish/usb/usb_hardware.c         \
+       wirish/usb/descriptors.c          \
+       wirish/usb/usb_lib/usb_core.c     \
+       wirish/usb/usb_lib/usb_init.c     \
+       wirish/usb/usb_lib/usb_int.c      \
+       wirish/usb/usb_lib/usb_mem.c      \
+       wirish/usb/usb_lib/usb_regs.c     \
 
 CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/Print.cpp 		 \
@@ -85,7 +98,6 @@ CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/comm/HardwareUsb.cpp 	 \
 	 wirish/comm/HardwareSPI.cpp 	 \
 	 wirish/cxxabi-compat.cpp 	 \
-	 main.cpp
 
 # i really have no idea what i'm doing
 meep += $(CSRC)

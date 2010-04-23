@@ -31,12 +31,19 @@
  */
 
 #include "usb.h"
+#include "libmaple.h"
+#include "usb_lib.h"
 #include "gpio.h"
+#include "usb_hardware.h"
+
+#include "usb_config.h"
 #include "usb_callbacks.h"
+#include "usb_lib.h"
 
 /* persistent usb structs */
+
 volatile uint32 bDeviceState = UNCONNECTED;
-volatile uint16 wIstr = 0;
+volatile uint16_t wIstr = 0;
 volatile bIntPackSOF  = 0;
 
 DEVICE Device_Table = 
@@ -55,31 +62,30 @@ DEVICE_PROP Device_Property =
     usbNoDataSetup,
     usbGetInterfaceSetting,
     usbGetDeviceDescriptor,
-    usbGetInterfaceDescriptor,
     usbGetConfigDescriptor,
     usbGetStringDescriptor,
-    usbGetFunctionalDescriptor,
+    NOP_Process,
     0,
     bMaxPacketSize
   };
 
 USER_STANDARD_REQUESTS User_Standard_Requests = 
   {
-    usbGetConfiguration,
+    NOP_Process,
     usbSetConfiguration,
-    usbGetInterface,
-    usbSetInterface,
-    usbGetStatus,
-    usbClearFeature,
-    usbSetEndpointFeature,
-    usbSetDeviceFeature,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
     usbSetDeviceAddress
   };
 
 void (*pEpInt_IN[7])(void) =
 { 
-  vcomManagementCb,
   vcomDataTxCb,
+  vcomManagementCb,
   NOP_Process,
   NOP_Process,
   NOP_Process,
@@ -138,7 +144,6 @@ void usbResumeInit(void) {
   _SetCNTR(wCNTR);
 
   /* undo power reduction handlers here */
-
   _SetCNTR(ISR_MSK);
 
 }
@@ -242,7 +247,7 @@ void usbDsbISR(void) {
 }
 
 /* overloaded ISR routine, this is the main usb ISR */
-void usb_lpIRQHandler(void);
+void usb_lpIRQHandler(void) {
 wIstr = _GetISTR();
 
 /* go nuts with the preproc switches since this is an ISTR and must be FAST */
@@ -327,5 +332,12 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask)
     CTR_LP(); /* low priority ISR defined in the usb core lib */
   }
 #endif
+}
 
+void usbSendHello(void) {
+  char* myStr = "HELLO!";
+  char myCh = 'a';
+  UserToPMABufferCopy((uint8*)myStr,VCOM_TX_ADDR,6);
+  _SetEPTxCount(VCOM_TX_ENDP,6);
+  _SetEPTxValid(VCOM_TX_ENDP);
 }

@@ -1,8 +1,21 @@
+/* insert license */
+
+#ifndef __USB_CALLBACKS
+#define __USB_CALLBACKS
+
+#include "libmaple.h"
+#include "usb_lib.h"
+
 #define SET_LINE_CODING        0x20
 #define GET_LINE_CODING        0x21
+#define SET_COMM_FEATURE       0x02
 #define SET_CONTROL_LINE_STATE 0x22
-#define CONTROL_LINE_DTR       (1 << 0)
-#define CONTROL_LINE_RTS       (1 << 1)
+#define CONTROL_LINE_DTR       (0x01)
+#define CONTROL_LINE_RTS       (0x02)
+
+#if defined(__cplusplus)
+extern "C" {
+#endif
 
 typedef struct {
   uint32 bitrate;
@@ -11,12 +24,18 @@ typedef struct {
   uint8  datatype;
 } USB_Line_Coding;
 
+typedef enum {
+  START,
+  NDTR_NRTS,
+  DTR_NRTS
+} RESET_STATE;
+
 void vcomDataTxCb(void);
 void vcomDataRxCb(void);
 void vcomManagementCb(void);
 
-u8* vcomGetSetLineCoding(uint16 length);
-void vcomSetLineSate(uint16 wValue);
+uint8* vcomGetSetLineCoding(uint16 length);
+void vcomSetLineSate(void);
 
 void usbInit(void);
 /* internal functions (as per the usb_core pProperty structure) */
@@ -25,23 +44,21 @@ void usbReset(void);
 void usbStatusIn(void);
 void usbStatusOut(void);
 
-RESULT usbDataSetup(u8 request);
-RESULT usbNoDataSetup(u8 request);
-RESULT usbGetInterfaceSetting(u8,u8);
+RESULT usbDataSetup(uint8 request);
+RESULT usbNoDataSetup(uint8 request);
+RESULT usbGetInterfaceSetting(uint8,uint8);
 
-u8* usbGetDeviceDescriptor(u16 length);
-u8* usbGetConfigDescriptor(u16 length);
-u8* usbGetStringDescriptor(u16 length);
-u8* usbGetFunctionalDescriptor(u16 length);
+uint8* usbGetDeviceDescriptor(uint16 length);
+uint8* usbGetConfigDescriptor(uint16 length);
+uint8* usbGetStringDescriptor(uint16 length);
 
 /* internal callbacks to respond to standard requests */
-void usbGetConfiguration(void);
 void usbSetConfiguration(void);
-void usbGetInterface(void);
-void usbSetInterface(void);
-void usbGetStatus(void);
-void usbClearFeature(void);
-void usbSetEndpointFeature(void);
-void usbSetDeviceFeature(void);
 void usbSetDeviceAddress(void);
 
+#if defined(__cplusplus)
+}
+#endif
+
+
+#endif

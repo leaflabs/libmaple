@@ -17,6 +17,10 @@
 #ifndef __USB_TYPE_H
 #define __USB_TYPE_H
 
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 #ifndef NULL
@@ -54,7 +58,7 @@ typedef enum
 {
   FALSE = 0, TRUE  = !FALSE
 }
-bool;
+USB_Bool;
 
 typedef enum { RESET = 0, SET   = !RESET } FlagStatus, ITStatus;
 
@@ -66,6 +70,10 @@ typedef enum { ERROR = 0, SUCCESS  = !ERROR} ErrorStatus;
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
 /* External variables --------------------------------------------------------*/
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* __USB_TYPE_H */
 

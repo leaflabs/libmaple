@@ -23,10 +23,18 @@
 /* Exported constants --------------------------------------------------------*/
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
+#if defined(__cplusplus)
+extern "C" {
+#endif
+
 void CTR_LP(void);
 void CTR_HP(void);
 
 /* External variables --------------------------------------------------------*/
+
+#if defined(__cplusplus)
+}
+#endif
 
 #endif /* __USB_INT_H */
 

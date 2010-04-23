@@ -29,7 +29,7 @@
  *
  */
 
-#include "hardware.h"
+#include "usb_hardware.h"
 
 void setPin(u32 bank, u8 pin) {
   u32 pinMask = 0x1 << (pin);
@@ -56,9 +56,6 @@ void setupCLK (void) {
   SET_REG(RCC_CR,GET_REG(RCC_CR) | 0x00010001);
   while ((GET_REG(RCC_CR) & 0x00020000) == 0); /* for it to come on */
   
-  /* enable flash prefetch buffer */
-  SET_REG(FLASH_ACR, 0x00000012);
-
   /* Configure PLL */
   SET_REG(RCC_CFGR,GET_REG(RCC_CFGR) | 0x001D0400);  /* pll=72Mhz,APB1=36Mhz,AHB=72Mhz */
   SET_REG(RCC_CR,GET_REG(RCC_CR)     | 0x01000000);  /* enable the pll */

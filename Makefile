@@ -83,6 +83,7 @@ CPPSRC = core/wiring_math.cpp \
 	 core/Print.cpp \
 	 core/comm/HardwareSerial.cpp \
 	 core/comm/HardwareUsb.cpp \
+	 core/comm/HardwareSPI.cpp \
 	 main.cpp
 
 # i really have no idea what i'm doing

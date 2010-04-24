@@ -48,7 +48,7 @@ extern "C" {
 #define CR1_BR_PRESCALE_128         0x00000030
 #define CR1_BR_PRESCALE_256         0x00000038
 
-#define CR1_LSBFIRST                    BIT(7      // data frame format
+#define CR1_LSBFIRST                    BIT(7)     // data frame format
 #define CR1_MSTR                        BIT(2)     // master selection
 #define CR1_SSM                         BIT(9)     // software slave management
 #define CR1_SSI                         BIT(8)     // internal slave select
@@ -97,6 +97,15 @@ void spi_init(uint32 spi_num,
               uint32 endian,
               uint32 mode);
 void spi_tx(uint32 spi_num, uint8 data);
+
+static inline uint8 spi_rx(uint32 spi_num) {
+   SPI *spi;
+
+   ASSERT(spi_num == 1 || spi_num == 2);
+   spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
+
+   return spi->DR;
+}
 
 #ifdef __cplusplus
 }

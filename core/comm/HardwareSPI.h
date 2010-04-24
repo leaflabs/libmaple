@@ -23,27 +23,35 @@
  * ****************************************************************************/
 
 /**
- *  @file libmaple_types.h
- *
- *  @brief libmaple types
+ * @brief HardwareSPI definitions
  */
 
-#ifndef _LIBMAPLE_TYPES_H_
-#define _LIBMAPLE_TYPES_H_
+#ifndef _HARDWARESPI_H_
+#define _HARDWARESPI_H_
 
-typedef unsigned char uint8;
-typedef unsigned short uint16;
-typedef unsigned int uint32;
-typedef unsigned long long uint64;
+typedef enum SPIFrequency {
+   SPI_18MHZ       = 0,
+   SPI_9MHZ        = 1,
+   SPI_4_5MHZ      = 2,
+   SPI_2_25MHZ     = 3,
+   SPI_1_125MHZ    = 4,
+   SPI_562_500KHZ  = 5,
+   SPI_281_250KHZ  = 6,
+   SPI_140_625KHZ  = 7,
+   MAX_SPI_FREQS   = 8,
+} SPIFrequency;
 
-typedef signed char int8;
-typedef short int16;
-typedef int int32;
-typedef long long int64;
+class HardwareSPI {
+   private:
+      uint32 spi_num;
 
-typedef void (*voidFuncPtr)(void);
-
-#define __io volatile
+   public:
+      HardwareSPI(uint32 spi_num);
+      void begin(void);
+      void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
+      void send(uint8 data);
+      uint8 recv(void);
+};
 
 #endif
 

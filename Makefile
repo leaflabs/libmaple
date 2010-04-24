@@ -70,6 +70,7 @@ CSRC = libmaple/systick.c              \
        libmaple/usb.c                  \
        libmaple/rcc.c                  \
        libmaple/flash.c                \
+       libmaple/spi.c                  \
        core/wiring.c 	               \
        core/wiring_shift.c             \
        core/wiring_analog.c            \
@@ -82,6 +83,7 @@ CPPSRC = core/wiring_math.cpp \
 	 core/Print.cpp \
 	 core/comm/HardwareSerial.cpp \
 	 core/comm/HardwareUsb.cpp \
+	 core/comm/HardwareSPI.cpp \
 	 main.cpp
 
 # i really have no idea what i'm doing

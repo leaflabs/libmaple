@@ -26,7 +26,9 @@
  * @brief HardwareSPI "wiring-like" api for SPI
  */
 
-/* Speeds:
+/* NOTES:
+ *
+ * Speeds:
  * -----------------------------------
  * Interface num:     SPI1        SPI2
  * Bus                APB2        APB1
@@ -41,6 +43,8 @@
  * 64:           1 125 000     562 500
  * 128:            562 500     281 250
  * 256:            281 250     140 625
+ *
+ * TODO: Do the complementary PWM outputs mess up SPI2?
  * */
 
 #include "wiring.h"
@@ -57,7 +61,6 @@ static const uint32 prescaleFactors[MAX_SPI_FREQS] = {
    SPI_PRESCALE_128,             // SPI_281_250KHZ
    SPI_PRESCALE_256,             // SPI_140_625KHZ
 };
-
 
 /**
  * @brief Initialize a SPI peripheral
@@ -87,9 +90,15 @@ void HardwareSPI::begin(SPIFrequency freq, uint32 endianness, uint32 mode) {
       return;
    }
 
-   /* SPI1 is too fast for 140625  */
-   if ((spi_num == 1) && (freq == SPI_140_625KHZ)) {
-      return;
+   if (spi_num == 1) {
+      /* SPI1 is too fast for 140625  */
+      if (freq == SPI_140_625KHZ) {
+         return;
+      }
+
+      /* Turn off PWM on shared pins */
+      timers_disable_channel(3, 2);
+      timers_disable_channel(3, 1);
    }
 
    endianness = (endianness == LSBFIRST) ? SPI_LSBFIRST : SPI_MSBFIRST;

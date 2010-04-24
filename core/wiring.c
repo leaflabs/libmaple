@@ -40,11 +40,11 @@ void init(void) {
    nvic_init();
    systick_init();
    gpio_init();
-//   adc_init();
-//   timer_init(1, 1);
-//   timer_init(2, 1);
-//   timer_init(3, 1);
-//   timer_init(4, 1);
+   adc_init();
+   timer_init(1, 1);
+   timer_init(2, 1);
+   timer_init(3, 1);
+   timer_init(4, 1);
 }
 
 void nvic_init(void) {

@@ -396,19 +396,17 @@ uint8 usbBytesAvailable(void) {
    will only copy the minimum of len or the available 
    bytes. returns the number of bytes copied */
 uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
-  uint8 bytesCopied;
-
   if (len > VCOM_RX_EPSIZE - maxNewBytes) {
     len = VCOM_RX_EPSIZE - maxNewBytes;
   }
   
   int i;
   for (i=0;i<len;i++) {
-    *recvBuf++ = vcomBufferRx[(recvBufOut++)%VCOM_RX_EPSIZE];
+    recvBuf[i] = (uint8)(vcomBufferRx[(recvBufOut++)%VCOM_RX_EPSIZE]);
   }
 
-  maxNewBytes += bytesCopied;
-  return bytesCopied;
+  maxNewBytes += len;
+  return len;
 }
 
 void usbSendHello(void) {
@@ -418,4 +416,7 @@ void usbSendHello(void) {
   char *line = "\n";
   while(usbSendBytes(&thisVal,1) == 0);
   while(usbSendBytes((uint8*)line,1) == 0);
+
+  uint8 recv[64];
+  usbReceiveBytes(&recv[0],1);
 }

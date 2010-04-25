@@ -31,9 +31,10 @@ libmaple Repo Layout
     Lowest level definitions, routines, macros, and functions. This is the meat
     of the library.
 
-/core/
+/wirish/
     Extra wrappers and functionality around the lower level code which is 
-    useful for programming in the IDE.
+    useful for programming in the IDE. Files in here implement the "Wirish"
+    language, an Arduino "Wiring"-like language.
 
 /examples/
     What it sounds like. Copy these to /main.cpp to compile them.

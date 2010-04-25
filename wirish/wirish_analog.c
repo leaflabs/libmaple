@@ -23,59 +23,20 @@
  * ****************************************************************************/
 
 /**
- *  @file nvic.c
- *
- *  @brief Nested interrupt controller routines
+ *  @brief 
  */
 
 #include "libmaple.h"
-#include "nvic.h"
-#include "systick.h"
+#include "wirish.h"
+#include "io.h"
 
-void nvic_disable_interrupts(void) {
-    /* Turn off all interrupts  */
-    REG_SET(NVIC_ICER0, 0xFFFFFFFF);
-    REG_SET(NVIC_ICER1, 0xFFFFFFFF);
+extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
-    /* Turn off systick exception  */
-    REG_CLEAR_BIT(SYSTICK_CSR, 0);
-}
+/* Assumes that the ADC has been initialized and
+ * that the pin is set to ANALOG_INPUT */
+uint32 analogRead(uint8 pin) {
+    if (pin >= NR_ANALOG_PINS)
+        return 0;
 
-
-void nvic_set_vector_table(uint32 *addr, uint32 offset) {
-   __write(SCB_VTOR, (uint32)addr | (offset & 0x1FFFFF80));
-}
-
-
-/**
- *  @brief turn on interrupt number n
- *  @param[in] n interrupt number
- */
-void nvic_enable_interrupt(uint32 n) {
-    if (n >= NVIC_NR_INTERRUPTS) {
-        return;
-    }
-
-    if (n < 32) {
-        REG_SET_BIT(NVIC_ISER0, n);
-    } else {
-        REG_SET_BIT(NVIC_ISER1, n - 32);
-    }
-}
-
-
-
-/**
- * @brief Initialice the NVIC at address addr
- * @param addr Address to set the vector table at
- */
-void nvic_init(void) {
-#ifdef VECT_TAB_ROM
-   nvic_set_vector_table(USER_ADDR_ROM, 0x0);
-#elif defined VECT_TAB_RAM
-   nvic_set_vector_table(USER_ADDR_RAM, 0x0);
-#else // VECT_TAB_BASE
-   /* Set the Vector Table base location at 0x08000000 */
-   nvic_set_vector_table(((uint32)0x08000000), 0x0);
-#endif
+    return adc_read(PIN_MAP[pin].adc);
 }

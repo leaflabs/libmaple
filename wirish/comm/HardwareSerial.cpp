@@ -28,7 +28,7 @@
  *  @brief Wiring-like serial api
  */
 
-#include "wiring.h"
+#include "wirish.h"
 #include "HardwareSerial.h"
 #include "usart.h"
 #include "gpio.h"

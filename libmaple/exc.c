@@ -1,3 +1,4 @@
+
 /* *****************************************************************************
  * The MIT License
  *
@@ -22,24 +23,41 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
+/**
+ * @brief libmaple exception handlers. If MAPLE_DEBUG is set, then these
+ * exceptions will ASSERT fail and call into the default _fail() light
+ * blinking.
+ */
+
+#include "util.h"
+
 void NMIException(void) {
+   ASSERT(0);
+   while(1)
+      ;
 }
+
 void HardFaultException(void) {
-  while (1) {
-  }
+   ASSERT(0);
+   while(1)
+      ;
 }
 
 void MemManageException(void) {
-  while (1) {
-  }
+   ASSERT(0);
+   while(1)
+      ;
 }
 
 void BusFaultException(void) {
-  while (1) {
-  }
+   ASSERT(0);
+   while(1)
+      ;
 }
 
 void UsageFaultException(void) {
-  while (1) {
-  }
+   ASSERT(0);
+   while(1)
+      ;
 }
+

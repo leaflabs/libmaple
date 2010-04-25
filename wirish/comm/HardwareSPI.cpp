@@ -79,8 +79,6 @@ static const uint32 prescaleFactors[MAX_SPI_FREQS] = {
  */
 void HardwareSPI::begin(SPIFrequency freq, uint32 endianness, uint32 mode) {
    uint32 spi_num    = this->spi_num;
-   uint32 high_speed = 0;
-   uint32 index;
    uint32 prescale;
 
    if ((freq >= MAX_SPI_FREQS)     ||

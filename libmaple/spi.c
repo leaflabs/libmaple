@@ -65,7 +65,7 @@ static const spi_dev spi_dev2 = {
    .mosi_pin = 15
 };
 
-static void spi_gpio_cfg(spi_dev *dev);
+static void spi_gpio_cfg(const spi_dev *dev);
 
 /**
  * @brief Initialize a spi peripheral
@@ -125,7 +125,7 @@ void spi_tx(uint32 spi_num, uint8 data) {
       ;
 }
 
-static void spi_gpio_cfg(spi_dev *dev) {
+static void spi_gpio_cfg(const spi_dev *dev) {
    gpio_set_mode(dev->port, dev->sck_pin, GPIO_MODE_AF_OUTPUT_PP);
    gpio_set_mode(dev->port, dev->miso_pin, GPIO_MODE_AF_OUTPUT_PP);
    gpio_set_mode(dev->port, dev->mosi_pin, GPIO_MODE_AF_OUTPUT_PP);

@@ -22,63 +22,30 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#ifndef _WIRING_H_
-#define _WIRING_H_
+/**
+ *  @brief 
+ */
 
-#include "libmaple.h"
+#include "wirish.h"
 #include "timers.h"
 #include "io.h"
-#include "binary.h"
-#include "bits.h"
-#include "time.h"
 #include "pwm.h"
-#include "ext_interrupts.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
 
-#define MAPLE 1
-#define NR_MAPLE_PINS   39 // temporary
+void pwmWrite(uint8 pin, uint16 duty_cycle) {
+    TimerCCR ccr;
 
-#define HIGH 0x1
-#define LOW  0x0
+    if (pin >= NR_MAPLE_PINS) {
+        return;
+    }
 
-#define true 0x1
-#define false 0x0
+    ccr = PIN_MAP[pin].timer_channel;
 
-#define SERIAL  0x0
-#define DISPLAY 0x1
+    if (ccr == TIMER_INVALID)
+        return;
 
-#define LSBFIRST 0
-#define MSBFIRST 1
+    timer_pwm_write_ccr(ccr, duty_cycle);
+}
 
-#define USER_ADDR_ROM 0x08005000
-#define USER_ADDR_RAM 0x20000C00
-
-#define lowByte(w) ((w) & 0xff)
-#define highByte(w) ((w) >> 8)
-#define bitRead(value, bit) (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit) ((value) |= (1UL << (bit)))
-#define bitClear(value, bit) ((value) &= ~(1UL << (bit)))
-#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : bitClear(value, bit))
-#define bit(b) (1UL << (b))
-
-
-typedef uint8 boolean;
-typedef uint8 byte;
-
-void init(void);
-unsigned long pulseIn(uint8 pin, uint8 state, unsigned long timeout);
-void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
-
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
-
-
-
-#endif
 

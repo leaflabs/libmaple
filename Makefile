@@ -27,14 +27,14 @@ BUILD_PATH = build
 LIB_PATH = libmaple
 
 OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
-	  $(BUILD_PATH)/core \
-	  $(BUILD_PATH)/core/comm
+	  $(BUILD_PATH)/wirish \
+	  $(BUILD_PATH)/wirish/comm
 
 
 INCLUDES = -I$(LIB_PATH) \
 	   -I./ \
-	   -Icore \
-	   -Icore/comm
+	   -Iwirish \
+	   -Iwirish/comm
 
 # default is to upload to flash
 #DEFFLAGS = VECT_TAB_BASE
@@ -57,33 +57,33 @@ ODFLAGS = -S
 # main source file
 MAIN=main.c
 
-CSRC = libmaple/systick.c              \
-       libmaple/timers.c               \
-       libmaple/adc.c 	               \
-       libmaple/syscalls.c 	       \
-       libmaple/exc.c                  \
-       libmaple/exti.c 	               \
-       libmaple/gpio.c 	               \
-       libmaple/nvic.c 	               \
-       libmaple/usart.c 	       \
-       libmaple/util.c	               \
-       libmaple/usb.c                  \
-       libmaple/rcc.c                  \
-       libmaple/flash.c                \
-       libmaple/spi.c                  \
-       core/wiring.c 	               \
-       core/wiring_shift.c             \
-       core/wiring_analog.c            \
-       core/time.c 		       \
-       core/pwm.c 		       \
-       core/ext_interrupts.c           \
-       core/wiring_digital.c
+CSRC = libmaple/systick.c                \
+       libmaple/timers.c                 \
+       libmaple/adc.c 	                 \
+       libmaple/syscalls.c 	         \
+       libmaple/exc.c                    \
+       libmaple/exti.c 	                 \
+       libmaple/gpio.c 	                 \
+       libmaple/nvic.c 	                 \
+       libmaple/usart.c 	         \
+       libmaple/util.c	                 \
+       libmaple/usb.c                    \
+       libmaple/rcc.c                    \
+       libmaple/flash.c                  \
+       libmaple/spi.c                    \
+       wirish/wirish.c 	                 \
+       wirish/wirish_shift.c             \
+       wirish/wirish_analog.c            \
+       wirish/time.c 		         \
+       wirish/pwm.c 		         \
+       wirish/ext_interrupts.c           \
+       wirish/wirish_digital.c
 
-CPPSRC = core/wiring_math.cpp \
-	 core/Print.cpp \
-	 core/comm/HardwareSerial.cpp \
-	 core/comm/HardwareUsb.cpp \
-	 core/comm/HardwareSPI.cpp \
+CPPSRC = wirish/wirish_math.cpp          \
+	 wirish/Print.cpp 		 \
+	 wirish/comm/HardwareSerial.cpp  \
+	 wirish/comm/HardwareUsb.cpp 	 \
+	 wirish/comm/HardwareSPI.cpp 	 \
 	 main.cpp
 
 # i really have no idea what i'm doing

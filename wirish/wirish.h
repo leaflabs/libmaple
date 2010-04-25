@@ -21,24 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  * ****************************************************************************/
-
 /**
- *  @file wiring_analog.c
+ * @brief Main include file for the Wirish core.
  *
- *  @brief 
+ * Includes various Arduino wiring macros and bit defines
  */
 
+
+#ifndef _WIRISH_H_
+#define _WIRISH_H_
+
 #include "libmaple.h"
-#include "wiring.h"
+#include "timers.h"
 #include "io.h"
+#include "bits.h"
+#include "time.h"
+#include "pwm.h"
+#include "ext_interrupts.h"
 
-extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-/* Assumes that the ADC has been initialized and
- * that the pin is set to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if (pin >= NR_ANALOG_PINS)
-        return 0;
+#define MAPLE 1
+#define NR_MAPLE_PINS   39 // temporary
 
-    return adc_read(PIN_MAP[pin].adc);
-}
+/* Arduino wiring macros and bit defines  */
+#define HIGH 0x1
+#define LOW  0x0
+
+#define true 0x1
+#define false 0x0
+
+#define LSBFIRST 0
+#define MSBFIRST 1
+
+#define USER_ADDR_ROM 0x08005000
+#define USER_ADDR_RAM 0x20000C00
+
+#define lowByte(w)                       ((w) & 0xff)
+#define highByte(w)                      ((w) >> 8)
+#define bitRead(value, bit)              (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit)               ((value) |= (1UL << (bit)))
+#define bitClear(value, bit)             ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue)   (bitvalue ? bitSet(value, bit) :      \
+                                                     bitClear(value, bit))
+#define bit(b)                           (1UL << (b))
+
+typedef uint8 boolean;
+typedef uint8 byte;
+
+void init(void);
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
+
+
+
+
+#endif
+

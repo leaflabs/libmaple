@@ -54,17 +54,21 @@
 
 #define NVIC_NR_INTERRUPTS        60
 
+/* Where to put code  */
+#define USER_ADDR_ROM 0x08005000
+#define USER_ADDR_RAM 0x20000C00
+
 #ifdef __cplusplus
 extern "C"{
 #endif
 
+void nvic_init(void);
 void nvic_disable_interrupts(void);
 void nvic_enable_interrupt(uint32);
 
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif
 

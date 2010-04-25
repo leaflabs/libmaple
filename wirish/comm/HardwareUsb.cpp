@@ -26,7 +26,7 @@
  *  @brief Wiring like serial api to USB virtual COM
  */
 
-#include "wiring.h"
+#include "wirish.h"
 #include "HardwareUsb.h"
 #include "bootVect.h"
 #include "usb.h"

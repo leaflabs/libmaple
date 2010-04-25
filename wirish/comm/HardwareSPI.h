@@ -22,35 +22,36 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#ifndef _WIRING_MATH_H_
-#define _WIRING_MATH_H_
+/**
+ * @brief HardwareSPI definitions
+ */
 
-#include <math.h>
+#ifndef _HARDWARESPI_H_
+#define _HARDWARESPI_H_
 
-void randomSeed(unsigned int);
-long random(long);
-long random(long, long);
-long map(long, long, long, long, long);
+typedef enum SPIFrequency {
+   SPI_18MHZ       = 0,
+   SPI_9MHZ        = 1,
+   SPI_4_5MHZ      = 2,
+   SPI_2_25MHZ     = 3,
+   SPI_1_125MHZ    = 4,
+   SPI_562_500KHZ  = 5,
+   SPI_281_250KHZ  = 6,
+   SPI_140_625KHZ  = 7,
+   MAX_SPI_FREQS   = 8,
+} SPIFrequency;
 
-#define PI 3.1415926535897932384626433832795
-#define HALF_PI 1.5707963267948966192313216916398
-#define TWO_PI 6.283185307179586476925286766559
-#define DEG_TO_RAD 0.017453292519943295769236907684886
-#define RAD_TO_DEG 57.295779513082320876798154814105
+class HardwareSPI {
+   private:
+      uint32 spi_num;
 
-#define min(a,b) ((a)<(b)?(a):(b))
-#define max(a,b) ((a)>(b)?(a):(b))
-#define constrain(amt,low,high) ((amt)<(low)?(low):((amt)>(high)?(high):(amt)))
-#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
-#define radians(deg) ((deg)*DEG_TO_RAD)
-#define degrees(rad) ((rad)*RAD_TO_DEG)
-#define sq(x) ((x)*(x))
-
-/* undefine stdlib's abs if encountered */
-#ifdef abs
-#undef abs
-#endif
-#define abs(x) (((x) > 0)  ?  (x) : -(unsigned)(x))
+   public:
+      HardwareSPI(uint32 spi_num);
+      void begin(void);
+      void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
+      void send(uint8 data);
+      uint8 recv(void);
+};
 
 #endif
 

@@ -28,7 +28,7 @@
  *  @brief Wiring-like interface for external interrupts
  */
 
-#include "wiring.h"
+#include "wirish.h"
 #include "exti.h"
 #include "ext_interrupts.h"
 

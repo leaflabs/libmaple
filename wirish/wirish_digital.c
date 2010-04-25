@@ -23,12 +23,10 @@
  * ****************************************************************************/
 
 /**
- *  @file wiring_digital.c
- *
  *  @brief 
  */
 
-#include "wiring.h"
+#include "wirish.h"
 #include "io.h"
 
 #define ADC0     0

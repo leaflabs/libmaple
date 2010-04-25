@@ -23,31 +23,25 @@
  * ****************************************************************************/
 
 /**
- *  @file pwm.c
- *
- *  @brief 
+ *  @brief Maple board bring up
  */
 
-#include "wiring.h"
-#include "timers.h"
-#include "io.h"
-#include "pwm.h"
+#include "wirish.h"
+#include "rcc.h"
+#include "systick.h"
+#include "gpio.h"
+#include "nvic.h"
 
-extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
-
-void pwmWrite(uint8 pin, uint16 duty_cycle) {
-    TimerCCR ccr;
-
-    if (pin >= NR_MAPLE_PINS) {
-        return;
-    }
-
-    ccr = PIN_MAP[pin].timer_channel;
-
-    if (ccr == TIMER_INVALID)
-        return;
-
-    timer_pwm_write_ccr(ccr, duty_cycle);
+void init(void) {
+   rcc_init();
+   nvic_init();
+   systick_init();
+   gpio_init();
+   adc_init();
+   timer_init(1, 1);
+   timer_init(2, 1);
+   timer_init(3, 1);
+   timer_init(4, 1);
 }
 
 

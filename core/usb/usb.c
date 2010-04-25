@@ -334,10 +334,89 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask)
 #endif
 }
 
+/* copies data out of sendBuf into the packet memory for 
+   usb, but waits until any previous usb transmissions have 
+   completed before doing this. It returns without waiting
+   for its data to be sent. most efficient when 64 bytes are copied
+   at a time. users responsible for not overflowing sendbuf 
+   with len! if > 64 bytes are being sent, then the function
+   will block at every 64 byte packet
+*/
+int16 usbSendBytes(uint8* sendBuf, uint16 len) {
+/*   while (countTx != 0) { */
+/*     if (reset_state == NDTR_NRTS) { */
+/*       return 0; */
+/*     } */
+/*   }/\* wait for pipe to be clear *\/ */
+
+  if (reset_state == NDTR_NRTS) {
+    return -1; /* indicates to caller to stop trying, were not connected */
+  }
+
+  /* ideally we should wait here, but it gets stuck
+     for some reason. countTx wont decrement when 
+     theres no host side port reading the data, this is
+     known, but even if we add the check for NDTR_NRTS it
+     still gets stuck...*/
+  if (countTx != 0) {
+    return 0; /* indicated to caller to keep trying, were just busy */
+  }
+
+  uint16 sent = len; 
+
+  while (len > VCOM_TX_EPSIZE) {
+    countTx = VCOM_TX_EPSIZE;
+
+    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR,VCOM_TX_EPSIZE);
+    _SetEPTxCount(VCOM_TX_ENDP,VCOM_TX_EPSIZE);
+    _SetEPTxValid(VCOM_TX_ENDP);
+
+    while(countTx != 0);
+    len     -= VCOM_TX_EPSIZE;
+    sendBuf += VCOM_TX_EPSIZE;
+  }
+
+  if (len != 0) {
+    countTx = len;
+    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR,len);
+    _SetEPTxCount(VCOM_TX_ENDP,len);
+    _SetEPTxValid(VCOM_TX_ENDP);
+  }
+  
+  return sent;
+}
+
+/* returns the number of available bytes are in the recv FIFO */
+uint8 usbBytesAvailable(void) {
+  return VCOM_RX_EPSIZE - maxNewBytes;
+}
+
+/* copies len bytes from the local recieve FIFO (not 
+   usb packet buffer) into recvBuf and deq's the fifo. 
+   will only copy the minimum of len or the available 
+   bytes. returns the number of bytes copied */
+uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
+  uint8 bytesCopied;
+
+  if (len > VCOM_RX_EPSIZE - maxNewBytes) {
+    len = VCOM_RX_EPSIZE - maxNewBytes;
+  }
+  
+  int i;
+  for (i=0;i<len;i++) {
+    *recvBuf++ = vcomBufferRx[(recvBufOut++)%VCOM_RX_EPSIZE];
+  }
+
+  maxNewBytes += bytesCopied;
+  return bytesCopied;
+}
+
 void usbSendHello(void) {
-  char* myStr = "HELLO!";
-  char myCh = 'a';
-  UserToPMABufferCopy((uint8*)myStr,VCOM_TX_ADDR,6);
-  _SetEPTxCount(VCOM_TX_ENDP,6);
-  _SetEPTxValid(VCOM_TX_ENDP);
+  char* myStr = "hello!";
+
+  uint8 thisVal = 48 + usbBytesAvailable();
+  char *line = "\n";
+  while(usbSendBytes(&thisVal,1) == 0);
+  while(usbSendBytes((uint8*)line,1) == 0);
+  GetEPTxCount(1);
 }

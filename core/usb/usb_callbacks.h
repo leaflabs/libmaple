@@ -5,6 +5,7 @@
 
 #include "libmaple.h"
 #include "usb_lib.h"
+#include "usb_config.h"
 
 #define SET_LINE_CODING        0x20
 #define GET_LINE_CODING        0x21
@@ -29,6 +30,13 @@ typedef enum {
   NDTR_NRTS,
   DTR_NRTS
 } RESET_STATE;
+
+extern RESET_STATE reset_state;  /* tracks DTR/RTS */
+extern uint8 countTx;
+extern uint8 vcomBufferRx[VCOM_RX_EPSIZE];  /* no reason this has to be VCOM_RX_EPSIZE, could be bigger */
+extern uint8 recvBufIn;   /* the FIFO in index to the recvbuffer */
+extern uint8 recvBufOut;  /* the FIFO out index to the recvbuffer */
+extern uint8 maxNewBytes;
 
 void vcomDataTxCb(void);
 void vcomDataRxCb(void);

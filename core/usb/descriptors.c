@@ -143,7 +143,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
    which is 0x0409 for US English
 */
 
-uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] = 
+const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] = 
 {
   USB_DESCRIPTOR_STRING_LEN(1),
   USB_DESCRIPTOR_TYPE_STRING,
@@ -151,7 +151,7 @@ uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] =
   0x04
 };
 
-uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] = 
+const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] = 
 {
   USB_DESCRIPTOR_STRING_LEN(8),
   USB_DESCRIPTOR_TYPE_STRING,
@@ -159,7 +159,7 @@ uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] =
   'L', 0, 'a', 0, 'b', 0, 's', 0
 };
 
-uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = 
+const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = 
 {
   USB_DESCRIPTOR_STRING_LEN(8),
   USB_DESCRIPTOR_TYPE_STRING,

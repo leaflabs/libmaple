@@ -33,6 +33,8 @@
 #define GPIOA ((u32)0x40010800)
 #define GPIOC ((u32)0x40011000)
 
+#define USB_PACKET_BUFFER ((u32)0x40006000)
+
 #define RCC_CR      RCC
 #define RCC_CFGR    RCC + 0x04
 #define RCC_CIR     RCC + 0x08

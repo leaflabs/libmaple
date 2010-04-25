@@ -31,28 +31,54 @@ USB_Line_Coding line_coding = {
  datatype:    0x08
 };
 
-uint8 vcomBufferTx[VCOM_TX_EPSIZE];
 uint8 vcomBufferRx[VCOM_RX_EPSIZE];
-uint8 countTx = 0;
-uint8 countRx = 0;
+uint8 countTx    = 0;
+uint8 recvBufIn  = 0;
+uint8 recvBufOut = 0;
+uint8 maxNewBytes   = VCOM_RX_EPSIZE;
 
 RESET_STATE reset_state = START;
 
 void vcomDataTxCb(void) {
   /* do whatever after data has been sent to host */
+
+  /* allows usbSendBytes to stop blocking */
+
+
   countTx = 0;
 }
 
+/* we could get arbitrarily complicated here for speed purposes
+   however, the simple scheme here is to implement a receive fifo
+   and always set the maximum to new bytes to the space remaining
+   in the fifo. this number will be reincremented after calls
+   to usbReceiveBytes */
 void vcomDataRxCb(void) {
   /* do whatever after data has been received from host */
- /*  countRx = GetEPRxCount(VCOM_RX_ENDP); */
-/*   PMAToUserBufferCopy(vcomBufferRx,VCOM_RX_ADDR,countRx); */
-/*   SetEPRxValid(VCOM_RX_ENDP); */
 
-/*   countTx = countRx; */
-/*   UserToPMABufferCopy(vcomBufferRx,VCOM_TX_ADDR,countTx); */
-/*   SetEPTxCount(VCOM_TX_ENDP,countTx); */
-/*   SetEPTxValid(VCOM_TX_ENDP); */
+  /* setEPRxCount on the previous cycle should garuntee
+     we havnt received more bytes than we can fit */
+  uint8 newBytes = _GetEPRxCount(VCOM_RX_ENDP);
+  /* assert (newBytes <= maxNewBytes); */
+
+  if (recvBufIn + newBytes < VCOM_RX_EPSIZE) {
+    PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,newBytes);
+    recvBufIn += newBytes;
+  } else {
+    /* we have to copy the data in two chunks because we roll over
+       the edge of the circular buffer */
+    uint8 tailBytes = VCOM_RX_EPSIZE - recvBufIn;
+    uint8 remaining = newBytes - tailBytes;
+
+    PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,tailBytes);
+    PMAToUserBufferCopy(&vcomBufferRx[0],        VCOM_RX_ADDR,remaining);
+
+    recvBufIn += (newBytes % VCOM_RX_EPSIZE);
+  }
+  
+  maxNewBytes    -= newBytes;
+  SetEPRxCount(VCOM_RX_ENDP,maxNewBytes);
+  SetEPRxValid(VCOM_RX_ENDP);
 }
 
 void vcomManagementCb(void) {
@@ -115,12 +141,18 @@ void usbReset(void) {
 
   /* setup data endpoint IN (tx)  */
   SetEPType     (VCOM_TX_ENDP, EP_BULK);
-  SetEPRxAddr   (VCOM_TX_ENDP, VCOM_TX_ADDR);
+  SetEPTxAddr   (VCOM_TX_ENDP, VCOM_TX_ADDR);
   SetEPTxStatus (VCOM_TX_ENDP, EP_TX_NAK);
   SetEPRxStatus (VCOM_TX_ENDP, EP_RX_DIS);
 
   bDeviceState = ATTACHED;
   SetDeviceAddress(0);
+
+  /* reset the rx fifo */
+  recvBufIn   = 0;
+  recvBufOut  = 0;
+  maxNewBytes = VCOM_RX_EPSIZE;
+  countTx     = 0;
 }
 
 

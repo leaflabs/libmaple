@@ -29,7 +29,7 @@
 
 #define VCOM_RX_ENDP              ENDP3
 #define VCOM_RX_EPNUM             0x03
-#define VCOM_RX_ADDR              0x140
+#define VCOM_RX_ADDR              0x110
 #define VCOM_RX_EPSIZE            0x40
 
 #define bMaxPacketSize            0x40  /* 64B, maximum for USB FS Devices */

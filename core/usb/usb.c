@@ -402,7 +402,8 @@ uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
   
   int i;
   for (i=0;i<len;i++) {
-    recvBuf[i] = (uint8)(vcomBufferRx[(recvBufOut++)%VCOM_RX_EPSIZE]);
+    recvBuf[i] = (uint8)(vcomBufferRx[recvBufOut]);
+    recvBufOut = (recvBufOut + 1) % VCOM_RX_EPSIZE;
   }
 
   maxNewBytes += len;
@@ -412,9 +413,12 @@ uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
 void usbSendHello(void) {
   char* myStr = "hello!";
 
-  uint8 thisVal = 48 + usbBytesAvailable();
+  uint8 bufin = 48 + recvBufIn;;
+  uint8 bufout = 48 + recvBufOut;
+
   char *line = "\n";
-  while(usbSendBytes(&thisVal,1) == 0);
+  while(usbSendBytes(&bufin,1) == 0);
+  while(usbSendBytes(&bufout,1) == 0);
   while(usbSendBytes((uint8*)line,1) == 0);
 
   uint8 recv[64];

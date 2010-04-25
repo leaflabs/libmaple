@@ -73,7 +73,7 @@ void vcomDataRxCb(void) {
     PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,tailBytes);
     PMAToUserBufferCopy(&vcomBufferRx[0],        VCOM_RX_ADDR,remaining);
 
-    recvBufIn += (newBytes % VCOM_RX_EPSIZE);
+    recvBufIn = (recvBufIn + newBytes ) % VCOM_RX_EPSIZE;
   }
   
   maxNewBytes    -= newBytes;

@@ -48,6 +48,7 @@ typedef enum
 
   /* overloaded ISR routine, this is the main usb ISR */
   void usb_lpIRQHandler(void);
+  void usbWaitReset(void);
 
   /* blocking functions for send/receive */
   int16 usbSendBytes(uint8* sendBuf,uint16 len);

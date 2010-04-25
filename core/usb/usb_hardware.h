@@ -28,6 +28,10 @@
 #include "usb_type.h"
 
 /* macro'd register and peripheral definitions */
+#define EXC_RETURN 0xFFFFFFF9
+#define DEFAULT_CPSR 0x61000000
+#define STACK_TOP 0x20005000
+
 #define RCC   ((u32)0x40021000)
 #define FLASH ((u32)0x40022000)
 #define GPIOA ((u32)0x40010800)

@@ -28,7 +28,9 @@ typedef struct {
 typedef enum {
   START,
   NDTR_NRTS,
-  DTR_NRTS
+  DTR_NRTS,
+  RESET_NEXT,
+  RESET_NOW
 } RESET_STATE;
 
 extern RESET_STATE reset_state;  /* tracks DTR/RTS */

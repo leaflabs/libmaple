@@ -199,9 +199,11 @@ jtag: $(BUILD_PATH)/main.bin
 	@echo "JTAG build"
 
 program_ram: ram 
+#	./reset.py
 	$(DFU) -a0 -d 0110:1001 -D build/main.bin -R
 
 program_flash: flash
+	./reset.py
 	$(DFU) -a1 -d 0110:1001 -D build/main.bin -R
 
 program_jtag: jtag

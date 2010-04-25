@@ -5,6 +5,7 @@
 
 # Change this
 DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
+WORK_DEST=`pwd`/../maple-ide/build/linux/work/hardware/leaflabs/cores/maple/
 
 ARCH=`uname -a`
 
@@ -39,6 +40,28 @@ FILES="LICENSE
     ./libmaple/adc.c
     ./libmaple/flash.c
     ./libmaple/gpio.c
+    ./wirish/usb/usb_lib/usb_core.c
+    ./wirish/usb/usb_lib/usb_core.h
+    ./wirish/usb/usb_lib/usb_def.h
+    ./wirish/usb/usb_lib/usb_init.c
+    ./wirish/usb/usb_lib/usb_init.h
+    ./wirish/usb/usb_lib/usb_int.c
+    ./wirish/usb/usb_lib/usb_int.h
+    ./wirish/usb/usb_lib/usb_lib.h
+    ./wirish/usb/usb_lib/usb_mem.c
+    ./wirish/usb/usb_lib/usb_mem.h
+    ./wirish/usb/usb_lib/usb_regs.c
+    ./wirish/usb/usb_lib/usb_regs.h
+    ./wirish/usb/usb_lib/usb_type.h
+    ./wirish/usb/descriptors.c
+    ./wirish/usb/descriptors.h
+    ./wirish/usb/usb_callbacks.h
+    ./wirish/usb/usb_callbacks.c
+    ./wirish/usb/usb_config.h
+    ./wirish/usb/usb.h
+    ./wirish/usb/usb.c
+    ./wirish/usb/usb_hardware.c
+    ./wirish/usb/usb_hardware.h
     ./wirish/bits.h
     ./wirish/ext_interrupts.c
     ./wirish/ext_interrupts.h
@@ -79,4 +102,16 @@ cp -v stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
 # Finally delete and copy the source files
 rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
 cp -v $FILES $DEST
+
+# if a working directory already exists, copy in there too so we 
+# dont have to rebuild the ide just to change the lib out
+if (test -d $DEST_WORD)
+then
+# Then copy over linker files
+    cp -v stm32conf/* $WORK_DEST
+    cp -v stm32conf/lanchon-stm32/* $WORK_DEST/lanchon-stm32
+
+# Finally the source files
+    cp -v $FILES $WORK_DEST
+fi
 

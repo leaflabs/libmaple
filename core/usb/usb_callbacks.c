@@ -232,11 +232,19 @@ RESULT usbNoDataSetup(u8 request) {
 
         case DTR_NRTS: 
 	  if (new_signal == 0) {
-	    systemHardReset();
+	    /* dont reset here, otherwise
+	       well likely crash the host! */
+	    reset_state = RESET_NOW;
 	  } else {
 	    reset_state = START;
 	  }
 	  break;
+      case RESET_NEXT:
+	reset_state = RESET_NOW;
+	break;
+      case RESET_NOW:
+      /* do nothing, wait for reset */
+	break;
       }
       return USB_SUCCESS;
     }

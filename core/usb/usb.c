@@ -418,5 +418,4 @@ void usbSendHello(void) {
   char *line = "\n";
   while(usbSendBytes(&thisVal,1) == 0);
   while(usbSendBytes((uint8*)line,1) == 0);
-  GetEPTxCount(1);
 }

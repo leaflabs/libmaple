@@ -58,7 +58,7 @@ void vcomDataRxCb(void) {
 
   /* setEPRxCount on the previous cycle should garuntee
      we havnt received more bytes than we can fit */
-  uint8 newBytes = _GetEPRxCount(VCOM_RX_ENDP);
+  uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
   /* assert (newBytes <= maxNewBytes); */
 
   if (recvBufIn + newBytes < VCOM_RX_EPSIZE) {
@@ -82,7 +82,7 @@ void vcomDataRxCb(void) {
 }
 
 void vcomManagementCb(void) {
-  /* unused. This enpoint would callback if we had sent a linestate
+/* unused. This enpoint would callback if we had sent a linestate
      changed notification */
 }
 
@@ -133,11 +133,17 @@ void usbReset(void) {
   SetEPRxStatus (VCOM_NOTIFICATION_ENDP,     EP_RX_DIS);
 
   /* setup data endpoint OUT (rx) */
-  SetEPType     (VCOM_RX_ENDP, EP_BULK);
-  SetEPRxAddr   (VCOM_RX_ENDP, VCOM_RX_ADDR);
-  SetEPRxCount  (VCOM_RX_ENDP, VCOM_RX_EPSIZE);
-  SetEPTxStatus (VCOM_RX_ENDP, EP_TX_DIS);
-  SetEPRxStatus (VCOM_RX_ENDP, EP_RX_VALID);
+/*   SetEPType     (VCOM_RX_ENDP, EP_BULK); */
+/*   SetEPRxAddr   (VCOM_RX_ENDP, VCOM_RX_ADDR); */
+/*   SetEPRxCount  (VCOM_RX_ENDP, VCOM_RX_EPSIZE); */
+/*   // SetEPTxStatus (VCOM_RX_ENDP, EP_TX_DIS); */
+/*   SetEPRxStatus (VCOM_RX_ENDP, EP_RX_VALID); */
+
+  SetEPType     (3, EP_BULK);
+  SetEPRxAddr   (3, 0x110);
+  SetEPRxCount  (3,64);
+  // SetEPTxStatus (VCOM_RX_ENDP, EP_TX_DIS);
+  SetEPRxStatus (3, EP_RX_VALID);
 
   /* setup data endpoint IN (tx)  */
   SetEPType     (VCOM_TX_ENDP, EP_BULK);

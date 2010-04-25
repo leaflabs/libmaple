@@ -17,15 +17,15 @@
 #define VCOM_CTRL_TX_ADDR         0x80
 #define VCOM_CTRL_EPSIZE          0x40
 
-#define VCOM_NOTIFICATION_ENDP    ENDP2
-#define VCOM_NOTIFICATION_EPNUM   0x02
-#define VCOM_NOTIFICATION_ADDR    0x100
-#define VCOM_NOTIFICATION_EPSIZE  0x40
-
 #define VCOM_TX_ENDP              ENDP1
 #define VCOM_TX_EPNUM             0x01
 #define VCOM_TX_ADDR              0xC0
 #define VCOM_TX_EPSIZE            0x40
+
+#define VCOM_NOTIFICATION_ENDP    ENDP2
+#define VCOM_NOTIFICATION_EPNUM   0x02
+#define VCOM_NOTIFICATION_ADDR    0x100
+#define VCOM_NOTIFICATION_EPSIZE  0x40
 
 #define VCOM_RX_ENDP              ENDP3
 #define VCOM_RX_EPNUM             0x03
@@ -34,7 +34,7 @@
 
 #define bMaxPacketSize            0x40  /* 64B, maximum for USB FS Devices */
 
-#define NUM_ENDPTS                0x03
+#define NUM_ENDPTS                0x04
 
 /* handle all usb interrupts */
 #define ISR_MSK ( CNTR_CTRM    |           \

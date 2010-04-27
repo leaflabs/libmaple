@@ -119,7 +119,11 @@ void HardwareSPI::begin(void) {
  * @param data byte to send
  */
 void HardwareSPI::send(uint8 data) {
-   spi_tx(this->spi_num, data);
+   spi_tx_byte(this->spi_num, data);
+}
+
+void HardwareSPI::send(uint8 *buf, uint32 len) {
+   spi_tx(this->spi_num, buf, len);
 }
 
 

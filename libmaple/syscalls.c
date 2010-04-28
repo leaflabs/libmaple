@@ -111,7 +111,9 @@ int _read(int fd, char *buf, size_t cnt)
 
 void putch(unsigned char c)
 {
-//    if (c == '\n') putch('\r');
+    if (c == '\n')
+       usart_putc(2,('\r'));
+    usart_putc(2, c);
 
 //    while (!(USART2->SR & USART_FLAG_TXE));
 //    USART2->DR = c;

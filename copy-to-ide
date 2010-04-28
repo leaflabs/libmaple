@@ -8,58 +8,62 @@ DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
 
 ARCH=`uname -a`
 
-FILES="libmaple/adc.c
-    libmaple/adc.h
-    libmaple/bootVect.h
-    libmaple/exc.c
-    libmaple/exti.c
-    libmaple/exti.h
-    libmaple/flash.c
-    libmaple/flash.h
-    libmaple/gpio.c
-    libmaple/gpio.h
-    libmaple/libmaple.h
-    libmaple/libmaple_types.h
-    libmaple/nvic.c
-    libmaple/nvic.h
-    libmaple/rcc.c
-    libmaple/rcc.h
-    libmaple/syscalls.c
-    libmaple/systick.c
-    libmaple/systick.h
-    libmaple/timers.c
-    libmaple/timers.h
-    libmaple/usart.c
-    libmaple/usart.h
-    libmaple/usb.c
-    libmaple/usb.h
-    libmaple/usb_regs.h
-    libmaple/util.c
-    libmaple/util.h
-    core/binary.h
-    core/bits.h
-    core/ext_interrupts.c
-    core/ext_interrupts.h
-    core/io.h
-    core/main.cxx
-    core/Print.cpp
-    core/Print.h
-    core/pwm.c
-    core/pwm.h
-    core/time.c
-    core/time.h
-    core/wiring_analog.c
-    core/wiring.c
-    core/wiring_digital.c
-    core/wiring.h
-    core/wiring_math.cpp
-    core/wiring_math.h
-    core/wiring_shift.c
-    core/WProgram.h
-    core/comm/HardwareSerial.cpp
-    core/comm/HardwareSerial.h
-    core/comm/HardwareUsb.cpp
-    core/comm/HardwareUsb.h"
+FILES="LICENSE
+    ./libmaple/nvic.h
+    ./libmaple/util.h
+    ./libmaple/adc.h
+    ./libmaple/usb_regs.h
+    ./libmaple/rcc.h
+    ./libmaple/exti.h
+    ./libmaple/usart.h
+    ./libmaple/usb.h
+    ./libmaple/timers.h
+    ./libmaple/bootVect.h
+    ./libmaple/systick.h
+    ./libmaple/flash.h
+    ./libmaple/spi.h
+    ./libmaple/gpio.h
+    ./libmaple/libmaple.h
+    ./libmaple/libmaple_types.h
+    ./libmaple/rcc.c
+    ./libmaple/exti.c
+    ./libmaple/syscalls.c
+    ./libmaple/usart.c
+    ./libmaple/systick.c
+    ./libmaple/util.c
+    ./libmaple/exc.c
+    ./libmaple/nvic.c
+    ./libmaple/spi.c
+    ./libmaple/timers.c
+    ./libmaple/usb.c
+    ./libmaple/adc.c
+    ./libmaple/flash.c
+    ./libmaple/gpio.c
+    ./wirish/bits.h
+    ./wirish/ext_interrupts.c
+    ./wirish/ext_interrupts.h
+    ./wirish/io.h
+    ./wirish/main.cxx
+    ./wirish/Print.cpp
+    ./wirish/Print.h
+    ./wirish/pwm.c
+    ./wirish/pwm.h
+    ./wirish/time.c
+    ./wirish/time.h
+    ./wirish/wirish_analog.c
+    ./wirish/wirish.c
+    ./wirish/wirish_digital.c
+    ./wirish/wirish.h
+    ./wirish/wirish_math.cpp
+    ./wirish/wirish_math.h
+    ./wirish/wirish_shift.c
+    ./wirish/WProgram.h
+    ./wirish/comm/HardwareSerial.cpp
+    ./wirish/comm/HardwareSerial.h
+    ./wirish/comm/HardwareSPI.cpp
+    ./wirish/comm/HardwareSPI.h
+    ./wirish/comm/HardwareUsb.cpp
+    ./wirish/comm/HardwareUsb.h"
 
 # First see if this folder exists
 if !(test -d $DEST/lanchon-stm32)
@@ -71,6 +75,7 @@ fi
 cp -v stm32conf/* $DEST
 cp -v stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
 
-# Finally the source files
+# Finally delete and copy the source files
+rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
 cp -v $FILES $DEST
 

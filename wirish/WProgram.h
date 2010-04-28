@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#include "wiring.h"
+#include "wirish.h"
 #include "HardwareSerial.h"
 #include "HardwareUsb.h"
 #include "math.h"

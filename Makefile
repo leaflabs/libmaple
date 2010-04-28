@@ -40,7 +40,8 @@ INCLUDES   = -I$(LIB_PATH)                     \
 	     -Iwirish                          \
 	     -Iwirish/comm                     \
 	     -I$(LIB_PATH)/usb                 \
-	     -I$(LIB_PATH)/usb/usb_lib
+	     -I$(LIB_PATH)/usb/usb_lib         \
+	     -Ilibraries/ethernet
 
 CFLAGS     = $(INCLUDES) -c                    \
              -Os                               \

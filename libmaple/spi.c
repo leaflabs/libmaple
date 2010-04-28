@@ -130,7 +130,8 @@ uint8 spi_tx_byte(uint32 spi_num, uint8 data) {
 
 uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len) {
    SPI *spi;
-   uint32 i;
+   uint32 i = 0;
+   uint8 rc;
 
    ASSERT(spi_num == 1 || spi_num == 2);
    spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
@@ -140,13 +141,15 @@ uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len) {
    }
 
    while (i < len) {
-      spi->DR = buf[len];
+      spi->DR = buf[i];
       while (!(spi->SR & SR_TXE) ||
-              (spi->SR & SR_BSY))
+              (spi->SR & SR_BSY) ||
+             !(spi->SR & SR_RXNE))
          ;
+      rc = spi->DR;
       i++;
    }
-   return spi->DR;
+   return rc;
 }
 
 static void spi_gpio_cfg(const spi_dev *dev) {

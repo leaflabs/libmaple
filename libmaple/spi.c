@@ -112,7 +112,7 @@ void spi_init(uint32 spi_num,
  * @param spi_num which spi to send on
  * @return data shifted back from the slave
  */
-void spi_tx(uint32 spi_num, uint8 data) {
+uint8 spi_tx_byte(uint32 spi_num, uint8 data) {
    SPI *spi;
 
    ASSERT(spi_num == 1 || spi_num == 2);
@@ -121,8 +121,35 @@ void spi_tx(uint32 spi_num, uint8 data) {
 
    spi->DR = data;
 
-   while (!(spi->SR & SR_TXE) || (spi->SR & SR_BSY))
+   while (!(spi->SR & SR_TXE) ||
+           (spi->SR & SR_BSY))
       ;
+
+   return spi->DR;
+}
+
+uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len) {
+   SPI *spi;
+   uint32 i = 0;
+   uint8 rc;
+
+   ASSERT(spi_num == 1 || spi_num == 2);
+   spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
+
+   if (!len) {
+      return 0;
+   }
+
+   while (i < len) {
+      spi->DR = buf[i];
+      while (!(spi->SR & SR_TXE) ||
+              (spi->SR & SR_BSY) ||
+             !(spi->SR & SR_RXNE))
+         ;
+      rc = spi->DR;
+      i++;
+   }
+   return rc;
 }
 
 static void spi_gpio_cfg(const spi_dev *dev) {

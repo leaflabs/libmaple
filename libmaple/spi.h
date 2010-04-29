@@ -96,7 +96,8 @@ void spi_init(uint32 spi_num,
               uint32 prescale,
               uint32 endian,
               uint32 mode);
-void spi_tx(uint32 spi_num, uint8 data);
+uint8 spi_tx_byte(uint32 spi_num, uint8 data);
+uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len);
 
 static inline uint8 spi_rx(uint32 spi_num) {
    SPI *spi;

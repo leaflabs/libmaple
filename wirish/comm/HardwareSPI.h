@@ -49,7 +49,8 @@ class HardwareSPI {
       HardwareSPI(uint32 spi_num);
       void begin(void);
       void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
-      void send(uint8 data);
+      uint8 send(uint8 data);
+      uint8 send(uint8 *data, uint32 length);
       uint8 recv(void);
 };
 

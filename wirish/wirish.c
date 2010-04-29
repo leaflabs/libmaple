@@ -43,5 +43,3 @@ void init(void) {
    timer_init(3, 1);
    timer_init(4, 1);
 }
-
-

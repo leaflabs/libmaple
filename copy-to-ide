@@ -58,6 +58,7 @@ FILES="LICENSE
     ./wirish/wirish_math.h
     ./wirish/wirish_shift.c
     ./wirish/WProgram.h
+    ./wirish/cxxabi-compat.cpp
     ./wirish/comm/HardwareSerial.cpp
     ./wirish/comm/HardwareSerial.h
     ./wirish/comm/HardwareSPI.cpp

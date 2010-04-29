@@ -23,52 +23,49 @@
  * ****************************************************************************/
 
 /**
- *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2
- *  and turns on PWM on pin 2
+ *  @brief Sample main.cpp file. Sends "Hello world!" out SPI1.
+ *
+ *  SPI1 is set up to be a master transmitter at 4.5MHz, little endianness,
+ *  and SPI mode 0.
+ *
+ *  Pin 10 is used as Chip Select
+ *
  */
 
 #include "wirish.h"
-#include "HardwareSerial.h"
-#include "HardwareUsb.h"
-#include "usb.h"
+#include "HardwareSPI.h"
 
-#define LED_PIN 13
-#define PWM_PIN  2
+#define CS      10
 
-HardwareUsb Usb;
+byte buf[] = "Hello world!";
 
-void setup()
-{
-    /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
+HardwareSPI spi1(1);
 
-    /* Send a message out USART2  */
-    Serial2.begin(9600);
-    Serial2.println("Hello world!");
+void setup() {
+   /* Set up chip select as output  */
+   pinMode(CS, OUTPUT);
 
-    /* Turn on PWM on pin PWM_PIN */
-    pinMode(PWM_PIN, PWM);
-    pwmWrite(PWM_PIN, 0x8000);
+   /* CS is usually active low, so initialize it high  */
+   digitalWrite(CS, HIGH);
 
-    /* Send a message out the USB virtual com port  */
-    Usb.println("Hello world!");
+   /* Initialize SPI   */
+   spi1.begin(SPI_4_5MHZ, LSBFIRST, 0);
 }
-
-int toggle = 0;
 
 void loop() {
-    toggle ^= 1;
-    digitalWrite(LED_PIN, toggle);
-    delay(100);
+   /* Send message  */
+   digitalWrite(CS, LOW);
+   spi1.send(buf, sizeof buf);
+   digitalWrite(CS,HIGH);
+   delay(1000);
 }
 
-
 int main(void) {
-    init();
-    setup();
+   init();
+   setup();
 
-    while (1) {
-        loop();
-    }
-    return 0;
+   while (1) {
+      loop();
+   }
+   return 0;
 }

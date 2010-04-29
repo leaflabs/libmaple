@@ -23,20 +23,10 @@
  * ****************************************************************************/
 
 /**
- *  @file example_main_blinky.cpp
- *
- *  @brief Example main.cpp. Blinks the LED, pin 13
+ *  @brief blinky.cpp. Blinks the LED, pin 13
  */
 
-#ifndef _EXAMPLE_MAIN_BLINKY_H_
-#define _EXAMPLE_MAIN_BLINKY_H_
-
-#endif
-#include "wiring.h"
-#include "HardwareSerial.h"
-#include "wiring_math.h"
-#include "HardwareUsb.h"
-#include "usb.h"
+#include "wirish.h"
 
 #define TEST_PIN 13
 
@@ -60,12 +50,4 @@ int main(void) {
         loop();
     }
     return 0;
-}
-
-/* Required for C++ hackery */
-/* TODO: This really shouldn't go here... move it later
- * */
-extern "C" void __cxa_pure_virtual(void) {
-    while(1)
-        ;
 }

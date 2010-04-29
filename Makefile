@@ -44,7 +44,7 @@ CFLAGS  =  $(INCLUDES) -c \
            -ffunction-sections -fdata-sections -Wl,--gc-sections \
 	   -D$(DEFFLAGS)
 
-CPPFLAGS = -fno-rtti -fno-exceptions -Wall
+CXXFLAGS = -fno-rtti -fno-exceptions -Wall
 
 #LINKER=lanchon-stm32.ld
 LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
@@ -84,6 +84,7 @@ CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/comm/HardwareSerial.cpp  \
 	 wirish/comm/HardwareUsb.cpp 	 \
 	 wirish/comm/HardwareSPI.cpp 	 \
+	 wirish/cxxabi-compat.cpp 	 \
 	 main.cpp
 
 # i really have no idea what i'm doing
@@ -144,7 +145,7 @@ $(COBJ) : $(BUILD_PATH)/%.o : %.c
 
 $(CPPOBJ) : $(BUILD_PATH)/%.o : %.cpp
 	@echo $(MSG_COMPILING) $<
-	$(CPP) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+	$(CPP) $(CFLAGS) $(CXXFLAGS) -c $< -o $@
 	@echo
 
 # targets

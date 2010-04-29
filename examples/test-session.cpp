@@ -527,10 +527,3 @@ int main(void) {
     return 0;
 }
 
-/* Required for C++ hackery */
-/* TODO: This really shouldn't go here... move it later
- * */
-extern "C" void __cxa_pure_virtual(void) {
-    while(1)
-        ;
-}

@@ -1,15 +1,17 @@
 Quick TODO --------------------------------------------------------------------
 
 - cleanup core/comm usb stuff 
-- support i2c in hardware (and a soft master mode?)
-- cleanup license headers
+- write language unit test
+- more maple-specific example programs
+- write gnu-toolchain howto
+- rewrite linker scripts and loader code
 
 Peripherals -------------------------------------------------------------------
 
 - complete timers and interrupt stuff
-- I2C
-- SPI
-- EEPROM
+- I2C wrap up
+- SPI wrap up
+- EEPROM emulation with flash
 
 Arduino Library functions to port (these are LGPL) ----------------------------
 

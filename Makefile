@@ -58,9 +58,6 @@ LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
 CPFLAGS = -v -Obinary
 ODFLAGS = -S
 
-# main source file
-MAIN=main.cpp
-
 CSRC = libmaple/systick.c                \
        libmaple/timers.c                 \
        libmaple/adc.c 	                 \
@@ -96,6 +93,7 @@ CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/comm/HardwareSerial.cpp  \
 	 wirish/comm/HardwareSPI.cpp 	 \
 	 wirish/cxxabi-compat.cpp 	 \
+   	 main.cpp
 
 # i really have no idea what i'm doing
 meep += $(CSRC)

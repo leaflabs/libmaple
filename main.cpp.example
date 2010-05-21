@@ -34,8 +34,6 @@
 #define LED_PIN 13
 #define PWM_PIN  2
 
-HardwareUsb Usb;
-
 void setup()
 {
     /* Set up the LED to blink  */

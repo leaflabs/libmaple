@@ -65,47 +65,47 @@ typedef struct {
 } USB_Descriptor_Device;
 
 typedef struct {
-  uint8_t                 bLength;
-  uint8_t                 bDescriptorType;
-  uint16_t                wTotalLength;
-  uint8_t                 bNumInterfaces;
-  uint8_t                 bConfigurationValue;
-  uint8_t                 iConfiguration;
-  uint8_t                 bmAttributes;
-  uint8_t                 bMaxPower;
+  uint8                 bLength;
+  uint8                 bDescriptorType;
+  uint16                wTotalLength;
+  uint8                 bNumInterfaces;
+  uint8                 bConfigurationValue;
+  uint8                 iConfiguration;
+  uint8                 bmAttributes;
+  uint8                 bMaxPower;
 } USB_Descriptor_Config_Header;
 
 typedef struct {
-  uint8_t                 bLength;
-  uint8_t                 bDescriptorType;
-  uint8_t                 bInterfaceNumber;
-  uint8_t                 bAlternateSetting;
-  uint8_t                 bNumEndpoints;
-  uint8_t                 bInterfaceClass;
-  uint8_t                 bInterfaceSubClass;
-  uint8_t                 bInterfaceProtocol;
-  uint8_t                 iInterface;
+  uint8                 bLength;
+  uint8                 bDescriptorType;
+  uint8                 bInterfaceNumber;
+  uint8                 bAlternateSetting;
+  uint8                 bNumEndpoints;
+  uint8                 bInterfaceClass;
+  uint8                 bInterfaceSubClass;
+  uint8                 bInterfaceProtocol;
+  uint8                 iInterface;
 } USB_Descriptor_Interface;
 
 typedef struct {
-  uint8_t                 bLength;
-  uint8_t                 bDescriptorType;
-  uint8_t                 bEndpointAddress;
-  uint8_t                 bmAttributes;
-  uint16_t                wMaxPacketSize;
-  uint8_t                 bInterval;
+  uint8                 bLength;
+  uint8                 bDescriptorType;
+  uint8                 bEndpointAddress;
+  uint8                 bmAttributes;
+  uint16                wMaxPacketSize;
+  uint8                 bInterval;
 } USB_Descriptor_Endpoint;
 
 typedef struct {
   /* config header */
-  uint8_t                 bLength;
-  uint8_t                 bDescriptorType;
-  uint16_t                wTotalLength;
-  uint8_t                 bNumInterfaces;
-  uint8_t                 bConfigurationValue;
-  uint8_t                 iConfiguration;
-  uint8_t                 bmAttributes;
-  uint8_t                 bMaxPower;
+  uint8                 bLength;
+  uint8                 bDescriptorType;
+  uint16                wTotalLength;
+  uint8                 bNumInterfaces;
+  uint8                 bConfigurationValue;
+  uint8                 iConfiguration;
+  uint8                 bmAttributes;
+  uint8                 bMaxPower;
 
   USB_Descriptor_Interface            CCI_Interface;
   struct {						
@@ -136,48 +136,48 @@ typedef struct {
   /*
   USB_Descriptor_Endpoint             ManagementEndpoint;
   */
-  uint8_t                 EP1_bLength;
-  uint8_t                 EP1_bDescriptorType;
-  uint8_t                 EP1_bEndpointAddress;
-  uint8_t                 EP1_bmAttributes;
-  uint8_t                 EP1_wMaxPacketSize0;
-  uint8_t                 EP1_wMaxPacketSize1;
-  uint8_t                 EP1_bInterval;
+  uint8                 EP1_bLength;
+  uint8                 EP1_bDescriptorType;
+  uint8                 EP1_bEndpointAddress;
+  uint8                 EP1_bmAttributes;
+  uint8                 EP1_wMaxPacketSize0;
+  uint8                 EP1_wMaxPacketSize1;
+  uint8                 EP1_bInterval;
 
   /*
   USB_Descriptor_Interface            DCI_Interface;
   */
 
-  uint8_t                 DCI_bLength;
-  uint8_t                 DCI_bDescriptorType;
-  uint8_t                 DCI_bInterfaceNumber;
-  uint8_t                 DCI_bAlternateSetting;
-  uint8_t                 DCI_bNumEndpoints;
-  uint8_t                 DCI_bInterfaceClass;
-  uint8_t                 DCI_bInterfaceSubClass;
-  uint8_t                 DCI_bInterfaceProtocol;
-  uint8_t                 DCI_iInterface;
+  uint8                 DCI_bLength;
+  uint8                 DCI_bDescriptorType;
+  uint8                 DCI_bInterfaceNumber;
+  uint8                 DCI_bAlternateSetting;
+  uint8                 DCI_bNumEndpoints;
+  uint8                 DCI_bInterfaceClass;
+  uint8                 DCI_bInterfaceSubClass;
+  uint8                 DCI_bInterfaceProtocol;
+  uint8                 DCI_iInterface;
 
   /*
   USB_Descriptor_Endpoint             DataOutEndpoint;
   USB_Descriptor_Endpoint             DataInEndpoint;
   */
 
-  uint8_t                 EP2_bLength;
-  uint8_t                 EP2_bDescriptorType;
-  uint8_t                 EP2_bEndpointAddress;
-  uint8_t                 EP2_bmAttributes;
-  uint8_t                 EP2_wMaxPacketSize0;
-  uint8_t                 EP2_wMaxPacketSize1;
-  uint8_t                 EP2_bInterval;
+  uint8                 EP2_bLength;
+  uint8                 EP2_bDescriptorType;
+  uint8                 EP2_bEndpointAddress;
+  uint8                 EP2_bmAttributes;
+  uint8                 EP2_wMaxPacketSize0;
+  uint8                 EP2_wMaxPacketSize1;
+  uint8                 EP2_bInterval;
 
-  uint8_t                 EP3_bLength;
-  uint8_t                 EP3_bDescriptorType;
-  uint8_t                 EP3_bEndpointAddress;
-  uint8_t                 EP3_bmAttributes;
-  uint8_t                 EP3_wMaxPacketSize0;
-  uint8_t                 EP3_wMaxPacketSize1;
-  uint8_t                 EP3_bInterval;
+  uint8                 EP3_bLength;
+  uint8                 EP3_bDescriptorType;
+  uint8                 EP3_bEndpointAddress;
+  uint8                 EP3_bmAttributes;
+  uint8                 EP3_wMaxPacketSize0;
+  uint8                 EP3_wMaxPacketSize1;
+  uint8                 EP3_bInterval;
 
   
 }USB_Descriptor_Config;

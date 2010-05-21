@@ -43,7 +43,7 @@
 /* persistent usb structs */
 
 volatile uint32 bDeviceState = UNCONNECTED;
-volatile uint16_t wIstr = 0;
+volatile uint16 wIstr = 0;
 volatile bIntPackSOF  = 0;
 
 DEVICE Device_Table = 

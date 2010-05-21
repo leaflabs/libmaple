@@ -27,8 +27,6 @@ extern "C" {
 #define NULL ((void *)0)
 #endif
 
-#ifndef __STM32F10x_TYPE_H
-
 typedef signed long      s32;
 typedef signed short     s16;
 typedef signed char      s8;
@@ -65,7 +63,6 @@ typedef enum { RESET = 0, SET   = !RESET } FlagStatus, ITStatus;
 typedef enum { DISABLE = 0, ENABLE  = !DISABLE} FunctionalState;
 
 typedef enum { ERROR = 0, SUCCESS  = !ERROR} ErrorStatus;
-#endif
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */

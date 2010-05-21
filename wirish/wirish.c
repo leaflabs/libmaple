@@ -31,6 +31,7 @@
 #include "systick.h"
 #include "gpio.h"
 #include "nvic.h"
+#include "usb.h"
 
 void init(void) {
    rcc_init();
@@ -42,4 +43,5 @@ void init(void) {
    timer_init(2, 1);
    timer_init(3, 1);
    timer_init(4, 1);
+   setupUSB();
 }

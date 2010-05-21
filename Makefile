@@ -17,6 +17,9 @@ OD  := arm-none-eabi-objdump
 ARCH = $(shell uname -m)
 OS = $(shell uname)
 
+VENDOR_ID =  1EAF
+PRODUCT_ID = 0003
+
 ifeq ($(OS),Linux)
 	DFU = dfu-util
 else
@@ -195,11 +198,13 @@ jtag: $(BUILD_PATH)/main.bin
 	@echo "JTAG build"
 
 program_ram: ram 
-#	./reset.py
-	$(DFU) -a0 -d 0110:1001 -D build/main.bin -R
+	./reset.py
+	./wait.py
+	$(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_flash: flash
 	./reset.py
+	./wait.py
 	$(DFU) -a1 -d 0110:1001 -D build/main.bin -R
 
 program_jtag: jtag

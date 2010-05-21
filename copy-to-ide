@@ -40,28 +40,28 @@ FILES="LICENSE
     ./libmaple/adc.c
     ./libmaple/flash.c
     ./libmaple/gpio.c
-    ./wirish/usb/usb_lib/usb_core.c
-    ./wirish/usb/usb_lib/usb_core.h
-    ./wirish/usb/usb_lib/usb_def.h
-    ./wirish/usb/usb_lib/usb_init.c
-    ./wirish/usb/usb_lib/usb_init.h
-    ./wirish/usb/usb_lib/usb_int.c
-    ./wirish/usb/usb_lib/usb_int.h
-    ./wirish/usb/usb_lib/usb_lib.h
-    ./wirish/usb/usb_lib/usb_mem.c
-    ./wirish/usb/usb_lib/usb_mem.h
-    ./wirish/usb/usb_lib/usb_regs.c
-    ./wirish/usb/usb_lib/usb_regs.h
-    ./wirish/usb/usb_lib/usb_type.h
-    ./wirish/usb/descriptors.c
-    ./wirish/usb/descriptors.h
-    ./wirish/usb/usb_callbacks.h
-    ./wirish/usb/usb_callbacks.c
-    ./wirish/usb/usb_config.h
-    ./wirish/usb/usb.h
-    ./wirish/usb/usb.c
-    ./wirish/usb/usb_hardware.c
-    ./wirish/usb/usb_hardware.h
+    ./libmaple/usb/usb_lib/usb_core.c
+    ./libmaple/usb/usb_lib/usb_core.h
+    ./libmaple/usb/usb_lib/usb_def.h
+    ./libmaple/usb/usb_lib/usb_init.c
+    ./libmaple/usb/usb_lib/usb_init.h
+    ./libmaple/usb/usb_lib/usb_int.c
+    ./libmaple/usb/usb_lib/usb_int.h
+    ./libmaple/usb/usb_lib/usb_lib.h
+    ./libmaple/usb/usb_lib/usb_mem.c
+    ./libmaple/usb/usb_lib/usb_mem.h
+    ./libmaple/usb/usb_lib/usb_regs.c
+    ./libmaple/usb/usb_lib/usb_regs.h
+    ./libmaple/usb/usb_lib/usb_type.h
+    ./libmaple/usb/descriptors.c
+    ./libmaple/usb/descriptors.h
+    ./libmaple/usb/usb_callbacks.h
+    ./libmaple/usb/usb_callbacks.c
+    ./libmaple/usb/usb_config.h
+    ./libmaple/usb/usb.h
+    ./libmaple/usb/usb.c
+    ./libmaple/usb/usb_hardware.c
+    ./libmaple/usb/usb_hardware.h
     ./wirish/bits.h
     ./wirish/ext_interrupts.c
     ./wirish/ext_interrupts.h
@@ -85,9 +85,7 @@ FILES="LICENSE
     ./wirish/comm/HardwareSerial.cpp
     ./wirish/comm/HardwareSerial.h
     ./wirish/comm/HardwareSPI.cpp
-    ./wirish/comm/HardwareSPI.h
-    ./wirish/comm/HardwareUsb.cpp
-    ./wirish/comm/HardwareUsb.h"
+    ./wirish/comm/HardwareSPI.h"
 
 # First see if this folder exists
 if !(test -d $DEST/lanchon-stm32)
@@ -105,7 +103,7 @@ cp -v $FILES $DEST
 
 # if a working directory already exists, copy in there too so we 
 # dont have to rebuild the ide just to change the lib out
-if (test -d $DEST_WORD)
+if (test -d $WORK_DEST)
 then
 # Then copy over linker files
     cp -v stm32conf/* $WORK_DEST

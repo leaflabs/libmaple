@@ -27,6 +27,8 @@
 
 #include <math.h>
 
+#ifdef __cplusplus
+
 void randomSeed(unsigned int);
 long random(long);
 long random(long, long);
@@ -54,3 +56,4 @@ long map(long, long, long, long, long);
 
 #endif
 
+#endif

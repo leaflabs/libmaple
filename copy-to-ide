@@ -9,74 +9,26 @@ DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
 ARCH=`uname -a`
 
 FILES="LICENSE
-    ./libmaple/nvic.h
-    ./libmaple/util.h
-    ./libmaple/adc.h
-    ./libmaple/usb_regs.h
-    ./libmaple/rcc.h
-    ./libmaple/exti.h
-    ./libmaple/usart.h
-    ./libmaple/usb.h
-    ./libmaple/timers.h
-    ./libmaple/bootVect.h
-    ./libmaple/systick.h
-    ./libmaple/flash.h
-    ./libmaple/spi.h
-    ./libmaple/gpio.h
-    ./libmaple/libmaple.h
-    ./libmaple/libmaple_types.h
-    ./libmaple/rcc.c
-    ./libmaple/exti.c
-    ./libmaple/syscalls.c
-    ./libmaple/usart.c
-    ./libmaple/systick.c
-    ./libmaple/util.c
-    ./libmaple/exc.c
-    ./libmaple/nvic.c
-    ./libmaple/spi.c
-    ./libmaple/timers.c
-    ./libmaple/usb.c
-    ./libmaple/adc.c
-    ./libmaple/flash.c
-    ./libmaple/gpio.c
-    ./wirish/bits.h
-    ./wirish/ext_interrupts.c
-    ./wirish/ext_interrupts.h
-    ./wirish/io.h
+    ./libmaple/*.h
+    ./libmaple/*.c
+    ./wirish/*.h
+    ./wirish/*.c
     ./wirish/main.cxx
-    ./wirish/Print.cpp
-    ./wirish/Print.h
-    ./wirish/pwm.c
-    ./wirish/pwm.h
-    ./wirish/time.c
-    ./wirish/time.h
-    ./wirish/wirish_analog.c
-    ./wirish/wirish.c
-    ./wirish/wirish_digital.c
-    ./wirish/wirish.h
-    ./wirish/wirish_math.cpp
-    ./wirish/wirish_math.h
-    ./wirish/wirish_shift.c
-    ./wirish/WProgram.h
-    ./wirish/cxxabi-compat.cpp
-    ./wirish/comm/HardwareSerial.cpp
-    ./wirish/comm/HardwareSerial.h
-    ./wirish/comm/HardwareSPI.cpp
-    ./wirish/comm/HardwareSPI.h
-    ./wirish/comm/HardwareUsb.cpp
-    ./wirish/comm/HardwareUsb.h"
+    ./wirish/*.cpp
+    ./wirish/comm/*.cpp
+    ./wirish/comm/*.h"
 
-# First see if this folder exists
+echo "First make sure DEST exists: $DEST"
 if !(test -d $DEST/lanchon-stm32)
 then
     mkdir $DEST/lanchon-stm32
 fi
 
-# Then copy over linker files
-cp -v stm32conf/* $DEST
-cp -v stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
+echo "Then copy over linker files..."
+cp stm32conf/* $DEST
+cp stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
 
-# Finally delete and copy the source files
+echo "Finally delete the old and copy the new source files!"
 rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
-cp -v $FILES $DEST
-
+cp $FILES $DEST
+echo "Done."

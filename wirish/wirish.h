@@ -38,6 +38,7 @@
 #include "time.h"
 #include "pwm.h"
 #include "ext_interrupts.h"
+#include "wirish_math.h"
 
 #ifdef __cplusplus
 extern "C"{

@@ -59,7 +59,7 @@ CPFLAGS = -v -Obinary
 ODFLAGS = -S
 
 # main source file
-MAIN=main.c
+MAIN=main.cpp
 
 CSRC = libmaple/systick.c                \
        libmaple/timers.c                 \

@@ -29,7 +29,6 @@
 
 #include "wirish.h"
 #include "HardwareSerial.h"
-#include "HardwareUsb.h"
 #include "usb.h"
 
 #define LED_PIN 13
@@ -50,8 +49,6 @@ void setup()
     pinMode(PWM_PIN, PWM);
     pwmWrite(PWM_PIN, 0x8000);
 
-    /* Send a message out the USB virtual com port  */
-    Usb.println("Hello world!");
 }
 
 int toggle = 0;

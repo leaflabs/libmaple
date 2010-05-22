@@ -205,7 +205,7 @@ program_ram: ram
 program_flash: flash
 	./reset.py
 	./wait.py
-	$(DFU) -a1 -d 0110:1001 -D build/main.bin -R
+	$(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_jtag: jtag
 	openocd -f stm32conf/flash.cfg

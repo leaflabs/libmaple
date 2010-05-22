@@ -6,7 +6,7 @@
 #include "usb_lib.h"
 
 #define VCOM_ID_VENDOR    0x1EAF
-#define VCOM_ID_PRODUCT   0x1004
+#define VCOM_ID_PRODUCT   0x0004
 
 #define USB_CONFIG_MAX_POWER      (100 >> 1)
 

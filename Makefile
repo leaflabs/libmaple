@@ -199,12 +199,12 @@ jtag: $(BUILD_PATH)/main.bin
 
 program_ram: ram 
 	./reset.py
-	./wait.py
+	sleep 1
 	$(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_flash: flash
 	./reset.py
-	./wait.py
+	sleep 1
 	$(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_jtag: jtag

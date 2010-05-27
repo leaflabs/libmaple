@@ -1,11 +1,17 @@
 #!/usr/bin/python
 
 import serial
-import time
-
+import os
 
 try:
-    ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
+    highest = 0
+    # this totally won't work on Mac OSX! /dev/ttySOMETHINGELSE?
+    for f in filter(lambda x: x.startswith('ttyACM'), os.listdir('/dev/')):
+        if (int(f[6:]) > highest):
+            highest = int(f[6:])
+
+    print "Trying /dev/ttyACM%d..." % highest
+    ser = serial.Serial('/dev/ttyACM%d' % highest, baudrate=115200)
     ser.open()
 
     # pull dtr and rts low

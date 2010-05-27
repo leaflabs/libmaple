@@ -5,111 +5,34 @@
 
 # Change this
 DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
-WORK_DEST=`pwd`/../maple-ide/build/linux/work/hardware/leaflabs/cores/maple/
 
 ARCH=`uname -a`
 
 FILES="LICENSE
-    ./libmaple/nvic.h
-    ./libmaple/util.h
-    ./libmaple/adc.h
-    ./libmaple/usb_regs.h
-    ./libmaple/rcc.h
-    ./libmaple/exti.h
-    ./libmaple/usart.h
-    ./libmaple/usb.h
-    ./libmaple/timers.h
-    ./libmaple/bootVect.h
-    ./libmaple/systick.h
-    ./libmaple/flash.h
-    ./libmaple/spi.h
-    ./libmaple/gpio.h
-    ./libmaple/libmaple.h
-    ./libmaple/libmaple_types.h
-    ./libmaple/rcc.c
-    ./libmaple/exti.c
-    ./libmaple/syscalls.c
-    ./libmaple/usart.c
-    ./libmaple/systick.c
-    ./libmaple/util.c
-    ./libmaple/exc.c
-    ./libmaple/nvic.c
-    ./libmaple/spi.c
-    ./libmaple/timers.c
-    ./libmaple/usb.c
-    ./libmaple/adc.c
-    ./libmaple/flash.c
-    ./libmaple/gpio.c
-    ./libmaple/usb/usb_lib/usb_core.c
-    ./libmaple/usb/usb_lib/usb_core.h
-    ./libmaple/usb/usb_lib/usb_def.h
-    ./libmaple/usb/usb_lib/usb_init.c
-    ./libmaple/usb/usb_lib/usb_init.h
-    ./libmaple/usb/usb_lib/usb_int.c
-    ./libmaple/usb/usb_lib/usb_int.h
-    ./libmaple/usb/usb_lib/usb_lib.h
-    ./libmaple/usb/usb_lib/usb_mem.c
-    ./libmaple/usb/usb_lib/usb_mem.h
-    ./libmaple/usb/usb_lib/usb_regs.c
-    ./libmaple/usb/usb_lib/usb_regs.h
-    ./libmaple/usb/usb_lib/usb_type.h
-    ./libmaple/usb/descriptors.c
-    ./libmaple/usb/descriptors.h
-    ./libmaple/usb/usb_callbacks.h
-    ./libmaple/usb/usb_callbacks.c
-    ./libmaple/usb/usb_config.h
-    ./libmaple/usb/usb.h
-    ./libmaple/usb/usb.c
-    ./libmaple/usb/usb_hardware.c
-    ./libmaple/usb/usb_hardware.h
-    ./wirish/bits.h
-    ./wirish/ext_interrupts.c
-    ./wirish/ext_interrupts.h
-    ./wirish/io.h
+    ./libmaple/*.h
+    ./libmaple/*.c
+    ./libmaple/usb/*.h
+    ./libmaple/usb/*.c
+    ./libmaple/usb/usb_lib/*.h
+    ./libmaple/usb/usb_lib/*.c
+    ./wirish/*.h
+    ./wirish/*.c
     ./wirish/main.cxx
-    ./wirish/Print.cpp
-    ./wirish/Print.h
-    ./wirish/pwm.c
-    ./wirish/pwm.h
-    ./wirish/time.c
-    ./wirish/time.h
-    ./wirish/wirish_analog.c
-    ./wirish/wirish.c
-    ./wirish/wirish_digital.c
-    ./wirish/wirish.h
-    ./wirish/wirish_math.cpp
-    ./wirish/wirish_math.h
-    ./wirish/wirish_shift.c
-    ./wirish/WProgram.h
-    ./wirish/cxxabi-compat.cpp
-    ./wirish/comm/HardwareSerial.cpp
-    ./wirish/comm/HardwareSerial.h
-    ./wirish/comm/HardwareSPI.cpp
-    ./wirish/comm/HardwareSPI.h"
+    ./wirish/*.cpp
+    ./wirish/comm/*.cpp
+    ./wirish/comm/*.h"
 
-# First see if this folder exists
+echo "First make sure DEST exists: $DEST"
 if !(test -d $DEST/lanchon-stm32)
 then
     mkdir $DEST/lanchon-stm32
 fi
 
-# Then copy over linker files
-cp -v stm32conf/* $DEST
-cp -v stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
+echo "Then copy over linker files..."
+cp stm32conf/* $DEST
+cp stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
 
-# Finally delete and copy the source files
+echo "Finally delete the old and copy the new source files!"
 rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
-cp -v $FILES $DEST
-
-# if a working directory already exists, copy in there too so we 
-# dont have to rebuild the ide just to change the lib out
-if (test -d $WORK_DEST)
-then
-# Then copy over linker files
-    cp -v stm32conf/* $WORK_DEST
-    cp -v stm32conf/lanchon-stm32/* $WORK_DEST/lanchon-stm32
-
-# Finally the source files
-    cp -v $FILES $WORK_DEST
-fi
-
+cp $FILES $DEST
+echo "Done."

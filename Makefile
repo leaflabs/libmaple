@@ -196,12 +196,12 @@ jtag: $(BUILD_PATH)/main.bin
 	@echo "JTAG build"
 
 program_ram: ram 
-	./reset.py
+	support/scripts/reset.py
 	sleep 1
 	$(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_flash: flash
-	./reset.py
+	support/scripts/reset.py
 	sleep 1
 	$(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 

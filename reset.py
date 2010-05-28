@@ -4,14 +4,7 @@ import serial
 import os
 
 try:
-    highest = 0
-    # this totally won't work on Mac OSX! /dev/ttySOMETHINGELSE?
-    for f in filter(lambda x: x.startswith('ttyACM'), os.listdir('/dev/')):
-        if (int(f[6:]) > highest):
-            highest = int(f[6:])
-
-    print "Trying /dev/ttyACM%d..." % highest
-    ser = serial.Serial('/dev/ttyACM%d' % highest, baudrate=115200)
+    ser = serial.Serial('/dev/maple', baudrate=115200)
     ser.open()
 
     # pull dtr and rts low

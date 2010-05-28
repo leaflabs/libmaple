@@ -94,6 +94,7 @@ CSRC = libmaple/systick.c                \
 CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/Print.cpp 		 \
 	 wirish/comm/HardwareSerial.cpp  \
+	 wirish/comm/HardwareUsb.cpp     \
 	 wirish/comm/HardwareSPI.cpp 	 \
 	 wirish/cxxabi-compat.cpp 	 \
    	 main.cpp

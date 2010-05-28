@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs LLC.
+ * Copyright (c) 2010 Andrew Meyer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,39 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#include "wirish.h"
-#include "HardwareSerial.h"
-#include "HardwareUsb.h"
-#include "math.h"
+/**
+ * @brief Wiring like serial api to USB virtual COM
+ */
 
-void setup();
-void loop();
+#include "wirish.h"
+#include "HardwareUsb.h"
+#include "usb.h"
+
+HardwareUsb::HardwareUsb(void) {
+}
+
+uint8 HardwareUsb::read(void) {
+  uint8 outVal;
+  usbReceiveBytes(&outVal,1);
+  return outVal;
+}
+
+uint8 HardwareUsb::available(void) {
+  return usbBytesAvailable();
+}
+
+void HardwareUsb::flush(void) {
+  uint8 totalBytes = usbBytesAvailable();
+  uint8 recvBuf[totalBytes];
+  usbReceiveBytes(recvBuf,totalBytes);
+}
+
+void HardwareUsb::write(unsigned char ch) {
+  while (usbSendBytes(&ch, 1) == 0);
+}
+
+void HardwareUsb::begin(void) {
+  /* placeholder for usb<->uart linking */
+}
+
+HardwareUsb Usb;

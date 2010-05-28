@@ -1,7 +1,7 @@
 /* insert license */
 
-#ifndef __USB_H_
-#define __USB_H_
+#ifndef __USB_H
+#define __USB_H
 
 
 #include "usb_lib.h"

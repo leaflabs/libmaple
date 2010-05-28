@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs LLC.
+ * Copyright (c) 2010 Andrew Meyer.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,27 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#include "wirish.h"
-#include "HardwareSerial.h"
-#include "HardwareUsb.h"
-#include "math.h"
+/**
+ * @brief Wiring like serial api to USB virtual COM. Dummy implmentation wrapping printChar() around usb.h for now. Todo: something better. 
+ */
 
-void setup();
-void loop();
+#ifndef _HARDWAREUSB_H_
+#define _HARDWAREUSB_H_
+
+#include "Print.h"
+#include "usb.h"
+
+class HardwareUsb : public Print {
+ public:
+  HardwareUsb(void);
+  void begin();
+  uint8 available(void);
+  uint8 read(void);
+  void flush(void);
+  virtual void write(unsigned char);
+  using Print::write;
+};
+
+extern HardwareUsb Usb;
+
+#endif //_HARDWAREUSB_H/* *****************************************************************************

@@ -70,12 +70,13 @@ void nvic_enable_interrupt(uint32 n) {
  * @param addr Address to set the vector table at
  */
 void nvic_init(void) {
-#ifdef VECT_TAB_ROM
+#ifdef VECT_TAB_FLASH
    nvic_set_vector_table(USER_ADDR_ROM, 0x0);
 #elif defined VECT_TAB_RAM
    nvic_set_vector_table(USER_ADDR_RAM, 0x0);
-#else // VECT_TAB_BASE
-   /* Set the Vector Table base location at 0x08000000 */
+#elif defined VECT_TAB_BASE
    nvic_set_vector_table(((uint32)0x08000000), 0x0);
+#else
+#error "You must set a base address for the vector table!"
 #endif
 }

@@ -2,8 +2,6 @@
 # Project name
 PROJECT=maple
 
-STM_CONF = stm32conf/flash.conf
-
 # ARM/GNU toolchain parameters
 CC  := arm-none-eabi-gcc
 CPP := arm-none-eabi-g++
@@ -27,35 +25,34 @@ else
 endif
 
 BUILD_PATH = build
-LIB_PATH = libmaple
+LIB_PATH   = libmaple
 
-OUTDIRS = $(BUILD_PATH)/$(LIB_PATH)\
-	  $(BUILD_PATH)/wirish \
-	  $(BUILD_PATH)/wirish/comm \
-	  $(BUILD_PATH)/$(LIB_PATH)/usb \
-	  $(BUILD_PATH)/$(LIB_PATH)/usb/usb_lib
+OUTDIRS    = $(BUILD_PATH)/$(LIB_PATH)         \
+	     $(BUILD_PATH)/wirish              \
+	     $(BUILD_PATH)/wirish/comm         \
+	     $(BUILD_PATH)/$(LIB_PATH)/usb     \
+	     $(BUILD_PATH)/$(LIB_PATH)/usb/usb_lib
 
 
-INCLUDES = -I$(LIB_PATH) \
-	   -I./ \
-	   -Iwirish \
-	   -Iwirish/comm \
-	   -I$(LIB_PATH)/usb \
-	   -I$(LIB_PATH)/usb/usb_lib 
 
-# default is to upload to flash
-#DEFFLAGS = VECT_TAB_BASE
-CFLAGS  =  $(INCLUDES) -c \
-           -Os\
-           -g -mcpu=cortex-m3 -mthumb  -march=armv7-m -nostdlib \
-           -ffunction-sections -fdata-sections -Wl,--gc-sections \
-	   -D$(DEFFLAGS)
+INCLUDES   = -I$(LIB_PATH)                     \
+	     -I./  			       \
+	     -Iwirish                          \
+	     -Iwirish/comm                     \
+	     -I$(LIB_PATH)/usb                 \
+	     -I$(LIB_PATH)/usb/usb_lib
+
+CFLAGS     = $(INCLUDES) -c                    \
+             -Os                               \
+             -g -mcpu=cortex-m3 -mthumb  -march=armv7-m -nostdlib \
+             -ffunction-sections -fdata-sections -Wl,--gc-sections \
+	     -D$(DEFFLAGS)
 
 CXXFLAGS = -fno-rtti -fno-exceptions -Wall
 
-#LINKER=lanchon-stm32.ld
-LFLAGS  = -Tstm32conf/$(LINKER) -L stm32conf/lanchon-stm32 \
-          -mcpu=cortex-m3 -mthumb -Xlinker \
+LDDIR=support/ld
+LFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
+          -mcpu=cortex-m3 -mthumb -Xlinker     \
           --gc-sections --print-gc-sections --march=armv7-m -Wall
 
 CPFLAGS = -v -Obinary
@@ -184,17 +181,17 @@ $(BUILD_PATH)/main.bin: $(BUILD_PATH)/$(PROJECT).out
 	arm-none-eabi-size $<
 
 ram: DEFFLAGS := VECT_TAB_RAM
-ram: LINKER := lanchon-stm32-user-ram.ld
+ram: LDSCRIPT := ram.ld
 ram: $(BUILD_PATH)/main.bin
 	@echo "RAM build"
 
-flash: DEFFLAGS := VECT_TAB_ROM
-flash: LINKER := lanchon-stm32-user-rom.ld
+flash: DEFFLAGS := VECT_TAB_FLASH
+flash: LDSCRIPT := flash.ld
 flash: $(BUILD_PATH)/main.bin
 	@echo "Flash build"
 
 jtag: DEFFLAGS := VECT_TAB_BASE
-jtag: LINKER := lanchon-stm32.ld
+jtag: LDSCRIPT := jtag.ld
 jtag: $(BUILD_PATH)/main.bin
 	@echo "JTAG build"
 
@@ -209,15 +206,15 @@ program_flash: flash
 	$(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D build/main.bin -R
 
 program_jtag: jtag
-	openocd -f stm32conf/flash.cfg
+	openocd -f support/openocd/flash.cfg
 
 
 run: $(BUILD_PATH)/main.bin
-	openocd -f stm32conf/run.cfg
+	openocd -f support/openocd/run.cfg
 
 cscope:
 	rm -rf *.cscope
-	find . -name '*.[hcs]' -o -name '*.cpp' | xargs cscope
+	find . -name '*.[hcs]' -o -name '*.cpp' | xargs cscope -b
 
 clean:
 	rm -f *.hex *.o

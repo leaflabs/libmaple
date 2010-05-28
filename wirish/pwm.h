@@ -35,6 +35,7 @@
 extern "C"{
 #endif
 
+#define analogWrite pwmWrite
 void pwmWrite(uint8, uint16);
 
 #ifdef __cplusplus

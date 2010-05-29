@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# This hackish script copies the necessary library files into the Maple IDE
+# repository.
+
+# Change this
+DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
+
+ARCH=`uname -a`
+
+FILES="LICENSE
+    ./libmaple/*.h
+    ./libmaple/*.c
+    ./libmaple/usb/*.h
+    ./libmaple/usb/*.c
+    ./libmaple/usb/usb_lib/*.h
+    ./libmaple/usb/usb_lib/*.c
+    ./wirish/*.h
+    ./wirish/*.c
+    ./wirish/main.cxx
+    ./wirish/*.cpp
+    ./wirish/comm/*.cpp
+    ./wirish/comm/*.h"
+
+echo "First make sure DEST exists: $DEST"
+if !(test -d $DEST/lanchon-stm32)
+then
+    mkdir $DEST/lanchon-stm32
+fi
+
+echo "Then copy over linker files..."
+cp stm32conf/* $DEST
+cp stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
+
+echo "Finally delete the old and copy the new source files!"
+rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
+cp $FILES $DEST
+echo "Done."

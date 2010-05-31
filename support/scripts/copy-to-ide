@@ -20,7 +20,13 @@ FILES="LICENSE
     ./wirish/main.cxx
     ./wirish/*.cpp
     ./wirish/comm/*.cpp
-    ./wirish/comm/*.h"
+    ./wirish/comm/*.h
+    ./support/ld/flash.ld
+    ./support/ld/ram.ld
+    ./support/ld/jtag.ld
+    ./support/ld/libcs3-lanchon-stm32.a
+    ./support/ld/names.inc"
+
 
 echo "First make sure DEST exists: $DEST"
 if !(test -d $DEST/lanchon-stm32)
@@ -28,11 +34,9 @@ then
     mkdir $DEST/lanchon-stm32
 fi
 
-echo "Then copy over linker files..."
-cp stm32conf/* $DEST
-cp stm32conf/lanchon-stm32/* $DEST/lanchon-stm32
+echo "Then delete the old files..."
+rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.ld $DEST/*.inc $DEST/*.a
 
-echo "Finally delete the old and copy the new source files!"
-rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx
+echo "Finally copy the new source files!"
 cp $FILES $DEST
 echo "Done."

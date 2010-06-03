@@ -29,9 +29,10 @@ FILES="LICENSE
 
 
 echo "First make sure DEST exists: $DEST"
-if !(test -d $DEST/lanchon-stm32)
+if !(test -d $DEST)
 then
-    mkdir $DEST/lanchon-stm32
+    echo "Nope! Make sure you're doing this right?"
+    exit -1
 fi
 
 echo "Then delete the old files..."

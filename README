@@ -24,9 +24,6 @@ libmaple Repo Layout
 /build/
     Binary output
 
-/stm32conf/
-    Linker scripts
-
 /libmaple/
     Lowest level definitions, routines, macros, and functions. This is the meat
     of the library.
@@ -39,7 +36,10 @@ libmaple Repo Layout
 /examples/
     What it sounds like. Copy these to /main.cpp to compile them.
     
-/notes/
+/support/ld/
+    Linker scripts
+
+/support/notes/
     Unstructured text notes that may be useful. The 45-maple.rules udev file
     can be placed in /etc/udev/rules.d/ on compatible linux machines to allow
     non-root access to the Maple USB device for uploading.
@@ -52,17 +52,17 @@ from:
 
     http://www.codesourcery.com/sgpp/lite/arm
 
-Note: grab the linux binaries for targeting the EABI platform; there are also
-linux binaries for targeting the linux platform).
+Note: grab the linux binaries for targeting the EABI platform (not to be 
+confused with the linux binaries /tageting/ the linux platform).
 
-I unzip the archive ("TAR") version into a place like
+I unzip the archive ("TAR") version into a directory such as 
 ~/bin/arm-gcc-codesourcery and then add the bin/ directory within that to my
-$PATH in ~/.profile, then check that arm-none-eabi-gcc and others are in my
-path.
+$PATH in ~/.profile, resource that, then check that arm-none-eabi-gcc and
+others are in my path.
 
-You will also need to have dfu-util installed (on Linux) or compiled and placed
-in a folder "dfu-util/" at the same level as the maple-library folder (macosx
-and windows).
+You will also need to have dfu-util installed and on your path (on Linux) or
+compiled and placed in a folder "dfu-util/" at the same level as the
+maple-library folder (macosx and windows).
 
 Write your program using /main.cpp as the entry point. Then just 'make' and
 follow the directions!

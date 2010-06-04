@@ -23,13 +23,11 @@
  * ****************************************************************************/
 
 /**
- *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2
- *  and turns on PWM on pin 2
+ *  @brief Sample main.cpp file. Blinks an LED, sends a message out USART2 and the,
+ *  USB virtual serial port, and turns on PWM on pin 2
  */
 
 #include "wirish.h"
-#include "HardwareSerial.h"
-#include "usb.h"
 
 #define LED_PIN 13
 #define PWM_PIN  2
@@ -43,10 +41,12 @@ void setup()
     Serial2.begin(9600);
     Serial2.println("Hello world!");
 
+    /* Send a message out the usb virtual serial port  */
+    SerialUSB.println("Hello!");
+
     /* Turn on PWM on pin PWM_PIN */
     pinMode(PWM_PIN, PWM);
     pwmWrite(PWM_PIN, 0x8000);
-
 }
 
 int toggle = 0;

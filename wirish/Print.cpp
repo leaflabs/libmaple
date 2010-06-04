@@ -32,10 +32,12 @@ void Print::write(const char *str)
 }
 
 /* default implementation: may be overridden */
-void Print::write(const uint8 *buffer, uint32 size)
+void Print::write(void *buffer, uint32 size)
 {
-  while (size--)
-    write(*buffer++);
+   uint8 *ch = (uint8*)buffer;
+   while (size--) {
+      write(*ch++);
+   }
 }
 
 void Print::print(uint8 b)

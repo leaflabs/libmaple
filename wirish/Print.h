@@ -36,7 +36,7 @@ class Print
   public:
     virtual void write(uint8) = 0;
     virtual void write(const char *str);
-    virtual void write(const uint8 *buffer, uint32 size);
+    virtual void write(void *, uint32);
     void print(char);
     void print(const char[]);
     void print(uint8);

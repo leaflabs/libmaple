@@ -32,10 +32,10 @@ USB_Line_Coding line_coding = {
 };
 
 uint8 vcomBufferRx[VCOM_RX_EPSIZE];
-uint8 countTx    = 0;
-uint8 recvBufIn  = 0;
-uint8 recvBufOut = 0;
-uint8 maxNewBytes   = VCOM_RX_EPSIZE;
+volatile uint8 countTx    = 0;
+volatile uint8 recvBufIn  = 0;
+volatile uint8 recvBufOut = 0;
+volatile uint8 maxNewBytes   = VCOM_RX_EPSIZE;
 
 RESET_STATE reset_state = START;
 

@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Andrew Meyer.
+ * Copyright (c) 2010 Perry Hung.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,38 +23,50 @@
  * ****************************************************************************/
 
 /**
- * @brief Wiring like serial api to USB virtual COM
+ *  @brief wirish usb class for easy goin communication, uses libmaple's
+ *  virtual com port implementation
  */
 
+#include <string.h>
+
 #include "wirish.h"
-#include "HardwareUsb.h"
 #include "usb.h"
 
-HardwareUsb::HardwareUsb(void) {
+USBSerial :: USBSerial(void) {
 }
 
-uint8 HardwareUsb::read(void) {
-  uint8 outVal;
-  usbReceiveBytes(&outVal,1);
-  return outVal;
+void USBSerial::write(uint8 ch) {
+   usbSendBytes(&ch, 1);
 }
 
-uint8 HardwareUsb::available(void) {
-  return usbBytesAvailable();
+void USBSerial::write(const char *str) {
+   uint32 len = strlen(str);
+   usbSendBytes((uint8*)str, len);
 }
 
-void HardwareUsb::flush(void) {
-  uint8 totalBytes = usbBytesAvailable();
-  uint8 recvBuf[totalBytes];
-  usbReceiveBytes(recvBuf,totalBytes);
+void USBSerial::write(void *buf, uint32 size) {
+   if (!buf) {
+      return;
+   }
+   usbSendBytes((uint8*)buf, size);
 }
 
-void HardwareUsb::write(unsigned char ch) {
-  while (usbSendBytes(&ch, 1) == 0);
+uint32 USBSerial::available(void) {
+   return usbBytesAvailable();
 }
 
-void HardwareUsb::begin(void) {
-  /* placeholder for usb<->uart linking */
+uint32 USBSerial::read(void *buf, uint32 len) {
+   if (!buf) {
+      return 0;
+   }
+
+   return usbReceiveBytes((uint8*)buf, len);
 }
 
-HardwareUsb Usb;
+uint8 USBSerial::read(void) {
+   uint8 ch;
+   return usbReceiveBytes(&ch, 1);
+}
+
+USBSerial SerialUSB;
+

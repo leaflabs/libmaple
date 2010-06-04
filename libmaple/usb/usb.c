@@ -26,7 +26,7 @@
  *  @file usb.c
  *
  *  @brief usb-specific hardware setup, NVIC, clocks, and usb activities
- *  in the pre-attached state. includes some of the lower level callbacks 
+ *  in the pre-attached state. includes some of the lower level callbacks
  *  needed by the usb library, like suspend,resume,init,etc
  */
 
@@ -46,13 +46,13 @@ volatile uint32 bDeviceState = UNCONNECTED;
 volatile uint16 wIstr = 0;
 volatile bIntPackSOF  = 0;
 
-DEVICE Device_Table = 
+DEVICE Device_Table =
   {
     NUM_ENDPTS,
     1
   };
 
-DEVICE_PROP Device_Property = 
+DEVICE_PROP Device_Property =
   {
     usbInit,
     usbReset,
@@ -69,7 +69,7 @@ DEVICE_PROP Device_Property =
     bMaxPacketSize
   };
 
-USER_STANDARD_REQUESTS User_Standard_Requests = 
+USER_STANDARD_REQUESTS User_Standard_Requests =
   {
     NOP_Process,
     usbSetConfiguration,
@@ -83,7 +83,7 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
   };
 
 void (*pEpInt_IN[7])(void) =
-{ 
+{
   vcomDataTxCb,
   vcomManagementCb,
   NOP_Process,
@@ -218,7 +218,7 @@ RESULT usbPowerOff(void) {
   _SetISTR(0);
   _SetCNTR(CNTR_FRES + CNTR_PDWN);
 
-  /* note that all weve done here is powerdown the 
+  /* note that all weve done here is powerdown the
      usb peripheral. we have no disabled the clocks,
      pulled the usb_disc pin back up, or reset the
      application state machines */
@@ -370,15 +370,18 @@ void usbWaitReset(void) {
   systemHardReset();
 }
 
-/* copies data out of sendBuf into the packet memory for 
-   usb, but waits until any previous usb transmissions have 
+/* copies data out of sendBuf into the packet memory for
+   usb, but waits until any previous usb transmissions have
    completed before doing this. It returns without waiting
    for its data to be sent. most efficient when 64 bytes are copied
-   at a time. users responsible for not overflowing sendbuf 
+   at a time. users responsible for not overflowing sendbuf
    with len! if > 64 bytes are being sent, then the function
    will block at every 64 byte packet
 */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
+   /* Block for any pending writes */
+   while (countTx)
+      ;
 /*   while (countTx != 0) { */
 /*     if (reset_state == NDTR_NRTS) { */
 /*       return 0; */
@@ -390,7 +393,7 @@ int16 usbSendBytes(uint8* sendBuf, uint16 len) {
   }
 
   /* ideally we should wait here, but it gets stuck
-     for some reason. countTx wont decrement when 
+     for some reason. countTx wont decrement when
      theres no host side port reading the data, this is
      known, but even if we add the check for NDTR_NRTS it
      still gets stuck...*/
@@ -398,16 +401,18 @@ int16 usbSendBytes(uint8* sendBuf, uint16 len) {
     return 0; /* indicated to caller to keep trying, were just busy */
   }
 
-  uint16 sent = len; 
+  uint16 sent = len;
 
   while (len > VCOM_TX_EPSIZE) {
     countTx = VCOM_TX_EPSIZE;
 
     UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR,VCOM_TX_EPSIZE);
-    _SetEPTxCount(VCOM_TX_ENDP,VCOM_TX_EPSIZE);
+    _SetEPTxCount(VCOM_TX_ENDP, VCOM_TX_EPSIZE);
     _SetEPTxValid(VCOM_TX_ENDP);
 
-    while(countTx != 0);
+    while (countTx)
+       ;
+
     len     -= VCOM_TX_EPSIZE;
     sendBuf += VCOM_TX_EPSIZE;
   }
@@ -418,7 +423,7 @@ int16 usbSendBytes(uint8* sendBuf, uint16 len) {
     _SetEPTxCount(VCOM_TX_ENDP,len);
     _SetEPTxValid(VCOM_TX_ENDP);
   }
-  
+
   return sent;
 }
 
@@ -427,15 +432,15 @@ uint8 usbBytesAvailable(void) {
   return VCOM_RX_EPSIZE - maxNewBytes;
 }
 
-/* copies len bytes from the local recieve FIFO (not 
-   usb packet buffer) into recvBuf and deq's the fifo. 
-   will only copy the minimum of len or the available 
+/* copies len bytes from the local recieve FIFO (not
+   usb packet buffer) into recvBuf and deq's the fifo.
+   will only copy the minimum of len or the available
    bytes. returns the number of bytes copied */
 uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
   if (len > VCOM_RX_EPSIZE - maxNewBytes) {
     len = VCOM_RX_EPSIZE - maxNewBytes;
   }
-  
+
   int i;
   for (i=0;i<len;i++) {
     recvBuf[i] = (uint8)(vcomBufferRx[recvBufOut]);

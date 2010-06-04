@@ -33,7 +33,6 @@
  */
 
 #include "wirish.h"
-#include "HardwareSPI.h"
 
 #define CS      10
 

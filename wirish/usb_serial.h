@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Andrew Meyer.
+ * Copyright (c) 2010 Perry Hung.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,26 +23,30 @@
  * ****************************************************************************/
 
 /**
- * @brief Wiring like serial api to USB virtual COM. Dummy implmentation wrapping printChar() around usb.h for now. Todo: something better. 
+ *  @brief wirish usb class for easy goin communication, uses libmaple's
+ *  virtual com port implementation
  */
 
-#ifndef _HARDWAREUSB_H_
-#define _HARDWAREUSB_H_
+#ifndef _USB_SERIAL_H_
+#define _USB_SERIAL_H_
 
 #include "Print.h"
-#include "usb.h"
 
-class HardwareUsb : public Print {
- public:
-  HardwareUsb(void);
-  void begin();
-  uint8 available(void);
-  uint8 read(void);
-  void flush(void);
-  virtual void write(unsigned char);
-  using Print::write;
+class USBSerial : public Print {
+   public:
+      USBSerial(void);
+
+      uint32 available(void);
+
+      uint32 read(void *buf, uint32 len);
+      uint8  read(void);
+
+      void   write(uint8);
+      void   write(const char *str);
+      void   write(void *, uint32);
 };
 
-extern HardwareUsb Usb;
+extern USBSerial SerialUSB;
 
-#endif //_HARDWAREUSB_H/* *****************************************************************************
+#endif
+

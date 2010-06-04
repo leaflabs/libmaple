@@ -1,9 +1,16 @@
 /**
- *  @brief 
+ *  @brief wiznet 5100
  */
 
-#ifndef _ETHERNET_H_
-#define _ETHERNET_H_
+#ifndef _W5100_H_
+#define _W5100_H_
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/* slave select on maple pin 10  */
+#define SS 10
 
 #define MR              0x0000
 #define MR_RST            0x80
@@ -156,6 +163,19 @@
          0xFF                              \
       ) : 0x00 \
 )
+
+#define w5100_write(addr, data)         w5100_send_cmd(OPCODE_WRITE, addr, data)
+#define w5100_read(addr)                w5100_send_cmd(OPCODE_READ, addr, 0xFF)
+
+uint8 w5100_send_cmd(uint8 opcode, uint16 addr, uint8 data);
+void  w5100_reset(void);
+void  w5100_write_buf(uint16 addr, uint8 *buf, uint8 len);
+void  w5100_read_buf(uint16 addr, uint8 *buf, uint8 len);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

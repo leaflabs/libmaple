@@ -31,7 +31,8 @@ OUTDIRS    = $(BUILD_PATH)/$(LIB_PATH)         \
 	     $(BUILD_PATH)/wirish              \
 	     $(BUILD_PATH)/wirish/comm         \
 	     $(BUILD_PATH)/$(LIB_PATH)/usb     \
-	     $(BUILD_PATH)/$(LIB_PATH)/usb/usb_lib
+	     $(BUILD_PATH)/$(LIB_PATH)/usb/usb_lib \
+	     $(BUILD_PATH)/libraries/ethernet
 
 
 
@@ -87,7 +88,8 @@ CSRC = libmaple/systick.c                \
        libmaple/usb/usb_lib/usb_init.c   \
        libmaple/usb/usb_lib/usb_int.c    \
        libmaple/usb/usb_lib/usb_mem.c    \
-       libmaple/usb/usb_lib/usb_regs.c   \
+       libraries/ethernet/socket.c       \
+       libmaple/usb/usb_lib/usb_regs.c
 
 CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/Print.cpp 		 \
@@ -95,6 +97,7 @@ CPPSRC = wirish/wirish_math.cpp          \
 	 wirish/comm/HardwareSPI.cpp 	 \
 	 wirish/usb_serial.cpp 	         \
 	 wirish/cxxabi-compat.cpp 	 \
+         libraries/ethernet/w5100.cpp    \
    	 main.cpp
 
 # i really have no idea what i'm doing

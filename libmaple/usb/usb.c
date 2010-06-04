@@ -379,6 +379,11 @@ void usbWaitReset(void) {
    will block at every 64 byte packet
 */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
+
+  if (reset_state == NDTR_NRTS) {
+    return -1; /* indicates to caller to stop trying, were not connected */
+  }
+
    /* Block for any pending writes */
    while (countTx)
       ;
@@ -388,9 +393,6 @@ int16 usbSendBytes(uint8* sendBuf, uint16 len) {
 /*     } */
 /*   }/\* wait for pipe to be clear *\/ */
 
-  if (reset_state == NDTR_NRTS) {
-    return -1; /* indicates to caller to stop trying, were not connected */
-  }
 
   /* ideally we should wait here, but it gets stuck
      for some reason. countTx wont decrement when

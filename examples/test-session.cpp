@@ -92,7 +92,7 @@ void loop() {
                 print_help();
                 break;
             case 117: // 'u'
-                Usb.println("Hello World!");
+                SerialUSB.println("Hello World!");
                 break;
             case 119: // 'w'
                 Serial1.println("Hello World!");
@@ -157,7 +157,7 @@ void loop() {
                     Serial1.print(".");
                     Serial2.print(".");
                     Serial3.print(".");
-                    Usb.print(".");
+                    SerialUSB.print(".");
                 }
                 break;
             case 110: // 'n'
@@ -183,8 +183,8 @@ void loop() {
                             pwmWrite(pwm_pins[j], 1000 + i);
                         }
                     }
-                    Usb.print(DUMMY_DAT);
-                    Usb.print(DUMMY_DAT);
+                    SerialUSB.print(DUMMY_DAT);
+                    SerialUSB.print(DUMMY_DAT);
                     do_noise(adc_pins[i]);
                     for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
                         if(adc_pins[i] != pwm_pins[j]) {
@@ -207,7 +207,7 @@ void loop() {
             case 85:  // 'U'
                 COMM.println("Dumping data to USB. Press enter.");
                 while(!COMM.available()) {
-                    Usb.print(DUMMY_DAT);
+                    SerialUSB.print(DUMMY_DAT);
                 }
                 break;
             case 103:  // 'g'

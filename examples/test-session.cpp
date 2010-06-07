@@ -56,14 +56,14 @@ void setup() {
     pinMode(LED_PIN, OUTPUT);
 
     /* Send a message out over COMM interface */
-    //COMM.begin(115200);    // if USART; 9600 is more compatible
-    COMM.println("");
+    Serial2.begin(9600);    // if USART; 9600 is more compatible
+    COMM.println(" ");
     COMM.println("    __   __             _      _");
     COMM.println("   |  \\/  | __ _ _ __ | | ___| |"); 
     COMM.println("   | |\\/| |/ _` | '_ \\| |/ _ \\ |");
     COMM.println("   | |  | | (_| | |_) | |  __/_|");
     COMM.println("   |_|  |_|\\__,_| .__/|_|\\___(_)");
-    COMM.println("               |_|");
+    COMM.println("                 |_|");
     COMM.println("                              by leaflabs");
     COMM.println("");
     COMM.println("");

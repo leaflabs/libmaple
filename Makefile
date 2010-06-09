@@ -142,6 +142,10 @@ tags:
 	etags `find . -name "*.c" -o -name "*.cpp" -o -name "*.h"`
 	@echo "Made TAGS file for EMACS code browsing"
 
+ctags:
+	ctags-exuberant -R .
+	@echo "Made tags file for VIM code browsing"
+
 $(BUILD_PATH):
 	mkdir -p build
 

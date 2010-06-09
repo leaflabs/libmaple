@@ -2,9 +2,9 @@
 
 import serial
 import os
-
+from struct import pack
 try:
-    ser = serial.Serial('/dev/maple', baudrate=115200)
+    ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
     ser.open()
 
     # pull dtr and rts low
@@ -13,6 +13,10 @@ try:
 
     # toggle DTR
     ser.setDTR(1)
+    ser.setDTR(0)
+
+    programDelay = pack("b",35)
+    ser.write(programDelay)
 
     # close
     ser.close()

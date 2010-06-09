@@ -332,40 +332,11 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask)
   }
 #endif
 
-/* if we are about to reset from the DTR signal, then dont return
-   to user, instead return from the ISR into a wait slide */
- if (reset_state == RESET_NOW) {
-   reset_state = START;
-   unsigned int target = (unsigned int)usbWaitReset | 0x1;
-
-   asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
-		"mov sp, r0                \n\t"
-		"mov r0, #1                \n\t"
-		"mov r1, %[target_addr]    \n\t"
-		"mov r2, %[cpsr]           \n\t"
-		"push {r2}                 \n\t"             // Fake xPSR
-		"push {r1}                 \n\t"             // Target address for PC
-		"push {r0}                 \n\t"             // Fake LR
-		"push {r0}                 \n\t"             // Fake R12
-		"push {r0}                 \n\t"             // Fake R3
-		"push {r0}                 \n\t"             // Fake R2
-		"push {r0}                 \n\t"             // Fake R1
-		"push {r0}                 \n\t"             // Fake R0
-		"mov lr, %[exc_return]     \n\t"
-		"bx lr"
-		:
-		: [stack_top] "r" (STACK_TOP),
-		  [target_addr] "r" (target),
-		  [exc_return] "r" (EXC_RETURN),
-		  [cpsr] "r" (DEFAULT_CPSR)
-		: "r0", "r1", "r2");
-   // Should never get here.
- }
 }
 
 void usbWaitReset(void) {
-  static count=1000000;
-  while (count-- >0);
+  int count = program_delay*100000000;
+  delay(program_delay*10);
   systemHardReset();
 }
 

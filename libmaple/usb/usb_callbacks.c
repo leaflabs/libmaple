@@ -5,6 +5,7 @@
 #include "descriptors.h"
 #include "usb_config.h"
 #include "usb.h"
+#include "usb_hardware.h"
 
 ONE_DESCRIPTOR Device_Descriptor = {
   (uint8*)&usbVcomDescriptor_Device,
@@ -38,6 +39,7 @@ volatile uint8 recvBufOut = 0;
 volatile uint8 maxNewBytes   = VCOM_RX_EPSIZE;
 
 RESET_STATE reset_state = START;
+uint8       program_delay = 1;
 
 void vcomDataTxCb(void) {
   /* do whatever after data has been sent to host */
@@ -60,6 +62,48 @@ void vcomDataRxCb(void) {
      we havnt received more bytes than we can fit */
   uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
   /* assert (newBytes <= maxNewBytes); */
+
+
+  if (reset_state == RESET_NOW) {
+    /* todo, check for magic bytes */
+    /* for now just grab the new byte as the delay argument */
+    /* if theres anything in the recv buffer clear it, 
+       then wait for the command byte and the delay argument. 
+       if we dont get it, then just reset. todo, if we dont 
+       get it, then revert back to user code */
+   
+
+    reset_state = START;
+    unsigned int target = (unsigned int)usbWaitReset | 0x1;
+
+    PMAToUserBufferCopy(&program_delay,VCOM_RX_ADDR,1);
+
+    asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
+		 "mov sp, r0                \n\t"
+		 "mov r0, #1                \n\t"
+		 "mov r1, %[target_addr]    \n\t"
+		 "mov r2, %[cpsr]           \n\t"
+		 "push {r2}                 \n\t"             // Fake xPSR
+		 "push {r1}                 \n\t"             // Target address for PC
+		 "push {r0}                 \n\t"             // Fake LR
+		 "push {r0}                 \n\t"             // Fake R12
+		 "push {r0}                 \n\t"             // Fake R3
+		 "push {r0}                 \n\t"             // Fake R2
+		 "push {r0}                 \n\t"             // Fake R1
+		 "push {r0}                 \n\t"             // Fake R0
+		 "mov lr, %[exc_return]     \n\t"
+		 "bx lr"
+		 :
+		 : [stack_top] "r" (STACK_TOP),
+		   [target_addr] "r" (target),
+		   [exc_return] "r" (EXC_RETURN),
+		   [cpsr] "r" (DEFAULT_CPSR)
+		 : "r0", "r1", "r2");
+    // Should never get here.
+
+  }
+
+
 
   if (recvBufIn + newBytes < VCOM_RX_EPSIZE) {
     PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,newBytes);

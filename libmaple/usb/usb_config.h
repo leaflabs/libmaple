@@ -9,6 +9,7 @@
 #define VCOM_ID_PRODUCT   0x0004
 
 #define USB_CONFIG_MAX_POWER      (100 >> 1)
+#define RESET_DELAY               (100)
 
 /* choose addresses to give endpoints the max 64 byte buffers */
 #define USB_BTABLE_ADDRESS        0x00

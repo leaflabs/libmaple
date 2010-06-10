@@ -7,16 +7,11 @@ try:
     ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
     ser.open()
 
-    # pull dtr and rts low
-    ser.setRTS(0)
-    ser.setDTR(0)
-
     # toggle DTR
     ser.setDTR(1)
     ser.setDTR(0)
 
-    programDelay = pack("b",35)
-    ser.write(programDelay)
+    ser.write("1EAF")
 
     # close
     ser.close()

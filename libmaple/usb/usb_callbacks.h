@@ -26,15 +26,14 @@ typedef struct {
 } USB_Line_Coding;
 
 typedef enum {
-  START,
-  NDTR_NRTS,
-  DTR_NRTS,
-  RESET_NEXT,
-  RESET_NOW
+  DTR_UNSET,
+  DTR_HIGH,
+  DTR_NEGEDGE,
+  DTR_LOW  
 } RESET_STATE;
 
 extern RESET_STATE reset_state;  /* tracks DTR/RTS */
-extern uint8       program_delay;
+extern uint8       line_dtr_rts;  
 extern volatile uint8 countTx;
 extern uint8 vcomBufferRx[VCOM_RX_EPSIZE];  /* no reason this has to be VCOM_RX_EPSIZE, could be bigger */
 extern volatile uint8 recvBufIn;   /* the FIFO in index to the recvbuffer */

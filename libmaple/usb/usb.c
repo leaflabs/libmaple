@@ -335,8 +335,7 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask)
 }
 
 void usbWaitReset(void) {
-  int count = program_delay*100000000;
-  delay(program_delay*10);
+  delay(RESET_DELAY);
   systemHardReset();
 }
 
@@ -350,7 +349,7 @@ void usbWaitReset(void) {
 */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
 
-  if (reset_state != START || bDeviceState != CONFIGURED) {
+  if (((line_dtr_rts & 0x02) != 0) || bDeviceState != CONFIGURED) {
     return -1; /* indicates to caller to stop trying, were not connected */
   }
 

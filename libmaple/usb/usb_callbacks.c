@@ -38,8 +38,8 @@ volatile uint8 recvBufIn  = 0;
 volatile uint8 recvBufOut = 0;
 volatile uint8 maxNewBytes   = VCOM_RX_EPSIZE;
 
-RESET_STATE reset_state = START;
-uint8       program_delay = 1;
+RESET_STATE reset_state = DTR_UNSET;
+uint8       line_dtr_rts = 0;
 
 void vcomDataTxCb(void) {
   /* do whatever after data has been sent to host */
@@ -63,44 +63,55 @@ void vcomDataRxCb(void) {
   uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
   /* assert (newBytes <= maxNewBytes); */
 
+  /* todo, not checking very carefully for edge cases. USUALLY,
+     if we emit the reset pulse and send 4 bytes, then newBytes 
+     should be 4. But its POSSIBLE that this would be violated
+     in some cases */
 
-  if (reset_state == RESET_NOW) {
-    /* todo, check for magic bytes */
-    /* for now just grab the new byte as the delay argument */
-    /* if theres anything in the recv buffer clear it, 
-       then wait for the command byte and the delay argument. 
-       if we dont get it, then just reset. todo, if we dont 
-       get it, then revert back to user code */
-   
+  /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
+  char chkBuf[4];
+  char cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
+  if (reset_state == DTR_NEGEDGE) {
+    reset_state = DTR_LOW;
 
-    reset_state = START;
-    unsigned int target = (unsigned int)usbWaitReset | 0x1;
+    if  (newBytes >= 4) {
+      unsigned int target = (unsigned int)usbWaitReset | 0x1;
 
-    PMAToUserBufferCopy(&program_delay,VCOM_RX_ADDR,1);
+      PMAToUserBufferCopy(chkBuf,VCOM_RX_ADDR,4);
 
-    asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
-		 "mov sp, r0                \n\t"
-		 "mov r0, #1                \n\t"
-		 "mov r1, %[target_addr]    \n\t"
-		 "mov r2, %[cpsr]           \n\t"
-		 "push {r2}                 \n\t"             // Fake xPSR
-		 "push {r1}                 \n\t"             // Target address for PC
-		 "push {r0}                 \n\t"             // Fake LR
-		 "push {r0}                 \n\t"             // Fake R12
-		 "push {r0}                 \n\t"             // Fake R3
-		 "push {r0}                 \n\t"             // Fake R2
-		 "push {r0}                 \n\t"             // Fake R1
-		 "push {r0}                 \n\t"             // Fake R0
-		 "mov lr, %[exc_return]     \n\t"
-		 "bx lr"
-		 :
-		 : [stack_top] "r" (STACK_TOP),
-		   [target_addr] "r" (target),
-		   [exc_return] "r" (EXC_RETURN),
-		   [cpsr] "r" (DEFAULT_CPSR)
-		 : "r0", "r1", "r2");
-    // Should never get here.
+      int i;
+      USB_Bool cmpMatch = TRUE;
+      for (i=0; i<4; i++) {
+	if (chkBuf[i] != cmpBuf[i]) {
+	  cmpMatch = FALSE;
+	}
+      }
 
+      if (cmpMatch) {
+	asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
+		     "mov sp, r0                \n\t"
+		     "mov r0, #1                \n\t"
+		     "mov r1, %[target_addr]    \n\t"
+		     "mov r2, %[cpsr]           \n\t"
+		     "push {r2}                 \n\t"             // Fake xPSR
+		     "push {r1}                 \n\t"             // Target address for PC
+		     "push {r0}                 \n\t"             // Fake LR
+		     "push {r0}                 \n\t"             // Fake R12
+		     "push {r0}                 \n\t"             // Fake R3
+		     "push {r0}                 \n\t"             // Fake R2
+		     "push {r0}                 \n\t"             // Fake R1
+		     "push {r0}                 \n\t"             // Fake R0
+		     "mov lr, %[exc_return]     \n\t"
+		     "bx lr"
+		     :
+		     : [stack_top] "r" (STACK_TOP),
+		     [target_addr] "r" (target),
+		     [exc_return] "r" (EXC_RETURN),
+		       [cpsr] "r" (DEFAULT_CPSR)
+		     : "r0", "r1", "r2");
+	/* should never get here */
+      }
+    }
   }
 
 
@@ -256,40 +267,43 @@ RESULT usbNoDataSetup(u8 request) {
       /* to reset the board, pull both dtr and rts low
 	 then pulse dtr by itself */
       new_signal = pInformation->USBwValues.bw.bb0 & (CONTROL_LINE_DTR | CONTROL_LINE_RTS);
+      line_dtr_rts = new_signal & 0x03;
+
       switch (reset_state) {
 	/* no default, covered enum */
-        case START: 
-	  if (new_signal == 0) {
-	    reset_state = NDTR_NRTS;
-	  }
-	  break;
-
-        case NDTR_NRTS: 
-	  if (new_signal == CONTROL_LINE_DTR) {
-	    reset_state = DTR_NRTS;
-	  } else if (new_signal == 0) {
-	    reset_state = NDTR_NRTS;
-	  } else {
-	    reset_state = START;
-	  }
-	  break;
-
-        case DTR_NRTS: 
-	  if (new_signal == 0) {
-	    /* dont reset here, otherwise
-	       well likely crash the host! */
-	    reset_state = RESET_NOW;
-	  } else {
-	    reset_state = START;
-	  }
-	  break;
-      case RESET_NEXT:
-	reset_state = RESET_NOW;
+      case DTR_UNSET:
+	if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+	  reset_state = DTR_LOW;
+	} else {
+	  reset_state = DTR_HIGH;
+	}
 	break;
-      case RESET_NOW:
-      /* do nothing, wait for reset */
+
+      case DTR_HIGH:
+	if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+	  reset_state = DTR_NEGEDGE;
+	} else {
+	  reset_state = DTR_HIGH;
+	}	
+	break;
+
+      case DTR_NEGEDGE:
+	if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+	  reset_state = DTR_LOW;
+	} else {
+	  reset_state = DTR_HIGH;
+	}
+	break;
+
+      case DTR_LOW:
+	if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+	  reset_state = DTR_LOW;
+	} else {
+	  reset_state = DTR_HIGH;
+	}
 	break;
       }
+
       return USB_SUCCESS;
     }
   }

@@ -1,10 +1,13 @@
 #!/usr/bin/python
 
+# NOTE: On Mac OSX this script must be run as sudo? 
+
 import serial
 import os
 from struct import pack
+
 try:
-    ser = serial.Serial('/dev/maple', baudrate=115200)
+    ser = serial.Serial('/dev/maple', baudrate=115200, xonxoff=1)
     ser.open()
 
     # try to toggle DTR/RTS (old scheme)

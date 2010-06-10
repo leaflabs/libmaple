@@ -349,7 +349,7 @@ void usbWaitReset(void) {
 */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
 
-  if (((line_dtr_rts & 0x02) == 0) || bDeviceState != CONFIGURED) {
+  if (((line_dtr_rts & CONTROL_LINE_RTS) == 0) || bDeviceState != CONFIGURED) {
     return -1; /* indicates to caller to stop trying, were not connected */
   }
 

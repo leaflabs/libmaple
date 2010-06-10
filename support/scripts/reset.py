@@ -4,16 +4,22 @@ import serial
 import os
 from struct import pack
 try:
-    ser = serial.Serial('/dev/ttyACM0', baudrate=115200)
+    ser = serial.Serial('/dev/maple', baudrate=115200)
     ser.open()
 
-    # toggle DTR
+    # try to toggle DTR/RTS (old scheme)
+    ser.setRTS(0)
+    ser.setDTR(0)
     ser.setDTR(1)
     ser.setDTR(0)
 
+    # try magic number
+    ser.setRTS(1)
+    ser.setDTR(1)
+    ser.setDTR(0)
     ser.write("1EAF")
 
-    # close
+    # ok we're done here
     ser.close()
 
 except:

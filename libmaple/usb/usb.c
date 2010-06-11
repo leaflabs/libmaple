@@ -339,29 +339,39 @@ void usbWaitReset(void) {
   systemHardReset();
 }
 
+
+/* todo, change this function to behave like below */
 /* copies data out of sendBuf into the packet memory for
    usb, but waits until any previous usb transmissions have
    completed before doing this. It returns without waiting
    for its data to be sent. most efficient when 64 bytes are copied
    at a time. users responsible for not overflowing sendbuf
    with len! if > 64 bytes are being sent, then the function
-   will block at every 64 byte packet
+   will simply send the first 64 and return. It is the USERS JOB
+   to implement any blocking. return -1 implies connection failure,
+   return 0 implies buffer filled, return < len implies another
+   transaction is needed to complete the send. 
 */
+
+/* current behavior:
+   sendBytes will block until bytes are actually sent over the pipe.
+   broken pipes could stall this function. DTR and RTS are used to check
+   for a valid connection. 
+ */
 int16 usbSendBytes(uint8* sendBuf, uint16 len) {
 
-  if (((line_dtr_rts & CONTROL_LINE_RTS) == 0) || bDeviceState != CONFIGURED) {
+  if (bDeviceState != CONFIGURED || (!usbGetDTR() && !usbGetRTS())) {
     return -1; /* indicates to caller to stop trying, were not connected */
   }
 
-  /* This may be the correct behavior but it's undocumented
+    /*
   if (countTx >= VCOM_TX_EPSIZE) {
     return 0; // indicates to caller that the buffer is full 
   }
-  */
+    */
 
-  /* Block for any pending writes */
   while (countTx)
-     ;
+    ;
 
   uint16 sent = len;
 
@@ -434,4 +444,12 @@ void usbSendHello(void) {
 
   uint8 recv[64];
   usbReceiveBytes(&recv[0],1);
+}
+
+uint8 usbGetDTR() {
+  return ((line_dtr_rts & CONTROL_LINE_DTR) != 0);
+}
+
+uint8 usbGetRTS() {
+  return ((line_dtr_rts & CONTROL_LINE_RTS) != 0);
 }

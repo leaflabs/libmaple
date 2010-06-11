@@ -36,11 +36,12 @@ USBSerial :: USBSerial(void) {
 }
 
 void USBSerial::write(uint8 ch) {
-   usbSendBytes(&ch, 1);
+  usbSendBytes(&ch, 1);
 }
 
 void USBSerial::write(const char *str) {
    uint32 len = strlen(str);
+ 
    usbSendBytes((uint8*)str, len);
 }
 

@@ -54,7 +54,7 @@ void _fail(const char* file, int line, const char* exp) {
     nvic_disable_interrupts();
 
     /* Turn off timers  */
-    timers_disable();
+    timer_disable_all();
 
     /* Turn off ADC */
     adc_disable();

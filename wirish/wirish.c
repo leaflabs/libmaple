@@ -31,17 +31,17 @@
 #include "systick.h"
 #include "gpio.h"
 #include "nvic.h"
-#include "usb.h"
+//#include "usb.h"
 
 void init(void) {
    rcc_init();
    nvic_init();
-   systick_init();
+//   systick_init();
    gpio_init();
    adc_init();
    timer_init(1, 1);
    timer_init(2, 1);
    timer_init(3, 1);
    timer_init(4, 1);
-   setupUSB();
+   //setupUSB();
 }

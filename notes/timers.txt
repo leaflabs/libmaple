@@ -1,0 +1,77 @@
+
+Each timer (1-4) has 4 capture/compare channels (1-4). These are directly used
+by PWM but have a ton of other possible functionality. The STM32 implementation
+is particularly complicated with, eg, the ability to chain together timers
+
+Timer1 is an "advanced timer" with many more features. I think if we use just
+the "Capture and compare interrupt", and enable MOE during initialization
+everything will be ok. There are seperate Break, Update, and Trigger interrupts
+as well that we will ignore for now.
+
+Timer2,Ch 3+4 are D0 and D1, which conflict with Serial2. USART should work
+fine as long as pins aren't in output mode? and timers should work fine if
+Serial2 isn't in use?
+
+Misc Notes
+------------------------------------------------------------------------------
+implementation with case/switch in the interrupt handlers doesn't work; a lot
+of the time multiple interrupt flags are active at the same time (or become
+active?)
+
+TODO
+------------------------------------------------------------------------------
+- function to read out CCR registers
+- allow comparison output to the pin (a la PWM)
+- additional modes and configuration (up, down, up/down, etc)
+- Wirish (C++) higher level implementation
+- implement the update interrupt as a "5th channel"
+- track down and handle all pin conflicts
+- document
+
+Possible Wirish implementation
+------------------------------------------------------------------------------
+This recent implementation seems pretty clean:
+http://arduino.cc/pipermail/developers_arduino.cc/2010-June/002845.html
+
+        class Timer1Class {
+        public:
+            static void (*isrCompareA)(void);
+            static void (*isrCompareB)(void);
+
+            static const uint8_t PRESCALE1 = 1;
+            static const uint8_t PRESCALE8 = 2;
+            static const uint8_t PRESCALE64 = 3;
+            static const uint8_t PRESCALE256 = 4;
+            static const uint8_t PRESCALE1024 = 5;
+
+            const static uint8_t NORMAL = 0;
+            const static uint8_t CTC = 4;
+
+            void setPrescaleFactor(uint8_t factor);
+            void setMode(uint8_t mode);
+            uint16_t read();
+            void write(uint16_t val);
+            void writeCompareA(uint16_t val);
+            void writeCompareB(uint16_t val);
+            void attachCompareAInterrupt(void (*f)(void));
+            void attachCompareBInterrupt(void (*f)(void));
+            void detachCompareAInterrupt();
+            void detachCompareBInterrupt();
+        };
+
+        extern Timer1Class Timer1;
+
+Here's one of the more standard libaries out there:
+http://www.arduino.cc/playground/Code/Timer1
+
+        void initialize(long microseconds=1000000);
+        void start();
+        void stop();
+        void restart();
+        void setPeriod(long microseconds);
+        void pwm(char pin, int duty, long microseconds=-1);
+        void setPwmDuty(char pin, int duty);
+        void disablePwm(char pin);
+        void attachInterrupt(void (*isr)(), long microseconds=-1);
+        void detachInterrupt();
+

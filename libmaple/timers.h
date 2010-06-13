@@ -93,6 +93,9 @@ typedef volatile uint32* TimerCCR;
 #define ARPE               BIT(7)                // Auto-reload preload enable
 #define NOT_A_TIMER        0
 
+// just threw this in here cause I can, aw yeah
+#define TIMER_CCR(NUM,CHAN)     TIMER ## NUM ## _CH ## CHAN ## _CRR
+
 #define TIMER1_CH1_CCR     (TimerCCR)(TIMER1_BASE + 0x34)
 #define TIMER1_CH2_CCR     (TimerCCR)(TIMER1_BASE + 0x38)
 #define TIMER1_CH3_CCR     (TimerCCR)(TIMER1_BASE + 0x3C)
@@ -114,16 +117,25 @@ typedef volatile uint32* TimerCCR;
 #define TIMER4_CH4_CCR     (TimerCCR)(TIMER4_BASE + 0x40)
 
 
+#define TIMER_DISABLED          0
+#define TIMER_PWM               1
+#define TIMER_OUTPUTCOMPARE     2
+
 /* Turn on timer with prescale as the divisor
  * void timer_init(uint32 timer, uint16 prescale)
  *      timer     ->  {1-4}
  *      prescale  ->  {1-65535}
  * */
 void timer_init(uint8, uint16);
-void timers_disable(void);
-void timers_disable_channel(uint8, uint8);
-void timers_set_prescaler(uint32 timer_num, uint16 prescale);
-void timers_set_reload(uint32 timer_num, uint16 max_reload);
+void timer_disable_all(void);
+uint16 timer_get_count(uint8);
+void timer_set_count(uint8,uint16);
+void timer_set_prescaler(uint8 timer_num, uint16 prescale);
+void timer_set_reload(uint8 timer_num, uint16 max_reload);
+void timer_set_mode(uint8 timer_num, uint8 compare_num, uint8 mode);
+void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value);
+void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr handler);
+void timer_detach_interrupt(uint8 timer_num, uint8 compare_num);
 
 /* Turn on PWM with duty_cycle on the specified channel in timer.
  * This function takes in a pointer to the corresponding CCR
@@ -141,7 +153,6 @@ void timers_set_reload(uint32 timer_num, uint16 max_reload);
 static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16 duty_cycle) {
     *CCR = duty_cycle;
 }
-
 
 #ifdef __cplusplus
 } // extern "C"

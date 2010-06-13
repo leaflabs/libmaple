@@ -43,7 +43,7 @@
 #ifdef __cplusplus
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
-#include "usb_serial.h"
+//#include "usb_serial.h"
 #endif
 
 #ifdef __cplusplus

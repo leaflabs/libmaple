@@ -95,8 +95,8 @@ void HardwareSPI::begin(SPIFrequency freq, uint32 endianness, uint32 mode) {
       }
 
       /* Turn off PWM on shared pins */
-      timers_disable_channel(3, 2);
-      timers_disable_channel(3, 1);
+      timer_set_mode(3, 2, TIMER_DISABLED);
+      timer_set_mode(3, 1, TIMER_DISABLED);
    }
 
    endianness = (endianness == LSBFIRST) ? SPI_LSBFIRST : SPI_MSBFIRST;

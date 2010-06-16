@@ -420,6 +420,48 @@ void loop() {
                     if((uint8)COMM.read() == (uint8)27) break;      // ESC
                 }
                 break;
+            case 43:  // '+'
+                COMM.println("Doing QA testing for 37 GPIO pins...");
+                // turn off LED
+                digitalWrite(LED_PIN, 0);
+                for(int i = 0; i<NUM_GPIO; i++) {
+                    pinMode(i, INPUT);
+                    gpio_state[i] = 0; //(uint8)digitalRead(i);
+                }
+                COMM.println("Waiting to start...");
+                while(digitalRead(0) != 1 && !COMM.available()) {
+                    continue;
+                }
+                for(int i=0; i<38; i++) {
+                    if(i==13) {
+                        COMM.println("Not Checking D13 (LED)");
+                        continue;
+                    }
+                    COMM.print("Checking D");
+                    COMM.print(i,DEC);
+                    while(digitalRead(i) == 0) continue;
+                    for(int j=0; j<NUM_GPIO; j++) {
+                        if(digitalRead(j) && j!=i) {
+                            COMM.print(": FAIL ########################### D");
+                            COMM.println(j, DEC);
+                            break;
+                        }
+                    }
+                    while(digitalRead(i) == 1) continue;
+                    for(int j=0; j<NUM_GPIO; j++) {
+                        if(digitalRead(j) && j!=i) {
+                            COMM.print(": FAIL with D");
+                            COMM.println(j, DEC);
+                            break;
+                        }
+                    }
+                    COMM.println(": Ok!");
+                }
+                for(int i = 0; i<NUM_GPIO; i++) {
+                    pinMode(i, OUTPUT);
+                    digitalWrite(i, 0);
+                }
+                break;
             default:
                 COMM.print("Unexpected: ");
                 COMM.println(input);
@@ -451,6 +493,7 @@ void print_help(void) {
     COMM.println("\tr: read in GPIO status changes and print them in realtime");
     COMM.println("\ts: output a sweeping SERVO PWM on all PWM channels");
     COMM.println("\tm: output serial data dumps on USART1 and USART3 with various rates");
+    COMM.println("\t+: test shield mode (for QA, will disrupt Serial2!)");
 
     COMM.println("Unimplemented:");
     COMM.println("\te: do everything all at once until new input");

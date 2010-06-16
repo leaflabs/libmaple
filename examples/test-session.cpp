@@ -367,7 +367,7 @@ void loop() {
                 digitalWrite(LED_PIN, 0);
                 // make sure to skip the TX/RX headers
                 for(int i = 2; i<NUM_GPIO; i++) {
-                    pinMode(i, INPUT);
+                    pinMode(i, INPUT_PULLDOWN);
                     gpio_state[i] = (uint8)digitalRead(i);
                 }
                 while(!COMM.available()) { 
@@ -450,7 +450,7 @@ void loop() {
                     while(digitalRead(i) == 1) continue;
                     for(int j=0; j<NUM_GPIO; j++) {
                         if(digitalRead(j) && j!=i) {
-                            COMM.print(": FAIL with D");
+                            COMM.print(": FAIL ########################### D");
                             COMM.println(j, DEC);
                             break;
                         }

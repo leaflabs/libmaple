@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
-All code in /stm32lib/ is from v2.0.2 of the standard peripheral library from
-STMicroelectronics, which is released with the following notice:
+All code in /libmaple/usb/usb_lib/ is from v2.0.2 of the standard peripheral
+library from STMicroelectronics, which is released with the following notice:
 
 THE PRESENT FIRMWARE WHICH IS FOR GUIDANCE ONLY AIMS AT PROVIDING CUSTOMERS
 WITH CODING INFORMATION REGARDING THEIR PRODUCTS IN ORDER FOR THEM TO SAVE TIME.
@@ -10,8 +10,8 @@ CONTENT OF SUCH FIRMWARE AND/OR THE USE MADE BY CUSTOMERS OF THE CODING
 INFORMATION CONTAINED HEREIN IN CONNECTION WITH THEIR PRODUCTS.
 
 -------------------------------------------------------------------------------
-Unless otherwise noted in the header, all code in /libmaple/ is copyright
-LeafLabs LLC and are released under the MIT License:
+Unless otherwise noted in the header, all code in /libmaple/ and /wirish/ is
+copyright LeafLabs LLC and are released under the MIT License:
 
 Copyright (c) 2009-2010 LeafLabs LLC
 
@@ -36,7 +36,7 @@ THE SOFTWARE.
 See http://creativecommons.org/licenses/MIT/ for more information.
 
 -------------------------------------------------------------------------------
-Some of files in /stm32conf/ were written by 'lanchon' and posted in the
+Some of files in /support/ld/ were written by 'lanchon' and posted in the
 STMicroelectronics forum at:
 
 https://my.st.com/public/STe2ecommunities/mcu/Lists/ARM%20CortexM3%20STM32/flat.aspx?RootFolder=/public/STe2ecommunities/mcu/Lists/ARM%20CortexM3%20STM32/STM32%20CC%2B%2B%20build%20environment%20using%20CodeSourcery%20Sourcery%20G%2B%2B&currentviews=18152

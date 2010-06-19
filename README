@@ -46,6 +46,9 @@ libmaple Repo Layout
 
 Instructions to Compile for ARM Targets
 ------------------------------------------------------------------------------
+The best HOWTO for developing with this code is the "libmaple Unix Toolchain
+Quickstart" guide at http://leaflabs.com/docs/libmaple/unix-toolchain/.
+
 The Codesourcery g++ compiler for arm platforms is required. It is based on gcc
 (they push changes into gcc a couple times a year), get the latest EABI version
 from:

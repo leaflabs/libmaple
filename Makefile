@@ -18,11 +18,8 @@ OS = $(shell uname)
 VENDOR_ID =  1EAF
 PRODUCT_ID = 0003
 
-ifeq ($(OS),Linux)
-	DFU = dfu-util
-else
-	DFU = ../dfu-util/bin/linux/dfu-util
-endif
+# Modify this if necessary
+DFU = dfu-util
 
 BUILD_PATH = build
 LIB_PATH   = libmaple

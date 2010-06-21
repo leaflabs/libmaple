@@ -20,6 +20,7 @@
 #ifndef Print_h
 #define Print_h
 
+#include <libmaple_types.h>
 #include <stdio.h> // for size_t
 
 #define DEC 10

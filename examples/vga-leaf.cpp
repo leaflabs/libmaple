@@ -1,39 +1,11 @@
-
 #include "wirish.h"
 
-/*
-D5     PB6         -      TIM4_CH1       I2C1_SCL   -           -           Y
-D6     PA8         -      TIM1_CH1       -          USART1_CK   -           Y
-D7     PA9         -      TIM1_CH2       -          USART1_TX   -           Y
-D8     PA10        -      TIM1_CH3       -          USART1_RX   -           Y
-D9     PB7         -      TIM4_CH2       I2C1_SDA   -           -           Y
-*/
-
-//gpio_write_bit(GPIOB_BASE, 6, 1); // VGA_R
-//gpio_write_bit(GPIOB_BASE, 6, 0); 
-
-//(GPIOA_BASE)->BSRR = BIT(8);
-//asm volatile("nop");
-//(GPIOA_BASE)->BRR = BIT(8);
-/*
-    gpio_write_bit(GPIOB_BASE, 6, 1); // VGA_R
-    gpio_write_bit(GPIOB_BASE, 6, 0); 
-    gpio_write_bit(GPIOA_BASE, 8, 1); // VGA_G
-    gpio_write_bit(GPIOA_BASE, 8, 0); 
-    gpio_write_bit(GPIOA_BASE, 9, 1); // VGA_B
-    gpio_write_bit(GPIOA_BASE, 9, 0); 
-    gpio_write_bit(GPIOA_BASE, 10, 1); // VGA_V
-    gpio_write_bit(GPIOA_BASE, 10, 0); 
-    gpio_write_bit(GPIOB_BASE, 7, 1); // VGA_H
-    gpio_write_bit(GPIOB_BASE, 7, 0); 
-*/
-
 #define LED_PIN 13
-#define VGA_R 5 // B6
-#define VGA_G 6 // A8
-#define VGA_B 7 // A9
-#define VGA_V 11 // A6
-#define VGA_H 12 // A7
+#define VGA_R 5     // B6
+#define VGA_G 6     // A8
+#define VGA_B 7     // A9
+#define VGA_V 11    // A6
+#define VGA_H 12    // A7
 #define VGA_R_HIGH (GPIOB_BASE)->BSRR = BIT(6)
 #define VGA_R_LOW  (GPIOB_BASE)->BRR  = BIT(6)
 #define VGA_G_HIGH (GPIOA_BASE)->BSRR = BIT(8)
@@ -89,11 +61,14 @@ void setup()
     timer_set_count(4,0);
 }
 
+void loop() {
+    // everything happens in the interrupts!
+}
+
 int toggle = 0;
-uint16  x = 0;
+uint16 x = 0;
 uint16 y = 0;
 uint8 v_active = 1;
-GPIO_Port *portb = GPIOB_BASE;
 
 void isr_porch(void) {
     VGA_H_HIGH;
@@ -139,9 +114,9 @@ uint8 logo[18][16] = {
 
 void isr_start(void) {
     if(!v_active) { return; }
+    VGA_R_LOW;
     VGA_R_HIGH;
-    //delayMicroseconds(2);
-    //gpio_write_bit(GPIOA_BASE, 8, 1); // VGA_G
+
     for(x=0; x<32; x++) {
         if(logo[y/28][x/2]) {
             VGA_G_HIGH;
@@ -151,7 +126,6 @@ void isr_start(void) {
             VGA_B_LOW;
         }
     }
-
 }
 void isr_stop(void) {
     if(!v_active) { return; }
@@ -162,94 +136,6 @@ void isr_stop(void) {
 void isr_update(void) {
     VGA_H_LOW;
 }
-
-void loop() {
-    /* 
-    toggle ^= 1;
-    digitalWrite(LED_PIN, toggle);
-    delay(100);
-    Serial2.println("HIHIHI!");
-    */ 
-    //for(y=0; y<480; y++) {
-   /* 
-    for(y=0; y<160; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_H_HIGH;
-        VGA_R_HIGH;
-        delayMicroseconds(8);
-        VGA_G_HIGH;
-        delayMicroseconds(10);
-        VGA_B_HIGH;
-        delayMicroseconds(10);
-        VGA_R_LOW;
-        VGA_B_LOW;
-        VGA_G_LOW;
-        //VGA_G_HIGH;
-    }
-    for(y=0; y<160; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_H_HIGH;
-        VGA_G_HIGH;
-        delayMicroseconds(8);
-        VGA_R_HIGH;
-        delayMicroseconds(10);
-        VGA_B_HIGH;
-        delayMicroseconds(10);
-        VGA_R_LOW;
-        VGA_B_LOW;
-        VGA_G_LOW;
-        //VGA_G_HIGH;
-    }
-    for(y=0; y<160; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_H_HIGH;
-        VGA_B_HIGH;
-        delayMicroseconds(8);
-        VGA_G_HIGH;
-        delayMicroseconds(10);
-        VGA_R_HIGH;
-        delayMicroseconds(10);
-        VGA_R_LOW;
-        VGA_B_LOW;
-        VGA_G_LOW;
-        //VGA_G_HIGH;
-    }
-    for(y=0; y<11; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_R_LOW;
-        VGA_H_HIGH;
-        delayMicroseconds(28);
-    }
-    VGA_V_LOW;
-    for(y=0; y<2; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_R_LOW;
-        VGA_H_HIGH;
-        delayMicroseconds(28);
-    }
-    VGA_V_HIGH;
-    for(y=0; y<30; y++) {
-        VGA_R_LOW;
-        VGA_H_LOW;
-        delayMicroseconds(3);
-        VGA_R_LOW;
-        VGA_H_HIGH;
-        delayMicroseconds(28);
-    }
-    */
-
-}
-
 
 int main(void) {
     init();

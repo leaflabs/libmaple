@@ -75,15 +75,17 @@ typedef struct {
     uint16  RESERVED19;
 } Timer;
 
-
+// These are the output compare interrupt functions that get called by the
+// handlers below
 volatile static voidFuncPtr timer1_handlers[4];
 volatile static voidFuncPtr timer2_handlers[4];
 volatile static voidFuncPtr timer3_handlers[4];
 volatile static voidFuncPtr timer4_handlers[4];
 
+// This function should probably be rewriten to take (timer_num, mode) and have
+// prescaler set elsewhere. The mode can be passed through to set_mode at the 
+// end
 void timer_init(uint8 timer_num, uint16 prescale) {
-    // This initialization is very PWM-specific. That's a good default but it
-    // should probably call down to a set_mode function
     
     Timer *timer; uint8 is_advanced = 0;
 
@@ -151,9 +153,11 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     timer->CR1  |= 1;         // Enable timer
 }
 
-void timer_set_count(uint8 timer_num, uint16 value) {
-    Timer *timer;
-    ASSERT(timer_num > 0 && timer_num <= 4);
+// This function sets the counter value via register for the specified timer.
+// Can't think of specific usecases except for resetting to zero but it's easy
+// to implement and allows for "creative" programming
+void timer_set_count(uint8 timer_num, uint16 value) { Timer *timer;
+ASSERT(timer_num > 0 && timer_num <= 4);
 
     switch(timer_num) {
     case 1:
@@ -172,6 +176,8 @@ void timer_set_count(uint8 timer_num, uint16 value) {
     timer->CNT = value;
 }
 
+// Returns the current timer counter value. Probably very inaccurate if the
+// counter is running with a low prescaler.
 uint16 timer_get_count(uint8 timer_num) {
     Timer *timer;
     ASSERT(timer_num > 0 && timer_num <= 4);
@@ -193,6 +199,7 @@ uint16 timer_get_count(uint8 timer_num) {
     return timer->CNT;
 }
 
+// Does what it says
 void timer_set_prescaler(uint8 timer_num, uint16 prescale) {
     Timer *timer;
     ASSERT(timer_num > 0 && timer_num <= 4);
@@ -214,6 +221,8 @@ void timer_set_prescaler(uint8 timer_num, uint16 prescale) {
     timer->PSC = prescale;
 }
 
+// This sets the "reload" or "overflow" value for the entire timer. We should
+// probably settle on either "reload" or "overflow" to prevent confusion?
 void timer_set_reload(uint8 timer_num, uint16 max_reload) {
     Timer *timer;
     ASSERT(timer_num > 0 && timer_num <= 4);
@@ -235,15 +244,28 @@ void timer_set_reload(uint8 timer_num, uint16 max_reload) {
     timer->ARR = max_reload;
 }
 
-
+// This quickly disables all 4 timers, presumably as part of a system shutdown
+// or similar to prevent interrupts and PWM output without 16 seperate function
+// calls to timer_set_mode
 void timer_disable_all(void) {
     // Note: this must be very robust because it gets called from, eg, ASSERT
     // TODO: rewrite?
-    Timer *timer; Timer *timers[4] = { (Timer*)TIMER1_BASE,
-    (Timer*)TIMER2_BASE, (Timer*)TIMER3_BASE, (Timer*)TIMER4_BASE, }; int i;
-    for (i = 0; i < 4; i++) { timer = timers[i]; timer->CR1 = 0; timer->CCER =
-    0; } }
+    Timer *timer; 
+    Timer *timers[4] = { (Timer*)TIMER1_BASE,
+                         (Timer*)TIMER2_BASE, 
+                         (Timer*)TIMER3_BASE, 
+                         (Timer*)TIMER4_BASE, 
+                       }; 
+    int i;
 
+    for (i = 0; i < 4; i++) { 
+        timer = timers[i]; 
+        timer->CR1 = 0; 
+        timer->CCER = 0; 
+    } 
+}
+
+// Sets the mode of individual timer channels, including a DISABLE mode
 void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
     Timer *timer;
     switch (timer_num) {
@@ -359,6 +381,7 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
     }
 }
 
+// This sets the compare value (aka the trigger) for a given timer channel
 void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value) {
     // The faster version of this function is the inline timer_pwm_write_ccr
     
@@ -395,6 +418,8 @@ void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value) {
     }
 }
 
+// Stores a pointer to the passed usercode interrupt function and configures
+// the actual ISR so that it will actually be called
 void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr handler) {
     Timer *timer;
     ASSERT(timer_num > 0 && timer_num <= 4 && compare_num > 0 && compare_num <= 4);
@@ -455,12 +480,20 @@ void timer_detach_interrupt(uint8 timer_num, uint8 compare_num) {
     }
 }
 
+// The following are the actual interrupt handlers; 1 for each timer which must
+// determine which actual compare value (aka channel) was triggered.
+//
+// These ISRs get called when the timer interrupt is enabled, the timer is running, and
+// the timer count equals any of the CCR registers /or/ has overflowed.
+//
+// This is a rather long implementation...
 void TIM1_CC_IRQHandler(void) {
-    // This is a rather long implementation...
     Timer *timer = (Timer*)TIMER1_BASE;
     uint16 sr_buffer; 
     sr_buffer = timer->SR;
 
+    // Simply switch/case-ing here doesn't work because multiple 
+    // CC flags may be high. 
     if(sr_buffer & 0x10){ // CC4 flag
         timer->SR &= ~(0x10);
         if(timer1_handlers[3]) {

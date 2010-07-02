@@ -1,32 +1,42 @@
 
-classic digitalWrite() gives ~500ns pulse time (2MHz)
+Notes on GPIO Writing
+------------------------------------------------------------------------------
+Classic digitalWrite() gives ~500ns pulse time (2MHz)
 
 gpio_write_bit() is about 360ns (2.78MHz)
 
-writing to GPIO?_BASE is about 60ns (16.6MHz -> 18MHz)
+Writing to GPIO?_BASE is about 60ns (16.6MHz -> 18MHz)
 
-pwm write 0x0001 is about 30ns (33MHz)
+pwm write 0x0001 is about 30ns (33MHz) with prescaler as 1 (default)
 pwm write 0x0001 is about 14ns (72MHz) with prescaler as 0 (!)
 
-1/25.125MHz = 39.72ns
+VGA Timing
+------------------------------------------------------------------------------
+1/25.125MHz = 39.72ns (640x480 pixel clock)
 
-crude 640x480 directions:
-    www.epanorama.net/documents/pc/vga_timing.html
+Crude 640x480 directions:
+    From www.epanorama.net/documents/pc/vga_timing.html
     480 lines
     31.77 us horizontal line length -> 2287.44 clock cycles -> 2287
     3.77 us sync period -> 271 clocks -> 271
     1.89 us front porch? -> 136 clocks -> 136
     25.17 us video -> 1812.24 clocks -> 1812
    
-    so... 
+    So... 
     2287 reload 
     271  1: Hsync high
     407  2: Video on
     2219 3: Video off
     2287 4: Hsync low
 
-    vertically, it's 
+    Vertically, it's 
     480 lines active video
     11 lines front porch
     2 lines Vsync (low)
     31 lines back porch
+
+Currently, setting vs. clearing GPIO registers seems to take a different amount
+of time? Or perhaps i'm not analyzing branching correctly. Regardless, if you
+SET 100x times then UNSET on one line, then UNSET 100x then SET the next line,
+the two changes in color will generally not line up. 
+

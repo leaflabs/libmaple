@@ -12,54 +12,69 @@ Timer2,Ch 3+4 are D0 and D1, which conflict with Serial2. USART should work
 fine as long as pins aren't in output mode? and timers should work fine if
 Serial2 isn't in use?
 
+Caveats
+------------------------------------------------------------------------------
+There are probably subtle bugs with the way register settings get read in; eg,
+it is often required to have the counter fully overflow before new settings
+come into effect?
+Getting really good timing is still an art, not a science here... usually you 
+need to fiddle with an oscilloscope and the exact overflow/compare numbers to
+get just the right time values.
+Any other interrupts (SysTick, USB, Serial, etc) can blow away all the nice 
+timing stuff.
+
 Misc Notes
 ------------------------------------------------------------------------------
-implementation with case/switch in the interrupt handlers doesn't work; a lot
+Implementation with case/switch in the interrupt handlers doesn't work; a lot
 of the time multiple interrupt flags are active at the same time (or become
 active?)
 
 TODO
 ------------------------------------------------------------------------------
+- document carefully (eg, determine clock-wise and overflow-wise behavior for
+  each function)
+- track down and handle all pin conflicts
+- implement the update interrupt as a "5th channel"
+- "pulse in" stuff, both c and c++
 - function to read out CCR registers
 - allow comparison output to the pin (a la PWM)
 - additional modes and configuration (up, down, up/down, etc)
-- Wirish (C++) higher level implementation
-- implement the update interrupt as a "5th channel"
-- track down and handle all pin conflicts
-- document
 
 Possible Wirish implementation
 ------------------------------------------------------------------------------
-This recent implementation seems pretty clean:
+Inspired by Timer1 Library for arduino
 http://arduino.cc/pipermail/developers_arduino.cc/2010-June/002845.html
 
-        class Timer1Class {
+        class HardwareTimer {
+
         public:
-            static void (*isrCompareA)(void);
-            static void (*isrCompareB)(void);
 
-            static const uint8_t PRESCALE1 = 1;
-            static const uint8_t PRESCALE8 = 2;
-            static const uint8_t PRESCALE64 = 3;
-            static const uint8_t PRESCALE256 = 4;
-            static const uint8_t PRESCALE1024 = 5;
-
-            const static uint8_t NORMAL = 0;
-            const static uint8_t CTC = 4;
-
-            void setPrescaleFactor(uint8_t factor);
-            void setMode(uint8_t mode);
-            uint16_t read();
-            void write(uint16_t val);
-            void writeCompareA(uint16_t val);
-            void writeCompareB(uint16_t val);
-            void attachCompareAInterrupt(void (*f)(void));
-            void attachCompareBInterrupt(void (*f)(void));
-            void detachCompareAInterrupt();
-            void detachCompareBInterrupt();
+            void pause();
+            void resume();
+            void setPrescaleFactor(uint8 factor);
+            void setOverflow(uint16 val); // truncates to overflow
+            void setCount(uint16 val);    // truncates to overflow
+            uint16 getCount();
+            uint16 setPeriod(uint32 microseconds); // tries to set prescaler and overflow wisely; returns overflow
+            void setMode(uint8 mode);
+            void setCompare1(uint16 val); // truncates to overflow
+            void setCompare2(uint16 val); // truncates to overflow
+            void setCompare3(uint16 val); // truncates to overflow
+            void setCompare4(uint16 val); // truncates to overflow
+            void attachCompare1Interrupt(void (*f)(void));
+            void attachCompare2Interrupt(void (*f)(void));
+            void attachCompare3Interrupt(void (*f)(void));
+            void attachCompare4Interrupt(void (*f)(void));
+            void detachCompare1Interrupt();
+            void detachCompare2Interrupt();
+            void detachCompare3Interrupt();
+            void detachCompare4Interrupt();
         };
 
-        extern Timer1Class Timer1;
+        HardwareTimer Timer1 = HardwareTimer(1);
+        HardwareTimer Timer2 = HardwareTimer(2);
+        HardwareTimer Timer3 = HardwareTimer(3);
+        HardwareTimer Timer4 = HardwareTimer(4);
 
 Here's one of the more standard libaries out there:
 http://www.arduino.cc/playground/Code/Timer1

@@ -1,33 +1,6 @@
 
 #include "wirish.h"
 
-/*
-D5     PB6         -      TIM4_CH1       I2C1_SCL   -           -           Y
-D6     PA8         -      TIM1_CH1       -          USART1_CK   -           Y
-D7     PA9         -      TIM1_CH2       -          USART1_TX   -           Y
-D8     PA10        -      TIM1_CH3       -          USART1_RX   -           Y
-D9     PB7         -      TIM4_CH2       I2C1_SDA   -           -           Y
-*/
-
-//gpio_write_bit(GPIOB_BASE, 6, 1); // VGA_R
-//gpio_write_bit(GPIOB_BASE, 6, 0); 
-
-//(GPIOA_BASE)->BSRR = BIT(8);
-//asm volatile("nop");
-//(GPIOA_BASE)->BRR = BIT(8);
-/*
-    gpio_write_bit(GPIOB_BASE, 6, 1); // VGA_R
-    gpio_write_bit(GPIOB_BASE, 6, 0); 
-    gpio_write_bit(GPIOA_BASE, 8, 1); // VGA_G
-    gpio_write_bit(GPIOA_BASE, 8, 0); 
-    gpio_write_bit(GPIOA_BASE, 9, 1); // VGA_B
-    gpio_write_bit(GPIOA_BASE, 9, 0); 
-    gpio_write_bit(GPIOA_BASE, 10, 1); // VGA_V
-    gpio_write_bit(GPIOA_BASE, 10, 0); 
-    gpio_write_bit(GPIOB_BASE, 7, 1); // VGA_H
-    gpio_write_bit(GPIOB_BASE, 7, 0); 
-*/
-
 #define LED_PIN 13
 #define ANALOG_PIN 18
 #define VGA_R 5 // B6
@@ -152,7 +125,6 @@ void isr_update(void) {
 
 void loop() {
     //val = analogRead(ANALOG_PIN);
-
 }
 
 

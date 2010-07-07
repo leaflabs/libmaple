@@ -67,7 +67,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 include support/make/build-targets.mk
 
 # Fake targets
-POSSIBLE_TARGETS := install sketch clean help debug cscope tags ctags
+POSSIBLE_TARGETS := install sketch clean help debug cscope tags ctags ram flash jtag
 .PHONY: $(POSSIBLE_TARGETS)
 
 install: sketch
@@ -108,3 +108,15 @@ tags:
 ctags:
 	ctags-exuberant -R .
 	@echo "Made tags file for VIM code browsing"
+
+ram:
+	@env - MAPLE_TARGET=ram
+	@echo "Memory target set to RAM for this session"
+
+flash:
+	@env - MAPLE_TARGET=flash
+	@echo "Memory target set to FLASH for this session"
+
+jtag:
+	@env - MAPLE_TARGET=jtag
+	@echo "Memory target set to JTAG for this session"

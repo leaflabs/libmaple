@@ -28,10 +28,7 @@ VENDOR_ID =  1EAF
 PRODUCT_ID = 0003
 
 # Force a rebuild if the maple target changed
-PREV_BUILD_TYPE := $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
-ifneq ($(PREV_BUILD_TYPE), $(MAPLE_TARGET))
-   $(shell rm -rf $(BUILD_PATH))
-endif
+PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 
 # Some target specific things
 ifeq ($(MAPLE_TARGET), ram)
@@ -66,14 +63,17 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 # Main target
 include support/make/build-targets.mk
 
-# Fake targets
-POSSIBLE_TARGETS := install sketch clean help debug cscope tags ctags ram flash jtag
-.PHONY: $(POSSIBLE_TARGETS)
+.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag
 
 install: sketch
 	$(UPLOAD)
 
-sketch: MSG_INFO $(BUILD_PATH)/$(BOARD).bin
+build-check:
+ifneq ($(PREV_BUILD_TYPE), $(MAPLE_TARGET))
+	$(shell rm -rf $(BUILD_PATH))
+endif
+
+sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
 
 clean:
 	rm -rf build
@@ -82,8 +82,11 @@ help:
 	@echo ""
 	@echo "  libmaple Makefile help"
 	@echo "  ----------------------"
-	@echo "  Compile targets:"
-	@echo "      sketch:   Compile sketch code"
+	@echo "  Compile targets (default MAPLE_TARGET=flash):"
+	@echo "      ram:    Compile sketch code to ram"
+	@echo "      flash:  Compile sketch code to flash"
+	@echo "      jtag:   Compile sketch code to jtag"
+	@echo "      sketch: Compile sketch code to target MAPLE_TARGET"
 	@echo "  "
 	@echo "  Programming targets:"
 	@echo "      install:  Upload code to target"
@@ -110,13 +113,10 @@ ctags:
 	@echo "Made tags file for VIM code browsing"
 
 ram:
-	@env - MAPLE_TARGET=ram
-	@echo "Memory target set to RAM for this session"
+	$(MAKE) MAPLE_TARGET=ram --no-print-directory
 
 flash:
-	@env - MAPLE_TARGET=flash
-	@echo "Memory target set to FLASH for this session"
+	$(MAKE) MAPLE_TARGET=flash --no-print-directory
 
 jtag:
-	@env - MAPLE_TARGET=jtag
-	@echo "Memory target set to JTAG for this session"
+	$(MAKE) MAPLE_TARGET=jtag --no-print-directory

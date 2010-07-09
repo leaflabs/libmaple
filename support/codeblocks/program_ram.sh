@@ -1,4 +1,4 @@
 #/usr/bin/env sh
 
 cd ../..
-make program_ram
+make MAPLE_TARGET=ram install

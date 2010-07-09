@@ -1,4 +1,4 @@
 #/usr/bin/env sh
 
 cd ../..
-make program_flash
+make MAPLE_TARGET=flash install

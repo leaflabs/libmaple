@@ -9,9 +9,8 @@ BUILD_PATH = build
 LIBMAPLE_PATH := libmaple
 
 # Useful variables
-GLOBAL_CFLAGS    = -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
-                   -ffunction-sections -fdata-sections -Wl,--gc-sections
-
+GLOBAL_CFLAGS    := -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
+                    -ffunction-sections -fdata-sections -Wl,--gc-sections
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall
 
 
@@ -24,33 +23,22 @@ LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
 include support/make/build-rules.mk
 include support/make/build-templates.mk
 
-VENDOR_ID =  1EAF
-PRODUCT_ID = 0003
-
-# Force a rebuild if the maple target changed
-PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
+# Maple USB id
+VENDOR_ID  := 1EAF
+PRODUCT_ID := 0003
 
 # Some target specific things
 ifeq ($(MAPLE_TARGET), ram)
    VECT_BASE_ADDR := VECT_TAB_RAM
    LDSCRIPT := ram.ld
-   UPLOAD := support/scripts/reset.py && \
-	     sleep 1                  && \
-	     $(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-
 endif
 ifeq ($(MAPLE_TARGET), flash)
    LDSCRIPT := flash.ld
    VECT_BASE_ADDR := VECT_TAB_FLASH
-   UPLOAD := support/scripts/reset.py && \
-	     sleep 1                  && \
-	     $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
 endif
 ifeq ($(MAPLE_TARGET), jtag)
    LDSCRIPT := jtag.ld
    VECT_BASE_ADDR := VECT_TAB_BASE
-   UPLOAD := \
-      openocd -f support/openocd/flash.cfg
 endif
 
 # Set all submodules here
@@ -65,9 +53,23 @@ include support/make/build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag
 
-install: sketch
-	$(UPLOAD)
+# Target upload commands
+UPLOAD_ram   := support/scripts/reset.py && \
+                sleep 1                  && \
+                $(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+UPLOAD_flash := support/scripts/reset.py && \
+                sleep 1                  && \
+                $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+UPLOAD_jtag  := $(OPENOCD) -f support/openocd/flash.cfg
 
+# conditionally upload to whatever the last build was
+install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
+install: $(BUILD_PATH)/$(BOARD).bin
+	@echo Install target: $(INSTALL_TARGET)
+	$(UPLOAD_$(INSTALL_TARGET))
+
+# Force a rebuild if the maple target changed
+PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 build-check:
 ifneq ($(PREV_BUILD_TYPE), $(MAPLE_TARGET))
 	$(shell rm -rf $(BUILD_PATH))
@@ -113,10 +115,10 @@ ctags:
 	@echo "Made tags file for VIM code browsing"
 
 ram:
-	$(MAKE) MAPLE_TARGET=ram --no-print-directory
+	@$(MAKE) MAPLE_TARGET=ram --no-print-directory sketch
 
 flash:
-	$(MAKE) MAPLE_TARGET=flash --no-print-directory
+	@$(MAKE) MAPLE_TARGET=flash --no-print-directory sketch
 
 jtag:
-	$(MAKE) MAPLE_TARGET=jtag --no-print-directory
+	@$(MAKE) MAPLE_TARGET=jtag --no-print-directory sketch

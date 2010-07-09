@@ -21,9 +21,10 @@ ifndef V
    SILENT_OBJCOPY  = @echo '  [OBJCOPY]  ' $(@F);
    SILENT_DISAS    = @echo '  [DISAS]    ' $(@:$(BUILD_PATH)/%.bin=%).disas;
    SILENT_OBJDUMP  = @echo '  [OBJDUMP]  ' $(OBJDUMP);
-   DFU             := dfu-util
-   OPENOCD         := openocd
 endif
+
+DFU             := dfu-util
+OPENOCD         := openocd
 
 BUILDDIRS :=
 TGT_BIN   :=

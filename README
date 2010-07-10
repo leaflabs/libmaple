@@ -67,6 +67,6 @@ You will also need to have dfu-util installed and on your path (on Linux) or
 compiled and placed in a folder "dfu-util/" at the same level as the
 maple-library folder (macosx and windows).
 
-Write your program using /main.cpp as the entry point. Then just 'make' and
-follow the directions!
+Write your program using /main.cpp as the entry point. Then just 'make help'
+and follow the directions!
 

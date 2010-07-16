@@ -101,6 +101,10 @@ void HardwareSerial::end(void) {
     usart_disable(usartNum);
 }
 
+void HardwareSerial::flush(void) {
+    usart_clear_buffer(usartNum);
+}
+
 HardwareSerial Serial1(1);
 HardwareSerial Serial2(2);
 HardwareSerial Serial3(3);

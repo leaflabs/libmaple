@@ -209,6 +209,9 @@ void usart_disable(uint8 usart_num) {
 
     /* Disable UE */
     port->CR1 = 0;
+
+    /* Clean up buffer */
+    usart_clear_buffer(usart_num);
 }
 
 
@@ -306,6 +309,26 @@ uint32 usart_data_available(uint8 usart_num) {
     }
 
     return rb->tail - rb->head;
+}
+
+void usart_clear_buffer(uint8 usart_num) {
+    usart_ring_buf *rb;
+
+    switch (usart_num) {
+    case 1:
+        rb = &ring_buf1;
+        break;
+    case 2:
+        rb = &ring_buf2;
+        break;
+    case 3:
+        rb = &ring_buf3;
+        break;
+    default:
+        ASSERT(0);
+    }
+
+    rb->tail = rb->head;
 }
 
 

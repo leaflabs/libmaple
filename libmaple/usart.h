@@ -48,6 +48,7 @@ void usart_putc(uint8 usart_num, uint8 ch);
 
 uint32 usart_data_available(uint8 usart_num);
 uint8 usart_getc(uint8 usart_num);
+void usart_clear_buffer(uint8 usart_num);
 
 #ifdef __cplusplus
 } // extern "C"

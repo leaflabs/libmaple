@@ -39,6 +39,7 @@ class HardwareSerial : public Print {
     public:
         HardwareSerial(uint8);
         void begin(uint32);
+        void end(void);
         uint32 available(void);
         uint8 read(void);
         void flush(void);

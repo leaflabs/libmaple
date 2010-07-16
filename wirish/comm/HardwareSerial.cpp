@@ -97,6 +97,10 @@ void HardwareSerial::begin(uint32 baud) {
     usart_init(usartNum, baud);
 }
 
+void HardwareSerial::end(void) {
+    usart_disable(usartNum);
+}
+
 HardwareSerial Serial1(1);
 HardwareSerial Serial2(2);
 HardwareSerial Serial3(3);

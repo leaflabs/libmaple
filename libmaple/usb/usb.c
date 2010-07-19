@@ -120,7 +120,13 @@ void setupUSB (void) {
   /* initialize the usb application */
   gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,0);  /* present ourselves to the host */
   USB_Init();  /* low level init routine provided by st lib */
+}
 
+void disableUSB (void) {
+  // These are just guesses about how to do this
+  // TODO: real disable function
+  usbDsbISR();
+  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,1); 
 }
 
 void usbSuspend(void) {

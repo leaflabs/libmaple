@@ -32,24 +32,53 @@
 #include "wirish.h"
 #include "usb.h"
 
+#define USB_TIMEOUT 2
+
 USBSerial :: USBSerial(void) {
 }
 
+void USBSerial::begin(void) {
+    setupUSB();
+}
+
+void USBSerial::end(void) {
+    disableUSB();
+}
+
 void USBSerial::write(uint8 ch) {
-  usbSendBytes(&ch, 1);
+    uint16 status = 0;
+    uint32 start = millis();
+    while(status == 0 && (millis() - start <= USB_TIMEOUT)) {
+        status = usbSendBytes(&ch, 1);
+    }
 }
 
 void USBSerial::write(const char *str) {
-   uint32 len = strlen(str);
- 
-   usbSendBytes((uint8*)str, len);
+    uint32 len = strlen(str);
+    uint16 status = 0;
+    uint16 oldstatus = 0;
+    uint32 start = millis();
+    while(status < len && (millis() - start < USB_TIMEOUT)) {
+        status += usbSendBytes((uint8*)str+status, len-status);
+        if(oldstatus != status) 
+            start = millis();
+        oldstatus = status;
+    }
 }
 
 void USBSerial::write(void *buf, uint32 size) {
    if (!buf) {
       return;
    }
-   usbSendBytes((uint8*)buf, size);
+    uint16 status = 0;
+    uint16 oldstatus = 0;
+    uint32 start = millis();
+    while(status < size && (millis() - start < USB_TIMEOUT)) {
+        status += usbSendBytes((uint8*)buf+status, size-status);
+        if(oldstatus != status) 
+            start = millis();
+        oldstatus = status;
+    }
 }
 
 uint32 USBSerial::available(void) {
@@ -68,6 +97,10 @@ uint8 USBSerial::read(void) {
    uint8 ch;
    usbReceiveBytes(&ch, 1);
    return ch;
+}
+
+uint8 USBSerial::pending(void) {
+   return usbGetPending();
 }
 
 USBSerial SerialUSB;

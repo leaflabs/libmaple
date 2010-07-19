@@ -36,6 +36,9 @@ class USBSerial : public Print {
    public:
       USBSerial(void);
 
+      void begin(void);
+      void end(void);
+
       uint32 available(void);
 
       uint32 read(void *buf, uint32 len);
@@ -44,6 +47,10 @@ class USBSerial : public Print {
       void   write(uint8);
       void   write(const char *str);
       void   write(void *, uint32);
+
+      uint8  getRTS();
+      uint8  getDTR();
+      uint8  pending();
 };
 
 extern USBSerial SerialUSB;

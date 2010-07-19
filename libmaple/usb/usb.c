@@ -225,10 +225,11 @@ RESULT usbPowerOff(void) {
   return USB_SUCCESS;
 }
 
+
+// These two functions (usbEnbISR/usbDsbISR) are implementented in ST style,
+// and at least the DsbISR doesn't seem to work?
 void usbEnbISR(void) {
   NVIC_InitTypeDef NVIC_InitStructure;
-
-
   NVIC_InitStructure.NVIC_IRQChannel = USB_LP_IRQ;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
@@ -339,64 +340,62 @@ void usbWaitReset(void) {
   systemHardReset();
 }
 
-
-/* todo, change this function to behave like below */
-/* copies data out of sendBuf into the packet memory for
-   usb, but waits until any previous usb transmissions have
-   completed before doing this. It returns without waiting
-   for its data to be sent. most efficient when 64 bytes are copied
-   at a time. users responsible for not overflowing sendbuf
-   with len! if > 64 bytes are being sent, then the function
-   will simply send the first 64 and return. It is the USERS JOB
-   to implement any blocking. return -1 implies connection failure,
-   return 0 implies buffer filled, return < len implies another
-   transaction is needed to complete the send. 
-*/
-
-/* current behavior:
-   sendBytes will block until bytes are actually sent over the pipe.
-   broken pipes could stall this function. DTR and RTS are used to check
-   for a valid connection. 
- */
-int16 usbSendBytes(uint8* sendBuf, uint16 len) {
+/* This low-level send bytes function is NON-BLOCKING; blocking behavior, with
+ * a timeout, is implemented in usercode (or in the Wirish C++ high level
+ * implementation). 
+ *
+ * This function will quickly copy up to 64 bytes of data (out of an
+ * arbitrarily large buffer) into the USB peripheral TX buffer and return the
+ * number placed in that buffer. It is up to usercode to divide larger packets
+ * into 64-byte chunks to guarantee delivery. Use usbGetCountTx() to determine
+ * whether the bytes were ACTUALLY recieved by the host or just transfered to
+ * the buffer.
+ *
+ * The function will return -1 if it doesn't think that the USB host is
+ * "connected", but it can't detect this state robustly. "Connected" in this
+ * context means that an actual program on the Host operating system is
+ * connected to the virtual COM/ttyACM device and is recieving the bytes; the
+ * Host operating system is almost always configured and keeping this endpoint
+ * alive, but the bytes never get read out of the endpoint buffer.  
+ *
+ * The behavior of this function is subtle and frustrating; it has gone through
+ * many simpler and cleaner implementation that frustratingly don't work cross
+ * platform.
+ *
+ * */
+uint16 usbSendBytes(uint8* sendBuf, uint16 len) { 
+  
+  uint16 loaded = 0;
 
   if (bDeviceState != CONFIGURED || (!usbGetDTR() && !usbGetRTS())) {
-    return -1; /* indicates to caller to stop trying, were not connected */
+    // Indicates to caller to stop trying, were not configured/connected
+    // The DTR and RTS lines are handled differently on major platforms, so
+    // the above logic is unreliable
+    return 0; 
   }
 
-    /*
-  if (countTx >= VCOM_TX_EPSIZE) {
-    return 0; // indicates to caller that the buffer is full 
+  // Due to a variety of shit this is how we roll; all buffering etc is pushed
+  // upstream
+  if (countTx) { 
+    return 0; 
   }
-    */
 
-  while (countTx)
-    ;
+  // We can only put VCOM_TX_EPSIZE bytes in the buffer
+  if(len > VCOM_TX_EPSIZE) {
+    loaded = VCOM_TX_EPSIZE;
+  } else {
+    loaded = len;
+  }
 
-  uint16 sent = len;
-
-  while (len > VCOM_TX_EPSIZE) {
-    countTx = VCOM_TX_EPSIZE;
-
-    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR,VCOM_TX_EPSIZE);
-    _SetEPTxCount(VCOM_TX_ENDP, VCOM_TX_EPSIZE);
+  // Try to load some bytes if we can
+  if (loaded) {
+    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR + countTx, loaded);
+    _SetEPTxCount(VCOM_TX_ENDP, countTx+loaded);
     _SetEPTxValid(VCOM_TX_ENDP);
-
-    while (countTx)
-       ;
-
-    len     -= VCOM_TX_EPSIZE;
-    sendBuf += VCOM_TX_EPSIZE;
+    countTx += loaded;
   }
 
-  if (len != 0) {
-    countTx = len;
-    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR,len);
-    _SetEPTxCount(VCOM_TX_ENDP,len);
-    _SetEPTxValid(VCOM_TX_ENDP);
-  }
-
-  return sent;
+  return loaded;
 }
 
 /* returns the number of available bytes are in the recv FIFO */
@@ -453,3 +452,8 @@ uint8 usbGetDTR() {
 uint8 usbGetRTS() {
   return ((line_dtr_rts & CONTROL_LINE_RTS) != 0);
 }
+
+uint16 usbGetPending() {
+  return countTx;
+}
+

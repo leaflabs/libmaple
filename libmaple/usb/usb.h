@@ -51,13 +51,15 @@ typedef enum
   void usbWaitReset(void);
 
   /* blocking functions for send/receive */
-  int16 usbSendBytes(uint8* sendBuf,uint16 len);
+  uint16 usbSendBytes(uint8* sendBuf,uint16 len);
   uint8 usbBytesAvailable(void);
   uint8 usbReceiveBytes(uint8* recvBuf, uint8 len);
   uint8 usbGetDTR(void);
   uint8 usbGetRTS(void);
+  uint16 usbGetPending(void);
 
   void usbSendHello(void);
+
 
 #ifdef __cplusplus
 } // extern "C"

@@ -63,6 +63,22 @@ void nvic_enable_interrupt(uint32 n) {
     }
 }
 
+/**
+ *  @brief turn off interrupt number n
+ *  @param[in] n interrupt number
+ */
+void nvic_disable_interrupt(uint32 n) {
+    if (n >= NVIC_NR_INTERRUPTS) {
+        return;
+    }
+
+    if (n < 32) {
+        REG_SET_BIT(NVIC_ICER0, n);
+    } else {
+        REG_SET_BIT(NVIC_ICER1, n - 32);
+    }
+}
+
 
 
 /**

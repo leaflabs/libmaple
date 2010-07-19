@@ -65,6 +65,7 @@ extern "C"{
 void nvic_init(void);
 void nvic_disable_interrupts(void);
 void nvic_enable_interrupt(uint32);
+void nvic_disable_interrupt(uint32);
 
 #ifdef __cplusplus
 }

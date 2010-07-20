@@ -153,10 +153,55 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     timer->CR1  |= 1;         // Enable timer
 }
 
+// Stops the counter; the mode and settings are not modified
+void timer_pause(uint8 timer_num) { 
+    Timer *timer;
+    ASSERT(timer_num > 0 && timer_num <= 4);
+
+    switch(timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        break;
+    }
+    timer->CR1 &= ~(0x0001);    // CEN
+}
+
+// Starts the counter; the mode and settings are not modified
+void timer_resume(uint8 timer_num) { 
+    Timer *timer;
+    ASSERT(timer_num > 0 && timer_num <= 4);
+
+    switch(timer_num) {
+    case 1:
+        timer = (Timer*)TIMER1_BASE;
+        break;
+    case 2:
+        timer = (Timer*)TIMER2_BASE;
+        break;
+    case 3:
+        timer = (Timer*)TIMER3_BASE;
+        break;
+    case 4:
+        timer = (Timer*)TIMER4_BASE;
+        break;
+    }
+    timer->CR1 |= 0x0001;    // CEN
+}
+
 // This function sets the counter value via register for the specified timer.
 // Can't think of specific usecases except for resetting to zero but it's easy
 // to implement and allows for "creative" programming
-void timer_set_count(uint8 timer_num, uint16 value) { Timer *timer;
+void timer_set_count(uint8 timer_num, uint16 value) { 
+Timer *timer;
 ASSERT(timer_num > 0 && timer_num <= 4);
 
     switch(timer_num) {
@@ -249,7 +294,6 @@ void timer_set_reload(uint8 timer_num, uint16 max_reload) {
 // calls to timer_set_mode
 void timer_disable_all(void) {
     // Note: this must be very robust because it gets called from, eg, ASSERT
-    // TODO: rewrite?
     Timer *timer; 
     Timer *timers[4] = { (Timer*)TIMER1_BASE,
                          (Timer*)TIMER2_BASE, 
@@ -293,18 +337,22 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
         case 1:
             timer->DIER &= ~(1 << channel); // 1-indexed compare nums
             timer->CCER &= ~(0x1);
+            timer_detach_interrupt(timer_num, channel);
             break;
         case 2:
             timer->DIER &= ~(1 << channel); // 1-indexed compare nums
             timer->CCER &= ~(0x10);
+            timer_detach_interrupt(timer_num, channel);
             break;
         case 3:
             timer->DIER &= ~(1 << channel); // 1-indexed compare nums
             timer->CCER &= ~(0x100);
+            timer_detach_interrupt(timer_num, channel);
             break;
         case 4:
             timer->DIER &= ~(1 << channel); // 1-indexed compare nums
             timer->CCER &= ~(0x1000);
+            timer_detach_interrupt(timer_num, channel);
             break;
         default:
             ASSERT(0);
@@ -375,7 +423,6 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
             ASSERT(0);
         }
         break;
-    // TODO: others
     default:
         ASSERT(0);
     }
@@ -385,8 +432,9 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
 void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value) {
     // The faster version of this function is the inline timer_pwm_write_ccr
     
-    Timer *timer; TimerCCR *timer_ccr; ASSERT(timer_num > 0 && timer_num <= 4
-    && compare_num > 0 && compare_num <= 4);
+    Timer *timer; TimerCCR *timer_ccr; 
+    ASSERT(timer_num <= 4 && timer_num > 0 && 
+        compare_num > 0 && compare_num <= 4);
 
     switch(timer_num) {
     case 1:

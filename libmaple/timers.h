@@ -130,6 +130,8 @@ void timer_init(uint8, uint16);
 void timer_disable_all(void);
 uint16 timer_get_count(uint8);
 void timer_set_count(uint8,uint16);
+void timer_pause(uint8);
+void timer_resume(uint8);
 void timer_set_prescaler(uint8 timer_num, uint16 prescale);
 void timer_set_reload(uint8 timer_num, uint16 max_reload);
 void timer_set_mode(uint8 timer_num, uint8 compare_num, uint8 mode);

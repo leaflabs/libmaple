@@ -1,10 +1,8 @@
-// Sample main.cpp file. Blinks an LED, sends a message out USART2
-// and turns on PWM on pin 2
+// Program to test the wirish timers implementation
 
 #include "wirish.h"
 
 #define LED_PIN 13
-#define PWM_PIN  2
 
 void handler1(void);
 void handler2(void);
@@ -37,6 +35,7 @@ void setup()
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
 
+    // Setup the button as input
     pinMode(38, INPUT_PULLUP);
 
     /* Send a message out USART2  */
@@ -54,6 +53,9 @@ void setup()
 }
 
 void loop() {
+    // This tests whether the pause/resume functions work; when BUT is held
+    // down Timer4 is in the "pause" state and the timer doesn't increment, so
+    // the final counts should reflect the ratio of time that BUT was held down
     SerialUSB.println("-----------------------------------------------------");
     SerialUSB.println("Testing Pause/Resume; button roughly controls Timer4"); 
     count3 = 0;
@@ -86,6 +88,7 @@ void loop() {
     SerialUSB.print("Count3: "); SerialUSB.println(count3);
     SerialUSB.print("Count4: "); SerialUSB.println(count4);
 
+    // These test the setPeriod auto-configure functionality
     SerialUSB.println("-----------------------------------------------------");
     SerialUSB.println("Testing setPeriod"); 
     Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
@@ -163,6 +166,10 @@ void loop() {
     SerialUSB.print("Count4: "); SerialUSB.println(count4);
     SerialUSB.println("(should be around 2sec/30000ms ~ 67)");
 
+    // This section is to touch every channel of every timer. The output
+    // ratios should reflect the ratios of the rate variables. Demonstrates
+    // that over time the actual timing rates get blown away by other system
+    // interrupts.
     for(t=0; t<4; t++) {
         toggle ^= 1; digitalWrite(LED_PIN, toggle);
         delay(100);

@@ -1,3 +1,5 @@
+// Low-level, non-wirish demonstration of VGA
+
 #include "wirish.h"
 
 #define LED_PIN 13

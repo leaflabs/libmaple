@@ -38,6 +38,9 @@ void setup()
     Serial2.begin(9600);
     Serial2.println("Video time...");
 
+    // This gets rid of the majority of the interrupt artifacts;
+    // a SysTick.end() is required as well
+    SerialUSB.end();
     
     digitalWrite(VGA_R, 0);
     digitalWrite(VGA_G, 0);

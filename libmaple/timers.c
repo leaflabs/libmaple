@@ -128,7 +128,7 @@ void timer_init(uint8 timer_num, uint16 prescale) {
      * we'll worry about that later. */
     timer->CCR1   = 0x8FFF;     // PWM start value
     timer->CCMR1 |= 0x68;       // PWM mode 1, enable preload register.
-    timer->CCER  |= 0x002;      // enable ch
+    timer->CCER  |= 0x001;      // enable ch
 
     timer->CCR2   = 0x8FFF;     // PWM start value
     timer->CCMR1 |= (0x68 << 8);// PWM mode 1, enable preload register.

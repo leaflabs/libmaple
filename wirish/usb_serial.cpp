@@ -103,5 +103,17 @@ uint8 USBSerial::pending(void) {
    return usbGetPending();
 }
 
+uint8 USBSerial::getDTR(void) {
+   return usbGetDTR();
+}
+
+uint8 USBSerial::getRTS(void) {
+   return usbGetRTS();
+}
+
+uint8 USBSerial::isConnected(void) {
+   return (usbIsConnected() && usbIsConfigured());
+}
+
 USBSerial SerialUSB;
 

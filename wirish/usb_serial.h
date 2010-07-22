@@ -50,6 +50,7 @@ class USBSerial : public Print {
 
       uint8  getRTS();
       uint8  getDTR();
+      uint8  isConnected();
       uint8  pending();
 };
 

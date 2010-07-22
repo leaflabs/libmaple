@@ -459,6 +459,14 @@ uint8 usbGetRTS() {
   return ((line_dtr_rts & CONTROL_LINE_RTS) != 0);
 }
 
+uint8 usbIsConfigured() {
+  return (bDeviceState == CONFIGURED);
+}
+
+uint8 usbIsConnected() {
+  return (bDeviceState != UNCONNECTED);
+}  
+
 uint16 usbGetPending() {
   return countTx;
 }

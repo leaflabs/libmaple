@@ -57,6 +57,8 @@ typedef enum
   uint8 usbReceiveBytes(uint8* recvBuf, uint8 len);
   uint8 usbGetDTR(void);
   uint8 usbGetRTS(void);
+  uint8 usbIsConnected(void);
+  uint8 usbIsConfigured(void);
   uint16 usbGetPending(void);
 
   void usbSendHello(void);

@@ -46,6 +46,9 @@ void USBSerial::end(void) {
 }
 
 void USBSerial::write(uint8 ch) {
+    if(!(usbIsConnected() && usbIsConfigured())) {
+        return;
+    }
     uint16 status = 0;
     uint32 start = millis();
     while(status == 0 && (millis() - start <= USB_TIMEOUT)) {
@@ -54,6 +57,9 @@ void USBSerial::write(uint8 ch) {
 }
 
 void USBSerial::write(const char *str) {
+    if(!(usbIsConnected() && usbIsConfigured())) {
+        return;
+    }
     uint32 len = strlen(str);
     uint16 status = 0;
     uint16 oldstatus = 0;
@@ -67,9 +73,12 @@ void USBSerial::write(const char *str) {
 }
 
 void USBSerial::write(void *buf, uint32 size) {
-   if (!buf) {
-      return;
-   }
+    if(!(usbIsConnected() && usbIsConfigured())) {
+        return;
+    }
+    if (!buf) {
+        return;
+    }
     uint16 status = 0;
     uint16 oldstatus = 0;
     uint32 start = millis();

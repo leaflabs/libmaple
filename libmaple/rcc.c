@@ -99,8 +99,8 @@ static void pll_init(void) {
 
    /* select pll for system clock source  */
    cfgr = __read(RCC_CFGR);
-   cfgr &= ~RCC_CFGR_SWS;
-   __write(RCC_CFGR, cfgr | RCC_CFGR_SWS_PLL);
+   cfgr &= ~RCC_CFGR_SW;
+   __write(RCC_CFGR, cfgr | RCC_CFGR_SW_PLL);
 
    while (__get_bits(RCC_CFGR, 0x00000008) != 0x8) {
       asm volatile("nop");

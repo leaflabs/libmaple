@@ -65,8 +65,8 @@
 #define PLLON                  BIT(24)
 #define PLL_INPUT_CLK_HSE      BIT(16)
 
-#define RCC_CFGR_SWS           0x00000003
-#define RCC_CFGR_SWS_PLL       0x00000002
+#define RCC_CFGR_SW           0x00000003
+#define RCC_CFGR_SW_PLL       0x00000002
 
 /* APB2 reset bits  */
 #define RCC_APB2RSTR_USART1RST   BIT(14)

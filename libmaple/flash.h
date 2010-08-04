@@ -24,17 +24,26 @@
 
 
 /**
- *  @brief 
+ *  @brief basic stm32 flash setup routines
  */
 
 #ifndef _FLASH_H_
 #define _FLASH_H_
 
-#define FLASH_BASE              0x40022000
-#define FLASH_ACR               FLASH_BASE
+#define FLASH_WAIT_STATE_0              0x0
+#define FLASH_WAIT_STATE_1              0x1
+#define FLASH_WAIT_STATE_2              0x2
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 void flash_enable_prefetch(void);
-void flash_set_latency(void);
+void flash_set_latency(uint32 wait_states);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

@@ -32,9 +32,15 @@
 #include "gpio.h"
 #include "nvic.h"
 #include "usb.h"
+#include "flash.h"
 
 void init(void) {
+   /* make sure the flash is ready before spinning the high speed clock up */
+   flash_enable_prefetch();
+   flash_set_latency(FLASH_WAIT_STATE_2);
+
    rcc_init();
+
    nvic_init();
    systick_init();
    gpio_init();

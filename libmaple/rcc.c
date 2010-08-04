@@ -116,14 +116,6 @@ static void hse_init(void) {
 
 void rcc_init(void) {
    hse_init();
-
-   /* Leave this here for now...  */
-   /* Enable Prefetch Buffer */
-   flash_enable_prefetch();
-
-   /* Flash 2 wait state */
-   flash_set_latency();
-
    set_ahb_prescaler(SYSCLK_DIV_1);
    set_apb1_prescaler(HCLK_DIV_2);
    set_apb2_prescaler(HCLK_DIV_1);

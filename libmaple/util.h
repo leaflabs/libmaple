@@ -65,6 +65,8 @@
 #define __read(reg)                     *(volatile uint32*)(reg)
 #define __write(reg, value)             *(volatile uint32*)(reg) = (value)
 
+#define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
+
 #ifdef __cplusplus
 extern "C"{
 #endif

@@ -62,10 +62,16 @@
 extern "C"{
 #endif
 
+enum {
+   NVIC_USART1 = 37,
+   NVIC_USART2 = 38,
+   NVIC_USART3 = 39,
+};
+
 void nvic_init(void);
 void nvic_disable_interrupts(void);
-void nvic_enable_interrupt(uint32);
-void nvic_disable_interrupt(uint32);
+void nvic_enable_interrupt(uint32 device);
+void nvic_disable_interrupt(uint32 device);
 
 #ifdef __cplusplus
 }

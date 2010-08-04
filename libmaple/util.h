@@ -32,7 +32,7 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#define MAPLE_DEBUG 1
+#define MAPLE_DEBUG 0
 
 #define BIT(shift)                     (1 << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))

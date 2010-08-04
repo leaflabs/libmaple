@@ -89,12 +89,12 @@ void spi_init(uint32 spi_num,
       /* limit to 18 mhz max speed  */
       ASSERT(prescale != CR1_BR_PRESCALE_2);
       spi = (SPI*)SPI1_BASE;
-      rcc_enable_clk_spi1();
+      rcc_clk_enable(RCC_SPI1);
       spi_gpio_cfg(&spi_dev1);
       break;
    case 2:
       spi = (SPI*)SPI2_BASE;
-      rcc_enable_clk_spi2();
+      rcc_clk_enable(RCC_SPI2);
       spi_gpio_cfg(&spi_dev2);
       break;
    }

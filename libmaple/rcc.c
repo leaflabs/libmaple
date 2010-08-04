@@ -99,6 +99,8 @@ static const struct rcc_dev_info rcc_dev_table[] = {
    [RCC_TIMER2] = { .clk_domain = APB1, .line_num = 0 },
    [RCC_TIMER3] = { .clk_domain = APB1, .line_num = 1 },
    [RCC_TIMER4] = { .clk_domain = APB1, .line_num = 2 },
+   [RCC_SPI1]   = { .clk_domain = APB2, .line_num = 12 },
+   [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
 };
 
 /**

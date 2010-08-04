@@ -32,16 +32,6 @@
 #include "nvic.h"
 #include "systick.h"
 
-void nvic_disable_interrupts(void) {
-    /* Turn off all interrupts  */
-    REG_SET(NVIC_ICER0, 0xFFFFFFFF);
-    REG_SET(NVIC_ICER1, 0xFFFFFFFF);
-
-    /* Turn off systick exception  */
-    REG_CLEAR_BIT(SYSTICK_CSR, 0);
-}
-
-
 void nvic_set_vector_table(uint32 addr, uint32 offset) {
    __write(SCB_VTOR, (uint32)addr | (offset & 0x1FFFFF80));
 }
@@ -49,13 +39,9 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
 
 /**
  *  @brief turn on interrupt number n
- *  @param[in] n interrupt number
+ *  @param n interrupt number
  */
-void nvic_enable_interrupt(uint32 n) {
-    if (n >= NVIC_NR_INTERRUPTS) {
-        return;
-    }
-
+void nvic_irq_enable(uint32 n) {
     if (n < 32) {
         REG_SET_BIT(NVIC_ISER0, n);
     } else {
@@ -65,13 +51,9 @@ void nvic_enable_interrupt(uint32 n) {
 
 /**
  *  @brief turn off interrupt number n
- *  @param[in] n interrupt number
+ *  @param n interrupt number
  */
-void nvic_disable_interrupt(uint32 n) {
-    if (n >= NVIC_NR_INTERRUPTS) {
-        return;
-    }
-
+void nvic_irq_disable(uint32 n) {
     if (n < 32) {
         REG_SET_BIT(NVIC_ICER0, n);
     } else {

@@ -48,8 +48,6 @@
 #define BITBAND_PERI_BASE  0x42000000
 #define BITBAND_PERI(a,b) ((BITBAND_PERI_BASE + (a-BITBAND_PERI_REF)*32 + (b*4)))  // Convert PERI address
 
-#define COUNTFLAG *((volatile unsigned char*) (BITBAND_PERI(SYSTICK_CSR,2)))
-
 #define REG_SET(reg, val)               (*(volatile uint32*)(reg)  = (val))
 #define REG_SET_BIT(reg, bit)           (*(volatile uint32*)(reg) |= BIT(bit))
 #define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32*)(reg) &= ~BIT(bit))

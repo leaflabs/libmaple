@@ -23,8 +23,6 @@
  * ****************************************************************************/
 
 /**
- *  @file time.h
- *
  *  @brief 
  */
 
@@ -34,32 +32,42 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-/* Returns time since boot in milliseconds  */
-uint32 millis(void);
+
+#include "nvic.h"
+#include "systick.h"
+
+#define CYCLES_PER_MICROSECOND  72
+#define US_PER_MS               1000
+#define MAPLE_RELOAD_VAL        72000
+
+extern volatile uint32 systick_timer_millis;
+
+/* time in milliseconds since boot  */
+static inline uint32 millis(void) {
+   return systick_timer_millis;
+}
 
 /* Time in microseconds since boot  */
-uint32 micros(void);
+static inline uint32 micros(void) {
+   uint32 ms;
+   uint32 cycle_cnt;
+   uint32 res;
 
-/* Delay for ms milliseconds  */
+   nvic_globalirq_disable();
+
+   cycle_cnt = systick_get_count();
+   ms = millis();
+
+   nvic_globalirq_enable();
+
+   res = (ms * US_PER_MS) + (MAPLE_RELOAD_VAL - cycle_cnt)/CYCLES_PER_MICROSECOND;
+
+   return res;
+}
+
 void delay(unsigned long ms);
-
-/* Delay for us microseconds  */
 void delayMicroseconds(uint32 us);
 
-#if 0
-static inline void delay_us(uint32 us) {
-    us *= 12;
-    asm volatile("mov  r0, %[us]        \n\t"
-                 "subs r0, #2 \n\t"
-"1:                                    \n\t"
-                  "subs r0, r0, #1           \n\t"
-                  "bne 1b"
-                 :
-                 : [us] "r" (us)
-                 : "r0", "cc");
-
-}
-#endif
 #ifdef __cplusplus
 } // extern "C"
 #endif

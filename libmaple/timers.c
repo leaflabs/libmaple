@@ -30,6 +30,7 @@
 
 #include "libmaple.h"
 #include "rcc.h"
+#include "nvic.h"
 #include "timers.h"
 
 typedef struct {
@@ -476,25 +477,25 @@ void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr hand
     case 1:
         timer = (Timer*)TIMER1_BASE;
         timer1_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(27);
+        nvic_irq_enable(NVIC_TIMER1);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
         timer2_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(28);
+        nvic_irq_enable(NVIC_TIMER2);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
         timer3_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(29);
+        nvic_irq_enable(NVIC_TIMER3);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
         timer4_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(30);
+        nvic_irq_enable(NVIC_TIMER4);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     }

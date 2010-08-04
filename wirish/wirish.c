@@ -53,7 +53,7 @@ void init(void) {
    rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
 
    nvic_init();
-   systick_init();
+   systick_init(MAPLE_RELOAD_VAL);
    gpio_init();
    adc_init();
    timer_init(1, 1);

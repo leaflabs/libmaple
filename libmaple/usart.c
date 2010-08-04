@@ -93,7 +93,7 @@ void usart_init(uint8 usart_num, uint32 baud) {
 
     port = usart_dev_table[usart_num].base;
     rcc_clk_enable(usart_dev_table[usart_num].rcc_dev_num);
-    nvic_enable_interrupt(usart_dev_table[usart_num].nvic_dev_num);
+    nvic_irq_enable(usart_dev_table[usart_num].nvic_dev_num);
 
     /* usart1 is mad fast  */
     clk_speed = (usart_num == USART1) ? 72000000UL : 36000000UL;

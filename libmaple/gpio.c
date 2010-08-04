@@ -33,11 +33,11 @@
 #include "gpio.h"
 
 void gpio_init(void) {
-   rcc_enable_clk_gpioa();
-   rcc_enable_clk_gpiob();
-   rcc_enable_clk_gpioc();
-   rcc_enable_clk_gpiod();
-   rcc_enable_clk_afio();
+   rcc_clk_enable(RCC_GPIOA);
+   rcc_clk_enable(RCC_GPIOB);
+   rcc_clk_enable(RCC_GPIOC);
+   rcc_clk_enable(RCC_GPIOD);
+   rcc_clk_enable(RCC_AFIO);
 }
 
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode) {

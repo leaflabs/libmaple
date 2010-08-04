@@ -94,20 +94,20 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     switch(timer_num) {
     case 1:
         timer = (Timer*)TIMER1_BASE;
-        rcc_enable_clk_timer1();
+        rcc_clk_enable(RCC_TIMER1);
         is_advanced = 1;
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
-        rcc_enable_clk_timer2();
+        rcc_clk_enable(RCC_TIMER2);
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
-        rcc_enable_clk_timer3();
+        rcc_clk_enable(RCC_TIMER3);
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
-        rcc_enable_clk_timer4();
+        rcc_clk_enable(RCC_TIMER4);
         break;
     }
 

@@ -23,15 +23,22 @@
  * ****************************************************************************/
 
 /**
- *  @brief Maple board bring up
+ *  @brief generic maple board bring up:
+ *
+ *  By default, we bring up all maple boards running on the stm32 to 72mhz,
+ *  clocked off the PLL, driven by the 8MHz external crystal.
+ *
+ *  AHB and APB2 are clocked at 72MHz
+ *  APB1 is clocked at 36MHz
+ *
  */
 
 #include "wirish.h"
-#include "rcc.h"
 #include "systick.h"
 #include "gpio.h"
 #include "nvic.h"
 #include "usb.h"
+#include "rcc.h"
 #include "flash.h"
 
 void init(void) {
@@ -39,7 +46,11 @@ void init(void) {
    flash_enable_prefetch();
    flash_set_latency(FLASH_WAIT_STATE_2);
 
-   rcc_init();
+   /* initialize clocks  */
+   rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
+   rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
+   rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
+   rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
 
    nvic_init();
    systick_init();

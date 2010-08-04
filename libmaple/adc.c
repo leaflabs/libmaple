@@ -63,9 +63,9 @@
  * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
 
 void adc_init(void) {
-   rcc_set_adc_prescaler(PCLK2_DIV_2);
-   rcc_enable_clk_adc1();
-   rcc_reset_adc1();
+   rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
+   rcc_clk_enable(RCC_ADC1);
+   rcc_reset_dev(RCC_ADC1);
 
     ADC_CR1  = 0;
     ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;  // Software triggers conversions

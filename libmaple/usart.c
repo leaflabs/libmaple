@@ -128,21 +128,21 @@ void usart_init(uint8 usart_num, uint32 baud) {
         port = (usart_port*)USART1_BASE;
         ring_buf = &ring_buf1;
         clk_speed = USART1_CLK;
-        rcc_enable_clk_usart1();
+        rcc_clk_enable(RCC_USART1);
         REG_SET(NVIC_ISER1, BIT(5));
         break;
     case 2:
         port = (usart_port*)USART2_BASE;
         ring_buf = &ring_buf2;
         clk_speed = USART2_CLK;
-        rcc_enable_clk_usart2();
+        rcc_clk_enable(RCC_USART2);
         REG_SET(NVIC_ISER1, BIT(6));
         break;
     case 3:
         port = (usart_port*)USART3_BASE;
         ring_buf = &ring_buf3;
         clk_speed = USART3_CLK;
-        rcc_enable_clk_usart3();
+        rcc_clk_enable(RCC_USART3);
         REG_SET(NVIC_ISER1, BIT(7));
         break;
     default:

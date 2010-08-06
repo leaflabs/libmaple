@@ -1,0 +1,42 @@
+
+FSMC notes (for maple native)
+-------------------------------------------------------------------------------
+
+There is an application note for all this which is helpful; see the ST website.
+
+Chip details
+    IS62WV51216BLL
+    512k x 16
+    19 address input
+    16 data inputs
+
+For simple debugging, i'm going to set all the access parameters to maximum
+time values (aka, slowest). I'm going to use not-extended mode 1 for
+read/write.
+
+Steps from application note:
+
+- enable bank3: BCR3_MBKEN = '1'
+- memory type is SRAM: BCR3_MTYP = '00'
+- databuse weidth is 16bits: BCR3_MWID = '01'
+- memory is nonmultiplexed: BCR3_MEXEN is reset (= '0')
+- everything else is cleared
+
+Parameters:
+
+ t_wc (write cycle) = 55ns
+ t_rc (write cycle) = 55ns
+ t_pwe1 (write enable low pulse) = 40ns
+ t_aa (address access) = 55ns
+
+So address setup (ADDSET) = 0x0, data setup (DATAST) = 0x3
+
+Using bank1, NOR/PSRAM1 memory starts at 0x60000000.
+
+Oops, obviously have to turn on the clock for all those GPIO pins...
+
+Not-super-helpful-link:
+http://www.keil.com/support/man/docs/mcbstm32e/mcbstm32e_to_xmemory.htm
+
+PG9 (which is NE2) is twiddling on reset?
+

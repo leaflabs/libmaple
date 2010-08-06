@@ -48,6 +48,9 @@
 #define GPIOB_BASE               (GPIO_Port*)0x40010C00
 #define GPIOC_BASE               (GPIO_Port*)0x40011000
 #define GPIOD_BASE               (GPIO_Port*)0x40011400
+#define GPIOE_BASE               (GPIO_Port*)0x40011800
+#define GPIOF_BASE               (GPIO_Port*)0x40011C00
+#define GPIOG_BASE               (GPIO_Port*)0x40012000
 
 #define GPIO_SPEED_50MHZ            (0x3)
 

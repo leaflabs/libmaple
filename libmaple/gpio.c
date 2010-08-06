@@ -37,6 +37,9 @@ void gpio_init(void) {
    rcc_enable_clk_gpiob();
    rcc_enable_clk_gpioc();
    rcc_enable_clk_gpiod();
+   rcc_enable_clk_gpioe();
+   rcc_enable_clk_gpiof();
+   rcc_enable_clk_gpiog();
    rcc_enable_clk_afio();
 }
 

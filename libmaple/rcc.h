@@ -122,11 +122,13 @@ struct rcc_device {
 #define RCC_APB2ENR_TIM1EN     BIT(11)
 #define RCC_APB2ENR_ADC2EN     BIT(10)
 #define RCC_APB2ENR_ADC1EN     BIT(9)
-#define RCC_APB2ENR_IOEEN      BIT(6)
-#define RCC_APB2ENR_IODEN      BIT(5)
-#define RCC_APB2ENR_IOCEN      BIT(4)
-#define RCC_APB2ENR_IOBEN      BIT(3)
-#define RCC_APB2ENR_IOAEN      BIT(2)
+#define RCC_APB2ENR_IOPGEN     BIT(8)
+#define RCC_APB2ENR_IOPFEN     BIT(7)
+#define RCC_APB2ENR_IOPEEN     BIT(6)
+#define RCC_APB2ENR_IOPDEN     BIT(5)
+#define RCC_APB2ENR_IOPCEN     BIT(4)
+#define RCC_APB2ENR_IOPBEN     BIT(3)
+#define RCC_APB2ENR_IOPAEN     BIT(2)
 #define RCC_APB2ENR_AFIOEN     BIT(0)
 
 /* APB1 peripheral clock enable bits  */
@@ -138,6 +140,17 @@ struct rcc_device {
 #define RCC_APB1ENR_SPI2EN     BIT(14)
 #define RCC_APB1ENR_USB        BIT(23)
 
+/* AHB peripheral clock enable bits  */
+#define RCC_AHBENR_DMA1EN      BIT(0)
+#define RCC_AHBENR_DMA2EN      BIT(1)
+#define RCC_AHBENR_SRAMEN      BIT(2)
+#define RCC_AHBENR_FLITFEN     BIT(4)
+#define RCC_AHBENR_CRCEN       BIT(6)
+#define RCC_AHBENR_FSMCEN      BIT(8)
+#define RCC_AHBENR_SDIOEN      BIT(10)
+
+#define rcc_enable_clk_fsmc()     __set_bits(RCC_AHBENR, RCC_AHBENR_FSMCEN)
+
 #define rcc_enable_clk_spi1()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_SPI1EN)
 #define rcc_enable_clk_spi2()     __set_bits(RCC_APB1ENR, RCC_APB1ENR_SPI2EN)
 
@@ -146,10 +159,13 @@ struct rcc_device {
 #define rcc_enable_clk_timer3()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_TIM3EN)
 #define rcc_enable_clk_timer4()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_TIM4EN)
 
-#define rcc_enable_clk_gpioa()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOAEN)
-#define rcc_enable_clk_gpiob()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOBEN)
-#define rcc_enable_clk_gpioc()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOCEN)
-#define rcc_enable_clk_gpiod()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IODEN)
+#define rcc_enable_clk_gpioa()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPAEN)
+#define rcc_enable_clk_gpiob()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPBEN)
+#define rcc_enable_clk_gpioc()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPCEN)
+#define rcc_enable_clk_gpiod()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPDEN)
+#define rcc_enable_clk_gpioe()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPEEN)
+#define rcc_enable_clk_gpiof()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPFEN)
+#define rcc_enable_clk_gpiog()    __set_bits(RCC_APB2ENR, RCC_APB2ENR_IOPGEN)
 #define rcc_enable_clk_afio()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_AFIOEN)
 
 #define rcc_enable_clk_usart1()   __set_bits(RCC_APB2ENR, RCC_APB2ENR_USART1EN)

@@ -36,11 +36,11 @@
 #include "adc.h"
 #include "timers.h"
 
-#define ERROR_LED_PORT         GPIOA_BASE
-#define ERROR_LED_PIN          5
-#define ERROR_USART_NUM        2
+#define ERROR_LED_PORT         GPIOC_BASE
+#define ERROR_LED_PIN          15
+#define ERROR_USART_NUM        1
 #define ERROR_USART_BAUD       9600
-#define ERROR_TX_PIN           2
+#define ERROR_TX_PIN           10
 #define ERROR_TX_PORT          GPIOA_BASE
 
 /* Error assert + fade */
@@ -76,7 +76,8 @@ void _fail(const char* file, int line, const char* exp) {
     usart_putstr(ERROR_USART_NUM, ": ");
     usart_putudec(ERROR_USART_NUM, line);
     usart_putc(ERROR_USART_NUM, '\n');
-
+    usart_putc(ERROR_USART_NUM, '\r');
+    
     /* Turn on the error LED  */
     gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
 

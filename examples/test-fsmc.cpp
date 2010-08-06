@@ -1,48 +1,17 @@
-/* *****************************************************************************
- * The MIT License
- *
- * Copyright (c) 2010 LeafLabs LLC.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * ****************************************************************************/
-
-/**
- *  @brief Sample main.cpp file. Sends "Hello world!" out SPI1.
- *
- *  SPI1 is set up to be a master transmitter at 4.5MHz, little endianness,
- *  and SPI mode 0.
- *
- *  Pin 10 is used as Chip Select
- *
- */
 
 #include "wirish.h"
 #include "fsmc.h"
 #include "rcc.h"
 #include "gpio.h"
 
-#define LED_PIN 23
-#define DISC_PIN 14
+#define LED_PIN  23 // hack for maple native
+#define DISC_PIN 14 // hack for USB on native
 
 // System control block registers
 #define SCB_BASE    (SCB_Reg*)(0xE000ED00)
 
+// This stuff should ultimately get moved to util.h or scb.h or w/e. 
+// Also in interactive test program and the HardFault IRQ handler.
 typedef struct {
     volatile uint32 CPUID;
     volatile uint32 ICSR;
@@ -65,6 +34,7 @@ SCB_Reg *scb;
 
 uint16 *ptr;
 int toggle = 0;
+int count = 0;
 
 void setup() {
    uint32 id;
@@ -84,26 +54,20 @@ void setup() {
    fsmc_native_sram_init();
    Serial1.println("Done.");
 
-
+   // Start of channel1 SRAM bank (through to 0x63FFFFFF, though only a chunk
+   // of this is valid)
    ptr = (uint16*)(0x60000000);
-   //ptr = (uint16*)(0x68000000);
-   //ptr = (uint16*)(0x80000000);
-   Serial1.print("Writing... ");
 
-   *ptr = 0xFFFF;
+   Serial1.print("Writing... ");
+   *ptr = 0x1234;
    Serial1.println("Done.");
 
    Serial1.print("Reading... ");
    id = *ptr;
-   Serial1.print("Done: ");
+   Serial1.print("Done: ");     // shouldn't be 0xFFFFFFFF
    Serial1.println(id,BIN);
 
-   /*
-   Serial1.print("CPUID is at: ");
-   id = (uint32)(&(scb->CPUID));
-   Serial1.println(id,BIN);
-   */
-
+   Serial1.println("Dumping System Control Block Registers");
    Serial1.print("CPUID: ");
    id = scb->CPUID;
    Serial1.println(id,BIN);
@@ -122,20 +86,32 @@ void setup() {
    Serial1.print("BFAR:  ");
    id = scb->BFAR;
    Serial1.println(id,BIN);
-
+    
+   Serial1.println("Now testing all memory addresses... (will hardfault at the end)");
+   delay(3000);
 }
 
 void loop() {
    digitalWrite(LED_PIN, toggle);
    toggle ^= 1;
-   delay(100);
+   delay(1);
 
-   *ptr = 0xFFFF;
-   /*
+   ptr = (uint16*)(0x60000000);
+   count = 0;
+   for(int i = 0; i<1024; i++) {
+        count++;
+        ptr++;
+        *ptr = (0x0000FFFF & count);
+        //delay(10);    // tweak this to test SRAM resiliance over time
+        if(*ptr != (0x0000FFFF & count)) {
+                Serial1.println("ERROR: mismatch, halting");
+                while(1) { }
+        }
+   }
+   
    Serial1.print((uint32)(ptr),HEX);
    Serial1.print(": ");
    Serial1.println(*ptr,BIN);
-   */
 }
 
 int main(void) {

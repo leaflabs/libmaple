@@ -28,12 +28,14 @@
 #include "gpio.h"
 #include "fsmc.h"
 
-#define FSMC_ADDSET 0x5
-#define FSMC_DATAST 0x5
+// These values determined for a particular SRAM chip by following the
+// calculations in the ST FSMC application note.
+#define FSMC_ADDSET 0x0
+#define FSMC_DATAST 0x3
 
-// Setup the FSMC peripheral to use the SRAM chip on the maple native
-// as an external segment of memory space.
-// This is for the IS62WV51216BLL 8meg 55ns chip
+// Sets up the FSMC peripheral to use the SRAM chip on the maple native as an
+// external segment of system memory space.
+// This implementation is for the IS62WV51216BLL 8mbit chip (55ns timing)
 void fsmc_native_sram_init(void) {
     FSMC_Bank *bank;
 
@@ -87,8 +89,8 @@ void fsmc_native_sram_init(void) {
     gpio_set_mode(GPIOE_BASE,  0, MODE_AF_OUTPUT_PP);   // NBL0
     gpio_set_mode(GPIOE_BASE,  1, MODE_AF_OUTPUT_PP);   // NBL1
 
-    // Then we configure the FSMC SRAM channel 1 peripheral
-    // (the SRAM part of the FSMC is "bank 1")
+    // Then we configure channel 1 the FSMC SRAM peripheral
+    // (all SRAM channels are in "Bank 1" of the FSMC)
     bank = (FSMC_Bank*)(FSMC1_BASE);
     
     // Everything else is cleared (BCR1)
@@ -104,6 +106,9 @@ void fsmc_native_sram_init(void) {
     // Memory is nonmultiplexed
     bank->BCR &= ~(FSMC_BCR_MUXEN); // '0'
 
+    // Need write enable to write to the chip
+    bank->BCR |= FSMC_BCR_WREN;
+
     // Set ADDSET 
     bank->BTR &= ~(FSMC_BTR_ADDSET);
     bank->BTR |= (FSMC_BTR_ADDSET | FSMC_ADDSET);
@@ -112,9 +117,9 @@ void fsmc_native_sram_init(void) {
     bank->BTR &= ~(FSMC_BTR_DATAST);
     bank->BTR |= (FSMC_BTR_DATAST | (FSMC_DATAST << 8));
 
-    // Enable bank1 
+    // Enable channel 1
     bank->BCR |= FSMC_BCR_MBKEN;    // '1'
 
-    // FSMC_BWTR3 not used
+    // FSMC_BWTR3 not used for this simple configuration.
 }
 

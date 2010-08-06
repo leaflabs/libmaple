@@ -38,7 +38,6 @@ void NMIException(void) {
 }
 
 void HardFaultException(void) {
-   return;
    ASSERT(0);
    while(1)
       ;

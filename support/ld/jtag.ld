@@ -8,8 +8,8 @@
 /* Define memory spaces. */
 MEMORY
 {
-  ram (rwx) : ORIGIN = 0x20000000, LENGTH = 20K
-  rom (rx) : ORIGIN = 0x08000000, LENGTH = 120K
+  ram (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
+  rom (rx) : ORIGIN = 0x08000000, LENGTH = 512K
 }
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")

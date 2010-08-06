@@ -118,7 +118,8 @@ void setupUSB (void) {
   pRCC->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
-  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,0);  /* present ourselves to the host */
+  gpio_write_bit(USB_DISC_BANK, USB_DISC_PIN, 0);  /* present ourselves to the host */
+
   USB_Init();  /* low level init routine provided by st lib */
 }
 

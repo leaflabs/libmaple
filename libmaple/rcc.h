@@ -31,6 +31,62 @@
 #ifndef _RCC_H_
 #define _RCC_H_
 
+struct rcc_device {
+   uint32 apb1_prescale;
+   uint32 apb2_prescale;
+   uint32 ahb_prescale;
+   uint32 sysclk_src;
+   uint32 pll_src;
+   uint32 pll_mul;
+};
+
+#define RCC_CLKSRC_HSI                          (0x0)
+#define RCC_CLKSRC_HSE                          (0x1)
+#define RCC_CLKSRC_PLL                          (0x2)
+
+#define RCC_PLLSRC_HSI_DIV_2                (0x0 << 16)
+#define RCC_PLLSRC_HSE                      (0x1 << 16)
+
+#define RCC_APB1_HCLK_DIV_1                     (0x0 << 8)
+#define RCC_APB1_HCLK_DIV_2                     (0x4 << 8)
+#define RCC_APB1_HCLK_DIV_4                     (0x5 << 8)
+#define RCC_APB1_HCLK_DIV_8                     (0x6 << 8)
+#define RCC_APB1_HCLK_DIV_16                    (0x7 << 8)
+
+#define RCC_APB2_HCLK_DIV_1                     (0x0 << 11)
+#define RCC_APB2_HCLK_DIV_2                     (0x4 << 11)
+#define RCC_APB2_HCLK_DIV_4                     (0x5 << 11)
+#define RCC_APB2_HCLK_DIV_8                     (0x6 << 11)
+#define RCC_APB2_HCLK_DIV_16                    (0x7 << 11)
+
+#define RCC_AHB_SYSCLK_DIV_1                    (0x0 << 4)
+#define RCC_AHB_SYSCLK_DIV_2                    (0x8 << 4)
+#define RCC_AHB_SYSCLK_DIV_4                    (0x9 << 4)
+#define RCC_AHB_SYSCLK_DIV_8                    (0xA << 4)
+#define RCC_AHB_SYSCLK_DIV_16                   (0xB << 4)
+#define RCC_AHB_SYSCLK_DIV_32                   (0xC << 4)
+#define RCC_AHB_SYSCLK_DIV_64                   (0xD << 4)
+#define RCC_AHB_SYSCLK_DIV_128                  (0xD << 4)
+#define RCC_AHB_SYSCLK_DIV_256                  (0xE << 4)
+#define RCC_AHB_SYSCLK_DIV_512                  (0xF << 4)
+
+#define RCC_PLLMUL_2                            (0x0 << 18)
+#define RCC_PLLMUL_3                            (0x1 << 18)
+#define RCC_PLLMUL_4                            (0x2 << 18)
+#define RCC_PLLMUL_5                            (0x3 << 18)
+#define RCC_PLLMUL_6                            (0x4 << 18)
+#define RCC_PLLMUL_7                            (0x5 << 18)
+#define RCC_PLLMUL_8                            (0x6 << 18)
+#define RCC_PLLMUL_9                            (0x7 << 18)
+#define RCC_PLLMUL_10                           (0x8 << 18)
+#define RCC_PLLMUL_11                           (0x9 << 18)
+#define RCC_PLLMUL_12                           (0xA << 18)
+#define RCC_PLLMUL_13                           (0xB << 18)
+#define RCC_PLLMUL_14                           (0xC << 18)
+#define RCC_PLLMUL_15                           (0xD << 18)
+#define RCC_PLLMUL_16                           (0xE << 18)
+
+/* remove!!  */
 #define RCC_BASE               0x40021000
 #define RCC_CR                 (RCC_BASE + 0x0)
 #define RCC_CFGR               (RCC_BASE + 0x4)
@@ -43,30 +99,7 @@
 #define RCC_BDCR               (RCC_BASE + 0x20)
 #define RCC_CSR                (RCC_BASE + 0x24)
 #define RCC_AHBSTR             (RCC_BASE + 0x28)
-#define RCC_CFGR2              (RCC_BASE + 0x2C))
-
-#define HSEON                  BIT(16)
-#define HSERDY                 *(volatile uint32*)(BITBAND_PERI(RCC_CR + 2, 0))
-
-#define ADCPRE                 0x0000C000
-#define HPRE                   0x000000F0
-#define PPRE2                  0x00003800  // apb2 high speed prescaler
-#define PPRE1                  0x00000700  // apb1 low-speed prescaler
-
-#define PLLMUL                 0x002C0000
-#define PLL_MUL_9              0x001C0000
-#define PLLSRC                 BIT(16)
-#define SYSCLK_DIV_1           (0x0 << 4)
-#define HCLK_DIV_1             0
-#define HCLK_DIV_2             0x00000400
-#define PCLK2_DIV_2            0x00008000
-
-#define PLLRDY                 BIT(25)
-#define PLLON                  BIT(24)
-#define PLL_INPUT_CLK_HSE      BIT(16)
-
-#define RCC_CFGR_SW           0x00000003
-#define RCC_CFGR_SW_PLL       0x00000002
+#define RCC_CFGR2              (RCC_BASE + 0x2C)
 
 /* APB2 reset bits  */
 #define RCC_APB2RSTR_USART1RST   BIT(14)
@@ -80,6 +113,8 @@
 #define RCC_APB2RSTR_IOBRST      BIT(3)
 #define RCC_APB2RSTR_IOARST      BIT(2)
 #define RCC_APB2RSTR_AFIORST     BIT(0)
+
+#define RCC_APB1RSTR_USB         BIT(23)
 
 /* APB2 peripheral clock enable bits  */
 #define RCC_APB2ENR_USART1EN   BIT(14)
@@ -101,6 +136,7 @@
 #define RCC_APB1ENR_USART2EN   BIT(17)
 #define RCC_APB1ENR_USART3EN   BIT(18)
 #define RCC_APB1ENR_SPI2EN     BIT(14)
+#define RCC_APB1ENR_USB        BIT(23)
 
 #define rcc_enable_clk_spi1()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_SPI1EN)
 #define rcc_enable_clk_spi2()     __set_bits(RCC_APB1ENR, RCC_APB1ENR_SPI2EN)
@@ -126,9 +162,22 @@
                                     __clear_bits(RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST); \
                                   }
 
+#define rcc_reset_usb()           { __set_bits(RCC_APB1RSTR, RCC_APB1RSTR_USB);   \
+                                    __clear_bits(RCC_APB1RSTR, RCC_APB1RSTR_USB); \
+                                  }
 
-void rcc_init(void);
-void rcc_set_adc_prescaler(uint32 divider);
+
+#define PCLK2_DIV_2            0x00008000
+
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+void rcc_init(struct rcc_device *dev);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

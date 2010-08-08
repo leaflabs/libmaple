@@ -1,8 +1,6 @@
 
 #include "wirish.h"
 #include "fsmc.h"
-#include "rcc.h"
-#include "gpio.h"
 
 #define LED_PIN  23 // hack for maple native
 #define DISC_PIN 14 // hack for USB on native
@@ -39,8 +37,6 @@ int count = 0;
 void setup() {
    uint32 id;
    scb = (SCB_Reg*)SCB_BASE;
-
-   rcc_enable_clk_fsmc();
 
    pinMode(LED_PIN, OUTPUT);
    pinMode(DISC_PIN, OUTPUT);
@@ -96,13 +92,11 @@ void loop() {
    toggle ^= 1;
    delay(1);
 
-   ptr = (uint16*)(0x60000000);
-   count = 0;
-   for(int i = 0; i<1024; i++) {
+   for(int i = 0; i<100; i++) {   // modify this to speed things up
         count++;
         ptr++;
-        *ptr = (0x0000FFFF & count);
         //delay(10);    // tweak this to test SRAM resiliance over time
+        *ptr = (0x0000FFFF & count);
         if(*ptr != (0x0000FFFF & count)) {
                 Serial1.println("ERROR: mismatch, halting");
                 while(1) { }

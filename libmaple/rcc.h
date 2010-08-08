@@ -139,6 +139,7 @@ struct rcc_device {
 #define RCC_APB1ENR_USART3EN   BIT(18)
 #define RCC_APB1ENR_SPI2EN     BIT(14)
 #define RCC_APB1ENR_USB        BIT(23)
+#define RCC_APB1ENR_DACEN      BIT(29)
 
 /* AHB peripheral clock enable bits  */
 #define RCC_AHBENR_DMA1EN      BIT(0)
@@ -173,6 +174,8 @@ struct rcc_device {
 #define rcc_enable_clk_usart3()   __set_bits(RCC_APB1ENR, RCC_APB1ENR_USART3EN)
 
 #define rcc_enable_clk_adc1()     __set_bits(RCC_APB2ENR, RCC_APB2ENR_ADC1EN)
+
+#define rcc_enable_clk_dac()      __set_bits(RCC_APB1ENR, RCC_APB1ENR_DACEN)
 
 #define rcc_reset_adc1()          { __set_bits(RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST);   \
                                     __clear_bits(RCC_APB2RSTR, RCC_APB2RSTR_ADC1RST); \

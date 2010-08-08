@@ -1,0 +1,32 @@
+
+DAC notes (for maple native and other "high density" STM32 devices)
+-------------------------------------------------------------------------------
+There is an ST application note for the DACs; it provides a lot of context but
+doesn't help setup the peripheral very much.
+
+For the first code iteration we'll just use 12-bit right-aligned single writes, 
+so use DAC_DHR12Rx
+
+Once data is loaded into the digital registers, there are a number of possible
+triggers to start conversion to analog output: external interrupts, software
+control, and timer events. We'll just use software triggering for now.
+
+There is (obviously) DMA support for DAC output.
+
+There are noise output and triangle wave output features with variable
+amplitude.
+
+There are many additional modes to tigger output to both channels at the same
+time.
+
+Buffering will be enabled by default.
+
+TODO
+-------------------------------------------------------------------------------
+- sine wave demo using Timer interrupts
+- wirish implementation
+- documentation
+- higher performance modes?
+- signal quality testing
+- DMA output
+

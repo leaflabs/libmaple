@@ -31,14 +31,14 @@
 #ifndef _EXT_INTERRUPTS_H_
 #define _EXT_INTERRUPTS_H_
 
-typedef enum ExtInterruptTriggerMode {
+enum {
     RISING,
     FALLING,
     CHANGE
-} ExtInterruptTriggerMode;
+};
 
 
-enum ExtInterruptError {
+enum {
     EXT_INTERRUPT_INVALID_PIN =      (-1),
     EXT_INTERRUPT_INVALID_FUNCTION = (-2),
     EXT_INTERRUPT_INVALID_MODE =     (-3),
@@ -48,7 +48,7 @@ enum ExtInterruptError {
 extern "C"{
 #endif
 
-int attachInterrupt(uint8 pin, voidFuncPtr, ExtInterruptTriggerMode mode);
+int attachInterrupt(uint8 pin, voidFuncPtr, uint32 mode);
 int detachInterrupt(uint8 pin);
 
 #ifdef __cplusplus

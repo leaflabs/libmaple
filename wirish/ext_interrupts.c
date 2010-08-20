@@ -65,7 +65,7 @@ static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
  *
  *  @sideeffect Registers a handler
  */
-int attachInterrupt(uint8 pin, voidFuncPtr handler, ExtInterruptTriggerMode mode) {
+int attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
     uint8 outMode;
     /* Parameter checking  */
     if (pin >= NR_MAPLE_PINS) {

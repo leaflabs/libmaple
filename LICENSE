@@ -57,3 +57,10 @@ the new terms are clearly indicated on the first page of each file where
 they apply.
 
 -------------------------------------------------------------------------------
+The ./support/stm32loader.py python script is GPL (see
+http://www.gnu.org/licenses/ for a copy) and comes with the following info:
+
+    Author: Ivan A-R <ivan@tuxotronic.org>
+    Project page: http://tuxotronic.org/wiki/projects/stm32loader
+
+-------------------------------------------------------------------------------

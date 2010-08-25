@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := sketch
 
 BOARD ?= maple
-MAPLE_TARGET ?= flash
+MEMORY_TARGET ?= flash
 
 # Useful paths
 SRCROOT := $(dir)
@@ -28,15 +28,15 @@ VENDOR_ID  := 1EAF
 PRODUCT_ID := 0003
 
 # Some target specific things
-ifeq ($(MAPLE_TARGET), ram)
+ifeq ($(MEMORY_TARGET), ram)
    VECT_BASE_ADDR := VECT_TAB_RAM
    LDSCRIPT := ram.ld
 endif
-ifeq ($(MAPLE_TARGET), flash)
+ifeq ($(MEMORY_TARGET), flash)
    LDSCRIPT := flash.ld
    VECT_BASE_ADDR := VECT_TAB_FLASH
 endif
-ifeq ($(MAPLE_TARGET), jtag)
+ifeq ($(MEMORY_TARGET), jtag)
    LDSCRIPT := jtag.ld
    VECT_BASE_ADDR := VECT_TAB_BASE
 endif
@@ -71,7 +71,7 @@ install: $(BUILD_PATH)/$(BOARD).bin
 # Force a rebuild if the maple target changed
 PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 build-check:
-ifneq ($(PREV_BUILD_TYPE), $(MAPLE_TARGET))
+ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))
 	$(shell rm -rf $(BUILD_PATH))
 endif
 
@@ -84,11 +84,11 @@ help:
 	@echo ""
 	@echo "  libmaple Makefile help"
 	@echo "  ----------------------"
-	@echo "  Compile targets (default MAPLE_TARGET=flash):"
+	@echo "  Compile targets (default MEMORY_TARGET=flash):"
 	@echo "      ram:    Compile sketch code to ram"
 	@echo "      flash:  Compile sketch code to flash"
 	@echo "      jtag:   Compile sketch code to jtag"
-	@echo "      sketch: Compile sketch code to target MAPLE_TARGET"
+	@echo "      sketch: Compile sketch code to target MEMORY_TARGET"
 	@echo "  "
 	@echo "  Programming targets:"
 	@echo "      install:  Upload code to target"
@@ -115,10 +115,10 @@ ctags:
 	@echo "Made tags file for VIM code browsing"
 
 ram:
-	@$(MAKE) MAPLE_TARGET=ram --no-print-directory sketch
+	@$(MAKE) MEMORY_TARGET=ram --no-print-directory sketch
 
 flash:
-	@$(MAKE) MAPLE_TARGET=flash --no-print-directory sketch
+	@$(MAKE) MEMORY_TARGET=flash --no-print-directory sketch
 
 jtag:
-	@$(MAKE) MAPLE_TARGET=jtag --no-print-directory sketch
+	@$(MAKE) MEMORY_TARGET=jtag --no-print-directory sketch

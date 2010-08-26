@@ -16,7 +16,7 @@
 #define USB_DEVICE_SUBCLASS_CDC           0x00
 
 #define USB_CONFIG_ATTR_BUSPOWERED        0b10000000
-#define USB_CONFIG_ATTR_SELF_POWERED       0b11000000
+#define USB_CONFIG_ATTR_SELF_POWERED      0b11000000
 
 #define EP_TYPE_INTERRUPT                 0x03
 #define EP_TYPE_BULK                      0x02

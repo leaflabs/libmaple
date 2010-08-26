@@ -31,48 +31,6 @@
 #include "flash.h"
 #include "rcc.h"
 
-/* registers  */
-#define RCC_BASE               0x40021000
-#define RCC_CR                 (RCC_BASE + 0x0)
-#define RCC_CFGR               (RCC_BASE + 0x4)
-#define RCC_CIR                (RCC_BASE + 0x8)
-#define RCC_APB2RSTR           (RCC_BASE + 0xC)
-#define RCC_APB1RSTR           (RCC_BASE + 0x10)
-#define RCC_AHBENR             (RCC_BASE + 0x14)
-#define RCC_APB2ENR            (RCC_BASE + 0x18)
-#define RCC_APB1ENR            (RCC_BASE + 0x1C)
-#define RCC_BDCR               (RCC_BASE + 0x20)
-#define RCC_CSR                (RCC_BASE + 0x24)
-#define RCC_AHBSTR             (RCC_BASE + 0x28)
-#define RCC_CFGR2              (RCC_BASE + 0x2C)
-
-#define RCC_CFGR_USBPRE        (0x1 << 22)
-#define RCC_CFGR_ADCPRE        (0x3 << 14)
-#define RCC_CFGR_PPRE1         (0x7 << 8)
-#define RCC_CFGR_PPRE2         (0x7 << 11)
-#define RCC_CFGR_HPRE          (0xF << 4)
-#define RCC_CFGR_PLLSRC        (0x1 << 16)
-
-#define RCC_CFGR_SWS           (0x3 << 2)
-#define RCC_CFGR_SWS_PLL       (0x2 << 2)
-#define RCC_CFGR_SWS_HSE       (0x1 << 2)
-
-#define RCC_CFGR_SW            (0x3 << 0)
-#define RCC_CFGR_SW_PLL        (0x2 << 0)
-#define RCC_CFGR_SW_HSE        (0x1 << 0)
-
-/* CR status bits  */
-#define RCC_CR_HSEON           (0x1 << 16)
-#define RCC_CR_HSERDY          (0x1 << 17)
-#define RCC_CR_PLLON           (0x1 << 24)
-#define RCC_CR_PLLRDY          (0x1 << 25)
-
-#define RCC_WRITE_CFGR(val)    __write(RCC_CFGR, val)
-#define RCC_READ_CFGR()        __read(RCC_CFGR)
-
-#define RCC_WRITE_CR(val)      __write(RCC_CR, val)
-#define RCC_READ_CR()          __read(RCC_CR)
-
 enum {
    APB1,
    APB2,
@@ -90,15 +48,24 @@ static const struct rcc_dev_info rcc_dev_table[] = {
    [RCC_GPIOB]  = { .clk_domain = APB2, .line_num = 3 },
    [RCC_GPIOC]  = { .clk_domain = APB2, .line_num = 4 },
    [RCC_GPIOD]  = { .clk_domain = APB2, .line_num = 5 },
+   [RCC_GPIOE]  = { .clk_domain = APB2, .line_num = 6 }, // High-density devices only
+   [RCC_GPIOF]  = { .clk_domain = APB2, .line_num = 7 }, // High-density devices only
+   [RCC_GPIOG]  = { .clk_domain = APB2, .line_num = 8 }, // High-density devices only
    [RCC_AFIO]   = { .clk_domain = APB2, .line_num = 0 },
    [RCC_ADC1]   = { .clk_domain = APB2, .line_num = 9 },
+   [RCC_ADC2]   = { .clk_domain = APB2, .line_num = 10 },
    [RCC_USART1] = { .clk_domain = APB2, .line_num = 14 },
    [RCC_USART2] = { .clk_domain = APB1, .line_num = 17 },
    [RCC_USART3] = { .clk_domain = APB1, .line_num = 18 },
+   [RCC_USART4] = { .clk_domain = APB1, .line_num = 19 },  // High-density devices only
+   [RCC_USART5] = { .clk_domain = APB1, .line_num = 20 },  // High-density devices only
    [RCC_TIMER1] = { .clk_domain = APB2, .line_num = 11 },
    [RCC_TIMER2] = { .clk_domain = APB1, .line_num = 0 },
    [RCC_TIMER3] = { .clk_domain = APB1, .line_num = 1 },
    [RCC_TIMER4] = { .clk_domain = APB1, .line_num = 2 },
+   [RCC_TIMER5] = { .clk_domain = APB1, .line_num = 3 },   // High-density devices only
+   [RCC_TIMER6] = { .clk_domain = APB1, .line_num = 4 },   // High-density devices only
+   [RCC_TIMER7] = { .clk_domain = APB1, .line_num = 5 },   // High-density devices only
    [RCC_SPI1]   = { .clk_domain = APB2, .line_num = 12 },
    [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
 };

@@ -10,8 +10,9 @@ LIBMAPLE_PATH := libmaple
 
 # Useful variables
 GLOBAL_CFLAGS    := -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
-                    -ffunction-sections -fdata-sections -Wl,--gc-sections
-GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall
+                    -ffunction-sections -fdata-sections -Wl,--gc-sections \
+					-DBOARD_$(BOARD)
+GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall -DBOARD_$(BOARD)
 
 
 LDDIR    := support/ld

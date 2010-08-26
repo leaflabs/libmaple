@@ -32,8 +32,6 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#define MAPLE_DEBUG 0
-
 #define BIT(shift)                     (1 << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
@@ -41,11 +39,7 @@
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
 /* Bit-banding macros  */
-#define BITBAND_SRAM_REF   0x20000000
-#define BITBAND_SRAM_BASE  0x22000000
 #define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE + (a-BITBAND_SRAM_REF)*32 + (b*4)))  // Convert SRAM address
-#define BITBAND_PERI_REF   0x40000000
-#define BITBAND_PERI_BASE  0x42000000
 #define BITBAND_PERI(a,b) ((BITBAND_PERI_BASE + (a-BITBAND_PERI_REF)*32 + (b*4)))  // Convert PERI address
 
 #define REG_SET(reg, val)               (*(volatile uint32*)(reg)  = (val))

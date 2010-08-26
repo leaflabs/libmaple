@@ -28,13 +28,6 @@
 /* _end is set in the linker command file */
 extern caddr_t _end;
 
-/* just in case, most boards have at least some memory */
-#ifndef RAMSIZE
-#  define RAMSIZE             (caddr_t)0x50000
-#endif
-
-#define STACK_TOP 0x20000800
-
 void uart_send(const char*str);
 
 /*

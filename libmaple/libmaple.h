@@ -32,6 +32,24 @@
 #define _LIBMAPLE_H_
 
 #include "libmaple_types.h"
+
+// General configuration
+#define MAPLE_DEBUG 0
+
+#ifdef BOARD_maple
+   #include "board_maple.h"
+#endif
+/*
+#ifdef BOARD_maple-native
+   #include "board_maple_native.h"
+#endif
+
+#ifdef BOARD_maple-mini
+   #include "board_maple_mini.h"
+#endif
+*/
+
+// Requires board configuration info
 #include "util.h"
 
 #endif

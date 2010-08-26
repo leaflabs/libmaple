@@ -94,12 +94,11 @@
  * EXTI[5-9] -> EXT9_5
  * EXTI[10-15] -> EXT15_10
  *
- *
  * */
 
-#define NR_EXTI_CHANNELS         16
-#define NR_EXTI_PORTS             4
 #define NR_EXTI_MODES             3
+#define NR_EXTI_CHANNELS         16
+#define NR_EXTI_PORTS            NR_GPIO_PORTS       // board specific
 
 #define EXTI_IMR        0x40010400                   // Interrupt mask register
 #define EXTI_EMR        (EXTI_IMR + 0x04)            // Event mask register
@@ -139,6 +138,9 @@
 #define EXTI_CONFIG_PORTB 1
 #define EXTI_CONFIG_PORTC 2
 #define EXTI_CONFIG_PORTD 3
+#define EXTI_CONFIG_PORTE 4     // Native only
+#define EXTI_CONFIG_PORTF 5     // Native only
+#define EXTI_CONFIG_PORTG 6     // Native only
 
 
 #ifdef __cplusplus

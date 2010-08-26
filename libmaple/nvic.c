@@ -44,8 +44,10 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
 void nvic_irq_enable(uint32 n) {
     if (n < 32) {
         REG_SET_BIT(NVIC_ISER0, n);
-    } else {
+    } else if(n < 64) {
         REG_SET_BIT(NVIC_ISER1, n - 32);
+    } else {
+        REG_SET_BIT(NVIC_ISER2, n - 64);
     }
 }
 
@@ -56,8 +58,10 @@ void nvic_irq_enable(uint32 n) {
 void nvic_irq_disable(uint32 n) {
     if (n < 32) {
         REG_SET_BIT(NVIC_ICER0, n);
-    } else {
+    } else if(n < 64) {
         REG_SET_BIT(NVIC_ICER1, n - 32);
+    } else {
+        REG_SET_BIT(NVIC_ICER2, n - 64);
     }
 }
 

@@ -36,6 +36,8 @@
 #define USART1_BASE         0x40013800
 #define USART2_BASE         0x40004400
 #define USART3_BASE         0x40004800
+#define UART4_BASE          0x40004C00  // High-density devices only (Maple Native)
+#define UART5_BASE          0x40005000  // High-density devices only (Maple Native)
 
 #define USART_UE            BIT(13)
 #define USART_M             BIT(12)
@@ -61,6 +63,18 @@ struct usart_dev usart_dev_table[] = {
       .rcc_dev_num = RCC_USART3,
       .nvic_dev_num = NVIC_USART3
    },
+   #if NR_USART >= 5
+   [UART4] = {
+      .base = (usart_port*)UART4_BASE,
+      .rcc_dev_num = RCC_UART4,
+      .nvic_dev_num = NVIC_UART4
+   },
+   [UART5] = {
+      .base = (usart_port*)UART5_BASE,
+      .rcc_dev_num = RCC_UART5,
+      .nvic_dev_num = NVIC_UART5
+   },
+   #endif
 };
 
 /* usart interrupt handlers  */
@@ -75,6 +89,14 @@ void USART2_IRQHandler(void) {
 void USART3_IRQHandler(void) {
     rb_insert(&usart_dev_table[USART3].rb, (uint8)(((usart_port*)(USART3_BASE))->DR));
 }
+#if NR_USART >= 5
+void UART4_IRQHandler(void) {
+    rb_insert(&usart_dev_table[UART4].rb, (uint8)(((usart_port*)(UART4_BASE))->DR));
+}
+void UART5_IRQHandler(void) {
+    rb_insert(&usart_dev_table[UART5].rb, (uint8)(((usart_port*)(UART5_BASE))->DR));
+}
+#endif
 
 /**
  *  @brief Enable a USART in single buffer transmission mode, multibuffer
@@ -83,6 +105,7 @@ void USART3_IRQHandler(void) {
  *  @param baud Baud rate to be set at
  */
 void usart_init(uint8 usart_num, uint32 baud) {
+    ASSERT(usart_num <= NR_USART);
     usart_port *port;
     ring_buffer *ring_buf;
 
@@ -121,6 +144,18 @@ void usart_init(uint8 usart_num, uint32 baud) {
     port->CR1 |= USART_UE;
 }
 
+/**
+ *  @brief Turn off all USARTs.
+ */
+void usart_disable_all() {
+    usart_disable(1);
+    usart_disable(2);
+    usart_disable(3);
+    #if NR_USART >= 5
+    usart_disable(4);
+    usart_disable(5);
+    #endif
+}
 
 /**
  *  @brief Turn off a USART.

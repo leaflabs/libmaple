@@ -23,9 +23,6 @@ ifndef V
    SILENT_OBJDUMP  = @echo '  [OBJDUMP]  ' $(OBJDUMP);
 endif
 
-DFU             := dfu-util
-OPENOCD         := openocd
-
 BUILDDIRS :=
 TGT_BIN   :=
 

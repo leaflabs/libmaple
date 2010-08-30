@@ -4,9 +4,14 @@ BOARD ?= maple
 MAPLE_TARGET ?= flash
 
 # Useful paths
+ifeq ($(LIB_MAPLE_HOME),)
 SRCROOT := $(dir)
+else
+SRCROOT := $(LIB_MAPLE_HOME)
+endif
 BUILD_PATH = build
-LIBMAPLE_PATH := libmaple
+LIBMAPLE_PATH := $(SRCROOT)/libmaple
+SUPPORT_PATH := $(SRCROOT)/support
 
 # Useful variables
 GLOBAL_CFLAGS    := -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
@@ -14,14 +19,14 @@ GLOBAL_CFLAGS    := -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall
 
 
-LDDIR    := support/ld
+LDDIR    := $(SUPPORT_PATH)/ld
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
             -mcpu=cortex-m3 -mthumb -Xlinker     \
             --gc-sections --print-gc-sections --march=armv7-m -Wall
 
 # Set up build rules and some useful templates
-include support/make/build-rules.mk
-include support/make/build-templates.mk
+include $(SUPPORT_PATH)/make/build-rules.mk
+include $(SUPPORT_PATH)/make/build-templates.mk
 
 # Maple USB id
 VENDOR_ID  := 1EAF
@@ -42,22 +47,22 @@ ifeq ($(MAPLE_TARGET), jtag)
 endif
 
 # Set all submodules here
-LIBMAPLE_MODULES := libmaple
-LIBMAPLE_MODULES += wirish
+LIBMAPLE_MODULES := $(SRCROOT)/libmaple
+LIBMAPLE_MODULES += $(SRCROOT)/wirish
 
 # call each module rules.mk
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 
 # Main target
-include support/make/build-targets.mk
+include $(SUPPORT_PATH)/make/build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag
 
 # Target upload commands
-UPLOAD_ram   := support/scripts/reset.py && \
+UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-UPLOAD_flash := support/scripts/reset.py && \
+UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
 UPLOAD_jtag  := $(OPENOCD) -f support/openocd/flash.cfg

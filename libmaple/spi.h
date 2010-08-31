@@ -36,6 +36,7 @@ extern "C" {
 /* peripheral addresses */
 #define SPI1_BASE                   0x40013000
 #define SPI2_BASE                   0x40003800
+#define SPI3_BASE                   0x40003C00
 
 /* baud rate prescaler bits */
 #define CR1_BR                      0x00000038

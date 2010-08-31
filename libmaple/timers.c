@@ -28,8 +28,11 @@
  *  @brief General timer routines
  */
 
+// TODO: actually support timer5 and timer8
+
 #include "libmaple.h"
 #include "rcc.h"
+#include "nvic.h"
 #include "timers.h"
 
 typedef struct {
@@ -81,6 +84,10 @@ volatile static voidFuncPtr timer1_handlers[4];
 volatile static voidFuncPtr timer2_handlers[4];
 volatile static voidFuncPtr timer3_handlers[4];
 volatile static voidFuncPtr timer4_handlers[4];
+#if NR_TIMERS >= 8
+volatile static voidFuncPtr timer5_handlers[4]; // High-density devices only
+volatile static voidFuncPtr timer8_handlers[4]; // High-density devices only
+#endif
 
 // This function should probably be rewriten to take (timer_num, mode) and have
 // prescaler set elsewhere. The mode can be passed through to set_mode at the 
@@ -94,21 +101,35 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     switch(timer_num) {
     case 1:
         timer = (Timer*)TIMER1_BASE;
-        rcc_enable_clk_timer1();
+        rcc_clk_enable(RCC_TIMER1);
         is_advanced = 1;
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
-        rcc_enable_clk_timer2();
+        rcc_clk_enable(RCC_TIMER2);
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
-        rcc_enable_clk_timer3();
+        rcc_clk_enable(RCC_TIMER3);
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
-        rcc_enable_clk_timer4();
+        rcc_clk_enable(RCC_TIMER4);
         break;
+    #if NR_TIMERS >= 8
+    case 5:
+        timer = (Timer*)TIMER5_BASE;
+        rcc_clk_enable(RCC_TIMER5);
+        break;
+    case 8:
+        timer = (Timer*)TIMER8_BASE;
+        rcc_clk_enable(RCC_TIMER8);
+        is_advanced = 1;
+        break;
+    #endif
+    default:
+        ASSERT(0);
+        return;
     }
 
     timer->CR1 = ARPE;        // No clock division
@@ -171,6 +192,9 @@ void timer_pause(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CR1 &= ~(0x0001);    // CEN
 }
@@ -193,6 +217,9 @@ void timer_resume(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CR1 |= 0x0001;    // CEN
 }
@@ -217,6 +244,9 @@ ASSERT(timer_num > 0 && timer_num <= 4);
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CNT = value;
 }
@@ -240,6 +270,9 @@ uint16 timer_get_count(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     return timer->CNT;
 }
@@ -262,6 +295,9 @@ void timer_set_prescaler(uint8 timer_num, uint16 prescale) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->PSC = prescale;
 }
@@ -285,6 +321,9 @@ void timer_set_reload(uint8 timer_num, uint16 max_reload) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->ARR = max_reload;
 }
@@ -476,25 +515,25 @@ void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr hand
     case 1:
         timer = (Timer*)TIMER1_BASE;
         timer1_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(27);
+        nvic_irq_enable(NVIC_TIMER1);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 2:
         timer = (Timer*)TIMER2_BASE;
         timer2_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(28);
+        nvic_irq_enable(NVIC_TIMER2);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 3:
         timer = (Timer*)TIMER3_BASE;
         timer3_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(29);
+        nvic_irq_enable(NVIC_TIMER3);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     case 4:
         timer = (Timer*)TIMER4_BASE;
         timer4_handlers[compare_num-1] = handler;
-        nvic_enable_interrupt(30);
+        nvic_irq_enable(NVIC_TIMER4);
         timer->DIER |= (1 << compare_num); // 1-indexed compare nums
         break;
     }

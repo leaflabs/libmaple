@@ -39,7 +39,7 @@ DAC_Map *dac = (DAC_Map*)(DAC_BASE);
 void dac_init(void) {
 
     // First turn on the clock
-    rcc_enable_clk_dac();
+    rcc_clk_enable(RCC_DAC);
 
     // Then setup ANALOG mode on PA4 and PA5 
     gpio_set_mode(GPIOA_BASE,  4, CNF_INPUT_ANALOG);

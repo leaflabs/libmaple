@@ -34,77 +34,60 @@
 #include "gpio.h"
 #include "timers.h"
 
-#define USART1_TX_PORT             GPIOA_BASE
-#define USART1_TX_PIN              9
-#define USART1_RX_PORT             GPIOA_BASE
-#define USART1_RX_PIN              10
+HardwareSerial Serial1(USART1, 4500000UL, GPIOA_BASE, 9, 10, 1, 2);
+HardwareSerial Serial2(USART2, 2250000UL, GPIOA_BASE, 2, 3,  2, 3);
+HardwareSerial Serial3(USART3, 2250000UL, GPIOB_BASE, 10, 11, 0, 0);
+// TODO: High density device ports
 
-#define USART2_TX_PORT             GPIOA_BASE
-#define USART2_TX_PIN              2
-#define USART2_RX_PORT             GPIOA_BASE
-#define USART2_RX_PIN              3
-
-#define USART3_TX_PORT             GPIOB_BASE
-#define USART3_TX_PIN              10
-#define USART3_RX_PORT             GPIOB_BASE
-#define USART3_RX_PIN              11
-
-HardwareSerial::HardwareSerial(uint8 usartNum) {
-    ASSERT(usartNum == 1 ||
-           usartNum == 2 ||
-           usartNum == 3);
-    this->usartNum = usartNum;
+HardwareSerial::HardwareSerial(uint8 usart_num,
+                               uint32 max_baud,
+                               GPIO_Port *gpio_port,
+                               uint8 tx_pin,
+                               uint8 rx_pin,
+                               uint8 timer_num,
+                               uint8 compare_num) {
+    this->usart_num = usart_num;
+    this->max_baud = max_baud;
+    this->gpio_port = gpio_port;
+    this->tx_pin = tx_pin;
+    this->rx_pin = rx_pin;
+    this->timer_num = timer_num;
+    this->compare_num = compare_num;
 }
 
 uint8 HardwareSerial::read(void) {
-    return usart_getc(usartNum);
+    return usart_getc(usart_num);
 }
 
 uint32 HardwareSerial::available(void) {
-
-    return usart_data_available(usartNum);
+    return usart_data_available(usart_num);
 }
 
 void HardwareSerial::write(unsigned char ch) {
-    usart_putc(usartNum, ch);
+    usart_putc(usart_num, ch);
 }
 
 void HardwareSerial::begin(uint32 baud) {
-    ASSERT(!(baud > USART_MAX_BAUD));
+   if (baud > max_baud) {
+      return;
+   }
 
-    /* Set appropriate pin modes  */
-    switch (usartNum) {
-    case 1:
-        gpio_set_mode(USART1_TX_PORT, USART1_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
-        gpio_set_mode(USART1_RX_PORT, USART1_RX_PIN, GPIO_MODE_INPUT_FLOATING);
-        /* Turn off any pwm  */
-        timer_set_mode(1, 2, TIMER_DISABLED);
-        break;
-    case 2:
-        gpio_set_mode(USART2_TX_PORT, USART2_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
-        gpio_set_mode(USART2_RX_PORT, USART2_RX_PIN, GPIO_MODE_INPUT_FLOATING);
-        /* Turn off any pwm  */
-        timer_set_mode(2, 3, TIMER_DISABLED);
-        break;
-    case 3:
-        gpio_set_mode(USART3_TX_PORT, USART3_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
-        gpio_set_mode(USART3_RX_PORT, USART3_RX_PIN, GPIO_MODE_INPUT_FLOATING);
-        break;
-    default:
-        ASSERT(0);
-    }
+   gpio_set_mode(gpio_port, tx_pin, GPIO_MODE_AF_OUTPUT_PP);
+   gpio_set_mode(gpio_port, rx_pin, GPIO_MODE_INPUT_FLOATING);
 
-    usart_init(usartNum, baud);
+   if ((usart_num == USART1) ||
+       (usart_num == USART2)) {
+      /* turn off any pwm if there's a conflict on this usart */
+      timer_set_mode(timer_num, compare_num, TIMER_DISABLED);
+   }
+
+    usart_init(usart_num, baud);
 }
 
 void HardwareSerial::end(void) {
-    usart_disable(usartNum);
+    usart_disable(usart_num);
 }
 
 void HardwareSerial::flush(void) {
-    usart_clear_buffer(usartNum);
+    usart_reset_rx(usart_num);
 }
-
-HardwareSerial Serial1(1);
-HardwareSerial Serial2(2);
-HardwareSerial Serial3(3);

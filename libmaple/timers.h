@@ -89,6 +89,10 @@ typedef volatile uint32* TimerCCR;
 #define TIMER2_BASE        0x40000000
 #define TIMER3_BASE        0x40000400
 #define TIMER4_BASE        0x40000800
+#define TIMER5_BASE        0x40000C00   // High-density devices only (Maple Native)
+#define TIMER6_BASE        0x40001000   // High-density devices only (Maple Native)
+#define TIMER7_BASE        0x40001400   // High-density devices only (Maple Native)
+#define TIMER8_BASE        0x40013400   // High-density devices only (Maple Native)
 
 #define ARPE               BIT(7)                // Auto-reload preload enable
 #define NOT_A_TIMER        0
@@ -116,6 +120,18 @@ typedef volatile uint32* TimerCCR;
 #define TIMER4_CH3_CCR     (TimerCCR)(TIMER4_BASE + 0x3C)
 #define TIMER4_CH4_CCR     (TimerCCR)(TIMER4_BASE + 0x40)
 
+// Timer5 and Timer8 are in high-density devices only (such as Maple Native).
+// Timer6 and Timer7 in these devices have no output compare pins.
+
+#define TIMER5_CH1_CCR     (TimerCCR)(TIMER5_BASE + 0x34)
+#define TIMER5_CH2_CCR     (TimerCCR)(TIMER5_BASE + 0x38)
+#define TIMER5_CH3_CCR     (TimerCCR)(TIMER5_BASE + 0x3C)
+#define TIMER5_CH4_CCR     (TimerCCR)(TIMER5_BASE + 0x40)
+
+#define TIMER8_CH1_CCR     (TimerCCR)(TIMER8_BASE + 0x34)
+#define TIMER8_CH2_CCR     (TimerCCR)(TIMER8_BASE + 0x38)
+#define TIMER8_CH3_CCR     (TimerCCR)(TIMER8_BASE + 0x3C)
+#define TIMER8_CH4_CCR     (TimerCCR)(TIMER8_BASE + 0x40)
 
 #define TIMER_DISABLED          0
 #define TIMER_PWM               1

@@ -23,7 +23,14 @@
  * ****************************************************************************/
 
 /**
- *  @brief Maple board bring up
+ *  @brief generic maple board bring up:
+ *
+ *  By default, we bring up all maple boards running on the stm32 to 72mhz,
+ *  clocked off the PLL, driven by the 8MHz external crystal.
+ *
+ *  AHB and APB2 are clocked at 72MHz
+ *  APB1 is clocked at 36MHz
+ *
  */
 
 #include "wirish.h"
@@ -32,35 +39,40 @@
 #include "nvic.h"
 #include "usb.h"
 #include "rcc.h"
+#include "fsmc.h"
+#include "dac.h"
 #include "flash.h"
 
-static void inline maple_flash_init(void) {
+void init(void) {
+   /* make sure the flash is ready before spinning the high speed clock up */
    flash_enable_prefetch();
    flash_set_latency(FLASH_WAIT_STATE_2);
-}
 
-static void inline maple_rcc_init(void) {
-   struct rcc_device maple_rcc_dev = {
-      .apb1_prescale = RCC_APB1_HCLK_DIV_2,
-      .apb2_prescale = RCC_APB2_HCLK_DIV_1,
-      .ahb_prescale  = RCC_AHB_SYSCLK_DIV_1,
-      .sysclk_src    = RCC_CLKSRC_PLL,
-      .pll_src       = RCC_PLLSRC_HSE,
-      .pll_mul       = RCC_PLLMUL_9
-   };
+   #if HAS_FSMC
+   fsmc_native_sram_init();
+   #endif
 
-   rcc_init(&maple_rcc_dev);
-}
-void init(void) {
-   maple_flash_init();
-   maple_rcc_init();
+   #if NR_DAC_PINS > 0
+   dac_init();
+   #endif
+
+   /* initialize clocks  */
+   rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
+   rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
+   rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
+   rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
+
    nvic_init();
-   systick_init();
+   systick_init(MAPLE_RELOAD_VAL);
    gpio_init();
-//   adc_init();
-//   timer_init(1, 1);
-//   timer_init(2, 1);
-//   timer_init(3, 1);
-//   timer_init(4, 1);
-//   setupUSB();
+   adc_init();
+   timer_init(1, 1);
+   timer_init(2, 1);
+   timer_init(3, 1);
+   timer_init(4, 1);
+   #if NR_TIMERS >= 8
+   timer_init(5, 1);
+   timer_init(8, 1);
+   #endif
+   setupUSB();
 }

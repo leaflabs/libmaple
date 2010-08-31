@@ -22,12 +22,19 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
+/**
+ *  @brief flash peripheral management functions
+ */
+
+
 #include "libmaple.h"
 #include "flash.h"
 
+/* flash registers  */
 #define FLASH_BASE                      0x40022000
 #define FLASH_ACR                       FLASH_BASE
 
+/* flash prefetcher  */
 #define ACR_PRFTBE                      BIT(4)
 #define ACR_PRFTBE_ENABLE               BIT(4)
 
@@ -36,7 +43,6 @@
 
 #define FLASH_WRITE_ACR(val)            __write(FLASH_ACR, val)
 #define FLASH_READ_ACR()                __read(FLASH_ACR)
-
 
 /**
  * @brief turn on the hardware prefetcher

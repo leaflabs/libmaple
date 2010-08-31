@@ -32,29 +32,6 @@
 #include "exti.h"
 #include "ext_interrupts.h"
 
-typedef struct ExtiInfo {
-    uint8 channel;
-    uint8 port;
-} ExtiInfo;
-
-static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
-    {EXTI3,  EXTI_CONFIG_PORTA},      // D0/PA3
-    {EXTI2,  EXTI_CONFIG_PORTA},      // D1/PA2
-    {EXTI0,  EXTI_CONFIG_PORTA},      // D2/PA0
-    {EXTI1,  EXTI_CONFIG_PORTA},      // D3/PA1
-    {EXTI5,  EXTI_CONFIG_PORTB},      // D4/PB5
-    {EXTI6,  EXTI_CONFIG_PORTB},      // D5/PB6
-    {EXTI8,  EXTI_CONFIG_PORTA},      // D6/PA8
-    {EXTI9,  EXTI_CONFIG_PORTA},      // D7/PA9
-    {EXTI10, EXTI_CONFIG_PORTA},      // D8/PA10
-    {EXTI7,  EXTI_CONFIG_PORTB},      // D9/PB7
-    {EXTI4,  EXTI_CONFIG_PORTA},      // D10/PA4
-    {EXTI7,  EXTI_CONFIG_PORTA},      // D11/PA7
-    {EXTI6,  EXTI_CONFIG_PORTA},      // D12/PA6
-    {EXTI5,  EXTI_CONFIG_PORTA},      // D13/PA5
-};
-
-
 /**
  *  @brief Attach an interrupt handler to be triggered on a given
  *  transition on the pin. Runs in interrupt context
@@ -65,10 +42,10 @@ static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_MAPLE_PINS] = {
  *
  *  @sideeffect Registers a handler
  */
-int attachInterrupt(uint8 pin, voidFuncPtr handler, ExtInterruptTriggerMode mode) {
+int attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
     uint8 outMode;
     /* Parameter checking  */
-    if (pin >= NR_MAPLE_PINS) {
+    if (pin >= NR_GPIO_PINS) {
         return EXT_INTERRUPT_INVALID_PIN;
     }
 
@@ -100,7 +77,7 @@ int attachInterrupt(uint8 pin, voidFuncPtr handler, ExtInterruptTriggerMode mode
 }
 
 int detachInterrupt(uint8 pin) {
-    if (!(pin < NR_MAPLE_PINS)) {
+    if (!(pin < NR_GPIO_PINS)) {
         return EXT_INTERRUPT_INVALID_PIN;
     }
 

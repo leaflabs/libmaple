@@ -35,9 +35,21 @@
 
 class HardwareSerial : public Print {
     private:
-        uint8 usartNum;
+        uint8 usart_num;
+        uint32 max_baud;
+        GPIO_Port *gpio_port;
+        uint8 tx_pin;
+        uint8 rx_pin;
+        uint8 timer_num;
+        uint8 compare_num;
     public:
-        HardwareSerial(uint8);
+        HardwareSerial(uint8 usart_num,
+                       uint32 max_baud,
+                       GPIO_Port *gpio_port,
+                       uint8 tx_pin,
+                       uint8 rx_pin,
+                       uint8 timer_num,
+                       uint8 compare_num);
         void begin(uint32);
         void end(void);
         uint32 available(void);
@@ -46,9 +58,9 @@ class HardwareSerial : public Print {
         virtual void write(unsigned char);
         using Print::write;
 };
-
 extern HardwareSerial Serial1;
 extern HardwareSerial Serial2;
 extern HardwareSerial Serial3;
+// TODO: high density device ports
 #endif
 

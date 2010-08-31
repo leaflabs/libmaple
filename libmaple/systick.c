@@ -31,23 +31,25 @@
 #include "libmaple.h"
 #include "systick.h"
 
-#define MILLIS_INC 1
+#define SYSTICK_RELOAD          0xE000E014  // Reload value register
+#define SYSTICK_CNT             0xE000E018  // Current value register
+#define SYSTICK_CALIB           0xE000E01C  // Calibration value register
+
+#define SYSTICK_SRC_HCLK        BIT(2)    // Use core clock
+#define SYSTICK_TICKINT         BIT(1)    // Interrupt on systick countdown
+#define SYSTICK_ENABLE          BIT(0)    // Turn on the counter
 
 volatile uint32 systick_timer_millis = 0;
 
-void systick_init(void) {
+void systick_init(uint32 reload_val) {
     /* Set the reload counter to tick every 1ms  */
-    REG_SET_MASK(SYSTICK_RELOAD, MAPLE_RELOAD_VAL);
-//    SYSTICK_RELOAD = MAPLE_RELOAD_VAL;
+    __write(SYSTICK_RELOAD, reload_val);
 
     /* Clock the system timer with the core clock
      * and turn it on, interrrupt every 1ms to keep track of millis()*/
-    REG_SET(SYSTICK_CSR, SYSTICK_SRC_HCLK |
+    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
                          SYSTICK_ENABLE   |
                          SYSTICK_TICKINT);
-//    SYSTICK_CSR = SYSTICK_SRC_HCLK |
-//                  SYSTICK_ENABLE   |
-//                  SYSTICK_TICKINT;
 }
 
 void SysTickHandler(void) {

@@ -90,7 +90,7 @@ void fsmc_native_sram_init(void) {
     gpio_set_mode(GPIOE_BASE,  1, MODE_AF_OUTPUT_PP);   // NBL1
     
     // Next enable the clock
-    rcc_enable_clk_fsmc();
+    rcc_clk_enable(RCC_FSMC);
 
     // Then we configure channel 1 the FSMC SRAM peripheral
     // (all SRAM channels are in "Bank 1" of the FSMC)

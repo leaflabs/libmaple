@@ -23,8 +23,6 @@
  * ****************************************************************************/
 
 /**
- *  @file time.c
- *
  *  @brief 
  */
 
@@ -32,46 +30,24 @@
 #include "systick.h"
 #include "time.h"
 
-#define CYCLES_PER_MICROSECOND  72
-#define FUDGE                   42
-
-extern volatile uint32 systick_timer_millis;
-
-uint32 millis() {
-   unsigned long m;
-   m = systick_timer_millis;
-   return m;
-}
-
 void delay(unsigned long ms)
 {
-   unsigned long start = millis();
-
-   while (millis() - start <= ms)
-      ;
+   uint32 i;
+   for (i = 0; i < ms; i++) {
+      delayMicroseconds(1000);
+   }
 }
 
-
-
-#if 1
 void delayMicroseconds(uint32 us) {
-    uint32 target;
-    uint32 last, cur, count;
-    /* fudge factor hacky hack hack for function overhead  */
-    target = us * CYCLES_PER_MICROSECOND - FUDGE;
+    // So (2^32)/12 micros max, or less than 6 minutes
+    us *= 12;
 
-    /* Get current count */
-    last = systick_get_count();
-    cur = systick_get_count();
-    count = last;
-    while ((count-cur) <= target) {
-        cur = systick_get_count();
-
-        /* check for overflow  */
-        if (cur > last) {
-            count += MAPLE_RELOAD_VAL;
-        }
-        last = cur;
-    }
+    /* fudge for function call overhead  */
+    us--;
+    asm volatile("   mov r0, %[us]          \n\t"
+                 "1: subs r0, #1            \n\t"
+                 "   bhi 1b                 \n\t"
+                 :
+                 : [us] "r" (us)
+                 : "r0");
 }
-#endif

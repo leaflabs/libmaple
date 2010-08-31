@@ -7,6 +7,7 @@ PA15                   JTDI
 PB2                    BOOT1
 PB3                    JTDO
 PB4                    JTRST
+PC9                    BUT button
 PC11                   USB_P
 PC12                   DISC
 PD0                    OSC_IN
@@ -59,9 +60,9 @@ D34    PB15        -      TIM1_CH3N      -          -           SPI2_MOSI   Y
 D35    PC6         -      -              -          -           -           Y
 D36    PC7         -      -              -          -           -           Y
 D37    PC8         -      -              -          -           -           Y
-D38    PC9         -      -              -          -           -           Y
 -------------------------------------------------------------------------------
-
+Note: former pin D38 (PC9) is now attached to the BUT button and there is a
+GND connection where D38 was.
 
 todo:
 adc pin check

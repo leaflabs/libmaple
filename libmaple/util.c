@@ -36,13 +36,6 @@
 #include "adc.h"
 #include "timers.h"
 
-#define ERROR_LED_PORT         GPIOC_BASE
-#define ERROR_LED_PIN          15
-#define ERROR_USART_NUM        1
-#define ERROR_USART_BAUD       9600
-#define ERROR_TX_PIN           10
-#define ERROR_TX_PORT          GPIOA_BASE
-
 /* Error assert + fade */
 void _fail(const char* file, int line, const char* exp) {
     int32  slope   = 1;
@@ -60,9 +53,7 @@ void _fail(const char* file, int line, const char* exp) {
     adc_disable();
 
     /* Turn off all usarts  */
-    usart_disable(1);
-    usart_disable(2);
-    usart_disable(3);
+    usart_disable_all();
 
     /* Initialize the error usart */
     gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);

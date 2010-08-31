@@ -30,13 +30,12 @@
 #include "wirish.h"
 #include "io.h"
 
-extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
-
 /* Assumes that the ADC has been initialized and
  * that the pin is set to ANALOG_INPUT */
 uint32 analogRead(uint8 pin) {
-    if (pin >= NR_ANALOG_PINS)
+    if(PIN_MAP[pin].adc == ADC_INVALID) {
         return 0;
+    } 
 
     return adc_read(PIN_MAP[pin].adc);
 }

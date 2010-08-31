@@ -31,12 +31,10 @@
 #include "io.h"
 #include "pwm.h"
 
-extern const PinMapping PIN_MAP[NR_MAPLE_PINS];
-
 void pwmWrite(uint8 pin, uint16 duty_cycle) {
     TimerCCR ccr;
 
-    if (pin >= NR_MAPLE_PINS) {
+    if (pin >= NR_GPIO_PINS) {
         return;
     }
 

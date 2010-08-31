@@ -32,6 +32,7 @@
 #define _WIRISH_H_
 
 #include "libmaple.h"
+#include "boards.h"
 #include "timers.h"
 #include "io.h"
 #include "bits.h"
@@ -79,9 +80,6 @@ void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
-
-
 
 #endif
 

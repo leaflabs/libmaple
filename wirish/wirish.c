@@ -56,9 +56,9 @@ void init(void) {
    systick_init(MAPLE_RELOAD_VAL);
    gpio_init();
    adc_init();
-   timer_init(1, 1);
-   timer_init(2, 1);
-   timer_init(3, 1);
-   timer_init(4, 1);
+   short i = 1;
+   for(i = 1; i <= NR_TIMERS; i++) {
+    timer_init(i, 1);
+   }
    setupUSB();
 }

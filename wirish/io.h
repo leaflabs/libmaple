@@ -38,48 +38,6 @@
 extern "C"{
 #endif
 
-/* stash these here for now  */
-#define D0    0
-#define D1    1
-#define D2    2
-#define D3    3
-#define D4    4
-#define D5    5
-#define D6    6
-#define D7    7
-#define D8    8
-#define D9    9
-#define D10  10
-#define D11  11
-#define D12  12
-#define D13  13
-#define D14  14
-#define D15  15
-#define D16  16
-#define D16  16
-#define D17  17
-#define D18  18
-#define D19  19
-#define D20  20
-#define D21  21
-#define D22  22
-#define D23  23
-#define D24  24
-#define D25  25
-#define D26  26
-#define D27  27
-#define D28  28
-#define D29  29
-#define D30  30
-#define D31  31
-#define D32  32
-#define D33  33
-#define D34  34
-#define D35  35
-#define D36  36
-#define D37  37
-#define D38  38
-#define D39  39
 
 typedef enum WiringPinMode {
     OUTPUT,
@@ -92,15 +50,6 @@ typedef enum WiringPinMode {
     PWM
 } WiringPinMode;
 
-typedef struct PinMapping {
-    GPIO_Port *port;
-    uint32 pin;
-    uint32 adc;
-    TimerCCR timer_channel;
-} PinMapping;
-
-#define ADC_INVALID       0xFFFFFFFF
-#define TIMER_INVALID     (TimerCCR)0xFFFFFFFF
 
 /* Set pin to mode
  * pinMode(pin, mode):

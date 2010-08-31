@@ -42,14 +42,17 @@
     // Number of GPIO ports (GPIOA, GPIOB, etc), definately used
     #define NR_GPIO_PORTS             4
 
+    // Total number of GPIO pins
+    #define NR_GPIO_PINS             39
+
     // Number of timer devices ports, definately used
     #define NR_TIMERS                 4
 
-    // Total number of GPIO pins
-    #define NR_MAPLE_PINS             39
-
     // Number of ADC pins. Not actually used?
     #define NR_ANALOG_PINS            29
+
+    // Has an FSMC bus?
+    //#define HAS_FSMC          // Maple does not
 
     // USB Identifier numbers
     // Descriptor strings must be modified by hand in usb/descriptors.c for now

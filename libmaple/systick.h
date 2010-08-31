@@ -43,6 +43,7 @@ extern "C"{
 #endif
 
 void systick_init(uint32 reload_val);
+void systick_disable();
 
 static inline uint32 systick_get_count(void) {
     return __read(SYSTICK_CNT);

@@ -86,7 +86,6 @@ uint8 logo[18][16] = {
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}, };
 
 void setup() {
-    
     // Setup our pins
     pinMode(LED_PIN, OUTPUT);
     pinMode(VGA_R, OUTPUT);
@@ -101,9 +100,8 @@ void setup() {
     digitalWrite(VGA_V, HIGH);
 
     // This gets rid of the majority of the interrupt artifacts;
-    // a SysTick.end() is required as well
     SerialUSB.end();
-    
+    SystemTick.end();
 
     // Configure
     Timer4.pause(); // while we configure

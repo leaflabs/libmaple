@@ -1,7 +1,7 @@
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Marti F. Bolivar.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,44 +22,19 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-/**
- *  @file systick.c
- *
- *  @brief System timer interrupt handler and initialization routines
- */
-
-#include "libmaple.h"
+#include "SystemTick.h"
 #include "systick.h"
+#include "time.h"
 
-#define SYSTICK_RELOAD          0xE000E014  // Reload value register
-#define SYSTICK_CNT             0xE000E018  // Current value register
-#define SYSTICK_CALIB           0xE000E01C  // Calibration value register
-
-#define SYSTICK_SRC_HCLK        BIT(2)    // Use core clock
-#define SYSTICK_TICKINT         BIT(1)    // Interrupt on systick countdown
-#define SYSTICK_ENABLE          BIT(0)    // Turn on the counter
-
-volatile uint32 systick_timer_millis = 0;
-
-void systick_init(uint32 reload_val) {
-    /* Set the reload counter to tick every 1ms  */
-    __write(SYSTICK_RELOAD, reload_val);
-
-    /* Clock the system timer with the core clock
-     * and turn it on, interrrupt every 1ms to keep track of millis()*/
-    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
-                         SYSTICK_ENABLE   |
-                         SYSTICK_TICKINT);
+SysTick::SysTick(void) {
 }
 
-void systick_disable() {
-  /* clock the system timer with the core clock, but don't turn it on
-     or enable interrupt. */
-  __write(SYSTICK_CSR, SYSTICK_SRC_HCLK);
+void SysTick::begin(void) {
+  systick_init(MAPLE_RELOAD_VAL);
 }
 
-void SysTickHandler(void) {
-    systick_timer_millis++;
+void SysTick::end(void) {
+  systick_disable();
 }
 
-
+SysTick SystemTick;

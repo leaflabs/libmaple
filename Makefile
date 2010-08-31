@@ -3,6 +3,20 @@
 BOARD ?= maple
 MEMORY_TARGET ?= flash
 
+# USB ID for DFU upload
+VENDOR_ID  := 1EAF
+PRODUCT_ID := 0003
+
+# Guess the MCU based on the BOARD (can be overridden )
+ifeq ($(BOARD), maple)
+   MCU := STM32F103RB
+   PRODUCT_ID := 0003
+endif
+ifeq ($(BOARD), maple-native)
+   MCU := STM32F103ZE
+   PRODUCT_ID := 0003
+endif
+
 # Useful paths
 SRCROOT := $(dir)
 BUILD_PATH = build
@@ -11,8 +25,8 @@ LIBMAPLE_PATH := libmaple
 # Useful variables
 GLOBAL_CFLAGS    := -Os -g -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
                     -ffunction-sections -fdata-sections -Wl,--gc-sections \
-					-DBOARD_$(BOARD)
-GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall -DBOARD_$(BOARD)
+					-DBOARD_$(BOARD) -DMCU_$(MCU)
+GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall -DBOARD_$(BOARD) -DMCU_$(MCU)
 
 
 LDDIR    := support/ld
@@ -23,10 +37,6 @@ LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
 # Set up build rules and some useful templates
 include support/make/build-rules.mk
 include support/make/build-templates.mk
-
-# Maple USB id
-VENDOR_ID  := 1EAF
-PRODUCT_ID := 0003
 
 # Some target specific things
 ifeq ($(MEMORY_TARGET), ram)

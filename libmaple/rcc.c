@@ -66,6 +66,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
    [RCC_TIMER5] = { .clk_domain = APB1, .line_num = 3 },   // High-density devices only
    [RCC_TIMER6] = { .clk_domain = APB1, .line_num = 4 },   // High-density devices only
    [RCC_TIMER7] = { .clk_domain = APB1, .line_num = 5 },   // High-density devices only
+   [RCC_TIMER8] = { .clk_domain = APB2, .line_num = 13 },   // High-density devices only
    [RCC_SPI1]   = { .clk_domain = APB2, .line_num = 12 },
    [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
 };

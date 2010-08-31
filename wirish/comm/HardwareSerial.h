@@ -61,5 +61,6 @@ class HardwareSerial : public Print {
 extern HardwareSerial Serial1;
 extern HardwareSerial Serial2;
 extern HardwareSerial Serial3;
+// TODO: high density device ports
 #endif
 

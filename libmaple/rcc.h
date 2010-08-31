@@ -163,6 +163,7 @@ enum {
    RCC_TIMER5,      // High-density devices only (Maple Native)
    RCC_TIMER6,      // High-density devices only (Maple Native)
    RCC_TIMER7,      // High-density devices only (Maple Native)
+   RCC_TIMER8,      // High-density devices only (Maple Native)
    RCC_SPI1,
    RCC_SPI2,
 };

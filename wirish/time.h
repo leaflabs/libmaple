@@ -35,10 +35,10 @@ extern "C"{
 
 #include "nvic.h"
 #include "systick.h"
+#include "boards.h"
 
-#define CYCLES_PER_MICROSECOND  72
 #define US_PER_MS               1000
-#define MAPLE_RELOAD_VAL        72000
+#define MAPLE_RELOAD_VAL        (CYCLES_PER_MICROSECOND * US_PER_MS)
 
 extern volatile uint32 systick_timer_millis;
 

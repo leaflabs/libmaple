@@ -33,10 +33,10 @@
 
 #include "libmaple.h"
 #include "boards.h"
+#include "time.h"
 #include "timers.h"
 #include "io.h"
 #include "bits.h"
-#include "time.h"
 #include "pwm.h"
 #include "ext_interrupts.h"
 #include "wirish_math.h"

@@ -38,7 +38,36 @@ Files to check by hand:
 #   util.h
 #   libmaple.h
 #   usb/*
-#   wirish/*
+
+wirish/:
+#   bits.h
+#   boards.h
+#   cxxabi-compat.cpp
+#   ext_interrupts.c
+#   ext_interrupts.h
+#   HardwareTimer.cpp
+#   HardwareTimer.h
+#   io.h
+#   main.cxx
+#   Print.cpp
+#   Print.h
+#   pwm.c
+#   pwm.h
+#   rules.mk
+#   time.c
+#   time.h
+#   usb_serial.cpp
+#   usb_serial.h
+#   wirish_analog.c
+#   wirish.c
+#   wirish_digital.c
+#   wirish.h
+#   wirish_math.cpp
+#   wirish_math.h
+#   wirish_shift.c
+#   WProgram.h
+-   comm/
+
 
 
 ADC Notes:
@@ -64,6 +93,8 @@ TIMER Notes:
     TIMER6 and TIMER7 are much less useful.
     There is some partial progress towards adding timer5/timer8 functionality,
     but not much. This should probably all be rewritten.
+    The wirish timer implementation should be refactored to use pin numbers.
 
 USART Notes:
     The USART/UART nomeclature is a little mixed up.
+    TODO: portability of HardwareSerial, HardwareSPI

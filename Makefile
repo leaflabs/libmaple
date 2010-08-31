@@ -1,5 +1,6 @@
 .DEFAULT_GOAL := sketch
 
+# Valid BOARDs: maple, maple_native, ...
 BOARD ?= maple
 MEMORY_TARGET ?= flash
 
@@ -12,7 +13,7 @@ ifeq ($(BOARD), maple)
    MCU := STM32F103RB
    PRODUCT_ID := 0003
 endif
-ifeq ($(BOARD), maple-native)
+ifeq ($(BOARD), maple_native)
    MCU := STM32F103ZE
    PRODUCT_ID := 0003
 endif

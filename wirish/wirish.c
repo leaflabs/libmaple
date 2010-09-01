@@ -48,7 +48,7 @@ void init(void) {
    flash_enable_prefetch();
    flash_set_latency(FLASH_WAIT_STATE_2);
 
-   #if HAS_FSMC
+   #if NR_FSMC > 0
    fsmc_native_sram_init();
    #endif
 

@@ -25,8 +25,12 @@
 /* Define memory spaces. */
 MEMORY
 {
+  ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 17K
+  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 0K
+/* native
   ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 61K
-  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 512K
+  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 0K
+*/
 }
 
 

@@ -65,7 +65,12 @@ void nvic_irq_disable(uint32 n) {
     }
 }
 
-
+void nvic_irq_disable_all(void) {
+    short n;
+    for(n=0; n<65; n++) {
+        nvic_irq_disable(n);
+    }
+}
 
 /**
  * @brief Initialice the NVIC at address addr

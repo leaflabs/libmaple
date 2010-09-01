@@ -24,8 +24,9 @@ MSG_INFO:
 	@echo "================================================================================"
 	@echo ""
 	@echo "  Build info:"
-	@echo "     BOARD:" $(BOARD)
-	@echo "     MEMORY_TARGET:" $(MEMORY_TARGET)
+	@echo "     BOARD:          " $(BOARD)
+	@echo "     MCU:            " $(MCU)
+	@echo "     MEMORY_TARGET:  " $(MEMORY_TARGET)
 	@echo ""
 	@echo "  See 'make help' for all possible targets"
 	@echo ""

@@ -40,9 +40,6 @@
 		  CNTR_ESOFM   |	   \
 		  CNTR_RESETM  )
 
-#define USB_DISC_BANK GPIOB_BASE
-#define USB_DISC_PIN  8
-
 #define F_SUSPEND_ENABLED 1
 
 #endif

@@ -78,6 +78,7 @@ enum {
 void nvic_init(void);
 void nvic_irq_enable(uint32 device);
 void nvic_irq_disable(uint32 device);
+void nvic_irq_disable_all(void);
 
 #ifdef __cplusplus
 }

@@ -32,10 +32,7 @@
 #include "HardwareTimer.h"
 
 HardwareTimer::HardwareTimer(uint8 timerNum) {
-    ASSERT(timerNum == 1 ||
-           timerNum == 2 ||
-           timerNum == 3 ||
-           timerNum == 4);
+    ASSERT(timerNum <= NR_TIMERS);
     this->timerNum = timerNum;
     // Need to remember over flow for bounds checking
     this->overflow = 0xFFFF;
@@ -141,9 +138,43 @@ void HardwareTimer::detachCompare3Interrupt(void) {
 void HardwareTimer::detachCompare4Interrupt(void) {
     timer_detach_interrupt(this->timerNum,4);
 }
+#if NR_TIMERS >= 8
+void HardwareTimer::setChannel5Mode(uint8 mode) {
+    timer_set_mode(this->timerNum,5,mode);
+}
+void HardwareTimer::setChannel8Mode(uint8 mode) {
+    timer_set_mode(this->timerNum,8,mode);
+}
+void HardwareTimer::setCompare5(uint16 val) {
+    if(val > this->overflow)
+        val = this->overflow;
+    timer_set_compare_value(this->timerNum,5,val);
+}
+void HardwareTimer::setCompare8(uint16 val) {
+    if(val > this->overflow)
+        val = this->overflow;
+    timer_set_compare_value(this->timerNum,8,val);
+}
+void HardwareTimer::attachCompare5Interrupt(voidFuncPtr handler) {
+    timer_attach_interrupt(this->timerNum,5,handler);
+}
+void HardwareTimer::attachCompare8Interrupt(voidFuncPtr handler) {
+    timer_attach_interrupt(this->timerNum,8,handler);
+}
+void HardwareTimer::detachCompare5Interrupt(void) {
+    timer_detach_interrupt(this->timerNum,5);
+}
+void HardwareTimer::detachCompare8Interrupt(void) {
+    timer_detach_interrupt(this->timerNum,8);
+}
+#endif
 
 HardwareTimer Timer1(1);
 HardwareTimer Timer2(2);
 HardwareTimer Timer3(3);
 HardwareTimer Timer4(4);
+#if NR_TIMERS >= 8
+HardwareTimer Timer5(5);    // High-density devices only
+HardwareTimer Timer8(8);    // High-density devices only
+#endif
 

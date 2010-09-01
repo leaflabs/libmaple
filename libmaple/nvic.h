@@ -38,23 +38,19 @@
 #define NVIC_ISER0          0xE000E100
 #define NVIC_ISER1          0xE000E104
 #define NVIC_ISER2          0xE000E108
-#define NVIC_ISER3          0xE000E10C
+#define NVIC_ISER3          0xE000E10C  // Non existant?
 
 /* NVIC Interrupt Clear registers  */
 #define NVIC_ICER0          0xE000E180
 #define NVIC_ICER1          0xE000E184
 #define NVIC_ICER2          0xE000E188
-#define NVIC_ICER3          0xE000E18C
+#define NVIC_ICER3          0xE000E18C  // Non existant?
 
 /* System control registers  */
 #define SCB_VTOR            0xE000ED08  // Vector table offset register
 
 #define NVIC_VectTab_RAM             ((u32)0x20000000)
 #define NVIC_VectTab_FLASH           ((u32)0x08000000)
-
-/* Where to put code  */
-#define USER_ADDR_ROM 0x08005000
-#define USER_ADDR_RAM 0x20000C00
 
 #ifdef __cplusplus
 extern "C"{
@@ -65,9 +61,14 @@ enum {
    NVIC_TIMER2  = 28,
    NVIC_TIMER3  = 29,
    NVIC_TIMER4  = 30,
+   NVIC_TIMER5  = 50,   // high density only (Maple Native)
+   NVIC_TIMER6  = 54,   // high density only (Maple Native)
+   NVIC_TIMER7  = 55,   // high density only (Maple Native)
    NVIC_USART1  = 37,
    NVIC_USART2  = 38,
    NVIC_USART3  = 39,
+   NVIC_USART4  = 52,   // high density only (Maple Native)
+   NVIC_USART5  = 53,   // high density only (Maple Native)
 };
 
 
@@ -77,6 +78,7 @@ enum {
 void nvic_init(void);
 void nvic_irq_enable(uint32 device);
 void nvic_irq_disable(uint32 device);
+void nvic_irq_disable_all(void);
 
 #ifdef __cplusplus
 }

@@ -44,10 +44,13 @@
  * - After reset, the alternate functions are not active and IO prts
  * are set to Input Floating mode */
 
-#define GPIOA_BASE               (GPIO_Port*)0x40010800
-#define GPIOB_BASE               (GPIO_Port*)0x40010C00
-#define GPIOC_BASE               (GPIO_Port*)0x40011000
-#define GPIOD_BASE               (GPIO_Port*)0x40011400
+#define GPIOA_BASE    (GPIO_Port*)0x40010800
+#define GPIOB_BASE    (GPIO_Port*)0x40010C00
+#define GPIOC_BASE    (GPIO_Port*)0x40011000
+#define GPIOD_BASE    (GPIO_Port*)0x40011400
+#define GPIOE_BASE    (GPIO_Port*)0x40011800 // High-density devices only
+#define GPIOF_BASE    (GPIO_Port*)0x40011C00 // High-density devices only
+#define GPIOG_BASE    (GPIO_Port*)0x40012000 // High-density devices only
 
 #define GPIO_SPEED_50MHZ            (0x3)
 

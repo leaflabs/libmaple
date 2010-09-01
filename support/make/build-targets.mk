@@ -15,7 +15,7 @@ $(BUILD_PATH)/$(BOARD).bin: $(BUILD_PATH)/$(BOARD).elf
 	@echo " "
 	@echo "Final Size:"
 	@$(SIZE) $<
-	@echo $(MAPLE_TARGET) > $(BUILD_PATH)/build-type
+	@echo $(MEMORY_TARGET) > $(BUILD_PATH)/build-type
 
 $(BUILDDIRS):
 	@mkdir -p $@
@@ -24,8 +24,9 @@ MSG_INFO:
 	@echo "================================================================================"
 	@echo ""
 	@echo "  Build info:"
-	@echo "     BOARD:" $(BOARD)
-	@echo "     MAPLE_TARGET:" $(MAPLE_TARGET)
+	@echo "     BOARD:          " $(BOARD)
+	@echo "     MCU:            " $(MCU)
+	@echo "     MEMORY_TARGET:  " $(MEMORY_TARGET)
 	@echo ""
 	@echo "  See 'make help' for all possible targets"
 	@echo ""

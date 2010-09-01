@@ -36,13 +36,6 @@
 #include "adc.h"
 #include "timers.h"
 
-#define ERROR_LED_PORT         GPIOA_BASE
-#define ERROR_LED_PIN          5
-#define ERROR_USART_NUM        2
-#define ERROR_USART_BAUD       9600
-#define ERROR_TX_PIN           2
-#define ERROR_TX_PORT          GPIOA_BASE
-
 /* Error assert + fade */
 void _fail(const char* file, int line, const char* exp) {
     int32  slope   = 1;
@@ -51,7 +44,7 @@ void _fail(const char* file, int line, const char* exp) {
     uint32 i       = 0;
 
     /* Turn off interrupts */
-    nvic_disable_interrupts();
+    nvic_irq_disable_all();
 
     /* Turn off timers  */
     timer_disable_all();
@@ -60,9 +53,7 @@ void _fail(const char* file, int line, const char* exp) {
     adc_disable();
 
     /* Turn off all usarts  */
-    usart_disable(1);
-    usart_disable(2);
-    usart_disable(3);
+    usart_disable_all();
 
     /* Initialize the error usart */
     gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
@@ -76,13 +67,14 @@ void _fail(const char* file, int line, const char* exp) {
     usart_putstr(ERROR_USART_NUM, ": ");
     usart_putudec(ERROR_USART_NUM, line);
     usart_putc(ERROR_USART_NUM, '\n');
-
+    usart_putc(ERROR_USART_NUM, '\r');
+    
     /* Turn on the error LED  */
     gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
 
     /* Turn the USB interrupt back on so the bootloader keeps on functioning  */
-    nvic_enable_interrupt(NVIC_INT_USBHP);
-    nvic_enable_interrupt(NVIC_INT_USBLP);
+    nvic_irq_enable(NVIC_INT_USBHP);
+    nvic_irq_enable(NVIC_INT_USBLP);
 
     /* Error fade  */
     while (1) {

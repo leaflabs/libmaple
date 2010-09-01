@@ -1,7 +1,8 @@
+
 /* *****************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Bryan Newbold.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +23,45 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-/**
- *  @brief 
- */
-
 #include "libmaple.h"
-#include "wirish.h"
-#include "io.h"
+#include "rcc.h"
+#include "gpio.h"
+#include "dac.h"
 
-/* Assumes that the ADC has been initialized and
- * that the pin is set to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if(PIN_MAP[pin].adc == ADC_INVALID) {
-        return 0;
-    } 
+// Only one, so global to this file
+DAC_Map *dac = (DAC_Map*)(DAC_BASE);
 
-    return adc_read(PIN_MAP[pin].adc);
+// This numbering follows the registers (1-indexed)
+#define DAC_CHA     1
+#define DAC_CHB     2
+
+// Sets up the DAC peripheral
+void dac_init(void) {
+
+    // First turn on the clock
+    rcc_clk_enable(RCC_DAC);
+
+    // Then setup ANALOG mode on PA4 and PA5 
+    gpio_set_mode(GPIOA_BASE,  4, CNF_INPUT_ANALOG);
+    gpio_set_mode(GPIOA_BASE,  5, CNF_INPUT_ANALOG);
+
+    // Then do register stuff.
+    // Default does no triggering, and buffered output, so all good.
+    dac->CR |= DAC_CR_EN1;
+    dac->CR |= DAC_CR_EN2;
+
+}
+
+void dac_write(uint8 chan, uint16 val) {
+
+    switch(chan) {
+        case DAC_CHA:
+            dac->DHR12R1 = 0x0FFF & val;
+            break;
+        case DAC_CHB:
+            dac->DHR12R2 = 0x0FFF & val;
+            break;
+        default:    
+            ASSERT(0);  // Shouldn't get here
+    }
 }

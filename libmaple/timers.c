@@ -28,6 +28,8 @@
  *  @brief General timer routines
  */
 
+// TODO: actually support timer5 and timer8
+
 #include "libmaple.h"
 #include "rcc.h"
 #include "nvic.h"
@@ -82,6 +84,10 @@ volatile static voidFuncPtr timer1_handlers[4];
 volatile static voidFuncPtr timer2_handlers[4];
 volatile static voidFuncPtr timer3_handlers[4];
 volatile static voidFuncPtr timer4_handlers[4];
+#if NR_TIMERS >= 8
+volatile static voidFuncPtr timer5_handlers[4]; // High-density devices only
+volatile static voidFuncPtr timer8_handlers[4]; // High-density devices only
+#endif
 
 // This function should probably be rewriten to take (timer_num, mode) and have
 // prescaler set elsewhere. The mode can be passed through to set_mode at the 
@@ -110,6 +116,20 @@ void timer_init(uint8 timer_num, uint16 prescale) {
         timer = (Timer*)TIMER4_BASE;
         rcc_clk_enable(RCC_TIMER4);
         break;
+    #if NR_TIMERS >= 8
+    case 5:
+        timer = (Timer*)TIMER5_BASE;
+        rcc_clk_enable(RCC_TIMER5);
+        break;
+    case 8:
+        timer = (Timer*)TIMER8_BASE;
+        rcc_clk_enable(RCC_TIMER8);
+        is_advanced = 1;
+        break;
+    #endif
+    default:
+        ASSERT(0);
+        return;
     }
 
     timer->CR1 = ARPE;        // No clock division
@@ -172,6 +192,9 @@ void timer_pause(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CR1 &= ~(0x0001);    // CEN
 }
@@ -194,6 +217,9 @@ void timer_resume(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CR1 |= 0x0001;    // CEN
 }
@@ -218,6 +244,9 @@ ASSERT(timer_num > 0 && timer_num <= 4);
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->CNT = value;
 }
@@ -241,6 +270,9 @@ uint16 timer_get_count(uint8 timer_num) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     return timer->CNT;
 }
@@ -263,6 +295,9 @@ void timer_set_prescaler(uint8 timer_num, uint16 prescale) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->PSC = prescale;
 }
@@ -286,6 +321,9 @@ void timer_set_reload(uint8 timer_num, uint16 max_reload) {
     case 4:
         timer = (Timer*)TIMER4_BASE;
         break;
+    default:
+        ASSERT(0);
+        return;
     }
     timer->ARR = max_reload;
 }

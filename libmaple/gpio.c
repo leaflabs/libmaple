@@ -37,6 +37,11 @@ void gpio_init(void) {
    rcc_clk_enable(RCC_GPIOB);
    rcc_clk_enable(RCC_GPIOC);
    rcc_clk_enable(RCC_GPIOD);
+   #if NR_GPIO_PORTS >= 7
+   rcc_clk_enable(RCC_GPIOE);
+   rcc_clk_enable(RCC_GPIOF);
+   rcc_clk_enable(RCC_GPIOG);
+   #endif
    rcc_clk_enable(RCC_AFIO);
 }
 

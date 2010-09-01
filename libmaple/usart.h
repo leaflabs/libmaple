@@ -42,6 +42,8 @@ enum {
    USART1,
    USART2,
    USART3,
+   UART4,
+   UART5,
 };
 
 /* peripheral register struct  */
@@ -113,6 +115,7 @@ static inline void usart_reset_rx(uint8 usart_num) {
 
 void usart_init(uint8 usart_num, uint32 baud);
 void usart_disable(uint8 usart_num);
+void usart_disable_all();
 void usart_putstr(uint8 usart_num, const char*);
 void usart_putudec(uint8 usart_num, uint32 val);
 

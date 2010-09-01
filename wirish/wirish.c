@@ -39,12 +39,22 @@
 #include "nvic.h"
 #include "usb.h"
 #include "rcc.h"
+#include "fsmc.h"
+#include "dac.h"
 #include "flash.h"
 
 void init(void) {
    /* make sure the flash is ready before spinning the high speed clock up */
    flash_enable_prefetch();
    flash_set_latency(FLASH_WAIT_STATE_2);
+
+   #if NR_FSMC > 0
+   fsmc_native_sram_init();
+   #endif
+
+   #if NR_DAC_PINS > 0
+   dac_init();
+   #endif
 
    /* initialize clocks  */
    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
@@ -60,5 +70,9 @@ void init(void) {
    timer_init(2, 1);
    timer_init(3, 1);
    timer_init(4, 1);
+   #if NR_TIMERS >= 8
+   timer_init(5, 1);
+   timer_init(8, 1);
+   #endif
    setupUSB();
 }

@@ -5,12 +5,6 @@
 
 #include "usb_lib.h"
 
-#define VCOM_ID_VENDOR    0x1EAF
-#define VCOM_ID_PRODUCT   0x0004
-
-#define USB_CONFIG_MAX_POWER      (100 >> 1)
-#define RESET_DELAY               (100)
-
 /* choose addresses to give endpoints the max 64 byte buffers */
 #define USB_BTABLE_ADDRESS        0x00
 #define VCOM_CTRL_EPNUM           0x00
@@ -45,9 +39,6 @@
 		  CNTR_SOFM    |	   \
 		  CNTR_ESOFM   |	   \
 		  CNTR_RESETM  )
-
-#define USB_DISC_BANK GPIOC_BASE
-#define USB_DISC_PIN  12
 
 #define F_SUSPEND_ENABLED 1
 

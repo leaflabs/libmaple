@@ -39,6 +39,7 @@ void delay(unsigned long ms)
 }
 
 void delayMicroseconds(uint32 us) {
+    // So (2^32)/12 micros max, or less than 6 minutes
     us *= 12;
 
     /* fudge for function call overhead  */

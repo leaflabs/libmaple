@@ -2,7 +2,7 @@
 
 # Valid BOARDs: maple, maple_native, ...
 BOARD ?= maple
-MEMORY_TARGET ?= ram
+MEMORY_TARGET ?= flash
 
 # USB ID for DFU upload
 VENDOR_ID  := 1EAF

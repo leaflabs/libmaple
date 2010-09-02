@@ -148,7 +148,7 @@ typedef struct ExtiInfo {
     #define MAPLE_RELOAD_VAL        72000
 
     // TODO:
-    static PinMapping PIN_MAP[NR_GPIO_PINS] = {
+    static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         {GPIOA_BASE,  3,        ADC3, TIMER2_CH4_CCR}, // D0/PA3
         {GPIOA_BASE,  2,        ADC2, TIMER2_CH3_CCR}, // D1/PA2
         {GPIOA_BASE,  0,        ADC0, TIMER2_CH1_CCR}, // D2/PA0
@@ -192,7 +192,8 @@ typedef struct ExtiInfo {
         {GPIOC_BASE,  9, ADC_INVALID,  TIMER_INVALID}  // D38/PC9 (BUT)
     };
 
-    static ExtiInfo PIN_TO_EXTI_CHANNEL[NR_GPIO_PINS] = {
+    static __attribute__ ((unused)) ExtiInfo PIN_TO_EXTI_CHANNEL[NR_GPIO_PINS] =
+    {
         {EXTI3,  EXTI_CONFIG_PORTA},      // D0/PA3
         {EXTI2,  EXTI_CONFIG_PORTA},      // D1/PA2
         {EXTI0,  EXTI_CONFIG_PORTA},      // D2/PA0
@@ -211,7 +212,7 @@ typedef struct ExtiInfo {
 #endif
 
 #ifndef CYCLES_PER_MICROSECOND
-#error Board type has not been selected correctly.
+#error "Board type has not been selected correctly."
 #endif
 
 #ifdef __cplusplus

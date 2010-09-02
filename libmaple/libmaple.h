@@ -37,7 +37,8 @@
 #define MAPLE_DEBUG 1
 
 // MCU-specific configuration
-#ifdef MCU_STM32F103RB  // eg, LeafLabs Maple
+#ifdef MCU_STM32F103RB  
+    // eg, LeafLabs Maple
 
     // Number of GPIO ports (GPIOA, GPIOB, etc), definately used
     #define NR_GPIO_PORTS             4
@@ -130,8 +131,8 @@
 
 // Make sure MCU-specific settings were defined
 #ifndef NR_GPIO_PORTS
-#error Error: No MCU type specified. Add something like -DMCU_STM32F103RB \
-       to your compiler arguments (probably in a Makefile).
+#error "No MCU type specified. Add something like -DMCU_STM32F103RB " \
+       "to your compiler arguments (probably in a Makefile)."
 #endif
 
 // Requires board configuration info

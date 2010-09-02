@@ -26,13 +26,8 @@
 MEMORY
 {
   ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 17K
-  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 0K
-/* native
-  ram (rwx) : ORIGIN = 0x20000C00, LENGTH = 61K
-  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 0K
-*/
+  rom (rx)  : ORIGIN = 0x08005000, LENGTH = 108K
 }
-
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(_start)
@@ -59,12 +54,14 @@ SECTIONS
   .text :
   {
     CREATE_OBJECT_SYMBOLS
-    __cs3_region_start_ram = .;
-    *(.cs3.region-head.ram)
+    __cs3_region_start_rom = .;
+    *(.cs3.region-head.rom)
     __cs3_interrupt_vector = __cs3_interrupt_vector_lanchon_stm32;
     *(.cs3.interrupt_vector)
     /* Make sure we pulled in an interrupt vector.  */
     ASSERT (. != __cs3_interrupt_vector_lanchon_stm32, "No interrupt vector");
+    *(.rom)
+    *(.rom.b)
 
     PROVIDE(__cs3_reset_lanchon_stm32 = _start);
     __cs3_reset = __cs3_reset_lanchon_stm32;
@@ -123,46 +120,37 @@ SECTIONS
     LONG (__cs3_region_start_ram)
     LONG (__cs3_region_init_size_ram)
     LONG (__cs3_region_zero_size_ram)
-  } >ram
+  } >rom
 
   /* .ARM.exidx is sorted, so has to go in its own output section.  */
-  /* even cs3.rom is in ram since its running as user code under the Maple
-     bootloader */
   __exidx_start = .;
   .ARM.exidx :
   {
     *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-  } >ram
+  } >rom
   __exidx_end = .;
   .text.align :
   {
     . = ALIGN(8);
     _etext = .;
-  } >ram
+  } >rom
 
-  .cs3.rom :
+/* expose a custom rom only section */
+  .USER_FLASH :
   {
-    __cs3_region_start_rom = .;
-    *(.cs3.region-head.rom)
-    *(.rom)
-    . = ALIGN (8);
-  } >ram
+    *(.USER_FLASH)
+  } >rom
 
-  .cs3.rom.bss :
-  {
-    *(.rom.b)
-    . = ALIGN (8);
-  } >ram
+
   /* __cs3_region_end_rom is deprecated */
-  __cs3_region_end_rom = __cs3_region_start_rom + LENGTH(ram);
-  __cs3_region_size_rom = LENGTH(ram);
-  __cs3_region_init_rom = LOADADDR (.cs3.rom);
-  __cs3_region_init_size_rom = SIZEOF(.cs3.rom);
-  __cs3_region_zero_size_rom = SIZEOF(.cs3.rom.bss);
+  __cs3_region_end_rom = __cs3_region_start_rom + LENGTH(rom);
+  __cs3_region_size_rom = LENGTH(rom);
+  __cs3_region_num = 1;
 
   .data :
   {
-
+    __cs3_region_start_ram = .;
+    *(.cs3.region-head.ram)
     KEEP(*(.jcr))
     *(.got.plt) *(.got)
     *(.shdata)
@@ -170,7 +158,7 @@ SECTIONS
     *(.ram)
     . = ALIGN (8);
     _edata = .;
-  } >ram
+  } >ram AT>rom
   .bss :
   {
     *(.shbss)
@@ -180,12 +168,12 @@ SECTIONS
     . = ALIGN (8);
     _end = .;
     __end = .;
-  } >ram
+  } >ram AT>rom
   /* __cs3_region_end_ram is deprecated */
   __cs3_region_end_ram = __cs3_region_start_ram + LENGTH(ram);
   __cs3_region_size_ram = LENGTH(ram);
-  __cs3_region_init_ram = LOADADDR (.text);
-  __cs3_region_init_size_ram = _edata - ADDR (.text);
+  __cs3_region_init_ram = LOADADDR (.data);
+  __cs3_region_init_size_ram = _edata - ADDR (.data);
   __cs3_region_zero_size_ram = _end - _edata;
   __cs3_region_num = 1;
 
@@ -221,4 +209,3 @@ SECTIONS
   .ARM.attributes 0 : { KEEP (*(.ARM.attributes)) }
   /DISCARD/ : { *(.note.GNU-stack) }
 }
-

@@ -20,7 +20,7 @@ endif
 
 # Useful paths
 ifeq ($(LIB_MAPLE_HOME),)
-SRCROOT := $(dir)
+SRCROOT := .
 else
 SRCROOT := $(LIB_MAPLE_HOME)
 endif
@@ -46,15 +46,15 @@ include $(SUPPORT_PATH)/make/build-templates.mk
 
 # Some target specific things
 ifeq ($(MEMORY_TARGET), ram)
+   LDSCRIPT := $(BOARD)/ram.ld
    VECT_BASE_ADDR := VECT_TAB_RAM
-   LDSCRIPT := ram.ld
 endif
 ifeq ($(MEMORY_TARGET), flash)
-   LDSCRIPT := flash.ld
+   LDSCRIPT := $(BOARD)/flash.ld
    VECT_BASE_ADDR := VECT_TAB_FLASH
 endif
 ifeq ($(MEMORY_TARGET), jtag)
-   LDSCRIPT := jtag.ld
+   LDSCRIPT := $(BOARD)/jtag.ld
    VECT_BASE_ADDR := VECT_TAB_BASE
 endif
 

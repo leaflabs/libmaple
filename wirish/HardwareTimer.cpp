@@ -77,8 +77,8 @@ uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     // With a prescale factor of 1, there are 72counts/ms
     uint16 ps = ((microseconds*72)/65536) + 1;
     setPrescaleFactor(ps);
-    // Find this overflow will always be less than 65536
-    setOverflow((microseconds*72)/ps);
+    // Finally, this overflow will always be less than 65536
+    setOverflow(((microseconds*72)/ps) - 1);
     return this->overflow;    
 }
 void HardwareTimer::setChannel1Mode(uint8 mode) {

@@ -21,9 +21,8 @@ FILES="LICENSE
     ./wirish/*.cpp
     ./wirish/comm/*.cpp
     ./wirish/comm/*.h
-    ./support/ld/flash.ld
-    ./support/ld/ram.ld
-    ./support/ld/jtag.ld
+    ./support/ld/maple/
+    ./support/ld/maple_native/
     ./support/ld/libcs3-lanchon-stm32.a
     ./support/ld/names.inc"
 
@@ -36,8 +35,8 @@ then
 fi
 
 echo "Then delete the old files..."
-rm $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.ld $DEST/*.inc $DEST/*.a
+rm -r $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.ld $DEST/*.inc $DEST/*.a $DEST/maple/ $DEST/maple_native/
 
 echo "Finally copy the new source files!"
-cp $FILES $DEST
+cp -r $FILES $DEST
 echo "Done."

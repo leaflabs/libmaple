@@ -137,6 +137,71 @@ typedef volatile uint32* TimerCCR;
 #define TIMER_PWM               1
 #define TIMER_OUTPUTCOMPARE     2
 
+typedef struct {
+    volatile uint16 CR1;
+    uint16  RESERVED0;
+    volatile uint16 CR2;
+    uint16  RESERVED1;
+    volatile uint16 SMCR;
+    uint16  RESERVED2;
+    volatile uint16 DIER;
+    uint16  RESERVED3;
+    volatile uint16 SR;
+    uint16  RESERVED4;
+    volatile uint16 EGR;
+    uint16  RESERVED5;
+    volatile uint16 CCMR1;
+    uint16  RESERVED6;
+    volatile uint16 CCMR2;
+    uint16  RESERVED7;
+    volatile uint16 CCER;
+    uint16  RESERVED8;
+    volatile uint16 CNT;
+    uint16  RESERVED9;
+    volatile uint16 PSC;
+    uint16  RESERVED10;
+    volatile uint16 ARR;
+    uint16  RESERVED11;
+    volatile uint16 RCR;
+    uint16  RESERVED12;
+    volatile uint16 CCR1;
+    uint16  RESERVED13;
+    volatile uint16 CCR2;
+    uint16  RESERVED14;
+    volatile uint16 CCR3;
+    uint16  RESERVED15;
+    volatile uint16 CCR4;
+    uint16  RESERVED16;
+    volatile uint16 BDTR;   // Not used in general purpose timers
+    uint16  RESERVED17;     // Not used in general purpose timers
+    volatile uint16 DCR;
+    uint16  RESERVED18;
+    volatile uint16 DMAR;
+    uint16  RESERVED19;
+} timer_port;
+
+// timer device numbers
+enum {
+   TIMER1,
+   TIMER2,
+   TIMER3,
+   TIMER4,
+   TIMER5,      // High density only
+   TIMER6,      // High density only; no compare
+   TIMER7,      // High density only; no compare
+   TIMER8,      // High density only
+};
+
+// timer descriptor 
+struct timer_dev {
+   timer_port *base;
+   const uint8 rcc_dev_num;
+   const uint8 nvic_dev_num;
+   volatile voidFuncPtr handlers[4];
+};
+
+extern struct timer_dev timer_dev_table[];
+
 /* Turn on timer with prescale as the divisor
  * void timer_init(uint32 timer, uint16 prescale)
  *      timer     ->  {1-4}

@@ -62,16 +62,6 @@ class HardwareTimer {
         void detachCompare2Interrupt(void);
         void detachCompare3Interrupt(void);
         void detachCompare4Interrupt(void);
-        #if NR_TIMERS >= 8
-        void setChannel5Mode(uint8 mode);
-        void setChannel8Mode(uint8 mode);
-        void setCompare5(uint16 val); // truncates to overflow
-        void setCompare8(uint16 val); // truncates to overflow
-        void attachCompare5Interrupt(voidFuncPtr handler);
-        void attachCompare8Interrupt(voidFuncPtr handler);
-        void detachCompare5Interrupt(void);
-        void detachCompare8Interrupt(void);
-        #endif
 };
 
 extern HardwareTimer Timer1;

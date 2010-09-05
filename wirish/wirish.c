@@ -66,13 +66,13 @@ void init(void) {
    systick_init(MAPLE_RELOAD_VAL);
    gpio_init();
    adc_init();
-   timer_init(1, 1);
-   timer_init(2, 1);
-   timer_init(3, 1);
-   timer_init(4, 1);
+   timer_init(TIMER1, 1);
+   timer_init(TIMER2, 1);
+   timer_init(TIMER3, 1);
+   timer_init(TIMER4, 1);
    #if NR_TIMERS >= 8
-   timer_init(5, 1);
-   timer_init(8, 1);
+   timer_init(TIMER5, 1);
+   timer_init(TIMER8, 1);
    #endif
    setupUSB();
 }

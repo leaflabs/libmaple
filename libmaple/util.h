@@ -32,6 +32,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
+#include "libmaple.h"
+
 #define BIT(shift)                     (1 << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
@@ -70,9 +72,14 @@ void _fail(const char*, int, const char*);
 #endif
 
 
-/* Assert for sanity checks, undefine MAPLE_DEBUG to compile
- * out these checks */
-#if MAPLE_DEBUG
+// Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to compile out
+// these checks 
+
+#define DEBUG_NONE      0
+#define DEBUG_FAULT     1
+#define DEBUG_ALL       2
+
+#if DEBUG_LEVEL >= DEBUG_ALL
 #define ASSERT(exp)         \
     if (exp)              \
         {}                  \
@@ -80,6 +87,16 @@ void _fail(const char*, int, const char*);
         _fail(__FILE__, __LINE__, #exp)
 #else
 #define ASSERT(exp) (void)((0))
+#endif
+
+#if DEBUG_LEVEL >= DEBUG_FAULT
+#define ASSERT_FAULT(exp)         \
+    if (exp)              \
+        {}                  \
+    else                    \
+        _fail(__FILE__, __LINE__, #exp)
+#else
+#define ASSERT_FAULT(exp) (void)((0))
 #endif
 
 #endif

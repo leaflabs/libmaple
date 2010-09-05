@@ -24,7 +24,7 @@
  * ****************************************************************************/
 
 /**
- * @brief libmaple exception handlers. If MAPLE_DEBUG is set, then these
+ * @brief libmaple exception handlers. If DEBUG_LEVEL > DEBUG_FAULT, then these
  * exceptions will ASSERT fail and call into the default _fail() light
  * blinking.
  */
@@ -32,31 +32,31 @@
 #include "util.h"
 
 void NMIException(void) {
-   ASSERT(0);
+   ASSERT_FAULT(0);
    while(1)
       ;
 }
 
 void HardFaultException(void) {
-   ASSERT(0);
+   ASSERT_FAULT(0);
    while(1)
       ;
 }
 
 void MemManageException(void) {
-   ASSERT(0);
+   ASSERT_FAULT(0);
    while(1)
       ;
 }
 
 void BusFaultException(void) {
-   ASSERT(0);
+   ASSERT_FAULT(0);
    while(1)
       ;
 }
 
 void UsageFaultException(void) {
-   ASSERT(0);
+   ASSERT_FAULT(0);
    while(1)
       ;
 }

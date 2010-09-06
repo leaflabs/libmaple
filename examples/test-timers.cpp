@@ -53,6 +53,12 @@ void setup()
 }
 
 void loop() {
+    SerialUSB.println("-----------------------------------------------------");
+    SerialUSB.println("Testing setCount/getCount"); 
+    SerialUSB.print("Timer1.getCount() = "); SerialUSB.println(Timer1.getCount());
+    SerialUSB.println("Timer1.setCount(1234)");
+    Timer1.setCount(1234);
+    SerialUSB.print("Timer1.getCount() = "); SerialUSB.println(Timer1.getCount());
     // This tests whether the pause/resume functions work; when BUT is held
     // down Timer4 is in the "pause" state and the timer doesn't increment, so
     // the final counts should reflect the ratio of time that BUT was held down

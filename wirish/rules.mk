@@ -26,7 +26,6 @@ cppSRCS_$(d) := wirish_math.cpp          \
                 usb_serial.cpp 	         \
 		HardwareTimer.cpp        \
                 cxxabi-compat.cpp        \
-		SystemTick.cpp
 
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)

@@ -58,6 +58,13 @@ void systick_disable() {
   __write(SYSTICK_CSR, SYSTICK_SRC_HCLK);
 }
 
+void systick_resume() {
+  /* re-enable init registers without changing relead_val */
+  __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
+                       SYSTICK_ENABLE   |
+                       SYSTICK_TICKINT);
+}
+
 void SysTickHandler(void) {
     systick_timer_millis++;
 }

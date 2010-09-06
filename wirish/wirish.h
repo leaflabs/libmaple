@@ -45,7 +45,6 @@
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
 #include "usb_serial.h"
-#include "SystemTick.h"
 #include "HardwareTimer.h"
 #endif
 

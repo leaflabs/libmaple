@@ -64,6 +64,7 @@ enum {
    NVIC_TIMER5  = 50,   // high density only (Maple Native)
    NVIC_TIMER6  = 54,   // high density only (Maple Native)
    NVIC_TIMER7  = 55,   // high density only (Maple Native)
+   NVIC_TIMER8  = 46,   // high density only (Maple Native)
    NVIC_USART1  = 37,
    NVIC_USART2  = 38,
    NVIC_USART3  = 39,

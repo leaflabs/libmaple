@@ -182,18 +182,33 @@ void timer_disable_all(void) {
     // TODO: refactor
     // Note: this must be very robust because it gets called from, eg, ASSERT
     timer_port *timer;  
+    #if NR_TIMERS >= 8
+    timer_port *timers[6] = { (timer_port*)TIMER1_BASE,
+                         (timer_port*)TIMER2_BASE,  
+                         (timer_port*)TIMER3_BASE,  
+                         (timer_port*)TIMER4_BASE,  
+                         (timer_port*)TIMER5_BASE,  
+                         (timer_port*)TIMER8_BASE,  
+                       };  
+    uint8 i;
+    for (i = 0; i < 6; i++) {  
+        timer = timers[i];  
+        timer->CR1 = 0;  
+        timer->CCER = 0;  
+    }
+    #else
     timer_port *timers[4] = { (timer_port*)TIMER1_BASE,
                          (timer_port*)TIMER2_BASE,  
                          (timer_port*)TIMER3_BASE,  
                          (timer_port*)TIMER4_BASE,  
                        };  
-    int i;
-
+    uint8 i;
     for (i = 0; i < 4; i++) {  
         timer = timers[i];  
         timer->CR1 = 0;  
         timer->CCER = 0;  
     }
+    #endif
 }
 
 // Sets the mode of individual timer channels, including a DISABLE mode

@@ -38,8 +38,12 @@ void setup() {
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
 
+    /* Start up the serial ports */
+    Serial1.begin(9600);
+    Serial2.begin(9600);
+    Serial3.begin(9600);
+
     /* Send a message out over COMM interface */
-    Serial2.begin(9600);    // if USART; 9600 is more compatible
     COMM.println(" ");
     COMM.println("    __   __             _      _");
     COMM.println("   |  \\/  | __ _ _ __ | | ___| |"); 

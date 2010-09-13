@@ -66,7 +66,7 @@ LIBMAPLE_MODULES += $(SRCROOT)/wirish
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 
 # Main target
-include $(SUPPORT_PATH)/make/build-targets.mk
+include build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag
 

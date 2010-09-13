@@ -72,10 +72,10 @@ typedef struct ExtiInfo {
 } ExtiInfo;
 
 // LeafLabs Maple rev3, rev4
-#ifdef BOARD_maple  
+#ifdef BOARD_maple
 
     #define CYCLES_PER_MICROSECOND  72
-    #define MAPLE_RELOAD_VAL        72000
+    #define MAPLE_RELOAD_VAL        71999 /* takes a cycle to reload */
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         {GPIOA_BASE,  3,        ADC3, TIMER2_CH4_CCR}, // D0/PA3
@@ -142,10 +142,10 @@ typedef struct ExtiInfo {
 #endif
 
 // LeafLabs Maple Native (prototype)
-#ifdef BOARD_maple_native  
+#ifdef BOARD_maple_native
 
     #define CYCLES_PER_MICROSECOND  72
-    #define MAPLE_RELOAD_VAL        72000
+    #define MAPLE_RELOAD_VAL        71999 /* takes a cycle to reload */
 
     // TODO:
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {

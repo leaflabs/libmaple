@@ -23,7 +23,7 @@
  * ****************************************************************************/
 
 /**
- *  @brief 
+ *  @brief
  */
 
 #ifndef _TIME_H
@@ -59,7 +59,10 @@ static inline uint32 micros(void) {
 
    nvic_globalirq_enable();
 
-   res = (ms * US_PER_MS) + (MAPLE_RELOAD_VAL - cycle_cnt)/CYCLES_PER_MICROSECOND;
+   /* MAPLE_RELOAD_VAL is 1 less than the number of cycles it actually
+      takes to complete a systick reload */
+   res = (ms * US_PER_MS) +
+       (MAPLE_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
 
    return res;
 }

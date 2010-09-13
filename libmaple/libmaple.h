@@ -34,14 +34,10 @@
 #include "libmaple_types.h"
 
 // General configuration
-#ifndef DEBUG_LEVEL
-    //#define DEBUG_LEVEL DEBUG_ALL
-    #define DEBUG_LEVEL DEBUG_FAULT
-    //#define DEBUG_LEVEL DEBUG_NONE
-#endif
+#define MAPLE_DEBUG 1
 
 // MCU-specific configuration
-#ifdef MCU_STM32F103RB  
+#ifdef MCU_STM32F103RB
     // eg, LeafLabs Maple
 
     // Number of GPIO ports (GPIOA, GPIOB, etc), definately used
@@ -96,7 +92,7 @@
     #define BITBAND_PERI_BASE  0x42000000
 #endif
 
-#ifdef MCU_STM32F103ZE  
+#ifdef MCU_STM32F103ZE
     // eg, LeafLabs Maple Native
     #define NR_GPIO_PORTS             7
     #define NR_GPIO_PINS             63

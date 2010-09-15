@@ -115,14 +115,14 @@ void spi_init(uint32 spi_num,
 uint8 spi_tx_byte(uint32 spi_num, uint8 data) {
    SPI *spi;
 
-   ASSERT(spi_num == 1 || spi_num == 2);
-
    spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
+
+   while (!(spi->SR & SR_TXE))
+      ;
 
    spi->DR = data;
 
-   while (!(spi->SR & SR_TXE) ||
-           (spi->SR & SR_BSY))
+   while (!(spi->SR & SR_RXNE))
       ;
 
    return spi->DR;
@@ -141,11 +141,14 @@ uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len) {
    }
 
    while (i < len) {
-      spi->DR = buf[i];
-      while (!(spi->SR & SR_TXE) ||
-              (spi->SR & SR_BSY) ||
-             !(spi->SR & SR_RXNE))
+      while (!(spi->SR & SR_TXE))
          ;
+
+      spi->DR = buf[i];
+
+      while (!(spi->SR & SR_RXNE))
+         ;
+
       rc = spi->DR;
       i++;
    }

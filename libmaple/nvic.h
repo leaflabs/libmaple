@@ -73,8 +73,8 @@ enum {
 };
 
 
-#define nvic_globalirq_enable()   asm volatile("cpsid i")
-#define nvic_globalirq_disable()  asm volatile("cpsie i")
+#define nvic_globalirq_enable()   asm volatile("cpsie i")
+#define nvic_globalirq_disable()  asm volatile("cpsid i")
 
 void nvic_init(void);
 void nvic_irq_enable(uint32 device);

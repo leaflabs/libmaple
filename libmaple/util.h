@@ -66,6 +66,7 @@ extern "C"{
 #endif
 
 void _fail(const char*, int, const char*);
+void throb(void);
 
 #ifdef __cplusplus
 } // extern "C"

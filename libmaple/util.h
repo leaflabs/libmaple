@@ -34,7 +34,7 @@
 
 #include "libmaple.h"
 
-#define BIT(shift)                     (1 << (shift))
+#define BIT(shift)                     (1UL << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
 /* Return bits m to n of x  */
@@ -74,7 +74,7 @@ void throb(void);
 
 
 // Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to compile out
-// these checks 
+// these checks
 
 #define DEBUG_NONE      0
 #define DEBUG_FAULT     1

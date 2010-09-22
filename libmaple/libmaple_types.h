@@ -45,5 +45,9 @@ typedef void (*voidFuncPtr)(void);
 
 #define __io volatile
 
+#ifndef NULL
+#define NULL 0
+#endif
+
 #endif
 

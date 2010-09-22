@@ -100,6 +100,10 @@
 #define NR_EXTI_CHANNELS         16
 #define NR_EXTI_PORTS            NR_GPIO_PORTS       // board specific
 
+#define EXTI_RISING                     0
+#define EXTI_FALLING                    1
+#define EXTI_RISING_FALLING             2
+
 #define EXTI_IMR        0x40010400                   // Interrupt mask register
 #define EXTI_EMR        (EXTI_IMR + 0x04)            // Event mask register
 #define EXTI_RTSR       (EXTI_IMR + 0x08)            // Rising trigger selection register
@@ -112,10 +116,6 @@
 #define AFIO_EXTICR2    (AFIO_EVCR + 0x0C)
 #define AFIO_EXTICR3    (AFIO_EVCR + 0x10)
 #define AFIO_EXTICR4    (AFIO_EVCR + 0x14)
-
-#define EXTI_RISING                     0
-#define EXTI_FALLING                    1
-#define EXTI_RISING_FALLING             2
 
 #define EXTI0  0
 #define EXTI1  1
@@ -142,13 +142,12 @@
 #define EXTI_CONFIG_PORTF 5     // Native only
 #define EXTI_CONFIG_PORTG 6     // Native only
 
-
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-void exti_attach_interrupt(uint8, uint8, voidFuncPtr, uint8);
-void exti_detach_interrupt(uint8);
+void exti_attach_interrupt(uint32, uint32, voidFuncPtr, uint32);
+void exti_detach_interrupt(uint32);
 
 #ifdef __cplusplus
 } // extern "C"

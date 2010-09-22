@@ -58,6 +58,9 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     case PWM:
         outputMode = GPIO_MODE_AF_OUTPUT_PP;
         break;
+    case PWM_OPEN_DRAIN:
+        outputMode = GPIO_MODE_AF_OUTPUT_OD;
+        break;
     default:
         ASSERT(0);
         return;

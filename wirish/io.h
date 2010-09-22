@@ -47,7 +47,8 @@ typedef enum WiringPinMode {
     INPUT_PULLUP,
     INPUT_PULLDOWN,
     INPUT_FLOATING,
-    PWM
+    PWM,
+    PWM_OPEN_DRAIN,
 } WiringPinMode;
 
 

@@ -42,13 +42,8 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
  *  @param n interrupt number
  */
 void nvic_irq_enable(uint32 n) {
-    if (n < 32) {
-        REG_SET_BIT(NVIC_ISER0, n);
-    } else if(n < 64) {
-        REG_SET_BIT(NVIC_ISER1, n - 32);
-    } else {
-        REG_SET_BIT(NVIC_ISER2, n - 64);
-    }
+    uint32 *iser = &((uint32*)NVIC_ISER0)[(n/32)];
+    __write(iser, BIT(n % 32));
 }
 
 /**
@@ -56,13 +51,8 @@ void nvic_irq_enable(uint32 n) {
  *  @param n interrupt number
  */
 void nvic_irq_disable(uint32 n) {
-    if (n < 32) {
-        REG_SET_BIT(NVIC_ICER0, n);
-    } else if(n < 64) {
-        REG_SET_BIT(NVIC_ICER1, n - 32);
-    } else {
-        REG_SET_BIT(NVIC_ICER2, n - 64);
-    }
+    uint32 *icer = &((uint32*)NVIC_ICER0)[(n/32)];
+    __write(icer, BIT(n % 32));
 }
 
 void nvic_irq_disable_all(void) {

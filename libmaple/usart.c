@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file usart.c
+ * @file usart.c
  *
- *  @brief USART control routines
+ * @brief USART control routines
  */
 
 #include "libmaple.h"
@@ -48,55 +48,60 @@
 
 /* usart descriptor table  */
 struct usart_dev usart_dev_table[] = {
-   [USART1] = {
-      .base = (usart_port*)USART1_BASE,
-      .rcc_dev_num = RCC_USART1,
-      .nvic_dev_num = NVIC_USART1
-   },
-   [USART2] = {
-      .base = (usart_port*)USART2_BASE,
-      .rcc_dev_num = RCC_USART2,
-      .nvic_dev_num = NVIC_USART2
-   },
-   [USART3] = {
-      .base = (usart_port*)USART3_BASE,
-      .rcc_dev_num = RCC_USART3,
-      .nvic_dev_num = NVIC_USART3
-   },
-   /*
-   #if NR_USART >= 5
-   [UART4] = {
+    [USART1] = {
+        .base = (usart_port*)USART1_BASE,
+        .rcc_dev_num = RCC_USART1,
+        .nvic_dev_num = NVIC_USART1
+    },
+    [USART2] = {
+        .base = (usart_port*)USART2_BASE,
+        .rcc_dev_num = RCC_USART2,
+        .nvic_dev_num = NVIC_USART2
+    },
+    [USART3] = {
+        .base = (usart_port*)USART3_BASE,
+        .rcc_dev_num = RCC_USART3,
+        .nvic_dev_num = NVIC_USART3
+    },
+    /*
+      #if NR_USART >= 5
+      [UART4] = {
       .base = (usart_port*)UART4_BASE,
       .rcc_dev_num = RCC_UART4,
       .nvic_dev_num = NVIC_UART4
-   },
-   [UART5] = {
+      },
+      [UART5] = {
       .base = (usart_port*)UART5_BASE,
       .rcc_dev_num = RCC_UART5,
       .nvic_dev_num = NVIC_UART5
-   },
-   #endif
-   */
+      },
+      #endif
+    */
 };
 
 /* usart interrupt handlers  */
 void USART1_IRQHandler(void) {
-    rb_insert(&(usart_dev_table[USART1].rb), (uint8)(((usart_port*)(USART1_BASE))->DR));
+    rb_insert(&(usart_dev_table[USART1].rb),
+              (uint8)(((usart_port*)(USART1_BASE))->DR));
 }
 
 void USART2_IRQHandler(void) {
-   rb_insert(&(usart_dev_table[USART2].rb), (uint8)(((usart_port*)(USART2_BASE))->DR));
+    rb_insert(&(usart_dev_table[USART2].rb),
+              (uint8)(((usart_port*)(USART2_BASE))->DR));
 }
 
 void USART3_IRQHandler(void) {
-    rb_insert(&usart_dev_table[USART3].rb, (uint8)(((usart_port*)(USART3_BASE))->DR));
+    rb_insert(&usart_dev_table[USART3].rb,
+              (uint8)(((usart_port*)(USART3_BASE))->DR));
 }
 #if NR_USART >= 5
 void UART4_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART4].rb, (uint8)(((usart_port*)(UART4_BASE))->DR));
+    rb_insert(&usart_dev_table[UART4].rb,
+              (uint8)(((usart_port*)(UART4_BASE))->DR));
 }
 void UART5_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART5].rb, (uint8)(((usart_port*)(UART5_BASE))->DR));
+    rb_insert(&usart_dev_table[UART5].rb,
+              (uint8)(((usart_port*)(UART5_BASE))->DR));
 }
 #endif
 
@@ -153,15 +158,15 @@ void usart_disable_all() {
     usart_disable(USART1);
     usart_disable(USART2);
     usart_disable(USART3);
-    #if NR_USART >= 5
+#if NR_USART >= 5
     usart_disable(UART4);
     usart_disable(UART5);
-    #endif
+#endif
 }
 
 /**
- *  @brief Turn off a USART.
- *  @param USART to be disabled
+ * @brief Turn off a USART.
+ * @param USART to be disabled
  */
 void usart_disable(uint8 usart_num) {
     usart_port *port = usart_dev_table[usart_num].base;
@@ -179,10 +184,10 @@ void usart_disable(uint8 usart_num) {
 
 
 /**
- *  @brief Print a null terminated string to the specified USART
+ * @brief Print a null terminated string to the specified USART
  *
- *  @param usart_num usart to send on
- *  @param str string to send
+ * @param usart_num usart to send on
+ * @param str string to send
  */
 void usart_putstr(uint8 usart_num, const char* str) {
     char ch;
@@ -193,10 +198,10 @@ void usart_putstr(uint8 usart_num, const char* str) {
 }
 
 /**
- *  @brief Print an unsigned integer to the specified usart
+ * @brief Print an unsigned integer to the specified usart
  *
- *  @param usart_num usart to send on
- *  @param val number to print
+ * @param usart_num usart to send on
+ * @param val number to print
  */
 void usart_putudec(uint8 usart_num, uint32 val) {
     char digits[12];

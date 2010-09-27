@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @brief Nested interrupt controller defines and prototypes
@@ -55,28 +55,28 @@ extern "C"{
 #endif
 
 enum {
-   NVIC_TIMER1       = 27,
-   NVIC_TIMER2       = 28,
-   NVIC_TIMER3       = 29,
-   NVIC_TIMER4       = 30,
-   NVIC_TIMER5       = 50,   // high density only (Maple Native)
-   NVIC_TIMER6       = 54,   // high density only (Maple Native)
-   NVIC_TIMER7       = 55,   // high density only (Maple Native)
-   NVIC_TIMER8       = 46,   // high density only (Maple Native)
+    NVIC_TIMER1       = 27,
+    NVIC_TIMER2       = 28,
+    NVIC_TIMER3       = 29,
+    NVIC_TIMER4       = 30,
+    NVIC_TIMER5       = 50,   // high density only (Maple Native)
+    NVIC_TIMER6       = 54,   // high density only (Maple Native)
+    NVIC_TIMER7       = 55,   // high density only (Maple Native)
+    NVIC_TIMER8       = 46,   // high density only (Maple Native)
 
-   NVIC_USART1       = 37,
-   NVIC_USART2       = 38,
-   NVIC_USART3       = 39,
-   NVIC_USART4       = 52,   // high density only (Maple Native)
-   NVIC_USART5       = 53,   // high density only (Maple Native)
+    NVIC_USART1       = 37,
+    NVIC_USART2       = 38,
+    NVIC_USART3       = 39,
+    NVIC_USART4       = 52,   // high density only (Maple Native)
+    NVIC_USART5       = 53,   // high density only (Maple Native)
 
-   NVIC_EXTI0        = 6,
-   NVIC_EXTI1        = 7,
-   NVIC_EXTI2        = 8,
-   NVIC_EXTI3        = 9,
-   NVIC_EXTI4        = 10,
-   NVIC_EXTI9_5      = 23,
-   NVIC_EXTI15_10    = 40,
+    NVIC_EXTI0        = 6,
+    NVIC_EXTI1        = 7,
+    NVIC_EXTI2        = 8,
+    NVIC_EXTI3        = 9,
+    NVIC_EXTI4        = 10,
+    NVIC_EXTI9_5      = 23,
+    NVIC_EXTI15_10    = 40,
 };
 
 

@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @brief reset and clock control definitions and prototypes
@@ -132,42 +132,42 @@
 
 /* prescalers */
 enum {
-   RCC_PRESCALER_AHB,
-   RCC_PRESCALER_APB1,
-   RCC_PRESCALER_APB2,
-   RCC_PRESCALER_USB,
-   RCC_PRESCALER_ADC
+    RCC_PRESCALER_AHB,
+    RCC_PRESCALER_APB1,
+    RCC_PRESCALER_APB2,
+    RCC_PRESCALER_USB,
+    RCC_PRESCALER_ADC
 };
 
 // RCC Devices
 enum {
-   RCC_GPIOA,
-   RCC_GPIOB,
-   RCC_GPIOC,
-   RCC_GPIOD,
-   RCC_GPIOE,       // High-density devices only (Maple Native)
-   RCC_GPIOF,       // High-density devices only (Maple Native)
-   RCC_GPIOG,       // High-density devices only (Maple Native)
-   RCC_AFIO,
-   RCC_ADC1,
-   RCC_ADC2,
-   RCC_USART1,
-   RCC_USART2,
-   RCC_USART3,
-   RCC_USART4,      // High-density devices only (Maple Native)
-   RCC_USART5,      // High-density devices only (Maple Native)
-   RCC_TIMER1,
-   RCC_TIMER2,
-   RCC_TIMER3,
-   RCC_TIMER4,
-   RCC_TIMER5,      // High-density devices only (Maple Native)
-   RCC_TIMER6,      // High-density devices only (Maple Native)
-   RCC_TIMER7,      // High-density devices only (Maple Native)
-   RCC_TIMER8,      // High-density devices only (Maple Native)
-   RCC_SPI1,
-   RCC_SPI2,
-   RCC_FSMC,        // High-density devices only (Maple Native)
-   RCC_DAC,         // High-density devices only (Maple Native)
+    RCC_GPIOA,
+    RCC_GPIOB,
+    RCC_GPIOC,
+    RCC_GPIOD,
+    RCC_GPIOE,       // High-density devices only (Maple Native)
+    RCC_GPIOF,       // High-density devices only (Maple Native)
+    RCC_GPIOG,       // High-density devices only (Maple Native)
+    RCC_AFIO,
+    RCC_ADC1,
+    RCC_ADC2,
+    RCC_USART1,
+    RCC_USART2,
+    RCC_USART3,
+    RCC_USART4,      // High-density devices only (Maple Native)
+    RCC_USART5,      // High-density devices only (Maple Native)
+    RCC_TIMER1,
+    RCC_TIMER2,
+    RCC_TIMER3,
+    RCC_TIMER4,
+    RCC_TIMER5,      // High-density devices only (Maple Native)
+    RCC_TIMER6,      // High-density devices only (Maple Native)
+    RCC_TIMER7,      // High-density devices only (Maple Native)
+    RCC_TIMER8,      // High-density devices only (Maple Native)
+    RCC_SPI1,
+    RCC_SPI2,
+    RCC_FSMC,        // High-density devices only (Maple Native)
+    RCC_DAC,         // High-density devices only (Maple Native)
 };
 
 

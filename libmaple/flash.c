@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief flash peripheral management functions
+ * @brief flash peripheral management functions
  */
-
 
 #include "libmaple.h"
 #include "flash.h"
@@ -48,23 +47,22 @@
  * @brief turn on the hardware prefetcher
  */
 void flash_enable_prefetch(void) {
-   uint32 val = FLASH_READ_ACR();
+    uint32 val = FLASH_READ_ACR();
 
-   val |= ACR_PRFTBE_ENABLE;
+    val |= ACR_PRFTBE_ENABLE;
 
-   FLASH_WRITE_ACR(val);
+    FLASH_WRITE_ACR(val);
 }
-
 
 /**
  * @brief set flash wait states
  * @param number of wait states
  */
 void flash_set_latency(uint32 wait_states) {
-   uint32 val = FLASH_READ_ACR();
+    uint32 val = FLASH_READ_ACR();
 
-   val &= ~ACR_LATENCY;
-   val |= wait_states;
+    val &= ~ACR_LATENCY;
+    val |= wait_states;
 
-   FLASH_WRITE_ACR(val);
+    FLASH_WRITE_ACR(val);
 }

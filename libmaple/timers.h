@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file timers.h
+ * @file timers.h
  *
- *  @brief Timer prototypes and various definitions
+ * @brief Timer prototypes and various definitions
  */
 
 /* Note to self:
@@ -39,7 +39,7 @@
  * See stm32 manual, 77/995
  *
  * hence, 72 mhz timers
- * */
+ */
 
 /* Maple Timer channels:
  * Timer        Maple Pin               STM32 Pin     Type
@@ -75,7 +75,6 @@
  * pinMode(digitalPin, PWM);
  * pwmWrite(digitalPin) */
 
-
 #ifndef _TIMERS_H_
 #define _TIMERS_H_
 
@@ -89,15 +88,14 @@ typedef volatile uint32* TimerCCR;
 #define TIMER2_BASE        0x40000000
 #define TIMER3_BASE        0x40000400
 #define TIMER4_BASE        0x40000800
-#define TIMER5_BASE        0x40000C00   // High-density devices only (Maple Native)
-#define TIMER6_BASE        0x40001000   // High-density devices only (Maple Native)
-#define TIMER7_BASE        0x40001400   // High-density devices only (Maple Native)
-#define TIMER8_BASE        0x40013400   // High-density devices only (Maple Native)
+#define TIMER5_BASE        0x40000C00   // High-density devices only
+#define TIMER6_BASE        0x40001000   // High-density devices only
+#define TIMER7_BASE        0x40001400   // High-density devices only
+#define TIMER8_BASE        0x40013400   // High-density devices only
 
-#define ARPE               BIT(7)                // Auto-reload preload enable
+#define ARPE               BIT(7)       // Auto-reload preload enable
 #define NOT_A_TIMER        0
 
-// just threw this in here cause I can, aw yeah
 #define TIMER_CCR(NUM,CHAN)     TIMER ## NUM ## _CH ## CHAN ## _CRR
 
 #define TIMER1_CH1_CCR     (TimerCCR)(TIMER1_BASE + 0x34)
@@ -120,8 +118,9 @@ typedef volatile uint32* TimerCCR;
 #define TIMER4_CH3_CCR     (TimerCCR)(TIMER4_BASE + 0x3C)
 #define TIMER4_CH4_CCR     (TimerCCR)(TIMER4_BASE + 0x40)
 
-// Timer5 and Timer8 are in high-density devices only (such as Maple Native).
-// Timer6 and Timer7 in these devices have no output compare pins.
+/* Timer5 and Timer8 are in high-density devices only (such as Maple
+   Native).  Timer6 and Timer7 in these devices have no output compare
+   pins. */
 
 #define TIMER5_CH1_CCR     (TimerCCR)(TIMER5_BASE + 0x34)
 #define TIMER5_CH2_CCR     (TimerCCR)(TIMER5_BASE + 0x38)
@@ -180,24 +179,24 @@ typedef struct {
     uint16  RESERVED19;
 } timer_port;
 
-// timer device numbers
+/* timer device numbers */
 enum {
-   TIMER1,
-   TIMER2,
-   TIMER3,
-   TIMER4,
-   TIMER5,      // High density only
-   TIMER6,      // High density only; no compare
-   TIMER7,      // High density only; no compare
-   TIMER8,      // High density only
+    TIMER1,
+    TIMER2,
+    TIMER3,
+    TIMER4,
+    TIMER5,      // High density only
+    TIMER6,      // High density only; no compare
+    TIMER7,      // High density only; no compare
+    TIMER8,      // High density only
 };
 
-// timer descriptor 
+/* timer descriptor */
 struct timer_dev {
-   timer_port *base;
-   const uint8 rcc_dev_num;
-   const uint8 nvic_dev_num;
-   volatile voidFuncPtr handlers[4];
+    timer_port *base;
+    const uint8 rcc_dev_num;
+    const uint8 nvic_dev_num;
+    volatile voidFuncPtr handlers[4];
 };
 
 extern struct timer_dev timer_dev_table[];
@@ -206,7 +205,7 @@ extern struct timer_dev timer_dev_table[];
  * void timer_init(uint32 timer, uint16 prescale)
  *      timer     ->  {1-4}
  *      prescale  ->  {1-65535}
- * */
+ */
 void timer_init(uint8, uint16);
 void timer_disable_all(void);
 uint16 timer_get_count(uint8);
@@ -217,7 +216,8 @@ void timer_set_prescaler(uint8 timer_num, uint16 prescale);
 void timer_set_reload(uint8 timer_num, uint16 max_reload);
 void timer_set_mode(uint8 timer_num, uint8 compare_num, uint8 mode);
 void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value);
-void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr handler);
+void timer_attach_interrupt(uint8 timer_num, uint8 compare_num,
+                            voidFuncPtr handler);
 void timer_detach_interrupt(uint8 timer_num, uint8 compare_num);
 
 /* Turn on PWM with duty_cycle on the specified channel in timer.

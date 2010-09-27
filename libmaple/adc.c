@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file adc.c
+ * @file adc.c
  *
- *  @brief Analog to digital converter routines
+ * @brief Analog to digital converter routines
  */
 
 #include "libmaple.h"
@@ -63,23 +63,25 @@
  * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
 
 void adc_init(void) {
-   rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
-   rcc_clk_enable(RCC_ADC1);
-   rcc_reset_dev(RCC_ADC1);
+    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
+    rcc_clk_enable(RCC_ADC1);
+    rcc_reset_dev(RCC_ADC1);
 
     ADC_CR1  = 0;
-    ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;  // Software triggers conversions
+    /* Software triggers conversions */
+    ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;
     ADC_SQR1 = 0;
 
-    /* Up the sample conversion time to 55.5 cycles/sec, see note above  */
-    /* TODO: fix magic numbers  */
+    /* Up the sample conversion time to 55.5 cycles/sec, see note
+       above */
+    /* TODO: fix magic numbers */
     ADC_SMPR1 = 0xB6DB6D;
     ADC_SMPR2 = 0x2DB6DB6D;
 
-    /* Enable the ADC  */
+    /* Enable the ADC */
     CR2_ADON_BIT = 1;
 
-    /* Reset the calibration registers and then perform a reset  */
+    /* Reset the calibration registers and then perform a reset */
     CR2_RSTCAL_BIT = 1;
     while(CR2_RSTCAL_BIT)
         ;

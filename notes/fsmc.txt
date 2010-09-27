@@ -15,14 +15,15 @@ SRAM chip details
     t_aa (address access) = 55ns
 
 
-The FSMC nomenclature is very confusing. There are three seperate "banks"
-(which I will call "peripheral banks") each of specialized for different types
-of external memory (NOR flash, NAND flash, SRAM, etc). We use the one for
-"PSRAM" with our SRAM chip; it's bank #1. The SRAM peripheral bank is further
-split into 4 "banks" (which I will call "channels") to support multiple
-external devices with chip select pins. I think what's going on is that there
-are 4 hardware peripherals and many sections of RAM; the docs are confusing
-about what's a "block of memeory" and what's an "FSMC block".
+The FSMC nomenclature is very confusing. There are three separate
+"banks" (which I will call "peripheral banks") each specialized for
+different types of external memory (NOR flash, NAND flash, SRAM,
+etc). We use the one for "PSRAM" with our SRAM chip; it's bank #1. The
+SRAM peripheral bank is further split into 4 "banks" (which I will
+call "channels") to support multiple external devices with chip select
+pins. I think what's going on is that there are 4 hardware peripherals
+and many sections of RAM; the docs are confusing about what's a "block
+of memeory" and what's an "FSMC block".
 
 Anyways, this all takes place on the AHB memory bus.
 

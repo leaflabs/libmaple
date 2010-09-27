@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file gpio.h
@@ -65,24 +65,24 @@
 #define CNF_INPUT_PU          (0x02 << 2)
 
 typedef enum GPIOPinMode {
-   GPIO_MODE_OUTPUT_PP      = MODE_OUTPUT_PP,
-   GPIO_MODE_OUTPUT_OD      = MODE_OUTPUT_OD,
-   GPIO_MODE_AF_OUTPUT_PP   = MODE_AF_OUTPUT_PP,
-   GPIO_MODE_AF_OUTPUT_OD   = MODE_AF_OUTPUT_OD,
-   GPIO_MODE_INPUT_ANALOG   = CNF_INPUT_ANALOG,
-   GPIO_MODE_INPUT_FLOATING = CNF_INPUT_FLOATING,
-   GPIO_MODE_INPUT_PD       = CNF_INPUT_PD,
-   GPIO_MODE_INPUT_PU,
+    GPIO_MODE_OUTPUT_PP      = MODE_OUTPUT_PP,
+    GPIO_MODE_OUTPUT_OD      = MODE_OUTPUT_OD,
+    GPIO_MODE_AF_OUTPUT_PP   = MODE_AF_OUTPUT_PP,
+    GPIO_MODE_AF_OUTPUT_OD   = MODE_AF_OUTPUT_OD,
+    GPIO_MODE_INPUT_ANALOG   = CNF_INPUT_ANALOG,
+    GPIO_MODE_INPUT_FLOATING = CNF_INPUT_FLOATING,
+    GPIO_MODE_INPUT_PD       = CNF_INPUT_PD,
+    GPIO_MODE_INPUT_PU,
 } GPIOPinMode;
 
 typedef struct {
-   volatile uint32 CRL;      // Port configuration register low
-   volatile uint32 CRH;      // Port configuration register high
-   volatile uint32 IDR;      // Port input data register
-   volatile uint32 ODR;      // Port output data register
-   volatile uint32 BSRR;     // Port bit set/reset register
-   volatile uint32 BRR;      // Port bit reset register
-   volatile uint32 LCKR;     // Port configuration lock register
+    volatile uint32 CRL;      // Port configuration register low
+    volatile uint32 CRH;      // Port configuration register high
+    volatile uint32 IDR;      // Port input data register
+    volatile uint32 ODR;      // Port output data register
+    volatile uint32 BSRR;     // Port bit set/reset register
+    volatile uint32 BRR;      // Port bit reset register
+    volatile uint32 LCKR;     // Port configuration lock register
 } GPIO_Port;
 
 typedef volatile uint32* GPIOReg;
@@ -98,15 +98,15 @@ void gpio_init(void);
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode);
 
 static inline void gpio_write_bit(GPIO_Port *port, uint8 gpio_pin, uint8 val) {
-   if (val){
-      port->BSRR = BIT(gpio_pin);
-   } else {
-      port->BRR = BIT(gpio_pin);
-   }
+    if (val){
+        port->BSRR = BIT(gpio_pin);
+    } else {
+        port->BRR = BIT(gpio_pin);
+    }
 }
 
 static inline uint32 gpio_read_bit(GPIO_Port *port, uint8 gpio_pin) {
-   return (port->IDR & BIT(gpio_pin) ? 1 : 0);
+    return (port->IDR & BIT(gpio_pin) ? 1 : 0);
 }
 
 #ifdef __cplusplus

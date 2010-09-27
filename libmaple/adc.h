@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file adc.h
@@ -62,13 +62,12 @@ extern "C"{
 #define CR2_EXTTRIG              (BIT(20))
 
 /* Bit banded bits  */
-#define CR2_ADON_BIT             *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 0))
-#define CR2_CAL_BIT              *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 2))
-#define CR2_RSTCAL_BIT           *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 3))
-#define CR2_SWSTART_BIT          *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8 + 2, 6))
-#define SR_EOC_BIT               *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0, 1))
-
-// NR_ANALOG_PINS is board specific
+#define CR2_ADON_BIT    *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 0))
+#define CR2_CAL_BIT     *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 2))
+#define CR2_RSTCAL_BIT  *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8, 3))
+#define CR2_SWSTART_BIT *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0x8 + 2, 6))
+#define SR_EOC_BIT      *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0, 1))
+/* (NR_ANALOG_PINS is board specific) */
 
 /* Initialize ADC1 to do one-shot conversions  */
 void adc_init(void);

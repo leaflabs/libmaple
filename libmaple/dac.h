@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Bryan Newbold.
@@ -20,9 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
-/* 
+/*
  * See ../notes/dac.txt for more info
  */
 
@@ -36,19 +36,19 @@ extern "C"{
 #define DAC_BASE  0x40007400
 
 typedef struct {
-   volatile uint32 CR;
-   volatile uint32 SWTRIGR;
-   volatile uint32 DHR12R1;
-   volatile uint32 DHR12L1;
-   volatile uint32 DHR8R1;
-   volatile uint32 DHR12R2;
-   volatile uint32 DHR12L2;
-   volatile uint32 DHR8R2;
-   volatile uint32 DHR12RD;
-   volatile uint32 DHR12LD;
-   volatile uint32 DHR8RD;
-   volatile uint32 DOR1;
-   volatile uint32 DOR2;
+    volatile uint32 CR;
+    volatile uint32 SWTRIGR;
+    volatile uint32 DHR12R1;
+    volatile uint32 DHR12L1;
+    volatile uint32 DHR8R1;
+    volatile uint32 DHR12R2;
+    volatile uint32 DHR12L2;
+    volatile uint32 DHR8R2;
+    volatile uint32 DHR12RD;
+    volatile uint32 DHR12LD;
+    volatile uint32 DHR8RD;
+    volatile uint32 DOR1;
+    volatile uint32 DOR2;
 } DAC_Map;
 
 
@@ -73,29 +73,28 @@ typedef struct {
 
 #define DAC_DHR12R1_DACC1DHR     0x00000FFF
 
-#define DAC_DHR12L1_DACC1DHR     0x0000FFF0 
+#define DAC_DHR12L1_DACC1DHR     0x0000FFF0
 
-#define DAC_DHR8R1_DACC1DHR      0x000000FF 
+#define DAC_DHR8R1_DACC1DHR      0x000000FF
 
-#define DAC_DHR12R2_DACC2DHR     0x00000FFF 
+#define DAC_DHR12R2_DACC2DHR     0x00000FFF
 
 #define DAC_DHR12L2_DACC2DHR     0x0000FFF0
 
-#define DAC_DHR8R2_DACC2DHR      0x000000FF 
+#define DAC_DHR8R2_DACC2DHR      0x000000FF
 
 #define DAC_DHR12RD_DACC1DHR     0x00000FFF
 #define DAC_DHR12RD_DACC2DHR     0x0FFF0000
 
-#define DAC_DHR12LD_DACC1DHR     0x0000FFF0 
+#define DAC_DHR12LD_DACC1DHR     0x0000FFF0
 #define DAC_DHR12LD_DACC2DHR     0xFFF00000
 
 #define DAC_DHR8RD_DACC1DHR      0x000000FF
 #define DAC_DHR8RD_DACC2DHR      0x0000FF00
 
-#define DAC_DOR1                 0x00000FFF 
+#define DAC_DOR1                 0x00000FFF
 
-#define DAC_DOR2                 0x00000FFF 
-
+#define DAC_DOR2                 0x00000FFF
 
 void dac_init(void);
 void dac_write(uint8 chan, uint16 val);

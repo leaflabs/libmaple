@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,13 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
-
+ *****************************************************************************/
 
 /**
- *  @file exti.c
+ * @file exti.c
  *
- *  @brief External interrupt control routines
+ * @brief External interrupt control routines
  */
 
 #include "libmaple.h"
@@ -145,9 +144,9 @@ void EXTI15_10_IRQHandler(void) {
  * @param mode type of transition to trigger on
  */
 void exti_attach_interrupt(uint32 port,
-        uint32 pin,
-        voidFuncPtr handler,
-        uint32 mode) {
+                           uint32 pin,
+                           voidFuncPtr handler,
+                           uint32 mode) {
     static uint32 afio_regs[] = {
         AFIO_EXTICR1,         // EXT0-3
         AFIO_EXTICR2,         // EXT4-7

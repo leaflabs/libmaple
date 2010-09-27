@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file gpio.c
+ * @file gpio.c
  *
- *  @brief GPIO initialization routine
+ * @brief GPIO initialization routine
  */
 
 #include "libmaple.h"
@@ -33,39 +33,38 @@
 #include "gpio.h"
 
 void gpio_init(void) {
-   rcc_clk_enable(RCC_GPIOA);
-   rcc_clk_enable(RCC_GPIOB);
-   rcc_clk_enable(RCC_GPIOC);
-   rcc_clk_enable(RCC_GPIOD);
-   #if NR_GPIO_PORTS >= 7
-   rcc_clk_enable(RCC_GPIOE);
-   rcc_clk_enable(RCC_GPIOF);
-   rcc_clk_enable(RCC_GPIOG);
-   #endif
-   rcc_clk_enable(RCC_AFIO);
+    rcc_clk_enable(RCC_GPIOA);
+    rcc_clk_enable(RCC_GPIOB);
+    rcc_clk_enable(RCC_GPIOC);
+    rcc_clk_enable(RCC_GPIOD);
+#if NR_GPIO_PORTS >= 7
+    rcc_clk_enable(RCC_GPIOE);
+    rcc_clk_enable(RCC_GPIOF);
+    rcc_clk_enable(RCC_GPIOG);
+#endif
+    rcc_clk_enable(RCC_AFIO);
 }
 
 void gpio_set_mode(GPIO_Port* port, uint8 gpio_pin, GPIOPinMode mode) {
-   uint32 tmp;
-   uint32 shift = POS(gpio_pin % 8);
-   GPIOReg CR;
+    uint32 tmp;
+    uint32 shift = POS(gpio_pin % 8);
+    GPIOReg CR;
 
-   ASSERT(port);
-   ASSERT(gpio_pin < 16);
+    ASSERT(port);
+    ASSERT(gpio_pin < 16);
 
-   if (mode == GPIO_MODE_INPUT_PU) {
-      port->ODR |= BIT(gpio_pin);
-      mode = CNF_INPUT_PD;
-   } else if (mode == GPIO_MODE_INPUT_PD) {
-      port->ODR &= ~BIT(gpio_pin);
-   }
+    if (mode == GPIO_MODE_INPUT_PU) {
+        port->ODR |= BIT(gpio_pin);
+        mode = CNF_INPUT_PD;
+    } else if (mode == GPIO_MODE_INPUT_PD) {
+        port->ODR &= ~BIT(gpio_pin);
+    }
 
-   CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
+    CR = (gpio_pin < 8) ? &(port->CRL) : &(port->CRH);
 
-   tmp = *CR;
-   tmp &= POS_MASK(shift);
-   tmp |= mode << shift;
+    tmp = *CR;
+    tmp &= POS_MASK(shift);
+    tmp |= mode << shift;
 
-   *CR = tmp;
-
+    *CR = tmp;
 }

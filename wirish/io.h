@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file io.h
  *
- *  @brief 
+ *  @brief Arduino-compatible digital pin I/O interface.
  */
 
 #ifndef _IO_H
@@ -37,7 +37,6 @@
 #ifdef __cplusplus
 extern "C"{
 #endif
-
 
 typedef enum WiringPinMode {
     OUTPUT,
@@ -85,7 +84,7 @@ uint32 digitalRead(uint8);
  * to INPUT_ANALOG
  * analogRead(pin)
  *     pin -> {A0-A16}
- *     */
+ */
 uint32 analogRead(uint8);
 
 #ifdef __cplusplus

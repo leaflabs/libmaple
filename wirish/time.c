@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,30 +20,30 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief
+ *  @brief Delay implementation.
  */
 
 #include "libmaple.h"
 #include "systick.h"
 #include "time.h"
 
-void delay(unsigned long ms)
-{
-   uint32 i;
-   for (i = 0; i < ms; i++) {
-      delayMicroseconds(1000);
-   }
+void delay(unsigned long ms) {
+    uint32 i;
+    for (i = 0; i < ms; i++) {
+        delayMicroseconds(1000);
+    }
 }
 
 void delayMicroseconds(uint32 us) {
-    // So (2^32)/12 micros max, or less than 6 minutes
+    /* So (2^32)/12 micros max, or less than 6 minutes */
     us *= 12;
 
     /* fudge for function call overhead  */
     us--;
+    int x = 4;
     asm volatile("   mov r0, %[us]          \n\t"
                  "1: subs r0, #1            \n\t"
                  "   bhi 1b                 \n\t"

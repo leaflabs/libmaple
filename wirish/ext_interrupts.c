@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file ext_interrupts.c
@@ -44,7 +44,8 @@
  */
 void attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
     uint8 outMode;
-    /* Parameter checking  */
+
+    /* Parameter checking */
     if (pin >= NR_GPIO_PINS) {
         return;
     }
@@ -68,9 +69,9 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
     }
 
     exti_attach_interrupt(PIN_MAP[pin].exti_port,
-            PIN_MAP[pin].pin,
-            handler,
-            mode);
+                          PIN_MAP[pin].pin,
+                          handler,
+                          mode);
 
     return;
 }

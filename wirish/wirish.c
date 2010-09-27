@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,17 +20,16 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief generic maple board bring up:
+ * @brief generic maple board bring up:
  *
- *  By default, we bring up all maple boards running on the stm32 to 72mhz,
- *  clocked off the PLL, driven by the 8MHz external crystal.
+ * By default, we bring up all maple boards running on the stm32 to 72mhz,
+ * clocked off the PLL, driven by the 8MHz external crystal.
  *
- *  AHB and APB2 are clocked at 72MHz
- *  APB1 is clocked at 36MHz
- *
+ * AHB and APB2 are clocked at 72MHz
+ * APB1 is clocked at 36MHz
  */
 
 #include "wirish.h"
@@ -44,35 +43,35 @@
 #include "flash.h"
 
 void init(void) {
-   /* make sure the flash is ready before spinning the high speed clock up */
-   flash_enable_prefetch();
-   flash_set_latency(FLASH_WAIT_STATE_2);
+    /* make sure the flash is ready before spinning the high speed clock up */
+    flash_enable_prefetch();
+    flash_set_latency(FLASH_WAIT_STATE_2);
 
-   #if NR_FSMC > 0
-   fsmc_native_sram_init();
-   #endif
+#if NR_FSMC > 0
+    fsmc_native_sram_init();
+#endif
 
-   #if NR_DAC_PINS > 0
-   dac_init();
-   #endif
+#if NR_DAC_PINS > 0
+    dac_init();
+#endif
 
-   /* initialize clocks  */
-   rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
-   rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
-   rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
-   rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
+    /* initialize clocks  */
+    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
+    rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
+    rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
+    rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
 
-   nvic_init();
-   systick_init(MAPLE_RELOAD_VAL);
-   gpio_init();
-   adc_init();
-   timer_init(TIMER1, 1);
-   timer_init(TIMER2, 1);
-   timer_init(TIMER3, 1);
-   timer_init(TIMER4, 1);
-   #if NR_TIMERS >= 8
-   timer_init(TIMER5, 1);
-   timer_init(TIMER8, 1);
-   #endif
-   setupUSB();
+    nvic_init();
+    systick_init(MAPLE_RELOAD_VAL);
+    gpio_init();
+    adc_init();
+    timer_init(TIMER1, 1);
+    timer_init(TIMER2, 1);
+    timer_init(TIMER3, 1);
+    timer_init(TIMER4, 1);
+#if NR_TIMERS >= 8
+    timer_init(TIMER5, 1);
+    timer_init(TIMER8, 1);
+#endif
+    setupUSB();
 }

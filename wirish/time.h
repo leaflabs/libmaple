@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,10 +20,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief
+ *  @brief Timing and delay functions.
  */
 
 #ifndef _TIME_H
@@ -43,28 +43,28 @@ extern volatile uint32 systick_timer_millis;
 
 /* time in milliseconds since boot  */
 static inline uint32 millis(void) {
-   return systick_timer_millis;
+    return systick_timer_millis;
 }
 
 /* Time in microseconds since boot  */
 static inline uint32 micros(void) {
-   uint32 ms;
-   uint32 cycle_cnt;
-   uint32 res;
+    uint32 ms;
+    uint32 cycle_cnt;
+    uint32 res;
 
-   nvic_globalirq_disable();
+    nvic_globalirq_disable();
 
-   cycle_cnt = systick_get_count();
-   ms = millis();
+    cycle_cnt = systick_get_count();
+    ms = millis();
 
-   nvic_globalirq_enable();
+    nvic_globalirq_enable();
 
-   /* MAPLE_RELOAD_VAL is 1 less than the number of cycles it actually
-      takes to complete a systick reload */
-   res = (ms * US_PER_MS) +
-       (MAPLE_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
+    /* MAPLE_RELOAD_VAL is 1 less than the number of cycles it actually
+       takes to complete a systick reload */
+    res = (ms * US_PER_MS) +
+        (MAPLE_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
 
-   return res;
+    return res;
 }
 
 void delay(unsigned long ms);

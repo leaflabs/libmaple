@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,10 +20,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief 
+ *  @brief Arduino-compatible PWM implementation.
  */
 
 #include "wirish.h"
@@ -40,8 +40,9 @@ void pwmWrite(uint8 pin, uint16 duty_cycle) {
 
     ccr = PIN_MAP[pin].timer_channel;
 
-    if (ccr == TIMER_INVALID)
+    if (ccr == TIMER_INVALID) {
         return;
+    }
 
     timer_pwm_write_ccr(ccr, duty_cycle);
 }

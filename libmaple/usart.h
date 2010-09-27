@@ -119,4 +119,4 @@ void usart_putudec(uint8 usart_num, uint32 val);
 } // extern "C"
 #endif
 
-#endif _USART_H_
+#endif // _USART_H_

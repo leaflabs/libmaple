@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  * @brief HardwareSPI definitions
@@ -30,28 +30,28 @@
 #define _HARDWARESPI_H_
 
 typedef enum SPIFrequency {
-   SPI_18MHZ       = 0,
-   SPI_9MHZ        = 1,
-   SPI_4_5MHZ      = 2,
-   SPI_2_25MHZ     = 3,
-   SPI_1_125MHZ    = 4,
-   SPI_562_500KHZ  = 5,
-   SPI_281_250KHZ  = 6,
-   SPI_140_625KHZ  = 7,
-   MAX_SPI_FREQS   = 8,
+    SPI_18MHZ       = 0,
+    SPI_9MHZ        = 1,
+    SPI_4_5MHZ      = 2,
+    SPI_2_25MHZ     = 3,
+    SPI_1_125MHZ    = 4,
+    SPI_562_500KHZ  = 5,
+    SPI_281_250KHZ  = 6,
+    SPI_140_625KHZ  = 7,
+    MAX_SPI_FREQS   = 8,
 } SPIFrequency;
 
 class HardwareSPI {
-   private:
-      uint32 spi_num;
+ private:
+    uint32 spi_num;
 
-   public:
-      HardwareSPI(uint32 spi_num);
-      void begin(void);
-      void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
-      uint8 send(uint8 data);
-      uint8 send(uint8 *data, uint32 length);
-      uint8 recv(void);
+ public:
+    HardwareSPI(uint32 spi_num);
+    void begin(void);
+    void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
+    uint8 send(uint8 data);
+    uint8 send(uint8 *data, uint32 length);
+    uint8 recv(void);
 };
 
 #endif

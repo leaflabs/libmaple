@@ -104,7 +104,7 @@ void HardwareSPI::begin(SPIFrequency freq, uint32 endianness, uint32 mode) {
         prescaleFactors[freq + 1] :
         prescaleFactors[freq];
 
-    spi_init(spi_num, prescale, endianness, 0);
+    spi_init(spi_num, prescale, endianness, mode);
 }
 
 /**

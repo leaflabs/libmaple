@@ -29,13 +29,14 @@
 #ifndef _TIME_H
 #define _TIME_H
 
-#ifdef __cplusplus
-extern "C"{
-#endif
-
+#include "libmaple.h"
 #include "nvic.h"
 #include "systick.h"
 #include "boards.h"
+
+#ifdef __cplusplus
+extern "C"{
+#endif
 
 #define US_PER_MS               1000
 

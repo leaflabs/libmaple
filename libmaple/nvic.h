@@ -29,6 +29,10 @@
 #ifndef _NVIC_H_
 #define _NVIC_H_
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #define NVIC_INT_USBHP      19
 #define NVIC_INT_USBLP      20
 #define NVIC_EXTI1_OFFSET   (NVIC_ISER0 + 0x07)
@@ -51,10 +55,6 @@
 
 #define NVIC_VectTab_RAM             ((u32)0x20000000)
 #define NVIC_VectTab_FLASH           ((u32)0x08000000)
-
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 enum {
    NVIC_TIMER1  = 27,

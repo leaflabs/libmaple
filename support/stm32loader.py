@@ -26,6 +26,7 @@ import sys, getopt
 import serial
 import time
 import glob
+import time
 
 try:
     from progressbar import *
@@ -54,7 +55,7 @@ class CommandInterface:
             stopbits=1,
             xonxoff=0,              # enable software flow control
             rtscts=0,               # disable RTS/CTS flow control
-            timeout=5               # set a timeout value, None for waiting forever
+            timeout=0.5             # set a timeout value, None for waiting forever
         )
 
 
@@ -62,7 +63,7 @@ class CommandInterface:
         got = self.sp.read(1)
 
         if not got:
-            raise CmdException("No response")
+            raise CmdException("No response to %s" % info)
 
         # wait for ask
         ask = ord(got)
@@ -73,10 +74,10 @@ class CommandInterface:
         else:
             if ask == 0x1F:
                 # NACK
-                raise CmdException("NACK "+info)
+                raise CmdException("Chip replied with a NACK during %s" % info)
             else:
-                # Unknow responce
-                raise CmdException("Unknow response. "+info+": "+hex(ask))
+                # Unknown responce
+                raise CmdException("Unrecognised response %x to %s" % (ask, info))
 
     def reset(self):
         self.sp.setDTR(0)
@@ -89,8 +90,21 @@ class CommandInterface:
         self.sp.setRTS(0)
         self.reset()
 
-        self.sp.write("\x7F")       # Syncro
-        return self._wait_for_ask("Syncro")
+        # Be a bit more persistant when trying to initialise the chip
+        stop = time.time() + 5.0
+
+        while time.time() <= stop:
+            self.sp.write('\x7f')
+
+            got = self.sp.read()
+
+            # The chip will ACK a sync the very first time and
+            # NACK it every time afterwards
+            if got and got in '\x79\x1f':
+                # Synced up
+                return
+
+        raise CmdException('No response while trying to sync')
 
     def releaseChip(self):
         self.sp.setRTS(1)

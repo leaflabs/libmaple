@@ -25,6 +25,7 @@
 import sys, getopt
 import serial
 import time
+import glob
 
 try:
     from progressbar import *
@@ -314,7 +315,7 @@ def usage():
     -v          Verify
     -r          Read
     -l length   Length of read
-    -p port     Serial port (default: /dev/tty.usbserial-ftCYPMYJ)
+    -p port     Serial port (default: first USB-like port in /dev)
     -b baud     Baud speed (default: 115200)
     -a addr     Target address
 
@@ -334,7 +335,7 @@ if __name__ == "__main__":
         pass
 
     conf = {
-            'port': '/dev/tty.usbserial-FTD3TMCH',
+            'port': 'auto',
             'baud': 115200,
             'address': 0x08000000,
             'erase': 0,
@@ -385,6 +386,20 @@ if __name__ == "__main__":
 #            conf['fname'] = a
         else:
             assert False, "unhandled option"
+
+    # Try and find the port automatically
+    if conf['port'] == 'auto':
+        ports = []
+
+        # Get a list of all USB-like names in /dev
+        for name in ['tty.usbserial', 'ttyUSB']:
+            ports.extend(glob.glob('/dev/%s*' % name))
+
+        ports = sorted(ports)
+
+        if ports:
+            # Found something - take it
+            conf['port'] = ports[0]
 
     cmd = CommandInterface()
     cmd.open(conf['port'], conf['baud'])

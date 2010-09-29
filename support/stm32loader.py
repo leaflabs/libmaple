@@ -59,23 +59,24 @@ class CommandInterface:
 
 
     def _wait_for_ask(self, info = ""):
-        # wait for ask
-        try:
-            ask = ord(self.sp.read())
-        except:
-            raise CmdException("Can't read port or timeout")
-        else:
-            if ask == 0x79:
-                # ACK
-                return 1
-            else:
-                if ask == 0x1F:
-                    # NACK
-                    raise CmdException("NACK "+info)
-                else:
-                    # Unknow responce
-                    raise CmdException("Unknow response. "+info+": "+hex(ask))
+        got = self.sp.read(1)
 
+        if not got:
+            raise CmdException("No response")
+
+        # wait for ask
+        ask = ord(got)
+
+        if ask == 0x79:
+            # ACK
+            return 1
+        else:
+            if ask == 0x1F:
+                # NACK
+                raise CmdException("NACK "+info)
+            else:
+                # Unknow responce
+                raise CmdException("Unknow response. "+info+": "+hex(ask))
 
     def reset(self):
         self.sp.setDTR(0)
@@ -407,7 +408,7 @@ if __name__ == "__main__":
     try:
         try:
             cmd.initChip()
-        except:
+        except CmdException:
             print "Can't init. Ensure that BOOT0 is enabled and reset device"
 
         bootversion = cmd.cmdGet()

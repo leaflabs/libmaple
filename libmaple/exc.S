@@ -1,4 +1,4 @@
-/******************************************************************************
+/* *****************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,39 +20,42 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- *****************************************************************************/
+ * ****************************************************************************/
 
-/**
- * @brief HardwareSPI definitions
- */
+# On an exception, push a fake stack thread mode stack frame and redirect
+# thread execution to a thread mode error handler
 
-#ifndef _HARDWARESPI_H_
-#define _HARDWARESPI_H_
+# From RM008:
+# The SP is decremented by eight words by the completion of the stack push.
+# Figure 5-1 shows the contents of the stack after an exception pre-empts the
+# current program flow.
+#
+# Old SP--> <previous>
+#           xPSR
+#           PC
+#           LR
+#           r12
+#           r3
+#           r2
+#           r1
+#    SP-->  r0
 
-typedef enum SPIFrequency {
-    SPI_18MHZ       = 0,
-    SPI_9MHZ        = 1,
-    SPI_4_5MHZ      = 2,
-    SPI_2_25MHZ     = 3,
-    SPI_1_125MHZ    = 4,
-    SPI_562_500KHZ  = 5,
-    SPI_281_250KHZ  = 6,
-    SPI_140_625KHZ  = 7,
-    MAX_SPI_FREQS   = 8,
-} SPIFrequency;
+.text
+.globl HardFaultException
+.thumb_func
+HardFaultException:
+   ldr r0, CPSR_MASK           @ Set default CPSR
+   push {r0}
+   ldr r0, TARGET_PC           @ Set target pc
+   push {r0}
+   sub sp, sp, #24             @ its not like i even care
+   ldr r0, EXC_RETURN          @ Return to thread mode
+   mov lr, r0
+   bx lr                       @ Exception exit
 
-class HardwareSPI {
- private:
-    uint32 spi_num;
+ .align 4
+ CPSR_MASK:  .word 0x61000000
+ EXC_RETURN: .word 0xFFFFFFF9
+ TARGET_PC:  .word throb
 
- public:
-    HardwareSPI(uint32 spi_num);
-    void begin(void);
-    void begin(SPIFrequency freq, uint32 endianness, uint32 mode);
-    uint8 send(uint8 data);
-    uint8 send(uint8 *data, uint32 length);
-    uint8 recv(void);
-};
-
-#endif
 

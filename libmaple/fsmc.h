@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Bryan Newbold.
@@ -20,9 +20,9 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
-/* 
+/*
  * See ../notes/fsmc.txt for more info
  */
 
@@ -42,10 +42,10 @@ extern "C"{
 #define FSMC4_BASE  0xA0000018
 
 typedef struct {
-   volatile uint32 BCR;
-   volatile uint32 BTR;
-   //uint32 pad[62];      // double check this?
-   //__io uint32 BWTR;
+    volatile uint32 BCR;
+    volatile uint32 BTR;
+    //uint32 pad[62];      // double check this?
+    //__io uint32 BWTR;
 } FSMC_Bank;
 
 // And here are the register bit ranges

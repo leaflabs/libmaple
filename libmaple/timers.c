@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,63 +20,64 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file timers.c
+ * @file timers.c
  *
- *  @brief General timer routines
+ * @brief General timer routines
  */
 
-// TODO: actually support timer5 and timer8
+/* TODO: actually support timer5 and timer8 */
 
 #include "libmaple.h"
 #include "rcc.h"
 #include "nvic.h"
 #include "timers.h"
 
-// Timer descriptor table
+/* Timer descriptor table */
 struct timer_dev timer_dev_table[] = {
-   [TIMER1] = {
-      .base = (timer_port*)TIMER1_BASE,
-      .rcc_dev_num = RCC_TIMER1,
-      .nvic_dev_num = NVIC_TIMER1
-   },
-   [TIMER2] = {
-      .base = (timer_port*)TIMER2_BASE,
-      .rcc_dev_num = RCC_TIMER2,
-      .nvic_dev_num = NVIC_TIMER2
-   },
-   [TIMER3] = {
-      .base = (timer_port*)TIMER3_BASE,
-      .rcc_dev_num = RCC_TIMER3,
-      .nvic_dev_num = NVIC_TIMER3
-   },
-   [TIMER4] = {
-      .base = (timer_port*)TIMER4_BASE,
-      .rcc_dev_num = RCC_TIMER4,
-      .nvic_dev_num = NVIC_TIMER4
-   },
-   #if NR_TIMERS >= 8
-   // High density devices only (eg, Maple Native)
-   [TIMER5] = {
-      .base = (timer_port*)TIMER5_BASE,
-      .rcc_dev_num = RCC_TIMER5,
-      .nvic_dev_num = NVIC_TIMER5
-   },
-   [TIMER8] = {
-      .base = (timer_port*)TIMER8_BASE,
-      .rcc_dev_num = RCC_TIMER8,
-      .nvic_dev_num = NVIC_TIMER8
-   },
-   #endif 
+    [TIMER1] = {
+        .base = (timer_port*)TIMER1_BASE,
+        .rcc_dev_num = RCC_TIMER1,
+        .nvic_dev_num = NVIC_TIMER1
+    },
+    [TIMER2] = {
+        .base = (timer_port*)TIMER2_BASE,
+        .rcc_dev_num = RCC_TIMER2,
+        .nvic_dev_num = NVIC_TIMER2
+    },
+    [TIMER3] = {
+        .base = (timer_port*)TIMER3_BASE,
+        .rcc_dev_num = RCC_TIMER3,
+        .nvic_dev_num = NVIC_TIMER3
+    },
+    [TIMER4] = {
+        .base = (timer_port*)TIMER4_BASE,
+        .rcc_dev_num = RCC_TIMER4,
+        .nvic_dev_num = NVIC_TIMER4
+    },
+#if NR_TIMERS >= 8
+    /* High density devices only (eg, Maple Native) */
+    [TIMER5] = {
+        .base = (timer_port*)TIMER5_BASE,
+        .rcc_dev_num = RCC_TIMER5,
+        .nvic_dev_num = NVIC_TIMER5
+    },
+    [TIMER8] = {
+        .base = (timer_port*)TIMER8_BASE,
+        .rcc_dev_num = RCC_TIMER8,
+        .nvic_dev_num = NVIC_TIMER8
+    },
+#endif
 };
 
-// This function should probably be rewriten to take (timer_num, mode) and have
-// prescaler set elsewhere. The mode can be passed through to set_mode at the 
-// end
+/* This function should probably be rewriten to take (timer_num, mode)
+ * and have prescaler set elsewhere. The mode can be passed through to
+ * set_mode at the end */
 void timer_init(uint8 timer_num, uint16 prescale) {
-    ASSERT((timer_num != TIMER6) && (timer_num != TIMER7));     // TODO: doesn't catch 6+7
+    /* TODO: doesn't catch 6+7 */
+    ASSERT((timer_num != TIMER6) && (timer_num != TIMER7));
 
     timer_port *timer = timer_dev_table[timer_num].base;
     uint8 is_advanced = 0;
@@ -129,124 +130,128 @@ void timer_init(uint8 timer_num, uint16 prescale) {
     timer->CR1  |= 1;         // Enable timer
 }
 
-// Stops the counter; the mode and settings are not modified
-void timer_pause(uint8 timer_num) { 
+/* Stops the counter; the mode and settings are not modified */
+void timer_pause(uint8 timer_num) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     timer->CR1 &= ~(0x0001);    // CEN
 }
 
-// Starts the counter; the mode and settings are not modified
-void timer_resume(uint8 timer_num) { 
+/* Starts the counter; the mode and settings are not modified */
+void timer_resume(uint8 timer_num) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     timer->CR1 |= 0x0001;       // CEN
 }
 
-// This function sets the counter value via register for the specified timer.
-// Can't think of specific usecases except for resetting to zero but it's easy
-// to implement and allows for "creative" programming
-void timer_set_count(uint8 timer_num, uint16 value) { 
+/* This function sets the counter value via register for the specified
+ * timer.  Can't think of specific usecases except for resetting to
+ * zero but it's easy to implement and allows for "creative"
+ * programming */
+void timer_set_count(uint8 timer_num, uint16 value) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     timer->CNT = value;
 }
 
-// Returns the current timer counter value. Probably very inaccurate if the
-// counter is running with a low prescaler.
+/* Returns the current timer counter value. Probably very inaccurate
+ * if the counter is running with a low prescaler. */
 uint16 timer_get_count(uint8 timer_num) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     return timer->CNT;
 }
 
-// Does what it says
+/* Sets the prescaler */
 void timer_set_prescaler(uint8 timer_num, uint16 prescale) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     timer->PSC = prescale;
 }
 
-// This sets the "reload" or "overflow" value for the entire timer. We should
-// probably settle on either "reload" or "overflow" to prevent confusion?
+/* This sets the "reload" or "overflow" value for the entire timer. We
+ * should probably settle on either "reload" or "overflow" to prevent
+ * confusion? */
 void timer_set_reload(uint8 timer_num, uint16 max_reload) {
     timer_port *timer = timer_dev_table[timer_num].base;
 
     timer->ARR = max_reload;
 }
 
-// This quickly disables all 4 timers, presumably as part of a system shutdown
-// or similar to prevent interrupts and PWM output without 16 seperate function
-// calls to timer_set_mode
+/* This quickly disables all 4 timers, presumably as part of a system shutdown
+ * or similar to prevent interrupts and PWM output without 16 seperate function
+ * calls to timer_set_mode */
 void timer_disable_all(void) {
     // TODO: refactor
-    // Note: this must be very robust because it gets called from, eg, ASSERT
-    timer_port *timer;  
-    #if NR_TIMERS >= 8
+
+    /* Note: this must be very robust because it gets called from,
+       e.g., ASSERT */
+    timer_port *timer;
+#if NR_TIMERS >= 8
     timer_port *timers[6] = { (timer_port*)TIMER1_BASE,
-                         (timer_port*)TIMER2_BASE,  
-                         (timer_port*)TIMER3_BASE,  
-                         (timer_port*)TIMER4_BASE,  
-                         (timer_port*)TIMER5_BASE,  
-                         (timer_port*)TIMER8_BASE,  
-                       };  
+                              (timer_port*)TIMER2_BASE,
+                              (timer_port*)TIMER3_BASE,
+                              (timer_port*)TIMER4_BASE,
+                              (timer_port*)TIMER5_BASE,
+                              (timer_port*)TIMER8_BASE,
+    };
     uint8 i;
-    for (i = 0; i < 6; i++) {  
-        timer = timers[i];  
-        timer->CR1 = 0;  
-        timer->CCER = 0;  
+    for (i = 0; i < 6; i++) {
+        timer = timers[i];
+        timer->CR1 = 0;
+        timer->CCER = 0;
     }
-    #else
+#else
     timer_port *timers[4] = { (timer_port*)TIMER1_BASE,
-                         (timer_port*)TIMER2_BASE,  
-                         (timer_port*)TIMER3_BASE,  
-                         (timer_port*)TIMER4_BASE,  
-                       };  
+                              (timer_port*)TIMER2_BASE,
+                              (timer_port*)TIMER3_BASE,
+                              (timer_port*)TIMER4_BASE,
+    };
     uint8 i;
-    for (i = 0; i < 4; i++) {  
-        timer = timers[i];  
-        timer->CR1 = 0;  
-        timer->CCER = 0;  
+    for (i = 0; i < 4; i++) {
+        timer = timers[i];
+        timer->CR1 = 0;
+        timer->CCER = 0;
     }
-    #endif
+#endif
 }
 
-// Sets the mode of individual timer channels, including a DISABLE mode
+/* Sets the mode of individual timer channels, including a DISABLE mode */
 void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
     timer_port *timer = timer_dev_table[timer_num].base;
     ASSERT(channel >= 1);
 
     switch(mode) {
     case TIMER_DISABLED:
-        // Disable the channel
-        // Disable any interrupt
-        // Clear interrupt SR? (TODO)
+        /* Disable the channel
+         * Disable any interrupt
+         * Clear interrupt SR? (TODO) */
         timer->DIER &= ~(1 << channel); // 1-indexed compare nums
         timer_detach_interrupt(timer_num, channel);
-        timer->CCER &= ~(1 << (4*(channel - 1))); // 0-indexed 
+        timer->CCER &= ~(1 << (4*(channel - 1))); // 0-indexed
         break;
     case TIMER_PWM:
-        // Set CCMR mode
-        // Keep existing reload value
-        // Disable any interrupt
-        // Clear interrupt SR? (TODO)
-        // Enable channel
+        /* Set CCMR mode
+         * Keep existing reload value
+         * Disable any interrupt
+         * Clear interrupt SR? (TODO)
+         * Enable channel */
         timer->DIER &= ~(1 << channel); // 1-indexed compare nums
         switch (channel) {
         case 1:
-            timer->CCMR1 &= ~(0xFF);    
+            timer->CCMR1 &= ~(0xFF);
             timer->CCMR1 |= 0x68;       // PWM mode 1, enable preload register.
             break;
         case 2:
-            timer->CCMR1 &= ~(0xFF00);    
+            timer->CCMR1 &= ~(0xFF00);
             timer->CCMR1 |= (0x68 << 8);// PWM mode 1, enable preload register.
             break;
         case 3:
-            timer->CCMR2 &= ~(0xFF);    
+            timer->CCMR2 &= ~(0xFF);
             timer->CCMR2 |= 0x68;       // PWM mode 1, enable preload register.
             break;
         case 4:
-            timer->CCMR2 &= ~(0xFF00);    
+            timer->CCMR2 &= ~(0xFF00);
             timer->CCMR2 |= (0x68 << 8);// PWM mode 1, enable preload register.
             break;
         default:
@@ -255,27 +260,27 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
         timer->CCER |= (1 << (4*(channel - 1))); // Enable
         break;
     case TIMER_OUTPUTCOMPARE:
-        // Set CCMR mode
-        // Keep existing reload value
-        // Don't modify interrupt (needs to be attached to enable)
-        // Clear interrupt SR? (TODO)
-        // Enable channel
+        /* Set CCMR mode
+         * Keep existing reload value
+         * Don't modify interrupt (needs to be attached to enable)
+         * Clear interrupt SR? (TODO)
+         * Enable channel */
         switch (channel) {
         case 1:
-            timer->CCMR1 &= ~(0xFF);    
-            timer->CCMR1 |= 0x0010;       // PWM mode 1, enable preload register.
+            timer->CCMR1 &= ~(0xFF);
+            timer->CCMR1 |= 0x0010; // PWM mode 1, enable preload register.
             break;
         case 2:
-            timer->CCMR1 &= ~(0xFF00);    
-            timer->CCMR1 |= 0x1000;       // PWM mode 1, enable preload register.
+            timer->CCMR1 &= ~(0xFF00);
+            timer->CCMR1 |= 0x1000; // PWM mode 1, enable preload register.
             break;
         case 3:
-            timer->CCMR2 &= ~(0xFF);    
-            timer->CCMR2 |= 0x0010;       // PWM mode 1, enable preload register.
+            timer->CCMR2 &= ~(0xFF);
+            timer->CCMR2 |= 0x0010; // PWM mode 1, enable preload register.
             break;
         case 4:
-            timer->CCMR2 &= ~(0xFF00);    
-            timer->CCMR2 |= 0x1000;       // PWM mode 1, enable preload register.
+            timer->CCMR2 &= ~(0xFF00);
+            timer->CCMR2 |= 0x1000; // PWM mode 1, enable preload register.
             break;
         default:
             ASSERT(0);
@@ -287,12 +292,15 @@ void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
     }
 }
 
-// This sets the compare value (aka the trigger) for a given timer channel
-void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value) {
-    // The faster version of this function is the inline timer_pwm_write_ccr
-    //
+/* This sets the compare value (aka the trigger) for a given timer
+ * channel */
+void timer_set_compare_value(uint8 timer_num,
+                             uint8 compare_num,
+                             uint16 value) {
+    /* The faster version of this function is the inline
+       timer_pwm_write_ccr */
     timer_port *timer = timer_dev_table[timer_num].base;
-    
+
     ASSERT(compare_num > 0 && compare_num <= 4);
 
     switch(compare_num) {
@@ -311,9 +319,11 @@ void timer_set_compare_value(uint8 timer_num, uint8 compare_num, uint16 value) {
     }
 }
 
-// Stores a pointer to the passed usercode interrupt function and configures
-// the actual ISR so that it will actually be called
-void timer_attach_interrupt(uint8 timer_num, uint8 compare_num, voidFuncPtr handler) {
+/* Stores a pointer to the passed usercode interrupt function and configures
+ * the actual ISR so that it will actually be called */
+void timer_attach_interrupt(uint8 timer_num,
+                            uint8 compare_num,
+                            voidFuncPtr handler) {
     ASSERT(compare_num > 0 && compare_num <= 4);
 
     timer_port *timer = timer_dev_table[timer_num].base;
@@ -332,21 +342,21 @@ void timer_detach_interrupt(uint8 timer_num, uint8 compare_num) {
     timer->DIER &= ~(1 << compare_num); // 1-indexed compare nums
 }
 
-// The following are the actual interrupt handlers; 1 for each timer which must
-// determine which actual compare value (aka channel) was triggered.
-//
-// These ISRs get called when the timer interrupt is enabled, the timer is running, and
-// the timer count equals any of the CCR registers /or/ has overflowed.
-//
-// This is a rather long implementation...
+/* The following are the actual interrupt handlers; 1 for each timer which must
+ * determine which actual compare value (aka channel) was triggered.
+ *
+ * These ISRs get called when the timer interrupt is enabled, the
+ * timer is running, and the timer count equals any of the CCR
+ * registers /or/ has overflowed.
+ *
+ * This is a rather long implementation... */
 void TIM1_CC_IRQHandler(void) {
     timer_port *timer = (timer_port*)TIMER1_BASE;
-    uint16 sr_buffer; 
+    uint16 sr_buffer;
     sr_buffer = timer->SR;
 
-
-    // Simply switch/case-ing here doesn't work because multiple 
-    // CC flags may be high. 
+    /* Simply switch/case-ing here doesn't work because multiple
+     * CC flags may be high. */
     if(sr_buffer & 0x10){ // CC4 flag
         timer->SR &= ~(0x10);
         if(timer_dev_table[TIMER1].handlers[3]) {
@@ -377,9 +387,9 @@ void TIM1_CC_IRQHandler(void) {
     }
 }
 void TIM2_IRQHandler(void) {
-    // This is a rather long implementation...
+    /* This is a rather long implementation... */
     timer_port *timer = (timer_port*)TIMER2_BASE;
-    uint16 sr_buffer; 
+    uint16 sr_buffer;
     sr_buffer = timer->SR;
 
     if(sr_buffer & 0x10){ // CC4 flag
@@ -412,9 +422,9 @@ void TIM2_IRQHandler(void) {
     }
 }
 void TIM3_IRQHandler(void) {
-    // This is a rather long implementation...
+    /* This is a rather long implementation... */
     timer_port *timer = (timer_port*)TIMER3_BASE;
-    uint16 sr_buffer; 
+    uint16 sr_buffer;
     sr_buffer = timer->SR;
 
     if(sr_buffer & 0x10){ // CC4 flag
@@ -448,9 +458,9 @@ void TIM3_IRQHandler(void) {
 }
 
 void TIM4_IRQHandler(void) {
-    // This is a rather long implementation...
+    /* This is a rather long implementation... */
     timer_port*timer = (timer_port*)TIMER4_BASE;
-    uint16 sr_buffer; 
+    uint16 sr_buffer;
     sr_buffer = timer->SR;
 
     if(sr_buffer & 0x10){ // CC4 flag
@@ -482,4 +492,3 @@ void TIM4_IRQHandler(void) {
         //timer->EGR  = 1;
     }
 }
-

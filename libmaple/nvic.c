@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file nvic.c
+ * @file nvic.c
  *
- *  @brief Nested interrupt controller routines
+ * @brief Nested interrupt controller routines
  */
 
 #include "libmaple.h"
@@ -33,36 +33,25 @@
 #include "systick.h"
 
 void nvic_set_vector_table(uint32 addr, uint32 offset) {
-   __write(SCB_VTOR, (uint32)addr | (offset & 0x1FFFFF80));
+    __write(SCB_VTOR, (uint32)addr | (offset & 0x1FFFFF80));
 }
 
-
 /**
- *  @brief turn on interrupt number n
- *  @param n interrupt number
+ * @brief turn on interrupt number n
+ * @param n interrupt number
  */
 void nvic_irq_enable(uint32 n) {
-    if (n < 32) {
-        REG_SET_BIT(NVIC_ISER0, n);
-    } else if(n < 64) {
-        REG_SET_BIT(NVIC_ISER1, n - 32);
-    } else {
-        REG_SET_BIT(NVIC_ISER2, n - 64);
-    }
+    uint32 *iser = &((uint32*)NVIC_ISER0)[(n/32)];
+    __write(iser, BIT(n % 32));
 }
 
 /**
- *  @brief turn off interrupt number n
- *  @param n interrupt number
+ * @brief turn off interrupt number n
+ * @param n interrupt number
  */
 void nvic_irq_disable(uint32 n) {
-    if (n < 32) {
-        REG_SET_BIT(NVIC_ICER0, n);
-    } else if(n < 64) {
-        REG_SET_BIT(NVIC_ICER1, n - 32);
-    } else {
-        REG_SET_BIT(NVIC_ICER2, n - 64);
-    }
+    uint32 *icer = &((uint32*)NVIC_ICER0)[(n/32)];
+    __write(icer, BIT(n % 32));
 }
 
 void nvic_irq_disable_all(void) {
@@ -78,11 +67,11 @@ void nvic_irq_disable_all(void) {
  */
 void nvic_init(void) {
 #ifdef VECT_TAB_FLASH
-   nvic_set_vector_table(USER_ADDR_ROM, 0x0);
+    nvic_set_vector_table(USER_ADDR_ROM, 0x0);
 #elif defined VECT_TAB_RAM
-   nvic_set_vector_table(USER_ADDR_RAM, 0x0);
+    nvic_set_vector_table(USER_ADDR_RAM, 0x0);
 #elif defined VECT_TAB_BASE
-   nvic_set_vector_table(((uint32)0x08000000), 0x0);
+    nvic_set_vector_table(((uint32)0x08000000), 0x0);
 #else
 #error "You must set a base address for the vector table!"
 #endif

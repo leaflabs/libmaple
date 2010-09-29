@@ -3,6 +3,7 @@
 import serial
 import os
 import sys
+import time
 from struct import pack
 
 def get_maple_device_path(file_prefix):
@@ -68,14 +69,20 @@ try:
 
     # try to toggle DTR/RTS (old scheme)
     ser.setRTS(0)
+    time.sleep(0.01)
     ser.setDTR(0)
+    time.sleep(0.01)
     ser.setDTR(1)
+    time.sleep(0.01)
     ser.setDTR(0)
 
     # try magic number
     ser.setRTS(1)
+    time.sleep(0.01)
     ser.setDTR(1)
+    time.sleep(0.01)
     ser.setDTR(0)
+    time.sleep(0.01)
     ser.write("1EAF")
 
     # ok we're done here

@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file systick.c
+ * @file systick.c
  *
- *  @brief System timer interrupt handler and initialization routines
+ * @brief System timer interrupt handler and initialization routines
  */
 
 #include "libmaple.h"
@@ -45,24 +45,24 @@ void systick_init(uint32 reload_val) {
     /* Set the reload counter to tick every 1ms  */
     __write(SYSTICK_RELOAD, reload_val);
 
-    /* Clock the system timer with the core clock
-     * and turn it on, interrrupt every 1ms to keep track of millis()*/
+    /* Clock the system timer with the core clock and turn it on,
+     * interrrupt every 1ms to keep track of millis() */
     __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
-                         SYSTICK_ENABLE   |
-                         SYSTICK_TICKINT);
+            SYSTICK_ENABLE                |
+            SYSTICK_TICKINT);
 }
 
 void systick_disable() {
-  /* clock the system timer with the core clock, but don't turn it on
-     or enable interrupt. */
-  __write(SYSTICK_CSR, SYSTICK_SRC_HCLK);
+    /* clock the system timer with the core clock, but don't turn it
+       on or enable interrupt. */
+    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK);
 }
 
 void systick_resume() {
-  /* re-enable init registers without changing relead_val */
-  __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
-                       SYSTICK_ENABLE   |
-                       SYSTICK_TICKINT);
+    /* re-enable init registers without changing relead_val */
+    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
+            SYSTICK_ENABLE                |
+            SYSTICK_TICKINT);
 }
 
 void SysTickHandler(void) {

@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,10 +20,10 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief 
+ *  @brief Arduino-compatible digital I/O implementation.
  */
 
 #include "wirish.h"
@@ -32,8 +32,9 @@
 void pinMode(uint8 pin, WiringPinMode mode) {
     uint8 outputMode;
 
-    if (pin >= NR_GPIO_PINS)
+    if (pin >= NR_GPIO_PINS) {
         return;
+    }
 
     switch(mode) {
     case OUTPUT:
@@ -58,6 +59,9 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     case PWM:
         outputMode = GPIO_MODE_AF_OUTPUT_PP;
         break;
+    case PWM_OPEN_DRAIN:
+        outputMode = GPIO_MODE_AF_OUTPUT_OD;
+        break;
     default:
         ASSERT(0);
         return;
@@ -68,14 +72,17 @@ void pinMode(uint8 pin, WiringPinMode mode) {
 
 
 uint32 digitalRead(uint8 pin) {
-    if (pin >= NR_GPIO_PINS)
+    if (pin >= NR_GPIO_PINS) {
         return 0;
+    }
+
     return gpio_read_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin);
 }
 
 void digitalWrite(uint8 pin, uint8 val) {
-    if (pin >= NR_GPIO_PINS)
+    if (pin >= NR_GPIO_PINS) {
         return;
+    }
 
     gpio_write_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin, val);
 }

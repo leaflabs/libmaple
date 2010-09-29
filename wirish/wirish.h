@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,13 +20,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
+
 /**
  * @brief Main include file for the Wirish core.
  *
  * Includes various Arduino wiring macros and bit defines
  */
-
 
 #ifndef _WIRISH_H_
 #define _WIRISH_H_
@@ -62,14 +62,14 @@ extern "C"{
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define lowByte(w)                       ((w) & 0xff)
-#define highByte(w)                      ((w) >> 8)
-#define bitRead(value, bit)              (((value) >> (bit)) & 0x01)
-#define bitSet(value, bit)               ((value) |= (1UL << (bit)))
-#define bitClear(value, bit)             ((value) &= ~(1UL << (bit)))
-#define bitWrite(value, bit, bitvalue)   (bitvalue ? bitSet(value, bit) :      \
-                                                     bitClear(value, bit))
-#define bit(b)                           (1UL << (b))
+#define lowByte(w)                     ((w) & 0xff)
+#define highByte(w)                    ((w) >> 8)
+#define bitRead(value, bit)            (((value) >> (bit)) & 0x01)
+#define bitSet(value, bit)             ((value) |= (1UL << (bit)))
+#define bitClear(value, bit)           ((value) &= ~(1UL << (bit)))
+#define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : \
+                                                   bitClear(value, bit))
+#define bit(b)                         (1UL << (b))
 
 typedef uint8 boolean;
 typedef uint8 byte;

@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file HardwareSerial.h
+ * @file HardwareSerial.h
  *
- *  @brief 
+ * @brief Wirish interface to hardware serial communications.
  */
 
 #ifndef _HARDWARESERIAL_H_
@@ -34,29 +34,29 @@
 #include "Print.h"
 
 class HardwareSerial : public Print {
-    private:
-        uint8 usart_num;
-        uint32 max_baud;
-        GPIO_Port *gpio_port;
-        uint8 tx_pin;
-        uint8 rx_pin;
-        uint8 timer_num;
-        uint8 compare_num;
-    public:
-        HardwareSerial(uint8 usart_num,
-                       uint32 max_baud,
-                       GPIO_Port *gpio_port,
-                       uint8 tx_pin,
-                       uint8 rx_pin,
-                       uint8 timer_num,
-                       uint8 compare_num);
-        void begin(uint32);
-        void end(void);
-        uint32 available(void);
-        uint8 read(void);
-        void flush(void);
-        virtual void write(unsigned char);
-        using Print::write;
+ private:
+    uint8 usart_num;
+    uint32 max_baud;
+    GPIO_Port *gpio_port;
+    uint8 tx_pin;
+    uint8 rx_pin;
+    uint8 timer_num;
+    uint8 compare_num;
+ public:
+    HardwareSerial(uint8 usart_num,
+                   uint32 max_baud,
+                   GPIO_Port *gpio_port,
+                   uint8 tx_pin,
+                   uint8 rx_pin,
+                   uint8 timer_num,
+                   uint8 compare_num);
+    void begin(uint32);
+    void end(void);
+    uint32 available(void);
+    uint8 read(void);
+    void flush(void);
+    virtual void write(unsigned char);
+    using Print::write;
 };
 extern HardwareSerial Serial1;
 extern HardwareSerial Serial2;

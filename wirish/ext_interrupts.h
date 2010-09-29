@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file ext_interrupts.h
@@ -37,19 +37,12 @@ enum {
     CHANGE
 };
 
-
-enum {
-    EXT_INTERRUPT_INVALID_PIN =      (-1),
-    EXT_INTERRUPT_INVALID_FUNCTION = (-2),
-    EXT_INTERRUPT_INVALID_MODE =     (-3),
-};
-
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-int attachInterrupt(uint8 pin, voidFuncPtr, uint32 mode);
-int detachInterrupt(uint8 pin);
+void attachInterrupt(uint8 pin, voidFuncPtr, uint32 mode);
+void detachInterrupt(uint8 pin);
 
 #ifdef __cplusplus
 }

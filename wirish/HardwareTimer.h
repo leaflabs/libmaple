@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Bryan Newbold.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @brief wirish timer class to manage the four 16-bit timer peripherals
@@ -30,38 +30,38 @@
 #define _TIMER_H_
 
 class HardwareTimer {
-    private:
-        uint16 overflow;
-        uint8 timerNum;
+ private:
+    uint16 overflow;
+    uint8 timerNum;
 
-    public:
-        HardwareTimer(uint8 timer_num);
+ public:
+    HardwareTimer(uint8 timer_num);
 
-        void pause(void);
-        void resume(void);
-        void setPrescaleFactor(uint16 factor);
-        void setOverflow(uint16 val); // truncates to overflow
-        void setCount(uint16 val);    // truncates to overflow
-        uint16 getCount(void);
+    void pause(void);
+    void resume(void);
+    void setPrescaleFactor(uint16 factor);
+    void setOverflow(uint16 val); // truncates to overflow
+    void setCount(uint16 val);    // truncates to overflow
+    uint16 getCount(void);
 
-        // tries to set prescaler and overflow wisely; returns overflow
-        uint16 setPeriod(uint32 microseconds); 
-        void setChannel1Mode(uint8 mode);
-        void setChannel2Mode(uint8 mode);
-        void setChannel3Mode(uint8 mode);
-        void setChannel4Mode(uint8 mode);
-        void setCompare1(uint16 val); // truncates to overflow
-        void setCompare2(uint16 val); // truncates to overflow
-        void setCompare3(uint16 val); // truncates to overflow
-        void setCompare4(uint16 val); // truncates to overflow
-        void attachCompare1Interrupt(voidFuncPtr handler);
-        void attachCompare2Interrupt(voidFuncPtr handler);
-        void attachCompare3Interrupt(voidFuncPtr handler);
-        void attachCompare4Interrupt(voidFuncPtr handler);
-        void detachCompare1Interrupt(void);
-        void detachCompare2Interrupt(void);
-        void detachCompare3Interrupt(void);
-        void detachCompare4Interrupt(void);
+    // tries to set prescaler and overflow wisely; returns overflow
+    uint16 setPeriod(uint32 microseconds);
+    void setChannel1Mode(uint8 mode);
+    void setChannel2Mode(uint8 mode);
+    void setChannel3Mode(uint8 mode);
+    void setChannel4Mode(uint8 mode);
+    void setCompare1(uint16 val); // truncates to overflow
+    void setCompare2(uint16 val); // truncates to overflow
+    void setCompare3(uint16 val); // truncates to overflow
+    void setCompare4(uint16 val); // truncates to overflow
+    void attachCompare1Interrupt(voidFuncPtr handler);
+    void attachCompare2Interrupt(voidFuncPtr handler);
+    void attachCompare3Interrupt(voidFuncPtr handler);
+    void attachCompare4Interrupt(voidFuncPtr handler);
+    void detachCompare1Interrupt(void);
+    void detachCompare2Interrupt(void);
+    void detachCompare3Interrupt(void);
+    void detachCompare4Interrupt(void);
 };
 
 extern HardwareTimer Timer1;

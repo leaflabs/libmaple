@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,23 +20,44 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
-
+ *****************************************************************************/
 
 /**
- *  @file exti.c
+ * @file exti.c
  *
- *  @brief External interrupt control routines
+ * @brief External interrupt control routines
  */
 
 #include "libmaple.h"
 #include "exti.h"
 #include "nvic.h"
 
-volatile static voidFuncPtr exti_handlers[NR_EXTI_CHANNELS];
+typedef struct ExtIChannel {
+    void (*handler)(void);
+    uint32 irq_line;
+} ExtIChannel;
+
+static ExtIChannel exti_channels[] = {
+    { .handler = NULL, .irq_line = NVIC_EXTI0     },  // EXTI0
+    { .handler = NULL, .irq_line = NVIC_EXTI1     },  // EXTI1
+    { .handler = NULL, .irq_line = NVIC_EXTI2     },  // EXTI2
+    { .handler = NULL, .irq_line = NVIC_EXTI3     },  // EXTI3
+    { .handler = NULL, .irq_line = NVIC_EXTI4     },  // EXTI4
+    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI5
+    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI6
+    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI7
+    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI8
+    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI9
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI10
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI11
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI12
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI13
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI14
+    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI15
+};
 
 static inline void clear_pending(int bit) {
-    REG_SET(EXTI_PR, BIT(bit));
+    __set_bits(EXTI_PR, BIT(bit));
     /* If the pending bit is cleared as the last instruction in an ISR,
      * it won't actually be cleared in time and the ISR will fire again.
      * Insert a 2-cycle buffer to allow it to take effect. */
@@ -44,61 +65,39 @@ static inline void clear_pending(int bit) {
     asm volatile("nop");
 }
 
+static inline void dispatch_handler(uint32 channel) {
+    ASSERT(exti_channels[channel].handler);
+    if (exti_channels[channel].handler) {
+        (exti_channels[channel].handler)();
+    }
+}
+
 /* For EXTI0 through EXTI4, only one handler
  * is associated with each channel, so we
  * don't have to keep track of which channel
  * we came from */
 void EXTI0_IRQHandler(void) {
-    ASSERT(exti_handlers[EXTI0]);
-    if (exti_handlers[EXTI0]) {
-        exti_handlers[EXTI0]();
-    }
-
-    /* Clear pending bit*/
+    dispatch_handler(EXTI0);
     clear_pending(EXTI0);
 }
 
 void EXTI1_IRQHandler(void) {
-    ASSERT(exti_handlers[EXTI1]);
-    /* Call registered handler  */
-    if (exti_handlers[EXTI1]) {
-        exti_handlers[EXTI1]();
-    }
-
-    /* Clear pending bit*/
+    dispatch_handler(EXTI1);
     clear_pending(EXTI1);
 }
 
 void EXTI2_IRQHandler(void) {
-    ASSERT(exti_handlers[EXTI2]);
-    /* Call registered handler  */
-    if (exti_handlers[EXTI2]) {
-        exti_handlers[EXTI2]();
-    }
-
-    /* Clear pending bit*/
+    dispatch_handler(EXTI2);
     clear_pending(EXTI2);
 }
 
 void EXTI3_IRQHandler(void) {
-    ASSERT(exti_handlers[EXTI3]);
-    /* Call registered handler  */
-    if (exti_handlers[EXTI3]) {
-        exti_handlers[EXTI3]();
-    }
-
-    /* Clear pending bit*/
+    dispatch_handler(EXTI3);
     clear_pending(EXTI3);
 }
 
 void EXTI4_IRQHandler(void) {
-    ASSERT(exti_handlers[EXTI4]);
-    /* Call registered handler  */
-    if (exti_handlers[EXTI4]) {
-        exti_handlers[EXTI4]();
-    }
-
-    /* Clear pending bit*/
+    dispatch_handler(EXTI4);
     clear_pending(EXTI4);
 }
 
@@ -112,8 +111,7 @@ void EXTI9_5_IRQHandler(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 5; i++) {
         if (pending & 0x1) {
-            ASSERT(exti_handlers[EXTI5 + i]);
-            exti_handlers[EXTI5 + i]();
+            dispatch_handler(EXTI5 + i);
             clear_pending(EXTI5 + i);
         }
         pending >>= 1;
@@ -130,8 +128,7 @@ void EXTI15_10_IRQHandler(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 6; i++) {
         if (pending & 0x1) {
-            ASSERT(exti_handlers[EXTI10 + i]);
-            exti_handlers[EXTI10 + i]();
+            dispatch_handler(EXTI10 + i);
             clear_pending(EXTI10 + i);
         }
         pending >>= 1;
@@ -139,147 +136,73 @@ void EXTI15_10_IRQHandler(void) {
 }
 
 
-void exti_attach_interrupt(uint8 channel, uint8 port, voidFuncPtr handler, uint8 mode) {
-    ASSERT(channel < NR_EXTI_CHANNELS);
-    ASSERT(port < NR_EXTI_PORTS);
-    ASSERT(mode < NR_EXTI_MODES);
+/**
+ * @brief Register a handler to run upon external interrupt
+ * @param port source port of pin (eg EXTI_CONFIG_PORTA)
+ * @param pin pin number on the source port
+ * @param handler function handler to execute
+ * @param mode type of transition to trigger on
+ */
+void exti_attach_interrupt(uint32 port,
+                           uint32 pin,
+                           voidFuncPtr handler,
+                           uint32 mode) {
+    static uint32 afio_regs[] = {
+        AFIO_EXTICR1,         // EXT0-3
+        AFIO_EXTICR2,         // EXT4-7
+        AFIO_EXTICR3,         // EXT8-11
+        AFIO_EXTICR4,         // EXT12-15
+    };
+
+    /* Note: All of the following code assumes that EXTI0 = 0  */
     ASSERT(EXTI0 == 0);
     ASSERT(handler);
 
-    /* Note: All of the following code assumes that EXTI0 = 0  */
+    uint32 channel = pin;
 
-    /* Map port to the correct EXTI channel */
-    switch (channel) {
-    case EXTI0:
-    case EXTI1:
-    case EXTI2:
-    case EXTI3:
-        REG_SET_MASK(AFIO_EXTICR1, BIT_MASK_SHIFT(port, channel*4));
-        break;
-
-    case EXTI4:
-    case EXTI5:
-    case EXTI6:
-    case EXTI7:
-        REG_SET_MASK(AFIO_EXTICR2, BIT_MASK_SHIFT(port, (channel-4)*4));
-        break;
-
-    case EXTI8:
-    case EXTI9:
-    case EXTI10:
-    case EXTI11:
-        REG_SET_MASK(AFIO_EXTICR3, BIT_MASK_SHIFT(port, (channel-8)*4));
-        break;
-
-    case EXTI12:
-    case EXTI13:
-    case EXTI14:
-    case EXTI15:
-        REG_SET_MASK(AFIO_EXTICR4, BIT_MASK_SHIFT(port, (channel-12)*4));
-        break;
-    }
+    /* map port to channel */
+    __write(afio_regs[pin/4], (port << ((pin % 4) * 4)));
 
     /* Unmask appropriate interrupt line  */
-    REG_SET_BIT(EXTI_IMR, channel);
+    __set_bits(EXTI_IMR, BIT(channel));
 
     /* Set trigger mode  */
     switch (mode) {
     case EXTI_RISING:
-        REG_SET_BIT(EXTI_RTSR, channel);
+        __set_bits(EXTI_RTSR, BIT(channel));
         break;
 
     case EXTI_FALLING:
-        REG_SET_BIT(EXTI_FTSR, channel);
+        __set_bits(EXTI_FTSR, BIT(channel));
         break;
 
     case EXTI_RISING_FALLING:
-        REG_SET_BIT(EXTI_RTSR, channel);
-        REG_SET_BIT(EXTI_FTSR, channel);
+        __set_bits(EXTI_RTSR, BIT(channel));
+        __set_bits(EXTI_FTSR, BIT(channel));
         break;
     }
 
     /* Configure the enable interrupt bits for the NVIC  */
-    switch (channel) {
-    case EXTI0:
-    case EXTI1:
-    case EXTI2:
-    case EXTI3:
-    case EXTI4:
-        REG_SET(NVIC_ISER0, BIT(channel + 6));
-        break;
-
-    /* EXTI5-9 map to the same isr */
-    case EXTI5:
-    case EXTI6:
-    case EXTI7:
-    case EXTI8:
-    case EXTI9:
-        REG_SET(NVIC_ISER0, BIT(23));
-        break;
-
-    /* EXTI10-15 map to the same isr */
-    case EXTI10:
-    case EXTI11:
-    case EXTI12:
-    case EXTI13:
-    case EXTI14:
-    case EXTI15:
-        REG_SET(NVIC_ISER1, BIT(8));
-        break;
-    }
+    nvic_irq_enable(exti_channels[channel].irq_line);
 
     /* Register the handler  */
-    exti_handlers[channel] = handler;
+    exti_channels[channel].handler = handler;
 }
 
 
-void exti_detach_interrupt(uint8 channel) {
+/**
+ * @brief Unregister an external interrupt handler
+ * @param channel channel to disable (eg EXTI0)
+ */
+void exti_detach_interrupt(uint32 channel) {
     ASSERT(channel < NR_EXTI_CHANNELS);
     ASSERT(EXTI0 == 0);
-    /* Is this interrupt actually on?  */
-    ASSERT((REG_GET(EXTI_IMR) >> channel) & 0x01);
 
-    /* Clear EXTI_IMR line  */
-    REG_CLEAR_BIT(EXTI_IMR, channel);
+    __clear_bits(EXTI_IMR,  BIT(channel));
+    __clear_bits(EXTI_FTSR, BIT(channel));
+    __clear_bits(EXTI_RTSR, BIT(channel));
 
-    /* Clear triggers  */
-    REG_CLEAR_BIT(EXTI_FTSR, channel);
-    REG_CLEAR_BIT(EXTI_RTSR, channel);
+    nvic_irq_disable(exti_channels[channel].irq_line);
 
-    /* Turn off the associated interrupt */
-    switch (channel) {
-    case EXTI0:
-    case EXTI1:
-    case EXTI2:
-    case EXTI3:
-    case EXTI4:
-        REG_SET(NVIC_ICER0, BIT(channel + 6));
-        break;
-    case EXTI5:
-    case EXTI6:
-    case EXTI7:
-    case EXTI8:
-    case EXTI9:
-        /* Are there any other channels enabled?
-         * If so, don't disable the interrupt handler */
-        if (GET_BITS(REG_GET(EXTI_IMR), 5, 9) == 0) {
-            REG_SET(NVIC_ICER0, BIT(23));
-        }
-        break;
-    case EXTI10:
-    case EXTI11:
-    case EXTI12:
-    case EXTI13:
-    case EXTI14:
-    case EXTI15:
-        /* Are there any other channels enabled?
-         * If so, don't disable the interrupt handler */
-        if (GET_BITS(REG_GET(EXTI_IMR), 10, 15) == 0) {
-            REG_SET(NVIC_ICER1, BIT(8));
-        }
-        break;
-    }
-
-    /* Clear handler function pointer  */
-    exti_handlers[channel] = 0;
+    exti_channels[channel].handler = NULL;
 }

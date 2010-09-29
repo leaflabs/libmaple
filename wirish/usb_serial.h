@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,11 +20,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief wirish usb class for easy goin communication, uses libmaple's
- *  virtual com port implementation
+ * @brief wirish usb class for easy goin communication, uses libmaple's
+ * virtual com port implementation
  */
 
 #ifndef _USB_SERIAL_H_
@@ -33,25 +33,25 @@
 #include "Print.h"
 
 class USBSerial : public Print {
-   public:
-      USBSerial(void);
+public:
+    USBSerial(void);
 
-      void begin(void);
-      void end(void);
+    void begin(void);
+    void end(void);
 
-      uint32 available(void);
+    uint32 available(void);
 
-      uint32 read(void *buf, uint32 len);
-      uint8  read(void);
+    uint32 read(void *buf, uint32 len);
+    uint8  read(void);
 
-      void   write(uint8);
-      void   write(const char *str);
-      void   write(void *, uint32);
+    void write(uint8);
+    void write(const char *str);
+    void write(void *, uint32);
 
-      uint8  getRTS();
-      uint8  getDTR();
-      uint8  isConnected();
-      uint8  pending();
+    uint8 getRTS();
+    uint8 getDTR();
+    uint8 isConnected();
+    uint8 pending();
 };
 
 extern USBSerial SerialUSB;

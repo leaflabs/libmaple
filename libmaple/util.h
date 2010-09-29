@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @file util.h
@@ -34,30 +34,32 @@
 
 #include "libmaple.h"
 
-#define BIT(shift)                     (1 << (shift))
+#define BIT(shift)                     (1UL << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 
 /* Return bits m to n of x  */
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
 /* Bit-banding macros  */
-#define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE + (a-BITBAND_SRAM_REF)*32 + (b*4)))  // Convert SRAM address
-#define BITBAND_PERI(a,b) ((BITBAND_PERI_BASE + (a-BITBAND_PERI_REF)*32 + (b*4)))  // Convert PERI address
+/* Convert SRAM address */
+#define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE+(a-BITBAND_SRAM_REF)*32+(b*4)))
+/* Convert PERI address */
+#define BITBAND_PERI(a,b) ((BITBAND_PERI_BASE+(a-BITBAND_PERI_REF)*32+(b*4)))
 
-#define REG_SET(reg, val)               (*(volatile uint32*)(reg)  = (val))
-#define REG_SET_BIT(reg, bit)           (*(volatile uint32*)(reg) |= BIT(bit))
-#define REG_CLEAR_BIT(reg, bit)         (*(volatile uint32*)(reg) &= ~BIT(bit))
-#define REG_SET_MASK(reg, mask)         (*(volatile uint32*)(reg) |= (uint32)(mask))
-#define REG_CLEAR_MASK(reg, mask)       (*(volatile uint32*)(reg) &= (uint32)~(mask))
+#define REG_SET(reg, val)         (*(volatile uint32*)(reg)  = (val))
+#define REG_SET_BIT(reg, bit)     (*(volatile uint32*)(reg) |= BIT(bit))
+#define REG_CLEAR_BIT(reg, bit)   (*(volatile uint32*)(reg) &= ~BIT(bit))
+#define REG_SET_MASK(reg, mask)   (*(volatile uint32*)(reg) |= (uint32)(mask))
+#define REG_CLEAR_MASK(reg, mask) (*(volatile uint32*)(reg) &= (uint32)~(mask))
 
-#define REG_GET(reg)                    *(volatile uint32*)(reg)
+#define REG_GET(reg)              *(volatile uint32*)(reg)
 
-#define __set_bits(addr, mask)          *(volatile uint32*)(addr) |= (uint32)(mask)
-#define __clear_bits(addr, mask)        (*(volatile uint32*)(addr) &= (uint32)~(mask))
-#define __get_bits(addr, mask)          (*(volatile uint32*)(addr) & (uint32)(mask))
+#define __set_bits(addr, mask)    *(volatile uint32*)(addr) |= (uint32)(mask)
+#define __clear_bits(addr, mask) (*(volatile uint32*)(addr) &= (uint32)~(mask))
+#define __get_bits(addr, mask)   (*(volatile uint32*)(addr) & (uint32)(mask))
 
-#define __read(reg)                     *(volatile uint32*)(reg)
-#define __write(reg, value)             *(volatile uint32*)(reg) = (value)
+#define __read(reg)               *(volatile uint32*)(reg)
+#define __write(reg, value)       *(volatile uint32*)(reg) = (value)
 
 #define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
 
@@ -66,35 +68,37 @@ extern "C"{
 #endif
 
 void _fail(const char*, int, const char*);
+void throb(void);
 
 #ifdef __cplusplus
 } // extern "C"
 #endif
 
-
-// Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to compile out
-// these checks 
+/* Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to
+ * compile out these checks */
 
 #define DEBUG_NONE      0
 #define DEBUG_FAULT     1
 #define DEBUG_ALL       2
 
 #if DEBUG_LEVEL >= DEBUG_ALL
-#define ASSERT(exp)         \
-    if (exp)              \
-        {}                  \
-    else                    \
-        _fail(__FILE__, __LINE__, #exp)
+#define ASSERT(exp)                              \
+    if (exp) {                                   \
+    } else {                                     \
+        _fail(__FILE__, __LINE__, #exp);         \
+    }
+
 #else
 #define ASSERT(exp) (void)((0))
 #endif
 
 #if DEBUG_LEVEL >= DEBUG_FAULT
-#define ASSERT_FAULT(exp)         \
-    if (exp)              \
-        {}                  \
-    else                    \
-        _fail(__FILE__, __LINE__, #exp)
+#define ASSERT_FAULT(exp)                       \
+    if (exp) {                                  \
+    } else {                                    \
+        _fail(__FILE__, __LINE__, #exp);        \
+    }
+
 #else
 #define ASSERT_FAULT(exp) (void)((0))
 #endif

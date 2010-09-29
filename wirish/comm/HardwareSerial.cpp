@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,12 +20,12 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @file HardwareSerial.cpp
+ * @file HardwareSerial.cpp
  *
- *  @brief Wiring-like serial api
+ * @brief Wiring-like serial api
  */
 
 #include "wirish.h"
@@ -68,18 +68,18 @@ void HardwareSerial::write(unsigned char ch) {
 }
 
 void HardwareSerial::begin(uint32 baud) {
-   if (baud > max_baud) {
-      return;
-   }
+    if (baud > max_baud) {
+        return;
+    }
 
-   gpio_set_mode(gpio_port, tx_pin, GPIO_MODE_AF_OUTPUT_PP);
-   gpio_set_mode(gpio_port, rx_pin, GPIO_MODE_INPUT_FLOATING);
+    gpio_set_mode(gpio_port, tx_pin, GPIO_MODE_AF_OUTPUT_PP);
+    gpio_set_mode(gpio_port, rx_pin, GPIO_MODE_INPUT_FLOATING);
 
-   if ((usart_num == USART1) ||
-       (usart_num == USART2)) {
-      /* turn off any pwm if there's a conflict on this usart */
-      timer_set_mode(timer_num, compare_num, TIMER_DISABLED);
-   }
+    if ((usart_num == USART1) ||
+        (usart_num == USART2)) {
+        /* turn off any pwm if there's a conflict on this usart */
+        timer_set_mode(timer_num, compare_num, TIMER_DISABLED);
+    }
 
     usart_init(usart_num, baud);
 }

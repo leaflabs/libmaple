@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,7 +20,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
  *  @brief Nested interrupt controller defines and prototypes
@@ -35,8 +35,6 @@ extern "C"{
 
 #define NVIC_INT_USBHP      19
 #define NVIC_INT_USBLP      20
-#define NVIC_EXTI1_OFFSET   (NVIC_ISER0 + 0x07)
-#define NVIC_EXTI9_5_OFFSET (NVIC_ISER0 + 0x17)
 
 /* NVIC Interrupt Enable registers  */
 #define NVIC_ISER0          0xE000E100
@@ -57,24 +55,33 @@ extern "C"{
 #define NVIC_VectTab_FLASH           ((u32)0x08000000)
 
 enum {
-   NVIC_TIMER1  = 27,
-   NVIC_TIMER2  = 28,
-   NVIC_TIMER3  = 29,
-   NVIC_TIMER4  = 30,
-   NVIC_TIMER5  = 50,   // high density only (Maple Native)
-   NVIC_TIMER6  = 54,   // high density only (Maple Native)
-   NVIC_TIMER7  = 55,   // high density only (Maple Native)
-   NVIC_TIMER8  = 46,   // high density only (Maple Native)
-   NVIC_USART1  = 37,
-   NVIC_USART2  = 38,
-   NVIC_USART3  = 39,
-   NVIC_USART4  = 52,   // high density only (Maple Native)
-   NVIC_USART5  = 53,   // high density only (Maple Native)
+    NVIC_TIMER1       = 27,
+    NVIC_TIMER2       = 28,
+    NVIC_TIMER3       = 29,
+    NVIC_TIMER4       = 30,
+    NVIC_TIMER5       = 50,   // high density only (Maple Native)
+    NVIC_TIMER6       = 54,   // high density only (Maple Native)
+    NVIC_TIMER7       = 55,   // high density only (Maple Native)
+    NVIC_TIMER8       = 46,   // high density only (Maple Native)
+
+    NVIC_USART1       = 37,
+    NVIC_USART2       = 38,
+    NVIC_USART3       = 39,
+    NVIC_USART4       = 52,   // high density only (Maple Native)
+    NVIC_USART5       = 53,   // high density only (Maple Native)
+
+    NVIC_EXTI0        = 6,
+    NVIC_EXTI1        = 7,
+    NVIC_EXTI2        = 8,
+    NVIC_EXTI3        = 9,
+    NVIC_EXTI4        = 10,
+    NVIC_EXTI9_5      = 23,
+    NVIC_EXTI15_10    = 40,
 };
 
 
-#define nvic_globalirq_enable()   asm volatile("cpsid i")
-#define nvic_globalirq_disable()  asm volatile("cpsie i")
+#define nvic_globalirq_enable()   asm volatile("cpsie i")
+#define nvic_globalirq_disable()  asm volatile("cpsid i")
 
 void nvic_init(void);
 void nvic_irq_enable(uint32 device);

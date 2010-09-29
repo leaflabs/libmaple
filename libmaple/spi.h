@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
@@ -20,10 +20,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 /**
- *  @brief libmaple serial peripheral interface (SPI) prototypes and declarations
+ * @brief libmaple serial peripheral interface (SPI) prototypes and
+ * declarations
  */
 
 #ifndef _SPI_H_
@@ -61,36 +62,36 @@ extern "C" {
 #define SR_BSY                          BIT(7)     // busy flag
 
 typedef struct SPI {
-   __io uint16 CR1;
-   uint16 pad0;
-   __io uint8 CR2;
-   uint8 pad1[3];
-   __io uint8 SR;
-   uint8 pad2[3];
-   __io uint16 DR;
-   uint16 pad3;
-   __io uint16 CRCPR;
-   uint16 pad4;
-   __io uint16 RXCRCR;
-   uint16 pad5;
-   __io uint16 TXCRCR;
-   uint16 pad6;
+    __io uint16 CR1;
+    uint16 pad0;
+    __io uint8 CR2;
+    uint8 pad1[3];
+    __io uint8 SR;
+    uint8 pad2[3];
+    __io uint16 DR;
+    uint16 pad3;
+    __io uint16 CRCPR;
+    uint16 pad4;
+    __io uint16 RXCRCR;
+    uint16 pad5;
+    __io uint16 TXCRCR;
+    uint16 pad6;
 } SPI;
 
 enum {
-   SPI_MSBFIRST         = 0,
-   SPI_LSBFIRST         = BIT(7),
+    SPI_MSBFIRST         = 0,
+    SPI_LSBFIRST         = BIT(7),
 };
 
 enum {
-   SPI_PRESCALE_2       = (0x0 << 3),
-   SPI_PRESCALE_4       = (0x1 << 3),
-   SPI_PRESCALE_8       = (0x2 << 3),
-   SPI_PRESCALE_16      = (0x3 << 3),
-   SPI_PRESCALE_32      = (0x4 << 3),
-   SPI_PRESCALE_64      = (0x5 << 3),
-   SPI_PRESCALE_128     = (0x6 << 3),
-   SPI_PRESCALE_256     = (0x7 << 3)
+    SPI_PRESCALE_2       = (0x0 << 3),
+    SPI_PRESCALE_4       = (0x1 << 3),
+    SPI_PRESCALE_8       = (0x2 << 3),
+    SPI_PRESCALE_16      = (0x3 << 3),
+    SPI_PRESCALE_32      = (0x4 << 3),
+    SPI_PRESCALE_64      = (0x5 << 3),
+    SPI_PRESCALE_128     = (0x6 << 3),
+    SPI_PRESCALE_256     = (0x7 << 3)
 };
 
 void spi_init(uint32 spi_num,
@@ -101,12 +102,12 @@ uint8 spi_tx_byte(uint32 spi_num, uint8 data);
 uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len);
 
 static inline uint8 spi_rx(uint32 spi_num) {
-   SPI *spi;
+    SPI *spi;
 
-   ASSERT(spi_num == 1 || spi_num == 2);
-   spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
+    ASSERT(spi_num == 1 || spi_num == 2);
+    spi = (spi_num == 1) ? (SPI*)SPI1_BASE : (SPI*)SPI2_BASE;
 
-   return spi->DR;
+    return spi->DR;
 }
 
 #ifdef __cplusplus

@@ -21,30 +21,30 @@ typedef struct ring_buffer {
 } ring_buffer;
 
 static inline void rb_init(ring_buffer *rb, uint8 size, uint8 *buf) {
-   ASSERT(IS_POWER_OF_TWO(size));
-   rb->head = 0;
-   rb->tail = 0;
-   rb->size = size;
-   rb->buf = buf;
+    ASSERT(IS_POWER_OF_TWO(size));
+    rb->head = 0;
+    rb->tail = 0;
+    rb->size = size;
+    rb->buf = buf;
 }
 
 static inline void rb_insert(ring_buffer *rb, uint8 element) {
-   rb->buf[(rb->tail)++] = element;
-   rb->tail &= (rb->size - 1);
+    rb->buf[(rb->tail)++] = element;
+    rb->tail &= (rb->size - 1);
 }
 
 static inline uint8 rb_remove(ring_buffer *rb) {
-   uint8 ch = rb->buf[rb->head++];
-   rb->head &= (rb->size - 1);
-   return ch;
+    uint8 ch = rb->buf[rb->head++];
+    rb->head &= (rb->size - 1);
+    return ch;
 }
 
 static inline uint32 rb_full_count(ring_buffer *rb) {
-   return rb->tail - rb->head;
+    return rb->tail - rb->head;
 }
 
 static inline void  rb_reset(ring_buffer *rb) {
-   rb->tail = rb->head;
+    rb->tail = rb->head;
 }
 
 #ifdef __cplusplus

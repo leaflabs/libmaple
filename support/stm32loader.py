@@ -27,6 +27,9 @@ import serial
 import time
 import glob
 import time
+import tempfile
+import os
+import subprocess
 
 try:
     from progressbar import *
@@ -338,6 +341,34 @@ def usage():
 
     """ % sys.argv[0]
 
+def read(filename):
+    """Read the file to be programmed and turn it into a binary"""
+    with open(filename, 'rb') as f:
+        bytes = f.read()
+
+    if bytes.startswith('\x7FELF'):
+        # Actually an ELF file.  Convert to binary
+        handle, path = tempfile.mkstemp(suffix='.bin', prefix='stm32loader')
+
+        try:
+            os.close(handle)
+
+            # Try a couple of options for objcopy
+            for name in ['arm-none-eabi-objcopy', 'arm-linux-gnueabi-objcopy']:
+                try:
+                    code = subprocess.call([name, '-Obinary', filename, path])
+
+                    if code == 0:
+                        return read(path)
+                except OSError:
+                    pass
+            else:
+                raise Exception('Error %d while converting to a binary file' % code)
+        finally:
+            # Remove the temporary file
+            os.unlink(path)
+    else:
+        return [ord(x) for x in bytes]
 
 if __name__ == "__main__":
     
@@ -420,6 +451,9 @@ if __name__ == "__main__":
     cmd.open(conf['port'], conf['baud'])
     mdebug(10, "Open port %(port)s, baud %(baud)d" % {'port':conf['port'], 'baud':conf['baud']})
     try:
+        if (conf['write'] or conf['verify']):
+            data = read(args[0])
+
         try:
             cmd.initChip()
         except CmdException:
@@ -443,9 +477,6 @@ if __name__ == "__main__":
 #    cmd.cmdReadoutUnprotect()
 #    cmd.cmdWriteUnprotect()
 #    cmd.cmdWriteProtect([0, 1])
-
-        if (conf['write'] or conf['verify']):
-            data = map(lambda c: ord(c), file(args[0]).read())
 
         if conf['erase']:
             cmd.cmdEraseMemory()

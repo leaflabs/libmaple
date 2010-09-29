@@ -426,8 +426,18 @@ if __name__ == "__main__":
             print "Can't init. Ensure that BOOT0 is enabled and reset device"
 
         bootversion = cmd.cmdGet()
+
         mdebug(0, "Bootloader version %X" % bootversion)
-        mdebug(0, "Chip id `%s'" % str(map(lambda c: hex(ord(c)), cmd.cmdGetID())))
+
+        if bootversion < 20 or bootversion >= 100:
+            raise Exception('Unreasonable bootloader version %d' % bootversion)
+
+        id = [ord(x) for x in cmd.cmdGetID()]
+        mdebug(0, "Chip id '%s'" % ' '.join('0x%x' % x for x in id))
+
+        if len(id) < 2 or id[0] != 0x04:
+            raise Exception('Unrecognised chip ID')
+
 #    cmd.cmdGetVersion()
 #    cmd.cmdGetID()
 #    cmd.cmdReadoutUnprotect()

@@ -34,7 +34,13 @@
 #include "libmaple_types.h"
 
 // General configuration
-#define MAPLE_DEBUG 1
+#define DEBUG_NONE      0
+#define DEBUG_FAULT     1
+#define DEBUG_ALL       2
+
+#ifndef DEBUG_LEVEL
+#define DEBUG_LEVEL DEBUG_ALL
+#endif
 
 // MCU-specific configuration
 #ifdef MCU_STM32F103RB

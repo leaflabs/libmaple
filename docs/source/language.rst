@@ -162,15 +162,15 @@ Arduino Documentation Links
 |                                    |                                    |                                         |
 |* `+=`_ (compound addition)         |                                    |* `Serial`_                              |
 |                                    |                                    |                                         |
-|* `-=`_ (compound subtraction)      |                                    |Looking for something else? See the      |
-|                                    |                                    |:ref:`libraries` page for interfacing    |
-|* `*=`_ (compound multiplication)   |                                    |with particular types of hardware. Try   |
-|                                    |                                    |the list of `community-contributed       |
-|* `/=`_ (compound division)         |                                    |code`_.  Maple links against `newlib`_   |
-|                                    |                                    |and allows the use of any of its         |
-|* `&=`_ (compound bitwise and)      |                                    |functions; see its documentation for more|
-|                                    |                                    |details.                                 |
-|* `|=`_ (compound bitwise or)       |                                    |                                         |
+|* `-=`_ (compound subtraction)      |                                    |**Looking for something else?**          |
+|                                    |                                    |                                         |
+|* `*=`_ (compound multiplication)   |                                    |See the :ref:`libraries` page for        |
+|                                    |                                    |interfacing with particular types of     |
+|* `/=`_ (compound division)         |                                    |hardware. Try the list of                |
+|                                    |                                    |`community-contributed code`_.  Maple    |
+|* `&=`_ (compound bitwise and)      |                                    |links against `newlib`_ and allows the   |
+|                                    |                                    |use of any of its functions; see its     |
+|* `|=`_ (compound bitwise or)       |                                    |documentation for more details.          |
 |                                    |                                    |                                         |
 +------------------------------------+------------------------------------+-----------------------------------------+
 

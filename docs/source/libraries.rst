@@ -1,3 +1,5 @@
+.. _libraries:
+
 =========================
  Maple Library Reference
 =========================

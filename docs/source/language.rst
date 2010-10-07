@@ -162,14 +162,14 @@ Arduino Documentation Links
 |                                    |                                    |                                         |
 |* `+=`_ (compound addition)         |                                    |* `Serial`_                              |
 |                                    |                                    |                                         |
-|* `-=`_ (compound subtraction)      |                                    |Looking for something else? Try the list |
-|                                    |                                    |of `community-contributed code`_.        |
-|* `*=`_ (compound multiplication)   |                                    |                                         |
-|                                    |                                    |                                         |
-|* `/=`_ (compound division)         |                                    |                                         |
-|                                    |                                    |                                         |
-|* `&=`_ (compound bitwise and)      |                                    |                                         |
-|                                    |                                    |                                         |
+|* `-=`_ (compound subtraction)      |                                    |Looking for something else? See the      |
+|                                    |                                    |:ref:`libraries` page for interfacing    |
+|* `*=`_ (compound multiplication)   |                                    |with particular types of hardware. Try   |
+|                                    |                                    |the list of `community-contributed       |
+|* `/=`_ (compound division)         |                                    |code`_.  Maple links against `newlib`_   |
+|                                    |                                    |and allows the use of any of its         |
+|* `&=`_ (compound bitwise and)      |                                    |functions; see its documentation for more|
+|                                    |                                    |details.                                 |
 |* `|=`_ (compound bitwise or)       |                                    |                                         |
 |                                    |                                    |                                         |
 +------------------------------------+------------------------------------+-----------------------------------------+
@@ -324,6 +324,7 @@ Arduino Documentation Links
 
 .. _Serial: http://arduino.cc/en/Reference/Serial
 .. _community-contributed code: http://www.arduino.cc/playground/Main/GeneralCodeLibrary
+.. _newlib: http://sourceware.org/newlib/
 
 Recommended Reading
 -------------------

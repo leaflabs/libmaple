@@ -77,10 +77,6 @@ void throb(void);
 /* Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to
  * compile out these checks */
 
-#define DEBUG_NONE      0
-#define DEBUG_FAULT     1
-#define DEBUG_ALL       2
-
 #if DEBUG_LEVEL >= DEBUG_ALL
 #define ASSERT(exp)                              \
     if (exp) {                                   \

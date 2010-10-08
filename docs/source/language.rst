@@ -1,25 +1,31 @@
+.. highlight:: c++
+
 .. _language:
 
 ==========================
  Maple Language Reference
 ==========================
 
-The Maple can be programmed in a mostly-complete subset of the the
-`Wiring <http://www.wiring.org.co/reference/>`_ language, which is the
-same language used to program the `Arduino <http://arduino.cc/>`_
-boards.  The entire language will be supported in a future release.
-Please see the extensive `language reference
+The Maple can be programmed in the `Wiring
+<http://www.wiring.org.co/reference/>`_ language, which is the same
+language used to program the `Arduino <http://arduino.cc/>`_ boards.
+The entire language will be supported in a future release.  Please see
+the extensive `language reference
 <http://arduino.cc/en/Reference/HomePage>`_ on the Arduino webpage for
 more information, or follow a direct link below.
+
+C or C++ programmers curious about the differences between the Wiring
+language and C++ may wish to skip to the
+:ref:`arduino_c_for_c_hackers`.
 
 Unique Maple Additions
 ----------------------
 
 ``ASSERT(...)``
     The ``ASSERT()`` function can be very useful for basic program
-    debugging. The function accepts a boolean; for example:
+    debugging. The function accepts a boolean; for example::
 
-      ``ASSERT(state == WAIT);``
+      ASSERT(state == WAIT);
 
     zero is false and any other number is true. If the boolean is true
     the assertion passes and the program continues as usual. If it is
@@ -31,9 +37,9 @@ Unique Maple Additions
 
     Including assertions in a program increases the program size. When
     using libmaple **from the command line only**, they can be
-    disabled by making the definition
+    disabled by making the definition ::
 
-      ``#define DEBUG_LEVEL DEBUG_NONE``
+      #define DEBUG_LEVEL DEBUG_NONE
 
     before including either wirish or libmaple. In this case, all
     assertions will pass without any lost clock cycles.  Note that
@@ -325,6 +331,163 @@ Arduino Documentation Links
 .. _Serial: http://arduino.cc/en/Reference/Serial
 .. _community-contributed code: http://www.arduino.cc/playground/Main/GeneralCodeLibrary
 .. _newlib: http://sourceware.org/newlib/
+
+.. _arduino_c_for_c_hackers:
+
+Note for C/C++ Programmers
+--------------------------
+
+This is a note for programmers comfortable with C or C++ (although,
+you C programmers should remember that `C++ is not a superset of C
+<http://en.wikipedia.org/wiki/Compatibility_of_C_and_C%2B%2B>`_) who
+want a better understanding of the differences between C++ and the
+Wiring language.  The good news is that the differences are relatively
+few.
+
+A *sketch* is the IDE's notion of a project; it consists of one or
+more files written in the Wiring language, which is mostly the same as
+C++.  The major difference between the two is that in Wiring, it's not
+necessary to declare global functions before they are used.  That is,
+the following is valid Wiring, and ``f()`` returns ``5``::
+
+  int f() {
+    return g();
+  }
+
+  int g() {
+    return 5;
+  }
+
+All of the files in a sketch share the same (global) namespace.  That
+is, the behavior is as if all of a sketch's files were part of the
+same translation unit, so they don't have to include one another in
+order to access each other's definitions.  The only other major
+difference between Wiring and C++ is that Wiring doesn't support
+dynamically allocated memory -- that is, ``new`` and ``delete`` won't
+work.  As of |today|, Maple only has 20 KB RAM, anyway, so it's
+doubtful that static allocation is not what you want.
+
+The Wiring language also does not require you to define your own
+``main`` method (in fact, it forbids you from doing so).  Instead, you
+are required to define two functions, ``setup`` and ``loop``, with
+type signatures ::
+
+  void setup(void)
+  void loop(void)
+
+Once a sketch is uploaded to a Maple and begins to run, ``setup()`` is
+called once, and then ``loop()`` is called repeatedly.  The IDE
+compilation process proceeds via a source-to-source translation from
+the files in a sketch to C++.
+
+This translation process first concatenates the sketch files, then
+parses the result to produce a list of all functions defined in the
+global scope.  (We borrow this stage from the Arduino IDE, which in
+turn borrows it from Wiring.  It uses regular expressions to parse
+C++, which is, of course, `Bad and Wrong
+<http://www.retrologic.com/jargon/B/Bad-and-Wrong.html>`_.  An
+upcoming rewrite of the IDE performs this preprocessing step
+correctly, using a real parser.  Until then, you have our apologies.)
+The order in which the individual sketch files are concatenated is not
+defined; it is unwise to write code that depends on a particular
+ordering.
+
+The concatenated sketch files are then appended onto a file which
+includes `WProgram.h
+<http://github.com/leaflabs/libmaple/blob/master/wirish/WProgram.h>`_
+(which includes the wirish and libmaple libraries, and declares
+``setup()`` and ``loop()``), and then provides declarations for all
+the function definitions found in the previous step.  At this point,
+we have a file that is a valid C++ translation unit, but lacks a
+``main()`` method.  The final step of compilation provides this
+method, which behaves roughly like::
+
+  int main(void) {
+    setup();
+    while (true) loop();
+  }
+
+(The truth is a little bit more complicated, but not by much).  
+
+As an example, consider a sketch with two files.  The first file
+contains ``setup()`` and ``loop()``::
+
+  int the_pin;
+
+  void setup() {
+    the_pin = choose_a_pin();
+    pinMode(the_pin, OUTPUT);
+  }
+
+  void loop() {
+    static int toggle = 0;
+    toggle ^= 1;
+    digitalWrite(the_pin, toggle);
+  }
+
+The second file contains the (not very useful) implementation for
+``choose_a_pin()``::
+
+  int choose_a_pin() {
+     return random(5, 15);
+  }
+
+Then the results of the concatenation process might be ::
+
+  int the_pin;
+
+  void setup() {
+    the_pin = choose_a_pin();
+    pinMode(the_pin, OUTPUT);
+  }
+
+  void loop() {
+    static int toggle = 0;
+    toggle ^= 1;
+    digitalWrite(the_pin, toggle);
+  }
+
+  int choose_a_pin(void);
+
+  int choose_a_pin() {
+     return random(5, 15);
+  }
+
+Which could plausibly be turned into the final source file ::
+
+  #include "WProgram.h"
+
+  void setup(void);
+  void loop(void);
+  int choose_a_pin(void);
+
+  int the_pin;
+
+  void setup() {
+    the_pin = choose_a_pin();
+    pinMode(the_pin, OUTPUT);
+  }
+
+  void loop() {
+    static int toggle = 0;
+    toggle ^= 1;
+    digitalWrite(the_pin, toggle);
+  }
+
+  int choose_a_pin(void);
+
+  int choose_a_pin() {
+     return random(5, 15);
+  }
+
+  int main() {
+    setup();
+    while (true) loop();
+  }
+
+(Recall that it's legal C++ for a function to be declared multiple
+times, as long as it's defined exactly once).
+
 
 Recommended Reading
 -------------------

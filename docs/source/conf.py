@@ -44,7 +44,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'libmaple'
+project = u'Maple'
 copyright = u'2010, LeafLabs, LLC'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -169,7 +169,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'libmapledoc'
+htmlhelp_basename = 'mapledoc'
 
 
 # -- Options for LaTeX output -------------------------------------------------
@@ -183,7 +183,7 @@ htmlhelp_basename = 'libmapledoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target file, title, author, documentclass [howto/manual])
 latex_documents = [
-  ('index', 'libmaple.tex', u'libmaple Documentation',
+  ('index', 'maple.tex', u'Maple Documentation',
    u'LeafLabs, LLC', 'manual'),
 ]
 
@@ -216,7 +216,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'libmaple', u'libmaple Documentation',
+    ('index', 'maple', u'Maple Documentation',
      [u'LeafLabs, LLC'], 1)
 ]
 

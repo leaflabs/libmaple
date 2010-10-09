@@ -6,6 +6,10 @@
  Unix Toolchain Quickstart
 ===========================
 
+This is a tutorial for using the Maple with a standard Unix toolchain.
+It's not necessary to do this in order to program the Maple; you can
+always use our `IDE <maple-ide-install>`_ instead.
+
 You'll need a Maple board, a mini-b USB cable, a functional computer,
 and root access to that computer. This guide assumes you've had
 success with the IDE on your machine and that you are fairly
@@ -240,9 +244,10 @@ live with ::
   $ cd ~/Downloads
   $ tar -xvzf gcc-blah-blah-macosx32.tar.gz
   $ mv arm ~/libmaple/arm
+  $ export PATH=$PATH:~/libmaple/arm/bin
 
 After that's done, you'll probably want to update your shell startup
-script to stick :file:`~/libmaple/arm/bin` into your :envvar:`PATH`.
+script so :file:`~/libmaple/arm/bin` stays in your :envvar:`PATH`.
 
 **So far, so good?**
 
@@ -400,7 +405,8 @@ Debug with OpenOCD
 ------------------
 
 TODO. For now see `this great guide
-<http://fun-tech.se/stm32/OpenOCD/index.php>`_ from fun-tech.se.
+<http://fun-tech.se/stm32/OpenOCD/index.php>`_ from fun-tech.se, and
+the ``jtag`` Makefile target.
 
 .. _toolchain-codeblocks:
 

@@ -9,10 +9,16 @@
 The Maple can be programmed in the `Wiring
 <http://www.wiring.org.co/reference/>`_ language, which is the same
 language used to program the `Arduino <http://arduino.cc/>`_ boards.
-The entire language will be supported in a future release.  Please see
-the extensive `language reference
+Please see the extensive `language reference
 <http://arduino.cc/en/Reference/HomePage>`_ on the Arduino webpage for
 more information, or follow a direct link below.
+
+.. warning::
+
+   The Arduino boards have different sizes for data types, so don't
+   trust their documentation for how many bytes an ``int``, ``long``,
+   etc. take up.  The sizes of each data type on the Maple are given
+   in the :ref:`table below <language-arduino-docs>`.
 
 C or C++ programmers curious about the differences between the Wiring
 language and C++ may wish to skip to the
@@ -20,6 +26,8 @@ language and C++ may wish to skip to the
 
 Unique Maple Additions
 ----------------------
+
+.. _language-assert:
 
 ``ASSERT(...)``
     The ``ASSERT()`` function can be very useful for basic program
@@ -46,6 +54,8 @@ Unique Maple Additions
     this will **not work in the IDE**; even with this definition,
     assertions will still be enabled.
 
+.. _language-arduino-docs:
+
 Arduino Documentation Links
 ---------------------------
 
@@ -70,73 +80,73 @@ Arduino Documentation Links
 |* `for`_                            |                                    |                                         |
 |                                    |**Data Types**                      |* `analogRead()`_                        |
 |* `switch/case`_                    |                                    |                                         |
-|                                    |* `void`_                           |* `analogWrite()`_ - PWM                 |
-|* `while`_                          |                                    |                                         |
-|                                    |* `boolean`_                        |                                         |
-|* `do...while`_                     |                                    |**Advanced I/O**                         |
-|                                    |* `char`_                           |                                         |
-|* `break`_                          |                                    |* `tone()`_                              |
-|                                    |* `unsigned char`_                  |                                         |
-|* `continue`_                       |                                    |* `noTone()`_                            |
-|                                    |* `byte`_                           |                                         |
-|* `return`_                         |                                    |* `shiftOut()`_                          |
-|                                    |* `int`_                            |                                         |
-|* `goto`_                           |                                    |* `pulseIn()`_                           |
-|                                    |* `unsigned int`_                   |                                         |
+|                                    |Primitive data types on the Maple   |* `analogWrite()`_ - PWM                 |
+|* `while`_                          |have different sizes than on the    |                                         |
+|                                    |Arduino, since the Maple has a full |                                         |
+|* `do...while`_                     |32-bit processor.  The size of each |**Advanced I/O**                         |
+|                                    |such type on the Maple is given     |                                         |
+|* `break`_                          |below.                              |* `tone()`_                              |
 |                                    |                                    |                                         |
-|**Further syntax**                  |* `word`_                           |**Time**                                 |
+|* `continue`_                       |The ``word`` type is (deliberately) |* `noTone()`_                            |
+|                                    |:ref:`not supported                 |                                         |
+|* `return`_                         |<language-no-word>`.                |* `shiftOut()`_                          |
 |                                    |                                    |                                         |
-|* `;`_ (semicolon)                  |* `long`_                           |* `millis()`_                            |
+|* `goto`_                           |* `void`_                           |* `pulseIn()`_                           |
 |                                    |                                    |                                         |
-|* `{}`_ (curly braces)              |* `unsigned long`_                  |* `micros()`_                            |
+|                                    |* `boolean`_ (1 byte)               |                                         |
+|**Further syntax**                  |                                    |**Time**                                 |
+|                                    |* `char`_ (1 byte)                  |                                         |
+|* `;`_ (semicolon)                  |                                    |* `millis()`_                            |
+|                                    |* `unsigned char`_ (1 byte)         |                                         |
+|* `{}`_ (curly braces)              |                                    |* `micros()`_                            |
+|                                    |* `byte`_ (1 byte)                  |                                         |
+|* `//`_ (single line comment)       |                                    |* `delay()`_                             |
+|                                    |* `int`_ (4 bytes)                  |                                         |
+|* `/\* \*/`_ (multi-line comment)   |                                    |* `delayMicroseconds()`_                 |
+|                                    |* `unsigned int`_ (4 bytes)         |                                         |
+|* `#define`_                        |                                    |                                         |
+|                                    |* `long`_ (8 bytes)                 |**Math**                                 |
+|* `#include`_                       |                                    |                                         |
+|                                    |* `unsigned long`_ (8 bytes)        |* `min()`_                               |
 |                                    |                                    |                                         |
-|* `//`_ (single line comment)       |* `float`_                          |* `delay()`_                             |
+|**Arithmetic Operators**            |* `float`_ (4 bytes)                |* `max()`_                               |
 |                                    |                                    |                                         |
-|* `/\* \*/`_ (multi-line comment)   |* `double`_                         |* `delayMicroseconds()`_                 |
+|* `=`_ (assignment operator)        |* `double`_ (8 bytes)               |* `abs()`_                               |
 |                                    |                                    |                                         |
-|* `#define`_                        |* `string`_                         |                                         |
-|                                    |                                    |**Math**                                 |
-|* `#include`_                       |* `array`_                          |                                         |
-|                                    |                                    |* `min()`_                               |
+|* `+`_ (addition)                   |* `string`_                         |* `constrain()`_                         |
 |                                    |                                    |                                         |
-|**Arithmetic Operators**            |**Conversion**                      |* `max()`_                               |
+|* `-`_ (subtraction)                |* `array`_                          |* `map()`_                               |
 |                                    |                                    |                                         |
-|* `=`_ (assignment operator)        |* `char()`_                         |* `abs()`_                               |
+|* `*`_ (multiplication)             |                                    |* `pow()`_                               |
+|                                    |**Conversion**                      |                                         |
+|* `/`_ (division)                   |                                    |* `sqrt()`_                              |
+|                                    |* `char()`_                         |                                         |
+|* `%`_ (modulo)                     |                                    |                                         |
+|                                    |* `byte()`_                         |**Trigonometry**                         |
 |                                    |                                    |                                         |
-|* `+`_ (addition)                   |* `byte()`_                         |* `constrain()`_                         |
+|**Comparison Operators**            |* `int()`_                          |* `sin()`_                               |
 |                                    |                                    |                                         |
-|* `-`_ (subtraction)                |* `int()`_                          |* `map()`_                               |
+|* `==`_ (equal to)                  |* `word()`_                         |* `cos()`_                               |
 |                                    |                                    |                                         |
-|* `*`_ (multiplication)             |* `word()`_                         |* `pow()`_                               |
+|* `!=`_ (not equal to)              |* `long()`_                         |* `tan()`_                               |
 |                                    |                                    |                                         |
-|* `/`_ (division)                   |* `long()`_                         |* `sqrt()`_                              |
-|                                    |                                    |                                         |
-|* `%`_ (modulo)                     |* `float()`_                        |                                         |
-|                                    |                                    |**Trigonometry**                         |
-|                                    |                                    |                                         |
-|**Comparison Operators**            |**Variable Scope & Qualifiers**     |* `sin()`_                               |
-|                                    |                                    |                                         |
-|* `==`_ (equal to)                  |* `variable scope`_                 |* `cos()`_                               |
-|                                    |                                    |                                         |
-|* `!=`_ (not equal to)              |* `static`_                         |* `tan()`_                               |
-|                                    |                                    |                                         |
-|* `<`_ (less than)                  |* `volatile`_                       |                                         |
+|* `<`_ (less than)                  |* `float()`_                        |                                         |
 |                                    |                                    |**Random Numbers**                       |
-|* `>`_ (greater than)               |* `const`_                          |                                         |
-|                                    |                                    |* `randomSeed()`_                        |
+|* `>`_ (greater than)               |                                    |                                         |
+|                                    |**Variable Scope & Qualifiers**     |* `randomSeed()`_                        |
 |* `<=`_ (less than or equal to)     |                                    |                                         |
-|                                    |**Utilities**                       |* `random()`_                            |
+|                                    |* `variable scope`_                 |* `random()`_                            |
 |* `>=`_ (greater than or equal to)  |                                    |                                         |
-|                                    |* `sizeof()`_ (sizeof operator)     |                                         |
+|                                    |* `static`_                         |                                         |
 |                                    |                                    |**Bits and Bytes**                       |
-|**Boolean Operators**               |                                    |                                         |
+|**Boolean Operators**               |* `volatile`_                       |                                         |
 |                                    |                                    |* `lowByte()`_                           |
-|* `&&`_ (and)                       |                                    |                                         |
+|* `&&`_ (and)                       |* `const`_                          |                                         |
 |                                    |                                    |* `highByte()`_                          |
 |* `||`_ (or)                        |                                    |                                         |
-|                                    |                                    |* `bitRead()`_                           |
+|                                    |**Utilities**                       |* `bitRead()`_                           |
 |* `!`_ (not)                        |                                    |                                         |
-|                                    |                                    |* `bitWrite()`_                          |
+|                                    |* `sizeof()`_ (sizeof operator)     |* `bitWrite()`_                          |
 |                                    |                                    |                                         |
 |**Pointer Access Operators**        |                                    |* `bitSet()`_                            |
 |                                    |                                    |                                         |
@@ -179,6 +189,27 @@ Arduino Documentation Links
 |* `|=`_ (compound bitwise or)       |                                    |documentation for more details.          |
 |                                    |                                    |                                         |
 +------------------------------------+------------------------------------+-----------------------------------------+
+
+.. _language-no-word:
+
+.. note::
+
+   The ``word`` data type is not supported on the Maple.  This is by
+   choice.
+
+   We decided not to include it because, while the Maple has 32-bit
+   words, the word size on an Arduino board is only 16 bits, and code
+   that uses the ``word`` type is likely to rely on that fact.
+
+   By not supporting ``word``, you'll get a compile error when porting
+   Arduino code to your Maple instead of potentially weird,
+   hard-to-debug runtime behavior.
+
+   If you're porting over Arduino code and really want ``word``, you
+   can put the following at the top of the file you're porting::
+
+     typedef uint16 word;
+   
 
 .. _setup(): http://arduino.cc/en/Reference/Setup
 .. _loop(): http://arduino.cc/en/Reference/Loop

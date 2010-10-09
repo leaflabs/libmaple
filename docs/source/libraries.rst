@@ -7,9 +7,13 @@
  Maple Library Reference
 =========================
 
-This page briefly summarizes the Arduino libraries that have been ported to Maple. You can use a library from within a sketch by going to Sketch > Import Library... from within the IDE, then choosing the library you want.
+This page briefly summarizes the Arduino libraries that have been
+ported to Maple. You can use a library from within a sketch by going
+to Sketch > Import Library... from within the IDE, then choosing the
+library you want.
 
-Any incompatibilities between the Maple and Arduino versions are noted in the description of the library.
+Any incompatibilities between the Maple and Arduino versions are noted
+in the description of the library.
 
 * :ref:`LiquidCrystal <liquid_crystal>`
 * :ref:`Wire <wire>`
@@ -19,10 +23,14 @@ Any incompatibilities between the Maple and Arduino versions are noted in the de
 LiquidCrystal
 -------------
 
-The LiquidCrystal library allows Maple to control LCD screens. For more information, see the Arduino LiquidCrystal documentation.
-Compatibility Note
+The LiquidCrystal library allows Maple to control LCD screens. For
+more information, see the Arduino LiquidCrystal documentation.
 
-At this time, no incompatibilities between the Maple and Arduino versions are known. Any observed differences should be considered bugs, and reported on the forums.
+**Compatibility Note**
+
+At this time, no incompatibilities between the Maple and Arduino
+versions are known. Any observed differences should be considered
+bugs, and reported on the forums.
 
 .. _wire:
 
@@ -32,8 +40,7 @@ Wire
 We provide a soft (bit-banged) implementation of the `Wire I2C library
 <http://arduino.cc/en/Reference/WireBegin>`_.
 
-Compatibility Note
-^^^^^^^^^^^^^^^^^^
+**Compatibility Note**
 
 This implementation is synchronous, and thus supports only a subset of
 the full Wire interface (however, the functionality which is supported

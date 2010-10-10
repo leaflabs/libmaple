@@ -14,14 +14,14 @@ extern "C"{
  * The total buffer size must be a power of two
  * One byte is left free to distinguish empty from full */
 typedef struct ring_buffer {
-    /** Index of the next item to remove */
-    volatile uint32 head;
-    /** Index where the next item will get inserted */
-    volatile uint32 tail;
-    /** Buffer capacity */
-    uint8 size;
     /** Buffer items are stored into */
     volatile uint8 *buf;
+    /** Index of the next item to remove */
+    volatile uint16 head;
+    /** Index where the next item will get inserted */
+    volatile uint16 tail;
+    /** Buffer capacity */
+    uint16 size;
 } ring_buffer;
 
 /** Initialise a ring buffer.

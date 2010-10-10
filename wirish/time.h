@@ -40,8 +40,6 @@ extern "C"{
 
 #define US_PER_MS               1000
 
-extern volatile uint32 systick_timer_millis;
-
 /* time in milliseconds since boot  */
 static inline uint32 millis(void) {
     return systick_timer_millis;

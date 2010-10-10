@@ -33,14 +33,17 @@
 
 #include "libmaple.h"
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #define SYSTICK_CSR             0xE000E010  // Control and status register
 #define SYSTICK_CNT             0xE000E018  // Current value register
 
 #define SYSTICK_CSR_COUNTFLAG   BIT(16)
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+/** System elapsed time in milliseconds */
+volatile uint32 systick_timer_millis;
 
 void systick_init(uint32 reload_val);
 void systick_disable();

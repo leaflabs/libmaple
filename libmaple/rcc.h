@@ -29,6 +29,10 @@
 #ifndef _RCC_H_
 #define _RCC_H_
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /* registers  */
 #define RCC_BASE               0x40021000
 #define RCC_CR                 (RCC_BASE + 0x0)
@@ -176,5 +180,8 @@ void rcc_clk_enable(uint32 dev);
 void rcc_reset_dev(uint32 dev);
 void rcc_set_prescaler(uint32 prescaler, uint32 divider);
 
+#ifdef __cplusplus
+} // extern "C"
 #endif
 
+#endif

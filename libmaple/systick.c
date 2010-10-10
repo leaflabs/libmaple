@@ -66,6 +66,6 @@ void systick_resume() {
 }
 
 /** SysTick interrupt handler.  Bumps up the tick counter. */
-void SysTickHandler(void) {
+void SysTick_Handler(void) {
     systick_timer_millis++;
 }

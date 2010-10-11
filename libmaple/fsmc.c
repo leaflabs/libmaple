@@ -22,6 +22,10 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @brief
+ */
+
 #include "libmaple.h"
 #include "rcc.h"
 #include "gpio.h"

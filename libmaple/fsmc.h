@@ -26,6 +26,10 @@
  * See ../notes/fsmc.txt for more info
  */
 
+/**
+ * @file fsmc.h
+ */
+
 #ifndef _FSMC_H_
 #define _FSMC_H_
 

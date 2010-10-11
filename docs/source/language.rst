@@ -210,9 +210,7 @@ Arduino Documentation Links
 
      typedef uint16 word;
    
-
-.. _setup(): http://arduino.cc/en/Reference/Setup
-.. _loop(): http://arduino.cc/en/Reference/Loop
+.. setup()/loop() are part of the standard rst_epilog in conf.py
 .. _if: http://arduino.cc/en/Reference/If
 .. _if...else: http://arduino.cc/en/Reference/Else
 .. _for: http://arduino.cc/en/Reference/For

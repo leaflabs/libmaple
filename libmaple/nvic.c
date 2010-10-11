@@ -23,8 +23,6 @@
  *****************************************************************************/
 
 /**
- * @file nvic.c
- *
  * @brief Nested interrupt controller routines
  */
 

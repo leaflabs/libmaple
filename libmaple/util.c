@@ -23,8 +23,6 @@
  *****************************************************************************/
 
 /**
- * @file util.h
- *
  * @brief Utility procedures for debugging, mostly an error LED fade
  * and messages dumped over a uart for failed asserts.
  */

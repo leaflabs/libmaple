@@ -133,10 +133,10 @@ Common compiler problems
 
 ``undefined reference to setup()/loop()``
 
-    Your sketch/program either does not include one of the :ref:`setup
-    <setup()>` or :ref:`loop <loop()>` functions, or it was not found
-    by the compiler. Your program must include both ``void setup()``
-    and ``void loop()`` functions; they don't have to do anything, but
+    Your sketch/program either does not include one of the `setup
+    <setup()>`_ or `loop <loop()>`_ functions, or it was not found by
+    the compiler. Your program must include both ``void setup()`` and
+    ``void loop()`` functions; they don't have to do anything, but
     they **must** be there.
 
     You can start with an example program (to see one in the IDE,

@@ -23,7 +23,8 @@
  *****************************************************************************/
 
 /**
- *  @brief Nested interrupt controller defines and prototypes
+ * @file nvic.h
+ * @brief Nested interrupt controller defines and prototypes
  */
 
 #ifndef _NVIC_H_

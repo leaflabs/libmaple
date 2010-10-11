@@ -68,7 +68,11 @@ release = '0.0.7'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = []
+exclude_patterns = ['epilog.rst']
+
+# Included at the end of every source file that is read.
+with open('epilog.rst', 'r') as ep:
+    rst_epilog = ep.read()
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -91,6 +95,8 @@ pygments_style = 'sphinx'
 # A list of ignored prefixes for module index sorting.
 #modindex_common_prefix = []
 
+# Warn about all references where the target cannot be found.
+#nitpicky = True
 
 # -- Options for HTML output --------------------------------------------------
 

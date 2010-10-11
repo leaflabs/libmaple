@@ -28,9 +28,9 @@ Table of contents:
    Maple Language Reference <language>
    Maple Library Reference <libraries>
    libmaple Documentation and APIs <libmaple>   
-   Maple bootloader <bootloader>
    Troubleshooting <troubleshooting>
    Hardware-Specific Documentation <hardware>
+   Maple bootloader <bootloader>
    Known Problems <errata>
 
 Indices and tables

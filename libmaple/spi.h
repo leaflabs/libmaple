@@ -23,6 +23,7 @@
  *****************************************************************************/
 
 /**
+ * @file spi.h
  * @brief libmaple serial peripheral interface (SPI) prototypes and
  * declarations
  */

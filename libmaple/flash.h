@@ -24,7 +24,8 @@
 
 
 /**
- *  @brief basic stm32 flash setup routines
+ * @file flash.h
+ * @brief basic stm32 flash setup routines
  */
 
 #ifndef _FLASH_H_

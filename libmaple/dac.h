@@ -26,6 +26,10 @@
  * See ../notes/dac.txt for more info
  */
 
+/**
+ * @file dac.h
+ */
+
 #ifndef _DAC_H_
 #define _DAC_H_
 

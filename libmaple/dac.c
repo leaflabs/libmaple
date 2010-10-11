@@ -27,6 +27,10 @@
 #include "gpio.h"
 #include "dac.h"
 
+/**
+ * @brief DAC peripheral routines.
+ */
+
 /* Only one, so global to this file */
 DAC_Map *dac = (DAC_Map*)(DAC_BASE);
 

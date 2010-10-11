@@ -23,8 +23,6 @@
  *****************************************************************************/
 
 /**
- * @file exti.c
- *
  * @brief External interrupt control routines
  */
 

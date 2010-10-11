@@ -23,8 +23,6 @@
  *****************************************************************************/
 
 /**
- * @file systick.c
- *
  * @brief System timer interrupt handler and initialization routines
  */
 

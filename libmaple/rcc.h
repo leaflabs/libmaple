@@ -23,7 +23,8 @@
  *****************************************************************************/
 
 /**
- *  @brief reset and clock control definitions and prototypes
+ * @file rcc.h
+ * @brief reset and clock control definitions and prototypes
  */
 
 #ifndef _RCC_H_

@@ -1,5 +1,6 @@
 /**
- *  @brief simple circular buffer
+ * @file ring_buffer.h
+ * @brief simple circular buffer
  */
 
 #ifndef _RING_BUFFER_H_

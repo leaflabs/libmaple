@@ -15,6 +15,9 @@ Flash memory and only runs when the chip is reset).
 
 **Visit the github development project**: http://github.com/leaflabs/maple-bootloader
 
+.. contents:: Contents
+   :local:
+
 Bootloader Schemes Explained!
 -----------------------------
 

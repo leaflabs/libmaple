@@ -15,8 +15,8 @@ library you want.
 Any incompatibilities between the Maple and Arduino versions are noted
 in the description of the library.
 
-* :ref:`LiquidCrystal <liquid_crystal>`
-* :ref:`Wire <wire>`
+.. contents:: Contents
+   :local:
 
 .. _liquid_crystal:
 

@@ -25,7 +25,7 @@
 /**
  *  @file adc.h
  *
- *  @brief ADC prototypes and defines
+ *  @brief Analog-to-Digital Conversion (ADC) routines.
  */
 
 #ifndef _ADC_H_

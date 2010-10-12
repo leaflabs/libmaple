@@ -17,7 +17,11 @@ import sys, os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
+#
+# We rely on Michael Jones's breathe as a Doxygen-to-Sphinx bridge.
+# See libmaple/docs/README for information on obtaining it and letting
+# Sphinx know where it is.
+sys.path.append(os.environ['BREATHE_HOME'])
 
 # -- General configuration ----------------------------------------------------
 
@@ -29,7 +33,7 @@ import sys, os
 # ones.
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest',
               'sphinx.ext.intersphinx', 'sphinx.ext.todo',
-              'sphinx.ext.coverage']
+              'sphinx.ext.coverage', 'breathe']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -68,11 +72,15 @@ release = '0.0.7'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['epilog.rst']
+exclude_patterns = ['epilog.rst', 'prolog.rst']
 
 # Included at the end of every source file that is read.
 with open('epilog.rst', 'r') as ep:
     rst_epilog = ep.read()
+
+# Included at the beginning of every source file that is read.
+with open('prolog.rst', 'r') as pr:
+    rst_prolog = pr.read()
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
@@ -229,3 +237,11 @@ man_pages = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'http://docs.python.org/': None}
+
+
+# -- Options for breathe integration ------------------------------------------
+
+breathe_projects = {'libmaple' : os.path.join(os.environ['LIB_MAPLE_HOME'],
+                                              'docs', 'doxygen', 'xml')}
+
+breathe_default_project = 'libmaple'

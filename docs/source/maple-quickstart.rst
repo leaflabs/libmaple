@@ -15,13 +15,8 @@ If you have trouble along the way, try the :ref:`troubleshooting page
 <troubleshooting>` for help with some common problems.  If all else
 fails, try our `forum`_, or `contact us directly <contact>`_!
 
-The steps are:
-
-* :ref:`Install and run the IDE <maple-quickstart-get-ide>`
-
-* :ref:`Compile and upload a program <maple-quickstart-compile-blinky>`
-
-* :ref:`Test the USB serial connection <maple-quickstart-serial-port>`
+.. contents:: Contents
+   :local:
 
 .. _maple-quickstart-get-ide:
 

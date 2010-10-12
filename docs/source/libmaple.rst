@@ -30,6 +30,8 @@ wrappers and code to imitate the Arduino programming library.
 
     git clone git://github.com/leaflabs/libmaple.git
 
+**Table of contents:**
+
 .. toctree::
    :maxdepth: 2
 

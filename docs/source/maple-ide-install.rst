@@ -11,7 +11,8 @@ check the :ref:`troubleshooting page <troubleshooting>` for help with
 some common problems. If all else fails, try our `forum`_, or `contact
 us directly <http://leaflabs.com/contact>`_!
 
-.. _forum: http://forums.leaflabs.com
+.. contents:: Contents
+   :local:
 
 Download
 --------

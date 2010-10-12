@@ -13,7 +13,7 @@ environment variable BREATHE_HOME to be able to build the
 documentation.  Something like this on bash:
 
     $ git clone http://github.com/michaeljones/breathe.git
-    $ export BREATHE_HOME /path/to/breathe/repo/
+    $ export BREATHE_HOME=/path/to/breathe/repo/
 
 You can now build the HTML docs with (on Unix):
 

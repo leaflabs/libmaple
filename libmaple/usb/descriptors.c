@@ -1,12 +1,35 @@
-/* insert license */
-
+/******************************************************************************
+ * The MIT License
+ *
+ * Copyright (c) 2010 LeafLabs LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
 
 #include "descriptors.h"
 #include "libmaple.h"
 #include "usb_config.h"
 
 const USB_Descriptor_Device usbVcomDescriptor_Device = {
- bLength:              sizeof(USB_Descriptor_Device), 
+ bLength:              sizeof(USB_Descriptor_Device),
  bDescriptorType:      USB_DESCRIPTOR_TYPE_DEVICE,
  bcdUSB:               0x0200,
  bDeviceClass:         USB_DEVICE_CLASS_CDC,
@@ -29,7 +52,8 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
  bNumInterfaces:            0x02,
  bConfigurationValue:       0x01,
  iConfiguration:            0x00,
- bmAttributes:              (USB_CONFIG_ATTR_BUSPOWERED | USB_CONFIG_ATTR_SELF_POWERED),
+ bmAttributes:              (USB_CONFIG_ATTR_BUSPOWERED |
+                             USB_CONFIG_ATTR_SELF_POWERED),
  bMaxPower:                 USB_CONFIG_MAX_POWER,
 
  CCI_Interface:
@@ -77,7 +101,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
    Data:                     {0x00, 0x01}
    },
 
- // ManagementEndpoint: 
+ // ManagementEndpoint:
  //  {
  EP1_bLength:                 0x07,//sizeof(USB_Descriptor_Endpoint),
  EP1_bDescriptorType:         USB_DESCRIPTOR_TYPE_ENDPOINT,
@@ -126,12 +150,12 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
  //  }
 };
 
-/* 
+/*
    String Identifiers:
 
    we may choose to specify any or none of the following string
    identifiers:
-  
+
    iManufacturer:    LeafLabs
    iProduct:         Maple R3
    iSerialNumber:    NONE
@@ -143,7 +167,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
    which is 0x0409 for US English
 */
 
-const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] = 
+const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] =
 {
   USB_DESCRIPTOR_STRING_LEN(1),
   USB_DESCRIPTOR_TYPE_STRING,
@@ -151,18 +175,18 @@ const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] =
   0x04
 };
 
-const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] = 
+const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] =
 {
   USB_DESCRIPTOR_STRING_LEN(8),
   USB_DESCRIPTOR_TYPE_STRING,
-  'L', 0, 'e', 0, 'a', 0, 'f', 0, 
+  'L', 0, 'e', 0, 'a', 0, 'f', 0,
   'L', 0, 'a', 0, 'b', 0, 's', 0
 };
 
-const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = 
+const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] =
 {
   USB_DESCRIPTOR_STRING_LEN(8),
   USB_DESCRIPTOR_TYPE_STRING,
-  'M', 0, 'a', 0, 'p', 0, 'l', 0, 
+  'M', 0, 'a', 0, 'p', 0, 'l', 0,
   'e', 0, ' ', 0, 'R', 0, '3', 0
 };

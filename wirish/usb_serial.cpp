@@ -119,10 +119,12 @@ uint8 USBSerial::pending(void) {
     return usbGetPending();
 }
 
+// TODO deprecate the crap out of this
 uint8 USBSerial::getDTR(void) {
     return usbGetDTR();
 }
 
+// TODO deprecate the crap out of this
 uint8 USBSerial::getRTS(void) {
     return usbGetRTS();
 }

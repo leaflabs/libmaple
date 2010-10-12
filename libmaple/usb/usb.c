@@ -1,30 +1,30 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 LeafLabs LLC.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * ****************************************************************************/
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
 
 /**
- *  @file usb.c
- *
  *  @brief usb-specific hardware setup, NVIC, clocks, and usb activities
  *  in the pre-attached state. includes some of the lower level callbacks
  *  needed by the usb library, like suspend,resume,init,etc
@@ -47,87 +47,75 @@ volatile uint16 wIstr = 0;
 volatile bIntPackSOF  = 0;
 
 DEVICE Device_Table =
-  {
-    NUM_ENDPTS,
-    1
-  };
+    {NUM_ENDPTS,
+     1};
 
 DEVICE_PROP Device_Property =
-  {
-    usbInit,
-    usbReset,
-    usbStatusIn,
-    usbStatusOut,
-    usbDataSetup,
-    usbNoDataSetup,
-    usbGetInterfaceSetting,
-    usbGetDeviceDescriptor,
-    usbGetConfigDescriptor,
-    usbGetStringDescriptor,
-    0,
-    bMaxPacketSize
-  };
+    {usbInit,
+     usbReset,
+     usbStatusIn,
+     usbStatusOut,
+     usbDataSetup,
+     usbNoDataSetup,
+     usbGetInterfaceSetting,
+     usbGetDeviceDescriptor,
+     usbGetConfigDescriptor,
+     usbGetStringDescriptor,
+     0,
+     bMaxPacketSize};
 
 USER_STANDARD_REQUESTS User_Standard_Requests =
-  {
-    NOP_Process,
-    usbSetConfiguration,
-    NOP_Process,
-    NOP_Process,
-    NOP_Process,
-    NOP_Process,
-    NOP_Process,
-    NOP_Process,
-    usbSetDeviceAddress
-  };
+    {NOP_Process,
+     usbSetConfiguration,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     usbSetDeviceAddress};
 
 void (*pEpInt_IN[7])(void) =
-{
-  vcomDataTxCb,
-  vcomManagementCb,
-  NOP_Process,
-  NOP_Process,
-  NOP_Process,
-  NOP_Process,
-  NOP_Process,
-};
+    {vcomDataTxCb,
+     vcomManagementCb,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process};
 
 void (*pEpInt_OUT[7])(void) =
-{
-  NOP_Process,
-  NOP_Process,
-  vcomDataRxCb,
-  NOP_Process,
-  NOP_Process,
-  NOP_Process,
-  NOP_Process,
-};
+    {NOP_Process,
+     NOP_Process,
+     vcomDataRxCb,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process};
 
-struct
-{
+struct {
   volatile RESUME_STATE eState;
   volatile uint8 bESOFcnt;
 } ResumeS;
 
 void setupUSB (void) {
   gpio_set_mode(USB_DISC_BANK,
-		USB_DISC_PIN,
-		GPIO_MODE_OUTPUT_PP);
+                USB_DISC_PIN,
+                GPIO_MODE_OUTPUT_PP);
 
   /* setup the apb1 clock for USB */
   pRCC->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
-  gpio_write_bit(USB_DISC_BANK, USB_DISC_PIN, 0);  /* present ourselves to the host */
-
-  USB_Init();  /* low level init routine provided by st lib */
+  gpio_write_bit(USB_DISC_BANK, USB_DISC_PIN, 0); // presents us to the host
+  USB_Init();  // low level init routine provided by the ST library
 }
 
 void disableUSB (void) {
   // These are just guesses about how to do this
   // TODO: real disable function
   usbDsbISR();
-  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,1); 
+  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,1);
 }
 
 void usbSuspend(void) {
@@ -188,13 +176,12 @@ void usbResume(RESUME_STATE eResumeSetVal) {
       break;
     case RESUME_ON:
       ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0)
-	{
-	  wCNTR = _GetCNTR();
-	  wCNTR &= (~CNTR_RESUME);
-	  _SetCNTR(wCNTR);
-	  ResumeS.eState = RESUME_OFF;
-	}
+      if (ResumeS.bESOFcnt == 0) {
+          wCNTR = _GetCNTR();
+          wCNTR &= (~CNTR_RESUME);
+          _SetCNTR(wCNTR);
+          ResumeS.eState = RESUME_OFF;
+      }
       break;
     case RESUME_OFF:
     case RESUME_ESOF:
@@ -213,7 +200,7 @@ RESULT usbPowerOn(void) {
   wInterrupt_Mask = 0;
   _SetCNTR(wInterrupt_Mask);
   _SetISTR(0);
-  wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM; /* the bare minimum */
+  wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM; // the bare minimum
   _SetCNTR(wInterrupt_Mask);
 
   return USB_SUCCESS;
@@ -284,60 +271,51 @@ if (wIstr & ISTR_ERR & wInterrupt_Mask)
 
 
 #if (ISR_MSK & ISTR_WKUP)
-if (wIstr & ISTR_WKUP & wInterrupt_Mask)
-  {
+if (wIstr & ISTR_WKUP & wInterrupt_Mask) {
     _SetISTR((u16)CLR_WKUP);
     usbResume(RESUME_EXTERNAL);
-  }
+}
 #endif
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 #if (ISR_MSK & ISTR_SUSP)
-if (wIstr & ISTR_SUSP & wInterrupt_Mask)
-  {
-
+if (wIstr & ISTR_SUSP & wInterrupt_Mask) {
     /* check if SUSPEND is possible */
-    if (F_SUSPEND_ENABLED)
-      {
-	usbSuspend();
-      }
-    else
-      {
-	/* if not possible then resume after xx ms */
-	usbResume(RESUME_LATER);
-      }
+    if (F_SUSPEND_ENABLED) {
+        usbSuspend();
+    } else {
+        /* if not possible then resume after xx ms */
+        usbResume(RESUME_LATER);
+    }
     /* clear of the ISTR bit must be done after setting of CNTR_FSUSP */
     _SetISTR((u16)CLR_SUSP);
-  }
+}
 #endif
 
 
 #if (ISR_MSK & ISTR_SOF)
-if (wIstr & ISTR_SOF & wInterrupt_Mask)
-  {
+if (wIstr & ISTR_SOF & wInterrupt_Mask) {
     _SetISTR((u16)CLR_SOF);
     bIntPackSOF++;
-  }
+ }
 #endif
 
 
 #if (ISR_MSK & ISTR_ESOF)
-if (wIstr & ISTR_ESOF & wInterrupt_Mask)
-  {
+if (wIstr & ISTR_ESOF & wInterrupt_Mask) {
     _SetISTR((u16)CLR_ESOF);
     /* resume handling timing is made with ESOFs */
     usbResume(RESUME_ESOF); /* request without change of the machine state */
-  }
+ }
 #endif
 
 /*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*/
 #if (ISR_MSK & ISTR_CTR)
-if (wIstr & ISTR_CTR & wInterrupt_Mask)
-  {
+if (wIstr & ISTR_CTR & wInterrupt_Mask) {
     /* servicing of the endpoint correct transfer interrupt */
     /* clear of the CTR flag into the sub */
     CTR_LP(); /* low priority ISR defined in the usb core lib */
-  }
+ }
 #endif
 
 }
@@ -349,7 +327,7 @@ void usbWaitReset(void) {
 
 /* This low-level send bytes function is NON-BLOCKING; blocking behavior, with
  * a timeout, is implemented in usercode (or in the Wirish C++ high level
- * implementation). 
+ * implementation).
  *
  * This function will quickly copy up to 64 bytes of data (out of an
  * arbitrarily large buffer) into the USB peripheral TX buffer and return the
@@ -363,28 +341,28 @@ void usbWaitReset(void) {
  * context means that an actual program on the Host operating system is
  * connected to the virtual COM/ttyACM device and is recieving the bytes; the
  * Host operating system is almost always configured and keeping this endpoint
- * alive, but the bytes never get read out of the endpoint buffer.  
+ * alive, but the bytes never get read out of the endpoint buffer.
  *
  * The behavior of this function is subtle and frustrating; it has gone through
  * many simpler and cleaner implementation that frustratingly don't work cross
  * platform.
  *
  * */
-uint16 usbSendBytes(uint8* sendBuf, uint16 len) { 
-  
+uint16 usbSendBytes(uint8* sendBuf, uint16 len) {
+
   uint16 loaded = 0;
 
   if (bDeviceState != CONFIGURED || (!usbGetDTR() && !usbGetRTS())) {
     // Indicates to caller to stop trying, were not configured/connected
     // The DTR and RTS lines are handled differently on major platforms, so
     // the above logic is unreliable
-    return 0; 
+    return 0;
   }
 
   // Due to a variety of shit this is how we roll; all buffering etc is pushed
   // upstream
-  if (countTx) { 
-    return 0; 
+  if (countTx) {
+    return 0;
   }
 
   // We can only put VCOM_TX_EPSIZE bytes in the buffer
@@ -466,7 +444,7 @@ uint8 usbIsConfigured() {
 
 uint8 usbIsConnected() {
   return (bDeviceState != UNCONNECTED);
-}  
+}
 
 uint16 usbGetPending() {
   return countTx;

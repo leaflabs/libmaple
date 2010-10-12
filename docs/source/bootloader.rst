@@ -88,6 +88,8 @@ bootloader was attractive, it became clear, after much toiling, we
 were going to have to write some custom drivers across several
 platforms to make everything work this way.
 
+.. _bootloader-rev3:
+
 Maple Rev3
 ----------
 

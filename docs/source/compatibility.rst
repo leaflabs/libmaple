@@ -130,7 +130,5 @@ I sorta work
 
 And I am also ordinary
 
-Stub.
-
-(not finished)
+Stub (unfinished)
 

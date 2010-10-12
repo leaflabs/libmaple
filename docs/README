@@ -8,11 +8,14 @@ You need a recent-ish version of doxygen in your PATH:
     http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
 
 For the Doxygen-to-Sphinx bridge, we rely on a project called Breathe,
-by Michael Jones.  You must clone the breathe repository and set an
-environment variable BREATHE_HOME to be able to build the
-documentation.  Something like this on bash:
+by Michael Jones.  
 
-    $ git clone http://github.com/michaeljones/breathe.git
+***** You must clone the LEAFLABS VERSION OF THE breathe repository ******
+
+ ... and then set an environment variable BREATHE_HOME to be able to
+build the documentation.  Something like this on bash:
+
+    $ git clone git@github.com:leaflabs/breathe.git
     $ export BREATHE_HOME=/path/to/breathe/repo/
 
 You can now build the HTML docs with (on Unix):

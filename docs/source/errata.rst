@@ -14,5 +14,3 @@ list of differences between the Maple and Arduinos, see the page on
    :local:
 
 Stub.
-
-(not finished)

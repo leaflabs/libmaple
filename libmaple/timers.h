@@ -98,39 +98,39 @@ typedef volatile uint32* TimerCCR;
 
 #define TIMER_CCR(NUM,CHAN)     TIMER ## NUM ## _CH ## CHAN ## _CRR
 
-#define TIMER1_CH1_CCR     (TimerCCR)(TIMER1_BASE + 0x34)
-#define TIMER1_CH2_CCR     (TimerCCR)(TIMER1_BASE + 0x38)
-#define TIMER1_CH3_CCR     (TimerCCR)(TIMER1_BASE + 0x3C)
-#define TIMER1_CH4_CCR     (TimerCCR)(TIMER1_BASE + 0x40)
+#define TIMER1_CH1_CCR     TIMER1_BASE + 0x34
+#define TIMER1_CH2_CCR     TIMER1_BASE + 0x38
+#define TIMER1_CH3_CCR     TIMER1_BASE + 0x3C
+#define TIMER1_CH4_CCR     TIMER1_BASE + 0x40
 
-#define TIMER2_CH1_CCR     (TimerCCR)(TIMER2_BASE + 0x34)
-#define TIMER2_CH2_CCR     (TimerCCR)(TIMER2_BASE + 0x38)
-#define TIMER2_CH3_CCR     (TimerCCR)(TIMER2_BASE + 0x3C)
-#define TIMER2_CH4_CCR     (TimerCCR)(TIMER2_BASE + 0x40)
+#define TIMER2_CH1_CCR     TIMER2_BASE + 0x34
+#define TIMER2_CH2_CCR     TIMER2_BASE + 0x38
+#define TIMER2_CH3_CCR     TIMER2_BASE + 0x3C
+#define TIMER2_CH4_CCR     TIMER2_BASE + 0x40
 
-#define TIMER3_CH1_CCR     (TimerCCR)(TIMER3_BASE + 0x34)
-#define TIMER3_CH2_CCR     (TimerCCR)(TIMER3_BASE + 0x38)
-#define TIMER3_CH3_CCR     (TimerCCR)(TIMER3_BASE + 0x3C)
-#define TIMER3_CH4_CCR     (TimerCCR)(TIMER3_BASE + 0x40)
+#define TIMER3_CH1_CCR     TIMER3_BASE + 0x34
+#define TIMER3_CH2_CCR     TIMER3_BASE + 0x38
+#define TIMER3_CH3_CCR     TIMER3_BASE + 0x3C
+#define TIMER3_CH4_CCR     TIMER3_BASE + 0x40
 
-#define TIMER4_CH1_CCR     (TimerCCR)(TIMER4_BASE + 0x34)
-#define TIMER4_CH2_CCR     (TimerCCR)(TIMER4_BASE + 0x38)
-#define TIMER4_CH3_CCR     (TimerCCR)(TIMER4_BASE + 0x3C)
-#define TIMER4_CH4_CCR     (TimerCCR)(TIMER4_BASE + 0x40)
+#define TIMER4_CH1_CCR     TIMER4_BASE + 0x34
+#define TIMER4_CH2_CCR     TIMER4_BASE + 0x38
+#define TIMER4_CH3_CCR     TIMER4_BASE + 0x3C
+#define TIMER4_CH4_CCR     TIMER4_BASE + 0x40
 
 /* Timer5 and Timer8 are in high-density devices only (such as Maple
    Native).  Timer6 and Timer7 in these devices have no output compare
    pins. */
 
-#define TIMER5_CH1_CCR     (TimerCCR)(TIMER5_BASE + 0x34)
-#define TIMER5_CH2_CCR     (TimerCCR)(TIMER5_BASE + 0x38)
-#define TIMER5_CH3_CCR     (TimerCCR)(TIMER5_BASE + 0x3C)
-#define TIMER5_CH4_CCR     (TimerCCR)(TIMER5_BASE + 0x40)
+#define TIMER5_CH1_CCR     TIMER5_BASE + 0x34
+#define TIMER5_CH2_CCR     TIMER5_BASE + 0x38
+#define TIMER5_CH3_CCR     TIMER5_BASE + 0x3C
+#define TIMER5_CH4_CCR     TIMER5_BASE + 0x40
 
-#define TIMER8_CH1_CCR     (TimerCCR)(TIMER8_BASE + 0x34)
-#define TIMER8_CH2_CCR     (TimerCCR)(TIMER8_BASE + 0x38)
-#define TIMER8_CH3_CCR     (TimerCCR)(TIMER8_BASE + 0x3C)
-#define TIMER8_CH4_CCR     (TimerCCR)(TIMER8_BASE + 0x40)
+#define TIMER8_CH1_CCR     TIMER8_BASE + 0x34
+#define TIMER8_CH2_CCR     TIMER8_BASE + 0x38
+#define TIMER8_CH3_CCR     TIMER8_BASE + 0x3C
+#define TIMER8_CH4_CCR     TIMER8_BASE + 0x40
 
 #define TIMER_DISABLED          0
 #define TIMER_PWM               1

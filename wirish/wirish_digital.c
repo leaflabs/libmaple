@@ -31,6 +31,7 @@
 
 void pinMode(uint8 pin, WiringPinMode mode) {
     uint8 outputMode;
+    uint32 pwm = 0;
 
     if (pin >= NR_GPIO_PINS) {
         return;
@@ -58,9 +59,11 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         break;
     case PWM:
         outputMode = GPIO_MODE_AF_OUTPUT_PP;
+        pwm = 1;
         break;
     case PWM_OPEN_DRAIN:
         outputMode = GPIO_MODE_AF_OUTPUT_OD;
+        pwm = 1;
         break;
     default:
         ASSERT(0);
@@ -68,6 +71,19 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     }
 
     gpio_set_mode(PIN_MAP[pin].port, PIN_MAP[pin].pin, outputMode);
+
+    if (PIN_MAP[pin].timer_num != TIMER_INVALID) {
+        /* enable/disable timer channels if we're switching into or out of pwm  */
+        if (pwm) {
+            timer_set_mode(PIN_MAP[pin].timer_num,
+                           PIN_MAP[pin].timer_chan,
+                           TIMER_PWM);
+        } else {
+            timer_set_mode(PIN_MAP[pin].timer_num,
+                           PIN_MAP[pin].timer_chan,
+                           TIMER_DISABLED);
+        }
+    }
 }
 
 

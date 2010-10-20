@@ -172,6 +172,8 @@ enum {
     RCC_SPI2,
     RCC_FSMC,        // High-density devices only (Maple Native)
     RCC_DAC,         // High-density devices only (Maple Native)
+    RCC_DMA1,
+    RCC_DMA2,        // High-density devices only (Maple Native)
 };
 
 

@@ -185,7 +185,8 @@ Recommended Reading
 * Linux Kernel documentation for `USB ACM <http://www.kernel.org/doc/Documentation/usb/acm.txt>`_ and `USB Serial <http://www.kernel.org/doc/Documentation/usb/usb-serial.txt>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-    * `All documents <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
-    * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-    * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
-    * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (pdf; assembly language and register reference)
+    * `All documents <stm32-all>`_
+    * `Datasheet <datasheet>`_ (pdf)
+    * `Reference Manual <full-manual>`_ (pdf)
+    * `Programming Manual <stm32-programming>`_ (pdf; assembly
+      language and register reference)

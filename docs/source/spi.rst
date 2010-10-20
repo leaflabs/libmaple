@@ -63,9 +63,7 @@ Recommended Reading
 * `Hardcore SPI on Arduino <http://klk64.com/arduino-spi/>`_ by kik64
 * STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
-  * `Datasheet (pdf)
-    <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_
-  * `Reference Manual (pdf)
-    <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
+  * `All <stm32-all>`_
+  * `Datasheet <datasheet>`_ (pdf)
+  * `Reference Manual <full-manual>`_ (pdf)
 

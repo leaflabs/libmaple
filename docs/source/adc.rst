@@ -19,6 +19,10 @@ number of techniques must be used to get good precision and accuracy.
 
      D0, D1, D2, D3, D10, D11, D12, D13, D15, D16, D17, D18, D19, D20, D27, D28
 
+   Note that pins 3, 27, and 28 are not marked AIN on the silkscreen
+   for Maple revisions through Rev 5, however, they **do work** as
+   analog input pins.
+
 .. contents:: Contents
    :local:
 
@@ -55,7 +59,7 @@ range; opamps and other powered components can also be used.
 Function Reference
 ------------------
 
-.. TODO function reference (figure out Doxygen first)
+TODO function reference (figure out Doxygen first)
 
 .. _adc-recommended-reading:
 
@@ -66,10 +70,8 @@ Recommended Reading
 * `Arduino Analog Input Tutorial <http://arduino.cc/en/Tutorial/AnalogInputPins>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
-  * `Datasheet (pdf) <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_
-  * `Reference Manual (pdf) <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
-  * `Application Note on ADC Modes (pdf) <http://www.st.com/stonline/products/literature/an/16840.pdf>`_
-  * `Application Note on ADC Oversampling (pdf) <http://www.st.com/stonline/products/literature/an/14183.pdf>`_
-
-
+  * `All <stm32-all>`_
+  * `Datasheet <datasheet>`_ (pdf)
+  * `Reference Manual <full-manual>`_ (pdf)
+  * `Application Note on ADC Modes (pdf) <stm32-adc-modes>`_
+  * `Application Note on ADC Oversampling (pdf) <stm32-adc-oversampling>`_

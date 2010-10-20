@@ -2,11 +2,19 @@
 .. it's useful for common references, etc.
 
 .. Common URL references
+
 .. _forum: http://forums.leaflabs.com
 .. _contact: http://leaflabs.com/contact/
 
+.. _stm32-all: http://www.st.com/mcu/devicedocs-STM32F103RB-110.html
+.. _stm32-programming: http://www.st.com/stonline/products/literature/pm/15491.pdf
+.. _stm32-adc-modes: http://www.st.com/stonline/products/literature/an/16840.pdf
+.. _stm32-adc-oversampling: http://www.st.com/stonline/products/literature/an/14183.pdf
+.. _full-manual: http://www.st.com/stonline/products/literature/rm/13902.pdf
+.. _datasheet: http://www.st.com/stonline/products/literature/ds/13587.pdf
 
 .. Arduino built-in functions
+
 .. _setup(): http://arduino.cc/en/Reference/Setup
 .. _loop(): http://arduino.cc/en/Reference/Loop
 

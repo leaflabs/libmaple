@@ -80,77 +80,18 @@ above).
 GPIO Modes
 ----------
 
-``OUTPUT``
-
-    Basic digital output: when the pin set high the voltage is held at
-    +3.3V (|vcc|) and when set low it is pulled down to ground.
-
-``OUTPUT_OPEN_DRAIN``
-
-    In open drain mode, the pin indicates "low" by accepting current
-    flow to ground and "high" by providing increased impedance. An
-    example use would be to connect a pin to a bus line (which is
-    pulled up to a positive voltage by a separate supply through a
-    large resistor). When the pin is high, not much current flows
-    through to ground and the line stays at positive voltage; when the
-    pin is low the bus "drains" to ground with a small amount of
-    current constantly flowing through the large resistor from the
-    external supply. In this mode no current is ever actually
-    *sourced* from the pin.
-
-``INPUT`` (or ``INPUT_FLOATING``)
-
-    Basic digital input. The pin voltage is sampled; when it is closer
-    to 3.3V (|vcc|) the pin status is high, and when it is closer to
-    0V (ground) it is low. If no external circuit is pulling the pin
-    voltage to high or low, it will tend to randomly oscillate and be
-    very sensitive to noise (e.g., a breath of air across the pin will
-    cause the state to flip).
-
-``INPUT_PULLUP``
-
-    The state of the pin in this mode is reported the same way as with
-    INPUT, but the pin voltage is gently "pulled up" towards
-    +3.3V. This means the state will be high unless an external device
-    is specifically pulling the pin down to ground, in which case the
-    "gentle" pull up will not effect the state of the input.
-
-``INPUT_PULLDOWN``
-
-    The state of the pin in this mode is reported the same way as with
-    INPUT, but the pin voltage is gently "pulled down" towards
-    0V. This means the state will be low unless an external device is
-    specifically pulling the pin up to 3.3V, in which case the
-    "gentle" pull down will not effect the state of the input.
-
-``INPUT_ANALOG``
-
-    This is a special mode for when the pin will be used for analog
-    (not digital) reads. See the :ref:`ADC <adc>` page.
-
-``PWM``
-
-    This is a special mode for when the pin will be used for PWM
-    output (a special case of digital output). See the :ref:`PWM
-    <pwm>` page.
-
-.. TODO PWM_OPEN_DRAIN needs documentation
+.. doxygenenum:: WiringMode
 
 Function Reference
 ------------------
 
-``pinMode(pin_number, MODE)``
+.. doxygenfunction:: pinMode
 
-    Usually called from within `setup()`_ to configure the pin. MODE
-    is one of the set listed :ref:`above <gpio-modes>`.
+.. doxygenfunction:: digitalRead
 
-``digitalRead(pin_number)``
+.. doxygenfunction:: digitalWrite
 
-    Returns ``HIGH`` (|vcc|) or ``LOW`` (0V).
-
-``digitalWrite(pin_number, value)``
-
-    Sets the pin to ``HIGH`` or ``LOW``.
+.. doxygenfunction:: analogRead
 
 .. _gpio-recommended-reading:
 
@@ -159,6 +100,6 @@ Recommended Reading
 
 STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
-  * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-  * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+  * `All <stm32-all>`_
+  * `Datasheet <datasheet>`_ (pdf)
+  * `Reference Manual <full-manual>`_ (pdf)

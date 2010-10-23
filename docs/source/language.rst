@@ -213,7 +213,6 @@ Arduino Documentation Links
 
      typedef uint16 word;
    
-.. setup()/loop() are part of the standard rst_epilog in conf.py
 .. _if: http://arduino.cc/en/Reference/If
 .. _if...else: http://arduino.cc/en/Reference/Else
 .. _for: http://arduino.cc/en/Reference/For
@@ -483,8 +482,7 @@ Recommended Reading
 * `newlib Documentation <http://sourceware.org/newlib/>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-    * `All documents <stm32-all>`_
-    * `Datasheet <datasheet>`_ (pdf)
-    * `Reference Manual <full-manual>`_ (pdf)
-    * `Programming Manual <stm32-programming>`_ (assembly language and
-      register reference)
+    * `All documents <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
+    * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
+    * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+    * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)

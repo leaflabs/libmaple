@@ -15,9 +15,9 @@ This is the index of the imported Arduino docs.
    Arithmetic <arduino/arithmetic>
    Arrays <arduino/array>
    Assignment <arduino/assignment>
+   attachInterrupt() <arduino/attachinterrupt>
+   bit <arduino/bit>
 
-.. attachinterrupt <arduino-attachinterrupt>
-.. bit <arduino-bit>
 .. bitclear <arduino-bitclear>
 .. bitread <arduino-bitread>
 .. bitset <arduino-bitset>

@@ -9,7 +9,7 @@
 If you still can't get the IDE installed after reading this page,
 check the :ref:`troubleshooting page <troubleshooting>` for help with
 some common problems. If all else fails, try our `forum`_, or `contact
-us directly <http://leaflabs.com/contact>`_!
+us directly`_\ !
 
 .. contents:: Contents
    :local:

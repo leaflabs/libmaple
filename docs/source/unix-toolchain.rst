@@ -19,7 +19,7 @@ editing your shell startup script (.bashrc, .tcshrc, etc.) and using
 generic installation/setup issues, the `IDE install
 <http://leaflabs.com/docs/libmaple/install/>`_ and
 :ref:`troubleshooting` pages may be helpful. If all else fails, try
-our `forum`_, or `contact us directly <contact>`_!
+our `forum`_, or `contact us directly`_\ !
 
 We currently have instructions for 32- and 64-bit Linux and OS X Snow
 Leopard. If you're on another Unix platform, Windows, or an earlier

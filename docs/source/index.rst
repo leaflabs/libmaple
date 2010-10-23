@@ -30,6 +30,7 @@ Table of contents:
    libmaple Command-Line Tools and APIs <libmaple>   
    Troubleshooting <troubleshooting>
    Hardware-Specific Documentation <hardware>
+   External Interrupts <external-interrupts>
    Maple bootloader <bootloader>
    Known Problems <errata>
    [Temporary] Arduino docs TOC <foo>

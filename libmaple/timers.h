@@ -132,9 +132,21 @@ typedef volatile uint32* TimerCCR;
 #define TIMER8_CH3_CCR     TIMER8_BASE + 0x3C
 #define TIMER8_CH4_CCR     TIMER8_BASE + 0x40
 
-#define TIMER_DISABLED          0
-#define TIMER_PWM               1
-#define TIMER_OUTPUTCOMPARE     2
+/**
+ * Used to configure the behavior of a timer.
+ */
+typedef enum TimerMode {
+    TIMER_DISABLED, /**< In this mode, the timer stops counting,
+                       interrupts are not called, and no state changes
+                       are output. */
+    TIMER_PWM, /**< This is the default mode for pins after
+                  initialization. */
+    TIMER_OUTPUTCOMPARE, /**< In this mode, the timer counts from 0 to
+                            the overflow value repeatedly; every time
+                            the counter value reaches one of the
+                            channel compare values, the corresponding
+                            interrupt is fired. */
+} TimerMode;
 
 typedef struct {
     volatile uint16 CR1;

@@ -43,7 +43,8 @@ extern "C"{
  *
  * Need to up the sample time if otherwise... see datasheet */
 
-/* TODO: We'll only use ADC1 for now...  */
+/* TODO: We'll only use ADC1 for now.  See page 41 of the manual for
+   ADC2 and ADC3's real addresses.  */
 #define ADC1_BASE                 0x40012400
 #define ADC2_BASE                 0x40012400
 #define ADC3_BASE                 0x40012400
@@ -73,17 +74,17 @@ extern "C"{
 void adc_init(void);
 void adc_disable(void);
 
-/* Perform a single conversion on ADC[0-16],
+/* Perform a single conversion on ADC[0-15],
  * PRECONDITIONS:
  *   adc initialized */
 static inline int adc_read(int channel) {
-    /* Set channel  */
+    /* Set channel */
     ADC_SQR3 = channel;
 
-    /* Start the conversion  */
+    /* Start the conversion */
     CR2_SWSTART_BIT = 1;
 
-    /* Wait for it to finish  */
+    /* Wait for it to finish */
     while(SR_EOC_BIT == 0)
         ;
 

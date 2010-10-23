@@ -22,6 +22,8 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
+#include "libmaple_types.h"
+
 /**
  *  @file ext_interrupts.h
  *
@@ -31,17 +33,44 @@
 #ifndef _EXT_INTERRUPTS_H_
 #define _EXT_INTERRUPTS_H_
 
-enum {
-    RISING,
-    FALLING,
-    CHANGE
-};
+/**
+ * The kind transition on an external pin which should trigger an
+ * interrupt.
+ */
+typedef enum ExtIntTriggerMode_ {
+    RISING, /**< To trigger an interrupt when the pin transitions LOW
+               to HIGH */
+    FALLING, /**< To trigger an interrupt when the pin transitions
+                HIGH to LOW */
+    CHANGE /**< To trigger an interrupt when the pin transitions from
+              LOW to HIGH or HIGH to LOW (i.e., when the pin
+              changes). */
+} ExtIntTriggerMode;
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-void attachInterrupt(uint8 pin, voidFuncPtr, uint32 mode);
+/**
+ *  @brief Registers an interrupt handler on a pin.
+ *
+ *  The interrupt will be triggered on a given transition on the pin,
+ *  as specified by the mode parameter.  The handler runs in interrupt
+ *  context.
+ *
+ *  @param pin Maple pin number
+ *  @param handler Function to run upon external interrupt trigger.
+ *  @param mode Type of transition to trigger on, e.g. falling, rising, etc.
+ *
+ *  @sideeffect Registers a handler
+ */
+void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
+
+/**
+ * @brief Disable any registered external interrupt.
+ * @param pin Maple pin number
+ * @sideeffect unregisters external interrupt handler
+ */
 void detachInterrupt(uint8 pin);
 
 #ifdef __cplusplus

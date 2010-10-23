@@ -22,10 +22,8 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
-/**
- *  @brief wirish timer class to manage the four 16-bit timer peripherals
- *
- *  This implementation is not very efficient (lots of duplicated functions)
+/*
+ * wirish timer class to manage the four 16-bit timer peripherals
  */
 
 #include "wirish.h"
@@ -69,10 +67,6 @@ uint16 HardwareTimer::getCount(void) {
     return timer_get_count(this->timerNum);
 }
 
-/* This function will set the prescaler and overflow to get a period
- * of the given length with the most resolution; the return value is
- * the overflow value and thus the largest value that can be set as a
- * compare. */
 uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     // XXX: 72MHz shouldn't be hard coded in here... global define?
 
@@ -92,19 +86,19 @@ uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     return this->overflow;
 }
 
-void HardwareTimer::setChannel1Mode(uint8 mode) {
+void HardwareTimer::setChannel1Mode(TimerMode mode) {
     timer_set_mode(this->timerNum,1,mode);
 }
 
-void HardwareTimer::setChannel2Mode(uint8 mode) {
+void HardwareTimer::setChannel2Mode(TimerMode mode) {
     timer_set_mode(this->timerNum,2,mode);
 }
 
-void HardwareTimer::setChannel3Mode(uint8 mode) {
+void HardwareTimer::setChannel3Mode(TimerMode mode) {
     timer_set_mode(this->timerNum,3,mode);
 }
 
-void HardwareTimer::setChannel4Mode(uint8 mode) {
+void HardwareTimer::setChannel4Mode(TimerMode mode) {
     timer_set_mode(this->timerNum,4,mode);
 }
 

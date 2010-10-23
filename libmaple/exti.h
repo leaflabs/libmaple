@@ -141,10 +141,10 @@
 #define EXTI14 14
 #define EXTI15 15
 
-#define EXTI_CONFIG_PORTA 0
-#define EXTI_CONFIG_PORTB 1
-#define EXTI_CONFIG_PORTC 2
-#define EXTI_CONFIG_PORTD 3
+#define EXTI_CONFIG_PORTA 0     // Maple, Maple Native, Maple Mini
+#define EXTI_CONFIG_PORTB 1     // Maple, Maple Native, Maple Mini
+#define EXTI_CONFIG_PORTC 2     // Maple, Maple Native, Maple Mini
+#define EXTI_CONFIG_PORTD 3     // Maple and Maple Native only
 #define EXTI_CONFIG_PORTE 4     // Native only
 #define EXTI_CONFIG_PORTF 5     // Native only
 #define EXTI_CONFIG_PORTG 6     // Native only

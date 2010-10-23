@@ -168,6 +168,12 @@
     #ifndef RAMSIZE
     #  define RAMSIZE             (caddr_t)0x50000
     #endif
+
+    /* Bitbanded Memory sections */
+    #define BITBAND_SRAM_REF   0x20000000
+    #define BITBAND_SRAM_BASE  0x22000000
+    #define BITBAND_PERI_REF   0x40000000
+    #define BITBAND_PERI_BASE  0x42000000
 #endif
 
 /* Make sure MCU-specific settings were defined */

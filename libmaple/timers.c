@@ -211,7 +211,7 @@ void timer_disable_all(void) {
 }
 
 /* Sets the mode of individual timer channels, including a DISABLE mode */
-void timer_set_mode(uint8 timer_num, uint8 channel, uint8 mode) {
+void timer_set_mode(uint8 timer_num, uint8 channel, TimerMode mode) {
     timer_port *timer = timer_dev_table[timer_num].base;
     ASSERT(channel >= 1);
 

@@ -32,17 +32,8 @@
 #include "exti.h"
 #include "ext_interrupts.h"
 
-/**
- *  @brief Attach an interrupt handler to be triggered on a given
- *  transition on the pin. Runs in interrupt context
- *
- *  @param pin Maple pin number
- *  @param handler Function to run upon external interrupt trigger.
- *  @param mode Type of transition to trigger on, eg falling, rising, etc.
- *
- *  @sideeffect Registers a handler
- */
-void attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
+/* Attach ISR handler on pin, triggering on the given mode. */
+void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
     uint8 outMode;
 
     /* Parameter checking */
@@ -65,6 +56,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
         outMode = EXTI_RISING_FALLING;
         break;
     default:
+        ASSERT(0);
         return;
     }
 
@@ -76,11 +68,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, uint32 mode) {
     return;
 }
 
-/**
- * @brief Disable an external interrupt
- * @param pin maple pin number
- * @sideeffect unregisters external interrupt handler
- */
+/* Disable any interrupts */
 void detachInterrupt(uint8 pin) {
     if (!(pin < NR_GPIO_PINS)) {
         return;

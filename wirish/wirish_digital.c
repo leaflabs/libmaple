@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
-/**
- *  @brief Arduino-compatible digital I/O implementation.
+/*
+ * Arduino-compatible digital I/O implementation.
  */
 
 #include "wirish.h"
@@ -73,7 +73,8 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     gpio_set_mode(PIN_MAP[pin].port, PIN_MAP[pin].pin, outputMode);
 
     if (PIN_MAP[pin].timer_num != TIMER_INVALID) {
-        /* enable/disable timer channels if we're switching into or out of pwm  */
+        /* enable/disable timer channels if we're switching into or
+           out of pwm  */
         if (pwm) {
             timer_set_mode(PIN_MAP[pin].timer_num,
                            PIN_MAP[pin].timer_chan,

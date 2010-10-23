@@ -36,7 +36,16 @@ extern "C"{
 #endif
 
 #define analogWrite pwmWrite
-void pwmWrite(uint8, uint16);
+
+/**
+ * Set the PWM duty.
+ *
+ * User code is expected to determine and honor the maximum value
+ * (based on the configured period). As a convenience, analogWrite is
+ * an alias of pwmWrite to ease porting Arduino code, though period
+ * and duty will have to be recalibrated
+ */
+void pwmWrite(uint8 pin, uint16 duty_cycle);
 
 #ifdef __cplusplus
 }

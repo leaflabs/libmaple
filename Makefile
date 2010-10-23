@@ -17,6 +17,10 @@ ifeq ($(BOARD), maple_native)
    MCU := STM32F103ZE
    PRODUCT_ID := 0003
 endif
+ifeq ($(BOARD), maple_mini)
+   MCU := STM32F103CB
+   PRODUCT_ID := 0003
+endif
 
 # Useful paths
 ifeq ($(LIB_MAPLE_HOME),)

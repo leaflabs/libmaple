@@ -2,6 +2,14 @@
 $(BUILD_PATH)/main.o: main.cpp
 	$(SILENT_CXX) $(CXX) $(CFLAGS) $(CXXFLAGS) $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -o $@ -c $< 
 
+$(BUILD_PATH)/libmaple.a: $(BUILDDIRS) $(TGT_BIN)
+	- rm -f $@
+	$(AR) crv $(BUILD_PATH)/libmaple.a $(TGT_BIN)
+
+library: $(BUILD_PATH)/libmaple.a
+
+.PHONY: library
+
 $(BUILD_PATH)/$(BOARD).elf: $(BUILDDIRS) $(TGT_BIN) $(BUILD_PATH)/main.o
 	$(SILENT_LD) $(CXX) $(LDFLAGS) -o $@ $(TGT_BIN) $(BUILD_PATH)/main.o
 

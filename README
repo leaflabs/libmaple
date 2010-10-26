@@ -70,3 +70,11 @@ maple-library folder (macosx and windows).
 Write your program using /main.cpp as the entry point. Then just 'make help'
 and follow the directions!
 
+Instructions to create a library
+------------------------------------------------------------------------------
+If you have a complicated project with its own Makefile and multiple .c files,
+or you're using an IDE that creates its own Makefile, you'll probably want to
+load libmaple from an archive (a build-time library, not a DLL). Use the
+"make library" target, and install build/libmaple.a and the appropriate headers
+in your project's directory. At a minimum, the header set will include
+libmaple.h, util.h, and libmaple_types.h

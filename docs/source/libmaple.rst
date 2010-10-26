@@ -37,3 +37,4 @@ wrappers and code to imitate the Arduino programming library.
 
    Unix Toolchain Quickstart <unix-toolchain>
    libmaple API reference <libmaple-api>
+   Guide to using GCC's ARM target <arm-gcc>

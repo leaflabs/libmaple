@@ -289,15 +289,15 @@ void timer_set_mode(uint8 timer_num, uint8 channel, TimerMode mode) {
 /* This sets the compare value (aka the trigger) for a given timer
  * channel */
 void timer_set_compare_value(uint8 timer_num,
-                             uint8 compare_num,
+                             uint8 channel,
                              uint16 value) {
     /* The faster version of this function is the inline
        timer_pwm_write_ccr */
     timer_port *timer = timer_dev_table[timer_num].base;
 
-    ASSERT(compare_num > 0 && compare_num <= 4);
+    ASSERT(channel > 0 && channel <= 4);
 
-    switch(compare_num) {
+    switch(channel) {
     case 1:
         timer->CCR1 = value;
         break;

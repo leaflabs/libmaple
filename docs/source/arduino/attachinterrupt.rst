@@ -2,8 +2,18 @@
 
 .. _arduino-attachinterrupt:
 
-attachInterrupt(interrupt, function, mode)
-==========================================
+attachInterrupt()
+=================
+
+Used to specify a function to call when an external interrupt (like an
+GPIO changing from LOW to HIGH, a button getting pressed, etc.)
+occurs.
+
+.. contents:: Contents
+   :local:
+
+Library Documentation
+---------------------
 
 .. doxygenfunction:: attachInterrupt
 
@@ -14,17 +24,15 @@ attachInterrupt(interrupt, function, mode)
 Discussion
 ----------
 
-Specifies a function to call when an external interrupt occurs.
-Replaces any previous function that was attached to the interrupt.
-For more information on external interrupts on the Maple
+Because the function will run in interrupt context, inside of it,
+:ref:`arduino-delay` won't work, and the value returned by
+:ref:`arduino-millis` will not increment. Serial data received while
+in the function may be lost. You should declare as ``volatile`` any
+global variables that you modify within the attached function.
 
-Note
-----
-
-Inside the attached function, delay() won't work, and the value
-returned by millis() will not increment. Serial data received while in
-the function may be lost. You should declare as volatile any variables
-that you modify within the attached function.
+There are a few constraints you should be aware of if you're using
+more than one interrupt at a time; the :ref:`external-interrupts` page
+has the details.
 
 
 Using Interrupts
@@ -33,8 +41,7 @@ Using Interrupts
 Interrupts are useful for making things happen automatically in
 microcontroller programs, and can help solve timing problems. A
 good task for using an interrupt might be reading a rotary encoder,
-monitoring user input.
-
+or monitoring user input.
 
 
 If you wanted to insure that a program always caught the pulses
@@ -49,45 +56,44 @@ situations, using an interrupt can free the microcontroller to get
 some other work done while not missing the doorbell.
 
 
-
 Example
 -------
 
 ::
 
     int maple_led_pin = 13;
-    volatile int state = LOW;
-    
-    void setup()
-    {
+    volatile int state = LOW; // must declare volatile, since it's
+                              // modified within the blink handler
+
+    void setup() {
       pinMode(maple_led_pin, OUTPUT);
       attachInterrupt(0, blink, CHANGE);
     }
-    
-    void loop()
-    {
+
+    void loop() {
       digitalWrite(maple_led_pin, state);
     }
-    
-    void blink()
-    {
+
+    void blink() {
       state = !state;
     }
 
 
-Arduino Compatibility Note
---------------------------
+Arduino Compatibility
+---------------------
 
 Most Arduino boards have two external interrupts: numbers 0 (on
 digital pin 2) and 1 (on digital pin 3). The Arduino Mega has an
 additional four: numbers 2 (pin 21), 3 (pin 20), 4 (pin 19), and 5
-(pin 18).
+(pin 18).  On the Maple, you don't have to remember which interrupt
+number goes with which pin -- just tell ``attachInterrupt()`` the pin
+you want.
 
 
 See also
 --------
 
 
--  `detachInterrupt <http://arduino.cc/en/Reference/DetachInterrupt>`_
-
+-  :ref:`detachInterrupt <arduino-detachinterrupt>`
+-  :ref:`external-interrupts`
 

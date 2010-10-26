@@ -46,5 +46,3 @@ void pwmWrite(uint8 pin, uint16 duty_cycle) {
 
     timer_pwm_write_ccr(ccr, duty_cycle);
 }
-
-

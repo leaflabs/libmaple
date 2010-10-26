@@ -114,7 +114,7 @@ Function Reference
 
 .. _pwm-overflow:
 
-``Timer1.setOverflow(overflow)``
+``Timer[1,2,3,4].setOverflow(overflow)``
 
     This function sets the period ("reload" or "overflow") value for
     an entire PWM timer bank. The value is 16bit (0 to 65535) and
@@ -146,6 +146,30 @@ Function Reference
 
     This function is normally called once from, `setup()`_, but the
     timer can be reconfigured with a new prescaler at any time.
+
+     * Configure the prescaler and overflow values to generate a timer
+     * reload with a period as close to the given number of
+     * microseconds as possible.
+     *
+     * The return value is the overflow, which may be used to set
+     * channel compare values.  However, if a clock that fires an
+     * interrupt every given number of microseconds is all that is
+     * desired, and the relative "phases" are unimportant, channel
+     * compare values may all be set to 1.
+
+``Timer[1,2,3,4].setPeriod(period_in_microseconds)``
+
+    Configure the prescaler and overflow values to generate a timer
+    reload with a period as close to the given number of microseconds
+    as possible.
+
+    The return value is the overflow, which may be used to set channel
+    compare values.  However, if a clock that fires an interrupt every
+    given number of microseconds is all that is desired, and the
+    relative "phases" are unimportant, channel compare values may all
+    be set to 1.
+
+
 
 Recommended Reading
 -------------------

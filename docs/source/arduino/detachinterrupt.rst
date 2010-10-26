@@ -1,26 +1,34 @@
 .. _arduino-detachinterrupt:
 
-detachInterrupt(interrupt)
-==========================
+detachInterrupt()
+=================
 
-Description
------------
-
-Turns off the given interrupt.
+Used to disable an interrupt specified with
+:ref:`arduino-attachinterrupt`\ .
 
 
+Library Documentation
+---------------------
 
-Parameters
-----------
+.. doxygenfunction:: detachInterrupt
 
-interrupt: the number of interrupt to disable (0 or 1).
+Arduino Compatibility
+---------------------
 
+There is one important difference between the Maple version of
+detachInterrupt and the Arduino version.  On the Maple, the argument
+to ``detachInterrupt()`` is the *pin* on which the interrupt is
+attached, while on the Arduino, the argument is the *interrupt
+number*, which is different from the pin the interrupt is enabled on.
 
+If you're calling this function, you've already called
+:ref:`arduino-attachinterrupt` to set up your interrupt handler, so
+just call ``detachInterrupt()`` with the same pin argument you gave to
+``attachInterrupt()``.
 
-See also
+See Also
 --------
 
-
--  `attachInterrupt <http://arduino.cc/en/Reference/AttachInterrupt>`_\ ()
+- :ref:`attachInterrupt() <arduino-attachInterrupt>`
 
 

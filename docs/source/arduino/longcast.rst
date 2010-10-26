@@ -1,3 +1,5 @@
+.. highlight:: cpp
+
 .. _arduino-longcast:
 
 long()
@@ -6,36 +8,20 @@ long()
 Description
 -----------
 
-Converts a value to the
-`long <http://arduino.cc/en/Reference/Long>`_ data type.
+Converts a value to the :ref:`long <arduino-long>` data type.  Here is
+an example::
 
+    double d = 2.5;
+    long i = long(d); // i holds "2L", an long value
 
+The value inside of the parentheses (``long(...)``) can be of any type.
+However, if it is not a numeric type (like ``double``, ``char``,
+etc.), you will get strange results.
 
-Syntax
-------
+See the :ref:`long <arduino-long>` reference for details about the
+precision and limitations of ``long`` variables on the Maple.
 
-long(x)
-
-
-
-Parameters
-----------
-
-x: a value of any type
-
-
-
-Returns
--------
-
-long
-
-
-
-See also
+See Also
 --------
 
-
--  `long <http://arduino.cc/en/Reference/Long>`_
-
-
+-  :ref:`long <arduino-long>`

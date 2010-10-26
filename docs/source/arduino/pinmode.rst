@@ -5,6 +5,12 @@
 pinMode()
 =========
 
+.. contents:: Contents
+   :local:
+
+Library Documentation
+---------------------
+
 .. doxygenfunction:: pinMode
 
 .. doxygenenum:: WiringPinMode
@@ -13,7 +19,7 @@ Discussion
 ----------
 
 pinMode() is usually called within :ref:`arduino-setup` in order to
-configure a pin for a certain usage (although it may be called from
+configure a pin for a certain usage (although it may be called 
 anywhere).
 
 
@@ -40,8 +46,8 @@ Example
 
 
 
-Arduino Compatibility Note
---------------------------
+Arduino Compatibility
+---------------------
 
 The libmaple implementation of pinMode() supports OUTPUT and INPUT
 modes with a meaning identical to that of the Arduino function.
@@ -64,4 +70,4 @@ See also
 -  :ref:`arduino-digitalwrite`
 -  :ref:`arduino-digitalread`
 -  Maple :ref:`GPIO <gpio>` reference page
--  Arduino `pinMode() <http://www.arduino.cc/en/Reference/PinMode>`_ reference
+

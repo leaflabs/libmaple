@@ -1,16 +1,11 @@
+.. highlight:: cpp
+
 .. _arduino-semicolon:
 
-; semicolon
-===========
+Semicolon (;)
+=============
 
-Used to end a statement.
-
-
-
-Example
-~~~~~~~
-
-::
+Used to end a line of code.  Example::
 
     int a = 13;
 

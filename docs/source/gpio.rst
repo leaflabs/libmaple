@@ -1,8 +1,7 @@
 .. _gpio:
 
-======
- GPIO
-======
+GPIO
+====
 
 The Maple features 38 ready-to-use general purpose input/output (GPIO)
 pins for digital input/output, numbered D0 through D37.  These numbers
@@ -80,7 +79,7 @@ above).
 GPIO Modes
 ----------
 
-.. doxygenenum:: WiringMode
+.. doxygenenum:: WiringPinMode
 
 Function Reference
 ------------------

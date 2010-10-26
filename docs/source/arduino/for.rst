@@ -1,117 +1,139 @@
+.. highlight:: cpp
+
 .. _arduino-for:
 
-for statements
-==============
+for Loops
+=========
 
-Desciption
-----------
+.. contents:: Contents
+   :local:
 
-The **for** statement is used to repeat a block of statements
-enclosed in curly braces. An increment counter is usually used to
-increment and terminate the loop. The **for** statement is useful
-for any repetitive operation, and is often used in combination with
-arrays to operate on collections of data/pins.
+Description
+-----------
 
+A ``for`` loop is used to repeat a block of statements enclosed in
+curly braces.  ``for`` loops are useful for performing repetitive
+operations, and are often used in combination with :ref:`arrays
+<arduino-array>` to operate on collections of data or multiple
+:ref:`pins <gpio>`.  A ``for`` loop is composed of two parts: first, a
+*header*, which sets up the for loop, and then a *body*, which is made
+up of lines of code enclosed in curly braces.
 
+There are three parts to the ``for`` loop header: an *initialization*
+expression, *loop condition* expression, and a *post-loop*
+expression.  The general syntax looks like this::
 
-There are three parts to the **for** loop header:
+    for (initialization; condition; post-loop) {
+        // all of these lines inside the curly braces are part
+        // of the loop body.
+        statement 1;
+        statement 2;
+        ...
+    }
 
+(Note that there is no semicolon after the post-loop).  The
+initialization happens first and exactly once, before the loop begins.
+Each time through the loop, the condition is tested.  The condition is
+a :ref:`boolean arduino-boolean` expression.  If it is true, then the
+list of statements inside the curly braces are executed.  Next, the
+post-loop is executed.  The loop then begins again by evaluating the
+condition again, entering the loop body if it is true.  This proceeds
+until the condition becomes false.
 
+Examples
+--------
 
-``<strong>for</strong> (<strong>initialization</strong>;<strong> condition</strong>;<strong>  increment</strong>) {``
-
-
-
-``//statement(s);``
-
-
-
-``}``
-
-|image0|
-
-
-The **initialization** happens first and exactly once. Each time
-through the loop, the **condition** is tested; if it's true, the
-statement block, and the **increment** is executed, then the
-**condition** is tested again. When the **condition** becomes
-false, the loop ends.
-
-
-
-Example
--------
-
-::
+Here's an example::
 
     // Dim an LED using a PWM pin
-    int PWMpin = 10; // LED in series with 470 ohm resistor on pin 10
-    
-    void setup()
-    {
-      // no setup needed
-    }
-    
-    void loop()
-    {
-       for (int i=0; i <= 255; i++){
-          analogWrite(PWMpin, i);
-          delay(10);
-       } 
+    int pwmPin = 9; // LED in series with 470 ohm resistor on pin 9
+
+    void setup() {
+       pinMode(pwmPin, PWM);
     }
 
+    void loop() {
+       for (int i=0; i <= 65535; i++) {
+          pwmWrite(pwmPin, i);
+          delay(1);
+       }
+    }
 
+There is a ``for`` loop In the :ref:`loop() <arduino-loop>` function
+of the above example.  This loop starts by declaring an ``int``
+variable named ``i``, whose value starts out at zero.  The loop
+proceeds by checking if ``i`` is less than or equal to 65535.  Since
+``i`` is zero, this is true, and so the calls to :ref:`pwmWrite()
+<wirish-pwmwrite>` and :ref:`arduino-delay` happen next.  At this
+point, the post-loop expression ``i++`` is evaluated, which
+:ref:`increments <arduino-increment>` ``i``, so that ``i`` becomes
+one.  That concludes the first time through the loop.  Each "time
+through the loop" is referred to as an *iteration*.
+
+The loop then jumps back to the beginning, checking the condition as
+the beginning of its second iteration (initialization is skipped,
+since this only happens once, before the first iteration).  One is
+less than 65535, so the loop statements are executed again.  This
+proceeds over and over until the iteration when ``i`` finally
+reaches 65536.  At that point, the condition is no longer true, so the
+loop stops executing, and the ``loop()`` function returns.
+
+Here's another example, using a ``for`` loop to brighten and fade an
+LED (see the :ref:`pwmWrite() <wirish-pwmwrite>` reference for more
+information)::
+
+    int pwmPin = 9; // hook up the LED to pin 9
+    void loop() {
+       int x = 1;
+       for (int i = 0; i >= 0; i += x) {
+          analogWrite(pwmPin, i); // controls the brightness of the LED
+          if (i == 65535) {
+              x = -1;             // switch direction, so i starts decreasing
+          }
+          delay(1);
+       }
+    }
 
 Coding Tips
 -----------
 
-The C **for** loop is much more flexible than **for** loops found
-in some other computer languages, including BASIC. Any or all of
-the three header elements may be omitted, although the semicolons
-are required. Also the statements for initialization, condition,
-and increment can be any valid C statements with unrelated
-variables, and use any C datatypes including floats. These types of
-unusual **for** statements may provide solutions to some rare
+The C ``for`` loop is more flexible than ``for`` loops found in some
+other computer languages, including BASIC.  Any or all of the three
+header elements may be left blank, although the semicolons are
+required. Also the statements for initialization, condition, and
+post-loop can be any valid C statements, and use any C datatypes,
+including :ref:`floating point numbers <arduino-double>`. These types
+of unusual ``for`` loops sometimes provide solutions to less-common
 programming problems.
 
+For example, using a multiplication in the post-loop line will
+generate a `geometric progression
+<http://en.wikipedia.org/wiki/Geometric_progression>`_::
 
-
-For example, using a multiplication in the increment line will
-generate a logarithmic progression:
-
-::
-
-    for(int x = 2; x < 100; x = x * 1.5){
-    println(x);
+    for(int x = 1; x <= 100; x = x * 2) {
+        SerialUSB.println(x);
     }
 
 
+This loop prints out the numbers 1, 2, 4, 8, ..., 64.  Check
+your understanding of ``for`` loops by answering the following two
+questions (answers are in footnote [#fanswers]_\ ):
 
-Generates: 2,3,4,6,9,13,19,28,42,63,94
+1. How many iterations occur before the loop finishes?
 
-
-
-Another example, fade an LED up and down with one **for** loop:
-
-
-
-::
-
-    void loop()
-    {
-       int x = 1;
-       for (int i = 0; i > -1; i = i + x){
-          analogWrite(PWMpin, i);
-          if (i = 255) x = -1;             // switch direction at peak
-          delay(10);
-       } 
-    }
-
-
+2. Why does it stop at 64?
 
 See also
 --------
 
+- :ref:`while <arduino-while>` loops
+- :ref:`do <arduino-dowhile>` loops
 
--  `while <http://arduino.cc/en/Reference/While>`_
+.. rubric:: Footnotes
 
+.. [#fanswers]
+   1. Seven.
+
+   2. After the seventh iteration, the post-loop causes ``x`` to
+      equal 128.  This is larger than 100, so the loop condition is
+      false, and the loop stops.

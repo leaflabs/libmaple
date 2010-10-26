@@ -4,6 +4,8 @@
  Maple Bootloader
 ==================
 
+.. TODO: [Stub] add a section on flashing your own bootloader
+
 The firmware which allows the Maple to be reprogrammed via a USB
 connection. Every Maple board comes programmed with this by default,
 and it is not overwritten by regular programs (it lives lower in the
@@ -21,10 +23,10 @@ Flash memory and only runs when the chip is reset).
 Bootloader Schemes Explained!
 -----------------------------
 
-Maple Rev 3 (the version currently shipping) represents a drastic
-remake of the core library as well as the upload process. Some of
-these changes are aesthetic, refactoring and reorganization. Some are
-performance minded. The changes to the bootloader, however, were
+Maple Rev 3 and Rev 5 (the version currently shipping) represents a
+drastic remake of the core library as well as the upload process. Some
+of these changes are aesthetic, refactoring and reorganization. Some
+are performance minded. The changes to the bootloader, however, were
 implemented to solve some really gritty cross platform issues.  Before
 delving in to how the Rev 1 bootloader worked and how the Rev 3
 bootloader works now, lets look at the features common to both of them

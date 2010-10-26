@@ -1,83 +1,53 @@
+.. highlight:: cpp
+
 .. _arduino-define:
 
-Define
-======
+#define
+=======
 
-``#define`` is a useful C component that allows the programmer to
-give a name to a constant value before the program is compiled.
-Defined constants in arduino don't take up any program memory space
-on the chip. The compiler will replace references to these
-constants with the defined value at compile time.
+``#define`` is a useful C and C++ feature that allows the programmer
+to give a name to a constant value before the program is compiled.
+The compiler will replace references to these constants with the
+defined value at compile time.
 
-
-
-This can have some unwanted side effects though, if for example, a
-constant name that had been #defined is included in some other
-constant or variable name. In that case the text would be replaced
-by the #defined number (or text).
-
-
-
-In general, the *`const <http://arduino.cc/en/Reference/Const>`_*
-keyword is preferred for defining constants and should be used
-instead of #define.
-
-
-
-Arduino defines have the same syntax as C defines:
-
+This can have some unwanted side effects.  In general, the :ref:`const
+<arduino-const>` keyword is preferred for defining constants.
 
 
 Syntax
 ------
 
-``#define constantName value``
+The following line would define the name ``MY_CONSTANT`` to have value
+``value``::
 
+    #define MY_CONSTANT value
 
+Note that the ``#`` is necessary.  It is usually good style for the
+name to be capitalized, although this is not required.
 
-Note that the # is necessary.
+There is no semicolon after the #define statement. If you include one,
+the compiler will likely throw cryptic errors in unrelated places.
+That is, **don't do this**::
 
+    // DON'T DO THIS! THE SEMICOLON SHOULDN'T BE THERE!
+    #define NAME value;
 
+Similarly, including an equal sign after the ``#define`` line will
+also generate a cryptic compiler error further down the page.  That
+is, **don't do this, either**::
+
+    // DON'T DO THIS, EITHER! THE EQUALS SIGN SHOULDN'T BE THERE!
+    #define NAME = value
 
 Example
 -------
 
 ::
 
-    #define ledPin 3
-    // The compiler will replace any mention of ledPin with the value 3 at compile time.
+    #define LED_PIN 13
+    // The compiler will replace any mention of LED_PIN with
+    // the value 3 at compile time.
 
-
-
-Tip
----
-
-There is no semicolon after the #define statement. If you include
-one, the compiler will throw cryptic errors further down the page.
-
-
-
-::
-
-    #define ledPin 3;    // this is an error 
-
-
-
-Similarly, including an equal sign after the #define statement will
-also generate a cryptic compiler error further down the page.
-
-
-
-::
-
-    #define ledPin  = 3  // this is also an error 
-
-
-
-See
----
-
-
--  `const <http://arduino.cc/en/Reference/Const>`_
--  `Constants <http://arduino.cc/en/Reference/IntegerConstants>`_
-
+See Also
+--------
+-  :ref:`const <arduino-const>`

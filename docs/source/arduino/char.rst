@@ -1,3 +1,5 @@
+.. highlight:: cpp
+
 .. _arduino-char:
 
 char
@@ -6,28 +8,25 @@ char
 Description
 -----------
 
-A data type that takes up 1 byte of memory that stores a character
-value. Character literals are written in single quotes, like this:
-'A' (for multiple characters - strings - use double quotes:
-"ABC").
+The ``char`` type stores a 1-byte character value (or integer with
+value from -128 to 127).  Character literals are written in single
+quotes, like this: ``'A'`` (for multiple characters - strings - use
+double quotes: ``"ABC"``).
 
 
+Just like everything else on a computer, characters are stored as
+numbers. You can see the specific encoding in the `ASCII chart
+<http://en.wikipedia.org/wiki/ASCII#ASCII_printable_characters>`_\
+. This means that it is possible to do arithmetic on characters, in
+which the ASCII value of the character is used (e.g. ``'A' + 1`` has the
+decimal value 66, since the ASCII value of the capital letter A in
+decimal is 65).  See the :ref:`Serial.println()
+<arduino-serial-println>` documentation for more information about how
+characters are converted into numbers.
 
-Characters are stored as numbers however. You can see the specific
-encoding in the
-`ASCII chart <http://arduino.cc/en/Reference/ASCIIchart>`_. This
-means that it is possible to do arithmetic on characters, in which
-the ASCII value of the character is used (e.g. 'A' + 1 has the
-value 66, since the ASCII value of the capital letter A is 65). See
-`Serial.println <http://arduino.cc/en/Serial/Println>`_ reference
-for more on how characters are translated to numbers.
-
-
-
-The char datatype is a signed type, meaning that it encodes numbers
-from -128 to 127. For an unsigned, one-byte (8 bit) data type, use
-the *byte* data type.
-
+The ``char`` datatype is a signed type, meaning that it encodes
+numbers from -128 to 127.  For an unsigned type, which stores values
+from 0 to 255, just use the type ``unsigned char`` (two words).
 
 
 Example
@@ -35,17 +34,16 @@ Example
 
 ::
 
-      char myChar = 'A';
-      char myChar = 65;      // both are equivalent
-
+      // the following two lines are equivalent:
+      char c = 'A';
+      char c = 65;
 
 
 See also
 --------
 
 
--  `byte <http://arduino.cc/en/Reference/Byte>`_
--  `int <http://arduino.cc/en/Reference/Int>`_
--  `array <http://arduino.cc/en/Reference/Array>`_
--  `Serial.println <http://arduino.cc/en/Serial/Println>`_
+- :ref:`arduino-int`
+- :ref:`arduino-array` (a string is just an array of ``char``\ s)
+- :ref:`Serial.println() <arduino-serial-println>`
 

@@ -1,52 +1,37 @@
 .. _arduino-bitwrite:
 
-bitWrite()
-==========
+bitWrite(x, n, b)
+=================
 
 Description
 -----------
 
-Writes a bit of a numeric variable.
-
-
-
-Syntax
-------
-
-bitWrite(x, n, b)
-
-
+(Macro) Writes a bit of a numeric variable.
 
 Parameters
 ----------
 
-x: the numeric variable to which to write
+**x**: the numeric variable whose bit to write.
 
+**n**: which bit of the number to write, starting at 0 for the
+least-significant (rightmost) bit.
 
-
-n: which bit of the number to write, starting at 0 for the
-least-significant (rightmost) bit
-
-
-
-b: the value to write to the bit (0 or 1)
-
-
+**b**: the value to write to the bit (0 or 1).
 
 Returns
 -------
 
-none
+Nothing.
 
+Arduino Compatibility
+---------------------
 
+Maple's version of ``bitWrite()`` is compatible with Arduino.
 
 See also
 --------
 
-
--  `bit <http://arduino.cc/en/Reference/Bit>`_\ ()
--  `bitRead <http://arduino.cc/en/Reference/BitRead>`_\ ()
--  `bitSet <http://arduino.cc/en/Reference/BitSet>`_\ ()
--  `bitClear <http://arduino.cc/en/Reference/BitClear>`_\ ()
-
-
+-  :ref:`bit() <arduino-bit>`
+-  :ref:`bitRead() <arduino-bitRead>`
+-  :ref:`bitSet() <arduino-bitSet>`
+-  :ref:`bitClear() <arduino-bitClear>`

@@ -43,6 +43,9 @@ Functions
 -  `read <http://arduino.cc/en/Serial/Read>`_\ ()
 -  `flush <http://arduino.cc/en/Serial/Flush>`_\ ()
 -  `print <http://arduino.cc/en/Serial/Print>`_\ ()
+
+.. _arduino-serial-println:
+
 -  `println <http://arduino.cc/en/Serial/Println>`_\ ()
 -  `write <http://arduino.cc/en/Serial/Write>`_\ ()
 

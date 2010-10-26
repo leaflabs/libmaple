@@ -6,37 +6,40 @@ bit()
 Description
 -----------
 
-Computes the value of the specified bit (bit 0 is 1, bit 1 is 2,
-bit 2 is 4, etc.).
-
+(Macro) Computes the value of an (unsigned) integer with the specified
+bit set (``bit(0)`` is 1, ``bit(1)`` is 2, ``bit(2)`` is 4, then 8,
+16, 32, etc.).
 
 
 Syntax
 ------
 
-bit(n)
-
+``bit(n)``
 
 
 Parameters
 ----------
 
-n: the bit whose value to compute
+* **n** the bit to set.
 
 
+Value
+-----
 
-Returns
--------
+The value of an integer with the given bit set.
 
-the value of the bit
 
+Arduino Compatibility
+---------------------
+
+The Maple implementation of bit is compatible with Arduino.
 
 
 See also
 --------
 
 
--  `bitRead <http://arduino.cc/en/Reference/BitRead>`_\ ()
--  `bitWrite <http://arduino.cc/en/Reference/BitWrite>`_\ ()
--  `bitSet <http://arduino.cc/en/Reference/BitSet>`_\ ()
--  `bitClear <http://arduino.cc/en/Reference/BitClear>`_\ ()
+-  :ref:`arduino-bitread`
+-  :ref:`arduino-bitwrite`
+-  :ref:`arduino-bitset`
+-  :ref:`arduino-bitclear`

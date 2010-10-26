@@ -1,8 +1,3 @@
-.. libmaple documentation master file, created by
-   sphinx-quickstart on Thu Oct  7 06:42:30 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 .. _index:
 
 Maple Documentation Index
@@ -24,6 +19,7 @@ Table of contents:
 
    Maple Quickstart Guide <maple-quickstart>
    Maple IDE Installation Guide <maple-ide-install>
+   Maple IDE Documentation <ide>
    Maple/Arduino Compatibility Reference <compatibility>
    Maple Language Reference <language>
    Maple Library Reference <libraries>
@@ -34,6 +30,7 @@ Table of contents:
    Maple bootloader <bootloader>
    Known Problems <errata>
    [Temporary] Arduino docs TOC <foo>
+   [Temporary] Wirish-only docs TOC <wirish>
 
 Indices and tables
 ==================

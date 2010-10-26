@@ -1,60 +1,34 @@
+.. highlight:: cpp
+
 .. _arduino-delaymicroseconds:
 
 delayMicroseconds()
 ===================
 
-Description
------------
-
 Pauses the program for the amount of time (in microseconds)
 specified as parameter. There are a thousand microseconds in a
 millisecond, and a million microseconds in a second.
 
+Library Documentation
+---------------------
 
-
-Currently, the largest value that will produce an accurate delay is
-16383. This could change in future Arduino releases. For delays
-longer than a few thousand microseconds, you should use delay()
-instead.
-
-
-
-Syntax
-------
-
-delayMicroseconds(us)
-
-
-
-Parameters
-----------
-
-us: the number of microseconds to pause (*unsigned int*)
-
-
-
-Returns
--------
-
-None
-
+.. doxygenfunction:: delayMicroseconds
 
 
 Example
 -------
 
-::
-
+The following example configures pin number 8 to work as an output
+pin, and sends a train of pulses with a period of roughly 100
+microseconds::
      
-    int outPin = 8;                 // digital pin 8
+    int outPin = 8;
     
-    void setup()
-    {
+    void setup() {
       pinMode(outPin, OUTPUT);      // sets the digital pin as output
     }
     
-    void loop()
-    {
+    void loop() {
       digitalWrite(outPin, HIGH);   // sets the pin on
       delayMicroseconds(50);        // pauses for 50 microseconds      
       digitalWrite(outPin, LOW);    // sets the pin off
@@ -62,32 +36,27 @@ Example
     }
 
 
-
-configures pin number 8 to work as an output pin. It sends a train
-of pulses with 100 microseconds period.
-
-
-
 Caveats and Known Issues
 ------------------------
 
-This function works very accurately in the range 3 microseconds and
-up. We cannot assure that delayMicroseconds will perform precisely
-for smaller delay-times.
+The longest time ``delayMicroseconds()`` can delay is bounded by its
+argument type and the STM32 clock rate to be (2^32 - 1) / 12
+microseconds, or less than 6 minutes.  For longer pauses, use of
+:ref:`arduino-delay` is possible.
 
+Arduino Compatibility
+---------------------
 
+While we have made every effort we could to ensure that the timing of
+delayMicroseconds is as accurate as possible, we cannot guarantee it
+will behave as the Arduino implementation down to the microsecond,
+especially for smaller values of ``us``.
 
-As of Arduino 0018, delayMicroseconds() no longer disables
-interrupts.
-
-
-
-See also
+See Also
 --------
 
-
--  `millis <http://arduino.cc/en/Reference/Millis>`_\ ()
--  `micros <http://arduino.cc/en/Reference/Micros>`_\ ()
--  `delay <http://arduino.cc/en/Reference/Delay>`_\ ()
+-  :ref:`millis <arduino-millis>`
+-  :ref:`micros <arduino-micros>`
+-  :ref:`delay <arduino-delay>`
 
 

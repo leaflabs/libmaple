@@ -75,7 +75,7 @@ The incompatible hardware differences are:
 Software Language/Library Changes
 ---------------------------------
 
-With :ref:`one notable exception <language-no-word>`, the entire
+With :ref:`a few exceptions <language-missing-features>`, the entire
 Arduino language is supported.  However, there are some subtle
 differences, most of which are improvements:
 

@@ -11,7 +11,7 @@ Description
 Parameters
 ----------
 
-**x**: the number
+**x**: the number.
 
 Returns
 -------
@@ -24,10 +24,16 @@ Warning
 -------
 
 Because of the way ``abs()`` is implemented, avoid using other
-functions or causing side effects inside the brackets, as it may lead
-to incorrect results ::
+functions or causing side effects inside the parentheses, as it may
+lead to incorrect results::
 
     abs(a++);   // avoid this - yields incorrect results
-    
-    a++;          // use this instead -
-    abs(a);       // keep other math outside the function
+
+    abs(a);       // use this instead -
+    a++;          // keep other operations outside abs()
+
+
+Arduino Compatibility
+---------------------
+
+Maple's implementation of ``abs()`` is compatible with Arduino.

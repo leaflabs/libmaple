@@ -6,8 +6,10 @@
 
 This is the index of the imported Arduino docs.
 
+Finished:
+
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    abs() <arduino/abs>
    analogRead() <arduino/analogread>
@@ -16,99 +18,104 @@ This is the index of the imported Arduino docs.
    Arrays <arduino/array>
    Assignment <arduino/assignment>
    attachInterrupt() <arduino/attachinterrupt>
-   bit <arduino/bit>
+   bit() <arduino/bit>
+   bitClear() <arduino/bitclear>
+   bitRead() <arduino/bitread>
+   bitSet() <arduino/bitset>
+   arduino/bitshift
+   arduino/analogwrite
+   arduino/bitwisemath
+   arduino/bitwisecompound
+   bitWrite() <arduino/bitwrite>
+   arduino/boolean
+   arduino/booleanvariables
+   arduino/braces
+   arduino/break
+   arduino/byte
+   arduino/bytecast
+   arduino/char
+   arduino/charcast
+   arduino/comments
+   arduino/const
+   constrain() <arduino/constrain>
+   arduino/continue
+   cos() <arduino/cos>
+   #define <arduino/define>
+   arduino/delay
+   arduino/delaymicroseconds
+   arduino/detachinterrupt
+   arduino/digitalread
+   arduino/double
+   arduino/dowhile
+   arduino/else
+   arduino/float
+   arduino/floatcast
+   arduino/for
+   arduino/goto
+   arduino/highbyte
+   arduino/if
+   arduino/comparison
+   arduino/include
+   arduino/increment
+   arduino/arithmeticcompound
+   arduino/int
+   arduino/intcast
+   arduino/long
+   arduino/longcast
+   arduino/loop
+   arduino/max
+   arduino/min
+   arduino/modulo
+   arduino/pointer
+   arduino/pow
+   arduino/return
+   arduino/scope
+   arduino/semicolon
+   arduino/sin
+   arduino/sizeof
+   arduino/sqrt
+   arduino/sq
+   arduino/static
+   arduino/string
+ 
+Unfinished; straightforward to convert:
 
-.. bitclear <arduino-bitclear>
-.. bitread <arduino-bitread>
-.. bitset <arduino-bitset>
-.. bitshift <arduino-bitshift>
-.. bitwiseand <arduino-bitwiseand>
-.. bitwisecompound <arduino-bitwisecompound>
-.. bitwisexornot <arduino-bitwisexornot>
-.. bitwrite <arduino-bitwrite>
-.. boolean <arduino-boolean>
-.. booleanvariables <arduino-booleanvariables>
-.. braces <arduino-braces>
-.. break <arduino-break>
-.. byte <arduino-byte>
-.. bytecast <arduino-bytecast>
-.. changes <arduino-changes>
-.. char <arduino-char>
-.. charcast <arduino-charcast>
-.. comments <arduino-comments>
-.. comparison <arduino-comparison>
-.. const <arduino-const>
-.. constants <arduino-constants>
-.. constrain <arduino-constrain>
-.. continue <arduino-continue>
-.. cos <arduino-cos>
-.. define <arduino-define>
-.. delay <arduino-delay>
-.. delaymicroseconds <arduino-delaymicroseconds>
-.. detachinterrupt <arduino-detachinterrupt>
-.. digitalread <arduino-digitalread>
-.. digitalwrite <arduino-digitalwrite>
-.. double <arduino-double>
-.. dowhile <arduino-dowhile>
-.. else <arduino-else>
-.. float <arduino-float>
-.. floatcast <arduino-floatcast>
-.. for <arduino-for>
-.. fpconstants <arduino-fpconstants>
-.. goto <arduino-goto>
-.. highbyte <arduino-highbyte>
-.. homepage <arduino-homepage>
-.. if <arduino-if>
-.. include <arduino-include>
-.. increment <arduino-increment>
-.. incrementcompound <arduino-incrementcompound>
-.. int <arduino-int>
-.. intcast <arduino-intcast>
-.. integerconstants <arduino-integerconstants>
-.. interrupts <arduino-interrupts>
-.. libraries <arduino-libraries>
-.. long <arduino-long>
-.. longcast <arduino-longcast>
-.. loop <arduino-loop>
-.. lowbyte <arduino-lowbyte>
-.. map <arduino-map>
-.. max <arduino-max>
-.. micros <arduino-micros>
-.. millis <arduino-millis>
-.. min <arduino-min>
-.. modulo <arduino-modulo>
-.. nointerrupts <arduino-nointerrupts>
-.. notone <arduino-notone>
-.. pointer <arduino-pointer>
-.. pow <arduino-pow>
-.. pulsein <arduino-pulsein>
-.. random <arduino-random>
-.. randomseed <arduino-randomseed>
-.. return <arduino-return>
-.. scope <arduino-scope>
-.. semicolon <arduino-semicolon>
-.. serial <arduino-serial>
-.. setup <arduino-setup>
-.. shiftout <arduino-shiftout>
-.. sin <arduino-sin>
-.. sizeof <arduino-sizeof>
-.. sqrt <arduino-sqrt>
-.. static <arduino-static>
-.. string <arduino-string>
-.. stringobject <arduino-stringobject>
-.. switchcase <arduino-switchcase>
-.. tan <arduino-tan>
-.. tone <arduino-tone>
-.. unsignedchar <arduino-unsignedchar>
-.. unsignedint <arduino-unsignedint>
-.. unsignedlong <arduino-unsignedlong>
-.. void <arduino-void>
-.. volatile <arduino-volatile>
-.. while <arduino-while>
-.. word <arduino-word>
-.. wordcast <arduino-wordcast>
+.. toctree::
+   :maxdepth: 1
 
-.. TODO later
+   arduino/switchcase
+   arduino/tan
+   arduino/unsignedchar
+   arduino/unsignedint
+   arduino/unsignedlong
+   arduino/variables
+   arduino/void
+   arduino/volatile
+   arduino/while
 
-.. analogreference() <arduino/analogreference>
-.. analogWrite() <arduino/analogwrite>
+Unfinished, requires libmaple/Arduino knowledge:
+
+.. toctree::
+   :maxdepth: 1
+
+   arduino/word
+   arduino/wordcast
+   arduino/constants
+   arduino/digitalwrite
+   arduino/notone
+   arduino/serial
+   arduino/interrupts
+   analogWrite() <arduino/analogwrite>
+   arduino/nointerrupts
+   arduino/pulsein
+   arduino/stringobject
+   arduino/tone
+   arduino/random
+   arduino/randomseed
+   arduino/setup
+   arduino/map
+   arduino/shiftout
+   arduino/micros
+   arduino/millis
+   arduino/lowbyte
+   arduino/stringclass

@@ -1,35 +1,25 @@
 .. _arduino-sin:
 
-sin(rad)
-========
+sin()
+=====
 
-Description
------------
+Calculates the `sine <http://en.wikipedia.org/wiki/Sine>`_ of an angle
+(in radians).
 
-Calculates the sine of an angle (in radians). The result will be
-between -1 and 1.
+Library Documentation
+---------------------
 
+.. doxygenfunction:: sin
 
+Arduino Compatibility
+---------------------
 
-Parameters
-----------
+The Maple versino of ``sin()`` is compatible with Arduino.
 
-rad: the angle in radians (*float*)
-
-
-
-Returns
--------
-
-the sine of the angle (*double*)
-
-
-
-See also
+See Also
 --------
 
-
--  `cos <http://arduino.cc/en/Reference/Cos>`_\ ()
--  `tan <http://arduino.cc/en/Reference/Tan>`_\ ()
--  `float <http://arduino.cc/en/Reference/Float>`_
--  `double <http://arduino.cc/en/Reference/Double>`_
+-  :ref:`cos <arduino-cos>`
+-  :ref:`tan <arduino-tan>`
+-  :ref:`float <arduino-float>`
+-  :ref:`double <arduino-double>`

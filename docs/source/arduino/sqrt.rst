@@ -1,33 +1,22 @@
 .. _arduino-sqrt:
 
-sqrt(x)
-=======
-
-Description
------------
+sqrt()
+======
 
 Calculates the square root of a number.
 
+Library Documentation
+---------------------
 
+.. doxygenfunction:: sqrt
 
-Parameters
-----------
+Arduino Compatibility
+---------------------
 
-x: the number, any data type
+The Maple versino of ``sqrt()`` is compatible with Arduino.
 
-
-
-Returns
--------
-
-double, the number's square root.
-
-
-
-See also
+See Also
 --------
 
-
--  `pow <http://arduino.cc/en/Reference/Pow>`_\ ()
--  `sq <http://arduino.cc/en/Reference/Sq>`_\ ()
-
+-  :ref:`pow <arduino-pow>`
+-  :ref:`sq <arduino-sq>`

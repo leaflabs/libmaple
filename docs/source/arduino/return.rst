@@ -1,69 +1,58 @@
+.. highlight:: cpp
+
 .. _arduino-return:
 
 return
 ======
 
-Terminate a function and return a value from a function to the
-calling function, if desired.
-
-
+(Keyword) Terminates a function and return a value from a function to
+the calling function, if the function has non-``void`` return type.
 
 Syntax:
 -------
 
-return;
+::
 
+    // from within a "void" function:
+    return;
 
+    // from within a non-"void" function:
+    return value;
 
-return value; // both forms are valid
-
-
-
-Parameters
-----------
-
-value: any variable or constant type
-
-
+In the second case, ``value`` should have a type which is the same as
+the return type of the function, or be convertible to it (like an
+``int`` to a ``long``, etc.; see :ref:`this note
+<arduino-arithmetic-typeconversion>` for some references).
 
 Examples:
 ---------
 
-A function to compare a sensor input to a threshold
+A function to compare a sensor input to a threshold::
 
-::
-
-     int checkSensor(){       
+     // converts analog readings between 0 and 400 to 0, and 400 up to 1.
+     int checkSensor() {
         if (analogRead(0) > 400) {
             return 1;
-        else{
+        else {
             return 0;
         }
     }
 
+An early ``return`` is also useful when testing a section of code
+without having to "comment out" large sections of possibly buggy code,
+like so::
 
+    void loop() {
 
-The return keyword is handy to test a section of code without
-having to "comment out" large sections of possibly buggy code.
+        // brilliant code idea to test here
 
+        return;
 
-
-::
-
-    void loop(){
-    
-    // brilliant code idea to test here
-    
-    return;
-    
-    // the rest of a dysfunctional sketch here
-    // this code will never be executed
+        // the rest of a dysfunctional sketch here
+        // this code will never be executed
     }
 
-
-
-See also
+See Also
 --------
 
-`comments <http://arduino.cc/en/Reference/Comments>`_
-
+- :ref:`comments <arduino-comments>`

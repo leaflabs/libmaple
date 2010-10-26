@@ -10,6 +10,8 @@ number. Arrays in the C++ programming language, in which the Maple is
 programmed, can be complicated, but using simple arrays is relatively
 straightforward.
 
+.. contents:: Contents
+   :local:
 
 Creating (Declaring) an Array
 -----------------------------
@@ -69,15 +71,15 @@ access is within legal bounds of the array size that you have
 declared.
 
 
-To assign a value to an array:
-------------------------------
+To assign a value to an array
+-----------------------------
  ::
 
     mySensVals[0] = 10;
 
 
-To retrieve a value from an array:
-----------------------------------
+To retrieve a value from an array
+---------------------------------
 
  ::
 
@@ -106,6 +108,10 @@ Arduino `Knight Rider example
 <http://www.arduino.cc/en/Tutorial/KnightRider>`_\ (which will run
 unmodified on the Maple).
 
+Arduino Compatibility
+---------------------
+
+Arrays on Maple are identical those on Arduino.
 
 See also
 --------

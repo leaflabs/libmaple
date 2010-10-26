@@ -35,15 +35,18 @@
 extern "C"{
 #endif
 
+/**
+ * As a convenience, analogWrite is an alias of pwmWrite to ease
+ * porting Arduino code.  However, period and duty will have to be
+ * recalibrated.
+ */
 #define analogWrite pwmWrite
 
 /**
- * Set the PWM duty.
+ * Set the PWM duty on the given pin.
  *
  * User code is expected to determine and honor the maximum value
- * (based on the configured period). As a convenience, analogWrite is
- * an alias of pwmWrite to ease porting Arduino code, though period
- * and duty will have to be recalibrated
+ * (based on the configured period).
  */
 void pwmWrite(uint8 pin, uint16 duty_cycle);
 

@@ -1,3 +1,5 @@
+.. highlight:: cpp
+
 .. _arduino-intcast:
 
 int()
@@ -6,36 +8,22 @@ int()
 Description
 -----------
 
-Converts a value to the `int <http://arduino.cc/en/Reference/Int>`_
-data type.
+Converts a value to the :ref:`int <arduino-int>` data type.  Here is
+an example::
 
+    double d = 2.5;
+    int i = int(d); // i holds "2", an int value
 
+The value inside of the parentheses (``int(...)``) can be of any type.
+However, if it is not a numeric type (like ``double``, ``char``,
+etc.), you will get strange results.
 
-Syntax
-------
+See the :ref:`int <arduino-int>` reference for details about the
+precision and limitations of ``int`` variables on the Maple.
 
-int(x)
-
-
-
-Parameters
-----------
-
-x: a value of any type
-
-
-
-Returns
--------
-
-int
-
-
-
-See also
+See Also
 --------
 
-
--  `int <http://arduino.cc/en/Reference/Int>`_
+-  :ref:`int <arduino-int>`
 
 

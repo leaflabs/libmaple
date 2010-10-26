@@ -59,7 +59,11 @@ range; opamps and other powered components can also be used.
 Function Reference
 ------------------
 
-TODO function reference (figure out Doxygen first)
+.. doxygenfunction:: analogRead
+
+.. doxygenfunction:: pinMode
+
+.. doxygenenum:: WiringPinMode
 
 .. _adc-recommended-reading:
 

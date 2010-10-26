@@ -3,31 +3,28 @@
 cos(rad)
 ========
 
-Description
------------
+Calculate the cosine of an angle (in radians).
 
-Calculates the cos of an angle (in radians). The result will be
-between -1 and 1.
+Library Documentation
+---------------------
 
-Parameters
-----------
-
-rad: the angle in radians (*float*)
+.. doxygenfunction:: cos
 
 
+Arduino Compatibility
+---------------------
 
-Returns
--------
+The Maple ``cos()`` implementation is compatible with Arduino.
 
-The cos of the angle ("double")
-
-
+Note that the Maple implementation comes from `newlib
+<http://sourceware.org/newlib/>`_\ , while Arduino's is that of
+`avr-libc <http://avr-libc.nongnu.org/>`_\ .
 
 See also
 --------
 
 
--  `sin <http://arduino.cc/en/Reference/Sin>`_\ ()
--  `tan <http://arduino.cc/en/Reference/Tan>`_\ ()
--  `float <http://arduino.cc/en/Reference/Float>`_
--  `double <http://arduino.cc/en/Reference/Double>`_
+-  :ref:`sin() <arduino-sin>`
+-  :ref:`tan() <arduino-tan>`
+-  :ref:`float <arduino-float>`
+-  :ref:`double <arduino-double>`

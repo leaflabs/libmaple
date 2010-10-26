@@ -3,45 +3,24 @@
 pow(base, exponent)
 ===================
 
-Description
------------
+Calculates the value of a number raised to a power.
 
-Calculates the value of a number raised to a power. Pow() can be
-used to raise a number to a fractional power. This is useful for
-generating exponential mapping of values or curves.
+Library Documentation
+---------------------
 
-
-
-Parameters
-----------
-
-base: the number (*float*)
-
-
-
-exponent: the power to which the base is raised (*float*)
-
-
-
-Returns
--------
-
-The result of the exponentiation (*double*)
-
-
+.. doxygenfunction:: pow
 
 Example
 -------
 
-See the `fscale <http://arduino.cc/playground/Main/Fscale>`_
-function in the code library.
+``pow()`` can be used to raise a number to a fractional power.  This
+is useful for e.g.  generating exponential mapping of values or
+curves.  See the `fscale <http://arduino.cc/playground/main/fscale>`_
+function in the Arduino playground for more on this.
 
-
-
-See also
+See Also
 --------
 
-
--  `sqrt <http://arduino.cc/en/Reference/Sqrt>`_\ ()
--  `float <http://arduino.cc/en/Reference/Float>`_
--  `double <http://arduino.cc/en/Reference/Double>`_
+-  :ref:`sqrt() <arduino-sqrt>`
+-  :ref:`float <arduino-float>`
+-  :ref:`double <arduino-double>`

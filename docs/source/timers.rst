@@ -32,6 +32,8 @@ counter to reset to zero more frequently.
 Caveats
 -------
 
+.. _timers-pwm-conflicts:
+
 **PWM Conflicts:** Because PWM functionality on a given pin depends on
 the configuration of the timer and channel, you must chose your
 channels carefully if you want to use both timer interrupts and PWM in
@@ -195,6 +197,9 @@ from 1 to 4.
     events to be programmed at 4 different rates on a single timer!
     Note that function call overhead means that the smallest increment
     rate is a couple microseconds.
+
+.. _timers-attachinterrupt:
+.. _timers-detachinterrupt:
 
 ``Timer1.attachCompare1Interrupt(function)``/\ ``Timer1.detachCompare1Interrupt()``
 

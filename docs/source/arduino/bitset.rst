@@ -6,42 +6,41 @@ bitSet()
 Description
 -----------
 
-Sets (writes a 1 to) a bit of a numeric variable.
-
+(Macro) Sets (writes a 1 to) a bit of a numeric variable.
 
 
 Syntax
 ------
 
-bitSet(x, n)
-
+``bitSet(x, n)``
 
 
 Parameters
 ----------
 
-x: the numeric variable whose bit to set
+* **x** the numeric variable whose bit to set
+
+* **n** which bit to set, starting at 0 for the least-significant
+  (rightmost) bit
 
 
+Value
+-----
 
-n: which bit to set, starting at 0 for the least-significant
-(rightmost) bit
-
-
-
-Returns
--------
-
-none
+None.
 
 
+Arduino Compatibility
+---------------------
 
-See also
+The Maple implementation of bitSet is compatible with Arduino.
+
+
+See Also
 --------
 
-
--  `bit <http://arduino.cc/en/Reference/Bit>`_\ ()
--  `bitRead <http://arduino.cc/en/Reference/BitRead>`_\ ()
--  `bitWrite <http://arduino.cc/en/Reference/BitWrite>`_\ ()
--  `bitClear <http://arduino.cc/en/Reference/BitClear>`_\ ()
+-  :ref:`arduino-bit`
+-  :ref:`arduino-bitread`
+-  :ref:`arduino-bitwrite`
+-  :ref:`arduino-bitclear`
 

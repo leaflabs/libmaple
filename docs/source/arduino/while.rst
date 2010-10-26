@@ -1,6 +1,6 @@
 .. _arduino-while:
 
-while loops
+while Loops
 ===========
 
 Description

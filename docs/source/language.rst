@@ -193,7 +193,9 @@ Arduino Documentation Links
 |                                    |                                    |                                         |
 +------------------------------------+------------------------------------+-----------------------------------------+
 
-.. _language-no-word:
+.. _language-missing-features:
+
+Stub TODO: fill in other missing features, like analogReference()
 
 .. note::
 
@@ -212,7 +214,7 @@ Arduino Documentation Links
    can put the following at the top of the file you're porting::
 
      typedef uint16 word;
-   
+
 .. _if: http://arduino.cc/en/Reference/If
 .. _if...else: http://arduino.cc/en/Reference/Else
 .. _for: http://arduino.cc/en/Reference/For
@@ -394,7 +396,7 @@ method, which behaves roughly like::
     while (true) loop();
   }
 
-(The truth is a little bit more complicated, but not by much).  
+(The truth is a little bit more complicated, but not by much).
 
 As an example, consider a sketch with two files.  The first file
 contains ``setup()`` and ``loop()``::

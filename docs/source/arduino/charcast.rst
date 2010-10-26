@@ -1,41 +1,36 @@
+.. highlight:: cpp
+
 .. _arduino-charcast:
 
-char()
-======
+char() (cast)
+=============
 
 Description
 -----------
 
-Converts a value to the
-`char <http://arduino.cc/en/Reference/Char>`_ data type.
-
-
+Converts a value to the :ref:`char <arduino-char>` data type.
 
 Syntax
 ------
 
-char(x)
-
+``char(x)``
 
 
 Parameters
 ----------
 
-x: a value of any type
-
+**x**: a value of any type
 
 
 Returns
 -------
 
-char
+The value, converted to a ``char``.  Note, however, that if the value
+is outside the range of a ``char`` (-128 to 127), then the results
+might be strange and unexpected.
 
 
-
-See also
+See Also
 --------
 
-
--  `char <http://arduino.cc/en/Reference/Char>`_
-
-
+-  :ref:`char <arduino-char>`

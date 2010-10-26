@@ -1,35 +1,40 @@
+.. highlight:: cpp
+
 .. _arduino-delay:
 
 delay()
 =======
 
-Description
------------
+Pauses the program for at least a given number of milliseconds. (There
+are 1000 milliseconds in a second.)
 
-Pauses the program for the amount of time (in miliseconds)
-specified as parameter. (There are 1000 milliseconds in a second.)
+Library Documentation
+---------------------
 
-
-
-Syntax
-------
-
-delay(ms)
+.. doxygenfunction:: delay
 
 
-
-Parameters
+Discussion
 ----------
 
-ms: the number of milliseconds to pause (*unsigned long*)
+While it is easy to create a blinking LED with the ``delay()``
+function, and many sketches use short delays for such tasks as switch
+debouncing, the use of ``delay()`` in a sketch has significant
+drawbacks.  No other reading of sensors, mathematical calculations, or
+pin manipulation can go on during the delay function, so in effect, it
+brings most other activity to a halt. For alternative approaches to
+controlling timing see the :ref:`millis() <arduino-millis>` function
+and the "Blink Without Delay" sketch cited :ref:`below
+<arduino-delay-seealso>`\ . More knowledgeable programmers usually
+avoid the use of ``delay()`` for timing of events longer than tens of
+milliseconds, unless the sketch is very simple.
 
-
-
-Returns
--------
-
-nothing
-
+Certain things *do* go on while the ``delay()`` function is
+controlling the STM32 chip, however, because the delay function does
+not disable interrupts. Serial communication that appears at the RX
+pin is recorded, PWM (see :ref:`pwmWrite() <wirish-pwmwrite>`\ )
+values and pin states are maintained, and :ref:`interrupts
+<arduino-attachinterrupt>` will work as they should.
 
 
 Example
@@ -37,58 +42,26 @@ Example
 
 ::
 
-    int ledPin = 13;                 // LED connected to digital pin 13
+    int ledPin = 13;                 // LED connected to pin 13
     
-    void setup()
-    {
+    void setup() {
       pinMode(ledPin, OUTPUT);      // sets the digital pin as output
     }
     
-    void loop()
-    {
+    void loop() {
       digitalWrite(ledPin, HIGH);   // sets the LED on
       delay(1000);                  // waits for a second
       digitalWrite(ledPin, LOW);    // sets the LED off
       delay(1000);                  // waits for a second
     }
 
-
-
-Caveat
-------
-
-While it is easy to create a blinking LED with the delay()
-function, and many sketches use short delays for such tasks as
-switch debouncing, the use of delay() in a sketch has significant
-drawbacks. No other reading of sensors, mathematical calculations,
-or pin manipulation can go on during the delay function, so in
-effect, it brings most other activity to a halt. For alternative
-approaches to controlling timing see the
-`millis() <http://arduino.cc/en/Reference/Millis>`_ function and
-the sketch sited below. More knowledgeable programmers usually
-avoid the use of delay() for timing of events longer than 10's of
-milliseconds unless the Arduino sketch is very simple.
-
-
-
-Certain things *do* go on while the delay() function is controlling
-the Atmega chip however, because the delay function does not
-disable interrupts. Serial communication that appears at the RX pin
-is recorded, PWM
-(`analogWrite <http://arduino.cc/en/Reference/AnalogWrite>`_)
-values and pin states are maintained, and
-`interrupts <http://arduino.cc/en/Reference/AttachInterrupt>`_ will
-work as they should.
-
-
+.. _arduino-delay-seealso:
 
 See also
 --------
 
 
--  `millis <http://arduino.cc/en/Reference/Millis>`_\ ()
--  `micros <http://arduino.cc/en/Reference/Micros>`_\ ()
--  `delayMicroseconds <http://arduino.cc/en/Reference/DelayMicroseconds>`_\ ()
--  `Blink Without Delay <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_
-   example
-
+- :ref:`millis() <arduino-millis>`
+- :ref:`micros() <arduino-micros>`
+- :ref:`delayMicroseconds() <arduino-delayMicroseconds>`
+- (Arduino) `Blink Without Delay <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_ example (works unmodified on Maple)

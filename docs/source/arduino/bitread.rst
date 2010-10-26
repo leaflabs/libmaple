@@ -6,43 +6,41 @@ bitRead()
 Description
 -----------
 
-Reads a bit of a number.
-
+(Macro) Gets the value of a bit in a number.
 
 
 Syntax
 ------
 
-bitRead(x, n)
-
+``bitRead(x, n)``
 
 
 Parameters
 ----------
 
-x: the number from which to read
+* **x** the number from which to read the bit.
+
+* **n** which bit to read, starting at 0 for the least-significant
+  (rightmost) bit
 
 
+Value
+-----
 
-n: which bit to read, starting at 0 for the least-significant
-(rightmost) bit
+The value of the bit (0 or 1).
 
 
+Arduino Compatibility
+---------------------
 
-Returns
--------
-
-the value of the bit (0 or 1).
-
+The Maple implementation of ``bitRead`` is compatible with Arduino.
 
 
 See also
 --------
 
 
--  `bit <http://arduino.cc/en/Reference/Bit>`_\ ()
--  `bitWrite <http://arduino.cc/en/Reference/BitWrite>`_\ ()
--  `bitSet <http://arduino.cc/en/Reference/BitSet>`_\ ()
--  `bitClear <http://arduino.cc/en/Reference/BitClear>`_\ ()
-
-
+-  :ref:`arduino-bit`
+-  :ref:`arduino-bitwrite`
+-  :ref:`arduino-bitset`
+-  :ref:`arduino-bitclear`

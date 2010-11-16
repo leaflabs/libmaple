@@ -62,8 +62,8 @@ extern "C"{
 #define LSBFIRST 0
 #define MSBFIRST 1
 
-#define lowByte(w)                     ((w) & 0xff)
-#define highByte(w)                    ((w) >> 8)
+#define lowByte(w)                     ((w) & 0xFF)
+#define highByte(w)                    (((w) >> 8) & 0xFF)
 #define bitRead(value, bit)            (((value) >> (bit)) & 0x01)
 #define bitSet(value, bit)             ((value) |= (1UL << (bit)))
 #define bitClear(value, bit)           ((value) &= ~(1UL << (bit)))

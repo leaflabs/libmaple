@@ -159,3 +159,6 @@ See also
 .. [#fuint16max] This is because the value for the duty cycle on the
    Maple uses 2 bytes of memory, and an unsigned (i.e., nonnegative)
    integer with size 2 bytes can hold the values between 0 and 65,535.
+
+
+.. include:: cc-attribution.txt

@@ -68,3 +68,6 @@ See also
 -  `AttachInterrupt <http://arduino.cc/en/Reference/AttachInterrupt>`_
 
 
+
+
+.. include:: cc-attribution.txt

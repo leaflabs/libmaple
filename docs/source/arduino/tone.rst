@@ -76,3 +76,6 @@ See also
 
 -  `Tutorial: PWM <http://arduino.cc/en/Tutorial/PWM>`_
 
+
+
+.. include:: cc-attribution.txt

@@ -27,3 +27,6 @@ See also
 -  `byte <http://arduino.cc/en/Reference/Byte>`_
 -  `word <http://arduino.cc/en/Reference/WordCast>`_\ ()
 
+
+
+.. include:: cc-attribution.txt

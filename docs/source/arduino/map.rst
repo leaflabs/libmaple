@@ -117,3 +117,6 @@ See Also
 
 
 -  `constrain <http://arduino.cc/en/Reference/Constrain>`_\ ()
+
+
+.. include:: cc-attribution.txt

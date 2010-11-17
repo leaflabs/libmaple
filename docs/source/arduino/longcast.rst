@@ -25,3 +25,6 @@ See Also
 --------
 
 -  :ref:`long <arduino-long>`
+
+
+.. include:: cc-attribution.txt

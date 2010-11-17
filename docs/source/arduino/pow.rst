@@ -24,3 +24,6 @@ See Also
 -  :ref:`sqrt() <arduino-sqrt>`
 -  :ref:`float <arduino-float>`
 -  :ref:`double <arduino-double>`
+
+
+.. include:: cc-attribution.txt

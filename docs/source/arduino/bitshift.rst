@@ -143,3 +143,6 @@ See Also
 -  :ref:`arduino-bitread`
 -  :ref:`arduino-bitwrite`
 -  :ref:`arduino-bitclear`
+
+
+.. include:: cc-attribution.txt

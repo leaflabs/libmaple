@@ -60,3 +60,6 @@ See Also
 -  :ref:`delay <arduino-delay>`
 
 
+
+
+.. include:: cc-attribution.txt

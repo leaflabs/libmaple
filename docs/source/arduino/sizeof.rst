@@ -60,3 +60,6 @@ this::
     for (i = 0; i < (sizeof(myInts)/sizeof(int)) - 1; i++) {
       // do something with myInts[i]
     }
+
+
+.. include:: cc-attribution.txt

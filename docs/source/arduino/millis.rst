@@ -65,3 +65,6 @@ See also
 -  `delayMicroseconds <http://arduino.cc/en/Reference/DelayMicroseconds>`_\ ()
 -  `Tutorial: Blink Without Delay <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_
 
+
+
+.. include:: cc-attribution.txt

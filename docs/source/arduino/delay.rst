@@ -65,3 +65,6 @@ See also
 - :ref:`micros() <arduino-micros>`
 - :ref:`delayMicroseconds() <arduino-delayMicroseconds>`
 - (Arduino) `Blink Without Delay <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_ example (works unmodified on Maple)
+
+
+.. include:: cc-attribution.txt

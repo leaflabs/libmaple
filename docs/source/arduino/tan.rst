@@ -33,3 +33,6 @@ See also
 -  `cos <http://arduino.cc/en/Reference/Cos>`_\ ()
 -  `float <http://arduino.cc/en/Reference/Float>`_
 -  `double <http://arduino.cc/en/Reference/Double>`_
+
+
+.. include:: cc-attribution.txt

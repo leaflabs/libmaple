@@ -90,3 +90,6 @@ See also
 
 -  `randomSeed <http://arduino.cc/en/Reference/RandomSeed>`_\ ()
 
+
+
+.. include:: cc-attribution.txt

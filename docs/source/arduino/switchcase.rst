@@ -76,3 +76,6 @@ See also:
 `if...else <http://arduino.cc/en/Reference/Else>`_
 
 
+
+
+.. include:: cc-attribution.txt

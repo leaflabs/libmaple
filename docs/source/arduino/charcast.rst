@@ -34,3 +34,6 @@ See Also
 --------
 
 -  :ref:`char <arduino-char>`
+
+
+.. include:: cc-attribution.txt

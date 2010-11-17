@@ -126,3 +126,6 @@ See Also
 - :ref:`array <arduino-array>`
 - :ref:`__attribute__ <arm-gcc-attribute-flash>`
 - :ref:`Variables <arduino-variables>`
+
+
+.. include:: cc-attribution.txt

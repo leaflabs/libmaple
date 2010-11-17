@@ -84,3 +84,6 @@ See Also
 - :ref:`Compound bitwise operators <arduino-bitwisecompound>` (``&=``,
   ``|=``, ``^=``).
 - :ref:`if statement <arduino-if>`
+
+
+.. include:: cc-attribution.txt

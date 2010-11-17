@@ -35,3 +35,6 @@ See also
 -  :ref:`bitRead() <arduino-bitRead>`
 -  :ref:`bitSet() <arduino-bitSet>`
 -  :ref:`bitClear() <arduino-bitClear>`
+
+
+.. include:: cc-attribution.txt

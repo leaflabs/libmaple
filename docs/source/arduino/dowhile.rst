@@ -22,3 +22,6 @@ Example::
       delay(50);          // wait for sensors to stabilize
       x = readSensors();  // check the sensors
     } while (x < 100);
+
+
+.. include:: cc-attribution.txt

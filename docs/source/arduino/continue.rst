@@ -29,3 +29,6 @@ Example
         delay(50);
     }
 
+
+
+.. include:: cc-attribution.txt

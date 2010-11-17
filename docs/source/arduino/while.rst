@@ -44,3 +44,6 @@ Example
       var++;
     }
 
+
+
+.. include:: cc-attribution.txt

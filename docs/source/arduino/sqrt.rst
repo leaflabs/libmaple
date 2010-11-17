@@ -20,3 +20,6 @@ See Also
 
 -  :ref:`pow <arduino-pow>`
 -  :ref:`sq <arduino-sq>`
+
+
+.. include:: cc-attribution.txt

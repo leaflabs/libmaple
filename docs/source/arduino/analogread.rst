@@ -147,3 +147,6 @@ See also
    should first read ST's application notes on `ADC modes
    <stm32-adc-modes>`_ and `ADC oversampling
    <stm32-adc-oversampling>`_.
+
+
+.. include:: cc-attribution.txt

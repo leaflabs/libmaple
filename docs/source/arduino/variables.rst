@@ -186,3 +186,6 @@ Variable Scope
 -  `Variable Scope <http://arduino.cc/en/Reference/scope>`_
 
 
+
+
+.. include:: cc-attribution.txt

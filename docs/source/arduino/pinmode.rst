@@ -71,3 +71,6 @@ See also
 -  :ref:`arduino-digitalread`
 -  Maple :ref:`GPIO <gpio>` reference page
 
+
+
+.. include:: cc-attribution.txt

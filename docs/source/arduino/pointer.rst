@@ -23,3 +23,6 @@ See Also
 ========
 
 - http://xkcd.com/138/
+
+
+.. include:: cc-attribution.txt

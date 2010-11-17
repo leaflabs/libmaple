@@ -4,3 +4,6 @@ String Class
 ============
 
 Stub.
+
+
+.. include:: cc-attribution.txt

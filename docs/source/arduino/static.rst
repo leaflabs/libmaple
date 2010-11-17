@@ -52,3 +52,6 @@ then incremented, so it starts out at one.  Subsequent calls to
 ``readSensors()`` won't reset ``numSensorReadings`` to zero, because
 it was declared ``static``.  Thus, ``numSensorReadings`` is a count of
 the number of times that ``readSensors()`` has been called.
+
+
+.. include:: cc-attribution.txt

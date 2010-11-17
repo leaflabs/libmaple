@@ -181,3 +181,6 @@ See Also
 - :ref:`Boolean operations <arduino-boolean>` (``&&``, ``||``)
 - :ref:`Compound bitwise operations <arduino-bitwisecompound>` (``&=``,
    ``|=``, ``^=``).
+
+
+.. include:: cc-attribution.txt

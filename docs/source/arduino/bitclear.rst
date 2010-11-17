@@ -42,3 +42,6 @@ See also
 -  :ref:`bitRead <arduino-bitread>`\ ()
 -  :ref:`bitWrite <arduino-bitwrite>`\ ()
 -  :ref:`bitSet <arduino-bitset>`\ ()
+
+
+.. include:: cc-attribution.txt

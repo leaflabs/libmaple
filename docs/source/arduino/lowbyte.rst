@@ -40,3 +40,6 @@ See also
 -  `word <http://arduino.cc/en/Reference/WordCast>`_\ ()
 
 
+
+
+.. include:: cc-attribution.txt

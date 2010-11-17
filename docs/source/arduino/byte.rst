@@ -29,3 +29,6 @@ See Also
 
 -  :ref:`byte() <arduino-bytecast>` (casting a value to a byte)
 -  :ref:`Variables <arduino-variables>`
+
+
+.. include:: cc-attribution.txt

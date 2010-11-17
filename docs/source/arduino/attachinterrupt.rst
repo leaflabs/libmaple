@@ -97,3 +97,6 @@ See also
 -  :ref:`detachInterrupt <arduino-detachinterrupt>`
 -  :ref:`external-interrupts`
 
+
+
+.. include:: cc-attribution.txt

@@ -40,3 +40,6 @@ See Also
 --------
 
 - :ref:`setup() <arduino-setup>`
+
+
+.. include:: cc-attribution.txt

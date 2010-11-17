@@ -53,3 +53,6 @@ See Also
 -  :ref:`double <arduino-double>`
 -  :ref:`Variables <arduino-variables>`
 
+
+
+.. include:: cc-attribution.txt

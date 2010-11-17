@@ -111,3 +111,6 @@ See also
 -  `Tutorial: Digital Pins <http://arduino.cc/en/Tutorial/DigitalPins>`_
 
 
+
+
+.. include:: cc-attribution.txt

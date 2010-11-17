@@ -56,3 +56,6 @@ See Also
 
 
 
+
+
+.. include:: cc-attribution.txt

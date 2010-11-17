@@ -118,3 +118,6 @@ See also
 
 -  :ref:`Storing arrays in FLASH memory <arm-gcc-attribute-flash>`
 
+
+
+.. include:: cc-attribution.txt

@@ -64,3 +64,6 @@ See also
 -  `delay <http://arduino.cc/en/Reference/Delay>`_\ ()
 -  `delayMicroseconds <http://arduino.cc/en/Reference/DelayMicroseconds>`_\ ()
 
+
+
+.. include:: cc-attribution.txt

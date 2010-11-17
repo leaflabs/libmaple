@@ -72,3 +72,6 @@ See Also
 --------
 
 -  :ref:`Arithmetic <arduino-arithmetic>`
+
+
+.. include:: cc-attribution.txt

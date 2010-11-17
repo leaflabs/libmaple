@@ -58,3 +58,6 @@ See Also
 
 -  :ref:`min() <arduino-min>`
 -  :ref:`constrain() <arduino-constrain>`
+
+
+.. include:: cc-attribution.txt

@@ -124,3 +124,6 @@ See Also
   .
 
 - :ref:`sizeof <arduino-sizeof>`\ ()
+
+
+.. include:: cc-attribution.txt

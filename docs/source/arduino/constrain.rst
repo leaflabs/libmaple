@@ -60,3 +60,6 @@ See also
 
 -  :ref:`min() <arduino-min>`
 -  :ref:`max() <arduino-max>`
+
+
+.. include:: cc-attribution.txt

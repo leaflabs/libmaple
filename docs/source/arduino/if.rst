@@ -76,3 +76,6 @@ See Also
 - :ref:`boolean operators <arduino-boolean>`
 - :ref:`comparison operators <arduino-comparison>`
 - :ref:`else <arduino-else>`
+
+
+.. include:: cc-attribution.txt

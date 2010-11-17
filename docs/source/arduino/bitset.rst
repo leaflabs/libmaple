@@ -44,3 +44,6 @@ See Also
 -  :ref:`arduino-bitwrite`
 -  :ref:`arduino-bitclear`
 
+
+
+.. include:: cc-attribution.txt

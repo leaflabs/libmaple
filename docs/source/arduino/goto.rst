@@ -125,3 +125,6 @@ See Also
 - Dijkstra, Edsger W. `Go To Statement Considered Harmful <http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.92.4846&rep=rep1&type=pdf>`_ (PDF)
 
 - Knuth, Donald. `Structured Programming with go to Statements <http://pplab.snu.ac.kr/courses/adv_pl05/papers/p261-knuth.pdf>`_ (PDF)
+
+
+.. include:: cc-attribution.txt

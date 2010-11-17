@@ -47,3 +47,6 @@ See Also
 
 -  :ref:`#define <arduino-define>`
 -  :ref:`volatile <arduino-volatile>`
+
+
+.. include:: cc-attribution.txt

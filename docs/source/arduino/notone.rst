@@ -45,3 +45,6 @@ See also
 
 -  `tone <http://arduino.cc/en/Reference/Tone>`_ ()
 
+
+
+.. include:: cc-attribution.txt

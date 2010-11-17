@@ -49,3 +49,6 @@ See Also
 
 - :ref:`if <arduino-if>`
 - :ref:`switch/case <arduino-switchcase>`
+
+
+.. include:: cc-attribution.txt

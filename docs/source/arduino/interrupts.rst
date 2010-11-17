@@ -57,3 +57,6 @@ See Also
 -  `detachInterrupt <http://arduino.cc/en/Reference/DetachInterrupt>`_\ ()
 
 
+
+
+.. include:: cc-attribution.txt

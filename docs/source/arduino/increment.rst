@@ -39,3 +39,6 @@ See also
 --------
 
 - :ref:`Compound arithmetic operators <arduino-arithmeticcompound>`
+
+
+.. include:: cc-attribution.txt

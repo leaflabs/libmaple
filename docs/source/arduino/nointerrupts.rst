@@ -54,3 +54,6 @@ See Also
 -  `interrupts <http://arduino.cc/en/Reference/Interrupts>`_\ ()
 
 
+
+
+.. include:: cc-attribution.txt

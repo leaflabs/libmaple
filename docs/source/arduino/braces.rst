@@ -92,3 +92,6 @@ reference page for more information)::
 .. [#fbug] At present this feature is slightly buggy as the IDE will
    often find (incorrectly) a brace in text that has been commented
    out.
+
+
+.. include:: cc-attribution.txt

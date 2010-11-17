@@ -86,3 +86,6 @@ See Also
 -  `Variable Declaration <http://arduino.cc/en/Reference/VariableDeclaration>`_
 
 
+
+
+.. include:: cc-attribution.txt

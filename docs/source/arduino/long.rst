@@ -50,3 +50,6 @@ See Also
 -  :ref:`Integer Constants <arduino-constants-integers>`
 -  :ref:`Variables <arduino-variables>`
 
+
+
+.. include:: cc-attribution.txt

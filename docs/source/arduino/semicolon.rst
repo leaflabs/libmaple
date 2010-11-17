@@ -20,3 +20,6 @@ missing semicolon, in the immediate vicinity, preceding the line at
 which the compiler complained.
 
 
+
+
+.. include:: cc-attribution.txt

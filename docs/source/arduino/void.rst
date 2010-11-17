@@ -35,3 +35,6 @@ See also
 
 `function declaration <http://arduino.cc/en/Reference/FunctionDeclaration>`_
 
+
+
+.. include:: cc-attribution.txt

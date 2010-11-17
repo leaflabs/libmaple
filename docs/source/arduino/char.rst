@@ -47,3 +47,6 @@ See also
 - :ref:`arduino-array` (a string is just an array of ``char``\ s)
 - :ref:`Serial.println() <arduino-serial-println>`
 
+
+
+.. include:: cc-attribution.txt

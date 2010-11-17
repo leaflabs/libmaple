@@ -37,3 +37,6 @@ Arduino Compatibility
 ---------------------
 
 Maple's implementation of ``sq()`` is compatible with Arduino.
+
+
+.. include:: cc-attribution.txt

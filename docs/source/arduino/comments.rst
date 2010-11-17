@@ -58,3 +58,6 @@ a problem, or when a program refuses to compile and the compiler error
 is cryptic or unhelpful.
 
 
+
+
+.. include:: cc-attribution.txt

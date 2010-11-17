@@ -51,3 +51,6 @@ Example
 See Also
 --------
 -  :ref:`const <arduino-const>`
+
+
+.. include:: cc-attribution.txt

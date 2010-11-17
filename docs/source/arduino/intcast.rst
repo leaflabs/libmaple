@@ -27,3 +27,6 @@ See Also
 -  :ref:`int <arduino-int>`
 
 
+
+
+.. include:: cc-attribution.txt

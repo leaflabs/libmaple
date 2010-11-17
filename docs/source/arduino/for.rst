@@ -137,3 +137,6 @@ See also
    2. After the seventh iteration, the post-loop causes ``x`` to
       equal 128.  This is larger than 100, so the loop condition is
       false, and the loop stops.
+
+
+.. include:: cc-attribution.txt

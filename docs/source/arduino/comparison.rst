@@ -82,3 +82,6 @@ Comparison operators, along with :ref:`boolean operators
    (This sometimes has uses, though, so just because an assignment
    appears within a conditional doesn't mean it's automatically wrong.
    Be careful to know what you mean.)
+
+
+.. include:: cc-attribution.txt

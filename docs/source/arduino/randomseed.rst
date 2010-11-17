@@ -68,3 +68,6 @@ See also
 -  `random <http://arduino.cc/en/Reference/Random>`_
 
 
+
+
+.. include:: cc-attribution.txt

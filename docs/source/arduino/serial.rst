@@ -63,3 +63,6 @@ Examples
 -  `Serial Call Response <http://arduino.cc/en/Tutorial/SerialCallResponse>`_
 -  `Serial Call Response ASCII <http://arduino.cc/en/Tutorial/SerialCallResponseASCII>`_
 
+
+
+.. include:: cc-attribution.txt

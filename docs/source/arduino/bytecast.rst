@@ -48,3 +48,6 @@ See Also
 -  :ref:`arduino-byte`
 
 
+
+
+.. include:: cc-attribution.txt

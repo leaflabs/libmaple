@@ -37,3 +37,6 @@ Arduino Compatibility
 ---------------------
 
 Maple's implementation of ``abs()`` is compatible with Arduino.
+
+
+.. include:: cc-attribution.txt

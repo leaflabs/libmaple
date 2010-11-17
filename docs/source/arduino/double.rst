@@ -44,3 +44,6 @@ See Also
 
 -  :ref:`float <arduino-float>`
 
+
+
+.. include:: cc-attribution.txt

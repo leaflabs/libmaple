@@ -226,3 +226,6 @@ See Also
 
 - :ref:`Boolean operations <arduino-boolean>` (``&&``, ``||``)
 - :ref:`Bitwise operators <arduino-bitwisemath>` (``&``, ``|``, ``^``, ``~``)
+
+
+.. include:: cc-attribution.txt

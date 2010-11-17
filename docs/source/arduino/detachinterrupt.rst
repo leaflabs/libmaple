@@ -32,3 +32,6 @@ See Also
 - :ref:`attachInterrupt() <arduino-attachInterrupt>`
 
 
+
+
+.. include:: cc-attribution.txt

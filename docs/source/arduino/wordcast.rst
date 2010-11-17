@@ -49,3 +49,6 @@ See also
 -  `word <http://arduino.cc/en/Reference/Word>`_
 
 
+
+
+.. include:: cc-attribution.txt

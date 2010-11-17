@@ -61,3 +61,6 @@ See Also
 
 -  :ref:`max() <arduino-max>`
 -  :ref:`constrain() <arduino-constrain>`
+
+
+.. include:: cc-attribution.txt

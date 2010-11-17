@@ -50,3 +50,6 @@ See also
 -  :ref:`Boolean constants <arduino-constants-bool>`
 -  :ref:`Boolean operators <arduino-boolean>`
 -  :ref:`Variables <arduino-variables>`
+
+
+.. include:: cc-attribution.txt

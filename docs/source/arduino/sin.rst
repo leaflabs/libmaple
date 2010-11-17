@@ -23,3 +23,6 @@ See Also
 -  :ref:`tan <arduino-tan>`
 -  :ref:`float <arduino-float>`
 -  :ref:`double <arduino-double>`
+
+
+.. include:: cc-attribution.txt

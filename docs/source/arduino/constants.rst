@@ -299,3 +299,6 @@ See also
 -  `unsigned int <http://arduino.cc/en/Reference/UnsignedInt>`_
 -  `long <http://arduino.cc/en/Reference/Long>`_
 -  `unsigned long <http://arduino.cc/en/Reference/UnsignedLong>`_
+
+
+.. include:: cc-attribution.txt

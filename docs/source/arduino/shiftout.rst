@@ -131,3 +131,6 @@ Example
     } 
 
 
+
+
+.. include:: cc-attribution.txt

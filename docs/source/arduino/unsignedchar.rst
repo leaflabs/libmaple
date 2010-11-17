@@ -39,3 +39,6 @@ See also
 -  `Serial.println <http://arduino.cc/en/Serial/Println>`_
 
 
+
+
+.. include:: cc-attribution.txt

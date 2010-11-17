@@ -1,7 +1,7 @@
 .. Included in all this directory's files in order to satisfy the
 .. Arduino CC Attribution-ShareAlike 3.0 License
 
-.. admonition:: License
+.. admonition:: License and Attribution
 
    This documentation page was adapted from the `Arduino Reference
    Documentation <http://arduino.cc/en/Reference/HomePage>`_\ , which

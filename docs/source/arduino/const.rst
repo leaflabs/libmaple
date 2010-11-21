@@ -26,13 +26,13 @@ Example
     // this defines a variable called "pi", which cannot be changed:
     const float pi = 3.14;
     float x;
-    
+
     // ....
-    
+
     x = pi * 2;    // it's fine to find the value of a const variable
-    
+
     pi = 7;        // illegal - you can't write to (modify) a constant
-    
+
 
 **#define** or **const**
 ------------------------

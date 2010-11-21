@@ -9,16 +9,6 @@
 The Maple can be programmed in the `Wiring
 <http://www.wiring.org.co/reference/>`_ language, which is the same
 language used to program the `Arduino <http://arduino.cc/>`_ boards.
-Please see the extensive `language reference
-<http://arduino.cc/en/Reference/HomePage>`_ on the Arduino webpage for
-more information, or follow a direct link below.
-
-.. warning::
-
-   The Arduino boards have different sizes for data types, so don't
-   trust their documentation for how many bytes an ``int``, ``long``,
-   etc. take up.  The sizes of each data type on the Maple are given
-   in the :ref:`table below <language-arduino-docs>`.
 
 C or C++ programmers curious about the differences between the Wiring
 language and C++ may wish to skip to the
@@ -59,267 +49,206 @@ Unique Maple Additions
 
 .. _language-arduino-docs:
 
-Arduino Documentation Links
----------------------------
+Maple Language Reference
+------------------------
 
-(This table was copied from http://arduino.cc/en/Reference/Extended).
-
-+------------------------------------+------------------------------------+-----------------------------------------+
-| Structure                          | Variables                          | Functions                               |
-|                                    |                                    |                                         |
-+====================================+====================================+=========================================+
-|                                    |**Constants**                       |**Digital I/O**                          |
-|* `setup()`_                        |                                    |                                         |
-|                                    |* `HIGH`_ | `LOW`_                  |* `pinMode()`_                           |
-|* `loop()`_                         |                                    |                                         |
-|                                    |* `INPUT`_ | `OUTPUT`_              |* `digitalWrite()`_                      |
-|                                    |                                    |                                         |
-|**Control Structures**              |* `true`_ | `false`_                |* `digitalRead()`_                       |
-|                                    |                                    |                                         |
-|* `if`_                             |* `integer constants`_              |                                         |
-|                                    |                                    |**Analog I/O**                           |
-|* `if...else`_                      |* `floating point constants`_       |                                         |
-|                                    |                                    |* `analogReference()`_                   |
-|* `for`_                            |                                    |                                         |
-|                                    |**Data Types**                      |* `analogRead()`_                        |
-|* `switch/case`_                    |                                    |                                         |
-|                                    |Primitive data types on the Maple   |* `analogWrite()`_ - PWM                 |
-|* `while`_                          |have different sizes than on the    |                                         |
-|                                    |Arduino, since the Maple has a full |                                         |
-|* `do...while`_                     |32-bit processor.  The size of each |**Advanced I/O**                         |
-|                                    |such type on the Maple is given     |                                         |
-|* `break`_                          |below.                              |* `tone()`_                              |
-|                                    |                                    |                                         |
-|* `continue`_                       |The ``word`` type is (deliberately) |* `noTone()`_                            |
-|                                    |:ref:`not supported                 |                                         |
-|* `return`_                         |<language-no-word>`.                |* `shiftOut()`_                          |
-|                                    |                                    |                                         |
-|* `goto`_                           |* `void`_                           |* `pulseIn()`_                           |
-|                                    |                                    |                                         |
-|                                    |* `boolean`_ (1 byte)               |                                         |
-|**Further syntax**                  |                                    |**Time**                                 |
-|                                    |* `char`_ (1 byte)                  |                                         |
-|* `;`_ (semicolon)                  |                                    |* `millis()`_                            |
-|                                    |* `unsigned char`_ (1 byte)         |                                         |
-|* `{}`_ (curly braces)              |                                    |* `micros()`_                            |
-|                                    |* `byte`_ (1 byte)                  |                                         |
-|* `//`_ (single line comment)       |                                    |* `delay()`_                             |
-|                                    |* `int`_ (4 bytes)                  |                                         |
-|* `/\* \*/`_ (multi-line comment)   |                                    |* `delayMicroseconds()`_                 |
-|                                    |* `unsigned int`_ (4 bytes)         |                                         |
-|* `#define`_                        |                                    |                                         |
-|                                    |* `long`_ (8 bytes)                 |**Math**                                 |
-|* `#include`_                       |                                    |                                         |
-|                                    |* `unsigned long`_ (8 bytes)        |* `min()`_                               |
-|                                    |                                    |                                         |
-|**Arithmetic Operators**            |* `float`_ (4 bytes)                |* `max()`_                               |
-|                                    |                                    |                                         |
-|* `=`_ (assignment operator)        |* `double`_ (8 bytes)               |* `abs()`_                               |
-|                                    |                                    |                                         |
-|* `+`_ (addition)                   |* `string`_                         |* `constrain()`_                         |
-|                                    |                                    |                                         |
-|* `-`_ (subtraction)                |* `array`_                          |* `map()`_                               |
-|                                    |                                    |                                         |
-|* `*`_ (multiplication)             |                                    |* `pow()`_                               |
-|                                    |**Conversion**                      |                                         |
-|* `/`_ (division)                   |                                    |* `sqrt()`_                              |
-|                                    |* `char()`_                         |                                         |
-|* `%`_ (modulo)                     |                                    |                                         |
-|                                    |* `byte()`_                         |**Trigonometry**                         |
-|                                    |                                    |                                         |
-|**Comparison Operators**            |* `int()`_                          |* `sin()`_                               |
-|                                    |                                    |                                         |
-|* `==`_ (equal to)                  |* `word()`_                         |* `cos()`_                               |
-|                                    |                                    |                                         |
-|* `!=`_ (not equal to)              |* `long()`_                         |* `tan()`_                               |
-|                                    |                                    |                                         |
-|* `<`_ (less than)                  |* `float()`_                        |                                         |
-|                                    |                                    |**Random Numbers**                       |
-|* `>`_ (greater than)               |                                    |                                         |
-|                                    |**Variable Scope & Qualifiers**     |* `randomSeed()`_                        |
-|* `<=`_ (less than or equal to)     |                                    |                                         |
-|                                    |* `variable scope`_                 |* `random()`_                            |
-|* `>=`_ (greater than or equal to)  |                                    |                                         |
-|                                    |* `static`_                         |                                         |
-|                                    |                                    |**Bits and Bytes**                       |
-|**Boolean Operators**               |* `volatile`_                       |                                         |
-|                                    |                                    |* `lowByte()`_                           |
-|* `&&`_ (and)                       |* `const`_                          |                                         |
-|                                    |                                    |* `highByte()`_                          |
-|* `||`_ (or)                        |                                    |                                         |
-|                                    |**Utilities**                       |* `bitRead()`_                           |
-|* `!`_ (not)                        |                                    |                                         |
-|                                    |* `sizeof()`_ (sizeof operator)     |* `bitWrite()`_                          |
-|                                    |                                    |                                         |
-|**Pointer Access Operators**        |                                    |* `bitSet()`_                            |
-|                                    |                                    |                                         |
-|* `* dereference operator`_         |                                    |* `bitClear()`_                          |
-|                                    |                                    |                                         |
-|* `& reference operator`_           |                                    |* `bit()`_                               |
-|                                    |                                    |                                         |
-|                                    |                                    |                                         |
-|**Bitwise Operators**               |                                    |**External Interrupts**                  |
-|                                    |                                    |                                         |
-|* `&`_ (bitwise and)                |                                    |For more information on external         |
-|                                    |                                    |interrupts on Maple, see                 |
-|* `|`_ (bitwise or)                 |                                    |`our reference page`_.                   |
-|                                    |                                    |                                         |
-|* `^`_ (bitwise xor)                |                                    |                                         |
-|                                    |                                    |* `attachInterrupt()`_                   |
-|* `~`_ (bitwise not)                |                                    |                                         |
-|                                    |                                    |* `detachInterrupt()`_                   |
-|* `<<`_ (shift left)                |                                    |                                         |
-|                                    |                                    |                                         |
-|* `>>`_ (shift right)               |                                    |**Interrupts**                           |
-|                                    |                                    |                                         |
-|                                    |                                    |* `interrupts()`_                        |
-|**Compound Operators**              |                                    |                                         |
-|                                    |                                    |* `noInterrupts()`_                      |
-|* `++`_ (increment)                 |                                    |                                         |
-|                                    |                                    |                                         |
-|* `- -`_ (decrement)                |                                    |**Communication**                        |
-|                                    |                                    |                                         |
-|* `+=`_ (compound addition)         |                                    |* `Serial`_                              |
-|                                    |                                    |                                         |
-|* `-=`_ (compound subtraction)      |                                    |**Looking for something else?**          |
-|                                    |                                    |                                         |
-|* `*=`_ (compound multiplication)   |                                    |See the :ref:`libraries` page for        |
-|                                    |                                    |interfacing with particular types of     |
-|* `/=`_ (compound division)         |                                    |hardware. Try the list of                |
-|                                    |                                    |`community-contributed code`_.  Maple    |
-|* `&=`_ (compound bitwise and)      |                                    |links against `newlib`_ and allows the   |
-|                                    |                                    |use of any of its functions; see its     |
-|* `|=`_ (compound bitwise or)       |                                    |documentation for more details.          |
-|                                    |                                    |                                         |
-+------------------------------------+------------------------------------+-----------------------------------------+
++-------------------------------------------------+----------------------------------------------+---------------------------------------------------+
+| Structure                                       | Variables                                    | Functions                                         |
+|                                                 |                                              |                                                   |
++=================================================+==============================================+===================================================+
+|* :ref:`setup() <arduino-setup>`                 |**Constants**                                 |**Digital I/O**                                    |
+|                                                 |                                              |                                                   |
+|* :ref:`loop() <arduino-loop>`                   |* :ref:`HIGH <arduino-constants-high>` |      |* :ref:`pinMode() <arduino-pinmode>`               |
+|                                                 |  :ref:`LOW <arduino-constants-low>`          |                                                   |
+|                                                 |                                              |* :ref:`digitalWrite() <arduino-digitalwrite>`     |
+|**Control Structures**                           |* :ref:`INPUT <arduino-constants-input>` |    |                                                   |
+|                                                 |  :ref:`OUTPUT <arduino-constants-output>`    |* :ref:`digitalRead() <arduino-digitalread>`       |
+|* :ref:`if <arduino-if>`                         |                                              |                                                   |
+|                                                 |* :ref:`true <arduino-constants-true>` |      |                                                   |
+|* :ref:`if...else <arduino-else>`                |  :ref:`false <arduino-constants-false>`      |**Analog I/O**                                     |
+|                                                 |                                              |                                                   |
+|* :ref:`for <arduino-for>`                       |* :ref:`integer constants                     |* :ref:`analogRead() <arduino-analogread>`         |
+|                                                 |  <arduino-constants-integers>`               |                                                   |
+|* :ref:`switch/case <arduino-switchcase>`        |                                              |* :ref:`pwmWrite() <wirish-pwmwrite>`              |
+|                                                 |* :ref:`floating point constants              |  (:ref:`analogWrite() <arduino-analogwrite>` is   |
+|* :ref:`while <arduino-while>`                   |  <arduino-constants-fp>`                     |  also available, though its use is discouraged)   |
+|                                                 |                                              |                                                   |
+|* :ref:`do...while <arduino-dowhile>`            |                                              |                                                   |
+|                                                 |**Data Types**                                |**Advanced I/O**                                   |
+|* :ref:`break <arduino-break>`                   |                                              |                                                   |
+|                                                 | The size of each datatype, in bytes, is      |* tone(): TODO                                     |
+|* :ref:`continue <arduino-continue>`             | given in parentheses where appropriate.      |                                                   |
+|                                                 |                                              |* noTone(): TODO                                   |
+|* :ref:`return <arduino-return>`                 | *Note*: The ``word`` type is (deliberately)  |                                                   |
+|                                                 | :ref:`not supported <language-no-word>`.     |* shiftOut(): TODO                                 |
+|* :ref:`goto <arduino-goto>`                     |                                              |                                                   |
+|                                                 |* :ref:`void <arduino-void>`                  |* pulseIn(): TODO                                  |
+|                                                 |                                              |                                                   |
+|**Further syntax**                               |* :ref:`boolean <arduino-boolean>` (1 byte)   |                                                   |
+|                                                 |                                              |**Time**                                           |
+|* :ref:`; <arduino-semicolon>` (semicolon)       |* :ref:`char <arduino-char>` (1 byte)         |                                                   |
+|                                                 |                                              |* :ref:`millis() <arduino-millis>`                 |
+|* :ref:`{} <arduino-braces>` (curly braces)      |* :ref:`unsigned char                         |                                                   |
+|                                                 |  <arduino-unsignedchar>` (1 byte)            |* :ref:`micros() <arduino-micros>`                 |
+|* :ref:`// <arduino-comments-singleline>`        |                                              |                                                   |
+|  (single line comment)                          |* :ref:`byte <arduino-byte>` (1 byte)         |* :ref:`delay() <arduino-delay>`                   |
+|                                                 |                                              |                                                   |
+|* :ref:`/\* \*/                                  |* :ref:`int <arduino-int>` (4 bytes)          |* :ref:`delayMicroseconds()                        |
+|  <arduino-comments-multiline>`                  |                                              |  <arduino-delaymicroseconds>`                     |
+|  (multi-line comment)                           |* :ref:`unsigned int <arduino-unsignedint>`   |                                                   |
+|                                                 |  (4 bytes)                                   |                                                   |
+|* :ref:`#define <arduino-define>`                |                                              |**Math**                                           |
+|                                                 |* :ref:`long <arduino-long>` (8 bytes)        |                                                   |
+|* :ref:`#include <arduino-include>`              |                                              |* :ref:`min() <arduino-min>`                       |
+|                                                 |* :ref:`unsigned long <arduino-unsignedlong>` |                                                   |
+|                                                 |  (8 bytes)                                   |* :ref:`max() <arduino-max>`                       |
+|**Arithmetic Operators**                         |                                              |                                                   |
+|                                                 |* :ref:`float <arduino-float>` (4 bytes)      |* :ref:`abs() <arduino-abs>`                       |
+|* :ref:`= <arduino-assignment>`                  |                                              |                                                   |
+|  (assignment operator)                          |* :ref:`double <arduino-double>` (8 bytes)    |* :ref:`constrain() <arduino-constrain>`           |
+|                                                 |                                              |                                                   |
+|* :ref:`+ <arduino-arithmetic>` (addition)       |* :ref:`string <arduino-string>`              |* :ref:`map() <arduino-constrain>`                 |
+|                                                 |                                              |                                                   |
+|* :ref:`- <arduino-arithmetic>`                  |* :ref:`array <arduino-array>`                |* :ref:`pow() <arduino-pow>`                       |
+|  (subtraction)                                  |                                              |                                                   |
+|                                                 |* Also provided: ``int8``, ``int16``,         |* :ref:`sqrt() <arduino-sqrt>`                     |
+|* :ref:`* <arduino-arithmetic>`                  |  ``int32``, ``int64``, and their unsigned    |                                                   |
+|  (multiplication)                               |  counterparts ``uint8``, ``uint16``,         |                                                   |
+|                                                 |  ``uint32``, ``uint64``.                     |**Trigonometry**                                   |
+|* :ref:`/ <arduino-arithmetic>` (division)       |                                              |                                                   |
+|                                                 |                                              |* :ref:`sin() <arduino-sin>`                       |
+|* :ref:`% <arduino-modulo>` (modulo)             |**Conversion**                                |                                                   |
+|                                                 |                                              |* :ref:`cos() <arduino-cos>`                       |
+|                                                 |* :ref:`char() <arduino-charcast>`            |                                                   |
+|**Comparison Operators**                         |                                              |* :ref:`tan() <arduino-tan>`                       |
+|                                                 |* :ref:`byte() <arduino-bytecast>`            |                                                   |
+|* :ref:`== <arduino-comparison>` (equal to)      |                                              |                                                   |
+|                                                 |* :ref:`int() <arduino-intcast>`              |**Random Numbers**                                 |
+|* :ref:`\!= <arduino-comparison>`                |                                              |                                                   |
+|  (not equal to)                                 |* :ref:`long() <arduino-longcast>`            |* :ref:`randomSeed() <arduino-randomseed>`         |
+|                                                 |                                              |                                                   |
+|* :ref:`< <arduino-comparison>` (less than)      |* :ref:`float() <arduino-floatcast>`          |* :ref:`random() <arduino-random>`                 |
+|                                                 |                                              |                                                   |
+|* :ref:`> <arduino-comparison>`                  |* :ref:`double() <arduino-doublecast>`        |                                                   |
+|  (greater than)                                 |                                              |**Bits and Bytes**                                 |
+|                                                 |                                              |                                                   |
+|* :ref:`<= <arduino-comparison>`                 |**Variable Scope & Qualifiers**               |* :ref:`lowByte() <arduino-lowbyte>`               |
+|  (less than or equal to)                        |                                              |                                                   |
+|                                                 |* :ref:`variables <arduino-variables>`,       |* :ref:`highByte() <arduino-highbyte>` is          |
+|* :ref:`>= <arduino-comparison>`                 |  :ref:`scope <arduino-variables-scope>`      |  provided, though its use is discouraged.         |
+|  (greater than or equal to)                     |                                              |                                                   |
+|                                                 |* :ref:`static <arduino-static>`              |* :ref:`bitRead() <arduino-bitread>`               |
+|                                                 |                                              |                                                   |
+|**Boolean Operators**                            |* :ref:`volatile <arduino-volatile>`          |* :ref:`bitWrite() <arduino-bitwrite>`             |
+|                                                 |                                              |                                                   |
+|* :ref:`&& <arduino-boolean-and>` (and)          |* :ref:`const <arduino-const>`                |* :ref:`bitSet() <arduino-bitset>`                 |
+|                                                 |                                              |                                                   |
+|* :ref:`|| <arduino-boolean-or>` (or)            |                                              |* :ref:`bitClear() <arduino-bitclear>`             |
+|                                                 |**Utilities**                                 |                                                   |
+|* :ref:`\! <arduino-boolean-not>` (not)          |                                              |* :ref:`bit() <arduino-bit>`                       |
+|                                                 |* :ref:`sizeof() <arduino-sizeof>`            |                                                   |
+|                                                 |  (``sizeof`` operator)                       |                                                   |
+|**Pointer Access Operators**                     |                                              |**External Interrupts**                            |
+|                                                 |                                              |                                                   |
+|* :ref:`* dereference operator                   |                                              |* :ref:`Reference Page <external-interrupts>`      |
+|  <arduino-pointer>`                             |                                              |                                                   |
+|                                                 |                                              |* :ref:`attachInterrupt()                          |
+|* :ref:`& reference operator                     |                                              |  <arduino-attachinterrupt>`                       |
+|  <arduino-pointer>`                             |                                              |                                                   |
+|                                                 |                                              |* :ref:`detachInterrupt()                          |
+|                                                 |                                              |  <arduino-detachinterrupt>`                       |
+|**Bitwise Operators**                            |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`& <arduino-bitwisemath-and>`             |                                              |**Interrupts**                                     |
+|  (bitwise and)                                  |                                              |                                                   |
+|                                                 |                                              |* interrupts(): TODO                               |
+|* :ref:`| <arduino-bitwisemath-or>`              |                                              |                                                   |
+|  (bitwise or)                                   |                                              |* noInterrupts(): TODO                             |
+|                                                 |                                              |                                                   |
+|* :ref:`^ <arduino-bitwisemath-xor>`             |                                              |                                                   |
+|  (bitwise xor)                                  |                                              |**Communication**                                  |
+|                                                 |                                              |                                                   |
+|* :ref:`~ <arduino-bitwisemath-not>`             |                                              |* :ref:`SerialUSB <wirish-serialusb>`              |
+|  (bitwise not)                                  |                                              |                                                   |
+|                                                 |                                              |* :ref:`Serial <arduino-serial>`                   |
+|* :ref:`\<\< <arduino-bitshift>`                 |                                              |                                                   |
+|  (shift left)                                   |                                              |**Looking for something else?**                    |
+|                                                 |                                              |                                                   |
+|* :ref:`>> <arduino-bitshift>`                   |                                              | See the :ref:`libraries` page for interfacing with|
+|  (shift right)                                  |                                              | particular types of hardware. Try the list of     |
+|                                                 |                                              | `community-contributed code` .  Maple links       |
+|                                                 |                                              | against `newlib` and allows the use of any of its |
+|**Compound Operators**                           |                                              | functions; see its documentation for more details.|
+|                                                 |                                              |                                                   |
+|* :ref:`++ <arduino-increment>`                  |                                              |                                                   |
+|  (increment)                                    |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`- - <arduino-increment>`                 |                                              |                                                   |
+|  (decrement)                                    |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`+= <arduino-arithmeticcompound>`         |                                              |                                                   |
+|  (compound add)                                 |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`-=                                       |                                              |                                                   |
+|  <arduino-arithmeticcompound>` (compound        |                                              |                                                   |
+|  subtract)                                      |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`*=                                       |                                              |                                                   |
+|  <arduino-arithmeticcompound>` (compound        |                                              |                                                   |
+|  multiply)                                      |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`/=                                       |                                              |                                                   |
+|  <arduino-arithmeticcompound>` (compound        |                                              |                                                   |
+|  divide)                                        |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`&=                                       |                                              |                                                   |
+|  <arduino-arithmeticcompound>` (compound        |                                              |                                                   |
+|  bitwise and)                                   |                                              |                                                   |
+|                                                 |                                              |                                                   |
+|* :ref:`|=                                       |                                              |                                                   |
+|  <arduino-arithmeticcompound>` (compound        |                                              |                                                   |
+|  bitwise or)                                    |                                              |                                                   |
+|                                                 |                                              |                                                   |
++-------------------------------------------------+----------------------------------------------+---------------------------------------------------+
 
 .. _language-missing-features:
 
-Stub TODO: fill in other missing features, like analogReference()
+Missing Arduino Features
+------------------------
 
-.. note::
+Stub TODO: fill in other missing features
 
-   The ``word`` data type is not supported on the Maple.  This is by
-   choice.
+**analogReference()**
 
-   We decided not to include it because, while the Maple has 32-bit
-   words, the word size on an Arduino board is only 16 bits, and code
-   that uses the ``word`` type is likely to rely on that fact.
+    It is not possible to implement this function on the Maple
+    hardware.  It will be possible on the upcoming Maple Native.
 
-   By not supporting ``word``, you'll get a compile error when porting
-   Arduino code to your Maple instead of potentially weird,
-   hard-to-debug runtime behavior.
+.. _language-no-word:
 
-   If you're porting over Arduino code and really want ``word``, you
-   can put the following at the top of the file you're porting::
+**word**
 
-     typedef uint16 word;
+    Readers familiar with the Arduino environment may notice that the
+    ``word`` datatype is missing from the above table's list of data
+    types.  We chose **not to provide** the ``word`` data type on the
+    Maple.  If you want a 16-bit unsigned integer, use the ``uint16``
+    type instead.
 
-.. _if: http://arduino.cc/en/Reference/If
-.. _if...else: http://arduino.cc/en/Reference/Else
-.. _for: http://arduino.cc/en/Reference/For
-.. _switch/case: http://arduino.cc/en/Reference/SwitchCase
-.. _while: http://arduino.cc/en/Reference/While
-.. _do...while: http://arduino.cc/en/Reference/DoWhile
-.. _break: http://arduino.cc/en/Reference/Break
-.. _continue: http://arduino.cc/en/Reference/Continue
-.. _return: http://arduino.cc/en/Reference/Return
-.. _goto: http://arduino.cc/en/Reference/Goto
+    While the Maple has 32-bit words, the word size on an Arduino
+    board is only 16 bits, and code that uses the ``word`` type is
+    likely to rely on that fact.
 
-.. _;: http://arduino.cc/en/Reference/SemiColon
-.. _{}: http://arduino.cc/en/Reference/Braces
-.. _//: http://arduino.cc/en/Reference/Comments
-.. _/\* \*/: http://arduino.cc/en/Reference/Comments
-.. _#define: http://arduino.cc/en/Reference/Define
-.. _#include: http://arduino.cc/en/Reference/Include
+    By not supporting ``word``, you'll get a compile error when
+    porting Arduino code to the Maple instead of potentially weird,
+    hard-to-debug runtime behavior.
 
-.. _=: http://arduino.cc/en/Reference/Assignment
-.. _+: http://arduino.cc/en/Reference/Arithmetic
-.. _-: http://arduino.cc/en/Reference/Arithmetic
-.. _*: http://arduino.cc/en/Reference/Arithmetic
-.. _/: http://arduino.cc/en/Reference/Arithmetic
-.. _%: http://arduino.cc/en/Reference/Modulo
+    If you really must have ``word``, you can include the following
+    ``typedef`` in your program::
 
-.. _==: http://arduino.cc/en/Reference/If
-.. _!=: http://arduino.cc/en/Reference/If
-.. _<: http://arduino.cc/en/Reference/If
-.. _>: http://arduino.cc/en/Reference/If
-.. _<=: http://arduino.cc/en/Reference/If
-.. _>=: http://arduino.cc/en/Reference/If
+        typedef uint16 word;
 
-.. _&&: http://arduino.cc/en/Reference/Boolean
-.. _||: http://arduino.cc/en/Reference/Boolean
-.. _!: http://arduino.cc/en/Reference/Boolean
-
-.. _* dereference operator: http://arduino.cc/en/Reference/Pointer
-.. _& reference operator: http://arduino.cc/en/Reference/Pointer
-
-.. _&: http://arduino.cc/en/Reference/BitwiseAnd
-.. _|: http://arduino.cc/en/Reference/BitwiseAnd
-.. _^: http://arduino.cc/en/Reference/BitwiseAnd
-.. _~: http://arduino.cc/en/Reference/BitwiseXorNot
-.. _<<: http://arduino.cc/en/Reference/Bitshift
-.. _>>: http://arduino.cc/en/Reference/Bitshift
-
-.. _++: http://arduino.cc/en/Reference/Increment
-.. FIXME can't freaking get two hyphens to show up! sphinx turns "--"
-.. into an endash, whatever, fine, try to escape like "\-\-", that
-.. ALSO becomes endash (!@#$), damn, well, maybe someone else is
-.. eating my slash, try "\\-\\-", nope, that turns into a motherfing
-.. \-\-. i hate everything.
-.. _- -: http://arduino.cc/en/Reference/Increment
-.. _+=: http://arduino.cc/en/Reference/IncrementCompound
-.. _-=: http://arduino.cc/en/Reference/IncrementCompound
-.. _*=: http://arduino.cc/en/Reference/IncrementCompound
-.. _/=: http://arduino.cc/en/Reference/IncrementCompound
-.. _&=: http://arduino.cc/en/Reference/BitwiseCompound
-.. _|=: http://arduino.cc/en/Reference/BitwiseCompound
-
-.. _HIGH: http://arduino.cc/en/Reference/Constants
-.. _LOW: http://arduino.cc/en/Reference/Constants
-.. _INPUT: http://arduino.cc/en/Reference/Constants
-.. _OUTPUT: http://arduino.cc/en/Reference/Constants
-.. _true: http://arduino.cc/en/Reference/Constants
-.. _false: http://arduino.cc/en/Reference/Constants
-.. _integer constants: http://arduino.cc/en/Reference/IntegerConstants
-.. _floating point constants: http://arduino.cc/en/Reference/Fpconstants
-
-.. _void: http://arduino.cc/en/Reference/Void
-.. _boolean: http://arduino.cc/en/Reference/BooleanVariables
-.. _char: http://arduino.cc/en/Reference/Char
-.. _unsigned char: http://arduino.cc/en/Reference/UnsignedChar
-.. _byte: http://arduino.cc/en/Reference/Byte
-.. _int: http://arduino.cc/en/Reference/Int
-.. _unsigned int: http://arduino.cc/en/Reference/UnsignedInt
-.. _word: http://arduino.cc/en/Reference/Word
-.. _long: http://arduino.cc/en/Reference/Long
-.. _unsigned long: http://arduino.cc/en/Reference/UnsignedLong
-.. _float: http://arduino.cc/en/Reference/Float
-.. _double: http://arduino.cc/en/Reference/Double
-.. _string: http://arduino.cc/en/Reference/String
-.. _array: http://arduino.cc/en/Reference/Array
-
-.. _char(): http://arduino.cc/en/Reference/CharCast
-.. _byte(): http://arduino.cc/en/Reference/ByteCast
-.. _int(): http://arduino.cc/en/Reference/IntCast
-.. _word(): http://arduino.cc/en/Reference/WordCast
-.. _long(): http://arduino.cc/en/Reference/LongCast
-.. _float(): http://arduino.cc/en/Reference/FloatCast
-
-.. _variable scope: http://arduino.cc/en/Reference/Scope
-.. _static: http://arduino.cc/en/Reference/Static
-.. _volatile: http://arduino.cc/en/Reference/Volatile
-.. _const: http://arduino.cc/en/Reference/Const
-.. _sizeof(): http://arduino.cc/en/Reference/Sizeof
-
-.. Links for the standard Arduino built-in functions are included as
-.. part of the standard epilog.
 .. _our reference page: http://leaflabs.com/docs/external-interrupts/
 
-.. _Serial: http://arduino.cc/en/Reference/Serial
-.. _community-contributed code: http://www.arduino.cc/playground/Main/GeneralCodeLibrary
 .. _newlib: http://sourceware.org/newlib/
-
 
 .. _arduino_c_for_c_hackers:
 
@@ -331,7 +260,11 @@ you C programmers should remember that `C++ is not a superset of C
 <http://en.wikipedia.org/wiki/Compatibility_of_C_and_C%2B%2B>`_) who
 want a better understanding of the differences between C++ and the
 Wiring language.  The good news is that the differences are relatively
-few.
+few; Wiring is just a thin wrapper around C++.
+
+Some potentially better news is that the Maple can be programmed using
+a :ref:`standard Unix toolchain <unix-toolchain>`, so if you'd rather
+stick with :command:`gcc`, :command:`make`, and friends, you can.
 
 A *sketch* is the IDE's notion of a project; it consists of one or
 more files written in the Wiring language, which is mostly the same as
@@ -361,8 +294,8 @@ The Wiring language also does not require you to define your own
 are required to define two functions, ``setup`` and ``loop``, with
 type signatures ::
 
-  void setup(void)
-  void loop(void)
+  void setup(void);
+  void loop(void);
 
 Once a sketch is uploaded to a Maple and begins to run, ``setup()`` is
 called once, and then ``loop()`` is called repeatedly.  The IDE

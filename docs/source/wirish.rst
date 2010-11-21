@@ -7,3 +7,4 @@
 
    wirish/pwmwrite
    wirish/types
+   wirish/serialusb

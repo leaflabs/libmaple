@@ -16,17 +16,17 @@ Example:
 
     // actions are performed in the functions "setup" and "loop"
     // but  no information is reported to the larger program
-    
+
     void setup()
     {
       // ...
     }
-    
+
     void loop()
     {
       // ...
     }
-     
+
 
 
 

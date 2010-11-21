@@ -32,7 +32,7 @@ Example
 ::
 
     unsigned long time;
-    
+
     void setup(){
       Serial.begin(9600);
     }

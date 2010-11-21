@@ -103,7 +103,7 @@ Digital pins can be used either as **INPUT** or **OUTPUT**.
 Changing a pin from INPUT TO OUTPUT with pinMode() drastically
 changes the electrical behavior of the pin.
 
-
+.. _arduino-constants-input:
 
 Pins Configured as Inputs
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -115,7 +115,7 @@ circuit that they are sampling, say equivalent to a series resistor
 of 100 Megohms in front of the pin. This makes them useful for
 reading a sensor, but not powering an LED.
 
-
+.. _arduino-constants-output:
 
 Pins Configured as Outputs
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -132,7 +132,7 @@ of current provided by an Atmega pin is also not enough to power
 most relays or motors, and some interface circuitry will be
 required.
 
-.. _arduino-fpconstants:
+.. _arduino-constants-fp:
 
 Floating-Point Constants
 ------------------------
@@ -141,28 +141,26 @@ Similar to integer constants, floating point constants are used to
 make code more readable. Floating point constants are swapped at
 compile time for the value to which the expression evaluates.
 
+.. TODO explain that floating point literals are doubles
 
+.. _arduino-constants-fp-f:
+
+.. TODO f modifiers
 
 Examples:
 
-
-
 ``n = .005;``
-
-
 
 Floating point constants can also be expressed in a variety of
 scientific notation. 'E' and 'e' are both accepted as valid
 exponent indicators.
 
-
-
 ::
 
-    
+
     floating-point   evaluates to:      also evaluates to:
-      constant 
-    
+      constant
+
        10.0              10
       2.34E5          2.34 * 10^5             234000
       67e-12        67.0 * 10^-12         .000000000067

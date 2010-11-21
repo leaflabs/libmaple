@@ -14,19 +14,23 @@ One use for comments is to help you understand (or remember) how your
 program works, or to inform others how your program works.  There are
 two different ways of making comments.
 
+.. _arduino-comments-singleline:
+
 **Single line comment**: Anything following two slashes, ``//``, until
 the end of the line, is a comment::
 
      x = 5;  // the rest of this line is a comment
 
+.. _arduino-comments-multiline:
+
 **Multi-line comment**: Anything in between a pair of ``/*`` and ``*/``
 is a comment::
-    
+
     /* <-- a slash-star begins a multi-line comment
 
     all of this in the multi-line comment - you can use it to comment
     out whole blocks of code
-    
+
     if (gwb == 0){   // single line comment is OK inside a multi-line comment
     x = 3;
     }

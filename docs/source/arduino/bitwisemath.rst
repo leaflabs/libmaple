@@ -120,7 +120,7 @@ program to blink digital pin 13 (the LED pin on Maple)::
     void setup(){
         pinMode(led_pin, OUTPUT);
     }
-    
+
     void loop(){
         toggle = toggle ^ 1;
         digitalWrite(led_pin, toggle);

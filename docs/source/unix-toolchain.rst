@@ -32,20 +32,16 @@ GCC compiler tools <http://www.codesourcery.com/sgpp/features.html>`_
 please post in the forums, so we can fold your tips into this
 document!
 
-* :ref:`Linux setup <toolchain-linux-setup>`
-* :ref:`OS X setup <toolchain-osx-setup>`
-* :ref:`Test compilation <toolchain-test>`
-* :ref:`Upload a program <toolchain-upload>`
-* :ref:`Communicate over USB-serial interface <toolchain-serialusb>`
-* :ref:`Starting your own projects <toolchain-projects>`
-* :ref:`Debug with OpenOCD <toolchain-openocd>`
-* :ref:`Do it all with Code::Blocks <toolchain-codeblocks>`
-* :ref:`Go forth exuberantly! <toolchain-exuberantly>`
+.. contents:: Contents
+   :local:
 
 .. _toolchain-linux-setup:
 
-Linux Setup
------------
+Setup
+-----
+
+Linux
+^^^^^
 
 These instructions are oriented towards Linux users using a
 contemporary Debian-based distribution.
@@ -55,7 +51,7 @@ contemporary Debian-based distribution.
 First I'll give the commands to run, then explain::
 
   $ sudo aptitude install build-essential git-core wget screen dfu-util \
-                          openocd python python-serial 
+                          openocd python python-serial
 
 You'll want to install a bunch of developer "basics" like
 :command:`make`, :command:`tar`, etc.  A good catch-all for these
@@ -90,12 +86,12 @@ package; this could also be installed with `easy_install
 
 **2. Fetch libmaple and Compiler Toolchain** ::
 
-  $ cd ~ 
-  $ git clone git://github.com/leaflabs/libmaple.git libmaple 
-  $ cd libmaple 
+  $ cd ~
+  $ git clone git://github.com/leaflabs/libmaple.git libmaple
+  $ cd libmaple
   $ wget http://static.leaflabs.com/pub/codesourcery/gcc-arm-none-eabi-latest-linux32.tar.gz
   $ tar xvf arm-*-linux32.tar.gz
-  $ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up 
+  $ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up
 
 This step is fairly straightforward: do a git clone of the `libmaple
 repository <http://github.com/leaflabs/libmaple>`_ to some directory,
@@ -114,9 +110,9 @@ relative path calls and references.
 
 From the libmaple directory, ::
 
-  $ groups # make sure it includes plugdev; if not add, yourself to it 
-  $ sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules 
-  $ sudo /etc/init.d/udev restart 
+  $ groups # make sure it includes plugdev; if not add, yourself to it
+  $ sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules
+  $ sudo /etc/init.d/udev restart
 
 As a security precaution on linux, unknown USB devices can only be
 accessed by the superuser. This udev script identifies the Maple based
@@ -132,8 +128,8 @@ Great! Test your setup by :ref:`compiling a sample program
 
 .. _toolchain-osx-setup:
 
-OS X Setup
-----------
+OS X
+^^^^
 
 These instructions have been tested successfully on OS X 10.6.4. As
 stated previously, this document assumes a general level of Unix
@@ -185,7 +181,7 @@ You will need the following tools to get started:
    $ ln -s /Applications/OpenMoko\ Flasher.app/Contents/Mac\ OS/dfu-util \
            /somewhere/on/your/PATH/dfu-util
 
- .. note:: 
+ .. note::
    Just copying the binary somewhere doesn't work, as it relies on
    dynamically linked libraries found elsewhere in the .app
    bundle. It's possible to pull just the relevant pieces out of the
@@ -426,7 +422,7 @@ then `install Code::Blocks
 <http://www.codeblocks.org/downloads/26>`_. You can do this on Linux
 with::
 
-  $ sudo aptitude install codeblocks 
+  $ sudo aptitude install codeblocks
 
 The first time it runs you'll maybe want to disable all the glitzy
 "Getting Started" crap (when will they learn?). We've added a .cbp

@@ -95,7 +95,7 @@ Here's an example::
                 if (analogRead(0) > 250) {
                     goto bailout;
                 }
-                // more statements ... 
+                // more statements ...
             }
             // innermost loop ends here
         }

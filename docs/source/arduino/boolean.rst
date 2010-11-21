@@ -6,7 +6,8 @@ Boolean Operators
 =================
 
 These can be used inside the condition of an :ref:`if <arduino-if>`
-statement.
+statement.  Evaluate to :ref:`true <arduino-constants-true>` or
+:ref:`false <arduino-constants-false>`.
 
 .. contents:: Contents
    :local:
@@ -45,6 +46,7 @@ True if either operand is true.  For example::
 
 is true if either ``x`` or ``y`` is greater than 0.
 
+.. _arduino-boolean-not:
 
 ! (logical not)
 ---------------
@@ -55,7 +57,7 @@ True if the operand is false.  For example::
       // ...
     }
 
-is true if ``x`` is false (i.e. if ``x`` equals zero).
+is true if ``x`` is false (i.e. if ``x`` is zero).
 
 Some Advice
 -----------

@@ -19,16 +19,16 @@ Example
     for (x = 0; x < 255; x ++)
     {
         digitalWrite(PWMpin, x);
-        sens = analogRead(sensorPin);  
+        sens = analogRead(sensorPin);
         if (sens > threshold){      // bail out on sensor detect
            x = 0;
            // this line of code means that we'll immediately exit
            // from the "for" loop:
            break;
-        }  
+        }
         delay(50);
     }
-    
+
 
 
 

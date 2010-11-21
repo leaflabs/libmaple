@@ -6,9 +6,9 @@ highByte(x)
 .. warning:: This macro is provided for compatibility with Arduino
    only.  It returns the second-least significant byte in an integral
    value.  It makes sense to call this the "high" byte on a 16-bit
-   microcontroller like the Atmel chips on Arduinos, but it makes no
-   sense at all on a 32-bit microcontroller like the STM32s in the
-   Maple line.
+   ``int`` microcontroller like the Atmel chips on Arduinos, but it
+   makes no sense at all on a 32-bit microcontroller like the STM32s
+   in the Maple line.
 
    In short: we provide this so that existing Arduino code works as
    expected, but **strongly discourage its use** in new programs.

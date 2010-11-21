@@ -9,7 +9,7 @@ A variable is a way of naming and storing a value for later use by
 the program, such as data from a sensor or an intermediate value
 used in a calculation.
 
-
+.. _arduino-variables-declaring:
 
 Declaring Variables
 ^^^^^^^^^^^^^^^^^^^
@@ -34,7 +34,7 @@ store in choosing variable types. Variables will
 `roll over <#VariableRollover>`_ when the value stored exceeds the
 space assigned to store it. See below for an example.
 
-
+.. _arduino-variables-scope:
 
 Variable Scope
 ^^^^^^^^^^^^^^
@@ -45,7 +45,7 @@ influences how various functions in a program will *see* the
 variable. This is called variable
 `scope <http://arduino.cc/en/Reference/Scope>`_.
 
-
+.. _arduino-variables-initializing:
 
 Initializing Variables
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -63,7 +63,7 @@ Example:
 
      int calibrationVal = 17;  // declare calibrationVal and set initial value
 
-
+.. _arduino-variables-rollover:
 
 Variable Rollover
 ^^^^^^^^^^^^^^^^^
@@ -104,7 +104,7 @@ variable on the left side.
 ::
 
     inputVariable1 = 7;             // sets the variable named inputVariable1 to 7
-    inputVariable2 = analogRead(2); // sets the variable named inputVariable2 to the 
+    inputVariable2 = analogRead(2); // sets the variable named inputVariable2 to the
                                     // (digitized) input voltage read from analog pin #2
 
 
@@ -117,7 +117,7 @@ Examples
      int lightSensVal;
        char currentLetter;
        unsigned long speedOfLight = 186000UL;
-       char errorMessage = {"choose another option"}; // see string 
+       char errorMessage = {"choose another option"}; // see string
 
 
 
@@ -135,7 +135,7 @@ inputVariable2 which is a minimum of 100:
     {
       inputVariable2 = 100;
     }
-    
+
     delay(inputVariable2);
 
 

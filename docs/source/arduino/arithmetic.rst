@@ -14,7 +14,7 @@ Description
 These operators return the sum, difference, product, or quotient
 (respectively) of the two operands. The operation is conducted using
 the data type of the operands, so, for example, ``9 / 4`` gives ``2``
-since 9 and 4 are ints.
+since 9 and 4 are :ref:`int variables <arduino-int>`.
 
 This also means that the operation can overflow if the result is
 larger than that which can be stored in the data type (e.g. adding 1

@@ -10,17 +10,17 @@ Description
 
 Converts a value to the :ref:`byte <arduino-byte>` data type.
 
-.. warning::
+.. note::
 
    Casting to the byte type is provided for compatibility with
-   Arduino.  However, ``byte`` is a non-standard type.  The standard
-   C++ type for storing an 8-bit unsigned integer is ``unsigned
-   char``, and we recommend using that instead.
+   Arduino.  However, the recommended Maple type for storing an 8-bit
+   unsigned integer is ``uint8``. (C and C++ programmers: ``stdint.h``
+   is also available).
 
-   In order to cast a variable ``x`` to an ``unsigned char``, the
+   In order to cast a variable ``x`` to a ``uint8``, the
    following syntax can be used::
 
-       (unsigned char)(x);
+       uint8(x);
 
 Syntax
 ------

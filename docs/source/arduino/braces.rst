@@ -59,10 +59,10 @@ pages for more information)::
       while (boolean expression) {
          // code inside the loop goes here
       }
-    
+
       for (initialisation; termination condition; incrementing expr) {
          // code inside the loop goes here
-      } 
+      }
 
       do {
          // code inside the loop goes here
@@ -80,7 +80,7 @@ reference page for more information)::
       }
       else if (boolean expression) {
           // code inside the "else if"
-      } 
+      }
       else {
           // code inside the "else"
       }

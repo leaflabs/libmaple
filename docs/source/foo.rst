@@ -46,6 +46,7 @@ Finished:
    arduino/detachinterrupt
    arduino/digitalread
    arduino/double
+   arduino/doublecast
    arduino/dowhile
    arduino/else
    arduino/float
@@ -77,7 +78,7 @@ Finished:
    arduino/sq
    arduino/static
    arduino/string
- 
+
 Unfinished; straightforward to convert:
 
 .. toctree::

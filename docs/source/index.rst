@@ -15,19 +15,19 @@ Table of contents:
 
 .. TODO: be more Pythonic with a "parts of the documentation" thing
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   Maple Quickstart Guide <maple-quickstart>
-   Maple IDE Installation Guide <maple-ide-install>
-   Maple IDE Documentation <ide>
-   Maple/Arduino Compatibility Reference <compatibility>
-   Maple Language Reference <language>
-   Maple Library Reference <libraries>
-   libmaple Command-Line Tools and APIs <libmaple>   
+   Quickstart Guide <maple-quickstart>
+   IDE Installation Guide <maple-ide-install>
+   IDE Documentation <ide>
+   Language Reference <language>
+   Arduino Compatibility Reference <compatibility>
+   Library Reference <libraries>
+   Command-Line Tools and APIs <libmaple>
    Troubleshooting <troubleshooting>
    Hardware-Specific Documentation <hardware>
    External Interrupts <external-interrupts>
-   Maple bootloader <bootloader>
+   Bootloader <bootloader>
    Known Problems <errata>
    [Temporary] Arduino docs TOC <foo>
    [Temporary] Wirish-only docs TOC <wirish>

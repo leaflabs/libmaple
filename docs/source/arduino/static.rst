@@ -15,8 +15,8 @@ Variables declared as ``static`` will only be created and initialized
 the first time a function is called.
 
 .. note:: This is only one use of the ``static`` keyword in C++.  It
-   has some other important uses that are outside the scope of this
-   documentation; consult a reliable C++ reference for details.
+   has some other important uses that are not documented here; consult
+   a reliable C++ reference for details.
 
 Example
 -------

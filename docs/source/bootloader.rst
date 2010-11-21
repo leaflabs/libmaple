@@ -4,7 +4,7 @@
  Maple Bootloader(s)
 =====================
 
-.. TODO: [Stub] add a section on flashing your own bootloader
+.. TODO: add a section on flashing your own bootloader
 
 The firmware which allows the Maple to be reprogrammed via a USB
 connection. Every Maple board comes programmed with this by default,
@@ -20,43 +20,46 @@ Flash memory and only runs when the chip is reset).
 .. contents:: Contents
    :local:
 
-Bootloader Schemes Explained!
------------------------------
+Bootloader Schemes Explained
+----------------------------
 
-Maple Rev 3 and Rev 5 (the version currently shipping) represents a
-drastic remake of the core library as well as the upload process. Some
-of these changes are aesthetic, refactoring and reorganization. Some
-are performance minded. The changes to the bootloader, however, were
-implemented to solve some really gritty cross platform issues.  Before
-delving in to how the Rev 1 bootloader worked and how the Rev 3
-bootloader works now, lets look at the features common to both of them
-and touch a bit on the Arduino setup. This is a fairly involved
-explanation, with a lot of details that are likely only interesting to
-a few. If you just want to get the rough idea, skim this article. If
-you want to start hacking on the bootloader, get in touch with us to
-get even more info on how this all works.  Of course, you can always
-`check out the code at github <http://github.com/leaflabs/libmaple>`_!
+Maple Rev 3 and Rev 5 (Rev 5 is the version currently shipping)
+represents a drastic remake of the core library as well as the upload
+process. Thes changes to the bootloader, were implemented to resolve
+platform-specific issues on Windows.  Before delving into how the Rev
+1 bootloader worked and how the Rev 5 bootloader works now, we'll
+discuss the features common to each and touch a bit on the Arduino
+setup.
+
+This is a fairly involved explanation, with a lot of details that are
+likely only interesting to a few. If you just want to get the rough
+idea, skim this article. If you want to start hacking on the
+bootloader, get in touch with us to get even more info on how this all
+works.  And finally, you can always `check out the code at github
+<http://github.com/leaflabs/libmaple>`_!
 
 Arduino
 -------
 
-Arduino is based off of AVR series micro controllers, most of which
+Arduino is based off of AVR series microcontrollers, most of which
 lack USB support. Thus, boards like the Duemilanove add USB capability
-via an FTDI USB to Serial converter chip. This chip interfaces with
-the AVR over…serial. When you plug an Arduino into a computer, only an
-FTDI driver is needed. Since the FTDI chip is separate from the AVR,
-you can reset the Arduino without closing this USB connection with the
-FTDI chip. To program an Arduino, the host machine sends a command
-over the USB pipe (reset DTR) which in turn resets the AVR. The AVR
-will boot into a bootloader, which waits for a second for any upload
-commands over serial. The host machine can either send those commands,
-or do nothing. In which case the AVR will quickly jump to user code
+via an FTDI USB-to-Serial converter chip. This chip interfaces with
+the AVR over an RS-232 serial interface. When you plug an Arduino into
+a computer, only an FTDI driver is needed. Since the FTDI chip is
+separate from the AVR, you can reset the Arduino without closing this
+USB connection with the FTDI chip.
+
+To program an Arduino, the host machine sends a command over the USB
+pipe (reset DTR) which in turn resets the AVR. The AVR will boot into
+a bootloader, which waits for a second for any upload commands over
+serial. The host machine can either send those commands, or do
+nothing. If it does nothing, the AVR will quickly jump to user code
 and off you go.  The whole process is quick, the bootloader doesn’t
 live for very long, and will exit almost immediately if no upload
 commands are received.
 
-Maple Rev 1: The Horror...
----------------------------
+Maple Rev 1
+-----------
 
 Maple is based off the STM32 (ARM cortex M3) series chips, which do
 have embedded USB support. Thus, Maple doesn’t need the extra FTDI
@@ -140,101 +143,132 @@ bringing up the USB serial.
 Maple Rev6 - The Serial Bootloader (Tentative)
 ----------------------------------------------
 
-The bootloader in Rev3/Rev5 works quite well in linux, it works OK in
-Mac, but in windows we had a few major issues. First off, unlike the
-other operating systems, Windows needed to be manually pointed to both
-the driver to use for programming (DFU, via libusb) and the driver to
-use for serial communication (usbser.sys, built in to windows). Maple
-operates in only one of these modes at a time, installation has been
-quite tricky, involving getting Maple into the right mode and then
-installing the driver/inf file during the windows prompt. Furthermore,
-because libusb is not bundled with Windows, and its driver is not
-signed, users of Windows 7 have been forced to laboriously disable
-driver signing checks. Finally, the constant switching of the device
-between Serial and DFU modes (during programming) really confuses
-windows, often reprompting users to install drivers that are alrady
-installed or generally not working well. We have therefore decided to
-simplify things greatly, by simply abandoning DFU. In this new
-bootloader scheme, Maple is, simply, a serial device. Windows comes
-bundled with usbser.sys, so no driver signing is required. The
-installation process will be greatly simplified, there will be no more
-siwtching back and forth between "modes" and we get the chance to
-build in a lot of new functionality that were outside the DFU spec.
+The bootloader in Rev3/Rev5 works well on Linux, acceptably on Mac,
+but was unsatisfactory on Windows. Unlike the other operating systems,
+Windows needed to be manually pointed to both the driver to use for
+programming (DFU, via `libusb <http://www.libusb.org/>`_) and the
+driver to use for serial communication (usbser.sys, built in to
+Windows). Since Maple operates in only one of these modes at a time,
+driver installation was unnecessarily complicated. It was necessary to
+bring Maple into the correct mode before installing each of the
+drivers. Furthermore, because libusb is not bundled with Windows, and
+its driver is not signed, Windows 7 users have been forced to
+laboriously disable driver signing checks. Finally, Windows hates the
+constant switching of the device between Serial and DFU modes (during
+programming), and often prompts users to install drivers that are
+already installed. We have therefore decided to abandon DFU.
+
+In our new bootloader scheme, Maple is simply a serial device.
+Windows comes bundled with usbser.sys, so no driver signing is
+required.  The IDE installation process is greatly simplified, there
+is no more switching back and forth between "modes", and we can build
+in new functionality outside the DFU spec.
 
 The first incarnation of this serial-only bootloader leaves libmaple
 and user code untouched. However, during programming, instead of
-calling dfu-util to upload code we will now call a newly written
-utility script similar to avr-dude used by arduino. The high level
+calling :command:`dfu-util` to upload code we will now call a newly
+written utility script similar to `avr-dude
+<http://savannah.nongnu.org/projects/avrdude/>`_. The high level
 operation of the bootloader will remain the same - come on at startup,
-wait for an upload operation or timeout and jump to user code. The
-second version of this bootloader will eliminate this dependence on
-resetting and timing out by having the bootloader run in the
-background all the time, and owning the serial port. In this scheme,
+wait for an upload operation or timeout, and jump to user code.
+
+The second version of this bootloader will eliminate this dependence
+on resetting and timing out by having the bootloader run in the
+background.  It will additionally own the serial port. In this scheme,
 sending data over the COM port while DTR is pulled low results in that
 packet being captured by the bootloader and interpreted as a
 bootloader command. When the user uploads a new program, the
 bootloader will overwrite the old one, reset the various peripheral
-registers, and jump to user code. All of this will occur without every
+registers, and jump to user code. All of this will occur without
 resetting the chip and thus causing Maple to connect and disconnect
-from your computer (which seems to cause many problems). The finaly
-version of this new bootloader scheme will actually involve a separate
+from your computer (which seems to cause many problems).
+
+The final version of this bootloader scheme will involve a separate
 microcontroller, whose responsibilities are to drive the USB port,
 program the main processor, and offer some amount of debugging
-capability. This will allow user sketches to run on the "bare metal"
-of the main processor, without any bootloader hiding underneath your
-programs. This approach is similar to the approaches taken by mBed and
-the new Arduino UNO.
+capability. This will allow user sketches to run on the bare metal of
+the main processor, without any bootloader hiding underneath. This
+approach is similar to the approaches taken by mbed and the Arduino
+Uno.
 
 Regardless of which generation of the new serial bootloader you are
 working with, the command interface is the same. The low level
 communication protocol is inspired by STK-500, the protocol used to
-program Arduino's and many other AVR based development boards. The
-protocol is a packetized query-response scheme. The host PC initiates
-every transaction, and for every query sent to the bootloader, a
-single response will be returned (or the system times out). Data is
+program many AVR-based development boards. The protocol is a
+packetized query-response scheme. The host PC initiates every
+transaction, and for every query sent to the bootloader, a single
+response will be returned (or the system times out). Data is
 transmitted over 115.2kbps, 8 data bits, 1 stop bit, no parity
 bit. Every query or response follows the same packet format that looks
 like this:
 
 .. _bootloader-packet-structure:
 
-The Packet
-^^^^^^^^^^
-.. csv-table::
-   :header: Field, length (Bytes), value, description
+Packet Structure
+^^^^^^^^^^^^^^^^
 
-   START, 2, 0x7EAF, A magic constant that indicates this is a
-   bootloader packet
+A bootloader packet is composed of a sequence of fields, as follows.
 
-   SEQUENCE_NUM, 1, 0-255, Every response must have the same sequence
-   number as its query
+.. list-table::
+   :header-rows: 1
 
-   MESSAGE_SIZE, 2, 0-65535, Size of the message body\, currently
-   messages must be <= 512 Bytes
+   * - Field
+     - Length (bytes)
+     - Value
+     - Description
 
-   MESSAGE_BODY, 0-65535, DATA, Self explanatory
+   * - START
+     - 2
+     - 0x7EAF
+     - Magic constant, indicates bootloader packet
 
-   CHECKSUM, 4, VAL, The XOR of all bytes in the packet except the
-   checksum byte
+   * - SEQUENCE_NUM
+     - 1
+     - 0--255
+     - Queries and responses must have the same sequence number; rolls
+       over to 0 after 255.
+
+   * - MESSAGE_SIZE
+     - 2
+     - 0--65,535
+     - Size of message body, currently limited to a 512B maximum
+
+   * - MESSAGE_BODY
+     - Variable, determined by MESSAGE_SIZE field
+     - Command query or response
+     - See next section
+
+   * - CHECKSUM
+     - 4
+     - XOR of all other bytes in packet
+     -
 
 .. _bootloader-commands:
 
 Commands
 ^^^^^^^^
 
-The packet structure is really just overhead. The actual queries and
-responses are transacted inside of the message body. Again following
-in the footsteps of STK-500, each query or response begins with the
-single byte CMD field. For each query, the resultant response must
-begin with the same CMD byte. For each type of CMD, the structure of
-queries and responses are well formed and of fixed size. Like STK-500,
-fields longer than 1 byte are transmitted MSB first (big
-endian). However, READ and WRITE commands operate bytewise (not word
-wise), it is up to the host PC to ensure that alignment and ordering
-issues are taken care of when appropriate (Maple uses a little endian
-processor, LSB first).
+The packet structure overhead is for reliability. The actual queries
+and responses are transacted inside of the message body.  Following in
+the footsteps of the STK-500 protocol, each query or response begins
+with the single byte CMD field. For each query, the resultant response
+must begin with the same CMD byte. For each type of CMD, the structure
+of queries and responses are of fixed size. As in STK-500, fields
+longer than 1 byte are transmitted MSB first (big endian). However,
+READ and WRITE commands operate byte-wise (not word-wise); it is up to
+the host PC to ensure that alignment and ordering issues are handled
+appropriately.
 
-.. list-table:: GET_INFO Query
+.. _bootloader-get-info:
+
+GET_INFO
+""""""""
+
+Used to query device characteristics.
+
+GET_INFO Query:
+
+.. list-table::
    :header-rows: 1
 
    * - Field
@@ -243,11 +277,13 @@ processor, LSB first).
 
    * - GET_INFO
      - 1
-     -
-\ 
+     - Value 0
 
-.. list-table:: GET_INFO Response
+GET_INFO Response:
+
+.. list-table::
    :header-rows: 1
+   :widths: 4 2 10
 
    * - Field
      - Bytes
@@ -255,19 +291,25 @@ processor, LSB first).
 
    * - GET_INFO
      - 1
-     -
+     - Value 0
+
+   * - Endianness
+     - 1
+     - 0 indicates little-endian, 1 indicates big-endian.
+       (Currently returns 0; this field allows for future
+       expansion).
 
    * - Available Ram
      - 4
-     -
+     - In bytes
 
    * - Available Flash
      - 4
-     -
+     - In bytes
 
    * - Flash Page Size
      - 2
-     -
+     - In bytes
 
    * - Starting Address (FLASH)
      - 4
@@ -281,11 +323,18 @@ processor, LSB first).
      - 4
      - Current version 0x00060000 (MAJ,MIN)
 
-\ 
-\  
+.. _bootloader-erase-page:
 
-.. list-table:: ERASE_PAGE Query
+ERASE_PAGE
+""""""""""
+
+Used to erase flash pages.
+
+ERASE_PAGE query:
+
+.. list-table::
    :header-rows: 1
+   :widths: 4 2 10
 
    * - Field
      - Bytes
@@ -293,16 +342,17 @@ processor, LSB first).
 
    * - ERASE_PAGE
      - 1
-     - \ 
+     - Value 1
 
    * - ADDRESS
      - 4
      - Will erase whichever page contains ADDRESS
 
-\ 
+ERASE_PAGE response:
 
-.. list-table:: ERASE_PAGE Response
+.. list-table::
    :header-rows: 1
+   :widths: 3 2 10
 
    * - Field
      - Bytes
@@ -310,17 +360,22 @@ processor, LSB first).
 
    * - ERASE_PAGE
      - 1
-     -
-   
-   * - SUCCESS?
+     - Value 1
+
+   * - SUCCESS
      - 1
-     - Either 0 or 1, (FAILED and OK)
+     - Either 0 (failure) or 1 (success)
 
-\
-\
+WRITE_BYTES
+"""""""""""
 
-.. list-table:: ERASE_PAGE Response
+Used to write to RAM or flash.
+
+WRITE_BYTES query:
+
+.. list-table::
    :header-rows: 1
+   :widths: 4 4 10
 
    * - Field
      - Bytes
@@ -328,20 +383,22 @@ processor, LSB first).
 
    * - WRITE_BYTES
      - 1
-     - 
+     - Value 2
 
    * - Starting Address
      - 4
-     - Can only write to RAM or addresses on cleared FLASH pages!
+     - Can address arbitrary RAM, or :ref:`cleared
+       <bootloader-erase-page>` flash pages.
 
    * - DATA
-     - Message Size - 5
-     - 
+     - MESSAGE_SIZE - 5
+     - See :ref:`Packet Structure <bootloader-packet-structure>`
 
-\
+WRITE_BYTES response:
 
-.. list-table:: WRITE_BYTES Response
+.. list-table::
    :header-rows: 1
+   :widths: 2 2 10
 
    * - Field
      - Bytes
@@ -349,38 +406,47 @@ processor, LSB first).
 
    * - WRITE_BYTES
      - 1
-     - 
-   
-   * - SUCCESS?
+     - Value 2
+
+   * - SUCCESS
      - 1
-     - Either 0 or 1 (FAILED, OK). Will fail if writes were made to uncleared pages, does not clean up failed writes (memory in unknown state)
+     - Either 0 (failure) or 1 (success). Will fail if writes were
+       made to uncleared pages.  Does not clean up failed writes
+       (memory will be left in an undefined state).
 
-\
-\
+READ_BYTES
+""""""""""
 
-.. list-table:: READ_BYTES Query
+Used to read from RAM or flash.
+
+READ_BYTES query:
+
+.. list-table::
    :header-rows: 1
+   :widths: 2 2 10
 
    * - Field
      - Bytes
      - Comments
-   
+
    * - READ_BYTES
      - 1
-     - 
- 
+     - Value 3
+
    * - ADDRESS
      - 4
-     - Start of block to read, must be a multiple of 4 (4 byte alignment)
+     - Start of block to read.  Must be a multiple of 4.
 
    * - LENGTH
      - 2
-     - Number of Bytes to Read (currently 512 byte max, must be a multiple of 4)
+     - Maximum number of bytes to read (currently, this may be at most
+       512). Must be a multiple of 4.
 
-\
+READ_BYTES response:
 
-.. list-table:: READ_BYTES Response
+.. list-table::
    :header-rows: 1
+   :widths: 2 2 10
 
    * - Field
      - Bytes
@@ -388,17 +454,26 @@ processor, LSB first).
 
    * - READ_BYTES
      - 1
-     -
+     - Value 3
 
    * - DATA
-     - Message Size - 1
-     - Returns data, if this section is of length 0, this should be interpreted as a read failure
+     - MESSAGE_SIZE - 1
+     - Contains read bytes.  The actual number of bytes read may be
+       less than the LENGTH field of the corresponding READ_BYTES
+       query. If this section is of length 0, this should be
+       interpreted as a read failure. See
+       :ref:`bootloader-packet-structure`.
 
-\
-\
+JUMP_TO_USER
+""""""""""""
 
-.. list-table:: JUMP_TO_USER Query
+Causes the bootloader to jump to user code's starting address.
+
+JUMP_TO_USER query:
+
+.. list-table::
    :header-rows: 1
+   :widths: 2 1 10
 
    * - Field
      - Bytes
@@ -406,12 +481,19 @@ processor, LSB first).
 
    * - JUMP_TO_USER
      - 1
-     -
+     - Value 4
 
-\
+   * - Location
+     - 1
+     - 0 means jump to flash starting address, 1 means jump to RAM
+       starting address.  See the :ref:`bootloader-get-info` command
+       for more information.
 
-.. list-table:: JUMP_TO_USER Response
+JUMP_TO_USER response:
+
+.. list-table::
    :header-rows: 1
+   :widths: 2 1 10
 
    * - Field
      - Bytes
@@ -419,17 +501,26 @@ processor, LSB first).
 
    * - JUMP_TO_USER
      - 1
-     -
+     - Value 4
 
    * - SUCCESS
      - 1
-     - Either 0 or 1 (FAILED,OK). Will end this bootloader session and jump to user
+     - Either 0 (failure) or 1 (success).  If successful, after the
+       response is sent, the bootloader ends this session and jumps to
+       the user code in flash or RAM as specified in the query's
+       Location field.
 
-\
-\
-    
-.. list-table:: SOFT_RESET Query
+
+SOFT_RESET
+""""""""""
+
+Engages a full software reset.
+
+SOFT_RESET query:
+
+.. list-table::
    :header-rows: 1
+   :widths: 2 1 10
 
    * - Field
      - Bytes
@@ -437,12 +528,13 @@ processor, LSB first).
 
    * - SOFT_RESET
      - 1
-     - Will engage a full software reset
+     - Value 5
 
-\
+SOFT_RESET response:
 
-.. list-table:: SOFT_RESET Response
+.. list-table::
    :header-rows: 1
+   :widths: 2 1 10
 
    * - Field
      - Bytes
@@ -450,11 +542,9 @@ processor, LSB first).
 
    * - SOFT_RESET
      - 1
-     - Will engage a full software 
+     - Value 5
 
    * - SUCCESS
      - 1
-     - Either 0 or 1 (FAILED,OK). Will end this bootloader session and reset the processor
-
-\
-\
+     - Either 0 or 1 (FAILED and OK, respectively). Will end this
+       bootloader session and reset the processor.

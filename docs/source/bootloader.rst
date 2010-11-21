@@ -218,20 +218,25 @@ A bootloader packet is composed of a sequence of fields, as follows.
      - Description
 
    * - START
-     - 2
-     - 0x7EAF
+     - 1
+     - 0x1B
      - Magic constant, indicates bootloader packet
 
    * - SEQUENCE_NUM
      - 1
-     - 0--255
+     - 0--0xFF
      - Queries and responses must have the same sequence number; rolls
-       over to 0 after 255.
+       over to 0 after 0xFF.
 
    * - MESSAGE_SIZE
      - 2
-     - 0--65,535
-     - Size of message body, currently limited to a 512B maximum
+     - 0--0xFFFF
+     - Size of message body, currently limited to a 1024B maximum
+
+   * - TOKEN
+     - 1
+     - 0x7F
+     - Differs from STK500 value of 0x0E
 
    * - MESSAGE_BODY
      - Variable, determined by MESSAGE_SIZE field
@@ -240,8 +245,10 @@ A bootloader packet is composed of a sequence of fields, as follows.
 
    * - CHECKSUM
      - 4
-     - XOR of all other bytes in packet
-     -
+     - XOR of all other 32-bit words in packet
+     - Words are checksummed little-endian; however, like all
+       multi-byte fields, the CHECKSUM is transmitted between PC and
+       device in network (big-endian) order.
 
 .. _bootloader-commands:
 
@@ -253,8 +260,8 @@ and responses are transacted inside of the message body.  Following in
 the footsteps of the STK-500 protocol, each query or response begins
 with the single byte CMD field. For each query, the resultant response
 must begin with the same CMD byte. For each type of CMD, the structure
-of queries and responses are of fixed size. As in STK-500, fields
-longer than 1 byte are transmitted MSB first (big endian). However,
+of queries and responses is of fixed size.  Following STK-500, fields
+longer than 1 byte are transmitted MSB first (big-endian). However,
 READ and WRITE commands operate byte-wise (not word-wise); it is up to
 the host PC to ensure that alignment and ordering issues are handled
 appropriately.

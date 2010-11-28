@@ -76,7 +76,7 @@ The following table shows which pins can be used on which lines.
 
 .. note::
 
-   You should set the :ref:`pin mode <arduino-pinmode>` of your
+   You should set the :ref:`pin mode <lang-pinmode>` of your
    desired pin to an input mode (e.g ``INPUT`` or ``INPUT_FLOATING``,
    ``INPUT_PULLUP``, ``INPUT_PULLDOWN``).
 

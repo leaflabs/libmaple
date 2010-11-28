@@ -226,12 +226,12 @@ A bootloader packet is composed of a sequence of fields, as follows.
      - 1
      - 0--0xFF
      - Queries and responses must have the same sequence number; rolls
-       over to 0 after 0xFF.
+       over to 0 after 0xFF
 
    * - MESSAGE_SIZE
      - 2
      - 0--0xFFFF
-     - Size of message body, currently limited to a 1024B maximum
+     - Size of message body, currently limited to a 1024B=1KB maximum
 
    * - TOKEN
      - 1
@@ -241,14 +241,32 @@ A bootloader packet is composed of a sequence of fields, as follows.
    * - MESSAGE_BODY
      - Variable, determined by MESSAGE_SIZE field
      - Command query or response
-     - See next section
+     - See :ref:`next section <bootloader-commands>`
 
    * - CHECKSUM
      - 4
      - XOR of all other 32-bit words in packet
-     - Words are checksummed little-endian; however, like all
-       multi-byte fields, the CHECKSUM is transmitted between PC and
-       device in network (big-endian) order.
+     - See :ref:`below <bootloader-checksum>`
+
+.. _bootloader-checksum:
+
+.. highlight:: cpp
+
+.. note:: When computing the checksum, the words in a packet are
+   interpreted big-endian (as if the packet were a sequence of 32-bit,
+   big-endian unsigned integers).  If the end of the MESSAGE_BODY is
+   not aligned with a four-byte boundary, then the checksum will treat
+   it as if it was padded with zero bytes to a four-byte boundary.
+
+   As a concrete example, an entire GET_INFO query (see :ref:`below
+   <bootloader-get-info>`), including the packet structure, is
+   comprised of the byte sequence ::
+
+      {0x1B, 0x7F, 0x00, 0x01, 0x7F, 0x00, 0x64, 0x7F, 0x00, 0x01}
+
+   The SEQUENCE_NUM of this query is 0x7F.
+
+.. highlight:: sh
 
 .. _bootloader-commands:
 
@@ -256,15 +274,16 @@ Commands
 ^^^^^^^^
 
 The packet structure overhead is for reliability. The actual queries
-and responses are transacted inside of the message body.  Following in
-the footsteps of the STK-500 protocol, each query or response begins
-with the single byte CMD field. For each query, the resultant response
-must begin with the same CMD byte. For each type of CMD, the structure
-of queries and responses is of fixed size.  Following STK-500, fields
-longer than 1 byte are transmitted MSB first (big-endian). However,
-READ and WRITE commands operate byte-wise (not word-wise); it is up to
-the host PC to ensure that alignment and ordering issues are handled
-appropriately.
+and responses are transacted inside of the message body.  Following
+the STK-500 protocol, each query or response begins with the single
+byte command field. For each query, the resultant response must begin
+with the same CMD byte. For each type of command, the structure of
+queries and responses is of fixed size.
+
+Also following STK-500, fields longer than 1 byte are transmitted MSB
+first (big-endian). However, READ and WRITE commands operate byte-wise
+(not word-wise); it is up to the host PC to ensure that alignment and
+ordering issues are handled appropriately.
 
 .. _bootloader-get-info:
 
@@ -447,7 +466,7 @@ READ_BYTES query:
    * - LENGTH
      - 2
      - Maximum number of bytes to read (currently, this may be at most
-       512). Must be a multiple of 4.
+       1024 = 1KB). Must be a multiple of 4.
 
 READ_BYTES response:
 

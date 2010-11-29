@@ -71,6 +71,8 @@ world!")``.
 
    Returns the number of bytes available for reading.
 
+.. _lang-serialusb-read:
+
 .. cpp:function:: unsigned char USBSerial::read()
 
    Returns the next available, unread character.  If there are no

@@ -20,24 +20,23 @@ pins summarized in the following table:
    :header-rows: 1
 
    * - Serial port
-     - Pins (TX, RX)
+     - TX, RX, CK
+     - CTS, RTS (if present)
 
    * - ``Serial1``
-     - 7, 8
+     - 7, 8, 6
+     -
 
    * - ``Serial2``
-     - 1, 0
+     - 1, 0, 10
+     - 2, 3
 
    * - ``Serial3``
-     - 29, 30
+     - 29, 30, 31
+     - 32, 33
 
 Thus, if you use a particular serial port, you cannot also use its
 communication pins for other purposes at the same time.
-
-Unlike the Arduino, none of these serial ports is connected to the USB
-port on the Maple board.  Thus, to use these pins to communicate with
-your personal computer, you will need an additional USB-to-serial
-adaptor.
 
 If you want to communicate with the Maple using the provided USB port,
 use :ref:`SerialUSB <lang-serialusb>` instead.
@@ -60,8 +59,8 @@ means that you can use any of these functions on any of ``Serial1``,
 
 .. cpp:class:: HardwareSerial
 
-   Serial port class.  Predefined instances are Serial1, Serial2, and
-   Serial3.
+   Serial port class.  Predefined instances are ``Serial1``,
+   ``Serial2``, and ``Serial3``.
 
 .. cpp:function:: HardwareSerial::begin(unsigned int baud)
 
@@ -73,7 +72,7 @@ means that you can use any of these functions on any of ``Serial1``,
 .. cpp:function:: HardwareSerial::end()
 
    Disables the USART associated with this object, allowing any
-   associated TX and RX pins to be used for other purposes.
+   associated communication pins to be used for other purposes.
 
 .. cpp:function:: unsigned int HardwareSerial::available()
 
@@ -202,6 +201,14 @@ means that you can use any of these functions on any of ``Serial1``,
    This is a low-level function.  One of the ``print()`` or
    ``println()`` functions is likely to be more useful when printing
    multiple characters, when formatting numbers for printing, etc.
+
+Arduino Compatibility Note
+--------------------------
+
+Unlike the Arduino, none of the Maple's serial ports is connected to
+the USB port on the Maple board (for that, use :ref:`SerialUSB
+<lang-serialusb>`).  Thus, to use these pins to communicate with your
+personal computer, you will need an additional USB-to-serial adaptor.
 
 .. TODO LATER port these examples over
 

@@ -41,8 +41,8 @@ My 5v peripheral doesn't work! (I2C, SPI, USART, etc)
 
 Yup, the Maple is a 3.3v board. You may need to use a level
 converter. See the :ref:`compatibility <compatibility>`, :ref:`GPIO
-<gpio>`, or other :ref:`hardware specific documentation <hardware>`
-for more information.
+<gpio>`, or other :ref:`hardware specific documentation
+<index-hardware>` for more information.
 
 The reset and D38/serial buttons don't seem to work reliably!
 -------------------------------------------------------------

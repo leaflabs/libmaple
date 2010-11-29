@@ -222,8 +222,6 @@ more exhaustive index is available at the :ref:`language-index`.
 Missing Arduino Features
 ------------------------
 
-Stub TODO: fill in other missing features
-
 **analogReference()**
 
     It is not possible to implement this function on the Maple
@@ -251,6 +249,20 @@ Stub TODO: fill in other missing features
     ``typedef`` in your program::
 
         typedef uint16 word;
+
+Unimplemented Arduino Features
+------------------------------
+
+The following Wiring/Arduino features are currently unimplemented on
+the Maple.  However, they will be present in future versions:
+
+- `interrupts() <http://arduino.cc/en/Reference/Interrupts>`_
+- `noInterrupts() <http://www.arduino.cc/en/Reference/NoInterrupts>`_
+- `noTone() <http://www.arduino.cc/en/Reference/NoTone>`_
+- `pulseIn() <http://www.arduino.cc/en/Reference/PulseIn>`_
+- `shiftOut() <http://www.arduino.cc/en/Reference/ShiftOut>`_
+- `String <http://arduino.cc/en/Reference/StringObject>`_
+- `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 
 .. _our reference page: http://leaflabs.com/docs/external-interrupts/
 

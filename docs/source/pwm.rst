@@ -1,10 +1,9 @@
 .. _pwm:
 
-==============================
- Pulse-Width Modulation (PWM)
-==============================
+PWM
+===
 
-Pulse Width Modulation is a basic technique to create repeated square
+Pulse Width Modulation (PWM) is a basic technique to create repeated square
 waves (digital high/low voltage transitions) of user defined length
 and duty cycle. It can be used as a way to encode an "analog" signal
 on a single digital (high/low) line using the time between transitions
@@ -42,7 +41,7 @@ to track down exactly which timer *channel* corresponds to each pin.
    Timer1 | D6,D7,D8
    Timer2 | D0,D1,D2,D3
    Timer3 | D11,D12,D27,D28
-   Timer4 | D5,D9,D14,D24 
+   Timer4 | D5,D9,D14,D24
 
 Background
 ----------
@@ -96,11 +95,11 @@ Function Reference
 
 ``pinMode(pin_num, PWM)``
 
-    This command is usually called from `setup()`_ to tell the
-    microcontroller that pin_num should be configured to PWM
-    output. ``PWM`` implies regular driven OUTPUT; ``PWM_OPEN_DRAIN`` is
-    also available (see the list of :ref:`GPIO modes <gpio-modes>` for
-    more information).
+    This command is usually called from :ref:`setup() <lang-setup>` to
+    tell the microcontroller that pin_num should be configured to PWM
+    output. ``PWM`` implies regular driven OUTPUT; ``PWM_OPEN_DRAIN``
+    is also available (see the list of :ref:`GPIO modes <gpio-modes>`
+    for more information).
 
 .. _pwm-pwmwrite:
 
@@ -144,8 +143,8 @@ Function Reference
     For instance, an 8MHz frequency can be achieved by setting
     ``prescale`` to 9, since 72MHz / 9 = 8MHz.
 
-    This function is normally called once from, `setup()`_, but the
-    timer can be reconfigured with a new prescaler at any time.
+    This function is normally called once from, :ref:`lang-setup`, but
+    the timer can be reconfigured with a new prescaler at any time.
 
      * Configure the prescaler and overflow values to generate a timer
      * reload with a period as close to the given number of

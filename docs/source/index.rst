@@ -17,7 +17,7 @@ If you're having problems, you might want to visit the
 <http://forums.leaflabs.com/>`_ to ask questions to the LeafLabs team
 and other Maple users.  Good luck, and have fun!
 
-Table of contents:
+General documentation:
 
 .. toctree::
    :maxdepth: 1
@@ -30,15 +30,24 @@ Table of contents:
    Library Reference <libraries>
    Command-Line Tools and APIs <libmaple>
    Troubleshooting <troubleshooting>
-   Hardware-Specific Documentation <hardware>
    External Interrupts <external-interrupts>
    Bootloader <bootloader>
    Known Problems <errata>
    Language Reference Index <language-index>
 
-Indices and tables
-==================
+.. _index-hardware:
 
-* :ref:`genindex`
-* :ref:`search`
+Hardware features:
 
+.. toctree::
+   :maxdepth: 1
+
+   i2c
+   pwm
+   gpio
+   usb
+   jtag
+   adc
+   spi
+   usart
+   timers

@@ -95,8 +95,8 @@ platforms to make everything work this way.
 
 .. _bootloader-rev3:
 
-Maple Rev3/Rev5
----------------
+Maple Rev3/Rev5 - DFU
+---------------------
 
 Maple Rev 3 takes a completely different tack, more along the lines of
 Arduino.  In Rev 3, the device resets into bootloader mode, which
@@ -142,6 +142,11 @@ bringing up the USB serial.
 
 Maple Rev6 - The Serial Bootloader (Tentative)
 ----------------------------------------------
+
+.. note:: This section documents an in-progress version of the Maple
+   bootloader.  **No Maples yet sold use this bootloader protocol**.
+   It has not been yet been publicly released, and its interface is
+   not stable.
 
 The bootloader in Rev3/Rev5 works well on Linux, acceptably on Mac,
 but was unsatisfactory on Windows. Unlike the other operating systems,
@@ -580,4 +585,98 @@ SOFT_RESET response:
 Flashing A Custom Bootloader
 ----------------------------
 
-Stub (flashing a custom bootloader)
+The STM32 microprocessor on the Maple comes with a built-in hardware
+bootloader that can be used to flash a new (software) bootloader onto
+the chip.  This section describes how to go about this, using a Maple
+Rev 3 or higher (if you have a Maple Rev 1; you don't have a BUT
+button, and won't be able to follow these directions.  A workaround is
+detailed in `this forum posting
+<http://forums.leaflabs.com/topic.php?id=32#post-126>`_).
+
+.. warning:: This section is directed at users wishing to write a
+   custom bootloader for the Maple, or update their bootloader to a
+   more recent version.  It's generally not necessary to do so, and it
+   is possible to make a mistake and e.g. render your Maple unable to
+   communicate with the IDE.  Know what you're doing, and proceed with
+   caution.
+
+.. highlight:: sh
+
+Setup
+^^^^^
+
+In order to follow these instructions, you will need:
+
+- A binary of the bootloader you want to upload
+- Hardware for communicating between the Maple and your computer over
+  serial.
+- `Python <http://python.org>`_ version 2.5 or higher, with the
+  `PySerial <http://pyserial.sourceforge.net/>`_ library installed.
+
+**Step 1: Obtain a bootloader binary**. The first thing you'll need to
+do is to compile your bootloader binary.  Note that an ASCII
+representation of the binary, such as the Intel .hex format, will not
+suffice.  For example, you can run (on a :ref:`suitably configured
+system <unix-toolchain>`) the following to obtain a binary of the
+bootloader currently used on the Maple::
+
+    $ git checkout git://github.com/leaflabs/maple-bootloader.git
+    $ cd maple-bootloader
+    $ make
+    $ ls -lh build/maple-boot.bin # this is the compiled bootloader binary
+
+**Step 2: Connect Maple Serial1 to your computer**.
+There are a variety of ways of doing this.  We use Sparkfun's `FTDI
+breakout boards <http://www.sparkfun.com/products/718>`_, but you
+could use another Maple, an Arduino, etc. -- anything that allows your
+computer to communicate with the Maple you want to reprogram over a
+serial interface.
+
+If you do use an FTDI breakout board, first make sure your Maple is
+disconnected from an external power source, be it battery, USB, or
+barrel jack.  Then, connect the FTDI board's TX pin to ``Serial1``\ 's
+RX pin (pin 8), FTDI RX to ``Serial1`` TX (pin 7), FTDI ground to
+Maple's GND, and its 3.3V pin to Maple's Vin (use the Maple's
+silkscreen for help locating these pins).  At this point, you're ready
+to plug the FTDI board into your computer (via USB).
+
+The ``Serial1`` pins are documented :ref:`here <lang-serial>`.
+
+**Step 3: Put your Maple into serial bootloader mode**.  Do this by
+pressing the RESET button, then *while RESET is held down*, pressing
+and holding the BUT button.  Next, *making sure to keep BUT held
+down*, release the RESET button and wait for a few seconds before
+releasing BUT.
+
+**Step 4: Obtain stm32loader.py**.  The
+script ``stm32loader.py`` is provided with libmaple.  If you have set
+up the :ref:`Unix toolchain <unix-toolchain>`, it is available in
+libmaple/support/stm32loader.py.  Otherwise, you can download it
+directly from `github
+<https://github.com/leaflabs/libmaple/raw/master/support/stm32loader.py>`_
+(click the link, then save the file somewhere on your system).
+
+Flashing the new Bootloader
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We'll use ``new-boot.bin``, ``ser-port``, and ``stm32loader.py`` to
+respectively refer to the absolute paths to the bootloader binary
+(from Step 1), the serial port device file or COMM port (from Steps 2
+and 3), and the stm32loader.py script.
+
+.. highlight:: sh
+
+You can run ::
+
+    $ python stm32loader.py -h
+
+to obtain usage information.  The incantation for uploading a
+bootloader binary ``new-bootloader.bin`` is ::
+
+    $ python stm32loader.py -p ser-port -evw new-boot.bin
+
+If all goes well, you'll see a bunch of output, then "Verification
+OK".  If something goes wrong, the `forum`_ is probably your best bet
+for obtaining help, with IRC (irc.freenode.net, #leafblowers) being
+another option.  If all else fails, you can always `contact us
+directly`_!

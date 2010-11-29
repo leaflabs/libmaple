@@ -25,6 +25,8 @@ analogWrite()
 .. contents:: Contents
    :local:
 
+.. _lang-analogwrite-compatibility:
+
 Arduino Compatibility
 ---------------------
 

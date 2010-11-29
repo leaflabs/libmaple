@@ -32,7 +32,7 @@ Wiring Diagram
    JTAG wiring diagram to connect a standard 20-pin ARM JTAG device to
    the 8-pin JTAG port on the Maple.
 
-.. TODO jtag wiring diagram (above) looks terrible; replace it
+.. FIXME jtag wiring diagram (above) looks terrible; replace it
 
 The Maple has holes for a 8-pin JTAG header but that header is not
 soldered on by default. If you know ahead of time that you'll be
@@ -56,8 +56,7 @@ Compatible Devices
 
 We have had good experience with the `Olimex ARM-USB-OCD
 <http://www.olimex.com/dev/arm-usb-ocd.html>`_ device, which costs
-about 55 euro plus shipping (as of October 2010).
-
+about 55 euro plus shipping (as of November 2010).
 
 Recommended Reading
 -------------------

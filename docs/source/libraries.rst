@@ -7,6 +7,9 @@
  Maple Library Reference
 =========================
 
+.. Note: if you port an Arduino library and document it here, be sure
+.. to update compatibility.rst to reflect that fact.
+
 This page briefly summarizes the Arduino libraries that have been
 ported to Maple. You can use a library from within a sketch by going
 to Sketch > Import Library... from within the IDE, then choosing the

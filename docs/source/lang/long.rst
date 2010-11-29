@@ -2,11 +2,8 @@
 
 .. _lang-long:
 
-long
-====
-
-Description
------------
+``long``
+========
 
 The ``long`` data type stores extended size integer values.  You can
 use a ``long`` when your values are too large to fit into an :ref:`int
@@ -19,7 +16,7 @@ Way galaxy).  The exact range of a ``long`` on the Maple is from
 <lang-variables-rollover>` as any numeric data type.
 
 Here's an example of declaring a long (see :ref:`integer constants
-<lang-constants-u-l>` for an explanation of the "L" at the end of the
+<lang-constants-integers-u-l>` for an explanation of the "L" at the end of the
 number)::
 
         // Speed of light in nanometers per second (approximate).

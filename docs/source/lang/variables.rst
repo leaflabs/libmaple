@@ -37,8 +37,8 @@ named ``inputVariable2``, with an initial value of ``0``::
     int inputVariable2 = 0;
 
 The Maple environment comes ready to use with many useful types of
-variables.  See the :ref:`built-in types <lang-types>` page for more
-information.
+variables.  See the :ref:`built-in types <lang-numeric-types>` page
+for more information.
 
 Here are a few examples of declaring variables of different types::
 
@@ -116,8 +116,8 @@ he goes past the left side of the screen, he reappears on the right::
        x = x + 1; // x now contains -2,147,483,648; rolled over "right to left"
 
 Each numeric type's reference page includes its range.  See the
-:ref:`built-in types <lang-types>` reference for links to each type's
-reference page.
+:ref:`built-in types <lang-numeric-types>` reference for links to each
+type's reference page.
 
 Using Variables
 ---------------
@@ -149,7 +149,7 @@ See Also
 --------
 
 - :ref:`lang-scope`
-- :ref:`lang-types`
+- :ref:`lang-numeric-types`
 
 .. rubric:: Footnotes
 

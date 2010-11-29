@@ -3,9 +3,6 @@
 bitSet()
 ========
 
-Description
------------
-
 (Macro) Sets (writes a 1 to) a bit of a numeric variable.
 
 

@@ -3,46 +3,81 @@ as a Doxygen configuration file; we turn Doxygen XML output into
 Sphinx documentation.  You can generate HTML documentation using the
 Makefile if you have make, or using make.bat from Windows.
 
-You need a recent-ish version of doxygen in your PATH:
+Documentation Build Steps
+-------------------------
+
+1. You need a recent-ish version of Doxygen in your PATH:
 
     http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
 
-For the Doxygen-to-Sphinx bridge, we rely on a project called Breathe,
-by Michael Jones.  
+2. Install breathe, which does Doxygen-to-Sphinx conversion:
 
-***** You must clone the LEAFLABS VERSION OF THE breathe repository ******
-
- ... and then set an environment variable BREATHE_HOME to be able to
-build the documentation.  Something like this on bash:
+   Read/write version (for LeafLabs developers):
 
     $ git clone git@github.com:leaflabs/breathe.git
+
+   Read-only version (for non-LeafLabs developers):
+
+    $ git clone git://github.com/leaflabs/breathe.git
+
+   After that's done, set an environment variable BREATHE_HOME to
+   point to where you downloaded it.  Something like this on bash:
+
     $ export BREATHE_HOME=/path/to/breathe/repo/
 
-You can now build the HTML docs with (on Unix):
+   (You'll want to put this in your shell startup script).
+
+3. Install Sphinx.
+
+   From source or .egg:
+
+    http://pypi.python.org/pypi/Sphinx#downloads
+
+   Via easy_install:
 
     $ sudo easy_install -U Sphinx
+
+4. Before the first time you run Sphinx (and any time the Doxygen
+   comments in the libmaple source code are changed), you'll need to
+   rebuild the Doxygen XML output:
+
+    $ cd libmaple/docs/source
+    $ doxygen
+
+5. Finally, you can build the documentation:
+
     $ make html
 
-Which will produce Doxygen documentation in doxygen/xml, and HTML
-documentation (this is what you want to look at) in build/html.
+   (Read the Makefile for more targets).
 
-All of the documentation itself lives in source/.  The directory
-source/_static is for static content like style sheets;
-source/_templates contains Sphinx templates (or, it would if we had
+Reading and Modifying the Documentation
+---------------------------------------
+
+The net effect of the above is to produce Doxygen XML output (ignore
+this) in libmaple/docs/doxygen/xml, and HTML documentation (this is
+what you want) in libmaple/docs/build/html.
+
+Just point your web browser at the file
+
+  libmaple/docs/build/html/index.html
+
+it corresponds to the Sphinx file
+
+  libmaple/docs/source/index.rst
+
+All of the documentation itself lives in libmaple/docs/source/.  The
+directory source/_static/ is for static content (like style sheets);
+source/_templates/ contains Sphinx templates (or, it would, if we had
 any).
 
-The docs are written in reStructuredText (reST); it's a Python thing
-that they use to produce the docs at python.org (which are beautiful,
-if you've never seen them).  You can read more about Sphinx here:
+The docs are written in Sphinx's version of reStructuredText (reST);
+it's a Python thing that they use to produce the docs at
+http://python.org.  You can read more about Sphinx here:
 
     http://sphinx.pocoo.org/tutorial.html
 
-Specific information on documenting C and C++ is available here:
+You can view the source for any generated page of documentation by
+clicking the "Show Source" link in the sidebar.
 
-    http://sphinx.pocoo.org/domains.html
-
-You can view the reST source for any generated page of documentation
-by clicking the "Show Source" link in the sidebar.
-
-The file source/conf.py is the Sphinx configuration file; you can go
-read it for more information about our setup.
+The file libmaple/docs/source/conf.py is the Sphinx configuration
+file; you can go read it for more information about our setup.

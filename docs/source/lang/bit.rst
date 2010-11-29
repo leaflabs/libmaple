@@ -3,13 +3,9 @@
 bit()
 =====
 
-Description
------------
-
 (Macro) Computes the value of an (unsigned) integer with the specified
 bit set (``bit(0)`` is 1, ``bit(1)`` is 2, ``bit(2)`` is 4, then 8,
 16, 32, etc.).
-
 
 Syntax
 ------

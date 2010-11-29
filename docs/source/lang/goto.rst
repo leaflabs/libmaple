@@ -2,8 +2,8 @@
 
 .. _lang-goto:
 
-Labels and goto
-===============
+Labels and ``goto``
+===================
 
 A *label* gives a name to a line of code within a function.  You can
 label a line by writing a name for it, then a colon (``:``), before

@@ -2,8 +2,8 @@
 
 .. _lang-sizeof:
 
-sizeof()
-========
+``sizeof()``
+============
 
 The ``sizeof`` operator on the Maple returns the number of bytes
 needed to store a value of a given type\ [#fcharsize]_.  This can be

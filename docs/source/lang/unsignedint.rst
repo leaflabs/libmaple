@@ -2,11 +2,8 @@
 
 .. _lang-unsignedint:
 
-unsigned int
-============
-
-Description
------------
+``unsigned int``
+================
 
 An ``unsigned int`` (unsigned integer) is the same as an :ref:`int
 <lang-int>` in that it stores a 4 byte integer value.  However,

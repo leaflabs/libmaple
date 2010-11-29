@@ -3,9 +3,6 @@
 bitRead()
 =========
 
-Description
------------
-
 (Macro) Gets the value of a bit in a number.
 
 

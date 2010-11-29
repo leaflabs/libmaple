@@ -62,7 +62,7 @@ which control PWM output.  See the :ref:`timers reference <timers>`
 for more information.
 
 Another fix is to consult the :ref:`pin mapping mega table
-<pin-mapping-mega table>` to find the timer which controls PWM on the
+<pin-mapping-mega-table>` to find the timer which controls PWM on the
 pin you're using, then set that Timer's overflow to 255.  Subsequent
 calls to analogWrite() should work as on the Arduino (with the same
 loss of precision).  Note, however, that that affects the overflow for

@@ -1,12 +1,10 @@
-.. _lang-nointerrupts:
+.. _lang-interrupts:
 
-noInterrupts()
-==============
+interrupts()
+============
 
-Description
------------
-
-Disables interrupts (you can re-enable them with interrupts()).
+Re-enables interrupts (after they've been disabled by
+`noInterrupts <http://arduino.cc/en/Reference/NoInterrupts>`_\ ()).
 Interrupts allow certain important tasks to happen in the
 background and are enabled by default. Some functions will not work
 while interrupts are disabled, and incoming communication may be
@@ -19,14 +17,14 @@ code.
 Parameters
 ----------
 
-None.
+None
 
 
 
 Returns
 -------
 
-None.
+None
 
 
 
@@ -51,9 +49,11 @@ See Also
 --------
 
 
--  `interrupts <http://arduino.cc/en/Reference/Interrupts>`_\ ()
+-  `noInterrupts <http://arduino.cc/en/Reference/NoInterrupts>`_\ ()
+-  `attachInterrupt <http://arduino.cc/en/Reference/AttachInterrupt>`_\ ()
+-  `detachInterrupt <http://arduino.cc/en/Reference/DetachInterrupt>`_\ ()
 
 
 
 
-.. include:: cc-attribution.txt
+.. include:: /lang/cc-attribution.txt

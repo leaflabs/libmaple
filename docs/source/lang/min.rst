@@ -2,15 +2,17 @@
 
 .. _lang-min:
 
-min(x, y)
-=========
-
-Description
------------
+min()
+=====
 
 (Macro) Calculates the minimum of two numbers.
 
+Syntax
+------
 
+::
+
+    min(x,y)
 
 Parameters
 ----------
@@ -19,12 +21,10 @@ Parameters
 
 **y**: the second number; may be any number or numeric expression.
 
-
 Returns
 -------
 
 The smaller of the two numbers.
-
 
 Example
 -------

@@ -35,7 +35,7 @@ Function Reference
 
 ``Spi.begin(freq, endianness, mode)``
 
-    ``begin`` is usually called in `setup()`_ to configure the
+    ``begin`` is usually called in :ref:`lang-setup` to configure the
     baudrate of the given SPI port and to set up the header pins
     appropriately. ``freq`` is one of the set listed :ref:`above
     <spi-speeds>`; ``endianness`` is either ``LSBFIRST`` or

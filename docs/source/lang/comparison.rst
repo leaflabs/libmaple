@@ -2,8 +2,8 @@
 
 .. _lang-comparison:
 
-Comparison Operators
-====================
+Comparison Operators (``==``, ``!=``, ``<``, ``>``, ``<=``, ``>=``)
+===================================================================
 
 The comparison operators ``==``, ``!=``, ``<``, ``>``, ``<=``, and
 ``>=`` are used to compare two numbers.  They are :ref:`true

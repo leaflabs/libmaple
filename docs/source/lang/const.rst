@@ -2,8 +2,8 @@
 
 .. _lang-const:
 
-const Keyword
-=============
+``const``
+=========
 
 The ``const`` keyword stands for "constant". It is a variable
 *qualifier* that modifies the behavior of the variable, making a

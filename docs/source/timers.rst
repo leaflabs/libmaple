@@ -2,9 +2,8 @@
 
 .. _timers:
 
-========
- Timers
-========
+Timers
+======
 
 There are four general purpose timers in the Maple microcontroller
 that can be configured to generate periodic or delayed events with
@@ -52,7 +51,7 @@ configuration being the same.
 
    **Jitter:** other interrupts (USB, Serial, SysTick, or other
    timers) can and will get called before or during the timer
-   interrupt routines, causing pseudo-random delays and other
+   interrupt routines, causing pseudorandom delays and other
    frustrations.
 
    Disabling the USB port (by calling ``SerialUSB.end()``, or just
@@ -90,7 +89,7 @@ General Timer Modes
     :ref:`PWM docs <pwm>` for more information on this mode.
 
     .. note::
-    
+
        ``Timer1.setChannel1Mode(TIMER_PWM)`` may not work as expected;
        if you want PWM functionality on a channel, make sure you don't
        set it to something else.
@@ -240,7 +239,7 @@ LED blink
 
     void setup()
     {
-        // Set up the LED to blink 
+        // Set up the LED to blink
         pinMode(LED_PIN, OUTPUT);
 
         // Setup Timer
@@ -251,13 +250,13 @@ LED blink
     }
 
     void loop() {
-        // Nothing! It's all in the interrupts 
+        // Nothing! It's all in the interrupts
     }
 
     void handler_led(void) {
         toggle ^= 1;
         digitalWrite(LED_PIN, toggle);
-    } 
+    }
 
 Racing Counters
 ^^^^^^^^^^^^^^^
@@ -287,7 +286,7 @@ Racing Counters
         Timer3.setOverflow(30000);
         Timer4.setOverflow(30000);
         Timer3.setCompare1(1000);   // somewhere in the middle
-        Timer4.setCompare1(1000);   
+        Timer4.setCompare1(1000);
         Timer3.attachCompare1Interrupt(handler1);
         Timer4.attachCompare1Interrupt(handler2);
         Timer3.resume();
@@ -296,9 +295,9 @@ Racing Counters
 
     void loop() {
         // Display the running counts
-        SerialUSB.print("Count 1: "); 
+        SerialUSB.print("Count 1: ");
         SerialUSB.print(count1);
-        SerialUSB.print("\t\tCount 2: "); 
+        SerialUSB.print("\t\tCount 2: ");
         SerialUSB.println(count2);
 
         // Run... while BUT is held, pause Count2
@@ -314,7 +313,7 @@ Racing Counters
 
     void handler1(void) {
         count1++;
-    } 
+    }
     void handler2(void) {
         count2++;
-    } 
+    }

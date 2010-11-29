@@ -574,3 +574,10 @@ SOFT_RESET response:
      - 1
      - Either 0 or 1 (FAILED and OK, respectively). Will end this
        bootloader session and reset the processor.
+
+.. _bootloader-reflashing:
+
+Flashing A Custom Bootloader
+----------------------------
+
+Stub (flashing a custom bootloader)

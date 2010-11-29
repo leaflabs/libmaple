@@ -2,8 +2,8 @@
 
 .. _lang-semicolon:
 
-Semicolon (;)
-=============
+Semicolon (``;``)
+=================
 
 Used to end a line of code.  Example::
 

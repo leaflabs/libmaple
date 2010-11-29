@@ -2,15 +2,17 @@
 
 .. _lang-max:
 
-max(x, y)
-=========
-
-Description
------------
+max()
+=====
 
 (Macro) Calculates the maximum of two numbers.
 
+Syntax
+------
 
+::
+
+    max(x, y)
 
 Parameters
 ----------

@@ -2,11 +2,8 @@
 
 .. _lang-modulo:
 
-% (modulo)
-==========
-
-Description
------------
+Modulo Operator (``%``)
+=======================
 
 Calculates the `remainder <http://en.wikipedia.org/wiki/Remainder>`_
 when one integer is divided by another. It is useful for keeping a
@@ -17,9 +14,7 @@ Syntax
 
 ::
 
-    result = dividend % divisor
-
-
+    dividend % divisor
 
 Parameters
 ----------
@@ -67,11 +62,9 @@ The modulo operator does not work on floats.  For that, you can use
 the C standard library function `fmod()
 <http://sourceware.org/newlib/libm.html#fmod>`_.
 
-
 See Also
 --------
 
 -  :ref:`Arithmetic <lang-arithmetic>`
-
 
 .. include:: cc-attribution.txt

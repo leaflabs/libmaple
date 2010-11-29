@@ -2,14 +2,8 @@
 
 .. _lang-for:
 
-for Loops
-=========
-
-.. contents:: Contents
-   :local:
-
-Description
------------
+``for``
+=======
 
 A ``for`` loop is used to repeat a block of statements enclosed in
 curly braces.  ``for`` loops are useful for performing repetitive
@@ -18,6 +12,12 @@ operations, and are often used in combination with :ref:`arrays
 :ref:`pins <gpio>`.  A ``for`` loop is composed of two parts: first, a
 *header*, which sets up the for loop, and then a *body*, which is made
 up of lines of code enclosed in curly braces.
+
+.. contents:: Contents
+   :local:
+
+Syntax
+------
 
 There are three parts to the ``for`` loop header: an *initialization*
 expression, *loop condition* expression, and a *post-loop*

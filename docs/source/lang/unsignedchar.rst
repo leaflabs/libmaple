@@ -2,11 +2,8 @@
 
 .. _lang-unsignedchar:
 
-unsigned char
-=============
-
-Description
------------
+``unsigned char``
+=================
 
 An unsigned version of the :ref:`char <lang-char>` data type.  An
 ``unsigned char`` occupies 1 byte of memory; it stores an integer from

@@ -83,34 +83,32 @@ differences, most of which are improvements:
   full 32-bit (4 byte) integer values instead of the regular 16-bit (2
   byte) Arduino values.
 
-* `pinMode()`_ types: any :ref:`GPIO <gpio>` (including analog pins)
-  can be configured into one of the following modes with a single call
-  to `pinMode()`_: ``OUTPUT``, ``OUTPUT_OPEN_DRAIN``,
-  ``INPUT_FLOATING``, ``INPUT_PULLUP``,
+* :ref:`pinMode() <lang-pinmode>` types: any :ref:`GPIO <gpio>`
+  (including analog pins) can be configured into one of the following
+  modes with a single call to ```pinMode()``: ``OUTPUT``,
+  ``OUTPUT_OPEN_DRAIN``, ``INPUT_FLOATING``, ``INPUT_PULLUP``,
   ``INPUT_PULLDOWN``. Additionally, the PWM and Analog Input pins can
   be configured as ``INPUT_ANALOG`` and ``PWM`` respectively. See the
   :ref:`GPIO documentation <gpio>` for more information.
 
-  .. TODO: reference libmaple docs above when they're done
-
-* Serial1 syntax: like the `Arduino Mega
+* ``Serial1`` syntax: like the `Arduino Mega
   <http://arduino.cc/en/Main/ArduinoBoardMega>`_, the Maple has
-  multiple USART ports.  By default, Serial is not mapped to any of
-  them, use ``Serial1`` through ``Serial3`` instead.
-
-  .. TODO: reference libmaple docs for Serial[n] above when they're done
+  multiple :ref:`USART ports <lang-serial>`.  By default, ``Serial``
+  is not mapped to any of them, use ``Serial1`` through ``Serial3``
+  instead.
 
 * 16-bit :ref:`PWM <pwm>`: Arduino boards support 8-bit PWM, which
-  means that calls to `analogWrite()`_ take values between 0 (always
-  off) and 255 (always on).  The Maple supports 16-bit PWM, so the
-  corresponding values should be between 0 (always off) and 65535
-  (always on).
+  means that calls to :ref:`analogWrite() <lang-analogwrite>` take
+  values between 0 (always off) and 255 (always on).  The Maple
+  supports 16-bit PWM, so the corresponding values should be between 0
+  (always off) and 65535 (always on).
 
 * 12-bit :ref:`ADC <adc>`: Arduino boards support 10-bit ADC, which
-  means that calls to `analogRead()`_ will return values between 0 and
-  1023.  The Maple supports 12-bit ADC, so the same call will instead
-  return values between 0 and 4095.
+  means that calls to :ref:`analogRead() <lang-analogread>` will
+  return values between 0 and 1023.  The Maple supports 12-bit ADC, so
+  the same call will instead return values between 0 and 4095.
 
+Stub (unfinished)
 
 .. class:: ported-feature
 
@@ -130,5 +128,4 @@ I sorta work
 
 And I am also ordinary
 
-Stub (unfinished)
 

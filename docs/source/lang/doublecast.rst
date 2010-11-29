@@ -2,11 +2,8 @@
 
 .. _lang-doublecast:
 
-double() (cast)
-===============
-
-Description
------------
+``double()`` (cast)
+===================
 
 Converts a value to the :ref:`double <lang-double>` floating point
 data type.  Here is an example::

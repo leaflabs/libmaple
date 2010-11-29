@@ -5,9 +5,6 @@
 Strings
 =======
 
-Description
------------
-
 Text strings can be represented in two ways.  You can
 
 1. Use the :ref:`String <lang-stringclass>` data type, which is

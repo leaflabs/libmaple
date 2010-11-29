@@ -6,9 +6,8 @@ Booleans
 ========
 
 A **boolean** holds one of two values, :ref:`true
-<lang-constants-true>` or :ref:`false <lang-constants-false>`.
-On a Maple, each boolean variable occupies one byte of memory, and has
-type ``bool``.
+<lang-constants-true>` or :ref:`false <lang-constants-false>`.  On a
+Maple, each boolean variable has type ``bool``.
 
 .. warning::
 

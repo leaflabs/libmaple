@@ -2,13 +2,17 @@
 
 .. _lang-constrain:
 
-constrain(x, a, b)
-==================
-
-Description
------------
+constrain()
+===========
 
 (Macro) Constrains a number to be within a range.
+
+Syntax
+------
+
+::
+
+    constrain(x, a, b)
 
 
 Parameters

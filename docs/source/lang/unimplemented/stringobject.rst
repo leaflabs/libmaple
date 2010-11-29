@@ -6,12 +6,11 @@ String
 Description
 -----------
 
-The String class, part of the core as of version 0019, allows you
-to use and manipulate strings of text in more complex ways than
-`character arrays <http://arduino.cc/en/Reference/String>`_ do. You
-can concatenate Strings, append to them, search for and replace
-substrings, and more. It takes more memory than a simple character
-array, but it is also more useful.
+The String class, part of the core as of version 0019, allows you to
+use and manipulate strings of text in more complex ways than character
+arrays do. You can concatenate Strings, append to them, search for and
+replace substrings, and more. It takes more memory than a simple
+character array, but it is also more useful.
 
 
 
@@ -81,11 +80,10 @@ See Also
 --------
 
 
--  `string <http://arduino.cc/en/Reference/String>`_: character
-   arrays
+-  `Character array strings <http://arduino.cc/en/Reference/String>`_
 -  `Variable Declaration <http://arduino.cc/en/Reference/VariableDeclaration>`_
 
 
 
 
-.. include:: cc-attribution.txt
+.. include:: /lang/cc-attribution.txt

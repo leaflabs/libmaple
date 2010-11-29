@@ -79,8 +79,8 @@ typedef enum WiringPinMode {
               when it is closer to 0v (ground) it is low. If no
               external circuit is pulling the pin voltage to high or
               low, it will tend to randomly oscillate and be very
-              sensitive to noise (eg a breath of air across the pin
-              will cause the state to flip). */
+              sensitive to noise (e.g., a breath of air across the pin
+              might cause the state to flip). */
 
     INPUT_ANALOG, /**< This is a special mode for when the pin will be
                      used for analog (not digital) reads.  Enables ADC
@@ -101,7 +101,7 @@ typedef enum WiringPinMode {
                        the state will be low unless an external device
                        is specifically pulling the pin up to 3.3v, in
                        which case the "gentle" pull down will not
-                       effect the state of the input. */
+                       affect the state of the input. */
 
     INPUT_FLOATING, /**< Synonym for INPUT. */
 

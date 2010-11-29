@@ -2,8 +2,8 @@
 
 .. _lang-break:
 
-break
-=====
+``break``
+=========
 
 ``break`` is used to exit from a :ref:`while <lang-while>`\ ,
 :ref:`for <lang-for>`\ , or :ref:`do/while <lang-dowhile>` loop,

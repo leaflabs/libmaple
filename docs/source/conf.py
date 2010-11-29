@@ -88,7 +88,7 @@ with open('prolog.rst', 'r') as pr:
 #default_role = None
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
-#add_function_parentheses = True
+add_function_parentheses = True
 
 # If true, the current module name will be prepended to all description
 # unit titles (such as .. function::).
@@ -105,7 +105,7 @@ pygments_style = 'sphinx'
 #modindex_common_prefix = []
 
 # Warn about all references where the target cannot be found.
-#nitpicky = True
+nitpicky = True
 
 # -- Options for HTML output --------------------------------------------------
 

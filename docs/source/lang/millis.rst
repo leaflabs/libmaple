@@ -1,70 +1,52 @@
+.. highlight:: cpp
+
 .. _lang-millis:
 
 millis()
 ========
 
-Description
------------
+Returns the number of milliseconds since the Maple board began running
+the current program. This number will overflow (go back to zero) after
+approximately 50 days.
 
-Returns the number of milliseconds since the Arduino board began
-running the current program. This number will overflow (go back to
-zero), after approximately 50 days.
+Library Documentation
+---------------------
 
-
-
-Parameters
-----------
-
-None
-
-
-
-Returns
--------
-
-Number of milliseconds since the program started (*unsigned long*)
-
-
+.. doxygenfunction:: millis
 
 Example
 -------
 
-::
+The following time prints the value returned by ``millis()`` roughly
+once per second::
 
-    unsigned long time;
+    unsigned int time;
 
-    void setup(){
-      Serial.begin(9600);
+    void setup() {
     }
-    void loop(){
-      Serial.print("Time: ");
+
+    void loop() {
+      SerialUSB.print("Time: ");
       time = millis();
-      //prints time since program started
+      // prints time since program started
       Serial.println(time);
+
       // wait a second so as not to send massive amounts of data
       delay(1000);
     }
 
+Tip
+---
 
+Since the return value for ``millis()`` is an :ref:`unsigned long
+<lang-unsignedlong>`, overflow errors may occur if you try to do math
+with other data types, such as :ref:`ints <lang-int>`.
 
-Tip:
-----
-
-Note that the parameter for millis is an unsigned long, errors may
-be generated if a programmer tries to do math with other datatypes
-such as ints.
-
-
-
-See also
+See Also
 --------
 
-
--  `micros <http://arduino.cc/en/Reference/Micros>`_\ ()
--  `delay <http://arduino.cc/en/Reference/Delay>`_\ ()
--  `delayMicroseconds <http://arduino.cc/en/Reference/DelayMicroseconds>`_\ ()
--  `Tutorial: Blink Without Delay <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_
-
-
+- :ref:`micros <lang-micros>`
+- :ref:`delay <lang-delay>`
+- :ref:`delayMicroseconds <lang-delaymicroseconds>`
 
 .. include:: cc-attribution.txt

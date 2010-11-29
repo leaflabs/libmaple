@@ -2,8 +2,8 @@
 
 .. _lang-static:
 
-Static
-======
+``static``
+==========
 
 The ``static`` keyword can be used to create variables that are
 visible to only one function. However, unlike local variables that get

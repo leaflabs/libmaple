@@ -1,9 +1,9 @@
 .. highlight:: cpp
 
-.. _lang-braces:
+.. _lang-curly-braces:
 
-Curly Braces ({})
-=================
+Curly Braces (``{``, ``}``)
+===========================
 
 .. contents:: Contents
    :local:

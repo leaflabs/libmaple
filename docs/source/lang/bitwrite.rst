@@ -1,12 +1,18 @@
+.. highlight:: cpp
+
 .. _lang-bitwrite:
 
-bitWrite(x, n, b)
-=================
-
-Description
------------
+bitWrite()
+==========
 
 (Macro) Writes a bit of a numeric variable.
+
+Syntax
+------
+
+::
+
+   bitWrite(x, n, b)
 
 Parameters
 ----------

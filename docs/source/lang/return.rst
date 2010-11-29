@@ -2,11 +2,11 @@
 
 .. _lang-return:
 
-return
-======
+``return``
+==========
 
-(Keyword) Terminates a function and return a value from a function to
-the calling function, if the function has non-``void`` return type.
+Terminates a function and return a value from a function to the
+calling function, if the function has non-``void`` return type.
 
 Syntax:
 -------

@@ -1,9 +1,9 @@
 .. highlight:: cpp
 
-.. _lang-bitwisecompound:
+.. _lang-compoundbitwise:
 
-Compound bitwise and (&=), or (\|=), XOR (^=)
-=============================================
+Compound Bitwise Operators (``&=``, ``|=``, ``^=``)
+===================================================
 
 The compound bitwise operators perform their calculations at the
 bit level of variables. They are often used to clear and set
@@ -15,10 +15,10 @@ information on bitwise operators.
 .. contents:: Contents
    :local:
 
-.. _lang-bitwisecompound-and:
+.. _lang-compoundbitwise-and:
 
-Compound bitwise AND (&=)
--------------------------
+Compound bitwise AND (``&=``)
+-----------------------------
 
 The compound bitwise AND operator ``&=`` is often used with a variable
 and a constant to force particular bits in a variable to be zero. This
@@ -48,7 +48,7 @@ bits that are "bitwise ANDed" with 1 are left unchanged.  So, if ``b``
 is a ``byte`` variable, then ``b & B00000000`` equals zero, and ``b &
 B11111111`` equals ``b``.
 
-.. _lang-bitwisecompound-binconst:
+.. _lang-compoundbitwise-binconst:
 
 .. note:: The above uses :ref:`binary constants
    <lang-constants-integers-bin>`\ .  The numbers are still the same
@@ -101,10 +101,10 @@ then we will have ::
 
     b == B10101000; // B10101000 == 0xA8
 
-.. _lang-bitwisecompound-or:
+.. _lang-compoundbitwise-or:
 
-Compound bitwise OR (\|=)
--------------------------
+Compound bitwise OR (``|=``)
+----------------------------
 
 The compound bitwise OR operator ``|=`` is often used with a variable
 and a constant to "set" (set to 1) particular bits in a variable.  In
@@ -118,7 +118,7 @@ You can use any integer variable for ``x`` (i.e., any variable of type
 ``int``, ``long``, ``char``, ``byte``, etc.).  You can use either an
 integer variable or any integer value (like ``3`` or ``0x20``) for
 ``y``.  (This works the same way as :ref:`compound bitwise AND
-<lang-bitwisecompound-and>`\ , ``&=``).
+<lang-compoundbitwise-and>`\ , ``&=``).
 
 Before doing an example of ``|=``, let's first review the Bitwise OR
 (``|``) operator::
@@ -132,7 +132,7 @@ Bits that are "bitwise ORed" with 0 are unchanged, while bits that are
 "bitwise ORed" with 1 are set to 1.  So if ``b`` is a ``byte``
 variable, then ``b | B00000000`` equals ``b``, and ``b & B11111111``
 equals ``B11111111`` (here we've used binary constants; see the
-:ref:`note <lang-bitwisecompound-binconst>` above).
+:ref:`note <lang-compoundbitwise-binconst>` above).
 
 So, to set bits 0 and 1 of a one-byte variable, while leaving the rest
 of the variable unchanged, use the compound bitwise OR operator
@@ -164,10 +164,10 @@ then we will have ::
 
     b == B10101011; // B10101011 == 0xAB
 
-.. _lang-bitwisecompound-xor:
+.. _lang-compoundbitwise-xor:
 
-Compound bitwise XOR (\^=)
---------------------------
+Compound bitwise XOR (``^=``)
+-----------------------------
 
 The compound bitwise XOR operator ``^=`` is used with a variable and a
 constant to "toggle" (change 0 to 1, and 1 to 0) particular bits in a
@@ -181,8 +181,8 @@ You can use any integer variable for ``x`` (i.e., any variable of type
 ``int``, ``long``, ``char``, ``byte``, etc.).  You can use either an
 integer variable or any integer value (like ``3`` or ``0x20``) for
 ``y``.  (This works the same way as :ref:`&=
-<lang-bitwisecompound-and>` and :ref:`\|=
-<lang-bitwisecompound-or>`; in fact, these three operators all
+<lang-compoundbitwise-and>` and :ref:`\|=
+<lang-compoundbitwise-or>`; in fact, these three operators all
 work the same in this way).
 
 Before doing an example of ``^=``, let's first review the Bitwise
@@ -203,7 +203,7 @@ toggle) its value, while if you XOR a bit with 0, it stays the same.
 So, to toggle bits 0 and 1 of a one-byte variable, while leaving the
 rest of the variable unchanged, use the compound bitwise XOR operator
 ``^=`` with the constant ``B00000011`` (hexadecimal ``0x3``\ ; see
-:ref:`note <lang-bitwisecompound-binconst>` above)::
+:ref:`note <lang-compoundbitwise-binconst>` above)::
 
        1  0  1  0  1  0  1  0    variable
        0  0  0  0  0  0  1  1    mask

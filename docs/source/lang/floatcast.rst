@@ -2,15 +2,12 @@
 
 .. _lang-floatcast:
 
-float() (cast)
-==============
+``float()`` (cast)
+==================
 
-Description
------------
-
-Converts a value to the :ref:`float <lang-float>` data type.  Here
-is an example (see the :ref:`constants reference
-<lang-constants-fp-f>` for an explanation of the "2.0f")::
+Converts a value to the :ref:`float <lang-float>` data type.  Here is
+an example (see the :ref:`constants reference <lang-constants-fp>` for
+an explanation of the "2.0f")::
 
    int x = 2;
    float f = float(x);  // f now holds 2.0f, a float value

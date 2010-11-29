@@ -5,9 +5,6 @@
 digitalRead()
 =============
 
-Description
------------
-
 Reads the value from a specified digital pin, either :ref:`HIGH
 <lang-constants-high>` or :ref:`LOW <lang-constants-low>`.
 

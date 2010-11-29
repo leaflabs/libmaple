@@ -2,8 +2,8 @@
 
 .. _lang-scope:
 
-Variable Scope
-==============
+Scope
+=====
 
 Variables in the C++ programming language, which Maple uses (all of
 your sketches are C++ programs in disguise), have a property called
@@ -25,8 +25,8 @@ of a function (like :ref:`setup() <lang-setup>` and :ref:`loop()
 
 A local variable can only be "seen" inside of a particular function.
 You can declare a variable to be local to a function by declaring it
-inside of the :ref:`curly braces <lang-braces>` which enclose that
-function.
+inside of the :ref:`curly braces <lang-curly-braces>` which enclose
+that function.
 
 When programs start to get larger and more complex, local variables
 are a useful way to ensure that a function has exclusive access to its

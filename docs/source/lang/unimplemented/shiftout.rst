@@ -133,4 +133,4 @@ Example
 
 
 
-.. include:: cc-attribution.txt
+.. include:: /lang/cc-attribution.txt

@@ -23,9 +23,7 @@ Example
 -------
 
 Sets the output to the LED proportional to the value read from the
-potentiometer (adapted for Maple from the Arduino `analogWrite()
-reference <http://www.arduino.cc/en/Reference/AnalogWrite>`_)::
-
+potentiometer::
 
     int ledPin = 13;      // LED connected to pin 13 (Maple)
     int analogPin = 3;    // potentiometer connected to analog pin 3

@@ -2,12 +2,12 @@
 
 .. _lang-switchcase:
 
-switch / case statements
-========================
+``switch``\ /\ ``case``
+=======================
 
-Like :ref:`if/else <lang-else>` blocks, A ``switch`` statement
-controls program flow by allowing you to specify different code that
-should be executed under various cases.
+Like :ref:`if <lang-if>` statements, A ``switch`` statement controls
+program flow by allowing you to specify different code that should be
+executed under various cases.
 
 The general syntax looks like this::
 
@@ -26,7 +26,6 @@ The general syntax looks like this::
 Where ``var`` is a variable whose value to investigate, and the
 ``val1``, ``val2`` after each ``case`` are constant values that
 ``var`` might be.
-
 
 Description
 -----------
@@ -80,6 +79,8 @@ a ``break`` has been reached, so the program continues by calling
 ``afterTheSwitch()``.  This is usually not what you want, which is why
 each ``case`` usually has a ``break`` at the end.
 
+.. _lang-switchcase-default:
+
 Writing "``default:``" instead of a ``case`` statement allows you to
 specify what to do if none of the ``case`` statements matches.  Having
 a ``default`` is optional (you can leave it out), but if you have one,
@@ -104,14 +105,14 @@ two, ``doThing2()`` gets called.  If ``var`` is anything else,
 optional.  If you're missing one and none of the ``case`` statements
 match, the ``switch`` does nothing at all, as if it weren't there.
 
-``switch`` statements are often used with an ``enum`` value as the
-variable to compare.  In this case, you can write down all of the
-values the ``enum`` takes as ``case`` statements, and be sure you've
-covered all the possibilities.
+``switch`` statements are often used with an :ref:`enum <lang-enum>`
+value as the variable to compare.  In this case, you can write down
+all of the values the ``enum`` takes as ``case`` statements, and be
+sure you've covered all the possibilities.
 
 See also:
 ---------
 
-- :ref:`if...else <lang-else>`
+- :ref:`if/else <lang-if>`
 
 .. include:: cc-attribution.txt

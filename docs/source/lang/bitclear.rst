@@ -3,9 +3,6 @@
 bitClear()
 ==========
 
-Description
------------
-
 (Macro) Clears (writes a 0 to) a bit of a numeric variable.
 
 Syntax

@@ -2,11 +2,8 @@
 
 .. _lang-char:
 
-char
-====
-
-Description
------------
+``char``
+========
 
 The ``char`` type stores a 1-byte character value (or integer with
 value from -128 to 127).  Character literals are written in single

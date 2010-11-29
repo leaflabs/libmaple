@@ -2,13 +2,17 @@
 
 .. _lang-sq:
 
-sq(a)
-=====
-
-Description
------------
+sq()
+====
 
 (Macro) computes the square of a number.
+
+Syntax
+------
+
+::
+
+    sq(a)
 
 Parameters
 ----------

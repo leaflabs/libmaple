@@ -1,11 +1,11 @@
 .. _lang-constants:
 
-constants
+Constants
 =========
 
-Constants are predefined variables in the Arduino language. They
-are used to make the programs easier to read. We classify constants
-in groups.
+Constants are like predefined variables, whose values can't
+change. They are used to make the programs easier to read and modify.
+This page describes the most commonly used constants.
 
 .. contents:: Contents
    :local:
@@ -15,288 +15,290 @@ in groups.
 Boolean Constants
 -----------------
 
-There are two constants used to represent truth and falsity in the
-Arduino language: **true**, and **false**.
+There are two constants used to represent truth and falsity: ``true``,
+and ``false``.
 
 .. _lang-constants-false:
 
 false
 ^^^^^
 
-false is the easier of the two to define. false is defined as 0
-(zero).
+``false`` is the false ``bool`` value. An integer which is 0 evaluates
+to ``false`` as a boolean.
 
 .. _lang-constants-true:
 
 true
 ^^^^
 
-true is often said to be defined as 1, which is correct, but true
-has a wider definition. Any integer which is *non-zero* is TRUE, in
-a Boolean sense. So -1, 2 and -200 are all defined as true, too, in
-a Boolean sense.
+``true`` is the true ``bool`` value.  As an integer, ``true`` is often
+said to be 1.  This is correct in the sense that ``true`` evaluates to
+1 as an integer.  However, any integer which is *non-zero* is ``true``
+as a :ref:`bool <lang-booleanvariables>`. So -1, 2 and -200 are all
+"true", in the sense that these numbers are treated the same as
+``true`` in a boolean context.
+
+Note that the ``true`` and ``false`` constants are typed in lowercase;
+unlike e.g. ``HIGH``, ``LOW``, ``INPUT``, and ``OUTPUT`` (which are
+described below).
 
 
-Note that the *true* and *false* constants are typed in lowercase
-unlike HIGH, LOW, INPUT, & OUTPUT.
+Pin Levels: HIGH and LOW
+------------------------
 
-
-Defining Pin Levels, HIGH and LOW
----------------------------------
-
-When reading or writing to a digital pin there are only two
-possible values a pin can take/be-set-to: **HIGH** and **LOW**.
+When reading or writing to a digital pin there are only two possible
+values a pin can be set to: ``HIGH`` and ``LOW``.
 
 .. _lang-constants-high:
 
-**HIGH**
+HIGH
+^^^^
 
+The meaning of ``HIGH`` (in reference to a pin) is somewhat different
+depending on whether the pin is set to ``INPUT`` or ``OUTPUT``. When a
+pin is configured as an ``INPUT`` (using :ref:`pinMode()
+<lang-pinmode>`), and read with :ref:`digitalRead()
+<lang-digitalread>`, the microcontroller will report ``HIGH`` if a
+voltage of 3 volts or more is present at the pin.
 
+.. TODO? Following seems false; check it out sometime, leave out for now:
 
-The meaning of HIGH (in reference to a pin) is somewhat different
-depending on whether a pin is set to an INPUT or OUTPUT. When a pin
-is configured as an INPUT with pinMode, and read with digitalRead,
-the microcontroller will report HIGH if a voltage of 3 volts or
-more is present at the pin.
+.. A pin may also be configured as an ``INPUT`` with ``pinMode()``, and
+.. subsequently made ``HIGH`` with :ref:`digitalWrite()
+.. <lang-digitalwrite>`, this will set the internal pullup resistors,
+.. which will *steer* the input pin to a HIGH reading unless it is pulled
+.. LOW by external circuitry.
 
-
-
-A pin may also be configured as an INPUT with pinMode, and
-subsequently made HIGH with digitalWrite, this will set the
-internal 20K pullup resistors, which will *steer* the input pin to
-a HIGH reading unless it is pulled LOW by external circuitry.
-
-
-
-When a pin is configured to OUTPUT with pinMode, and set to HIGH
-with digitalWrite, the pin is at 5 volts. In this state it can
-*source* current, e.g. light an LED that is connected through a
-series resistor to ground, or to another pin configured as an
-output, and set to LOW.
+When a pin is configured to ``OUTPUT`` with pinMode, and set to
+``HIGH`` with :ref:`digitalWrite() <lang-digitalwrite>`, the pin is at
+3.3 volts. In this state it can *source* current, e.g. light an LED
+that is connected through a series resistor to ground, or to another
+pin configured as an output and set to ``LOW``.
 
 .. _lang-constants-low:
 
-**LOW**
+LOW
+^^^
 
+The meaning of ``LOW`` also has a different meaning depending on
+whether a pin is set to ``INPUT`` or ``OUTPUT``. When a pin is
+configured as an ``INPUT`` with :ref:`pinMode() <lang-pinmode>`, and
+read with :ref:`digitalRead() <lang-digitalread>`, the microcontroller
+will report ``LOW`` if a voltage of 2 volts or less is present at the
+pin.
 
+When a pin is configured to ``OUTPUT`` with ``pinMode()``, and set to
+``LOW`` with :ref:`digitalWrite() <lang-digitalwrite>`, the
+microcontroller will attempt to keep that pin's voltage at 0V. In this
+state it can *sink* current, e.g. light an LED that is connected
+through a series resistor to +3.3V, or to another pin configured as an
+output, and set to ``HIGH``.
 
-The meaning of LOW also has a different meaning depending on
-whether a pin is set to INPUT or OUTPUT. When a pin is configured
-as an INPUT with pinMode, and read with digitalRead, the
-microcontroller will report LOW if a voltage of 2 volts or less is
-present at the pin.
+Pin Modes
+---------
 
+Digital pins can be used in a variety of modes.  The basic modes,
+``INPUT`` and ``OUTPUT``, have been introduced above.  Changing a pin
+from ``INPUT`` TO ``OUTPUT`` with :ref:`pinMode() <lang-pinmode>`
+drastically changes the electrical behavior of the pin.
 
-
-When a pin is configured to OUTPUT with pinMode, and set to LOW
-with digitalWrite, the pin is at 0 volts. In this state it can
-*sink* current, e.g. light an LED that is connected through a
-series resistor to, +5 volts, or to another pin configured as an
-output, and set to HIGH.
-
-
-
-Defining Digital Pins, INPUT and OUTPUT
----------------------------------------
-
-Digital pins can be used either as **INPUT** or **OUTPUT**.
-Changing a pin from INPUT TO OUTPUT with pinMode() drastically
-changes the electrical behavior of the pin.
+This section describes the basic digital pin modes (``INPUT`` and
+``OUTPUT``) only.  For a detailed description of all possible pin
+modes, see the :ref:`pinMode() <lang-pinmode>` reference page.
 
 .. _lang-constants-input:
 
-Pins Configured as Inputs
-^^^^^^^^^^^^^^^^^^^^^^^^^
+INPUT
+^^^^^
 
-Arduino (Atmega) pins configured as **INPUT** with pinMode() are
-said to be in a high-impedance state. One way of explaining this is
-that pins configured as INPUT make extremely small demands on the
-circuit that they are sampling, say equivalent to a series resistor
-of 100 Megohms in front of the pin. This makes them useful for
-reading a sensor, but not powering an LED.
+Maple (STM32) pins configured as ``INPUT`` are said to be in a
+high-impedance state. One way of explaining this is that pins
+configured as ``INPUT`` make extremely small demands on the circuit
+that they are sampling. This makes them useful for reading a sensor,
+but not powering an LED.
 
 .. _lang-constants-output:
 
-Pins Configured as Outputs
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+OUTPUT
+^^^^^^
 
-Pins configured as **OUTPUT** with pinMode() are said to be in a
-low-impedance state. This means that they can provide a substantial
-amount of current to other circuits. Atmega pins can source
-(provide positive current) or sink (provide negative current) up to
-40 mA (milliamps) of current to other devices/circuits. This makes
-them useful for powering LED's but useless for reading sensors.
-Pins configured as outputs can also be damaged or destroyed if
-short circuited to either ground or 5 volt power rails. The amount
-of current provided by an Atmega pin is also not enough to power
-most relays or motors, and some interface circuitry will be
-required.
+Pins configured as ``OUTPUT`` with :ref:`pinMode() <lang-pinmode>` are
+said to be in a low-impedance state. This means that they can provide
+a substantial amount of current to other circuits. STM32 pins can
+source (provide positive current) or sink (provide negative current)
+up to 50 mA (milliamps) of current to other devices/circuits. This
+makes them useful for powering LEDs, but useless for reading sensors.
 
-.. _lang-constants-fp:
-
-Floating-Point Constants
-------------------------
-
-Similar to integer constants, floating point constants are used to
-make code more readable. Floating point constants are swapped at
-compile time for the value to which the expression evaluates.
-
-.. TODO explain that floating point literals are doubles
-
-.. _lang-constants-fp-f:
-
-.. TODO f modifiers
-
-Examples:
-
-``n = .005;``
-
-Floating point constants can also be expressed in a variety of
-scientific notation. 'E' and 'e' are both accepted as valid
-exponent indicators.
-
-::
-
-
-    floating-point   evaluates to:      also evaluates to:
-      constant
-
-       10.0              10
-      2.34E5          2.34 * 10^5             234000
-      67e-12        67.0 * 10^-12         .000000000067
+Pins configured as outputs can also be damaged or destroyed if short
+circuited to either ground or 3.3V power rails. The amount of current
+provided by an STM32 pin is also not enough to power most relays or
+motors, and some interface circuitry will be required.
 
 .. _lang-constants-integers:
 
 Integer Constants
 -----------------
 
-Integer constants are numbers used directly in a sketch, like
-``123``. By default, these numbers are treated as
-`int <http://arduino.cc/en/Reference/Int>`_'s but you can change
-this with the U and L modifiers (see below).
+Integer constants (or more properly speaking, integer *literals*) are
+numbers used directly in a sketch, like ``123``. By default, an
+integer literal is treated as a (signed) :ref:`int <lang-int>`, but
+you can change this with the U and L modifiers (see :ref:`below
+<lang-constants-integers-u-l>`).  You can specify negative numbers by
+putting a minus sign in front, like ``-123``.
 
+Normally, integer literals are treated as base 10 (decimal) integers,
+but special notation (formatters) may be used to enter numbers in
+other bases.  These are summarized in the following table:
 
+.. list-table::
+   :header-rows: 1
 
-Normally, integer constants are treated as base 10 (decimal)
-integers, but special notation (formatters) may be used to enter
-numbers in other bases.
+   * - Base
+     - Example
+     - Formatter
+     - Comment
 
+   * - 10 (decimal)
+     - ``123``
+     - None
+     -
 
+   * - 2 (binary)
+     - ``0b1111011``
+     - Leading "0b"
+     - GCC extension; not standard C++
 
-::
+   * - 8 (octal)
+     - ``0173``
+     - Leading "0"
+     - Characters 0-7 valid
 
-    Base               Example    Formatter        Comment
+   * - 16 (hexadecimal)
+     - ``0x7B``
+     - Leading "0x"
+     - Characters 0-9, A-F (or a-f) valid
 
-    10 (decimal)           123    none
-
-    2 (binary)        B1111011    leading 'B'      only works with 8 bit values (0 to 255)
-                                                   characters 0-1 valid
-
-    8 (octal)             0173    leading "0"      characters 0-7 valid
-
-    16 (hexadecimal)      0x7B    leading "0x"     characters 0-9, A-F, a-f valid
+Binary constants (like ``B1111011``) for values between 0 and 255 are
+supported for compatibility with Arduino only.  Their use in new
+programs is discouraged.
 
 .. _lang-constants-integers-dec:
 
-**Decimal** is base 10. This is the common-sense math with which
-you are acquainted. Constants without other prefixes are assumed to
-be in decimal format.
+**Decimal** is base 10. This is the common number system we learn in
+school.  Integer literals without other prefixes are assumed to be in
+decimal format.
 
-
-
-Example:
-::
-
-    101     // same as 101 decimal   ((1 * 10^2) + (0 * 10^1) + 1)
+For example, the decimal literal ``101`` is one hundred and one: 1×10\
+:sup:`2` + 0×10\ :sup:`1` + 1×10\ :sup:`0` = 101.
 
 .. _lang-constants-integers-bin:
 
-**Binary** is base two. Only characters 0 and 1 are valid.
+**Binary** is base two. Only characters 0 and 1 are valid.  Binary
+literals are indicated by the prefix ``0b`` (this is a :ref:`GCC
+<arm-gcc>` extension; it's not standard C++).
 
-
-
-Example:
-::
-
-    B101    // same as 5 decimal   ((1 * 2^2) + (0 * 2^1) + 1)
-
-The binary formatter only works on bytes (8 bits) between 0 (B0)
-and 255 (B11111111). If it is convenient to input an int (16 bits)
-in binary form you can do it a two-step procedure such as:
-
-
-
-::
-
-    myInt = (B11001100 * 256) + B10101010;    // B11001100 is the high byte
+For example, the binary literal ``0b101`` is five: 1×2\ :sup:`2` +
+0×2\ :sup:`1` + 1×2\ :sup:`0` = 5.
 
 .. _lang-constants-integers-oct:
 
 **Octal** is base eight. Only characters 0 through 7 are valid.  Octal
-values are indicated by the prefix "0".
+literals are indicated by the prefix ``0``.
 
-Example:
+For example, the octal literal ``0101`` is sixty five: 1×8\ :sup:`2` +
+0×8\ :sup:`1` + 1×8\ :sup:`0` = 65.
 
-::
-
-    0101    // same as 65 decimal   ((1 * 8^2) + (0 * 8^1) + 1)
-
-Warning
-It is possible to generate a hard-to-find bug by (unintentionally)
-including a leading zero before a constant and having the compiler
-unintentionally interpret your constant as octal.
+.. warning:: Bugs sometimes result by (unintentionally) including a
+   leading "0" before an integer literal, which makes the compiler
+   interpret it in octal.
 
 .. _lang-constants-integers-hex:
 
-**Hexadecimal (or hex)** is base sixteen. Valid characters are 0
-through 9 and letters A through F; A has the value 10, B is 11, up
-to F, which is 15. Hex values are indicated by the prefix "0x".
-Note that A-F may be syted in upper or lower case (a-f).
+**Hexadecimal** (or "hex") is base sixteen. Valid characters are 0
+through 9 and letters A through F; A has the value 10, B is 11, up to
+F, which is 15. Hex values are indicated by the prefix ``0x``.  A-F
+may be typed in upper or lower case (a-f).
 
+For example, the hexadecimal literal ``0x101`` is two hundred fifty
+seven: 1×16\ :sup:`2` + 0×16\ :sup:`1` + 1×16\ :sup:`0` = 257.
 
+The hexadecimal literal ``0xCF2`` is three thousand, three hundred
+fourteen: 12×16\ :sup:`2` + 15×16\ :sup:`1` + 2×16\ :sup:`0` = 3314.
 
-Example:
-
-::
-
-    0x101   // same as 257 decimal   ((1 * 16^2) + (0 * 16^1) + 1)
+(Remember that in hex, ``A`` means 10, and counting up, ``B``\ =11, so
+``C``\ =12 and ``F``\ =15).
 
 .. _lang-constants-integers-u-l:
 
-U & L formatters
+U and L Suffixes
 ^^^^^^^^^^^^^^^^
 
-By default, an integer constant is treated as an
-`int <http://arduino.cc/en/Reference/Int>`_ with the attendant
-limitations in values. To specify an integer constant with another
-data type, follow it with:
+By default, an integer constant is treated as an :ref:`int
+<lang-int>`, with the attendant :ref:`limitations in values
+<lang-int-overflow>`. To specify an integer constant with another data
+type, follow it with:
+
+- a ``u`` or ``U`` to interpret the constant as an unsigned value.
+  For example, ``33U`` is an :ref:`unsigned int <lang-unsignedint>`.
+
+- an ``l`` or ``L`` to interpret the constant as a long value.  For
+  example, ``100000L`` is a :ref:`long <lang-long>`.
+
+- a ``ul`` or ``UL`` to do both.  For example, ``32767UL`` is an
+  :ref:`unsigned long <lang-unsignedlong>`.
+
+.. _lang-constants-fp:
+
+Floating-Point Constants
+------------------------
+
+Similar to integer literals, floating point constants (properly:
+floating-point *literals*) are used to make code more readable.
+Floating point literals are swapped at compile time for the value to
+which the expression evaluates.
+
+A floating point literal is any number which includes a decimal point.
+For instance, ``3.0`` is a floating-point literal for the number 3.
+By default, a floating-point literal is a :ref:`double <lang-double>`.
+In order for the literal to be interpreted as a :ref:`float
+<lang-float>`, you can write ``f`` directly after it.  For example,
+``3.0f`` is a floating-point literal with type ``float``.
+
+Floating point constants can also be expressed in a variety of
+scientific notation. ``E`` and ``e`` are both accepted as valid
+exponent indicators.  Some examples are given in the following table:
 
 
+.. list-table::
+   :header-rows: 1
 
+   * - Floating-point literal
+     - Evaluates to
+     - Alternate expression
 
--  a 'u' or 'U' to force the constant into an unsigned data format.
-   Example: ``33u``
--  a 'l' or 'L' to force the constant into a long data format.
-   Example: ``100000L``
--  a 'ul' or 'UL' to force the constant into an unsigned long
-   constant. Example: ``32767ul``
+   * - ``10.0``
+     - 10
+     -
 
+   * - ``2.34E5``
+     - 2.34×10\ :sup:`5`
+     - ``234000.0``
 
+   * - ``67e-12``
+     - 67.0×10\ :sup:`-12`
+     - ``0.000000000067``
 
-
-See also
+See Also
 --------
 
-
--  `pinMode() <http://arduino.cc/en/Reference/PinMode>`_
--  `Integer Constants <http://arduino.cc/en/Reference/IntegerConstants>`_
--  `boolean variables <http://arduino.cc/en/Reference/BooleanVariables>`_
--  `#define <http://arduino.cc/en/Reference/Define>`_
--  `byte <http://arduino.cc/en/Reference/Byte>`_
--  `int <http://arduino.cc/en/Reference/Int>`_
--  `unsigned int <http://arduino.cc/en/Reference/UnsignedInt>`_
--  `long <http://arduino.cc/en/Reference/Long>`_
--  `unsigned long <http://arduino.cc/en/Reference/UnsignedLong>`_
-
+- :ref:`pinMode() <lang-pinmode>`
+- :ref:`Boolean Variables <lang-booleanvariables>`
+- :ref:`#define <lang-define>`
+- :ref:`int <lang-int>`
+- :ref:`unsigned int <lang-unsignedint>`
+- :ref:`long <lang-long>`
+- :ref:`unsigned long <lang-unsignedlong>`
+- :ref:`float <lang-float>`
+- :ref:`double <lang-double>`
 
 .. include:: cc-attribution.txt

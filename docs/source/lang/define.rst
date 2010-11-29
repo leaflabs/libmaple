@@ -2,8 +2,8 @@
 
 .. _lang-define:
 
-#define
-=======
+``#define``
+===========
 
 ``#define`` is a useful C and C++ feature that allows the programmer
 to give a name to a constant value before the program is compiled.

@@ -1,37 +1,28 @@
+.. highlight:: cpp
+
 .. _lang-while:
 
-while Loops
-===========
-
-Description
------------
-
-**while** loops will loop continuously, and infinitely, until the
-expression inside the parenthesis, () becomes false. Something must
-change the tested variable, or the **while** loop will never exit.
-This could be in your code, such as an incremented variable, or an
-external condition, such as testing a sensor.
-
-
+``while``
+=========
 
 Syntax
 ------
 
 ::
 
-    while(expression){
-      // statement(s)
+    while (expression) {
+      // block of code
     }
 
+Description
+-----------
 
-
-Parameters
-----------
-
-expression - a (boolean) C statement that evaluates to true or
-false
-
-
+``while`` loops will repeat the statements inside their associated
+block of code until the expression inside the parentheses becomes
+:ref:`false <lang-constants-false>`. Something must change the tested
+expressions' value, or the ``while`` loop will never exit.  This could
+be in your code, such as an incremented variable, or an external
+condition, such as testing a sensor.
 
 Example
 -------
@@ -39,11 +30,9 @@ Example
 ::
 
     var = 0;
-    while(var < 200){
+    while(var < 200) {
       // do something repetitive 200 times
       var++;
     }
-
-
 
 .. include:: cc-attribution.txt

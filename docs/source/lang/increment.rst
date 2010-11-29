@@ -2,8 +2,8 @@
 
 .. _lang-increment:
 
-Increment (``++``) and Decrement (``--``)
-=========================================
+Increment and Decrement Operators (``++``, ``--``)
+==================================================
 
 These operators increment (add one to) or decrement (subtract one
 from) a variable.  If they come before the variable, they return its
@@ -29,16 +29,9 @@ A more extended example::
         // this line won't compile (notice the extra space):
         int y = x+ +;
 
-Parameters
-----------
-
-**x**: an integer value (like an ``int``, ``long``, ``unsigned int``,
-etc.).
-
-See also
+See Also
 --------
 
-- :ref:`Compound arithmetic operators <lang-arithmeticcompound>`
-
+- :ref:`lang-compoundarithmetic`
 
 .. include:: cc-attribution.txt

@@ -1,13 +1,10 @@
 .. _lang-double:
 
-double
-======
+``double``
+==========
 
-Description
------------
-
-Double precision floating point number. Occupies 8 bytes.  On Maple,
-the ``double`` type has a range of approximately -1.79769×10^308 to
+Double precision floating point type. Occupies 8 bytes.  On Maple, the
+``double`` type has a range of approximately -1.79769×10^308 to
 1.79769×10^308; the ``double`` type subject to the same :ref:`overflow
 issues <lang-variables-rollover>` as any numeric data type.
 

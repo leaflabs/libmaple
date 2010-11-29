@@ -2,8 +2,8 @@
 
 .. _lang-bitwisemath:
 
-Bitwise AND (&), OR (\|), XOR (^), NOT (~)
-==========================================
+Bitwise Operators (``&``, ``|``, ``^``, ``~``)
+==============================================
 
 The bitwise operators perform their calculations at the bit level of
 variables. They help solve a wide range of common programming
@@ -22,8 +22,8 @@ Below are descriptions and syntax for all of the operators.
 
 .. _lang-bitwisemath-and:
 
-Bitwise AND (&)
----------------
+Bitwise AND (``&``)
+-------------------
 
 The bitwise AND operator in C++ is a single ampersand, ``&``, used
 between two other integer expressions. Bitwise AND operates on each
@@ -54,8 +54,8 @@ value 1000100 in binary, which is 68 in decimal.
 
 .. _lang-bitwisemath-or:
 
-Bitwise OR (\|)
----------------
+Bitwise OR (``|``)
+------------------
 
 The bitwise OR operator in C++ is the vertical bar symbol, ``|``. Like
 the ``&`` operator, ``|`` operates independently on each bit in its
@@ -78,8 +78,8 @@ uses 32)::
 
 .. _lang-bitwisemath-xor:
 
-Bitwise XOR (^)
----------------
+Bitwise XOR (``^``)
+-------------------
 
 There is a somewhat unusual operator in C++ called bitwise EXCLUSIVE
 OR, also known as bitwise XOR. (In English, this is usually pronounced
@@ -129,8 +129,8 @@ program to blink digital pin 13 (the LED pin on Maple)::
 
 .. _lang-bitwisemath-not:
 
-Bitwise NOT (~)
----------------
+Bitwise NOT (``~``)
+-------------------
 
 The bitwise NOT operator in C++ is the tilde character ``~``. Unlike
 ``&`` and ``|``, the bitwise NOT operator is applied to a single
@@ -179,7 +179,7 @@ See Also
 --------
 
 - :ref:`Boolean operations <lang-boolean>` (``&&``, ``||``)
-- :ref:`Compound bitwise operations <lang-bitwisecompound>` (``&=``,
+- :ref:`Compound bitwise operations <lang-compoundbitwise>` (``&=``,
    ``|=``, ``^=``).
 
 

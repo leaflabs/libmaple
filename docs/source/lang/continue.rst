@@ -2,9 +2,8 @@
 
 .. _lang-continue:
 
-==========
- continue
-==========
+``continue``
+============
 
 The ``continue`` keyword skips the rest of the current iteration of a
 :ref:`while <lang-while>`\ , :ref:`for <lang-for>`\ , or
@@ -12,9 +11,8 @@ The ``continue`` keyword skips the rest of the current iteration of a
 conditional expression of the loop, and proceeding with any subsequent
 iterations.
 
-
 Example
-=======
+-------
 
 ::
 

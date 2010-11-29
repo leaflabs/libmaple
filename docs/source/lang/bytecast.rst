@@ -5,9 +5,6 @@
 byte() (cast)
 =============
 
-Description
------------
-
 Converts a value to the :ref:`byte <lang-byte>` data type.
 
 .. note::

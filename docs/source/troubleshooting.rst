@@ -30,10 +30,8 @@ use :ref:`perpetual bootloader mode
 My board is bricked! I can't upload via the bootloader no matter what!
 ----------------------------------------------------------------------
 
-Use the hardcoded serial STM32 serial bootloader to re-flash the
-bootloader.
-
-.. TODO insert docs on reflashing the bootloader
+Use the hardcoded serial STM32 serial bootloader to :ref:`re-flash the
+bootloader <bootloader-reflashing>`.
 
 If it really is bricked, and you think it's our fault, `contact us
 <http://leaflabs.com/contact>`_\ !
@@ -100,18 +98,18 @@ a board selected.  The work-around is to restart the IDE. Mysterious!
 ``NullPointerException``
 ------------------------
 
-A classic! Make sure you have selected a board from the pulldown menu. 
+A classic! Make sure you have selected a board from the pulldown menu.
 
 .. TODO: remove when Python version is released
 
 ``undefined reference to setup()/loop()``
 -----------------------------------------
 
-Your sketch/program either does not include one of the `setup
-<setup()>`_ or `loop <loop()>`_ functions, or it was not found by the
-compiler. Your program must include both ``void setup()`` and ``void
-loop()`` functions; they don't have to do anything, but they **must**
-be there.
+Your sketch/program either does not include one of the :ref:`setup()
+<lang-setup>` or `loop() <lang-loop>` functions, or it was not found
+by the compiler. Your program must include both ``void setup()`` and
+``void loop()`` functions; they don't have to do anything, but they
+**must** be there.
 
 You can start with an example program (to see one in the IDE, click on
 File > Examples > Stubs > BareMinimum) to get the basic structure.
@@ -152,7 +150,7 @@ is several times more FLASH memory available for user programs.
 ``No DFU capable USB device found``
 -----------------------------------
 
-This probably means you don't have a Maple plugged in or powered on! 
+This probably means you don't have a Maple plugged in or powered on!
 
 I have multiple Maples installed; how do I know which one will get flashed?
 ---------------------------------------------------------------------------

@@ -2,16 +2,12 @@
 
 .. _lang-bitshift:
 
-Bit shift left (``<<``), bit shift right (``>>``)
-=================================================
-
-Description
------------
+Bit Shift Operators (``<<``, ``>>``)
+====================================
 
 (Adapted from `The Bit Math Tutorial
 <http://www.arduino.cc/playground/Code/BitMath>`_ in `The Arduino
 Playground <http://www.arduino.cc/playground/Main/HomePage>`_\ )
-
 
 There are two bit shift operators in C++: the left shift operator
 ``<<`` and the right shift operator ``>>``. These operators cause the

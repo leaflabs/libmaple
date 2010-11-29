@@ -33,6 +33,13 @@
 
 #include "Print.h"
 
+/* NB: this class documented "by hand" (i.e., not using Doxygen) in:
+
+     libmaple/docs/source/lang/serial.rst
+
+   If you alter the public HardwareSerial interface, you must update
+   the documentation accordingly. */
+
 class HardwareSerial : public Print {
  private:
     uint8 usart_num;
@@ -50,7 +57,7 @@ class HardwareSerial : public Print {
                    uint8 rx_pin,
                    uint8 timer_num,
                    uint8 compare_num);
-    void begin(uint32);
+    void begin(uint32 baud);
     void end(void);
     uint32 available(void);
     uint8 read(void);

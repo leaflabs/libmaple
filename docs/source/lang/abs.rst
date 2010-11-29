@@ -1,12 +1,18 @@
+.. highlight:: cpp
+
 .. _lang-abs:
 
-abs(x)
+abs()
 ======
 
-Description
------------
-
 (Macro) computes the absolute value of a number.
+
+Syntax
+------
+
+::
+
+   abs(x)
 
 Parameters
 ----------

@@ -2,11 +2,8 @@
 
 .. _lang-float:
 
-float
-=====
-
-Description
------------
+``float``
+=========
 
 Single-precision floating point number. Occupies 4 bytes. On Maple,
 the ``float`` type has a range of approximately -3.40282×10^38 to

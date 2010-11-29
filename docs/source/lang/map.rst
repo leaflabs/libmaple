@@ -1,122 +1,68 @@
+.. highlight:: cpp
+
 .. _lang-map:
 
-map(value, fromLow, fromHigh, toLow, toHigh)
-============================================
+map()
+=====
 
-Description
------------
+Re-maps a number from one range to another.
 
-Re-maps a number from one range to another. That is, a **value** of
-**fromLow** would get mapped to **toLow**, a value of **fromHigh**
-to **toHigh**, values in-between to values in-between, etc.
+.. contents:: Contents
+   :local:
 
+Library Documentation
+---------------------
 
+.. doxygenfunction:: map
 
-Does not constrain values to within the range, because out-of-range
-values are sometimes intended and useful. The constrain() function
-may be used either before or after this function, if limits to the
-ranges are desired.
-
-
-
-Note that the "lower bounds" of either range may be larger or
-smaller than the "upper bounds" so the map() function may be used
-to reverse a range of numbers, for example
-
-
-
-``y = map(x, 1, 50, 50, 1);``
-
-
-
-The function also handles negative numbers well, so that this
-example
-
-
-
-``y = map(x, 1, 50, 50, -100);``
-
-
-
-is also valid and works well.
-
-
-
-The map() function uses integer math so will not generate
-fractions, when the math might indicate that it should do so.
-Fractional remainders are truncated, and are not rounded or
-averaged.
-
-
-
-Parameters
+Discussion
 ----------
 
-value: the number to map
+``map()`` does not constrain values to within the range, because
+out-of-range values are sometimes intended and useful. The
+:ref:`constrain() <lang-constrain>` macro may be used either before or
+after this function, if limits to the ranges are desired.
 
+Note that the "lower bounds" of either range may be larger or smaller
+than the "upper bounds" so that ``map()`` may be used to reverse a
+range of numbers; for example::
 
+    y = map(x, 1, 50, 50, 1);
 
-fromLow: the lower bound of the value's current range
+The function also handles negative numbers well, so that this
+example ::
 
+    y = map(x, 1, 50, 50, -100);
 
+is also valid.
 
-fromHigh: the upper bound of the value's current range
-
-
-
-toLow: the lower bound of the value's target range
-
-
-
-toHigh: the upper bound of the value's target range
-
-
-
-Returns
--------
-
-The mapped value.
-
-
+The ``map()`` function uses integer math (its arguments and return
+values all have type :ref:`long <lang-long>`), so it will not generate
+fractions, when the math might indicate that it should do so.
+Fractional remainders are truncated, and are not rounded or averaged.
 
 Example
 -------
 
 ::
 
-    /* Map an analog value to 8 bits (0 to 255) */
-    void setup() {}
+    /* Map an ADC reading (12 bits) to 16-bit PWM (0 to 65,535) */
 
-    void loop()
-    {
-      int val = analogRead(0);
-      val = map(val, 0, 1023, 0, 255);
-      analogWrite(9, val);
+    void setup() {
+        pinMode(0, INPUT_ANALOG);
+        pinMode(9, PWM);
     }
 
-
-
-Appendix
-~~~~~~~~
-
-For the mathematically inclined, here's the whole function
-
-
-
-::
-
-    long map(long x, long in_min, long in_max, long out_min, long out_max)
-    {
-      return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    void loop() {
+        int val = analogRead(0);
+        val = map(val, 0, 4095, 0, 65535);
+        analogWrite(9, val);
     }
-
 
 
 See Also
 --------
 
-
--  `constrain <http://arduino.cc/en/Reference/Constrain>`_\ ()
-
+-  :ref:`constrain() <lang-constrain>`
 
 .. include:: cc-attribution.txt

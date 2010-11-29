@@ -6,4 +6,4 @@ String Class
 Stub.
 
 
-.. include:: cc-attribution.txt
+.. include:: /lang/cc-attribution.txt

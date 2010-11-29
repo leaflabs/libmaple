@@ -2,8 +2,8 @@
 
 .. _lang-include:
 
-#include
-========
+``#include``
+============
 
 ``#include`` is used to include outside libraries in your sketch.
 This gives the programmer access to a large group of standard C
@@ -15,7 +15,8 @@ Example
 
 This example (from the `Arduino LiquidCrystal Tutorial
 <http://arduino.cc/en/Tutorial/LiquidCrystal>`_) includes a library
-that is used to control :ref:`LCD displays <liquid-crystal>`::
+that is used to control :ref:`LCD displays
+<libraries-liquid-crystal>`::
 
     // include the library code:
     #include <LiquidCrystal.h>

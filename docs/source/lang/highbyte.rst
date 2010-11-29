@@ -1,7 +1,11 @@
+.. highlight:: cpp
+
 .. _lang-highbyte:
 
-highByte(x)
-===========
+highByte()
+==========
+
+(Macro) Extracts the second lowest byte of an integral data type.
 
 .. warning:: This macro is provided for compatibility with Arduino
    only.  It returns the second-least significant byte in an integral
@@ -13,10 +17,12 @@ highByte(x)
    In short: we provide this so that existing Arduino code works as
    expected, but **strongly discourage its use** in new programs.
 
-Description
------------
+Syntax
+------
 
-(Macro) Extracts the second lowest byte of an integral data type.
+::
+
+  highByte(x)
 
 Parameters
 ----------

@@ -2,11 +2,8 @@
 
 .. _lang-unsignedlong:
 
-unsigned long
-=============
-
-Description
------------
+``unsigned long``
+=================
 
 An unsigned version of the :ref:`long <lang-long>` data type.  An
 ``unsigned long`` occupies 8 bytes of memory; it stores an integer
@@ -19,8 +16,8 @@ won't store negative numbers; it is also subject to the same
 
 Here is an example of declaring an ``unsigned long`` variable named
 ``c``, then giving it value 299,792,458,000,000,000 (see :ref:`integer
-constants <lang-constants-u-l>` for an explanation of the "L" at the
-end of the number)::
+constants <lang-constants-integers-u-l>` for an explanation of the "L"
+at the end of the number)::
 
         // Speed of light in nanometers per second (approximate).
         unsigned long c = 299792458000000000L;

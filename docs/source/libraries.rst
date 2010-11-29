@@ -18,7 +18,7 @@ in the description of the library.
 .. contents:: Contents
    :local:
 
-.. _liquid_crystal:
+.. _libraries-liquid-crystal:
 
 LiquidCrystal
 -------------
@@ -32,7 +32,7 @@ At this time, no incompatibilities between the Maple and Arduino
 versions are known. Any observed differences should be considered
 bugs, and reported on the forums.
 
-.. _wire:
+.. _libraries-wire:
 
 Wire
 ----

@@ -2,11 +2,8 @@
 
 .. _lang-longcast:
 
-long()
-======
-
-Description
------------
+``long()`` (cast)
+=================
 
 Converts a value to the :ref:`long <lang-long>` data type.  Here is
 an example::

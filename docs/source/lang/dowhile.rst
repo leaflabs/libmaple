@@ -2,8 +2,8 @@
 
 .. _lang-dowhile:
 
-do/while Loop
-=============
+``do``/``while``
+================
 
 A ``do`` loop works in the same manner as a :ref:`while
 <lang-while>` loop, with the exception that the condition is tested

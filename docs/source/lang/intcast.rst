@@ -2,11 +2,8 @@
 
 .. _lang-intcast:
 
-int()
-=====
-
-Description
------------
+``int()`` (cast)
+================
 
 Converts a value to the :ref:`int <lang-int>` data type.  Here is
 an example::

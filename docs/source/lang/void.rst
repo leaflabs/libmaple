@@ -1,40 +1,31 @@
+.. highlight:: cpp
+
 .. _lang-void:
 
-void
-====
+``void``
+========
 
-The void keyword is used only in function declarations. It
+The ``void`` keyword is used only in function declarations. It
 indicates that the function is expected to return no information to
-the function from which it was called.
+the function from which it was called, or that it expects no arguments
+from its caller.
 
-
-
-Example:
---------
+Example
+-------
 
 ::
 
     // actions are performed in the functions "setup" and "loop"
     // but  no information is reported to the larger program
 
-    void setup()
-    {
+    void setup() {
       // ...
     }
 
-    void loop()
-    {
+    void loop() {
       // ...
     }
 
-
-
-
-See also
---------
-
-`function declaration <http://arduino.cc/en/Reference/FunctionDeclaration>`_
-
-
+.. TODO doc page on function declaration?
 
 .. include:: cc-attribution.txt

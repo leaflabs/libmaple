@@ -1,15 +1,13 @@
 .. highlight:: cpp
 
-.. _lang-arithmeticcompound:
+.. _lang-compoundarithmetic:
 
 Compound Arithmetic Operators (``+=`` , ``-=``, ``*=``, ``/=``)
 ===============================================================
 
-Description
------------
-
-Perform a mathematical operation on a variable with another constant
-or variable.  These operators are just a convenient shorthand::
+These oparators perform a mathematical operation on a variable with
+another constant or variable.  These operators are just a convenient
+shorthand::
 
     x += y;   // equivalent to the expression x = x + y;
     x -= y;   // equivalent to the expression x = x - y;

@@ -2,8 +2,8 @@
 
 .. _lang-assignment:
 
-= assignment operator (single equal sign)
-=========================================
+Assignment Operator (``=``)
+===========================
 
 Stores the value to the right of the equal sign in the variable to
 the left of the equal sign.

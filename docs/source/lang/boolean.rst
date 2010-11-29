@@ -83,7 +83,7 @@ See Also
 --------
 
 - :ref:`Bitwise operators <lang-bitwisemath>` (``&``, ``|``, ``^``, ``~``)
-- :ref:`Compound bitwise operators <lang-bitwisecompound>` (``&=``,
+- :ref:`Compound bitwise operators <lang-compoundbitwise>` (``&=``,
   ``|=``, ``^=``).
 - :ref:`if statement <lang-if>`
 

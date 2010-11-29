@@ -2,27 +2,26 @@
 
 .. _lang-arithmetic:
 
-Addition, Subtraction, Multiplication, & Division
+Arithmetic Operators (``+``, ``-``, ``*``, ``/``)
 =================================================
 
-.. contents:: Contents
-   :local:
-
-Description
------------
-
-These operators return the sum, difference, product, or quotient
-(respectively) of the two operands. The operation is conducted using
-the data type of the operands, so, for example, ``9 / 4`` gives ``2``
-since 9 and 4 are :ref:`int variables <lang-int>`.
+The operators ``+``, ``-``, ``*``, and ``/`` respectively evaluate to
+the sum, difference, product, or quotient (respectively) of the two
+operands. The operation is conducted using the data type of the
+operands, so, for example, ``9 / 4`` gives ``2`` since 9 and 4 are
+:ref:`int variables <lang-int>`.
 
 This also means that the operation can overflow if the result is
 larger than that which can be stored in the data type (e.g. adding 1
-to an :ref:`lang-int` with the value 2147483647 gives
--2147483648). If the operands are of different types, the "larger"
-type is used for the calculation.
+to an :ref:`lang-int` with the value 2,147,483,647 gives
+-2,147,483,648).
 
 .. _lang-arithmetic-typeconversion:
+
+If the operands are of different types, the "larger" type is used for
+the calculation.  If one of the numbers (operands) are of the type
+**float** or of type **double**, floating point math will be used for
+the calculation.
 
 .. note:: The specifics of these rules are beyond the scope of this
    documentation; for more information, see `The C++ Programming
@@ -35,9 +34,8 @@ type is used for the calculation.
    see the Wikipedia page on `two's complement
    <http://en.wikipedia.org/wiki/Two's_complement>`_.
 
-If one of the numbers (operands) are of the type **float** or of type
-**double**, floating point math will be used for the
-calculation.
+.. contents:: Contents
+   :local:
 
 Examples
 --------

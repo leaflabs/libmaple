@@ -2,11 +2,8 @@
 
 .. _lang-charcast:
 
-char() (cast)
-=============
-
-Description
------------
+``char()`` (cast)
+=================
 
 Converts a value to the :ref:`char <lang-char>` data type.
 

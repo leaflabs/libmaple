@@ -2,11 +2,8 @@
 
 .. _lang-int:
 
-int
-===
-
-Description
------------
+``int``
+=======
 
 The ``int`` data type represents integers.  Integers are your primary
 data type for number storage, and store a 4 byte value. This yields a
@@ -43,7 +40,7 @@ Integer Overflow
 ----------------
 
 When ``int`` variables leave the range specified above, they
-:ref:`roll over <lang-variable-rollover>` in the other direction.
+:ref:`roll over <lang-variables-rollover>` in the other direction.
 Here are some examples::
 
        int x;

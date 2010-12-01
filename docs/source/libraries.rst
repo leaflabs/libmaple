@@ -57,8 +57,8 @@ the hardware i2c peripheral on the stm32 as well as the DMA for
 performance. Support for slave, smBUS, and multimaster modes are also
 slated for inclusion in the enhanced Wire port.
 
-Function Reference
-^^^^^^^^^^^^^^^^^^
+Wire Function Reference
+^^^^^^^^^^^^^^^^^^^^^^^
 
 ``Wire.begin()``
     Joins the i2c bus as master, using pin 20 as SDA and pin 21 as SCL

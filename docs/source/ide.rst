@@ -3,17 +3,17 @@
 Maple IDE
 =========
 
-.. figure:: /_static/img/ide-blinky.png
-   :align: center
-   :alt: Maple IDE
-
 This page documents the basic functionality of the Maple IDE.
 Specifically, it describes the operation of the buttons on the main
 toolbar.  It is expected to become more comprehensive over time.
 
-The :ref:`Maple Quickstart <maple-quickstart>` is another source of
+The :ref:`Maple Quickstart <maple-quickstart>` is another good source of
 information on the IDE; it is especially useful for setting up a
 computer for the first time.
+
+.. figure:: /_static/img/ide-blinky.png
+   :align: center
+   :alt: Maple IDE
 
 .. _ide-verify:
 
@@ -31,6 +31,7 @@ Stop
 ----
 
 .. image:: /_static/img/button-stop.png
+   :align: left
 
 Click Stop to cancel a compilation.
 
@@ -40,6 +41,7 @@ New
 ---
 
 .. image:: /_static/img/button-new.png
+   :align: left
 
 Click New to begin a fresh sketch.
 
@@ -49,6 +51,7 @@ Open
 ----
 
 .. image:: /_static/img/button-open.png
+   :align: left
 
 Click Open to open a new sketch.  By default, this will look in you
 *sketchbook*, which is a directory on your system which contains all
@@ -61,6 +64,7 @@ Save
 ----
 
 .. image:: /_static/img/button-save.png
+   :align: left
 
 Click Save to save the currently opened sketch.
 
@@ -70,6 +74,7 @@ Upload
 ------
 
 .. image:: /_static/img/button-upload.png
+   :align: left
 
 Click Upload to send the compiled sketch to your Maple to run.  Before
 you click Upload, you must have a memory location and serial port
@@ -104,6 +109,7 @@ Serial Monitor
 --------------
 
 .. image:: /_static/img/button-serial-monitor.png
+   :align: left
 
 Click Serial Monitor to open up a communications channel between your
 PC and the Maple's :ref:`Serial-over-USB <lang-serialusb>`

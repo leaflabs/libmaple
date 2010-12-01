@@ -1,47 +1,44 @@
 .. _index:
 
-Maple Documentation Index
-=========================
+Maple Documentation Contents
+=============================
 
-Welcome!  This is the Maple documentation index.  It contains
-tutorials, quickstarts, and technical documentation.
+.. _index-usage:
 
-If you just got a new Maple, you probably want to begin with the
-:ref:`quickstart <maple-quickstart>`.  You can then move on to reading
-about the programming language you use with the Maple at the
-:ref:`language reference <language>`.
-
-If you're having problems, you might want to visit the
-:ref:`troubleshooting <troubleshooting>` and :ref:`known problems
-<errata>` pages.  Finally, you can always hit the `forums
-<http://forums.leaflabs.com/>`_ to ask questions to the LeafLabs team
-and other Maple users.  Good luck, and have fun!
-
-General documentation:
+**Usage Guides:**
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
 
-   Quickstart Guide <maple-quickstart>
-   IDE Installation Guide <maple-ide-install>
-   IDE Documentation <ide>
-   Language Reference <language>
-   Arduino Compatibility Reference <compatibility>
-   Library Reference <libraries>
-   Command-Line Tools and APIs <libmaple>
-   Troubleshooting <troubleshooting>
+   Quickstart <maple-quickstart>
+   IDE Installation <maple-ide-install>
+   IDE Anatomy <ide>
+
+.. _index-maple-programming:
+  
+**Maple Programming:**
+
+.. toctree::
+   :maxdepth: 2
+
+   Maple Language<language>
+   Maple Libraries <libraries>
+   Arduino Compatibility <compatibility>
    External Interrupts <external-interrupts>
+   Command-Line Tools & APIs <libmaple>
    Bootloader <bootloader>
+
+
+   Troubleshooting <troubleshooting> 
    Known Problems <errata>
-   Language Reference Index <language-index>
 
 .. _index-hardware:
 
-Hardware features:
+**Hardware Features:**
 
 .. toctree::
    :maxdepth: 1
-
+ 
    i2c
    pwm
    gpio
@@ -51,3 +48,15 @@ Hardware features:
    spi
    usart
    timers
+
+.. _index-reference:
+
+**Reference:**
+
+.. toctree::
+   :maxdepth: 1
+   
+   Technical Specifications <specs>
+   Complete Language Index <language-index>
+
+   

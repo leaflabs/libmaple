@@ -268,10 +268,16 @@ the Maple.  However, they will be present in future versions:
 
 .. _newlib: http://sourceware.org/newlib/
 
+.. _cpp-for-maple:
+
+C++ for Maple
+--------------
+If you haven't programmed in C++, or if you just need to jog your memory, you may want to check out our :ref:`C++ for Maple Index<cpp>`.  It covers programming ideas and C++ that will definitely come in handy.
+
 .. _arduino_c_for_c_hackers:
 
-Note for C/C++ Programmers
---------------------------
+Note for C/C++ Hackers
+----------------------
 
 This is a note for programmers comfortable with C or C++ (although,
 you C programmers should remember that `C++ is not a superset of C

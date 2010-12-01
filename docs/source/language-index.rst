@@ -1,16 +1,28 @@
 .. _language-index:
 
-Language Reference Index
-========================
+=============================
+Complete Maple Language Index
+=============================
 
-This is the index of the :ref:`language reference <language>`
-documentation.
+This is the index of Maple's :ref:`language reference <language-lang-docs>` documentation.  The 'Maple API' column includes language specific to Maple as a microcontroller development platform, while the language in 'C++ for Maple' is more generally applied.
 
-.. toctree::
-   :maxdepth: 1
-   :glob:
+# Fix above explanation/have marti write it
 
-   lang/*
+.. _index-language-index-cpp:
+.. _index-language-index-api:
+
++--------------------------------------------+----------------------------------------------+
+|   Maple API                                |   :ref:`C++ for Maple <cpp>`                 |
+|                                            |                                              |
++============================================+==============================================+
+|                                            |                                              |
+|  .. toctree::                              |	.. toctree::                                |
+|     :maxdepth: 1                           |	   :maxdepth: 1                             |
+|     :glob:                                 |     :glob:                                   |
+|   					     |                                              |
+|     lang/api/*			     |	   lang/cpp/*                               |
+|                                            |                                              |
++--------------------------------------------+----------------------------------------------+
 
 .. Unfinished, unimplemented in libmaple:
 

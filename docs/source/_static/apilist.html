@@ -1,0 +1,5 @@
+{# Filename: .static/apilist.html #}
+{% set parents = parents.pop() %}
+{% if parents %}
+<a href="{{ parents.link|e }}">{{ parents.title }}</a>
+{% endif %}

@@ -70,11 +70,14 @@ typedef struct PinMapping {
     uint32 timer_chan;
 } PinMapping;
 
-/* LeafLabs Maple rev3, rev4 */
+/* LeafLabs Maple rev3, rev5 */
 #ifdef BOARD_maple
 
     #define CYCLES_PER_MICROSECOND  72
     #define MAPLE_RELOAD_VAL        71999 /* takes a cycle to reload */
+
+    #define BOARD_BUTTON_PIN   38
+    #define BOARD_LED_PIN      13
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         /* D0/PA3 */
@@ -163,10 +166,12 @@ typedef struct PinMapping {
         {GPIOC_BASE,  9, ADC_INVALID,  TIMER_INVALID,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID}
     };
 
-#endif
+    #define BOARD_INIT do {                           \
+        } while(0)
 
-/* LeafLabs Maple Native (prototype) */
-#ifdef BOARD_maple_native
+#elif defined(BOARD_maple_native)
+
+    /* LeafLabs Maple Native (prototype) */
 
     #define CYCLES_PER_MICROSECOND  72
     #define MAPLE_RELOAD_VAL        71999 /* takes a cycle to reload */
@@ -290,12 +295,14 @@ typedef struct PinMapping {
         /* D13/PA5 */
         {EXTI5,  EXTI_CONFIG_PORTA},
     };
-#endif
 
-#ifdef BOARD_maple_mini
+#elif defined(BOARD_maple_mini)
 
     #define CYCLES_PER_MICROSECOND 72
     #define MAPLE_RELOAD_VAL       71999 /* takes a cycle to reload */
+
+    #define BOARD_BUTTON_PIN 32
+    #define BOARD_LED_PIN    33
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         /* D0/PC15 */
@@ -368,11 +375,18 @@ typedef struct PinMapping {
         {GPIOB_BASE, 12,  ADC_INVALID, TIMER_INVALID,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
     };
 
+    /* since we want the Serial Wire/JTAG pins as GPIOs, disable both
+       SW and JTAG debug support */
+    /* don't use __clear_bits here! */
+    #define BOARD_INIT                                                  \
+        do {                                                            \
+            *AFIO_MAPR = (*AFIO_MAPR | BIT(26)) & ~(BIT(25) | BIT(24)); \
+        } while (0)
 
-#endif
+#else
 
-#ifndef CYCLES_PER_MICROSECOND
 #error "Board type has not been selected correctly."
+
 #endif
 
 #ifdef __cplusplus

@@ -42,15 +42,18 @@
  *      Alternate function open-drain
  *
  * - After reset, the alternate functions are not active and IO prts
- * are set to Input Floating mode */
+ * are set to Input Floating mode, EXCEPT for the Serial Wire and JTAG
+ * ports, which are in alternate function mode by default. */
 
-#define GPIOA_BASE    (GPIO_Port*)0x40010800
-#define GPIOB_BASE    (GPIO_Port*)0x40010C00
-#define GPIOC_BASE    (GPIO_Port*)0x40011000
-#define GPIOD_BASE    (GPIO_Port*)0x40011400
-#define GPIOE_BASE    (GPIO_Port*)0x40011800 // High-density devices only
-#define GPIOF_BASE    (GPIO_Port*)0x40011C00 // High-density devices only
-#define GPIOG_BASE    (GPIO_Port*)0x40012000 // High-density devices only
+#define AFIO_MAPR     ((volatile uint32*)0x40010004)
+
+#define GPIOA_BASE    ((GPIO_Port*)0x40010800)
+#define GPIOB_BASE    ((GPIO_Port*)0x40010C00)
+#define GPIOC_BASE    ((GPIO_Port*)0x40011000)
+#define GPIOD_BASE    ((GPIO_Port*)0x40011400)
+#define GPIOE_BASE    ((GPIO_Port*)0x40011800) // High-density devices only
+#define GPIOF_BASE    ((GPIO_Port*)0x40011C00) // High-density devices only
+#define GPIOG_BASE    ((GPIO_Port*)0x40012000) // High-density devices only
 
 #define GPIO_SPEED_50MHZ            (0x3)
 
@@ -107,6 +110,13 @@ static inline void gpio_write_bit(GPIO_Port *port, uint8 gpio_pin, uint8 val) {
 
 static inline uint32 gpio_read_bit(GPIO_Port *port, uint8 gpio_pin) {
     return (port->IDR & BIT(gpio_pin) ? 1 : 0);
+}
+
+/* For pins configured as output push-pull, reading the ODR returns
+ * the last value written in push-pull mode.
+ */
+static inline void gpio_toggle_pin(GPIO_Port *port, uint8 gpio_pin) {
+    port->ODR = port->ODR ^ BIT(gpio_pin);
 }
 
 #ifdef __cplusplus

@@ -103,3 +103,35 @@ void digitalWrite(uint8 pin, uint8 val) {
 
     gpio_write_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin, val);
 }
+
+void togglePin(uint8 pin) {
+    gpio_toggle_pin(PIN_MAP[pin].port, PIN_MAP[pin].pin);
+}
+
+uint8 isButtonPressed() {
+    if (digitalRead(BOARD_BUTTON_PIN)) {
+        while (digitalRead(BOARD_BUTTON_PIN))
+            ;
+        return true;
+    }
+    return false;
+}
+
+uint8 waitForButtonPress(uint32 timeout) {
+    uint32 start = millis();
+    uint32 time;
+    if (timeout == 0) {
+        while (!isButtonPressed())
+            ;
+        return true;
+    }
+    do {
+        time = millis();
+        /* properly handle wrap-around */
+        if ((start > time && time + (0xffffffffU - start) > timeout) ||
+            time - start > timeout) {
+            return false;
+        }
+    } while (!isButtonPressed());
+    return true;
+}

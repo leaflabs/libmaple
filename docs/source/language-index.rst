@@ -1,12 +1,12 @@
 .. _language-index:
 
-=============================
-Complete Maple Language Index
-=============================
+=======================
+Complete Language Index
+=======================
 
 This is the index of Maple's :ref:`language reference <language-lang-docs>` documentation.  The 'Maple API' column includes language specific to Maple as a microcontroller development platform, while the language in 'C++ for Maple' is more generally applied.
 
-# Fix above explanation/have marti write it
+# Fix above explanation
 
 .. _index-language-index-cpp:
 .. _index-language-index-api:

@@ -34,7 +34,7 @@ Maple Documentation Contents
 
 .. _index-hardware:
 
-**Hardware Features:**
+**Hardware Peripherals:**
 
 .. toctree::
    :maxdepth: 1

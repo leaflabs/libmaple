@@ -6,7 +6,7 @@
 
 .. note::
 
-   The i2c interface is currently only available from the 'i2c' branch
+   The |i2c| interface is currently only available from the 'i2c' branch
    of the github `libmaple <http://github.com/leaflabs/libmaple>`_
    repository.
 

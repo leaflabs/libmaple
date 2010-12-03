@@ -7,10 +7,7 @@ Maple Documentation Home
 
 Welcome!
 
-Maple is a user-friendly prototyping platform developed by LeafLabs in Cambridge, MA.  Using Maple, creators with any level of experience can implement beautiful ideas that require the power of a 32-bit processor.  For more details about Maple's hardware, please see its :ref:`technical specifications <specs>`.  To start using your Maple, keep reading.
-
-.. contents:: Contents
-   :local:
+Maple is a user-friendly prototyping platform developed by LeafLabs in Cambridge, MA.  Using Maple, creators with any level of experience can implement beautiful ideas that require the power of a 32-bit processor.  For more details about Maple's hardware, please see its :ref:`technical specifications <specs>`.  To start using your Maple, keep reading
 
 .. _home-Getting-Started:
 
@@ -19,9 +16,11 @@ Getting Started
 
 :ref:`Quickstart <maple-quickstart>`
 
+:ref:`IDE Anatomy <ide>`
+
 :ref:`Basic Language Reference <language>`  
 
-:ref:`Full Documentation <index>` 
+:ref:`Tech Specs<specs>`
 
 .. _home-Problem-Solving:
 

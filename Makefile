@@ -66,6 +66,7 @@ endif
 # Set all submodules here
 LIBMAPLE_MODULES := $(SRCROOT)/libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
+LIBMAPLE_MODULES += $(SRCROOT)/libraries/Servo
 
 # call each module rules.mk
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))

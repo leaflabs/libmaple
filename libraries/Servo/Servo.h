@@ -1,0 +1,116 @@
+/******************************************************************************
+ * The MIT License
+ *
+ * Copyright (c) 2010, LeafLabs, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *****************************************************************************/
+
+#ifndef _SERVO_H_
+#define _SERVO_H_
+
+#include <stdint.h>
+
+#include "HardwareTimer.h"
+
+/* Note on Arduino compatibility:
+
+   In the Arduino implementation, PWM is done "by hand" in the sense
+   that timer channels are hijacked in groups and an ISR is set which
+   toggles Servo::attach()ed pins using digitalWrite().
+
+   While this scheme allows any pin to drive a servo, it chews up
+   cycles and complicates the programmer's notion of when a particular
+   timer channel will be in use.
+
+   This implementation only allows Servo instances to Servo::attach()
+   to pins that already have a timer channel associated with them, and
+   just uses pwmWrite() to drive the wave.
+
+   This introduces an incompatibility: while the Arduino
+   implementation of attach() returns the affected channel on success
+   and 0 on failure, this one returns true on success and false on
+   failure.
+
+   RC Servos expect a pulse every 20ms.  Since periods are set for
+   entire timers, rather than individual channels, attach()ing a Servo
+   to a pin can interfere with other pins associated with the same
+   timer.  As always, the pin mapping mega table is your friend.
+ */
+
+// Pin number of unattached pins
+#define NOT_ATTACHED (-1)
+
+// Maximum angle in degrees you can write(), exclusive.  Value chosen
+// for Arduino compatibility.
+#define SERVO_MAX_WRITE_ANGLE (200)
+
+// Default min (0 deg)/max(180 deg) pulse widths, in microseconds.
+// Value chosen for Arduino compatibility.
+#define SERVO_DEFAULT_MIN_PW (544)
+#define SERVO_DEFAULT_MAX_PW (2400)
+
+class Servo {
+public:
+    Servo();
+
+    /* Pin has to have a timer channel associated with it already;
+     * sets pinMode to PWM and returns true iff successful (failure
+     * when pin doesn't support PWM).  doesn't detach any ISRs
+     * associated with timer channel. */
+    bool attach(uint8_t pin);
+
+    /* Like attach(int), but with (inclusive) min (0 degree) and max
+     * (180 degree) pulse widths, in microseconds.
+     */
+    bool attach(uint8_t pin, uint16_t min, uint16_t max);
+
+    /* Return pin number if currently attach()ed to a pin,
+       NOT_ATTACHED otherwise. */
+    int attached() const { return pin; }
+
+    /* Stop driving the wave by disabling the output compare
+       interrupt.  Returns true if this call did anything. */
+    bool detach();
+
+    /* If value < MAX_WRITE_ANGLE, treated as an angle in degrees.
+       Otherwise, it's treated as a pulse width. */
+    void write(unsigned int value);
+
+    /* If outside of [min, max] determined by attach(), it is clamped
+       to lie in that range. */
+    void writeMicroseconds(uint16_t pulseWidth);
+
+    /* Return servo target angle, in degrees. This will lie between 0
+       and 180. */
+    int read() const;
+
+    /* Returns the current pulse width, in microseconds.  This will
+       lie within the [min, max] range. */
+    uint16_t readMicroseconds() const;
+
+private:
+    int8_t pin;
+    HardwareTimer *timer;
+    int channel;
+    uint16_t min;
+    uint16_t max;
+};
+
+#endif  /* _SERVO_H_ */

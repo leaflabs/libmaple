@@ -31,6 +31,8 @@
 #ifndef _HARDWARESERIAL_H_
 #define _HARDWARESERIAL_H_
 
+#include "timers.h"
+
 #include "Print.h"
 
 /* NB: this class documented "by hand" (i.e., not using Doxygen) in:
@@ -47,7 +49,7 @@ class HardwareSerial : public Print {
     GPIO_Port *gpio_port;
     uint8 tx_pin;
     uint8 rx_pin;
-    uint8 timer_num;
+    timer_dev_num timer_num;
     uint8 compare_num;
  public:
     HardwareSerial(uint8 usart_num,
@@ -55,7 +57,7 @@ class HardwareSerial : public Print {
                    GPIO_Port *gpio_port,
                    uint8 tx_pin,
                    uint8 rx_pin,
-                   uint8 timer_num,
+                   timer_dev_num timer_num,
                    uint8 compare_num);
     void begin(uint32 baud);
     void end(void);

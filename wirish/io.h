@@ -33,6 +33,7 @@
 
 #include "gpio.h"
 #include "adc.h"
+#include "time.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -161,6 +162,63 @@ uint32 digitalRead(uint8);
  * @see pinMode()
  */
 uint32 analogRead(uint8 pin);
+
+/**
+ * Toggles the digital value at the given pin.
+ *
+ * The pin must have its mode set to OUTPUT.
+ *
+ * @param pin the pin to toggle.  If the pin is HIGH, set it LOW.  If
+ * it is LOW, set it HIGH.
+ *
+ * @see pinMode()
+ */
+void togglePin(uint8 pin);
+
+/**
+ * Toggle the LED.
+ *
+ * If the LED is on, turn it off.  If it is off, turn it on.
+ *
+ * The LED must its mode set to OUTPUT. This can be accomplished
+ * portably over all LeafLabs boards by calling pinMode(BOARD_LED_PIN,
+ * OUTPUT) before calling this function.
+ *
+ * @see pinMode()
+ */
+static inline void toggleLED() {
+    togglePin(BOARD_LED_PIN);
+}
+
+/**
+ * If the button is currently pressed, waits until the button is no
+ * longer being pressed, and returns true.  Otherwise, returns false.
+ *
+ * The button pin must have its mode set to INPUT.  This can be
+ * accomplished portably over all LeafLabs boards by calling
+ * pinMode(BOARD_BUTTON_PIN, INPUT).
+ *
+ * @see pinMode()
+ */
+uint8 isButtonPressed();
+
+/**
+ * Wait until the button is pressed and released, timing out if no
+ * press occurs.
+ *
+ * The button pin must have its mode set to INPUT.  This can be
+ * accomplished portably over all LeafLabs boards by calling
+ * pinMode(BOARD_BUTTON_PIN, INPUT).
+ *
+ * @param timeout_millis Number of milliseconds to wait until the
+ * button is pressed.  If timeout_millis is 0, wait forever.
+ *
+ * @return true, if the button was pressed; false, if the timeout was
+ * reached.
+ *
+ * @see pinMode()
+ */
+uint8 waitForButtonPress(uint32 timeout_millis);
 
 #ifdef __cplusplus
 } // extern "C"

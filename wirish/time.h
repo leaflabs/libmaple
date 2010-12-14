@@ -68,10 +68,10 @@ static inline uint32 micros(void) {
 
     nvic_globalirq_enable();
 
-    /* MAPLE_RELOAD_VAL is 1 less than the number of cycles it actually
-       takes to complete a systick reload */
+    /* SYSTICK_RELOAD_VAL is 1 less than the number of cycles it
+       actually takes to complete a SysTick reload */
     res = (ms * US_PER_MS) +
-        (MAPLE_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
+        (SYSTICK_RELOAD_VAL + 1 - cycle_cnt)/CYCLES_PER_MICROSECOND;
 
     return res;
 }

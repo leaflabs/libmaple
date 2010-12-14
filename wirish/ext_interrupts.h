@@ -23,6 +23,7 @@
  *****************************************************************************/
 
 #include "libmaple_types.h"
+#include "nvic.h"
 
 /**
  *  @file ext_interrupts.h
@@ -76,6 +77,32 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
  * @see attachInterrupt()
  */
 void detachInterrupt(uint8 pin);
+
+/**
+ * Re-enable interrupts.
+ *
+ * Call this after noInterrupts() to re-enable interrupt handling,
+ * after you have finished with a timing-critical section of code.
+ *
+ * @see noInterrupts()
+ */
+static inline __attribute__((always_inline)) void interrupts() {
+    nvic_globalirq_enable();
+}
+
+/**
+ * Disable interrupts.
+ *
+ * After calling this function, all user-programmable interrupts will
+ * be disabled.  You can call this function before a timing-critical
+ * section of code, then call interrupts() to re-enable interrupt
+ * handling.
+ *
+ * @see interrupts()
+ */
+static inline __attribute__((always_inline)) void noInterrupts() {
+    nvic_globalirq_disable();
+}
 
 #ifdef __cplusplus
 }

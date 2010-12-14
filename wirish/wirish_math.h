@@ -78,9 +78,10 @@ long random(long min, long max);
  * @param toEnd the end of the value's mapped range.
  * @return the mapped value.
  */
-long map(long value,
-         long fromStart, long fromEnd,
-         long toStart, long toEnd);
+/* TODO: profile code bloat due to inlining this */
+inline long map(long x, long in_min, long in_max, long out_min, long out_max) {
+    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
 
 #define PI          3.1415926535897932384626433832795
 #define HALF_PI     1.5707963267948966192313216916398

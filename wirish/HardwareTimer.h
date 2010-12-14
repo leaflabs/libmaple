@@ -26,8 +26,10 @@
  *  @brief wirish timer class to manage the four 16-bit timer peripherals
  */
 
-#ifndef _TIMER_H_
-#define _TIMER_H_
+#ifndef _HARDWARETIMER_H_
+#define _HARDWARETIMER_H_
+
+#include "timers.h"
 
 /**
  * Interface to one of the 16-bit timer peripherals.
@@ -51,11 +53,16 @@
  */
 class HardwareTimer {
  private:
-    uint16 overflow;
-    uint8 timerNum;
+    timer_dev_num timerNum;
 
  public:
-    HardwareTimer(uint8 timer_num);
+    HardwareTimer(timer_dev_num timer_num);
+
+    /**
+     * Return this timer's device number. For example,
+     *  Timer1.getTimerNum() == TIMER1
+     */
+    timer_dev_num getTimerNum() { return timerNum; }
 
     /**
      * Stop the counter, without affecting its configuration.
@@ -90,6 +97,12 @@ class HardwareTimer {
     void resume(void);
 
     /**
+     * Returns the timer's prescale factor.
+     * @see HardwareTimer::setPrescaleFactor()
+     */
+    uint16 getPrescaleFactor();
+
+    /**
      * Set the timer prescale.
      *
      * The prescaler acts as a clock divider to slow down the rate at
@@ -112,6 +125,12 @@ class HardwareTimer {
     void setPrescaleFactor(uint16 factor);
 
     /**
+     * Gets the timer overflow value.
+     * @see HardwareTimer::setOverflow()
+     */
+    uint16 getOverflow();
+
+    /**
      * Sets the timer overflow (or "reload") value.
      *
      * When the timer's counter reaches this, value it resets to
@@ -122,9 +141,15 @@ class HardwareTimer {
      * value for the channel compare values.
      *
      * @param val The new overflow value to set
-     * @see HardwareTimer::setOverflow()
      */
     void setOverflow(uint16 val);
+
+    /**
+     * Retrieve the current timer count.
+     *
+     * @return The timer's current count value
+     */
+    uint16 getCount(void);
 
     /**
      * Set the current timer count.
@@ -138,13 +163,6 @@ class HardwareTimer {
      *            overflow value.
      */
     void setCount(uint16 val);
-
-    /**
-     * Retrieve the current timer count.
-     *
-     * @return The timer's current count value
-     */
-    uint16 getCount(void);
 
     /**
      * Configure the prescaler and overflow values to generate a timer
@@ -162,6 +180,18 @@ class HardwareTimer {
      *         set as a compare).
      */
     uint16 setPeriod(uint32 microseconds);
+
+    /**
+     * Set the given channel of this timer to the given mode.
+     *
+     * Note: Timer1.setChannel1Mode(TIMER_PWM) may not work as
+     * expected; if you want PWM functionality on a channel make sure
+     * you don't set it to something else!
+     *
+     * @param channel Timer channel, from 1 to 4
+     * @param mode Mode to set
+     */
+    void setChannelMode(int channel, TimerMode mode);
 
     /**
      * Set channel 1 of this timer to the given mode.
@@ -193,7 +223,25 @@ class HardwareTimer {
     void setChannel4Mode(TimerMode mode);
 
     /**
-     * Sets the compare value for channel 1.
+     * Gets the compare value for the given channel.
+     * @see HardwareTimer::setCompare()
+     */
+    uint16 getCompare(int channel);
+
+    /** Like getCompare(1) */
+    uint16 getCompare1();
+
+    /** Like getCompare(2) */
+    uint16 getCompare2();
+
+    /** Like getCompare(3) */
+    uint16 getCompare3();
+
+    /** Like getCompare(4) */
+    uint16 getCompare4();
+
+    /**
+     * Sets the compare value for the given channel.
      *
      * When the counter reaches this value the interrupt for this
      * channel will fire if channel 1 mode is TIMER_OUTPUTCOMPARE and
@@ -210,49 +258,40 @@ class HardwareTimer {
      * overheads mean that the smallest increment rate is at least a
      * few microseconds.
      *
+     * @param channel the channel whose compare to set, from 1 to 4.
      * @param val The compare value to set.  If greater than this
      *            timer's overflow value, it will be truncated to the
      *            overflow value.
      *
      * @see TimerMode
-     * @see HardwareTimer::setChannel1Mode()
+     * @see HardwareTimer::setChannelMode()
      */
-    void setCompare1(uint16 val);
+    void setCompare(int channel, uint16 compare);
 
     /**
-     * Sets the compare value for channel 2.
-     *
-     * @param val The compare value to set.  If greater than this
-     *            timer's overflow value, it will be truncated to the
-     *            overflow value.
-     * @see HardwareTimer::setCompare1()
+     * Like setCompare(1, compare).
      */
-    void setCompare2(uint16 val);
+    void setCompare1(uint16 compare);
 
     /**
-     * Sets the compare value for channel 3.
-     *
-     * @param val The compare value to set.  If greater than this
-     *            timer's overflow value, it will be truncated to the
-     *            overflow value.
-     * @see HardwareTimer::setCompare1()
+     * Like setCompare(2, compare).
      */
-    void setCompare3(uint16 val);
+    void setCompare2(uint16 compare);
 
     /**
-     * Sets the compare value for channel 4.
-     *
-     * @param val The compare value to set.  If greater than this
-     *            timer's overflow value, it will be truncated to the
-     *            overflow value.
-     * @see HardwareTimer::setCompare1()
+     * Like setCompare(3, compare).
      */
-    void setCompare4(uint16 val);
+    void setCompare3(uint16 compare);
 
     /**
-     * Attach an interrupt handler to this timer's channel 1. This
+     * Like setCompare(4, compare).
+     */
+    void setCompare4(uint16 compare);
+
+    /**
+     * Attach an interrupt handler to the given channel.  This
      * interrupt handler will be called when the timer's counter
-     * reaches its channel 1 compare value.
+     * reaches the given channel compare value.
      *
      * The argument should be a function which takes no arguments and
      * has no return value; i.e. it should have signature
@@ -267,56 +306,75 @@ class HardwareTimer {
      * if you have a delay() in your interrupt routine, you're probably
      * doing it wrong.
      *
-     * @param handler The ISR to attach to channel 1.
+     * @param channel the channel to attach the ISR to, from 1 to 4.
+     * @param handler The ISR to attach to the given channel.
      * @see voidFuncPtr
+     */
+    void attachInterrupt(int channel, voidFuncPtr handler);
+
+    /**
+     * Like attachCompareInterrupt(1, handler).
+     * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare1Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompare1Interrupt(), but for channel 2.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like attachCompareInterrupt(2, handler).
+     * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare2Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompare1Interrupt(), but for channel 3.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like attachCompareInterrupt(3, handler).
+     * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare3Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompare1Interrupt(), but for channel 4.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like attachCompareInterrupt(4, handler).
+     * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare4Interrupt(voidFuncPtr handler);
 
     /**
-     * Remove the interrupt handler attached to channel 1, if any.
-     * The handler will no longer be called by this timer.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Remove the interrupt handler attached to the given channel, if
+     * any.  The handler will no longer be called by this timer.
+     *
+     * @param channel the channel whose interrupt to detach, from 1 to 4.
+     * @see HardwareTimer::attachInterrupt()
+     */
+    void detachInterrupt(int channel);
+
+    /**
+     * Like detachInterrupt(1).
+     * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare1Interrupt(void);
 
     /**
-     * Remove the interrupt handler attached to channel 2, if any.
-     * The handler will no longer be called by this timer.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like detachInterrupt(2).
+     * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare2Interrupt(void);
 
     /**
-     * Remove the interrupt handler attached to channel 3, if any.
-     * The handler will no longer be called by this timer.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like detachInterrupt(3).
+     * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare3Interrupt(void);
 
     /**
-     * Remove the interrupt handler attached to channel 4, if any.
-     * The handler will no longer be called by this timer.
-     * @see HardwareTimer::attachCompare1Interrupt()
+     * Like detachInterrupt(4).
+     * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare4Interrupt(void);
+
+    /**
+     * Re-initializes the counter (to 0 in upcounting mode, which is
+     * the default), and generates an update of the prescale and
+     * overflow registers.
+     */
+    void generateUpdate(void);
 };
 
 /** Pre-instantiated timer for use by user code. */
@@ -335,6 +393,8 @@ extern HardwareTimer Timer5;
     more than four timers (this does not include the Maple). */
 extern HardwareTimer Timer8;
 #endif
+
+HardwareTimer* getTimer(timer_dev_num timerNum);
 
 #endif
 

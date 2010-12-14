@@ -37,7 +37,7 @@ volatile uint32 countTx    = 0;
 volatile uint32 recvBufIn  = 0;
 volatile uint32 recvBufOut = 0;
 volatile uint32 maxNewBytes   = VCOM_RX_BUFLEN;
-
+volatile uint32 newBytes = 0;
 RESET_STATE reset_state = DTR_UNSET;
 uint8       line_dtr_rts = 0;
 
@@ -47,7 +47,7 @@ void vcomDataTxCb(void) {
   /* allows usbSendBytes to stop blocking */
 
 
-  countTx = 0;
+    countTx = 0; /* assumes tx transactions are atomic 64 bytes (nearly certain they are) */
 }
 
 /* we could get arbitrarily complicated here for speed purposes
@@ -60,9 +60,8 @@ void vcomDataRxCb(void) {
 
   /* setEPRxCount on the previous cycle should garuntee
      we havnt received more bytes than we can fit */
-  uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
+  newBytes = GetEPRxCount(VCOM_RX_ENDP);
   SetEPRxStatus(VCOM_RX_ENDP,EP_RX_NAK);
-  /* assert (newBytes <= maxNewBytes); */
 
   /* todo, not checking very carefully for edge cases. USUALLY,
      if we emit the reset pulse and send 4 bytes, then newBytes 
@@ -117,28 +116,7 @@ void vcomDataRxCb(void) {
 
 
 
-  if (recvBufIn + newBytes < VCOM_RX_BUFLEN) {
-    PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,newBytes);
-    recvBufIn += newBytes;
-  } else {
-    /* we have to copy the data in two chunks because we roll over
-       the edge of the circular buffer */
-    uint8 tailBytes = VCOM_RX_BUFLEN - recvBufIn;
-    uint8 remaining = newBytes - tailBytes;
-
-    PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,tailBytes);
-    PMAToUserBufferCopy(&vcomBufferRx[0],        VCOM_RX_ADDR,remaining);
-
-    recvBufIn = (recvBufIn + newBytes ) % VCOM_RX_BUFLEN;
-  }
-  
-  maxNewBytes    -= newBytes;
-
-  if (maxNewBytes >= VCOM_RX_EPSIZE) {
-      SetEPRxCount(VCOM_RX_ENDP,VCOM_RX_EPSIZE);
-      SetEPRxStatus(VCOM_RX_ENDP,EP_RX_VALID); 
-  }
-
+  PMAToUserBufferCopy(&vcomBufferRx[0],VCOM_RX_ADDR,newBytes);
 }
 
 void vcomManagementCb(void) {

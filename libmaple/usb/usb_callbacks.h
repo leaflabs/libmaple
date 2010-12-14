@@ -39,6 +39,7 @@ extern uint8 vcomBufferRx[VCOM_RX_BUFLEN];  /* no reason this has to be VCOM_RX_
 extern volatile uint32 recvBufIn;   /* the FIFO in index to the recvbuffer */
 extern volatile uint32 recvBufOut;  /* the FIFO out index to the recvbuffer */
 extern volatile uint32 maxNewBytes;
+extern volatile uint32 newBytes;
 
 void vcomDataTxCb(void);
 void vcomDataRxCb(void);

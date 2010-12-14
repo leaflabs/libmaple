@@ -340,40 +340,32 @@ uint32 usbSendBytes(uint8* sendBuf, uint32 len) {
 
   uint16 loaded = 0;
 
-  if (bDeviceState != CONFIGURED || (!usbGetDTR() && !usbGetRTS())) {
-    // Indicates to caller to stop trying, were not configured/connected
-    // The DTR and RTS lines are handled differently on major platforms, so
-    // the above logic is unreliable
-    return 0;
-  }
+  /* any checks on connection (via dtr/rts) done upstream in wirish or by user */
 
-  // Due to a variety of shit this is how we roll; all buffering etc is pushed
-  // upstream
+  /* last xmit hasnt finished, abort */
   if (countTx) {
     return 0;
   }
 
   // We can only put VCOM_TX_EPSIZE bytes in the buffer
   if(len > VCOM_TX_EPSIZE) {
-    loaded = VCOM_TX_EPSIZE;
-  } else {
-    loaded = len;
+    len = VCOM_TX_EPSIZE;
   }
 
   // Try to load some bytes if we can
-  if (loaded) {
-    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR + countTx, loaded);
-    _SetEPTxCount(VCOM_TX_ENDP, countTx+loaded);
+  if (len) {
+    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR, len);
+    _SetEPTxCount(VCOM_TX_ENDP, len);
     _SetEPTxValid(VCOM_TX_ENDP);
-    countTx += loaded;
+    countTx += len;
   }
 
-  return loaded;
+  return len;
 }
 
 /* returns the number of available bytes are in the recv FIFO */
 uint32 usbBytesAvailable(void) {
-  return VCOM_RX_EPSIZE - maxNewBytes;
+  return newBytes;
 }
 
 /* copies len bytes from the local recieve FIFO (not
@@ -381,22 +373,20 @@ uint32 usbBytesAvailable(void) {
    will only copy the minimum of len or the available
    bytes. returns the number of bytes copied */
 uint32 usbReceiveBytes(uint8* recvBuf, uint32 len) {
-  if (len > VCOM_RX_EPSIZE - maxNewBytes) {
-    len = VCOM_RX_EPSIZE - maxNewBytes;
+  if (len > newBytes) {
+      len = newBytes;
   }
 
   int i;
   for (i=0;i<len;i++) {
-    recvBuf[i] = (uint8)(vcomBufferRx[recvBufOut]);
-    recvBufOut = (recvBufOut + 1) % VCOM_RX_EPSIZE;
+    recvBuf[i] = (uint8)(vcomBufferRx[i]);
   }
 
-  maxNewBytes += len; /* is this the potential bug? */
-  //  assert(maxNewBytes < VCOM_RX_EPSIZE)
+  newBytes -= len;
 
   /* re-enable the rx endpoint which we had set to receive 0 bytes */
-  if (maxNewBytes >= VCOM_RX_EPSIZE) {
-    SetEPRxCount(VCOM_RX_ENDP,maxNewBytes);
+  if (newBytes == 0) {
+    SetEPRxCount(VCOM_RX_ENDP,VCOM_RX_EPSIZE);
     SetEPRxStatus(VCOM_RX_ENDP,EP_RX_VALID);
   }
 

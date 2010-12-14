@@ -336,10 +336,15 @@ void usbWaitReset(void) {
  *
  * 
  */
+void usbBlockingSendByte(char ch) {
+    while (countTx);
+    UserToPMABufferCopy(&ch,VCOM_TX_ADDR,1);
+    _SetEPTxCount(VCOM_TX_ENDP,1);
+    _SetEPTxValid(VCOM_TX_ENDP);
+    countTx = 1;
+    while (countTx);
+}
 uint32 usbSendBytes(uint8* sendBuf, uint32 len) {
-
-  uint16 loaded = 0;
-
   /* any checks on connection (via dtr/rts) done upstream in wirish or by user */
 
   /* last xmit hasnt finished, abort */
@@ -348,8 +353,8 @@ uint32 usbSendBytes(uint8* sendBuf, uint32 len) {
   }
 
   // We can only put VCOM_TX_EPSIZE bytes in the buffer
-  if(len > VCOM_TX_EPSIZE) {
-    len = VCOM_TX_EPSIZE;
+  if(len > VCOM_TX_EPSIZE/2) {
+    len = VCOM_TX_EPSIZE/2;
   }
 
   // Try to load some bytes if we can

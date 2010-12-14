@@ -332,23 +332,11 @@ void usbWaitReset(void) {
  * This function will quickly copy up to 64 bytes of data (out of an
  * arbitrarily large buffer) into the USB peripheral TX buffer and return the
  * number placed in that buffer. It is up to usercode to divide larger packets
- * into 64-byte chunks to guarantee delivery. Use usbGetCountTx() to determine
- * whether the bytes were ACTUALLY recieved by the host or just transfered to
- * the buffer.
+ * into 64-byte chunks to guarantee delivery. 
  *
- * The function will return -1 if it doesn't think that the USB host is
- * "connected", but it can't detect this state robustly. "Connected" in this
- * context means that an actual program on the Host operating system is
- * connected to the virtual COM/ttyACM device and is recieving the bytes; the
- * Host operating system is almost always configured and keeping this endpoint
- * alive, but the bytes never get read out of the endpoint buffer.
- *
- * The behavior of this function is subtle and frustrating; it has gone through
- * many simpler and cleaner implementation that frustratingly don't work cross
- * platform.
- *
- * */
-uint16 usbSendBytes(uint8* sendBuf, uint16 len) {
+ * 
+ */
+uint32 usbSendBytes(uint8* sendBuf, uint16 len) {
 
   uint16 loaded = 0;
 
@@ -384,7 +372,7 @@ uint16 usbSendBytes(uint8* sendBuf, uint16 len) {
 }
 
 /* returns the number of available bytes are in the recv FIFO */
-uint8 usbBytesAvailable(void) {
+uint32 usbBytesAvailable(void) {
   return VCOM_RX_EPSIZE - maxNewBytes;
 }
 
@@ -392,7 +380,7 @@ uint8 usbBytesAvailable(void) {
    usb packet buffer) into recvBuf and deq's the fifo.
    will only copy the minimum of len or the available
    bytes. returns the number of bytes copied */
-uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
+uint32 usbReceiveBytes(uint8* recvBuf, uint8 len) {
   if (len > VCOM_RX_EPSIZE - maxNewBytes) {
     len = VCOM_RX_EPSIZE - maxNewBytes;
   }
@@ -403,11 +391,13 @@ uint8 usbReceiveBytes(uint8* recvBuf, uint8 len) {
     recvBufOut = (recvBufOut + 1) % VCOM_RX_EPSIZE;
   }
 
-  maxNewBytes += len;
+  maxNewBytes += len; /* is this the potential bug? */
+  //  assert(maxNewBytes < VCOM_RX_EPSIZE)
 
   /* re-enable the rx endpoint which we had set to receive 0 bytes */
-  if (maxNewBytes - len == 0) {
+  if (maxNewBytes >= VCOM_RX_EPSIZE) {
     SetEPRxCount(VCOM_RX_ENDP,maxNewBytes);
+    SetEPRxStatus(VCOM_RX_ENDP,EP_RX_VALID);
   }
 
   return len;

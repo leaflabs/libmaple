@@ -132,8 +132,12 @@ void vcomDataRxCb(void) {
   }
   
   maxNewBytes    -= newBytes;
-  SetEPRxCount(VCOM_RX_ENDP,maxNewBytes);
-  SetEPRxValid(VCOM_RX_ENDP);
+
+  if (maxNewBytes > VCOM_RX_EPSIZE) {
+      SetEPRxCount(VCOM_RX_ENDP,0);
+      SetEPRxStatus(VCOM_RX_ENDP,EP_RX_NAK); /* nak until we clear the buffer */
+  }
+
 }
 
 void vcomManagementCb(void) {

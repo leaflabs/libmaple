@@ -109,8 +109,8 @@ uint32 USBSerial::read(void *buf, uint32 len) {
 
     uint32 bytes_in = 0;
     while (len > 0) {
-        uint32 new_bytes = usbReceiveBytes(&(uint8)buf[new_bytes], len);
-        len -= newBytes;
+        uint32 new_bytes = usbReceiveBytes((uint8*)((uint8*)buf+bytes_in), len);
+        len -= new_bytes;
         bytes_in += new_bytes;
     }
 

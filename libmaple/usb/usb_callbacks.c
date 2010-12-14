@@ -32,11 +32,11 @@ USB_Line_Coding line_coding = {
  datatype:    0x08
 };
 
-uint8 vcomBufferRx[VCOM_RX_EPSIZE];
-volatile uint8 countTx    = 0;
-volatile uint8 recvBufIn  = 0;
-volatile uint8 recvBufOut = 0;
-volatile uint8 maxNewBytes   = VCOM_RX_EPSIZE;
+uint8 vcomBufferRx[VCOM_RX_BUFLEN];
+volatile uint32 countTx    = 0;
+volatile uint32 recvBufIn  = 0;
+volatile uint32 recvBufOut = 0;
+volatile uint32 maxNewBytes   = VCOM_RX_BUFLEN;
 
 RESET_STATE reset_state = DTR_UNSET;
 uint8       line_dtr_rts = 0;
@@ -61,6 +61,7 @@ void vcomDataRxCb(void) {
   /* setEPRxCount on the previous cycle should garuntee
      we havnt received more bytes than we can fit */
   uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
+  SetEPRxStatus(VCOM_RX_ENDP,EP_RX_NAK);
   /* assert (newBytes <= maxNewBytes); */
 
   /* todo, not checking very carefully for edge cases. USUALLY,
@@ -116,26 +117,26 @@ void vcomDataRxCb(void) {
 
 
 
-  if (recvBufIn + newBytes < VCOM_RX_EPSIZE) {
+  if (recvBufIn + newBytes < VCOM_RX_BUFLEN) {
     PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,newBytes);
     recvBufIn += newBytes;
   } else {
     /* we have to copy the data in two chunks because we roll over
        the edge of the circular buffer */
-    uint8 tailBytes = VCOM_RX_EPSIZE - recvBufIn;
+    uint8 tailBytes = VCOM_RX_BUFLEN - recvBufIn;
     uint8 remaining = newBytes - tailBytes;
 
     PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,tailBytes);
     PMAToUserBufferCopy(&vcomBufferRx[0],        VCOM_RX_ADDR,remaining);
 
-    recvBufIn = (recvBufIn + newBytes ) % VCOM_RX_EPSIZE;
+    recvBufIn = (recvBufIn + newBytes ) % VCOM_RX_BUFLEN;
   }
   
   maxNewBytes    -= newBytes;
 
-  if (maxNewBytes > VCOM_RX_EPSIZE) {
-      SetEPRxCount(VCOM_RX_ENDP,0);
-      SetEPRxStatus(VCOM_RX_ENDP,EP_RX_NAK); /* nak until we clear the buffer */
+  if (maxNewBytes >= VCOM_RX_EPSIZE) {
+      SetEPRxCount(VCOM_RX_ENDP,VCOM_RX_EPSIZE);
+      SetEPRxStatus(VCOM_RX_ENDP,EP_RX_VALID); 
   }
 
 }

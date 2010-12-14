@@ -73,9 +73,9 @@ void usb_lpIRQHandler(void);
 void usbWaitReset(void);
 
 /* blocking functions for send/receive */
-uint32 usbSendBytes(uint8* sendBuf,uint16 len);
+uint32 usbSendBytes(uint8* sendBuf,uint32 len);
 uint32 usbBytesAvailable(void);
-uint32 usbReceiveBytes(uint8* recvBuf, uint8 len);
+uint32 usbReceiveBytes(uint8* recvBuf, uint32 len);
 uint8 usbGetDTR(void);
 uint8 usbGetRTS(void);
 uint8 usbIsConnected(void);

@@ -336,7 +336,7 @@ void usbWaitReset(void) {
  *
  * 
  */
-uint32 usbSendBytes(uint8* sendBuf, uint16 len) {
+uint32 usbSendBytes(uint8* sendBuf, uint32 len) {
 
   uint16 loaded = 0;
 
@@ -380,7 +380,7 @@ uint32 usbBytesAvailable(void) {
    usb packet buffer) into recvBuf and deq's the fifo.
    will only copy the minimum of len or the available
    bytes. returns the number of bytes copied */
-uint32 usbReceiveBytes(uint8* recvBuf, uint8 len) {
+uint32 usbReceiveBytes(uint8* recvBuf, uint32 len) {
   if (len > VCOM_RX_EPSIZE - maxNewBytes) {
     len = VCOM_RX_EPSIZE - maxNewBytes;
   }

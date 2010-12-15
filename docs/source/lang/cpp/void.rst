@@ -5,10 +5,12 @@
 ``void``
 ========
 
-The ``void`` keyword is used only in function declarations. It
-indicates that the function is expected to return no information to
-the function from which it was called, or that it expects no arguments
-from its caller.
+.. cpp:type:: void
+
+   The ``void`` keyword is used in function declarations. It indicates
+   that the function is expected to return no information to the
+   function from which it was called, or that it expects no arguments
+   from its caller.
 
 Example
 -------

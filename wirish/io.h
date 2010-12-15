@@ -145,7 +145,7 @@ void digitalWrite(uint8 pin, uint8 value);
  * @return LOW or HIGH.
  * @see pinMode()
  */
-uint32 digitalRead(uint8);
+uint32 digitalRead(uint8 pin);
 
 /**
  * Read an analog value from pin.  This function blocks during ADC

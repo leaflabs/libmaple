@@ -94,7 +94,7 @@ The following keywords are used for built-in types.
 - :ref:`lang-float`
 - :ref:`lang-int`
 - :ref:`lang-long`
-- :ref:`short <lang-numeric-types-integral>`
+- :ref:`short <lang-built-in-types-integral>`
 - :ref:`void <lang-void>` (not really a type, but used in the absence
   of one)
 

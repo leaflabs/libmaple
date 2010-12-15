@@ -150,7 +150,11 @@ is several times more FLASH memory available for user programs.
 ``No DFU capable USB device found``
 -----------------------------------
 
-This probably means you don't have a Maple plugged in or powered on!
+This probably means you don't have a Maple plugged in or powered on.
+Try unplugging and plugging your Maple or pressing the RESET button.
+
+This can also happen if you disable the USB peripheral, e.g. using
+:ref:`SerialUSB.end() <lang-serialusb-end>`.
 
 I have multiple Maples installed; how do I know which one will get flashed?
 ---------------------------------------------------------------------------
@@ -161,18 +165,25 @@ board. There's no solution to this problem for now: you'll have to
 just plug in the Maples one at a time. If this is a real problem let
 us know and we'll see if we can come up with a better solution.
 
+My flash programs don't seem to stick; they behave like they are RAM!
+---------------------------------------------------------------------
+
+If you have uploaded a program to RAM, this will take priority over
+any program subsequently uploaded to flash.  We'll be removing this
+bug in a later version of the bootloader.  For now, you can fix this
+by unplugging your Maple to clear the contents of RAM, then plugging
+it back in.
+
+If you are using the :ref:`Unix toolchain <unix-toolchain>`, Make sure
+you :command:`make clean` when switching between FLASH and RAM
+targets; :command:`make` isn't smart enough to rebuild everything that
+needs to be for the new target.
+
 .. _troubleshooting-shell:
 
 =====================
  Command-line issues
 =====================
-
-My flash programs don't seem to stick; they behave like they are RAM!
----------------------------------------------------------------------
-
-Make sure you :command:`make clean` when switching between FLASH and
-RAM targets; :command:`make` isn't smart enough to rebuild everything
-that needs to be for the new target.
 
 [Linux] ``cdc_acm 3-1:1.0: no more free acm devices``
 -----------------------------------------------------

@@ -1,7 +1,15 @@
 .. _index:
 
 Maple Documentation Contents
-=============================
+============================
+
+Welcome!  This is the Maple documentation index.  If you just bought a
+Maple, you probably want to head to the :ref:`quickstart
+<maple-quickstart>`.  If you're having problems, check out the
+:ref:`troubleshooting <troubleshooting>` and :ref:`known problems
+<errata>` pages.
+
+Have fun!
 
 .. _index-usage:
 
@@ -15,7 +23,7 @@ Maple Documentation Contents
    IDE Anatomy <ide>
 
 .. _index-maple-programming:
-  
+
 **Maple Programming:**
 
 .. toctree::
@@ -29,7 +37,7 @@ Maple Documentation Contents
    Bootloader <bootloader>
 
 
-   Troubleshooting <troubleshooting> 
+   Troubleshooting <troubleshooting>
    Known Problems <errata>
 
 .. _index-hardware:
@@ -38,7 +46,7 @@ Maple Documentation Contents
 
 .. toctree::
    :maxdepth: 1
- 
+
    i2c
    pwm
    gpio
@@ -55,8 +63,8 @@ Maple Documentation Contents
 
 .. toctree::
    :maxdepth: 1
-   
+
    Technical Specifications <specs>
    Complete Language Index <language-index>
 
-   
+

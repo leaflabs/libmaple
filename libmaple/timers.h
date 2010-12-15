@@ -228,16 +228,16 @@ extern struct timer_dev timer_dev_table[];
 /**
  * Initializes timer with prescale as the clock divisor.
  *
- * @param timer Timer number.  Valid values are TIMER1, TIMER2,
- * TIMER3, TIMER4, and (on high-density devices) TIMER5, TIMER8.
+ * @param timer_num Timer number.
  *
  * @param prescale value in the range 1--65535 to use as a prescaler
  * for timer counter increment frequency.
  *
+ * @see timer_dev_num
  * @see timer_set_prescaler()
  * @see timer_set_mode()
  */
-void timer_init(timer_dev_num, uint16);
+void timer_init(timer_dev_num timer_num, uint16 prescale);
 
 /**
  * Quickly disable all timers.  Calling this function is faster than,
@@ -250,34 +250,34 @@ void timer_disable_all(void);
  * this value is likely to be inaccurate if the counter is running
  * with a low prescaler.
  *
- * @param timer the timer whose counter to return.
+ * @param timer_num the timer whose counter to return.
  *
  * @pre Timer has been initialized.
  */
-uint16 timer_get_count(timer_dev_num);
+uint16 timer_get_count(timer_dev_num timer_num);
 
 /**
  * Sets the counter value for the given timer.
  *
- * @param timer the timer whose counter to set.
+ * @param timer_num the timer whose counter to set.
  *
  * @param value the new counter value.
  *
  * @pre Timer has been initialized.
  */
-void timer_set_count(timer_dev_num,uint16);
+void timer_set_count(timer_dev_num timer_num, uint16 value);
 
 /**
  * Stops the timer's counter from incrementing.  Does not modify the
  * timer's mode or settings.
  *
- * @param timer the timer to pause.
+ * @param timer_num the timer to pause.
  *
  * @see timer_resume()
  *
  * @pre Timer has been initialized.
  */
-void timer_pause(timer_dev_num);
+void timer_pause(timer_dev_num timer_num);
 
 /**
  * Starts the counter for the given timer.  Does not modify the
@@ -285,16 +285,18 @@ void timer_pause(timer_dev_num);
  * first rising clock cycle after it has been re-enabled using this
  * function.
  *
- * @param timer the timer to resume.
+ * @param timer_num the timer to resume.
  *
  * @see timer_pause()
  *
  * @pre Timer has been initialized.
  */
-void timer_resume(timer_dev_num);
+void timer_resume(timer_dev_num timer_num);
 
 /**
  * Returns the prescaler for the given timer.
+ *
+ * @param timer_num the timer whose prescaler to return.
  *
  * @see timer_set_prescaler()
  *
@@ -308,7 +310,7 @@ uint16 timer_get_prescaler(timer_dev_num timer_num);
  * per clock cycle).  This prescale does not take effect until the
  * next update event.
  *
- * @param timer the timer whose prescaler to set.
+ * @param timer_num the timer whose prescaler to set.
  *
  * @param prescale the new prescaler.
  *
@@ -331,10 +333,6 @@ uint16 timer_get_reload(timer_dev_num timer_num);
  * After this function returns, the timer's counter will reset to 0
  * after it has reached the value max_reload.
  *
- * @param timer the timer whose reload to set.
- *
- * @param max_reload the new reload value.
- *
  * @pre Timer has been initialized.
  */
 void timer_set_reload(timer_dev_num timer_num, uint16 max_reload);
@@ -344,52 +342,32 @@ void timer_set_reload(timer_dev_num timer_num, uint16 max_reload);
 /**
  * Set the mode of an individual timer channel.
  *
- * @param timer the timer whose channel mode to set.
- *
- * @param channel the channel whose mode to set (1 <= channel <= 4).
- *
- * @param mode the new mode value.  Currently acceptable values
- * include TIMER_DISABLED, TIMER_PWM, and TIMER_OUTPUTCOMPARE.  Note
- * that timer_disable_all() will disable all timers and all channels
- * much more quickly than repeated calls to this function with mode
- * TIMER_DISABLED.
- *
- * @see TimerMode
- *
  * @see timer_disable_all()
- *
+ * @see TimerMode
+ * @see timer_dev_num
  * @pre Timer has been initialized.
  */
-void timer_set_mode(timer_dev_num timer_num, uint8 channel_num, uint8 mode);
+void timer_set_mode(timer_dev_num timer_num, uint8 channel, TimerMode mode);
 
 /**
  * Get the compare value for the given timer channel.
  * @see timer_set_compare_value()
- *
+ * @see timer_dev_num
  * @pre Timer has been initialized.
  */
-uint16 timer_get_compare_value(timer_dev_num timer_num, uint8 channel_num);
+uint16 timer_get_compare_value(timer_dev_num timer_num, uint8 channel);
 
 /**
  * Sets the compare value for a given timer channel.  Useful for
  * scheduling when interrupt handlers will be called.
  *
- * @param timer the timer whose channel compare to set.
- *
- * @param channel the channel whose compare to set (1 <= channel <= 4).
- *
- * @param compare the new compare value.  This new value must be less
- * than or equal to the timer's reload value.
- *
  * @see timer_attach_interrupt()
- *
  * @see timer_detach_interrupt()
- *
  * @see timer_set_reload()
- *
+ * @see timer_dev_num
  * @pre Timer has been initialized.
  */
-void timer_set_compare_value(timer_dev_num timer_num, uint8 channel_num,
+void timer_set_compare_value(timer_dev_num timer_num, uint8 channel,
                              uint16 value);
 
 /**
@@ -397,44 +375,27 @@ void timer_set_compare_value(timer_dev_num timer_num, uint8 channel_num,
  * After this function returns, any handler attached to the given
  * channel will no longer be called.
  *
- * @param timer the timer whose channel to detach the interrupt
- * handler from.
- *
- * @param channel the channel from which to detach the interrupt handler.
- *
  * @see timer_attach_interrupt()
- *
  * @pre Timer has been initialized.
+ * @see timer_dev_num
  */
-void timer_detach_interrupt(timer_dev_num timer_num, uint8 channel_num);
+void timer_detach_interrupt(timer_dev_num timer_num, uint8 channel);
 
 /**
  * Attach an interrupt handler for the given timer and channel.  The
- * handler will be called whenever the timer's counter reaches the
- * compare value for the given timer and channel.
- *
- * @param timer the timer whose channel to register with an interrupt handler.
- *
- * @param channel the channel with which the new handler will be
- * associated.  timer_set_compare_value() can be used to set the value
- * which the timer's counter must reach before handler is called (1 <=
- * channel <= 4).
- *
- * @param handler the interrupt handler to call once the timer reaches
- * the given channel's compare value.
- *
- * @pre The channel's mode must be set to TIMER_OUTPUTCOMPARE, or the
- * interrupt handler will not get called.
+ * given ISR, handler, will be called whenever the timer's counter
+ * reaches the compare value for the given timer and channel.
  *
  * @see timer_set_compare_value()
- *
  * @see timer_detach_interrupt()
- *
  * @see timer_set_mode()
- *
+ * @see timer_dev_num
+ * @see voidFuncPtr
  * @pre Timer has been initialized.
+ * @pre The channel's mode must be set to TIMER_OUTPUTCOMPARE, or the
+ *      interrupt handler will not get called.
  */
-void timer_attach_interrupt(timer_dev_num timer_num, uint8 channel_num,
+void timer_attach_interrupt(timer_dev_num timer_num, uint8 channel,
                             voidFuncPtr handler);
 
 /**
@@ -449,18 +410,18 @@ void timer_generate_update(timer_dev_num timer_num);
 /**
  * Turn on PWM with duty_cycle.
  *
- * @param channel TIMERx_CHn_CCR, where x goes from 1 to NR_TIMERS,
+ * @param ccr TIMERx_CHn_CCR, where x goes from 1 to NR_TIMERS,
  * and n goes from 1 to 4.
  *
- * @param duty_cycle 0--65535.  duty_cycle=0 means always off;
- * duty_cycle=65535 means always on.
+ * @param duty_cycle: A number between 0 and
+ * timer_get_compare_value(TIMERx, y), where x and y are as above.
  *
  * @pre Pin has been set to alternate function output.
  *
  * @pre Timer has been initialized.
  */
-static inline void timer_pwm_write_ccr(TimerCCR CCR, uint16 duty_cycle) {
-    *CCR = duty_cycle;
+static inline void timer_pwm_write_ccr(TimerCCR ccr, uint16 duty_cycle) {
+    *ccr = duty_cycle;
 }
 
 #ifdef __cplusplus

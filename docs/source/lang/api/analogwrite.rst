@@ -11,19 +11,18 @@ analogWrite()
 .. note::
 
    On the Maple, calling analogWrite() is the same as calling
-   :ref:`lang-pwmwrite`\ ; see that function's documentation for more
-   information.
+   :ref:`lang-pwmwrite`\ ; we recommend using that function directly
+   instead.
 
    This is because PWM is not true analog output (i.e., is not the
    output of a `DAC
    <http://en.wikipedia.org/wiki/Digital-to-analog_converter>`_\ ), so
-   the function is badly named.  For instance, **analogWrite() has
+   the function is badly named.  For instance, analogWrite() **has
    absolutely nothing to do with** :ref:`lang-analogread`\ , which is
    potentially confusing.
 
-   The alias of analogWrite() to pwmWrite() is provided (sigh) for the
-   sake of compatibility with Arduino, but we recommend using
-   :ref:`lang-pwmwrite` when writing new software, for clarity.
+   The alias of analogWrite() to pwmWrite() is provided for the sake
+   of compatibility with Arduino only.
 
 .. contents:: Contents
    :local:
@@ -97,23 +96,21 @@ Difference 3: No PWM on pin 10
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 On the Maple, the pins which support PWM are: 0, 1, 2, 3, 5, 6, 7, 8,
-9, 11, 12, and 14, or twelve pins in total.  That is at least as
-*many* PWM pins as any Arduino board, but there are differences in
-*which* pins support it.
+9, 11, 12, 14, 24, 27, and 28 or fifteen pins in total.  That's *more*
+PWM-capable pins as any Arduino board, but there are differences in
+*which* pins support PWM.
 
 * On **most Arduino boards** (those with the ATmega168 or ATmega328;
   this includes the **Arduino Uno**), this function works on pins 3,
   5, 6, 9, 10, and 11, or six pins total.  Note that these boards
   support PWM on pin 10, while Maple does not.
 
-* On the **Arduino Mega**, PWM works on pins 2 through 13, or twelve pins
-  total.  Note that this board supports PWM on pins 4, 10, and 13,
-  while the Maple does not.  Maple supports PWM on pins 0, 1, and 14,
-  which the Mega does not, making the total number of pins supporting
-  PWM equal on these boards.
+* On the **Arduino Mega**, PWM works on pins 2 through 13, or twelve
+  pins total.  Note that this board supports PWM on pins 4, 10, and
+  13, while the Maple does not.
 
-* **Older Arduino boards** with an ATmega8 only support analogWrite() on
-  pins 9, 10, and 11.  Maple does not support PWM on pin 10.
+* **Older Arduino boards** with an ATmega8 only support analogWrite()
+  on pins 9, 10, and 11.  Maple does not support PWM on pin 10.
 
 In all cases, Arduino boards support PWM on pin 10, unlike Maple.  We
 did our best to make PWM as pin-compatible as possible; however,
@@ -125,7 +122,8 @@ work on any Arduino board and on Maple.  The "safe" pins, which work
 on most recent Arduino boards, the Arduino Mega and the Maple, are
 pins 3, 5, 6, 9, and 11.  Thus, if you want your project to be as
 portable as possible between Maple and Arduino, we recommend using the
-"safest" pins first, then the "safe" pins, as necessary.
+"safest" pins first, then the "safe" pins, then any other pins, as
+necessary.
 
 Difference 4: PWM frequency
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -138,17 +136,23 @@ Hz, or 1.1 KHz.  This is because the PWM frequency is the frequency of
 the timer which controls PWM output on the particular pin (\
 :ref:`the PWM tutorial has the details <pwm>`\ ).
 
-If your application absolutely requires Arduino's PWM frequency (it
-probably doesn't), then the steps are:
+If your application definitely requires Arduino's PWM frequency, then
+the steps are:
 
-1. Figure out which timer controls PWM output on your pin (\ :ref:`this table <pwm-timer-table>` is your friend here).  Let's say it's ``Timern``\ , where ``n`` is some number 1, 2, 3, or 4.
+1. Figure out which :ref:`timer <lang-hardwaretimer>` controls PWM
+   output on your pin (\ :ref:`this table <pwm-timer-table>` is your
+   friend here).  Let's say it's ``Timern``\ , where ``n`` is some
+   number 1, 2, 3, or 4.
 
-2. Call ``Timern.setPeriod(2041)``\ .  This will set the timer's period to approximately 2041 microseconds, which is a frequency of approximately 490 Hz.
+2. Call ``Timern.setPeriod(2041)``\ .  This will set the timer's
+   period to approximately 2041 microseconds, which is a frequency of
+   approximately 490 Hz.
 
 Be aware that this will change the period for the **entire timer**\ ,
 and will affect anything else in your program that depends on that
-timer.  One example is :ref:`interrupts <timers-attachinterrupt>`\ .
-You've been :ref:`warned <timers-pwm-conflicts>`\ .
+timer.  The important examples are :ref:`timer interrupts
+<lang-hardwaretimer-attachinterrupt>` and :ref:`PWM
+<timers-pwm-conflicts>`\ .
 
 See also
 --------

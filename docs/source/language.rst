@@ -52,8 +52,8 @@ Unique Maple Additions
 Maple Language Reference
 ------------------------
 
-The following table summarizes the available language features.  A
-more exhaustive index is available at the :ref:`language-index`.
+The following table summarizes the available core language features.
+A more exhaustive index is available at the :ref:`language-index`.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -67,129 +67,129 @@ more exhaustive index is available at the :ref:`language-index`.
 |**Control Structures**                      |* :ref:`INPUT <lang-constants-input>` |       |                                                   |
 |                                            |  :ref:`OUTPUT <lang-constants-output>`       |* :ref:`digitalRead() <lang-digitalread>`          |
 |* :ref:`if/else <lang-if>`                  |                                              |                                                   |
-|                                            |* :ref:`true <lang-constants-true>` |         |                                                   |
-|* :ref:`for <lang-for>`                     |  :ref:`false <lang-constants-false>`         |**Analog I/O**                                     |
+|                                            |* :ref:`true <lang-constants-true>` |         |* :ref:`togglePin() <lang-togglepin>`              |
+|* :ref:`for <lang-for>`                     |  :ref:`false <lang-constants-false>`         |                                                   |
+|                                            |                                              |* :ref:`toggleLED() <lang-toggleled>`              |
+|* :ref:`switch/case <lang-switchcase>`      |* :ref:`BOARD_LED_PIN <lang-constants-led>` | |                                                   |
+|                                            |  :ref:`BOARD_BUTTON_PIN <lang-constants-but>`|* :ref:`isButtonPressed() <lang-isbuttonpressed>`  |
+|* :ref:`while <lang-while>`                 |                                              |                                                   |
+|                                            |* :ref:`Constants                             |* :ref:`waitForButtonPress()                       |
+|* :ref:`do...while <lang-dowhile>`          |  <lang-constants>` (:ref:`integers           |  <lang-waitforbuttonpress>`                       |
+|                                            |  <lang-constants-integers>`, :ref:`floating  |                                                   |
+|* :ref:`break <lang-break>`                 |  point <lang-constants-fp>`)                 |**Analog I/O**                                     |
 |                                            |                                              |                                                   |
-|* :ref:`switch/case <lang-switchcase>`      |* :ref:`Constants                             |* :ref:`analogRead() <lang-analogread>`            |
-|                                            |  <lang-constants>` (:ref:`integers           |                                                   |
-|* :ref:`while <lang-while>`                 |  <lang-constants-integers>`, :ref:`floating  |* :ref:`pwmWrite() <lang-pwmwrite>`                |
-|                                            |  point <lang-constants-fp>`)                 |  (:ref:`analogWrite() <lang-analogwrite>` is      |
-|* :ref:`do...while <lang-dowhile>`          |                                              |  also available, though its use is discouraged)   |
-|                                            |**Data Types**                                |                                                   |
-|* :ref:`break <lang-break>`                 |                                              |                                                   |
-|                                            | The size of each datatype, in bytes, is      |**Advanced I/O**                                   |
-|* :ref:`continue <lang-continue>`           | given in parentheses where appropriate.      |                                                   |
-|                                            |                                              |* tone(): TODO                                     |
-|* :ref:`return <lang-return>`               | *Note*: The ``word`` type is (deliberately)  |                                                   |
-|                                            | :ref:`not supported <language-no-word>`.     |* noTone(): TODO                                   |
-|* :ref:`goto <lang-goto>`                   |                                              |                                                   |
-|                                            |* :ref:`void <lang-void>`                     |* shiftOut(): TODO                                 |
+|* :ref:`continue <lang-continue>`           |**Data Types**                                |* :ref:`analogRead() <lang-analogread>`            |
 |                                            |                                              |                                                   |
-|**Further syntax**                          |* :ref:`boolean <lang-boolean>` (1 byte)      |* pulseIn(): TODO                                  |
+|* :ref:`return <lang-return>`               | The size of each datatype, in bytes, is      |* :ref:`pwmWrite() <lang-pwmwrite>`                |
+|                                            | given in parentheses where appropriate.      |  (:ref:`analogWrite() <lang-analogwrite>` is      |
+|* :ref:`goto <lang-goto>`                   |                                              |  also available, though its use is discouraged)   |
+|                                            | *Note*: The ``word`` type is (deliberately)  |                                                   |
+|                                            | :ref:`not supported <language-no-word>`.     |                                                   |
+|**Further syntax**                          |                                              |**Advanced I/O**                                   |
+|                                            |* :ref:`void <lang-void>`                     |                                                   |
+|* :ref:`; (semicolon) <lang-semicolon>`     |                                              |* tone(): TODO                                     |
+|                                            |* :ref:`boolean <lang-boolean>` (1 byte)      |                                                   |
+|* :ref:`{} (curly braces)                   |                                              |* noTone(): TODO                                   |
+|  <lang-curly-braces>`                      |* :ref:`char <lang-char>` (1 byte)            |                                                   |
+|                                            |                                              |* shiftOut(): TODO                                 |
+|* :ref:`// (single-line comment)            |* :ref:`unsigned char                         |                                                   |
+|  <lang-comments-singleline>`               |  <lang-unsignedchar>` (1 byte)               |* pulseIn(): TODO                                  |
 |                                            |                                              |                                                   |
-|* :ref:`; (semicolon) <lang-semicolon>`     |* :ref:`char <lang-char>` (1 byte)            |                                                   |
-|                                            |                                              |**Time**                                           |
-|* :ref:`{} (curly braces)                   |* :ref:`unsigned char                         |                                                   |
-|  <lang-curly-braces>`                      |  <lang-unsignedchar>` (1 byte)               |* :ref:`millis() <lang-millis>`                    |
+|* :ref:`/\* \*/ (multi-line comment)        |* :ref:`byte <lang-byte>` (1 byte)            |                                                   |
+|  <lang-comments-multiline>`                |                                              |**Time**                                           |
+|                                            |* :ref:`int <lang-int>` (4 bytes)             |                                                   |
+|* :ref:`#define <lang-define>`              |                                              |* :ref:`millis() <lang-millis>`                    |
+|                                            |* :ref:`unsigned int <lang-unsignedint>`      |                                                   |
+|* :ref:`#include <lang-include>`            |  (4 bytes)                                   |* :ref:`micros() <lang-micros>`                    |
 |                                            |                                              |                                                   |
-|* :ref:`// (single-line comment)            |* :ref:`byte <lang-byte>` (1 byte)            |* :ref:`micros() <lang-micros>`                    |
-|  <lang-comments-singleline>`               |                                              |                                                   |
-|                                            |* :ref:`int <lang-int>` (4 bytes)             |* :ref:`delay() <lang-delay>`                      |
-|* :ref:`/\* \*/ (multi-line comment)        |                                              |                                                   |
-|  <lang-comments-multiline>`                |* :ref:`unsigned int <lang-unsignedint>`      |* :ref:`delayMicroseconds()                        |
-|                                            |  (4 bytes)                                   |  <lang-delaymicroseconds>`                        |
-|* :ref:`#define <lang-define>`              |                                              |                                                   |
-|                                            |* :ref:`long <lang-long>` (8 bytes)           |                                                   |
-|* :ref:`#include <lang-include>`            |                                              |**Math**                                           |
-|                                            |* :ref:`unsigned long <lang-unsignedlong>`    |                                                   |
-|                                            |  (8 bytes)                                   |* :ref:`min() <lang-min>`                          |
+|                                            |* :ref:`long <lang-long>` (8 bytes)           |* :ref:`delay() <lang-delay>`                      |
 |**Arithmetic Operators**                    |                                              |                                                   |
-|                                            |* :ref:`float <lang-float>` (4 bytes)         |* :ref:`max() <lang-max>`                          |
-|* :ref:`= <lang-assignment>`                |                                              |                                                   |
-|  (assignment operator)                     |* :ref:`double <lang-double>` (8 bytes)       |* :ref:`abs() <lang-abs>`                          |
+|                                            |* :ref:`unsigned long <lang-unsignedlong>`    |* :ref:`delayMicroseconds()                        |
+|* :ref:`= <lang-assignment>`                |  (8 bytes)                                   |  <lang-delaymicroseconds>`                        |
+|  (assignment operator)                     |                                              |                                                   |
+|                                            |* :ref:`float <lang-float>` (4 bytes)         |                                                   |
+|* :ref:`+ <lang-arithmetic>` (addition)     |                                              |**Math**                                           |
+|                                            |* :ref:`double <lang-double>` (8 bytes)       |                                                   |
+|* :ref:`- <lang-arithmetic>`                |                                              |* :ref:`min() <lang-min>`                          |
+|  (subtraction)                             |* :ref:`Strings <lang-string>`                |                                                   |
+|                                            |                                              |* :ref:`max() <lang-max>`                          |
+|* :ref:`* <lang-arithmetic>`                |* :ref:`Arrays <lang-array>`                  |                                                   |
+|  (multiplication)                          |                                              |* :ref:`abs() <lang-abs>`                          |
+|                                            |* :ref:`enum <lang-enum>`                     |                                                   |
+|* :ref:`/ <lang-arithmetic>` (division)     |                                              |* :ref:`constrain() <lang-constrain>`              |
+|                                            |* :ref:`Numeric types <lang-built-in-types>`  |                                                   |
+|* :ref:`% <lang-modulo>` (modulo)           |                                              |* :ref:`map() <lang-map>`                          |
+|                                            |**Conversion**                                |                                                   |
+|                                            |                                              |* :ref:`pow() <lang-pow>`                          |
+|**Comparison Operators**                    |* :ref:`char() <lang-charcast>`               |                                                   |
+|                                            |                                              |* :ref:`sqrt() <lang-sqrt>`                        |
+|* :ref:`== <lang-comparison>` (equal to)    |* :ref:`byte() <lang-bytecast>`               |                                                   |
 |                                            |                                              |                                                   |
-|* :ref:`+ <lang-arithmetic>` (addition)     |* :ref:`Strings <lang-string>`                |* :ref:`constrain() <lang-constrain>`              |
+|* :ref:`\!= <lang-comparison>`              |* :ref:`int() <lang-intcast>`                 |**Trigonometry**                                   |
+|  (not equal to)                            |                                              |                                                   |
+|                                            |* :ref:`long() <lang-longcast>`               |* :ref:`sin() <lang-sin>`                          |
+|* :ref:`< <lang-comparison>` (less than)    |                                              |                                                   |
+|                                            |* :ref:`float() <lang-floatcast>`             |* :ref:`cos() <lang-cos>`                          |
+|* :ref:`> <lang-comparison>`                |                                              |                                                   |
+|  (greater than)                            |* :ref:`double() <lang-doublecast>`           |* :ref:`tan() <lang-tan>`                          |
 |                                            |                                              |                                                   |
-|* :ref:`- <lang-arithmetic>`                |* :ref:`Arrays <lang-array>`                  |* :ref:`map() <lang-map>`                          |
-|  (subtraction)                             |                                              |                                                   |
-|                                            |* :ref:`enum <lang-enum>`                     |* :ref:`pow() <lang-pow>`                          |
-|* :ref:`* <lang-arithmetic>`                |                                              |                                                   |
-|  (multiplication)                          |* :ref:`Numeric types <lang-numeric-types>`   |* :ref:`sqrt() <lang-sqrt>`                        |
+|* :ref:`<= <lang-comparison>`               |                                              |                                                   |
+|  (less than or equal to)                   |**Variable Scope & Qualifiers**               |**Random Numbers**                                 |
 |                                            |                                              |                                                   |
-|* :ref:`/ <lang-arithmetic>` (division)     |**Conversion**                                |                                                   |
-|                                            |                                              |**Trigonometry**                                   |
-|* :ref:`% <lang-modulo>` (modulo)           |* :ref:`char() <lang-charcast>`               |                                                   |
-|                                            |                                              |* :ref:`sin() <lang-sin>`                          |
-|                                            |* :ref:`byte() <lang-bytecast>`               |                                                   |
-|**Comparison Operators**                    |                                              |* :ref:`cos() <lang-cos>`                          |
-|                                            |* :ref:`int() <lang-intcast>`                 |                                                   |
-|* :ref:`== <lang-comparison>` (equal to)    |                                              |* :ref:`tan() <lang-tan>`                          |
-|                                            |* :ref:`long() <lang-longcast>`               |                                                   |
-|* :ref:`\!= <lang-comparison>`              |                                              |                                                   |
-|  (not equal to)                            |* :ref:`float() <lang-floatcast>`             |**Random Numbers**                                 |
+|* :ref:`>= <lang-comparison>`               |* :ref:`variables <lang-variables>`,          |* :ref:`randomSeed() <lang-randomseed>`            |
+|  (greater than or equal to)                |  :ref:`scope <lang-variables-scope>`         |                                                   |
+|                                            |                                              |* :ref:`random() <lang-random>`                    |
+|                                            |* :ref:`static <lang-static>`                 |                                                   |
+|**Boolean Operators**                       |                                              |                                                   |
+|                                            |* :ref:`volatile <lang-volatile>`             |**Bits and Bytes**                                 |
+|* :ref:`&& <lang-boolean-and>` (and)        |                                              |                                                   |
+|                                            |* :ref:`const <lang-const>`                   |* :ref:`lowByte() <lang-lowbyte>`                  |
+|* :ref:`|| <lang-boolean-or>` (or)          |                                              |                                                   |
+|                                            |                                              |* :ref:`highByte() <lang-highbyte>` is             |
+|* :ref:`\! <lang-boolean-not>` (not)        |**Utilities**                                 |  provided, though its use is discouraged.         |
 |                                            |                                              |                                                   |
-|* :ref:`< <lang-comparison>` (less than)    |* :ref:`double() <lang-doublecast>`           |* :ref:`randomSeed() <lang-randomseed>`            |
-|                                            |                                              |                                                   |
-|* :ref:`> <lang-comparison>`                |                                              |* :ref:`random() <lang-random>`                    |
-|  (greater than)                            |**Variable Scope & Qualifiers**               |                                                   |
-|                                            |                                              |                                                   |
-|* :ref:`<= <lang-comparison>`               |* :ref:`variables <lang-variables>`,          |**Bits and Bytes**                                 |
-|  (less than or equal to)                   |  :ref:`scope <lang-variables-scope>`         |                                                   |
-|                                            |                                              |* :ref:`lowByte() <lang-lowbyte>`                  |
-|* :ref:`>= <lang-comparison>`               |* :ref:`static <lang-static>`                 |                                                   |
-|  (greater than or equal to)                |                                              |* :ref:`highByte() <lang-highbyte>` is             |
-|                                            |* :ref:`volatile <lang-volatile>`             |  provided, though its use is discouraged.         |
-|                                            |                                              |                                                   |
-|**Boolean Operators**                       |* :ref:`const <lang-const>`                   |* :ref:`bitRead() <lang-bitread>`                  |
-|                                            |                                              |                                                   |
-|* :ref:`&& <lang-boolean-and>` (and)        |                                              |* :ref:`bitWrite() <lang-bitwrite>`                |
-|                                            |**Utilities**                                 |                                                   |
-|* :ref:`|| <lang-boolean-or>` (or)          |                                              |* :ref:`bitSet() <lang-bitset>`                    |
-|                                            |* :ref:`sizeof() <lang-sizeof>`               |                                                   |
-|* :ref:`\! <lang-boolean-not>` (not)        |                                              |* :ref:`bitClear() <lang-bitclear>`                |
-|                                            |                                              |                                                   |
-|                                            |                                              |* :ref:`bit() <lang-bit>`                          |
+|                                            |* :ref:`sizeof() <lang-sizeof>`               |* :ref:`bitRead() <lang-bitread>`                  |
 |**Pointer Operators**                       |                                              |                                                   |
+|                                            |                                              |* :ref:`bitWrite() <lang-bitwrite>`                |
+|* :ref:`* dereference operator              |                                              |                                                   |
+|  <lang-pointer>`                           |                                              |* :ref:`bitSet() <lang-bitset>`                    |
 |                                            |                                              |                                                   |
-|* :ref:`* dereference operator              |                                              |**External Interrupts**                            |
+|* :ref:`& reference operator                |                                              |* :ref:`bitClear() <lang-bitclear>`                |
 |  <lang-pointer>`                           |                                              |                                                   |
-|                                            |                                              |* :ref:`Reference Page <external-interrupts>`      |
-|* :ref:`& reference operator                |                                              |                                                   |
-|  <lang-pointer>`                           |                                              |* :ref:`attachInterrupt()                          |
-|                                            |                                              |  <lang-attachinterrupt>`                          |
+|                                            |                                              |* :ref:`bit() <lang-bit>`                          |
 |                                            |                                              |                                                   |
-|**Bitwise Operators**                       |                                              |* :ref:`detachInterrupt()                          |
-|                                            |                                              |  <lang-detachinterrupt>`                          |
+|**Bitwise Operators**                       |                                              |                                                   |
+|                                            |                                              |**External Interrupts**                            |
 |* :ref:`& <lang-bitwisemath-and>`           |                                              |                                                   |
-|  (bitwise and)                             |                                              |                                                   |
-|                                            |                                              |**Interrupts**                                     |
-|* :ref:`| <lang-bitwisemath-or>`            |                                              |                                                   |
-|  (bitwise or)                              |                                              |* interrupts(): TODO                               |
+|  (bitwise and)                             |                                              |* :ref:`Reference Page <external-interrupts>`      |
 |                                            |                                              |                                                   |
-|* :ref:`^ <lang-bitwisemath-xor>`           |                                              |* noInterrupts(): TODO                             |
-|  (bitwise xor)                             |                                              |                                                   |
+|* :ref:`| <lang-bitwisemath-or>`            |                                              |* :ref:`attachInterrupt()                          |
+|  (bitwise or)                              |                                              |  <lang-attachinterrupt>`                          |
 |                                            |                                              |                                                   |
-|* :ref:`~ <lang-bitwisemath-not>`           |                                              |**Communication**                                  |
-|  (bitwise not)                             |                                              |                                                   |
-|                                            |                                              |* :ref:`SerialUSB <lang-serialusb>`                |
-|* :ref:`\<\< <lang-bitshift>`               |                                              |                                                   |
-|  (shift left)                              |                                              |* :ref:`Serial <lang-serial>`                      |
+|* :ref:`^ <lang-bitwisemath-xor>`           |                                              |* :ref:`detachInterrupt()                          |
+|  (bitwise xor)                             |                                              |  <lang-detachinterrupt>`                          |
 |                                            |                                              |                                                   |
-|* :ref:`>> <lang-bitshift>`                 |                                              |**Looking for something else?**                    |
+|* :ref:`~ <lang-bitwisemath-not>`           |                                              |                                                   |
+|  (bitwise not)                             |                                              |**Interrupts**                                     |
+|                                            |                                              |                                                   |
+|* :ref:`\<\< <lang-bitshift>`               |                                              |* :ref:`interrupts() <lang-interrupts>`            |
+|  (shift left)                              |                                              |                                                   |
+|                                            |                                              |* :ref:`noInterrupts() <lang-nointerrupts>`        |
+|* :ref:`>> <lang-bitshift>`                 |                                              |                                                   |
 |  (shift right)                             |                                              |                                                   |
-|                                            |                                              | See the :ref:`libraries` page for interfacing with|
-|                                            |                                              | particular types of hardware.  Maple links        |
-|**Compound Operators**                      |                                              | against `newlib <http://sourceware.org/newlib/>`_ |
-|                                            |                                              | and allows the use of any of its functions; see   |
-|* :ref:`++ <lang-increment>`                |                                              | its documentation for more details.               |
+|                                            |                                              |**Communication**                                  |
+|                                            |                                              |                                                   |
+|**Compound Operators**                      |                                              |* :ref:`SerialUSB <lang-serialusb>`                |
+|                                            |                                              |                                                   |
+|* :ref:`++ <lang-increment>`                |                                              |* :ref:`Serial <lang-serial>`                      |
 |  (increment)                               |                                              |                                                   |
-|                                            |                                              |                                                   |
+|                                            |                                              |**Looking for something else?**                    |
 |* :ref:`- - <lang-increment>`               |                                              |                                                   |
-|  (decrement)                               |                                              |                                                   |
-|                                            |                                              |                                                   |
-|* :ref:`+= <lang-compoundarithmetic>`       |                                              |                                                   |
-|  (compound add)                            |                                              |                                                   |
-|                                            |                                              |                                                   |
+|  (decrement)                               |                                              | See the :ref:`libraries` page for interfacing with|
+|                                            |                                              | particular types of hardware.  Maple links        |
+|* :ref:`+= <lang-compoundarithmetic>`       |                                              | against `newlib <http://sourceware.org/newlib/>`_ |
+|  (compound add)                            |                                              | and allows the use of any of its functions; see   |
+|                                            |                                              | its documentation for more details.               |
 |* :ref:`-=                                  |                                              |                                                   |
 |  <lang-compoundarithmetic>` (compound      |                                              |                                                   |
 |  subtract)                                 |                                              |                                                   |
@@ -221,6 +221,8 @@ more exhaustive index is available at the :ref:`language-index`.
 
 Missing Arduino Features
 ------------------------
+
+.. _langage-missing-analogreference:
 
 **analogReference()**
 
@@ -256,8 +258,6 @@ Unimplemented Arduino Features
 The following Wiring/Arduino features are currently unimplemented on
 the Maple.  However, they will be present in future versions:
 
-- `interrupts() <http://arduino.cc/en/Reference/Interrupts>`_
-- `noInterrupts() <http://www.arduino.cc/en/Reference/NoInterrupts>`_
 - `noTone() <http://www.arduino.cc/en/Reference/NoTone>`_
 - `pulseIn() <http://www.arduino.cc/en/Reference/PulseIn>`_
 - `shiftOut() <http://www.arduino.cc/en/Reference/ShiftOut>`_
@@ -272,7 +272,11 @@ the Maple.  However, they will be present in future versions:
 
 C++ for Maple
 --------------
-If you haven't programmed in C++, or if you just need to jog your memory, you may want to check out our :ref:`C++ for Maple Index<cpp>`.  It covers programming ideas and C++ that will definitely come in handy.
+
+If you haven't programmed in C++, or if you just need to jog your
+memory, you may want to check out our :ref:`Language Index
+<language-index>`.  It provides some introductory coverage of
+programming ideas and C++.
 
 .. _arduino_c_for_c_hackers:
 
@@ -366,9 +370,7 @@ contains ``setup()`` and ``loop()``::
   }
 
   void loop() {
-    static int toggle = 0;
-    toggle ^= 1;
-    digitalWrite(the_pin, toggle);
+    togglePin(the_pin);
   }
 
 The second file contains the (not very useful) implementation for
@@ -388,9 +390,7 @@ Then the results of the concatenation process might be ::
   }
 
   void loop() {
-    static int toggle = 0;
-    toggle ^= 1;
-    digitalWrite(the_pin, toggle);
+    togglePin(the_pin);
   }
 
   int choose_a_pin(void);
@@ -415,9 +415,7 @@ Which could plausibly be turned into the final source file ::
   }
 
   void loop() {
-    static int toggle = 0;
-    toggle ^= 1;
-    digitalWrite(the_pin, toggle);
+    togglePin(the_pin);
   }
 
   int choose_a_pin(void);
@@ -441,7 +439,6 @@ Recommended Reading
 * `newlib Documentation <http://sourceware.org/newlib/>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-    * `All documents <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
     * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
     * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
     * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)

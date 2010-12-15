@@ -13,6 +13,8 @@ Library Documentation
 
 .. doxygenfunction:: pinMode
 
+.. _lang-pinmode-wiringpinmode:
+
 .. doxygenenum:: WiringPinMode
 
 Discussion

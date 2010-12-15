@@ -4,9 +4,7 @@
 # repository.
 
 # Change this
-DEST=`pwd`/../maple-ide/hardware/leaflabs/cores/maple/
-
-ARCH=`uname -a`
+DEST=`pwd`/../maple-ide-java/hardware/leaflabs/cores/maple
 
 FILES="LICENSE
     ./libmaple/*.h
@@ -21,8 +19,8 @@ FILES="LICENSE
     ./wirish/*.cpp
     ./wirish/comm/*.cpp
     ./wirish/comm/*.h
-    ./support/ld/maple/
-    ./support/ld/maple_native/
+    ./support/ld/maple
+    ./support/ld/maple_native
     ./support/ld/libcs3-lanchon-stm32.a
     ./support/ld/names.inc"
 
@@ -34,9 +32,9 @@ then
     exit -1
 fi
 
-echo "Then delete the old files..."
-rm -r $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.ld $DEST/*.inc $DEST/*.a $DEST/maple/ $DEST/maple_native/
+echo "\nThen delete the old files..."
+rm -r $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.inc $DEST/*.a $DEST/maple $DEST/maple_native
 
-echo "Finally copy the new source files!"
-cp -r $FILES $DEST
+echo "\nFinally copy the new source files!"
+cp -R $FILES $DEST
 echo "Done."

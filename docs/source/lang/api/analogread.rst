@@ -32,11 +32,6 @@ Before calling analogRead() on a pin, that pin must first be
 configured for analog input, using :ref:`lang-pinMode` (you only
 have to do this once, so it's usually done in :ref:`lang-setup`\ ).
 
-It takes about 0.8 microseconds (.0000008 seconds) to read an analog
-input, so the maximum sample rate using this function is approximately
-1.3 million samples per second\ [#fsamp]_.
-
-
 Parameter Discussion
 --------------------
 
@@ -115,40 +110,10 @@ Some basic tools to accomplish this are `resistor dividers
 . However, opamps and other powered components can also be used if
 greater precision is required.
 
-Finally, On the Arduino, it takes significantly longer to read analog
-input: about 100 microseconds (0.0001 s), so the maximum reading rate
-is 10,000 times a second.
-
-
 See also
 --------
 
 - :ref:`ADC note <adc>`
 - `(Arduino) Tutorial: Analog Input Pins <http://arduino.cc/en/Tutorial/AnalogInputPins>`_
-
-
-.. rubric:: Footnotes
-
-.. [#fsamp] This is based on the current configuration of a 55.5 cycle
-   sample time, at 72 MHz. However, the minimum sample time *possible*
-   is 1.5 cycles, leading to a theoretical maximum of approximately 48
-   million samples per second (of course, doing anything with the
-   readings also consumes cycles, so this maximum can't be reached in
-   practice).
-
-   See the `STM32 Reference Manual <full-manual>`_, §§11.12.4--5
-   (pp. 225--226), for more information on the low-level bit twiddling
-   currently necessary to change the sample time.  For examples of how
-   the ADCs are configured in libmaple, see `adc.h
-   <http://github.com/leaflabs/libmaple/blob/master/libmaple/adc.h>`_
-   and `adc.c
-   <http://github.com/leaflabs/libmaple/blob/master/libmaple/adc.c>`_\
-   .  Be aware that changing the sample time has important
-   consequences related to the impedance of the device connected to
-   the input pin.  If you want to make changes, as a minimum, you
-   should first read ST's application notes on `ADC modes
-   <stm32-adc-modes>`_ and `ADC oversampling
-   <stm32-adc-oversampling>`_.
-
 
 .. include:: cc-attribution.txt

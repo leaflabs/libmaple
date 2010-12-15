@@ -1,16 +1,20 @@
-.. _lang-numeric-types:
+.. highlight:: cpp
 
-Numeric types
-=============
+.. _lang-built-in-types:
 
-This document serves as a reference for all of the built-in numeric
-types which are available when programming in the IDE.  Programmers
-using the :ref:`command-line tools <unix-toolchain>` will have access
-to these types as long as they have imported ``wirish.h``; several are
-defined in in `libmaple_types.h
+================
+ Built-in Types
+================
+
+This document serves as a reference for many of the built-in types
+which are available when programming in the IDE.  Programmers using
+the :ref:`command-line tools <unix-toolchain>` will have access to
+these types as long as they have imported `wirish.h
+<https://github.com/leaflabs/libmaple/blob/master/wirish/wirish.h>`_;
+several are defined in in `libmaple_types.h
 <https://github.com/leaflabs/libmaple/blob/master/libmaple/libmaple_types.h>`_.
 
-.. _lang-numeric-types-integral:
+.. _lang-built-in-types-integral:
 
 Integral types
 --------------
@@ -77,3 +81,15 @@ Floating-Point Types
 .. cpp:type:: double
 
    64-bit, IEEE 754 double-precision floating-point type.
+
+Other Types
+-----------
+
+.. cpp:type:: voidFuncPtr
+
+   Pointer to a function that takes no arguments and returns nothing, i.e.
+
+   ::
+
+       typedef void (*voidFuncPtr)(void);
+

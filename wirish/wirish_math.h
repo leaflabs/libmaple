@@ -79,8 +79,10 @@ long random(long min, long max);
  * @return the mapped value.
  */
 /* TODO: profile code bloat due to inlining this */
-inline long map(long x, long in_min, long in_max, long out_min, long out_max) {
-    return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+inline long map(long value, long fromStart, long fromEnd,
+                long toStart, long toEnd) {
+    return (value - fromStart) * (toEnd - toStart) / (fromEnd - fromStart) +
+        toStart;
 }
 
 #define PI          3.1415926535897932384626433832795

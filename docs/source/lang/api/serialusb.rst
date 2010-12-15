@@ -52,7 +52,9 @@ world!")``.
 .. cpp:class:: USBSerial
 
    Emulated serial-over-USB class.  ``SerialUSB`` is the predefined
-   instance.
+   (singleton) instance.
+
+.. _lang-serialusb-begin:
 
 .. cpp:function:: USBSerial::begin()
 
@@ -65,7 +67,12 @@ world!")``.
 
 .. cpp:function:: USBSerial::end()
 
-   Disables the USB peripheral.
+   Disables the USB peripheral.  Note that using this function will
+   terminate all USB communications between the Maple and the USB
+   host; in particular, it implies that you won't be able to upload
+   any new programs without resetting the board or using
+   :ref:`perpetual bootloader mode
+   <troubleshooting-perpetual-bootloader>`.
 
 .. cpp:function:: unsigned int USBSerial::available()
 

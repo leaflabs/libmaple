@@ -121,6 +121,5 @@ Recommended Reading
 
 * STMicro documentation for STM32F103RB microcontroller:
 
-      * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
       * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
       * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)

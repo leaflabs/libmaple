@@ -119,8 +119,6 @@ differences, most of which are improvements:
 Shield and Device Compatibility
 -------------------------------
 
-.. TODO update for 0.0.9
-
 .. list-table::
    :header-rows: 1
 
@@ -134,7 +132,7 @@ Shield and Device Compatibility
 
    * - WiFi Shield
      - Yes!
-     - Tested; no library yet (expected for 0.0.9)
+     - Tested; preliminary library support
 
    * - MIDI shield
      - Yes!
@@ -146,7 +144,8 @@ Shield and Device Compatibility
 
    * - Bluetooth shield
      - Unknown
-     -
+     - Some Bluetooth <-> UART boards have been tested and are known
+       to work.
 
    * - Cellular shield
      - Unknown
@@ -158,10 +157,11 @@ Library Porting Status
 The state of currently ported Arduino libraries is the
 :ref:`libraries`.
 
-.. TODO update for 0.0.9; update as libraries are ported.
+.. TODO Update as libraries are ported.
 
 .. list-table::
    :header-rows: 1
+
 
    * - Library
      - Ported?
@@ -180,9 +180,11 @@ The state of currently ported Arduino libraries is the
      - Planned
 
    * - EEPROM
-     - No
-     - The Maple doesn't have EEPROM; use flash instead.  Perhaps this
-       library could be emulated?
+     - (Unsupported) third-party emulation
+     - The Maple doesn't have EEPROM; it uses flash instead.  There is
+       an `EEPROM emulation library
+       <http://akb77.com/g/mcu/maple-eeprom-emulation-library/>`_ by
+       `x893 <http://akb77.com/g/>`_, but we haven't tested it.
 
    * - Firmata
      - Not yet
@@ -191,6 +193,10 @@ The state of currently ported Arduino libraries is the
    * - Matrix
      - Not yet
      - Planned
+
+   * - Servo
+     - **Yes**
+     - :ref:`Included since IDE 0.0.9 <libraries-servo>`
 
    * - SoftwareSerial
      - Not yet

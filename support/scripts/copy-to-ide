@@ -1,14 +1,17 @@
 #!/bin/sh
 
-# This hackish script copies the necessary library files into the Maple IDE
+# This hack copies the necessary library files into the Maple IDE
 # repository.
 
-# Change this
-DEST=`pwd`/../maple-ide-java/hardware/leaflabs/cores/maple
+DEST=$1
 
-FILES="LICENSE
+DEST_REF=$DEST/build/shared/reference
+DEST_CORES=$DEST/hardware/leaflabs/cores/maple
+
+LMAPLE_SRC="LICENSE
     ./libmaple/*.h
     ./libmaple/*.c
+    ./libmaple/*.S
     ./libmaple/usb/*.h
     ./libmaple/usb/*.c
     ./libmaple/usb/usb_lib/*.h
@@ -24,6 +27,8 @@ FILES="LICENSE
     ./support/ld/libcs3-lanchon-stm32.a
     ./support/ld/names.inc"
 
+LMAPLE_DOCS=./docs
+LMAPLE_DOCS_BUILD=$LMAPLE_DOCS/build/html
 
 echo "First make sure DEST exists: $DEST"
 if !(test -d $DEST)
@@ -32,9 +37,20 @@ then
     exit -1
 fi
 
-echo "\nThen delete the old files..."
-rm -r $DEST/*.c $DEST/*.cpp $DEST/*.h $DEST/*.cxx $DEST/*.inc $DEST/*.a $DEST/maple $DEST/maple_native
+# source
+echo Handling libmaple source
+rm -r $DEST_CORES/*.c $DEST_CORES/*.cpp $DEST_CORES/*.h $DEST_CORES/*.cxx $DEST_CORES/*.inc $DEST_CORES/*.a $DEST_CORES/*.S $DEST_CORES/maple $DEST_CORES/maple_native
+cp -R $LMAPLE_SRC $DEST_CORES
 
-echo "\nFinally copy the new source files!"
-cp -R $FILES $DEST
-echo "Done."
+# docs
+echo Deleting old reference directory contents
+rm -r $DEST_REF/*
+
+# echo "\nRebuilding documentation"
+# (cd $LMAPLE_DOCS; doxygen 2>/dev/null 1>/dev/null && make clean 2>/dev/null 1>/dev/null && make html 2>&1 1>/dev/null)
+
+echo Copying over documentation
+cp -R $LMAPLE_DOCS_BUILD/* $DEST_REF
+
+echo
+echo "Done.  Handle libraries manually!"

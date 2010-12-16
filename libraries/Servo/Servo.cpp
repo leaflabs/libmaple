@@ -22,12 +22,12 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
+#include "Servo.h"
+
 #include "boards.h"
 #include "io.h"
 #include "pwm.h"
 #include "wirish_math.h"
-
-#include "Servo.h"
 
 // Configure prescaler and overflow for a 20msec period (could just
 // use HardwareTimer::setPeriod(), but this lets conversions below

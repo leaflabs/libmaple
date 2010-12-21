@@ -87,12 +87,6 @@ world!")``.
    <USBSerial::available>`), the call will block until one
    becomes available.
 
-.. cpp:function:: USBSerial::flush()
-
-   Removes the contents of the Serial's associated input buffer.  That
-   is, clears any buffered characters, so that the next character read
-   is guaranteed to be new.
-
 .. cpp:function:: USBSerial::print(unsigned char b)
 
    Print the given byte over the USB connection.

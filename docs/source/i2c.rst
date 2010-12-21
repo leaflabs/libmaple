@@ -6,7 +6,7 @@
 
 .. note::
 
-   The i2c interface is currently only available from the 'i2c' branch
+   The |i2c| interface is currently only available from the 'i2c' branch
    of the github `libmaple <http://github.com/leaflabs/libmaple>`_
    repository.
 
@@ -80,7 +80,6 @@ Recommended Reading
 * `Arduino i2c/TWI reference <http://www.arduino.cc/playground/Learning/I2C>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
   * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
   * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
   * `Application Note on Advanced I2C Usage

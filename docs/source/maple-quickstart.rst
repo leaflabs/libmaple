@@ -66,6 +66,8 @@ bottom window, and then a confirmation message will appear:
    :align: center
    :alt: Code verified successfully.
 
+.. _maple-quickstart-upload:
+
 Upload that program!
 --------------------
 
@@ -127,7 +129,7 @@ OS X:
    :alt: Board type and serial port for the OS X
 
 Then press the "Upload" button to upload your program to the
-Maple. 
+Maple.
 
 .. image:: /_static/img/upload-button.png
    :align: center

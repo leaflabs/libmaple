@@ -31,7 +31,7 @@
 
 void pinMode(uint8 pin, WiringPinMode mode) {
     uint8 outputMode;
-    uint32 pwm = 0;
+    boolean pwm = false;
 
     if (pin >= NR_GPIO_PINS) {
         return;
@@ -59,11 +59,11 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         break;
     case PWM:
         outputMode = GPIO_MODE_AF_OUTPUT_PP;
-        pwm = 1;
+        pwm = true;
         break;
     case PWM_OPEN_DRAIN:
         outputMode = GPIO_MODE_AF_OUTPUT_OD;
-        pwm = 1;
+        pwm = true;
         break;
     default:
         ASSERT(0);

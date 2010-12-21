@@ -43,7 +43,6 @@ void delayMicroseconds(uint32 us) {
 
     /* fudge for function call overhead  */
     us--;
-    int x = 4;
     asm volatile("   mov r0, %[us]          \n\t"
                  "1: subs r0, #1            \n\t"
                  "   bhi 1b                 \n\t"

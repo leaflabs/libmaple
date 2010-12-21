@@ -221,7 +221,6 @@ HardwareTimer* getTimer(timer_dev_num timerNum) {
         return &Timer8;
 #endif
     default:
-        ASSERT(0);
         return 0;
     }
 }

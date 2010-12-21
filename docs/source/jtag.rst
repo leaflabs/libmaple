@@ -15,12 +15,11 @@ and hardware peripherals (we use it when working on :ref:`libmaple
 Note that the STM32 on the Maple has a built-in low level serial
 debugger which could also be used to flash bootloaders, and that the
 :ref:`ASSERT <language-assert>` framework allows basic debugging over
-a USART serial channel.  We expect only advanced users to use this
-feature.
+a USART serial channel.  We expect only fairly advanced users to use
+this feature.
 
 .. contents:: Contents
    :local:
-
 
 Wiring Diagram
 --------------
@@ -28,11 +27,12 @@ Wiring Diagram
 .. figure:: /_static/img/jtag-wiring.png
    :align: center
    :alt: JTAG wiring diagram
+   :width: 7.4in
 
-   JTAG wiring diagram to connect a standard 20-pin ARM JTAG device to
-   the 8-pin JTAG port on the Maple.
-
-.. TODO jtag wiring diagram (above) looks terrible; replace it
+   JTAG wiring diagram (`large version
+   <http://leaflabs.com/wp-content/uploads/2010/11/maple-jtagadapter.png>`_)
+   to connect a standard 20-pin ARM JTAG device to the 8-pin JTAG port
+   on the Maple.
 
 The Maple has holes for a 8-pin JTAG header but that header is not
 soldered on by default. If you know ahead of time that you'll be
@@ -42,22 +42,14 @@ probably solder one on for no charge.  Otherwise, you can simply
 attach standard 0.1" pitch male header pins (either the exact 4x2
 block or two 4-pin pieces of breakaway straight header). For a one-off
 usage hack, the header can be jammed in the holes and twisted to
-ensure electrical contact; this is what we do to flash our bootloader.
-
-The above schematic assumes that the header has been soldered on to
-the *bottom* of the board, not the top; most ribbon cable connectors
-will interfere with the power header. If you don't want a header
-coming off the bottom, you can use a slim connector and invert this
-diagram appropriately.
-
+ensure electrical contact.
 
 Compatible Devices
 ------------------
 
 We have had good experience with the `Olimex ARM-USB-OCD
 <http://www.olimex.com/dev/arm-usb-ocd.html>`_ device, which costs
-about 55 euro plus shipping (as of October 2010).
-
+about 55 euro plus shipping (as of November 2010).
 
 Recommended Reading
 -------------------
@@ -66,6 +58,8 @@ Recommended Reading
 * `STM32/gdb/OpenOCD HOWTO <http://fun-tech.se/stm32/OpenOCD/gdb.php>`_
 * STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
   * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
   * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+* There's a `thread on JTAG
+  <http://forums.leaflabs.com/topic.php?id=536>`_ in our `forum`_
+  which you may find useful.

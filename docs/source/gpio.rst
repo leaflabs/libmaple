@@ -1,8 +1,7 @@
 .. _gpio:
 
-======
- GPIO
-======
+GPIO
+====
 
 The Maple features 38 ready-to-use general purpose input/output (GPIO)
 pins for digital input/output, numbered D0 through D37.  These numbers
@@ -15,9 +14,9 @@ peripheral functions.  This page documents those capabilities, by pin.
 The current and voltage limitations have not been copied over from the
 STM32 datasheet (see the :ref:`Recommended Reading
 <gpio-recommended-reading>` for a link).  In particular, a number of
-GPIO pins are 5v tolerant (which means that applying 5v to a pin and
-reading it as input or allowing it to drain to ground will not damage
-that pin), while some are not.
+GPIO pins are 5V tolerant (which means that applying 5 volts to a pin
+and reading it as input or allowing it to drain to ground will not
+damage that pin), while some are not.
 
 .. contents:: Contents
    :local:
@@ -27,11 +26,10 @@ that pin), while some are not.
 Pin Mapping Mega Table
 ----------------------
 
-This huge reference table shows the available functionality on every
-GPIO pin, by peripheral type. The "STM32" column refers to the port
-and number that the header is connected to on the microcontroller.
-The "5v?" column documents whether or not the pin is 5v tolerant (see
-above).
+This table shows the available functionality on every GPIO pin, by
+peripheral type. The "STM32" column refers to the port and number that
+the header is connected to on the microcontroller.  The "5V?" column
+documents whether or not the pin is 5 volt tolerant (see above).
 
 .. csv-table::
    :header: "Pin", "STM32", ":ref:`ADC <adc>`", ":ref:`Timer <timers>`", ":ref:`I2C <i2c>`", ":ref:`UART <usart>`", ":ref:`SPI <spi>`", "5v?"
@@ -80,7 +78,7 @@ above).
 GPIO Modes
 ----------
 
-.. doxygenenum:: WiringMode
+.. doxygenenum:: WiringPinMode
 
 Function Reference
 ------------------
@@ -100,6 +98,5 @@ Recommended Reading
 
 STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
   * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
   * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)

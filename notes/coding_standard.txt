@@ -50,7 +50,7 @@ Whitespace
 
 - Files end in exactly one newline. [The presence of a newline at EOF
   is already done by `c-require-final-newline' in recent versions of
-  emacs.]
+  Emacs.]
 
 - Exactly two newlines separate source paragraphs.
 
@@ -71,7 +71,7 @@ Comments
     /* comment starts here
      * the comment can end on the same line */
 
-- Doxygen comments are newline comments that begin with /** instead.
+- Doxygen comments begin with /** instead.
 
 - Single-line comments on the same line are // in c or c++.
 
@@ -114,9 +114,8 @@ because It_Looks_Really_Ugly, ok?
 - Structs: pick a style from "Variables" or "Classes" depending on how
   you mean it (since it might be either a simple record type, in which
   case do like c variables, or you might be faking an object in c, in
-  which case do like classes).  If it's in a typedef, should also
-  probably put _t at the end, but maybe you won't, and I don't really
-  feel too strongly about it.
+  which case do like classes).  If it's in a typedef, don't feel
+  obliged to put "_t" at the end of the name; we don't.
 
 - Acronyms: The case of letters in an acronym is determined by the
   case of the first letter in the acronym.  Examples:
@@ -139,10 +138,25 @@ because It_Looks_Really_Ugly, ok?
 Documentation
 -------------
 
-- Document your code, bitches!
+- Document your code.  This should go without saying.
 
 - At least put a doxygen comment with a nonempty @brief for every
   source file you add.  See the existing ones for examples.
+
+- Doxygen comments generally just belong on types, functions,
+  etc. that are part of the public user-facing API.  This generally
+  means that if there's ReST documentation for it under docs/source/,
+  it needs Doxygen comments, and that ReST should use Breathe to pull
+  that Doxygen comment out. (For more info on this, see docs/README).
+
+  There are some exceptions to this rule since Breathe isn't totally
+  mature yet and Sphinx's C++ domain is still in flux.  In these
+  cases, document the code "manually" in ReST.
+
+  This should be avoided if at all possible, since it creates a
+  maintenance burden of documenting things in two places at once, and
+  provides an opportunity for bad documentation to slip in, when the
+  code comments fall out of sync with the ReST docs.
 
 General Formatting
 ------------------
@@ -160,5 +174,9 @@ General Formatting
   Then put the file somewhere in your load-path, and
 
     (require 'lineker)
-    (dolist (hook programming-mode-hooks)
+    (dolist (hook '(c-mode-hook c++-mode-hook))
       (add-hook hook (lambda () (lineker-mode 1))))
+
+  There are only a few exceptional situations.  The most important one
+  is when specifying a lookup table like PIN_MAP where it'd be ugly to
+  split each entry over multiple lines.

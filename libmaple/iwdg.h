@@ -41,6 +41,16 @@ extern "C"{
 #define IWDG_RLR                (IWDG_BASE + 0x8)
 #define IWDG_SR                 (IWDG_BASE + 0xC)
 
+enum {
+    IWDG_PRE_4,
+    IWDG_PRE_8,
+    IWDG_PRE_16,
+    IWDG_PRE_32,
+    IWDG_PRE_64,
+    IWDG_PRE_128,
+    IWDG_PRE_256
+};
+
 void iwdg_init(uint8 prescaler, uint16 reload);
 void iwdg_feed(void);
 

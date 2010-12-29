@@ -61,7 +61,8 @@ typedef enum dma_mode_flags {
     DMA_CIRC_MODE = 1,
 } dma_mode_flags;
 
-void dma_init(uint8 channel, volatile void *peripheral, bool from_peripheral, dma_mode_flags mode);
+void dma_init(uint8 channel, volatile void *peripheral, int from_peripheral,
+              dma_mode_flags mode);
 void dma_start(uint8 channel, volatile void *buffer, uint16 count);
 
 #ifdef __cplusplus

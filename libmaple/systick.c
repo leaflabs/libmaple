@@ -59,13 +59,13 @@ void systick_disable() {
 }
 
 void systick_resume() {
-    /* re-enable init registers without changing relead_val */
+    /* re-enable init registers without changing reload val */
     __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
             SYSTICK_ENABLE                |
             SYSTICK_TICKINT);
 }
 
 /** SysTick interrupt handler.  Bumps up the tick counter. */
-void SysTick_Handler(void) {
+void SysTickHandler(void) {
     systick_timer_millis++;
 }

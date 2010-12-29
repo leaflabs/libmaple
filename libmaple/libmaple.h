@@ -40,6 +40,9 @@
 #ifdef MCU_STM32F103RB
     // eg, LeafLabs Maple
 
+    // Number of 16-bit backup registers
+    #define NR_BKP_REGS              10
+
     // Number of GPIO ports (GPIOA, GPIOB, etc), definately used
     #define NR_GPIO_PORTS             4
 
@@ -94,6 +97,7 @@
 
 #ifdef MCU_STM32F103ZE
     // eg, LeafLabs Maple Native
+    #define NR_BKP_REGS              42
     #define NR_GPIO_PORTS             7
     #define NR_GPIO_PINS             63
     #define NR_TIMERS                 8

@@ -43,7 +43,7 @@ extern "C"{
 #define SYSTICK_CSR_COUNTFLAG   BIT(16)
 
 /** System elapsed time in milliseconds */
-volatile uint32 systick_timer_millis;
+extern volatile uint32 systick_timer_millis;
 
 void systick_init(uint32 reload_val);
 void systick_disable();

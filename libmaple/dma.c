@@ -63,7 +63,8 @@ static dma_regs *dma_get_regs(uint8 channel) {
  *                          to memory
  *  @param mode             OR of the dma_mode_flags
  */
-void dma_init(uint8 channel, volatile void *peripheral, bool from_peripheral, enum dma_mode_flags mode) {
+void dma_init(uint8 channel, volatile void *peripheral, int from_peripheral,
+              dma_mode_flags mode) {
     volatile dma_regs *regs = dma_get_regs(channel);
 
     if (regs != NULL) {
@@ -79,6 +80,7 @@ void dma_init(uint8 channel, volatile void *peripheral, bool from_peripheral, en
                 | (mode << 5) // Increment and circular modes
                 | (0 << 0);   // Not enabled
 
+        /* FIXME XXX integer from pointer without a cast. */
         regs->CPAR = peripheral;
 
         if (!from_peripheral) {

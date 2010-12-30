@@ -26,10 +26,14 @@
  *  @file dma.h
  *
  *  @brief Direct Memory Access peripheral support
+ *
+ *  TODO: add DMA2 support for high-density devices.
  */
 
 #ifndef _DMA_H_
 #define _DMA_H_
+
+#include "libmaple_types.h"
 
 #ifdef __cplusplus
 extern "C"{
@@ -39,7 +43,7 @@ extern "C"{
 #define DMA1_BASE                0x40020000
 /** DMA Interrupt Status Register */
 #define DMA1_ISR                 (DMA1_BASE + 0x00)
-/** DMA Interrput Flag Clear Register */
+/** DMA Interrupt Flag Clear Register */
 #define DMA1_IFCR                (DMA1_BASE + 0x04)
 /** DMA Channel Configuration Register */
 #define DMA1_CCR1                (DMA1_BASE + 0x08)
@@ -52,18 +56,55 @@ extern "C"{
 /** Spacing between channel registers */
 #define DMA_CHANNEL_STRIDE       20
 
+/** Flags for DMA transfer configuration. */
 typedef enum dma_mode_flags {
-    /** Auto-increment memory address */
-    DMA_MINC_MODE = 4,
-    /** Auto-increment peripheral address */
-    DMA_PINC_MODE = 2,
-    /** Circular mode */
-    DMA_CIRC_MODE = 1,
+    DMA_MINC_MODE  = 1 << 7, /**< Auto-increment memory address */
+    DMA_PINC_MODE  = 1 << 6, /**< Auto-increment peripheral address */
+    DMA_CIRC_MODE  = 1 << 5, /**< Circular mode */
+    DMA_FROM_MEM   = 1 << 4, /**< Read from memory to peripheral */
+    DMA_TRNS_ERR   = 1 << 3, /**< Interrupt on transfer error */
+    DMA_HALF_TRNS  = 1 << 2, /**< Interrupt on half-transfer */
+    DMA_TRNS_CMPLT = 1 << 1  /**< Interrupt on transfer completion */
 } dma_mode_flags;
 
-void dma_init(uint8 channel, volatile void *peripheral, int from_peripheral,
+typedef enum dma_transfer_size {
+    DMA_SIZE_8BITS  = 0,
+    DMA_SIZE_16BITS = 1,
+    DMA_SIZE_32BITS = 2
+} dma_transfer_size;
+
+/**
+ * Initialize a DMA channel.  If desired, attach an interrupt handler
+ * using dma_attach_interrupt().  Start the transfer using
+ * dma_start().
+ *
+ * @param channel          the channel number (1..7)
+ * @param paddr            address of the peripheral
+ * @param psize            peripheral size
+ * @param msize            memory size
+ * @param mode             OR of the dma_mode_flags
+ * @see dma_mode_flags
+ * @see dma_attach_interrupt()
+ * @see dma_start() */
+void dma_init(uint8 channel, volatile void *paddr,
+              dma_transfer_size psize, dma_transfer_size msize,
               dma_mode_flags mode);
+
+/**
+ * Begin a DMA transfer initialized with dma_init().  You may call
+ * this function repeatedly after a single call to dma_init().
+ *
+ * @param channel Channel transfer to start.
+ * @param buffer  Buffer to write to (unless DMA_FROM_MEM was set in
+ *                mode argument to dma_init(), in which case, buffer
+ *                to read from).  This must be aligned with msize
+ *                argument to dma_init().
+ * @param count   Number of elements to transfer.
+ * @see dma_init() */
 void dma_start(uint8 channel, volatile void *buffer, uint16 count);
+
+void dma_attach_interrupt(uint8 channel, voidFuncPtr handler);
+void dma_detach_interrupt(uint8 channel);
 
 #ifdef __cplusplus
 } // extern "C"

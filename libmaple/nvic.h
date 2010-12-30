@@ -23,7 +23,8 @@
  *****************************************************************************/
 
 /**
- *  @brief Nested interrupt controller defines and prototypes
+ * @file nvic.h
+ * @brief Nested interrupt controller defines and prototypes
  */
 
 #ifndef _NVIC_H_
@@ -39,18 +40,17 @@ extern "C"{
 /* NVIC Interrupt Enable registers  */
 #define NVIC_ISER0          0xE000E100
 #define NVIC_ISER1          0xE000E104
-#define NVIC_ISER2          0xE000E108
-#define NVIC_ISER3          0xE000E10C  // Non existant?
+/* NVIC_ISER2 only on connectivity line */
 
 /* NVIC Interrupt Clear registers  */
 #define NVIC_ICER0          0xE000E180
 #define NVIC_ICER1          0xE000E184
-#define NVIC_ICER2          0xE000E188
-#define NVIC_ICER3          0xE000E18C  // Non existant?
+/* NVIC_ICER2 only on connectivity line */
 
 /* System control registers  */
 #define SCB_VTOR            0xE000ED08  // Vector table offset register
 
+/* PENDING: aren't these obsolete? they're not used anywhere. */
 #define NVIC_VectTab_RAM             ((u32)0x20000000)
 #define NVIC_VectTab_FLASH           ((u32)0x08000000)
 
@@ -77,6 +77,14 @@ enum {
     NVIC_EXTI4        = 10,
     NVIC_EXTI9_5      = 23,
     NVIC_EXTI15_10    = 40,
+
+    NVIC_DMA_CH1      = 11,
+    NVIC_DMA_CH2      = 12,
+    NVIC_DMA_CH3      = 13,
+    NVIC_DMA_CH4      = 14,
+    NVIC_DMA_CH5      = 15,
+    NVIC_DMA_CH6      = 16,
+    NVIC_DMA_CH7      = 17
 };
 
 

@@ -23,8 +23,6 @@
  *****************************************************************************/
 
 /**
- * @file nvic.c
- *
  * @brief Nested interrupt controller routines
  */
 
@@ -41,6 +39,7 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
  * @param n interrupt number
  */
 void nvic_irq_enable(uint32 n) {
+    /* TODO: bit-banding would be faster */
     uint32 *iser = &((uint32*)NVIC_ISER0)[(n/32)];
     __write(iser, BIT(n % 32));
 }
@@ -50,11 +49,16 @@ void nvic_irq_enable(uint32 n) {
  * @param n interrupt number
  */
 void nvic_irq_disable(uint32 n) {
+    /* TODO: bit-banding would be faster */
     uint32 *icer = &((uint32*)NVIC_ICER0)[(n/32)];
     __write(icer, BIT(n % 32));
 }
 
 void nvic_irq_disable_all(void) {
+    /* TODO why not:
+       __write(NVIC_ICER0, 0);
+       __write(NVIC_ICER1, 0);
+       */
     short n;
     for(n=0; n<65; n++) {
         nvic_irq_disable(n);
@@ -62,8 +66,8 @@ void nvic_irq_disable_all(void) {
 }
 
 /**
- * @brief Initialice the NVIC at address addr
- * @param addr Address to set the vector table at
+ * @brief Initialize the NVIC according to VECT_TAB_FLASH,
+ * VECT_TAB_RAM, or VECT_TAB_BASE.
  */
 void nvic_init(void) {
 #ifdef VECT_TAB_FLASH

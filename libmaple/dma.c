@@ -31,16 +31,31 @@
 #include "libmaple.h"
 #include "dma.h"
 #include "rcc.h"
+#include "nvic.h"
 
 #define DMA_EN    BIT(0)
 
-typedef struct dma_regs
-{
+typedef struct dma_regs {
     uint32 CCR;
     uint32 CNDTR;
     uint32 CPAR;
     uint32 CMAR;
 } dma_regs;
+
+typedef struct DMAChannel {
+    void (*handler)(void);
+    uint32 irq_line;
+} DMAChannel;
+
+static DMAChannel dma_channels[] = {
+    { .handler = NULL, .irq_line = NVIC_DMA_CH1 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH2 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH3 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH4 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH5 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH6 },
+    { .handler = NULL, .irq_line = NVIC_DMA_CH7 }
+};
 
 /** Get the base address of the given channel, asserting and returning
  * NULL on illegal
@@ -48,59 +63,86 @@ typedef struct dma_regs
 static dma_regs *dma_get_regs(uint8 channel) {
     if (channel >= 1 && channel <= 7) {
         return (dma_regs *)(DMA1_CCR1 + DMA_CHANNEL_STRIDE * (channel-1));
-    }
-    else {
+    } else {
         ASSERT(false);
         return NULL;
     }
 }
 
-/** Initialise a DMA channel.  Start the transfer using dma_start().
- *
- *  @param channel          the channel number (1..7)
- *  @param peripheral       address of the peripheral
- *  @param from_peripheral  true if transfer goes from the peripheral
- *                          to memory
- *  @param mode             OR of the dma_mode_flags
- */
-void dma_init(uint8 channel, volatile void *peripheral, int from_peripheral,
+/* Zero-based indexing */
+static inline void dispatch_handler(uint8 channel_idx) {
+    ASSERT(dma_channels[channel_idx].handler);
+    if (dma_channels[channel_idx].handler) {
+        (dma_channels[channel_idx].handler)();
+    }
+}
+
+void DMAChannel1_IRQHandler(void) {
+    dispatch_handler(0);
+}
+
+void DMAChannel2_IRQHandler(void) {
+    dispatch_handler(1);
+}
+
+void DMAChannel3_IRQHandler(void) {
+    dispatch_handler(2);
+}
+
+void DMAChannel4_IRQHandler(void) {
+    dispatch_handler(3);
+}
+
+void DMAChannel5_IRQHandler(void) {
+    dispatch_handler(4);
+}
+
+void DMAChannel6_IRQHandler(void) {
+    dispatch_handler(5);
+}
+
+void DMAChannel7_IRQHandler(void) {
+    dispatch_handler(6);
+}
+
+void dma_init(uint8 channel, volatile void *paddr,
+              dma_transfer_size psize, dma_transfer_size msize,
               dma_mode_flags mode) {
     volatile dma_regs *regs = dma_get_regs(channel);
 
     if (regs != NULL) {
         rcc_clk_enable(RCC_DMA1);
 
-        /* Disable the channel.  PENDING: May not be needed */
-        regs->CCR = 0;
+        regs->CCR = ((0 << 12)        /* Low priority */
+                     | (msize << 10)
+                     | (psize <<  8)
+                     | (0 << 0)       /* Disabled (until started) */
+                     | mode);
 
-        uint32 cr = 0
-                | (0 << 12)   // Low priority
-                | (0 << 10)   // Memory size = 8 bits
-                | (1 <<  8)   // Peripheral size = 16 bits
-                | (mode << 5) // Increment and circular modes
-                | (0 << 0);   // Not enabled
-
-        /* FIXME XXX integer from pointer without a cast. */
-        regs->CPAR = peripheral;
-
-        if (!from_peripheral) {
-            cr |= 1 << 4; // From memory
-        }
-
-        /* Stay disabled until started */
-        regs->CCR = cr;
+        regs->CPAR = (uint32)paddr;
     }
 }
 
-void dma_start(uint8 channel, volatile void *buffer, uint16 count)
-{
+void dma_start(uint8 channel, volatile void *buffer, uint16 count) {
     volatile dma_regs *regs = dma_get_regs(channel);
 
     if (regs != NULL) {
-        regs->CCR &= ~DMA_EN;
+        regs->CCR &= ~DMA_EN; /* CMAR may not be written with EN set */
         regs->CMAR = (uint32)buffer;
         regs->CNDTR = count;
 
-        regs->CCR |= DMA_EN;
+        regs->CCR |= DMA_EN;    /* Start the transfer */
     }
+}
+
+void dma_attach_interrupt(uint8 channel, voidFuncPtr handler) {
+    channel--;                  /* 1-based -> 0-based indexing */
+    dma_channels[channel].handler = handler;
+    nvic_irq_enable(dma_channels[channel].irq_line);
+}
+
+void dma_detach_interrupt(uint8 channel) {
+    channel--;
+    nvic_irq_disable(dma_channels[channel].irq_line);
+    dma_channels[channel].handler = NULL;
 }

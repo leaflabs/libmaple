@@ -88,11 +88,10 @@ typedef enum dma_transfer_size {
  * @see dma_start() */
 void dma_init(uint8 channel, volatile void *paddr,
               dma_transfer_size psize, dma_transfer_size msize,
-              dma_mode_flags mode);
+              int mode);
 
 /**
- * Begin a DMA transfer initialized with dma_init().  You may call
- * this function repeatedly after a single call to dma_init().
+ * Begin a DMA transfer initialized with dma_init().
  *
  * @param channel Channel transfer to start.
  * @param buffer  Buffer to write to (unless DMA_FROM_MEM was set in

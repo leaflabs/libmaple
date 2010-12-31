@@ -107,7 +107,7 @@ void DMAChannel7_IRQHandler(void) {
 
 void dma_init(uint8 channel, volatile void *paddr,
               dma_transfer_size psize, dma_transfer_size msize,
-              dma_mode_flags mode) {
+              int mode) {
     volatile dma_regs *regs = dma_get_regs(channel);
 
     if (regs != NULL) {
@@ -131,7 +131,7 @@ void dma_start(uint8 channel, volatile void *buffer, uint16 count) {
         regs->CMAR = (uint32)buffer;
         regs->CNDTR = count;
 
-        regs->CCR |= DMA_EN;    /* Start the transfer */
+        regs->CCR |= DMA_EN;
     }
 }
 

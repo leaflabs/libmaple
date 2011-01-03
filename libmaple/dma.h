@@ -67,6 +67,7 @@ typedef enum dma_mode_flags {
     DMA_TRNS_CMPLT = 1 << 1  /**< Interrupt on transfer completion */
 } dma_mode_flags;
 
+/** Source and destination transfer sizes. */
 typedef enum dma_transfer_size {
     DMA_SIZE_8BITS  = 0,
     DMA_SIZE_16BITS = 1,
@@ -102,7 +103,16 @@ void dma_init(uint8 channel, volatile void *paddr,
  * @see dma_init() */
 void dma_start(uint8 channel, volatile void *buffer, uint16 count);
 
+/**
+ * Attach an interrupt handler for the given DMA channel.
+ * @param channel DMA channel (1..7)
+ * @param handler Interrupt handler to attach
+ * @see voidFuncPtr */
 void dma_attach_interrupt(uint8 channel, voidFuncPtr handler);
+
+/**
+ * Detach any handler associated with the given DMA channel.
+ * @param channel Channel whose interrupt handler to detach. */
 void dma_detach_interrupt(uint8 channel);
 
 #ifdef __cplusplus

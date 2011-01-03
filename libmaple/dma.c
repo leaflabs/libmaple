@@ -47,7 +47,7 @@ typedef struct DMAChannel {
     uint32 irq_line;
 } DMAChannel;
 
-static DMAChannel dma_channels[] = {
+volatile static DMAChannel dma_channels[] = {
     { .handler = NULL, .irq_line = NVIC_DMA_CH1 },
     { .handler = NULL, .irq_line = NVIC_DMA_CH2 },
     { .handler = NULL, .irq_line = NVIC_DMA_CH3 },

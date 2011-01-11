@@ -7,6 +7,7 @@ DEST=$1
 
 DEST_REF=$DEST/build/shared/reference
 DEST_CORES=$DEST/hardware/leaflabs/cores/maple
+DEST_LIBS=$DEST/libraries
 
 LMAPLE_SRC="LICENSE
     ./libmaple/*.h
@@ -38,19 +39,22 @@ then
 fi
 
 # source
-echo Handling libmaple source
-rm -r $DEST_CORES/*.c $DEST_CORES/*.cpp $DEST_CORES/*.h $DEST_CORES/*.cxx $DEST_CORES/*.inc $DEST_CORES/*.a $DEST_CORES/*.S $DEST_CORES/maple $DEST_CORES/maple_native
+echo Copying libmaple source
+rm -rf $DEST_CORES/*.c $DEST_CORES/*.cpp $DEST_CORES/*.h $DEST_CORES/*.cxx $DEST_CORES/*.inc $DEST_CORES/*.a $DEST_CORES/*.S $DEST_CORES/maple $DEST_CORES/maple_native
 cp -R $LMAPLE_SRC $DEST_CORES
+
+echo Copying over libraries
+cp -R libraries/* $DEST_LIBS
 
 # docs
 echo Deleting old reference directory contents
-rm -r $DEST_REF/*
+rm -rf $DEST_REF/*
 
-# echo "\nRebuilding documentation"
-# (cd $LMAPLE_DOCS; doxygen 2>/dev/null 1>/dev/null && make clean 2>/dev/null 1>/dev/null && make html 2>&1 1>/dev/null)
+echo Rebuilding documentation
+( cd $LMAPLE_DOCS; doxygen && make clean 2>/dev/null 1>/dev/null && make html )
 
 echo Copying over documentation
 cp -R $LMAPLE_DOCS_BUILD/* $DEST_REF
 
-echo
-echo "Done.  Handle libraries manually!"
+
+echo Done.

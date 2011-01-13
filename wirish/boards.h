@@ -70,7 +70,11 @@ typedef struct PinMapping {
 } PinMapping;
 
 /* LeafLabs Maple rev3, rev5 */
-#ifdef BOARD_maple
+#ifdef BOARD_maple_audio
+#define BOARD_maple // audioboard has same pinmap as regular maple
+#endif
+
+#ifdef BOARD_maple 
 
     #define CYCLES_PER_MICROSECOND  72
     #define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */

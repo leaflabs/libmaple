@@ -89,7 +89,7 @@ class HardwareTimer {
      *
      * Note that there is some function call overhead associated with
      * using this method, so using it in concert with
-     * HardwareTimer::resume() is not a robust way to align multiple
+     * HardwareTimer::pause() is not a robust way to align multiple
      * timers to the same count value.
      *
      * @see HardwareTimer::pause()
@@ -103,7 +103,7 @@ class HardwareTimer {
     uint16 getPrescaleFactor();
 
     /**
-     * Set the timer prescale.
+     * Set the timer's prescale factor.
      *
      * The prescaler acts as a clock divider to slow down the rate at
      * which the counter increments.
@@ -155,7 +155,7 @@ class HardwareTimer {
      * Set the current timer count.
      *
      * Note that there is some function call overhead associated with
-     * callign this method, so using it is not a robust way to get
+     * calling this method, so using it is not a robust way to get
      * multiple timers to share a count value.
      *
      * @param val The new count value to set.  If this value exceeds
@@ -183,10 +183,6 @@ class HardwareTimer {
 
     /**
      * Set the given channel of this timer to the given mode.
-     *
-     * Note: Timer1.setChannel1Mode(TIMER_PWM) may not work as
-     * expected; if you want PWM functionality on a channel make sure
-     * you don't set it to something else!
      *
      * @param channel Timer channel, from 1 to 4
      * @param mode Mode to set
@@ -228,24 +224,24 @@ class HardwareTimer {
      */
     uint16 getCompare(int channel);
 
-    /** Like getCompare(1) */
+    /** Equivalent to getCompare(1) */
     uint16 getCompare1();
 
-    /** Like getCompare(2) */
+    /** Equivalent to getCompare(2) */
     uint16 getCompare2();
 
-    /** Like getCompare(3) */
+    /** Equivalent to getCompare(3) */
     uint16 getCompare3();
 
-    /** Like getCompare(4) */
+    /** Equivalent to getCompare(4) */
     uint16 getCompare4();
 
     /**
      * Sets the compare value for the given channel.
      *
      * When the counter reaches this value the interrupt for this
-     * channel will fire if channel 1 mode is TIMER_OUTPUTCOMPARE and
-     * an interrupt is attached.
+     * channel will fire if the channel mode is TIMER_OUTPUTCOMPARE
+     * and an interrupt is attached.
      *
      * By default, this only changes the relative offsets between
      * events on a single timer ("phase"); they don't control the
@@ -259,32 +255,33 @@ class HardwareTimer {
      * few microseconds.
      *
      * @param channel the channel whose compare to set, from 1 to 4.
-     * @param val The compare value to set.  If greater than this
-     *            timer's overflow value, it will be truncated to the
-     *            overflow value.
+     * @param compare The compare value to set.  If greater than this
+     *                timer's overflow value, it will be truncated to
+     *                the overflow value.
      *
      * @see TimerMode
      * @see HardwareTimer::setChannelMode()
+     * @see HardwareTimer::attachInterrupt()
      */
     void setCompare(int channel, uint16 compare);
 
     /**
-     * Like setCompare(1, compare).
+     * Equivalent to setCompare(1, compare).
      */
     void setCompare1(uint16 compare);
 
     /**
-     * Like setCompare(2, compare).
+     * Equivalent to setCompare(2, compare).
      */
     void setCompare2(uint16 compare);
 
     /**
-     * Like setCompare(3, compare).
+     * Equivalent to setCompare(3, compare).
      */
     void setCompare3(uint16 compare);
 
     /**
-     * Like setCompare(4, compare).
+     * Equivalent to setCompare(4, compare).
      */
     void setCompare4(uint16 compare);
 
@@ -313,25 +310,25 @@ class HardwareTimer {
     void attachInterrupt(int channel, voidFuncPtr handler);
 
     /**
-     * Like attachCompareInterrupt(1, handler).
+     * Equivalent to attachCompareInterrupt(1, handler).
      * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare1Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompareInterrupt(2, handler).
+     * Equivalent to attachCompareInterrupt(2, handler).
      * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare2Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompareInterrupt(3, handler).
+     * Equivalent to attachCompareInterrupt(3, handler).
      * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare3Interrupt(voidFuncPtr handler);
 
     /**
-     * Like attachCompareInterrupt(4, handler).
+     * Equivalent to attachCompareInterrupt(4, handler).
      * @see HardwareTimer::attachCompareInterrupt()
      */
     void attachCompare4Interrupt(voidFuncPtr handler);
@@ -346,25 +343,25 @@ class HardwareTimer {
     void detachInterrupt(int channel);
 
     /**
-     * Like detachInterrupt(1).
+     * Equivalent to detachInterrupt(1).
      * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare1Interrupt(void);
 
     /**
-     * Like detachInterrupt(2).
+     * Equivalent to detachInterrupt(2).
      * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare2Interrupt(void);
 
     /**
-     * Like detachInterrupt(3).
+     * Equivalent to detachInterrupt(3).
      * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare3Interrupt(void);
 
     /**
-     * Like detachInterrupt(4).
+     * Equivalent to detachInterrupt(4).
      * @see HardwareTimer::detachInterrupt()
      */
     void detachCompare4Interrupt(void);
@@ -394,6 +391,22 @@ extern HardwareTimer Timer5;
 extern HardwareTimer Timer8;
 #endif
 
+/**
+ * Get one of the pre-instantiated HardwareTimer instances, given a
+ * timer device number.
+ *
+ * Be careful not to pass an actual number to this function.  For
+ * example, getTimer(1) will not return Timer1.  Use a real
+ * timer_dev_num, e.g. TIMER1, TIMER2, etc.
+ *
+ * @param timerNum the timer device number, e.g. TIMER1.
+ *
+ * @return Pointer to the HardwareTimer instance corresponding to the
+ * given timer device number.  If timerNum is TIMER_INVALID, returns a
+ * null pointer.
+ *
+ * @see timer_dev_num
+ */
 HardwareTimer* getTimer(timer_dev_num timerNum);
 
 #endif

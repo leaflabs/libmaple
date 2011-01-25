@@ -30,10 +30,8 @@ use :ref:`perpetual bootloader mode
 My board is bricked! I can't upload via the bootloader no matter what!
 ----------------------------------------------------------------------
 
-Use the hardcoded serial STM32 serial bootloader to re-flash the
-bootloader.
-
-.. TODO insert docs on reflashing the bootloader
+Use the hardcoded serial STM32 serial bootloader to :ref:`re-flash the
+bootloader <bootloader-reflashing>`.
 
 If it really is bricked, and you think it's our fault, `contact us
 <http://leaflabs.com/contact>`_\ !
@@ -43,8 +41,8 @@ My 5v peripheral doesn't work! (I2C, SPI, USART, etc)
 
 Yup, the Maple is a 3.3v board. You may need to use a level
 converter. See the :ref:`compatibility <compatibility>`, :ref:`GPIO
-<gpio>`, or other :ref:`hardware specific documentation <hardware>`
-for more information.
+<gpio>`, or other :ref:`hardware specific documentation
+<index-hardware>` for more information.
 
 The reset and D38/serial buttons don't seem to work reliably!
 -------------------------------------------------------------
@@ -100,18 +98,18 @@ a board selected.  The work-around is to restart the IDE. Mysterious!
 ``NullPointerException``
 ------------------------
 
-A classic! Make sure you have selected a board from the pulldown menu. 
+A classic! Make sure you have selected a board from the pulldown menu.
 
 .. TODO: remove when Python version is released
 
 ``undefined reference to setup()/loop()``
 -----------------------------------------
 
-Your sketch/program either does not include one of the `setup
-<setup()>`_ or `loop <loop()>`_ functions, or it was not found by the
-compiler. Your program must include both ``void setup()`` and ``void
-loop()`` functions; they don't have to do anything, but they **must**
-be there.
+Your sketch/program either does not include one of the :ref:`setup()
+<lang-setup>` or `loop() <lang-loop>` functions, or it was not found
+by the compiler. Your program must include both ``void setup()`` and
+``void loop()`` functions; they don't have to do anything, but they
+**must** be there.
 
 You can start with an example program (to see one in the IDE, click on
 File > Examples > Stubs > BareMinimum) to get the basic structure.
@@ -152,7 +150,11 @@ is several times more FLASH memory available for user programs.
 ``No DFU capable USB device found``
 -----------------------------------
 
-This probably means you don't have a Maple plugged in or powered on! 
+This probably means you don't have a Maple plugged in or powered on.
+Try unplugging and plugging your Maple or pressing the RESET button.
+
+This can also happen if you disable the USB peripheral, e.g. using
+:ref:`SerialUSB.end() <lang-serialusb-end>`.
 
 I have multiple Maples installed; how do I know which one will get flashed?
 ---------------------------------------------------------------------------
@@ -163,18 +165,25 @@ board. There's no solution to this problem for now: you'll have to
 just plug in the Maples one at a time. If this is a real problem let
 us know and we'll see if we can come up with a better solution.
 
+My flash programs don't seem to stick; they behave like they are RAM!
+---------------------------------------------------------------------
+
+If you have uploaded a program to RAM, this will take priority over
+any program subsequently uploaded to flash.  We'll be removing this
+bug in a later version of the bootloader.  For now, you can fix this
+by unplugging your Maple to clear the contents of RAM, then plugging
+it back in.
+
+If you are using the :ref:`Unix toolchain <unix-toolchain>`, Make sure
+you :command:`make clean` when switching between FLASH and RAM
+targets; :command:`make` isn't smart enough to rebuild everything that
+needs to be for the new target.
+
 .. _troubleshooting-shell:
 
 =====================
  Command-line issues
 =====================
-
-My flash programs don't seem to stick; they behave like they are RAM!
----------------------------------------------------------------------
-
-Make sure you :command:`make clean` when switching between FLASH and
-RAM targets; :command:`make` isn't smart enough to rebuild everything
-that needs to be for the new target.
 
 [Linux] ``cdc_acm 3-1:1.0: no more free acm devices``
 -----------------------------------------------------

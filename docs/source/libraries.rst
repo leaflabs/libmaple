@@ -7,6 +7,9 @@
  Maple Library Reference
 =========================
 
+.. Note: if you port an Arduino library and document it here, be sure
+.. to update compatibility.rst to reflect that fact.
+
 This page briefly summarizes the Arduino libraries that have been
 ported to Maple. You can use a library from within a sketch by going
 to Sketch > Import Library... from within the IDE, then choosing the
@@ -18,13 +21,69 @@ in the description of the library.
 .. contents:: Contents
    :local:
 
-.. _liquid_crystal:
+.. toctree::
+   :hidden:
+
+   libs/servo.rst
+
+.. _libraries-servo:
+
+Servo
+-----
+
+The Servo library is provided for convenient control of RC
+servomotors.  For more information, see the :ref:`Servo <libs-servo>`
+reference.
+
+**Compatibility Note**
+
+The Servo class provides a public interface identical to the Arduino
+version's documented functionality (as of Arduino 0021), so in most
+cases, this library will be a drop-in replacement.
+
+However, there are some differences, essentially at the level of
+implementation details.
+
+The major difference is that while the Arduino implementation drives
+the servos with "bit-banged" :ref:`PWM <pwm>`, the Maple
+implementation uses :ref:`timers <timers>` to drive the PWM directly.
+
+Consequently, **the Maple implementation only allows Servo instances
+to** :ref:`attach <libs-servo-attach>` **to pins that support PWM**.
+
+To determine if a pin supports PWM (15 Maple pins do), you can either
+check if "PWM" appears next to its number on the Maple silkscreen, or
+consult the :ref:`pwmWrite() <lang-pwmwrite>` documentation.
+
+RC Servos expect a pulse approximately every 20ms.  In the Maple
+implementation, :ref:`periods <lang-hardwaretimer-setperiod>` are set
+for entire timers, rather than individual channels.  Thus,
+``attach()``\ ing a Servo to a pin can interfere with other pins
+associated with the same timer\ [#fard-servo]_.
+
+Because of this, we recommend connecting multiple servomotors to pins
+which share a timer, in order to keep as many timers free for other
+purposes as possible.  Consult the :ref:`table provided in the timers
+reference <timers-pin-channel-map>` to match up pins and timer
+channels.
+
+Another difference: although it is not publicly documented to do so,
+the Arduino implementation of `attach()
+<http://arduino.cc/en/Reference/ServoAttach>`_ returns the timer
+channel associated with the newly-attached pin, or 0 on failure (as of
+Arduino 0021).  The Maple implementation returns true on success, and
+false on failure (and this is its documented behavior).
+
+.. _libraries-liquid-crystal:
 
 LiquidCrystal
 -------------
 
+.. TODO 0.0.10 make our own LiquidCrystal docs
+
 The LiquidCrystal library allows Maple to control LCD screens. For
-more information, see the Arduino LiquidCrystal documentation.
+more information, see the `Arduino LiquidCrystal documentation
+<http://www.arduino.cc/en/Reference/LiquidCrystal>`_.
 
 **Compatibility Note**
 
@@ -32,7 +91,7 @@ At this time, no incompatibilities between the Maple and Arduino
 versions are known. Any observed differences should be considered
 bugs, and reported on the forums.
 
-.. _wire:
+.. _libraries-wire:
 
 Wire
 ----
@@ -54,8 +113,10 @@ the hardware i2c peripheral on the stm32 as well as the DMA for
 performance. Support for slave, smBUS, and multimaster modes are also
 slated for inclusion in the enhanced Wire port.
 
-Function Reference
-^^^^^^^^^^^^^^^^^^
+.. TODO 0.0.10 Wire docs in the cpp domain in own page under /libs/
+
+Wire Function Reference
+^^^^^^^^^^^^^^^^^^^^^^^
 
 ``Wire.begin()``
     Joins the i2c bus as master, using pin 20 as SDA and pin 21 as SCL
@@ -124,3 +185,10 @@ Function Reference
     Returns the number of bytes which are still available for reading
     (with ``Wire.receive()``) from the last call to
     ``Wire.requestFrom(uint8, int)``.
+
+.. rubric:: Footnotes
+
+.. [#fard-servo] The Arduino implementation also captures timer
+   channels in groups as more Servo objects are attached, but the
+   details of which channels have their periods reset when are
+   slightly different.

@@ -45,6 +45,8 @@ typedef void (*voidFuncPtr)(void);
 
 #define __io volatile
 
+#define ALWAYS_INLINE inline __attribute__((always_inline))
+
 #ifndef NULL
 #define NULL 0
 #endif

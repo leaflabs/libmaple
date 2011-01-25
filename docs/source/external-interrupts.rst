@@ -76,7 +76,7 @@ The following table shows which pins can be used on which lines.
 
 .. note::
 
-   You should set the :ref:`pin mode <arduino-pinmode>` of your
+   You should set the :ref:`pin mode <lang-pinmode>` of your
    desired pin to an input mode (e.g ``INPUT`` or ``INPUT_FLOATING``,
    ``INPUT_PULLUP``, ``INPUT_PULLDOWN``).
 
@@ -121,6 +121,5 @@ Recommended Reading
 
 * STMicro documentation for STM32F103RB microcontroller:
 
-      * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
       * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-      * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf) 
+      * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)

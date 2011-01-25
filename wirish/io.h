@@ -80,8 +80,8 @@ typedef enum WiringPinMode {
               when it is closer to 0v (ground) it is low. If no
               external circuit is pulling the pin voltage to high or
               low, it will tend to randomly oscillate and be very
-              sensitive to noise (eg a breath of air across the pin
-              will cause the state to flip). */
+              sensitive to noise (e.g., a breath of air across the pin
+              might cause the state to flip). */
 
     INPUT_ANALOG, /**< This is a special mode for when the pin will be
                      used for analog (not digital) reads.  Enables ADC
@@ -102,7 +102,7 @@ typedef enum WiringPinMode {
                        the state will be low unless an external device
                        is specifically pulling the pin up to 3.3v, in
                        which case the "gentle" pull down will not
-                       effect the state of the input. */
+                       affect the state of the input. */
 
     INPUT_FLOATING, /**< Synonym for INPUT. */
 
@@ -145,17 +145,21 @@ void digitalWrite(uint8 pin, uint8 value);
  * @return LOW or HIGH.
  * @see pinMode()
  */
-uint32 digitalRead(uint8);
+uint32 digitalRead(uint8 pin);
 
 /**
  * Read an analog value from pin.  This function blocks during ADC
- * conversion.  The pin must have its mode set to INPUT_ANALOG.
+ * conversion, and has 12 bits of resolution.  The pin must have its
+ * mode set to INPUT_ANALOG.  Ignoring function call overhead,
+ * conversion time is 55.5 cycles.
  *
- * @param pin Pin to read from. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
- * @return ADC-converted voltage, in the range 0--4095, inclusive.
+ * @param pin Pin to read from. One of: 0, 1, 2, 3, 10, 11, 12, 13,
+ * 15, 16, 17, 18, 19, 20, 27, 28.
+
+ * @return ADC-converted voltage, in the range 0--4095, inclusive
+ * (i.e. a 12-bit ADC conversion).
+
  * @see pinMode()
- * @see analogReference()
  */
 uint32 analogRead(uint8 pin);
 

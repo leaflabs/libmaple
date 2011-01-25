@@ -29,18 +29,23 @@
 #ifndef _HARDWARESPI_H_
 #define _HARDWARESPI_H_
 
+/**
+ * Defines the possible SPI communication speeds.
+ */
 typedef enum SPIFrequency {
-    SPI_18MHZ       = 0,
-    SPI_9MHZ        = 1,
-    SPI_4_5MHZ      = 2,
-    SPI_2_25MHZ     = 3,
-    SPI_1_125MHZ    = 4,
-    SPI_562_500KHZ  = 5,
-    SPI_281_250KHZ  = 6,
-    SPI_140_625KHZ  = 7,
-    MAX_SPI_FREQS   = 8,
+    SPI_18MHZ       = 0, /**< 18 MHz */
+    SPI_9MHZ        = 1, /**< 9 MHz */
+    SPI_4_5MHZ      = 2, /**< 4.5 MHz */
+    SPI_2_25MHZ     = 3, /**< 2.25 MHZ */
+    SPI_1_125MHZ    = 4, /**< 1.125 MHz */
+    SPI_562_500KHZ  = 5, /**< 562.500 KHz */
+    SPI_281_250KHZ  = 6, /**< 281.250 KHz */
+    SPI_140_625KHZ  = 7, /**< 140.625 KHz */
+    MAX_SPI_FREQS   = 8, /**< The number of SPI frequencies. */
 } SPIFrequency;
 
+/* Documented by hand in docs/source/lang/api/hardwarespi.rst; if you
+   make any changes, make sure to update this document. */
 class HardwareSPI {
  private:
     uint32 spi_num;

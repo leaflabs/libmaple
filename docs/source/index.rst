@@ -1,43 +1,70 @@
-.. libmaple documentation master file, created by
-   sphinx-quickstart on Thu Oct  7 06:42:30 2010.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 .. _index:
 
-Maple Documentation Index
-=========================
+Maple Documentation Contents
+============================
 
-Welcome!  This is the documentation index for programming your Maple.
-It contains tutorials, quickstarts, and technical documentation.
+Welcome!  This is the Maple documentation index.  If you just bought a
+Maple, you probably want to head to the :ref:`quickstart
+<maple-quickstart>`.  If you're having problems, check out the
+:ref:`troubleshooting <troubleshooting>` and :ref:`known problems
+<errata>` pages.
 
-If you just got a new Maple, you probably want to begin with the
-:ref:`quickstart <maple-quickstart>`.  You can then move on to reading
-about the programming language you use with the Maple at the
-:ref:`language reference <language>`.  Good luck, and have fun!
+Have fun!
 
-Table of contents:
+.. _index-usage:
 
-.. TODO: be more Pythonic with a "parts of the documentation" thing
+**Usage Guides:**
+
 .. toctree::
    :maxdepth: 2
 
-   Maple Quickstart Guide <maple-quickstart>
-   Maple IDE Installation Guide <maple-ide-install>
-   Maple/Arduino Compatibility Reference <compatibility>
-   Maple Language Reference <language>
-   Maple Library Reference <libraries>
-   libmaple Command-Line Tools and APIs <libmaple>   
-   Troubleshooting <troubleshooting>
-   Hardware-Specific Documentation <hardware>
+   Quickstart <maple-quickstart>
+   IDE Installation <maple-ide-install>
+   IDE Anatomy <ide>
+
+.. _index-maple-programming:
+
+**Maple Programming:**
+
+.. toctree::
+   :maxdepth: 2
+
+   Maple Language<language>
+   Maple Libraries <libraries>
+   Arduino Compatibility <compatibility>
    External Interrupts <external-interrupts>
-   Maple bootloader <bootloader>
+   Command-Line Tools & APIs <libmaple>
+   Bootloader <bootloader>
+
+
+   Troubleshooting <troubleshooting>
    Known Problems <errata>
-   [Temporary] Arduino docs TOC <foo>
 
-Indices and tables
-==================
+.. _index-hardware:
 
-* :ref:`genindex`
-* :ref:`search`
+**Hardware Peripherals:**
+
+.. toctree::
+   :maxdepth: 1
+
+   i2c
+   pwm
+   gpio
+   usb
+   jtag
+   adc
+   spi
+   usart
+   timers
+
+.. _index-reference:
+
+**Reference:**
+
+.. toctree::
+   :maxdepth: 1
+
+   Technical Specifications <specs>
+   Complete Language Index <language-index>
+
 

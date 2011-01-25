@@ -35,7 +35,7 @@
 #define _EXT_INTERRUPTS_H_
 
 /**
- * The kind transition on an external pin which should trigger an
+ * The kind of transition on an external pin which should trigger an
  * interrupt.
  */
 typedef enum ExtIntTriggerMode_ {
@@ -57,13 +57,16 @@ extern "C"{
  *
  *  The interrupt will be triggered on a given transition on the pin,
  *  as specified by the mode parameter.  The handler runs in interrupt
- *  context.
+ *  context.  The new handler will replace whatever handler is
+ *  currently registered for the pin, if any.
  *
  *  @param pin Maple pin number
  *  @param handler Function to run upon external interrupt trigger.
+ *  The handler should take no arguments, and have void return type.
  *  @param mode Type of transition to trigger on, e.g. falling, rising, etc.
  *
  *  @sideeffect Registers a handler
+ *  @see detachInterrupt()
  */
 void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
 
@@ -71,6 +74,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
  * @brief Disable any registered external interrupt.
  * @param pin Maple pin number
  * @sideeffect unregisters external interrupt handler
+ * @see attachInterrupt()
  */
 void detachInterrupt(uint8 pin);
 
@@ -82,7 +86,7 @@ void detachInterrupt(uint8 pin);
  *
  * @see noInterrupts()
  */
-static inline __attribute__((always_inline)) void interrupts() {
+static ALWAYS_INLINE void interrupts() {
     nvic_globalirq_enable();
 }
 
@@ -96,7 +100,7 @@ static inline __attribute__((always_inline)) void interrupts() {
  *
  * @see interrupts()
  */
-static inline __attribute__((always_inline)) void noInterrupts() {
+static ALWAYS_INLINE void noInterrupts() {
     nvic_globalirq_disable();
 }
 

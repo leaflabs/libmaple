@@ -1,8 +1,10 @@
 .. highlight:: sh
 
-==================
- Maple Bootloader
-==================
+=====================
+ Maple Bootloader(s)
+=====================
+
+.. TODO: add a section on flashing your own bootloader
 
 The firmware which allows the Maple to be reprogrammed via a USB
 connection. Every Maple board comes programmed with this by default,
@@ -18,43 +20,46 @@ Flash memory and only runs when the chip is reset).
 .. contents:: Contents
    :local:
 
-Bootloader Schemes Explained!
------------------------------
+Bootloader Schemes Explained
+----------------------------
 
-Maple Rev 3 (the version currently shipping) represents a drastic
-remake of the core library as well as the upload process. Some of
-these changes are aesthetic, refactoring and reorganization. Some are
-performance minded. The changes to the bootloader, however, were
-implemented to solve some really gritty cross platform issues.  Before
-delving in to how the Rev 1 bootloader worked and how the Rev 3
-bootloader works now, lets look at the features common to both of them
-and touch a bit on the Arduino setup. This is a fairly involved
-explanation, with a lot of details that are likely only interesting to
-a few. If you just want to get the rough idea, skim this article. If
-you want to start hacking on the bootloader, get in touch with us to
-get even more info on how this all works.  Of course, you can always
-`check out the code at github <http://github.com/leaflabs/libmaple>`_!
+Maple Rev 3 and Rev 5 (Rev 5 is the version currently shipping)
+represents a drastic remake of the core library as well as the upload
+process. Thes changes to the bootloader, were implemented to resolve
+platform-specific issues on Windows.  Before delving into how the Rev
+1 bootloader worked and how the Rev 5 bootloader works now, we'll
+discuss the features common to each and touch a bit on the Arduino
+setup.
+
+This is a fairly involved explanation, with a lot of details that are
+likely only interesting to a few. If you just want to get the rough
+idea, skim this article. If you want to start hacking on the
+bootloader, get in touch with us to get even more info on how this all
+works.  And finally, you can always `check out the code at github
+<http://github.com/leaflabs/libmaple>`_!
 
 Arduino
 -------
 
-Arduino is based off of AVR series micro controllers, most of which
+Arduino is based off of AVR series microcontrollers, most of which
 lack USB support. Thus, boards like the Duemilanove add USB capability
-via an FTDI USB to Serial converter chip. This chip interfaces with
-the AVR over…serial. When you plug an Arduino into a computer, only an
-FTDI driver is needed. Since the FTDI chip is separate from the AVR,
-you can reset the Arduino without closing this USB connection with the
-FTDI chip. To program an Arduino, the host machine sends a command
-over the USB pipe (reset DTR) which in turn resets the AVR. The AVR
-will boot into a bootloader, which waits for a second for any upload
-commands over serial. The host machine can either send those commands,
-or do nothing. In which case the AVR will quickly jump to user code
+via an FTDI USB-to-Serial converter chip. This chip interfaces with
+the AVR over an RS-232 serial interface. When you plug an Arduino into
+a computer, only an FTDI driver is needed. Since the FTDI chip is
+separate from the AVR, you can reset the Arduino without closing this
+USB connection with the FTDI chip.
+
+To program an Arduino, the host machine sends a command over the USB
+pipe (reset DTR) which in turn resets the AVR. The AVR will boot into
+a bootloader, which waits for a second for any upload commands over
+serial. The host machine can either send those commands, or do
+nothing. If it does nothing, the AVR will quickly jump to user code
 and off you go.  The whole process is quick, the bootloader doesn’t
 live for very long, and will exit almost immediately if no upload
 commands are received.
 
-Maple Rev 1: The Horror...
----------------------------
+Maple Rev 1
+-----------
 
 Maple is based off the STM32 (ARM cortex M3) series chips, which do
 have embedded USB support. Thus, Maple doesn’t need the extra FTDI
@@ -90,8 +95,8 @@ platforms to make everything work this way.
 
 .. _bootloader-rev3:
 
-Maple Rev3
-----------
+Maple Rev3/Rev5 - DFU
+---------------------
 
 Maple Rev 3 takes a completely different tack, more along the lines of
 Arduino.  In Rev 3, the device resets into bootloader mode, which
@@ -132,3 +137,546 @@ alternate setting 0 or 1, respectively) and resets the board again.
 This time, however, no DFU transaction is initiated, and the
 bootloader gives way to user code, closing down the DFU pipe and
 bringing up the USB serial.
+
+.. .. _bootloader-rev6:
+
+.. Maple Rev6 - The Serial Bootloader (Tentative)
+.. ----------------------------------------------
+
+.. .. note:: This section documents an in-progress version of the Maple
+..    bootloader.  **No Maples yet sold use this bootloader protocol**.
+..    It has not been yet been publicly released, and its interface is
+..    not stable.
+
+.. The bootloader in Rev3/Rev5 works well on Linux, acceptably on Mac,
+.. but was unsatisfactory on Windows. Unlike the other operating systems,
+.. Windows needed to be manually pointed to both the driver to use for
+.. programming (DFU, via `libusb <http://www.libusb.org/>`_) and the
+.. driver to use for serial communication (usbser.sys, built in to
+.. Windows). Since Maple operates in only one of these modes at a time,
+.. driver installation was unnecessarily complicated. It was necessary to
+.. bring Maple into the correct mode before installing each of the
+.. drivers. Furthermore, because libusb is not bundled with Windows, and
+.. its driver is not signed, Windows 7 users have been forced to
+.. laboriously disable driver signing checks. Finally, Windows hates the
+.. constant switching of the device between Serial and DFU modes (during
+.. programming), and often prompts users to install drivers that are
+.. already installed. We have therefore decided to abandon DFU.
+
+.. In our new bootloader scheme, Maple is simply a serial device.
+.. Windows comes bundled with usbser.sys, so no driver signing is
+.. required.  The IDE installation process is greatly simplified, there
+.. is no more switching back and forth between "modes", and we can build
+.. in new functionality outside the DFU spec.
+
+.. The first incarnation of this serial-only bootloader leaves libmaple
+.. and user code untouched. However, during programming, instead of
+.. calling :command:`dfu-util` to upload code we will now call a newly
+.. written utility script similar to `avr-dude
+.. <http://savannah.nongnu.org/projects/avrdude/>`_. The high level
+.. operation of the bootloader will remain the same - come on at startup,
+.. wait for an upload operation or timeout, and jump to user code.
+
+.. The second version of this bootloader will eliminate this dependence
+.. on resetting and timing out by having the bootloader run in the
+.. background.  It will additionally own the serial port. In this scheme,
+.. sending data over the COM port while DTR is pulled low results in that
+.. packet being captured by the bootloader and interpreted as a
+.. bootloader command. When the user uploads a new program, the
+.. bootloader will overwrite the old one, reset the various peripheral
+.. registers, and jump to user code. All of this will occur without
+.. resetting the chip and thus causing Maple to connect and disconnect
+.. from your computer (which seems to cause many problems).
+
+.. The final version of this bootloader scheme will involve a separate
+.. microcontroller, whose responsibilities are to drive the USB port,
+.. program the main processor, and offer some amount of debugging
+.. capability. This will allow user sketches to run on the bare metal of
+.. the main processor, without any bootloader hiding underneath. This
+.. approach is similar to the approaches taken by mbed and the Arduino
+.. Uno.
+
+.. Regardless of which generation of the new serial bootloader you are
+.. working with, the command interface is the same. The low level
+.. communication protocol is inspired by STK-500, the protocol used to
+.. program many AVR-based development boards. The protocol is a
+.. packetized query-response scheme. The host PC initiates every
+.. transaction, and for every query sent to the bootloader, a single
+.. response will be returned (or the system times out). Data is
+.. transmitted over 115.2kbps, 8 data bits, 1 stop bit, no parity
+.. bit. Every query or response follows the same packet format that looks
+.. like this:
+
+.. .. _bootloader-packet-structure:
+
+.. Packet Structure
+.. ^^^^^^^^^^^^^^^^
+
+.. A bootloader packet is composed of a sequence of fields, as follows.
+
+.. .. list-table::
+..    :header-rows: 1
+
+..    * - Field
+..      - Length (bytes)
+..      - Value
+..      - Description
+
+..    * - START
+..      - 1
+..      - 0x1B
+..      - Magic constant, indicates bootloader packet
+
+..    * - SEQUENCE_NUM
+..      - 1
+..      - 0--0xFF
+..      - Queries and responses must have the same sequence number; rolls
+..        over to 0 after 0xFF
+
+..    * - MESSAGE_SIZE
+..      - 2
+..      - 0--0xFFFF
+..      - Size of message body, currently limited to a 1024B=1KB maximum
+
+..    * - TOKEN
+..      - 1
+..      - 0x7F
+..      - Differs from STK500 value of 0x0E
+
+..    * - MESSAGE_BODY
+..      - Variable, determined by MESSAGE_SIZE field
+..      - Command query or response
+..      - See :ref:`next section <bootloader-commands>`
+
+..    * - CHECKSUM
+..      - 4
+..      - XOR of all other 32-bit words in packet
+..      - See :ref:`below <bootloader-checksum>`
+
+.. .. _bootloader-checksum:
+
+.. .. highlight:: cpp
+
+.. .. note:: When computing the checksum, the words in a packet are
+..    interpreted big-endian (as if the packet were a sequence of 32-bit,
+..    big-endian unsigned integers).  If the end of the MESSAGE_BODY is
+..    not aligned with a four-byte boundary, then the checksum will treat
+..    it as if it was padded with zero bytes to a four-byte boundary.
+
+..    As a concrete example, an entire GET_INFO query (see :ref:`below
+..    <bootloader-get-info>`), including the packet structure, is
+..    comprised of the byte sequence ::
+
+..       {0x1B, 0x7F, 0x00, 0x01, 0x7F, 0x00, 0x64, 0x7F, 0x00, 0x01}
+
+..    The SEQUENCE_NUM of this query is 0x7F.
+
+.. .. highlight:: sh
+
+.. .. _bootloader-commands:
+
+.. Commands
+.. ^^^^^^^^
+
+.. The packet structure overhead is for reliability. The actual queries
+.. and responses are transacted inside of the message body.  Following
+.. the STK-500 protocol, each query or response begins with the single
+.. byte command field. For each query, the resultant response must begin
+.. with the same CMD byte. For each type of command, the structure of
+.. queries and responses is of fixed size.
+
+.. Also following STK-500, fields longer than 1 byte are transmitted MSB
+.. first (big-endian). However, READ and WRITE commands operate byte-wise
+.. (not word-wise); it is up to the host PC to ensure that alignment and
+.. ordering issues are handled appropriately.
+
+.. .. _bootloader-get-info:
+
+.. GET_INFO
+.. """"""""
+
+.. Used to query device characteristics.
+
+.. GET_INFO Query:
+
+.. .. list-table::
+..    :header-rows: 1
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - GET_INFO
+..      - 1
+..      - Value 0
+
+.. GET_INFO Response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 4 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - GET_INFO
+..      - 1
+..      - Value 0
+
+..    * - Endianness
+..      - 1
+..      - 0 indicates little-endian, 1 indicates big-endian.
+..        (Currently returns 0; this field allows for future
+..        expansion).
+
+..    * - Available Ram
+..      - 4
+..      - In bytes
+
+..    * - Available Flash
+..      - 4
+..      - In bytes
+
+..    * - Flash Page Size
+..      - 2
+..      - In bytes
+
+..    * - Starting Address (FLASH)
+..      - 4
+..      - Usually 0x08005000
+
+..    * - Starting Address (RAM)
+..      - 4
+..      - Usually 0x200000C0
+
+..    * - Bootloader Version
+..      - 4
+..      - Current version 0x00060000 (MAJ,MIN)
+
+.. .. _bootloader-erase-page:
+
+.. ERASE_PAGE
+.. """"""""""
+
+.. Used to erase flash pages.
+
+.. ERASE_PAGE query:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 4 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - ERASE_PAGE
+..      - 1
+..      - Value 1
+
+..    * - ADDRESS
+..      - 4
+..      - Will erase whichever page contains ADDRESS
+
+.. ERASE_PAGE response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 3 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - ERASE_PAGE
+..      - 1
+..      - Value 1
+
+..    * - SUCCESS
+..      - 1
+..      - Either 0 (failure) or 1 (success)
+
+.. WRITE_BYTES
+.. """""""""""
+
+.. Used to write to RAM or flash.
+
+.. WRITE_BYTES query:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 4 4 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - WRITE_BYTES
+..      - 1
+..      - Value 2
+
+..    * - Starting Address
+..      - 4
+..      - Can address arbitrary RAM, or :ref:`cleared
+..        <bootloader-erase-page>` flash pages.
+
+..    * - DATA
+..      - MESSAGE_SIZE - 5
+..      - See :ref:`Packet Structure <bootloader-packet-structure>`
+
+.. WRITE_BYTES response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - WRITE_BYTES
+..      - 1
+..      - Value 2
+
+..    * - SUCCESS
+..      - 1
+..      - Either 0 (failure) or 1 (success). Will fail if writes were
+..        made to uncleared pages.  Does not clean up failed writes
+..        (memory will be left in an undefined state).
+
+.. READ_BYTES
+.. """"""""""
+
+.. Used to read from RAM or flash.
+
+.. READ_BYTES query:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - READ_BYTES
+..      - 1
+..      - Value 3
+
+..    * - ADDRESS
+..      - 4
+..      - Start of block to read.  Must be a multiple of 4.
+
+..    * - LENGTH
+..      - 2
+..      - Maximum number of bytes to read (currently, this may be at most
+..        1024 = 1KB). Must be a multiple of 4.
+
+.. READ_BYTES response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 2 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - READ_BYTES
+..      - 1
+..      - Value 3
+
+..    * - DATA
+..      - MESSAGE_SIZE - 1
+..      - Contains read bytes.  The actual number of bytes read may be
+..        less than the LENGTH field of the corresponding READ_BYTES
+..        query. If this section is of length 0, this should be
+..        interpreted as a read failure. See
+..        :ref:`bootloader-packet-structure`.
+
+.. JUMP_TO_USER
+.. """"""""""""
+
+.. Causes the bootloader to jump to user code's starting address.
+
+.. JUMP_TO_USER query:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 1 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - JUMP_TO_USER
+..      - 1
+..      - Value 4
+
+..    * - Location
+..      - 1
+..      - 0 means jump to flash starting address, 1 means jump to RAM
+..        starting address.  See the :ref:`bootloader-get-info` command
+..        for more information.
+
+.. JUMP_TO_USER response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 1 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - JUMP_TO_USER
+..      - 1
+..      - Value 4
+
+..    * - SUCCESS
+..      - 1
+..      - Either 0 (failure) or 1 (success).  If successful, after the
+..        response is sent, the bootloader ends this session and jumps to
+..        the user code in flash or RAM as specified in the query's
+..        Location field.
+
+
+.. SOFT_RESET
+.. """"""""""
+
+.. Engages a full software reset.
+
+.. SOFT_RESET query:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 1 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - SOFT_RESET
+..      - 1
+..      - Value 5
+
+.. SOFT_RESET response:
+
+.. .. list-table::
+..    :header-rows: 1
+..    :widths: 2 1 10
+
+..    * - Field
+..      - Bytes
+..      - Comments
+
+..    * - SOFT_RESET
+..      - 1
+..      - Value 5
+
+..    * - SUCCESS
+..      - 1
+..      - Either 0 or 1 (FAILED and OK, respectively). Will end this
+..        bootloader session and reset the processor.
+
+.. _bootloader-reflashing:
+
+Flashing A Custom Bootloader
+----------------------------
+
+The STM32 microprocessor on the Maple comes with a built-in hardware
+bootloader that can be used to flash a new (software) bootloader onto
+the chip.  This section describes how to go about this, using a Maple
+Rev 3 or higher (if you have a Maple Rev 1; you don't have a BUT
+button, and won't be able to follow these directions.  A workaround is
+detailed in `this forum posting
+<http://forums.leaflabs.com/topic.php?id=32#post-126>`_).
+
+.. warning:: This section is directed at users wishing to write a
+   custom bootloader for the Maple, or update their bootloader to a
+   more recent version.  It's generally not necessary to do so, and it
+   is possible to make a mistake and e.g. render your Maple unable to
+   communicate with the IDE.  Know what you're doing, and proceed with
+   caution.
+
+.. highlight:: sh
+
+Setup
+^^^^^
+
+In order to follow these instructions, you will need:
+
+- A binary of the bootloader you want to upload
+- Hardware for communicating between the Maple and your computer over
+  serial.
+- `Python <http://python.org>`_ version 2.5 or higher, with the
+  `PySerial <http://pyserial.sourceforge.net/>`_ library installed.
+
+**Step 1: Obtain a bootloader binary**. The first thing you'll need to
+do is to compile your bootloader binary.  Note that an ASCII
+representation of the binary, such as the Intel .hex format, will not
+suffice.  For example, you can run (on a :ref:`suitably configured
+system <unix-toolchain>`) the following to obtain a binary of the
+bootloader currently used on the Maple::
+
+    $ git checkout git://github.com/leaflabs/maple-bootloader.git
+    $ cd maple-bootloader
+    $ make
+    $ ls -lh build/maple-boot.bin # this is the compiled bootloader binary
+
+**Step 2: Connect Maple Serial1 to your computer**.
+There are a variety of ways of doing this.  We use Sparkfun's `FTDI
+breakout boards <http://www.sparkfun.com/products/718>`_, but you
+could use another Maple, an Arduino, etc. -- anything that allows your
+computer to communicate with the Maple you want to reprogram over a
+serial interface.
+
+If you do use an FTDI breakout board, first make sure your Maple is
+disconnected from an external power source, be it battery, USB, or
+barrel jack.  Then, connect the FTDI board's TX pin to ``Serial1``\ 's
+RX pin (pin 8), FTDI RX to ``Serial1`` TX (pin 7), FTDI ground to
+Maple's GND, and its 3.3V pin to Maple's Vin (use the Maple's
+silkscreen for help locating these pins).  At this point, you're ready
+to plug the FTDI board into your computer (via USB).
+
+The ``Serial1`` pins are documented :ref:`here <lang-serial>`.
+
+**Step 3: Put your Maple into serial bootloader mode**.  Do this by
+pressing the RESET button, then *while RESET is held down*, pressing
+and holding the BUT button.  Next, *making sure to keep BUT held
+down*, release the RESET button and wait for a few seconds before
+releasing BUT.
+
+**Step 4: Obtain stm32loader.py**.  The
+script ``stm32loader.py`` is provided with libmaple.  If you have set
+up the :ref:`Unix toolchain <unix-toolchain>`, it is available in
+libmaple/support/stm32loader.py.  Otherwise, you can download it
+directly from `github
+<https://github.com/leaflabs/libmaple/raw/master/support/stm32loader.py>`_
+(click the link, then save the file somewhere on your system).
+
+Flashing the new Bootloader
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+We'll use ``new-boot.bin``, ``ser-port``, and ``stm32loader.py`` to
+respectively refer to the absolute paths to the bootloader binary
+(from Step 1), the serial port device file or COMM port (from Steps 2
+and 3), and the stm32loader.py script.
+
+.. highlight:: sh
+
+You can run ::
+
+    $ python stm32loader.py -h
+
+to obtain usage information.  The incantation for uploading a
+bootloader binary ``new-bootloader.bin`` is ::
+
+    $ python stm32loader.py -p ser-port -evw new-boot.bin
+
+If all goes well, you'll see a bunch of output, then "Verification
+OK".  If something goes wrong, the `forum`_ is probably your best bet
+for obtaining help, with IRC (irc.freenode.net, #leafblowers) being
+another option.  If all else fails, you can always `contact us
+directly`_!

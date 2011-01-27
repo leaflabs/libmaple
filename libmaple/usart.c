@@ -36,8 +36,8 @@
 #define USART1_BASE    0x40013800
 #define USART2_BASE    0x40004400
 #define USART3_BASE    0x40004800
-#define UART4_BASE     0x40004C00  // High-density devices only (Maple Native)
-#define UART5_BASE     0x40005000  // High-density devices only (Maple Native)
+#define USART4_BASE    0x40004C00  // High-density devices only (Maple Native)
+#define USART5_BASE    0x40005000  // High-density devices only (Maple Native)
 
 #define USART_UE       BIT(13)
 #define USART_M        BIT(12)
@@ -63,45 +63,56 @@ struct usart_dev usart_dev_table[] = {
         .rcc_dev_num = RCC_USART3,
         .nvic_dev_num = NVIC_USART3
     },
-    /*
-      #if NR_USART >= 5
-      [UART4] = {
-      .base = (usart_port*)UART4_BASE,
-      .rcc_dev_num = RCC_UART4,
-      .nvic_dev_num = NVIC_UART4
-      },
-      [UART5] = {
-      .base = (usart_port*)UART5_BASE,
-      .rcc_dev_num = RCC_UART5,
-      .nvic_dev_num = NVIC_UART5
-      },
-      #endif
-    */
+#if NR_USART >= 5
+    /* TODO test */
+    [USART4] = {
+        .base = (usart_port*)USART4_BASE,
+        .rcc_dev_num = RCC_USART4,
+        .nvic_dev_num = NVIC_USART4
+    },
+    [USART5] = {
+        .base = (usart_port*)USART5_BASE,
+        .rcc_dev_num = RCC_USART5,
+        .nvic_dev_num = NVIC_USART5
+    },
+#endif
 };
 
-/* usart interrupt handlers  */
+/* usart interrupt handlers.
+
+   Use of rb_safe_insert() implies that a full buffer ignores new
+   bytes. */
+__attribute__((always_inline)) static inline void usart_irq(int usart_num) {
+    /* TODO: use attributes to let GCC know it's always called with
+       constants, just to force the inliner to do its thing */
+#ifdef USART_SAFE_INSERT
+    rb_safe_insert(&(usart_dev_table[usart_num].rb),
+                   (uint8)((usart_dev_table[usart_num].base)->DR));
+#else
+    rb_push_insert(&(usart_dev_table[usart_num].rb),
+                   (uint8)((usart_dev_table[usart_num].base)->DR));
+#endif
+}
+
 void USART1_IRQHandler(void) {
-    rb_insert(&(usart_dev_table[USART1].rb),
-              (uint8)(((usart_port*)(USART1_BASE))->DR));
+    usart_irq(USART1);
 }
 
 void USART2_IRQHandler(void) {
-    rb_insert(&(usart_dev_table[USART2].rb),
-              (uint8)(((usart_port*)(USART2_BASE))->DR));
+    usart_irq(USART2);
 }
 
 void USART3_IRQHandler(void) {
-    rb_insert(&usart_dev_table[USART3].rb,
-              (uint8)(((usart_port*)(USART3_BASE))->DR));
+    usart_irq(USART3);
 }
+
 #if NR_USART >= 5
-void UART4_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART4].rb,
-              (uint8)(((usart_port*)(UART4_BASE))->DR));
+void USART4_IRQHandler(void) {
+    usart_irq(USART4);
 }
-void UART5_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART5].rb,
-              (uint8)(((usart_port*)(UART5_BASE))->DR));
+
+void USART5_IRQHandler(void) {
+    usart_irq(USART5);
 }
 #endif
 

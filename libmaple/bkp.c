@@ -73,7 +73,7 @@ uint16 bkp_read(uint8 reg) {
     if (addr != 0) {
         return *addr;
     }
-    ASSERT(0);
+    ASSERT(0);                  /* nonexistent register */
     return 0;
 }
 
@@ -82,4 +82,5 @@ void bkp_write(uint8 reg, uint16 val) {
     if (addr != 0) {
         *addr = val;
     }
+    ASSERT(0);                  /* nonexistent register */
 }

@@ -39,9 +39,8 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
  * @param n interrupt number
  */
 void nvic_irq_enable(uint32 n) {
-    /* TODO: bit-banding would be faster */
-    uint32 *iser = &((uint32*)NVIC_ISER0)[(n/32)];
-    __write(iser, BIT(n % 32));
+    /* TODO: test */
+    __write(BITBAND_PERI(NVIC_ISER0, n), 1);
 }
 
 /**
@@ -49,20 +48,20 @@ void nvic_irq_enable(uint32 n) {
  * @param n interrupt number
  */
 void nvic_irq_disable(uint32 n) {
-    /* TODO: bit-banding would be faster */
-    uint32 *icer = &((uint32*)NVIC_ICER0)[(n/32)];
-    __write(icer, BIT(n % 32));
+    /* TODO: test */
+    __write(BITBAND_PERI(NVIC_ICER0, n), 1);
 }
 
 void nvic_irq_disable_all(void) {
-    /* TODO why not:
-       __write(NVIC_ICER0, 0);
-       __write(NVIC_ICER1, 0);
-       */
-    short n;
-    for(n=0; n<65; n++) {
-        nvic_irq_disable(n);
-    }
+    /* Each ICER register contains 1 bit per interrupt.  Writing a 1
+       to that bit disables the corresponding interrupt.  So each of
+       the following lines disables up to 32 interrupts at a time.
+       Since low, medium, and high-density devices all have less than
+       64 interrupts, this suffices. */
+    /* TODO: fix for connectivity line: __write(NVIC_ICER2,1),
+       requires connectivity line support in libmaple.h */
+    __write(NVIC_ICER0, 1);
+    __write(NVIC_ICER1, 1);
 }
 
 /**

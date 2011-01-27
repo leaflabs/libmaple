@@ -42,8 +42,8 @@ enum {
     USART1,
     USART2,
     USART3,
-    UART4,
-    UART5,
+    USART4,
+    USART5,
 };
 
 /* peripheral register struct  */

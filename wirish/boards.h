@@ -304,74 +304,74 @@ typedef struct PinMapping {
     #define BOARD_LED_PIN    33
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
-        /* D0/PC15 */
-        {GPIOC_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D1/PA0 */
-        {GPIOA_BASE,  0,  ADC0,        TIMER2_CH1_CCR, EXTI_CONFIG_PORTA, TIMER2,        1},
-        /* D2/PA1 */
-        {GPIOA_BASE,  1,  ADC1,        TIMER2_CH2_CCR, EXTI_CONFIG_PORTA, TIMER2,        2},
-        /* D3/PA2 */
-        {GPIOA_BASE,  2,  ADC2,        TIMER2_CH3_CCR, EXTI_CONFIG_PORTA, TIMER2,        3},
-        /* D4/PA3 */
-        {GPIOA_BASE,  3,  ADC3,        TIMER2_CH4_CCR, EXTI_CONFIG_PORTA, TIMER2,        4},
-        /* D5/PA4 */
-        {GPIOA_BASE,  4,  ADC4,                    0,  EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
+        /* D0/PB11 */
+        {GPIOB_BASE, 11,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D1/PB10 */
+        {GPIOB_BASE, 10,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D2/PB2 */
+        {GPIOB_BASE,  2,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D3/PB0 */
+        {GPIOB_BASE,  0,  ADC8,        TIMER3_CH3_CCR, EXTI_CONFIG_PORTB, TIMER3,        3},
+        /* D4/PA7 */
+        {GPIOA_BASE,  7,  ADC7,        TIMER3_CH2_CCR, EXTI_CONFIG_PORTA, TIMER3,        2},
+        /* D5/PA6 */
+        {GPIOA_BASE,  6,  ADC6,        TIMER3_CH1_CCR, EXTI_CONFIG_PORTA, TIMER3,        1},
         /* D6/PA5 */
         {GPIOA_BASE,  5,  ADC5,                    0,  EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D7/PA6 */
-        {GPIOA_BASE,  6,  ADC6,        TIMER3_CH1_CCR, EXTI_CONFIG_PORTA, TIMER3,        1},
-        /* D8/PA7 */
-        {GPIOA_BASE,  7,  ADC7,        TIMER3_CH2_CCR, EXTI_CONFIG_PORTA, TIMER3,        2},
-        /* D9/PB0 */
-        {GPIOB_BASE,  0,  ADC8,        TIMER3_CH3_CCR, EXTI_CONFIG_PORTB, TIMER3,        3},
-        /* D10/PB1 */
-        {GPIOB_BASE,  1,  ADC9,        TIMER3_CH4_CCR, EXTI_CONFIG_PORTB, TIMER3,        4},
-        /* D11/PB2 */
-        {GPIOB_BASE,  2,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D12/PB10 */
-        {GPIOB_BASE, 10,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D13/PB11 */
-        {GPIOB_BASE, 11,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D14/PB13 */
-        {GPIOB_BASE, 13,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D15/PB14 */
-        {GPIOB_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D16/PB15 */
-        {GPIOB_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D17/PA8 */
-        {GPIOA_BASE,  8,  ADC_INVALID, TIMER1_CH1_CCR, EXTI_CONFIG_PORTB, TIMER1,        1},
-        /* D18/PA9 */
-        {GPIOA_BASE,  9,  ADC_INVALID, TIMER1_CH2_CCR, EXTI_CONFIG_PORTA, TIMER2,        2},
-        /* D19/PA10 */
-        {GPIOA_BASE, 10,  ADC_INVALID, TIMER1_CH3_CCR, EXTI_CONFIG_PORTA, TIMER1,        3},
-        /* D20/PA11 */
-        {GPIOA_BASE, 11,  ADC_INVALID, TIMER1_CH4_CCR, EXTI_CONFIG_PORTA, TIMER1,        4},
-        /* D21/PA12 */
-        {GPIOA_BASE, 12,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
+        /* D7/PA4 */
+        {GPIOA_BASE,  4,  ADC4,                    0,  EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
+        /* D8/PA3 */
+        {GPIOA_BASE,  3,  ADC3,        TIMER2_CH4_CCR, EXTI_CONFIG_PORTA, TIMER2,        4},
+        /* D9/PA2 */
+        {GPIOA_BASE,  2,  ADC2,        TIMER2_CH3_CCR, EXTI_CONFIG_PORTA, TIMER2,        3},
+        /* D10/PA1 */
+        {GPIOA_BASE,  1,  ADC1,        TIMER2_CH2_CCR, EXTI_CONFIG_PORTA, TIMER2,        2},
+        /* D11/PA0 */
+        {GPIOA_BASE,  0,  ADC0,        TIMER2_CH1_CCR, EXTI_CONFIG_PORTA, TIMER2,        1},
+        /* D12/PC15 */
+        {GPIOC_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
+        /* D13/PC14 */
+        {GPIOC_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
+        /* D14/PC13 */
+        {GPIOC_BASE, 13,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
+        /* D15/PB7 */
+        {GPIOB_BASE,  7,  ADC_INVALID, TIMER4_CH2_CCR, EXTI_CONFIG_PORTB, TIMER4,        1},
+        /* D16/PB6 */
+        {GPIOB_BASE,  6,  ADC_INVALID, TIMER4_CH1_CCR, EXTI_CONFIG_PORTB, TIMER4,        1},
+        /* D17/PB5 */
+        {GPIOB_BASE,  5,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D18/PB4 */
+        {GPIOB_BASE,  4,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D19/PB3 */
+        {GPIOB_BASE,  3,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D20/PA15 */
+        {GPIOA_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
+        /* D21/PA14 */
+        {GPIOA_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
         /* D22/PA13 */
         {GPIOA_BASE, 13,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D23/PA14 */
-        {GPIOA_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D24/PA15 */
-        {GPIOA_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D25/PB3 */
-        {GPIOB_BASE,  3,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D26/PB4 */
-        {GPIOB_BASE,  4,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D27/PB5 */
-        {GPIOB_BASE,  5,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D28/PB6 */
-        {GPIOB_BASE,  6,  ADC_INVALID, TIMER4_CH1_CCR, EXTI_CONFIG_PORTB, TIMER4,        1},
-        /* D29/PB7 */
-        {GPIOB_BASE,  7,  ADC_INVALID, TIMER4_CH2_CCR, EXTI_CONFIG_PORTB, TIMER4,        1},
-        /* D30/PC13 */
-        {GPIOC_BASE, 13,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D31/PC14 */
-        {GPIOC_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
+        /* D23/PA12 */
+        {GPIOA_BASE, 12,  ADC_INVALID,              0, EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
+        /* D24/PA11 */
+        {GPIOA_BASE, 11,  ADC_INVALID, TIMER1_CH4_CCR, EXTI_CONFIG_PORTA, TIMER1,        4},
+        /* D25/PA10 */
+        {GPIOA_BASE, 10,  ADC_INVALID, TIMER1_CH3_CCR, EXTI_CONFIG_PORTA, TIMER1,        3},
+        /* D26/PA9 */
+        {GPIOA_BASE,  9,  ADC_INVALID, TIMER1_CH2_CCR, EXTI_CONFIG_PORTA, TIMER2,        2},
+        /* D27/PA8 */
+        {GPIOA_BASE,  8,  ADC_INVALID, TIMER1_CH1_CCR, EXTI_CONFIG_PORTB, TIMER1,        1},
+        /* D28/PB15 */
+        {GPIOB_BASE, 15,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D29/PB14 */
+        {GPIOB_BASE, 14,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D30/PB13 */
+        {GPIOB_BASE, 13,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D31/PB12 */
+        {GPIOB_BASE, 12,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
         /* D32/PB8 */
         {GPIOB_BASE,  8,  ADC_INVALID, TIMER4_CH3_CCR, EXTI_CONFIG_PORTB, TIMER4,        3},
-        /* D33/PB12 */
-        {GPIOB_BASE, 12,  ADC_INVALID,              0, EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        /* D33/PB1 */
+        {GPIOB_BASE,  1,  ADC9,        TIMER3_CH4_CCR, EXTI_CONFIG_PORTB, TIMER3,        4},
     };
 
     /* since we want the Serial Wire/JTAG pins as GPIOs, disable both

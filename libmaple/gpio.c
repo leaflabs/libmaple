@@ -34,8 +34,9 @@ void gpio_init(void) {
     rcc_clk_enable(RCC_GPIOA);
     rcc_clk_enable(RCC_GPIOB);
     rcc_clk_enable(RCC_GPIOC);
+#if NR_GPIO_PORTS >= 4          /* Maple, but not Maple Mini */
     rcc_clk_enable(RCC_GPIOD);
-#if NR_GPIO_PORTS >= 7
+#elif NR_GPIO_PORTS >= 7        /* Maple Native (high density only) */
     rcc_clk_enable(RCC_GPIOE);
     rcc_clk_enable(RCC_GPIOF);
     rcc_clk_enable(RCC_GPIOG);

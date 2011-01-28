@@ -43,7 +43,7 @@
 #endif
 
 /* MCU-specific configuration */
-#ifdef MCU_STM32F103RB
+#if defined(MCU_STM32F103RB)
     /* e.g., LeafLabs Maple */
 
     /* Number of GPIO ports (GPIOA, GPIOB, etc.) */
@@ -80,8 +80,8 @@
     #define STACK_TOP     0x20000800
 
     /* Debug port settings (from ASSERT) */
-    #define ERROR_LED_PORT         GPIOA_BASE
-    #define ERROR_LED_PIN          5
+    #define ERROR_LED_PORT         GPIOB_BASE
+    #define ERROR_LED_PIN          12
     #define ERROR_USART_NUM        USART2
     #define ERROR_USART_BAUD       9600
     #define ERROR_TX_PORT          GPIOA_BASE
@@ -97,9 +97,8 @@
     #define BITBAND_SRAM_BASE  0x22000000
     #define BITBAND_PERI_REF   0x40000000
     #define BITBAND_PERI_BASE  0x42000000
-#endif
 
-#ifdef MCU_STM32F103ZE
+#elif defined(MCU_STM32F103ZE)
     /* e.g., LeafLabs Maple Native */
 
     #define NR_GPIO_PORTS             7
@@ -135,9 +134,8 @@
     #define BITBAND_SRAM_BASE  0x22000000
     #define BITBAND_PERI_REF   0x40000000
     #define BITBAND_PERI_BASE  0x42000000
-#endif
 
-#ifdef MCU_STM32F103CB
+#elif defined(MCU_STM32F103CB)
     /* e.g., LeafLabs Maple Mini */
 
     #define NR_GPIO_PORTS 3
@@ -151,7 +149,7 @@
     #define VCOM_ID_PRODUCT      0x0005
     #define USB_DISC_BANK        GPIOB_BASE
     #define USB_DISC_PIN         9
-    #define USB_CONFIG_MAX_POWER (100 >> 1) /* WTF does this mean */
+    #define USB_CONFIG_MAX_POWER (100 >> 1)
     #define RESET_DELAY          100
 
     #define USER_ADDR_ROM 0x08005000
@@ -174,12 +172,12 @@
     #define BITBAND_SRAM_BASE  0x22000000
     #define BITBAND_PERI_REF   0x40000000
     #define BITBAND_PERI_BASE  0x42000000
-#endif
 
-/* Make sure MCU-specific settings were defined */
-#ifndef NR_GPIO_PORTS
-#error "No MCU type specified. Add something like -DMCU_STM32F103RB " \
+#else
+
+#error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \
        "to your compiler arguments (probably in a Makefile)."
+
 #endif
 
 /* Requires board configuration info */

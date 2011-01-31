@@ -39,8 +39,8 @@ void nvic_set_vector_table(uint32 addr, uint32 offset) {
  * @param n interrupt number
  */
 void nvic_irq_enable(uint32 n) {
-    /* TODO: test */
-    __write(BITBAND_PERI(NVIC_ISER0, n), 1);
+    uint32 *iser = &((uint32*)NVIC_ISER0)[(n/32)];
+    __write(iser, BIT(n % 32));
 }
 
 /**
@@ -48,8 +48,8 @@ void nvic_irq_enable(uint32 n) {
  * @param n interrupt number
  */
 void nvic_irq_disable(uint32 n) {
-    /* TODO: test */
-    __write(BITBAND_PERI(NVIC_ICER0, n), 1);
+    uint32 *icer = &((uint32*)NVIC_ICER0)[(n/32)];
+    __write(icer, BIT(n % 32));
 }
 
 void nvic_irq_disable_all(void) {
@@ -60,8 +60,8 @@ void nvic_irq_disable_all(void) {
        64 interrupts, this suffices. */
     /* TODO: fix for connectivity line: __write(NVIC_ICER2,1),
        requires connectivity line support in libmaple.h */
-    __write(NVIC_ICER0, 1);
-    __write(NVIC_ICER1, 1);
+    __write(NVIC_ICER0, 0xFFFFFFFF);
+    __write(NVIC_ICER1, 0xFFFFFFFF);
 }
 
 /**

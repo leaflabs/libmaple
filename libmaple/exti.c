@@ -35,7 +35,7 @@ typedef struct ExtIChannel {
     uint32 irq_line;
 } ExtIChannel;
 
-volatile static ExtIChannel exti_channels[] = {
+static ExtIChannel exti_channels[] = {
     { .handler = NULL, .irq_line = NVIC_EXTI0     },  // EXTI0
     { .handler = NULL, .irq_line = NVIC_EXTI1     },  // EXTI1
     { .handler = NULL, .irq_line = NVIC_EXTI2     },  // EXTI2

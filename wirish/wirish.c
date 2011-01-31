@@ -54,7 +54,7 @@ void init(void) {
 #if NR_DAC_PINS > 0
     dac_init();
 #endif
-
+ 
     /* initialize clocks  */
     rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
     rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);

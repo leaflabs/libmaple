@@ -208,6 +208,8 @@ typedef enum {
     TIMER4,      /*< General purpose timer TIM4 */
 #if NR_TIMERS >= 8
     TIMER5,      /*< General purpose timer TIM5; high density only */
+    /* FIXME maple native: put timers 6 and 7 back in and make the
+       corresponding changes to timers.c */
     /* TIMER6,      /\*< Basic timer TIM6; high density only *\/ */
     /* TIMER7,      /\*< Basic timer TIM7; high density only *\/ */
     TIMER8,      /*< Advanced control timer TIM8; high density only */

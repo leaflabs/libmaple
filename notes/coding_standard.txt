@@ -1,21 +1,31 @@
-Source code standards for libmaple.
+libmaple Coding Standards
+=========================
 
-Do it like this unless there's a really good reason why not.  You
-being a lazy bastard doesn't count as a good reason.
+Author: Marti Bolivar (mbolivar@leaflabs.com)
+
+LeafLabs team members are required to follow these when producing new
+code.  Community contributors to libmaple are strongly encouraged to
+do so; following these rules will greatly increase the probability
+that your patches will be folded in.
+
+In general, do it like this unless there's a really good reason why
+not.  You being lazy doesn't count as a good reason.  Most, if not
+all, of these decisions are entirely arbitrary, but it's important for
+readability that we be consistent.
 
 The file .dir-locals.el in the libmaple root directory already ensures
-that many of these standards are followed by default, if you use emacs
-(and not Windows, where it would need to be named _dir_locals.el, and
-no way, man).  There's also some elisp scattered about this file which
+that many of these standards are followed by default in Emacs (but not
+on Windows, where it would need to be named _dir_locals.el, and no
+way, man).  There's also some elisp scattered about this file which
 will provide you additional help.
 
-Vim customizations to do the same thing would be nice!
+Vim customizations to do the same thing would be nice (hint, hint)!
 
 License
 -------
 
 - Put an MIT license at the beginning of the file (look at any of our
-  source files for an example).  Copyright should go to either your or
+  source files for an example).  Copyright should go to either you or
   LeafLabs LLC.
 
   Emacs: if you don't like seeing the license, you should use
@@ -31,8 +41,8 @@ License
     (dolist (hook mbolivar-programming-mode-hooks)
       (add-hook hook (lambda () (elide-head))))
 
-Whitespace
-----------
+Whitespace/Indentation
+----------------------
 
 - 4 space indents.  [Set in .dir-locals.el]
 
@@ -45,16 +55,27 @@ Whitespace
 
     http://github.com/mbolivar/code-fascism
 
-  I hear tell you can get something similar in vim; ask Perry, I
+  I hear tell you can get something similar in vim; ask around, I
   guess.
 
 - Files end in exactly one newline. [The presence of a newline at EOF
   is already done by `c-require-final-newline' in recent versions of
   emacs.]
 
-- Exactly two newlines separate source paragraphs.
+- Exactly two newlines separate source paragraphs (you do separate
+  your code into paragraphs, don't you?).
 
 - The first line in a function is non-blank.
+
+- Don't indent C code within a conditionally-compiled extern "C"
+  block.  Emacs does this by default, which can be very annoying; you
+  can turn this behavior off with
+
+        (defun c-mode-inextern-lang-hook ()
+          (setcdr (assq 'inextern-lang c-offsets-alist) '-))
+
+        (add-hook 'c-mode-hook c-mode-inextern-lang-hook)
+
 
 Comments
 --------
@@ -72,6 +93,7 @@ Comments
      * the comment can end on the same line */
 
 - Doxygen comments are newline comments that begin with /** instead.
+  It is not required that the "/**" appear on a line by itself.
 
 - Single-line comments on the same line are // in c or c++.
 
@@ -94,9 +116,13 @@ Braces
 Naming conventions
 ------------------
 
-So there's always a fight about upper and lower case vs. underscores.
-We'll handle this as follows.  First, Dammit_Dont_Mix_Like_This,
-because It_Looks_Really_Ugly, ok?
+- There's always a fight about upper and lower case vs. underscores.
+  We'll handle this as follows.
+
+  First, Dammit_Dont_Mix_Like_This, because It_Looks_Really_Ugly, ok?
+  [There's been some debate about this, and some exceptions are
+  already grandfathered in, so in order to settle it, let's call this
+  a "recommendation" instead of "requirement".]
 
 - Variables: Use underscores to separate words in C identifiers:
 
@@ -109,7 +135,7 @@ because It_Looks_Really_Ugly, ok?
   this_is_not, and like I said, Dont_You_DareTryANYTHING_STUPID.
 
 - Functions: C functions are all lowercase, and words are separated by
-  underscores.  C++ method names are camel cased.
+  underscores.  C++ method names are camel cased (thisIsAnExample).
 
 - Structs: pick a style from "Variables" or "Classes" depending on how
   you mean it (since it might be either a simple record type, in which
@@ -118,8 +144,16 @@ because It_Looks_Really_Ugly, ok?
   probably put _t at the end, but maybe you won't, and I don't really
   feel too strongly about it.
 
+- Macros and constants: all caps, separated by underscores.  Variables
+  with the "const" qualifier aren't considered "constants" for the
+  purposes of this rule; i.e., case them according to the rules for
+  variables.
+
+- foo.h gets #ifdef'ed to _FOO_H_.
+
 - Acronyms: The case of letters in an acronym is determined by the
-  case of the first letter in the acronym.  Examples:
+  case of the first letter in the acronym, which is determined by
+  following the above rules.  Examples:
 
       void usb_func() { ... }
 
@@ -128,21 +162,28 @@ because It_Looks_Really_Ugly, ok?
           void initUSB();
       };
 
-  NEVER DO THIS:
+  Never do this:
 
       class BadUsb { ... }; // say "GoodUSB" instead
-
-- Macros and constants: all caps, separated by underscores.
-
-- foo.h gets ifdef'ed to _FOO_H_.
 
 Documentation
 -------------
 
-- Document your code, bitches!
+- Document your code!
 
-- At least put a doxygen comment with a nonempty @brief for every
-  source file you add.  See the existing ones for examples.
+- For complicated peripherals, it would be nice if you put longer-form
+  comments into this directory (notes/), with a comment in the
+  corresponding .h file referring to it.  See libmaple/dac.h for an
+  example.  That lets us keep the source files relatively clean while
+  still allowing new readers to have a starting point.
+
+- At least put a doxygen comment with a nonempty @brief for every .h
+  file you add.  See the existing ones for examples.  For now, it'd be
+  better if you didn't put a @brief into any .c[pp] files, since it
+  (currently) interferes with our documentation generator in a way
+  that I won't explain here (though you can look into the LeafLabs or
+  michaeljones breathe repos on github and potentially figure out
+  why).
 
 General Formatting
 ------------------
@@ -157,8 +198,17 @@ General Formatting
 
     http://www.helsinki.fi/~sjpaavol/programs/lineker.el
 
-  Then put the file somewhere in your load-path, and
+  Then put the file somewhere in your load-path, and:
 
     (require 'lineker)
     (dolist (hook programming-mode-hooks)
       (add-hook hook (lambda () (lineker-mode 1))))
+
+  Where "programming-mode-hooks" is a list that should at least
+  include c-mode-hook and c++-mode-hook; e.g.:
+
+    (setq programming-mode-hooks '(c-mode-hook
+                                   c++-mode-hook
+                                   python-mode-hook
+                                   ...
+                                   ))

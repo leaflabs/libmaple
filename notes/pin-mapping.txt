@@ -21,8 +21,12 @@ PC12                   DISC
 PD0                    OSC_IN
 PD1                    OSC_OUT
 
+Alternate function remaps:
+
+None?
+
 -------------------------------------------------------------------------------
-Pin    STM32 PIN   ADC    Timer          I2C        UART        SPI         F/T
+Pin    STM32 PIN   ADC    Timer          I2C        UART        SPI         5v?
 -------------------------------------------------------------------------------
 D0     PA3         ADC3   TIM2_CH4       -          USART2_RX   -           -
 D1     PA2         ADC2   TIM2_CH3       -          USART2_TX   -           -
@@ -90,7 +94,7 @@ PB9          DISC
 PD0          OSC_IN
 PD1          OSC_OUT
 
-Alternate function remaps (in ../wirish/boards.h BOARD_INIT):
+Alternate function remaps:
 
 Pin    Default   Remap
 ---    -------   -----
@@ -101,7 +105,7 @@ PA14   JTCK      GPIO
 PA13   JTMS      GPIO
 
 -------------------------------------------------------------------------------
-Pin    STM32 PIN   ADC    Timer          I2C        USART       SPI         F/T
+Pin    STM32 PIN   ADC    Timer          I2C        USART       SPI         5v?
 -------------------------------------------------------------------------------
 D0     PB11        -      -              I2C2_SDA   USART3_RX   -           Y
 D1     PB10        -      -              I2C2_SCL   USART3_TX   -           Y
@@ -126,9 +130,6 @@ D19    PB3         -      -              -          -           -           Y
 D20    PA15        -      -              -          -           -           Y
 D21    PA14        -      -              -          -           -           Y
 D22    PA13        -      -              -          -           -           Y
--------------------------------------------------------------------------------
-Pin    STM32 PIN   ADC    Timer          I2C        USART       SPI         F/T
--------------------------------------------------------------------------------
 # D23 is USBDP, but supports:  
        PA12        -      -              -          -           -           Y
 # D24 is USBDM, but supports:
@@ -145,3 +146,18 @@ D33    PB1         ADC9   TIM3_CH4       -          -           -           -
 
 TODO:
 - [?] JTAG pins for GPIO
+
+============
+Maple Native
+============
+
+Reserved pins:
+
+TODO
+
+Alternate function remaps:
+
+TODO
+
+The pin map on Maple Native is in flux.  However, the bank/port pin
+definitions are available in notes/native-pin-definitions.txt.

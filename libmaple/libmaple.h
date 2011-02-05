@@ -102,9 +102,9 @@
     /* e.g., LeafLabs Maple Native */
 
     #define NR_GPIO_PORTS             7
-    #define NR_GPIO_PINS             63
+    #define NR_GPIO_PINS            100
     #define NR_TIMERS                 8
-    #define NR_USART                  3
+    #define NR_USART                  5 /* NB: 4 and 5 are UART only */
     #define NR_FSMC                   1
     #define NR_DAC_PINS               2
 

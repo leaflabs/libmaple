@@ -2,10 +2,11 @@ Quick TODO --------------------------------------------------------------------
 
 - write language unit test
 - more maple-specific example programs
+- maple mini serial bootloader HOWTO
+- maple and mini jtag HOWTO
 
 Peripherals -------------------------------------------------------------------
 
-- complete timers and interrupt stuff
 - I2C wrap up
 - SPI wrap up
 
@@ -15,9 +16,6 @@ EEPROM:
     functions:
         uint8 read(int)
         void write(int, uint8)
-
-Servo:
-    modify timer code, "banks" of pins corresponding to a timer
 
 Firmata:
     edit Firmata.h for capabilities

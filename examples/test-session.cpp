@@ -15,6 +15,9 @@
 //#define COMM Serial2
 //#define COMM Serial3
 
+
+#define ESC       ((uint8)27)
+
 int rate = 0;
 
 #if defined(BOARD_maple)
@@ -27,8 +30,13 @@ const uint8 adc_pins[] =
 const uint8 pwm_pins[] = {3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27};
 const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33}; // NB: 33 is LED
 
-#elif defined(BOARD_maple_native) // TODO maple native
-#error "No Maple Native support here yet"
+#elif defined(BOARD_maple_native)
+const uint8 pwm_pins[] = {12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45,
+                          46, 47, 48, 49, 50, 53, 54};
+const uint8 adc_pins[] = {6, 7, 8, 9, 10, 11,
+                          /* the following are on ADC3, which lacks support:
+                             39, 40, 41, 42, 43, 45, */
+                          46, 47, 48, 49, 50, 51, 52, 53, 54};
 
 #else
 #error "Board type has not been selected correctly"
@@ -37,10 +45,8 @@ const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33}; // NB: 33 is LED
 
 uint8 gpio_state[NR_GPIO_PINS];
 
-#define DUMMY_DAT ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="     \
-                   "qwertyuiopasdfghjklzxcvbnm,./1234567890")
-
-#define ESC       ((uint8)27)
+const char* const dummy_dat = ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="
+                               "qwertyuiopasdfghjklzxcvbnm,./1234567890");
 
 void cmd_print_help(void);
 void cmd_adc_stats(void);
@@ -145,16 +151,16 @@ void loop () {
 
         case 'W':
             while(!COMM.available()) {
-                Serial1.print(DUMMY_DAT);
-                Serial2.print(DUMMY_DAT);
-                Serial3.print(DUMMY_DAT);
+                Serial1.print(dummy_dat);
+                Serial2.print(dummy_dat);
+                Serial3.print(dummy_dat);
             }
             break;
 
         case 'U':
             COMM.println("Dumping data to USB. Press any key.");
             while(!COMM.available()) {
-                SerialUSB.print(DUMMY_DAT);
+                SerialUSB.print(dummy_dat);
             }
             break;
 
@@ -324,8 +330,8 @@ void cmd_stressful_adc_stats(void) {
                 pwmWrite(pwm_pins[j], 1000 + i);
             }
         }
-        SerialUSB.print(DUMMY_DAT);
-        SerialUSB.print(DUMMY_DAT);
+        SerialUSB.print(dummy_dat);
+        SerialUSB.print(dummy_dat);
         measure_adc_noise(adc_pins[i]);
         for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
             if(adc_pins[i] != pwm_pins[j]) {
@@ -389,7 +395,7 @@ void do_serials(HardwareSerial **serials, int n, unsigned baud) {
     }
     while (!COMM.available()) {
         for (int i = 0; i < n; i++) {
-            serials[i]->println(DUMMY_DAT);
+            serials[i]->println(dummy_dat);
             if (serials[i]->available()) {
                 serials[i]->println(serials[i]->read());
                 delay(1000);

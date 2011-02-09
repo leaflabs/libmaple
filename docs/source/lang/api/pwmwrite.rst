@@ -33,21 +33,20 @@ Sets the output to the LED proportional to the value read from the
 potentiometer::
 
     int analogPin = 3;    // potentiometer connected to analog pin 3
-    int val = 0;          // variable to store the read value
 
     void setup() {
       pinMode(BOARD_LED_PIN, OUTPUT);   // sets the LED pin as output
 
-      pinMode(analogPin, PWM);   // sets the potentiometer pin as PWM
-                                 // output
+      pinMode(analogPin, INPUT_ANALOG); // sets the potentiometer pin as
+                                        // analog input
     }
 
     void loop() {
-      val = analogRead(analogPin);   // read the input pin
+      int val = analogRead(analogPin);        // read the input pin
 
-      analogWrite(BOARD_LED_PIN, val / 16);  // analogRead values go from 0
-                                             // to 4095, analogWrite values
-                                             // from 0 to 65535
+      pwmWrite(BOARD_LED_PIN, val * 16);  // analogRead values go from 0
+                                          // to 4095, pwmWrite values
+                                          // from 0 to 65535, so scale roughly
     }
 
 See Also

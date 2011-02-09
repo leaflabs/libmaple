@@ -6,11 +6,20 @@ detachInterrupt()
 Used to disable an interrupt specified with
 :ref:`lang-attachinterrupt`\ .
 
-
 Library Documentation
 ---------------------
 
-.. doxygenfunction:: detachInterrupt
+.. FIXME once breathe knows how to get the correct detachInterupt
+.. (right now it's copying from HardwareTimer), replace with a
+.. doxygenfunction directive
+
+.. cpp:function:: void detachInterrupt(uint8 pin)
+
+   Disable any registered external interrupt on the given pin.
+
+   *Parameters*
+
+       - ``pin`` Maple pin number
 
 Arduino Compatibility
 ---------------------
@@ -30,8 +39,5 @@ See Also
 --------
 
 - :ref:`attachInterrupt() <lang-attachInterrupt>`
-
-
-
 
 .. include:: cc-attribution.txt

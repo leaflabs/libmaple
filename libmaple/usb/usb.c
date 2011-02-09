@@ -376,8 +376,8 @@ uint16 usbSendBytes(uint8* sendBuf, uint16 len) {
   if (loaded) {
     UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR + countTx, loaded);
     _SetEPTxCount(VCOM_TX_ENDP, countTx+loaded);
-    _SetEPTxValid(VCOM_TX_ENDP);
     countTx += loaded;
+    _SetEPTxValid(VCOM_TX_ENDP);
   }
 
   return loaded;

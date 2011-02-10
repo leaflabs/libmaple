@@ -317,6 +317,8 @@ For example, to set the prescale factor on timer 1 to 5, call
     The :ref:`setPeriod() <lang-hardwaretimer-setperiod>` method may
     also be used as a convenient alternative.
 
+.. _lang-hardwaretimer-resume:
+
 .. cpp:function:: void HardwareTimer::resume()
 
     Resume a paused timer, without affecting its configuration.

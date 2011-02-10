@@ -97,7 +97,7 @@ particular, on Maple, ints do not overflow (become negative) until
 they reach 2,147,483,648; on the Arduino, they overflow at 32,767.
 Because of this, programs running on Maple are much less likely to run
 into overflow issues.  The following table summarizes the sizes and
-ranges of integer datatypes on the Maple (the ranges of long long
+ranges of integer datatypes on the Maple (the ranges of ``long long``
 types are approximate):
 
 .. _lang-arithmetic-int-sizes:

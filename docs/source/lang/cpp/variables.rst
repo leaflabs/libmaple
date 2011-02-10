@@ -44,7 +44,7 @@ Here are a few examples of declaring variables of different types::
 
      int lightSensVal;
      char currentLetter;
-     unsigned long speedOfLight = 186000UL;
+     unsigned long long speedOfLight = 186000ULL;
      char errorMessage = {"choose another option"}; // see string
 
 Naming Variables

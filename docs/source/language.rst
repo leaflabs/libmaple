@@ -102,59 +102,59 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |* :ref:`unsigned int <lang-unsignedint>`      |                                                   |
 |* :ref:`#include <lang-include>`            |  (4 bytes)                                   |* :ref:`micros() <lang-micros>`                    |
 |                                            |                                              |                                                   |
-|                                            |* :ref:`long <lang-long>` (8 bytes)           |* :ref:`delay() <lang-delay>`                      |
-|**Arithmetic Operators**                    |                                              |                                                   |
-|                                            |* :ref:`unsigned long <lang-unsignedlong>`    |* :ref:`delayMicroseconds()                        |
-|* :ref:`= <lang-assignment>`                |  (8 bytes)                                   |  <lang-delaymicroseconds>`                        |
-|  (assignment operator)                     |                                              |                                                   |
-|                                            |* :ref:`float <lang-float>` (4 bytes)         |                                                   |
-|* :ref:`+ <lang-arithmetic>` (addition)     |                                              |**Math**                                           |
-|                                            |* :ref:`double <lang-double>` (8 bytes)       |                                                   |
-|* :ref:`- <lang-arithmetic>`                |                                              |* :ref:`min() <lang-min>`                          |
-|  (subtraction)                             |* :ref:`Strings <lang-string>`                |                                                   |
+|                                            |* ``long`` (4 bytes), synonym for :ref:`int   |* :ref:`delay() <lang-delay>`                      |
+|**Arithmetic Operators**                    |  <lang-int>`                                 |                                                   |
+|                                            |                                              |* :ref:`delayMicroseconds()                        |
+|* :ref:`= <lang-assignment>`                |* ``unsigned long`` (4 bytes), synonym for    |  <lang-delaymicroseconds>`                        |
+|  (assignment operator)                     |  :ref:`unsigned int <lang-unsignedint>`      |                                                   |
+|                                            |                                              |                                                   |
+|* :ref:`+ <lang-arithmetic>` (addition)     |* :ref:`long long <lang-longlong>` (8 bytes)  |**Math**                                           |
+|                                            |                                              |                                                   |
+|* :ref:`- <lang-arithmetic>`                |* :ref:`unsigned long                         |* :ref:`min() <lang-min>`                          |
+|  (subtraction)                             |  long <lang-unsignedlonglong>` (8 bytes)     |                                                   |
 |                                            |                                              |* :ref:`max() <lang-max>`                          |
-|* :ref:`* <lang-arithmetic>`                |* :ref:`Arrays <lang-array>`                  |                                                   |
+|* :ref:`* <lang-arithmetic>`                |* :ref:`float <lang-float>` (4 bytes)         |                                                   |
 |  (multiplication)                          |                                              |* :ref:`abs() <lang-abs>`                          |
-|                                            |* :ref:`enum <lang-enum>`                     |                                                   |
+|                                            |* :ref:`double <lang-double>` (8 bytes)       |                                                   |
 |* :ref:`/ <lang-arithmetic>` (division)     |                                              |* :ref:`constrain() <lang-constrain>`              |
-|                                            |* :ref:`Numeric types <lang-built-in-types>`  |                                                   |
+|                                            |* :ref:`strings <lang-string>`                |                                                   |
 |* :ref:`% <lang-modulo>` (modulo)           |                                              |* :ref:`map() <lang-map>`                          |
-|                                            |**Conversion**                                |                                                   |
+|                                            |* :ref:`arrays <lang-array>`                  |                                                   |
 |                                            |                                              |* :ref:`pow() <lang-pow>`                          |
-|**Comparison Operators**                    |* :ref:`char() <lang-charcast>`               |                                                   |
+|**Comparison Operators**                    |* :ref:`enum <lang-enum>`                     |                                                   |
 |                                            |                                              |* :ref:`sqrt() <lang-sqrt>`                        |
-|* :ref:`== <lang-comparison>` (equal to)    |* :ref:`byte() <lang-bytecast>`               |                                                   |
+|* :ref:`== <lang-comparison>` (equal to)    |* :ref:`numeric types <lang-built-in-types>`  |                                                   |
 |                                            |                                              |                                                   |
-|* :ref:`\!= <lang-comparison>`              |* :ref:`int() <lang-intcast>`                 |**Trigonometry**                                   |
+|* :ref:`\!= <lang-comparison>`              |**Conversion**                                |**Trigonometry**                                   |
 |  (not equal to)                            |                                              |                                                   |
-|                                            |* :ref:`long() <lang-longcast>`               |* :ref:`sin() <lang-sin>`                          |
+|                                            |* :ref:`char() <lang-charcast>`               |* :ref:`sin() <lang-sin>`                          |
 |* :ref:`< <lang-comparison>` (less than)    |                                              |                                                   |
-|                                            |* :ref:`float() <lang-floatcast>`             |* :ref:`cos() <lang-cos>`                          |
+|                                            |* :ref:`byte() <lang-bytecast>`               |* :ref:`cos() <lang-cos>`                          |
 |* :ref:`> <lang-comparison>`                |                                              |                                                   |
-|  (greater than)                            |* :ref:`double() <lang-doublecast>`           |* :ref:`tan() <lang-tan>`                          |
+|  (greater than)                            |* :ref:`int() <lang-intcast>`                 |* :ref:`tan() <lang-tan>`                          |
 |                                            |                                              |                                                   |
-|* :ref:`<= <lang-comparison>`               |                                              |                                                   |
-|  (less than or equal to)                   |**Variable Scope & Qualifiers**               |**Random Numbers**                                 |
-|                                            |                                              |                                                   |
-|* :ref:`>= <lang-comparison>`               |* :ref:`variables <lang-variables>`,          |* :ref:`randomSeed() <lang-randomseed>`            |
-|  (greater than or equal to)                |  :ref:`scope <lang-variables-scope>`         |                                                   |
+|* :ref:`<= <lang-comparison>`               |* :ref:`long() <lang-longcast>`               |                                                   |
+|  (less than or equal to)                   |                                              |**Random Numbers**                                 |
+|                                            |* :ref:`float() <lang-floatcast>`             |                                                   |
+|* :ref:`>= <lang-comparison>`               |                                              |* :ref:`randomSeed() <lang-randomseed>`            |
+|  (greater than or equal to)                |* :ref:`double() <lang-doublecast>`           |                                                   |
 |                                            |                                              |* :ref:`random() <lang-random>`                    |
-|                                            |* :ref:`static <lang-static>`                 |                                                   |
-|**Boolean Operators**                       |                                              |                                                   |
-|                                            |* :ref:`volatile <lang-volatile>`             |**Bits and Bytes**                                 |
-|* :ref:`&& <lang-boolean-and>` (and)        |                                              |                                                   |
-|                                            |* :ref:`const <lang-const>`                   |* :ref:`lowByte() <lang-lowbyte>`                  |
-|* :ref:`|| <lang-boolean-or>` (or)          |                                              |                                                   |
-|                                            |                                              |* :ref:`highByte() <lang-highbyte>` is             |
-|* :ref:`\! <lang-boolean-not>` (not)        |**Utilities**                                 |  provided, though its use is discouraged.         |
 |                                            |                                              |                                                   |
-|                                            |* :ref:`sizeof() <lang-sizeof>`               |* :ref:`bitRead() <lang-bitread>`                  |
-|**Pointer Operators**                       |                                              |                                                   |
+|**Boolean Operators**                       |**Variable Scope & Qualifiers**               |                                                   |
+|                                            |                                              |**Bits and Bytes**                                 |
+|* :ref:`&& <lang-boolean-and>` (and)        |* :ref:`variables <lang-variables>`,          |                                                   |
+|                                            |  :ref:`scope <lang-variables-scope>`         |* :ref:`lowByte() <lang-lowbyte>`                  |
+|* :ref:`|| <lang-boolean-or>` (or)          |                                              |                                                   |
+|                                            |* :ref:`static <lang-static>`                 |* :ref:`highByte() <lang-highbyte>` is             |
+|* :ref:`\! <lang-boolean-not>` (not)        |                                              |  provided, though its use is discouraged.         |
+|                                            |* :ref:`volatile <lang-volatile>`             |                                                   |
+|                                            |                                              |* :ref:`bitRead() <lang-bitread>`                  |
+|**Pointer Operators**                       |* :ref:`const <lang-const>`                   |                                                   |
 |                                            |                                              |* :ref:`bitWrite() <lang-bitwrite>`                |
 |* :ref:`* dereference operator              |                                              |                                                   |
-|  <lang-pointer>`                           |                                              |* :ref:`bitSet() <lang-bitset>`                    |
+|  <lang-pointer>`                           |**Utilities**                                 |* :ref:`bitSet() <lang-bitset>`                    |
 |                                            |                                              |                                                   |
-|* :ref:`& reference operator                |                                              |* :ref:`bitClear() <lang-bitclear>`                |
+|* :ref:`& reference operator                |* :ref:`sizeof() <lang-sizeof>`               |* :ref:`bitClear() <lang-bitclear>`                |
 |  <lang-pointer>`                           |                                              |                                                   |
 |                                            |                                              |* :ref:`bit() <lang-bit>`                          |
 |                                            |                                              |                                                   |

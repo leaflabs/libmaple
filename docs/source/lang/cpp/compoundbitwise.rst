@@ -31,8 +31,8 @@ value of ``y``::
     x &= y;   // equivalent to x = x & y;
 
 You can use any integer variable for ``x`` (i.e., any variable of type
-``int``, ``long``, ``char``, ``byte``, etc.).  You can use either an
-integer variable or any :ref:`integer value
+``int``, ``char``, ``byte``, ``long long``, etc.).  You can use either
+an integer variable or any :ref:`integer value
 <lang-constants-integers>` (like ``3`` or ``0x20``) for ``y``.
 
 Before doing an example of ``&=``, let's first review the Bitwise AND
@@ -115,9 +115,9 @@ its old value bitwise ORed with the value of ``y``::
     x |= y;   // equivalent to x = x | y;
 
 You can use any integer variable for ``x`` (i.e., any variable of type
-``int``, ``long``, ``char``, ``byte``, etc.).  You can use either an
-integer variable or any integer value (like ``3`` or ``0x20``) for
-``y``.  (This works the same way as :ref:`compound bitwise AND
+``int``, ``char``, ``long long`` etc.).  You can use either an integer
+variable or any integer value (like ``3`` or ``0x20``) for ``y``.
+(This works the same way as :ref:`compound bitwise AND
 <lang-compoundbitwise-and>`\ , ``&=``).
 
 Before doing an example of ``|=``, let's first review the Bitwise OR
@@ -178,12 +178,11 @@ will be equal to its old value bitwise XORed with the value of ``y``::
     x ^= y;   // equivalent to x = x ^ y;
 
 You can use any integer variable for ``x`` (i.e., any variable of type
-``int``, ``long``, ``char``, ``byte``, etc.).  You can use either an
+``int``, ``char``, ``long long``, etc.).  You can use either an
 integer variable or any integer value (like ``3`` or ``0x20``) for
 ``y``.  (This works the same way as :ref:`&=
-<lang-compoundbitwise-and>` and :ref:`\|=
-<lang-compoundbitwise-or>`; in fact, these three operators all
-work the same in this way).
+<lang-compoundbitwise-and>` and :ref:`\|= <lang-compoundbitwise-or>`;
+in fact, these three operators all work the same in this way).
 
 Before doing an example of ``^=``, let's first review the Bitwise
 XOR operator, ``^``::

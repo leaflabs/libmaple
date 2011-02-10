@@ -40,7 +40,7 @@ Tip
 
 Since the return value for ``millis()`` is an :ref:`unsigned long
 <lang-unsignedlong>`, overflow errors may occur if you try to do math
-with other data types, such as :ref:`ints <lang-int>`.
+with other data types, such as :ref:`chars <lang-char>`.
 
 See Also
 --------

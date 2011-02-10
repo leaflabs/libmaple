@@ -33,7 +33,7 @@ Integral types
 
 .. cpp:type:: long
 
-   64-bit integer value.
+   32-bit integer value.
 
 .. cpp:type:: long long
 

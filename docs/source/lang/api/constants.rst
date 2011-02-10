@@ -242,10 +242,18 @@ type, follow it with:
   For example, ``33U`` is an :ref:`unsigned int <lang-unsignedint>`.
 
 - an ``l`` or ``L`` to interpret the constant as a long value.  For
-  example, ``100000L`` is a :ref:`long <lang-long>`.
+  example, ``100000L`` is a :ref:`long <lang-long>`.  On the Maple,
+  ``long`` is just a synonym for ``int``.
 
 - a ``ul`` or ``UL`` to do both.  For example, ``32767UL`` is an
-  :ref:`unsigned long <lang-unsignedlong>`.
+  :ref:`unsigned long <lang-unsignedlong>`.  On the Maple, ``unsigned
+  long`` is just a synonym for ``unsigned int``.
+
+- an ``ll`` or ``LL`` to interpret the constant as a :ref:`long long
+  <lang-longlong>` value.
+
+- a ``ull`` or ``ULL`` to interpret the constant as an :ref:`unsigned
+  long long <lang-unsignedlonglong>`.
 
 .. _lang-constants-fp:
 
@@ -321,6 +329,8 @@ See Also
 - :ref:`unsigned int <lang-unsignedint>`
 - :ref:`long <lang-long>`
 - :ref:`unsigned long <lang-unsignedlong>`
+- :ref:`long long <lang-longlong>`
+- :ref:`unsigned long long <lang-unsignedlonglong>`
 - :ref:`float <lang-float>`
 - :ref:`double <lang-double>`
 

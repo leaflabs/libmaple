@@ -18,8 +18,7 @@ which has values ``HOT``, ``COMFY``, and ``COLD``::
     enum weather {HOT, COMFY, COLD};
 
 Once you've defined this type, you can create variables of type
-``weather``, in the same way you would with an :ref:`int <lang-int>`
-or a :ref:`long <lang-long>`::
+``weather``, in the same way you would with an :ref:`int <lang-int>`::
 
     // create a weather variable named theWeather, with value COMFY:
     weather theWeather = COMFY;

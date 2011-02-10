@@ -89,11 +89,11 @@ Types
 The following keywords are used for built-in types.
 
 - :ref:`bool <lang-booleanvariables>`
-- :ref:`lang-char`
-- :ref:`lang-double`
-- :ref:`lang-float`
-- :ref:`lang-int`
-- :ref:`lang-long`
+- :ref:`char <lang-char>`
+- :ref:`double <lang-double>`
+- :ref:`float <lang-float>`
+- :ref:`int <lang-int>`
+- :ref:`long <lang-long>`
 - :ref:`short <lang-built-in-types-integral>`
 - :ref:`void <lang-void>` (not really a type, but used in the absence
   of one)
@@ -109,8 +109,7 @@ Qualifiers
   variables; it has other uses not documented here.
 
 - ``unsigned`` is used to specify an unsigned integral type.
-  Examples: :ref:`lang-unsignedint`, :ref:`lang-unsignedchar`,
-  :ref:`lang-unsignedlong`.
+  Examples: :ref:`lang-unsignedint`, :ref:`lang-unsignedchar`.
 
 - :ref:`volatile <lang-volatile>` is useful when declaring variables
   that may be modified by external interrupts.

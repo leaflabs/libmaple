@@ -7,12 +7,12 @@ random()
 
 The ``random()`` function generates pseudo-random numbers.
 
-.. TODO keep tracking Sphinx/Breathe's ability to reference overloaded
-.. functions so we can use doxygenfunction instead of manually
-.. documenting this.
-
 Library Documentation
 ---------------------
+
+.. FIXME keep tracking Sphinx/Breathe's ability to reference
+.. overloaded functions so we can use doxygenfunction instead of
+.. manually documenting.
 
 .. cpp:function:: random(long max)
 

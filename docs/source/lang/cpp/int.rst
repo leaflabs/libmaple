@@ -24,6 +24,10 @@ arithmetic operations work mostly as you'd expect. There can be an
 dealing with the :ref:`bitshift right operator (>>)
 <lang-bitshift>`, however.
 
+.. _lang-long:
+
+The ``long`` type is a synonym for ``int``.
+
 Here is an example of declaring an ``int`` variable named ``ledPin``,
 then giving it value 13::
 
@@ -56,8 +60,8 @@ See Also
 -  :ref:`unsigned int <lang-unsignedint>`
 -  :ref:`char <lang-char>`
 -  :ref:`unsigned char <lang-unsignedchar>`
--  :ref:`long <lang-long>`
--  :ref:`unsigned long <lang-unsignedlong>`
+-  :ref:`long long <lang-longlong>`
+-  :ref:`unsigned long long <lang-unsignedlonglong>`
 -  :ref:`Integer Constants <lang-constants-integers>`
 -  :ref:`Variables <lang-variables>`
 

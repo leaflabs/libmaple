@@ -21,7 +21,7 @@ Syntax:
 
 In the second case, ``value`` should have a type which is the same as
 the return type of the function, or be convertible to it (like an
-``int`` to a ``long``, etc.; see :ref:`this note
+``int`` to a ``double``, etc.; see :ref:`this note
 <lang-arithmetic-typeconversion>` for some references).
 
 Examples:

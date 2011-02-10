@@ -31,6 +31,10 @@ that an ``unsigned int`` will "underflow" at 0, and "overflow" at
        x--; // x now contains 4,294,967,295; rolled over "left to right"
        x++; // x now contains 0; rolled over "right to left"
 
+.. _lang-unsignedlong:
+
+The ``unsigned long`` type is a synonym for ``unsigned int``.
+
 Here is an example of declaring an ``unsigned int`` variable named
 ``ledPin``, then giving it value 13::
 
@@ -47,8 +51,8 @@ See Also
 -  :ref:`int <lang-int>`
 -  :ref:`char <lang-char>`
 -  :ref:`unsigned char <lang-unsignedchar>`
--  :ref:`long <lang-long>`
--  :ref:`unsigned long <lang-unsignedlong>`
+-  :ref:`long long <lang-longlong>`
+-  :ref:`unsigned long long <lang-unsignedlonglong>`
 -  :ref:`Integer Constants <lang-constants-integers>`
 -  :ref:`Variables <lang-variables>`
 

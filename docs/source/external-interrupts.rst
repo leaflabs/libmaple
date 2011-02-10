@@ -84,14 +84,8 @@ The following table shows which pins can be used on which lines.
 Function Reference
 ------------------
 
-.. doxygenfunction:: attachInterrupt
-
-.. doxygenfunction:: detachInterrupt
-
-.. doxygenenum:: ExtIntTriggerMode
-
-.. doxygentypedef:: voidFuncPtr
-
+- :ref:`attachInterrupt() <lang-attachinterrupt>`
+- :ref:`detachInterrupt() <lang-detachinterrupt>`
 
 Code example
 ------------

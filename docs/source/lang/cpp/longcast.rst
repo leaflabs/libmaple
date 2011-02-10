@@ -21,7 +21,7 @@ precision and limitations of ``long`` variables on the Maple.
 See Also
 --------
 
--  :ref:`long <lang-long>`
-
+- :ref:`long <lang-long>`
+- :ref:`long long <lang-longlong>`
 
 .. include:: cc-attribution.txt

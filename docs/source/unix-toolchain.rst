@@ -8,7 +8,7 @@
 
 This is a tutorial for using the Maple with a standard Unix toolchain.
 It's not necessary to do this in order to program the Maple; you can
-always use our `IDE <maple-ide-install>`_ instead.
+always :ref:`install the Maple IDE <maple-ide-install>` instead.
 
 You'll need a Maple board, a mini-b USB cable, a functional computer,
 and root access to that computer. This guide assumes you've had
@@ -16,10 +16,10 @@ success with the IDE on your machine and that you are fairly
 comfortable with the Unix command line; some previous experience with
 editing your shell startup script (.bashrc, .tcshrc, etc.) and using
 `make <http://www.gnu.org/software/make/>`_ is recommended. For
-generic installation/setup issues, the `IDE install
-<http://leaflabs.com/docs/libmaple/install/>`_ and
-:ref:`troubleshooting` pages may be helpful. If all else fails, try
-our `forum`_, or `contact us directly`_\ !
+generic installation/setup issues, the :ref:`IDE installation
+<maple-ide-install>` and :ref:`troubleshooting` pages may be
+helpful. If all else fails, try our `forum`_, or `contact us
+directly`_\ !
 
 We currently have instructions for 32- and 64-bit Linux and OS X Snow
 Leopard. If you're on another Unix platform, Windows, or an earlier
@@ -28,7 +28,7 @@ directions on your own. As a jumping off point, you might want to
 begin with these `stripped down distributions
 <http://static.leaflabs.com/pub/codesourcery/>`_ of the `CodeSourcery
 GCC compiler tools <http://www.codesourcery.com/sgpp/features.html>`_
-(including win32 versions). If you do have success on other platforms,
+(including Win32 versions). If you do have success on other platforms,
 please post in the forums, so we can fold your tips into this
 document!
 
@@ -325,7 +325,7 @@ something like :file:`/dev/ttyACMXXX` on Linux or
 :file:`/dev/tty.usbmodemXXX` on OS X, but it might have a slightly
 different name on your system. To open up a session, run ::
 
-  $ screen /dev/tty-whatever-it-is
+  $ screen /dev/ttyXXX
 
 If the interactive test program built and uploaded correctly, you
 should be able to connect without any errors reported by
@@ -334,14 +334,17 @@ there are a number of commands which demonstrate Maple peripheral
 features. As of October 2010, the HardwareSerial library is blocking,
 so using any commands which would write to the USART Serial ports will
 cause the program to hang. To exit the screen session, type :kbd:`C-a
-C-\\` (control-a, followed by control-backslash), and type ``y`` when
-prompted if you're sure.
+C-\\` (control-a, followed by control-backslash) on Mac, or :kbd:`C-a
+k` (control-a k) on Linux, and type ``y`` when prompted if you're
+sure.
 
-Using :command:`screen` in this way sometimes messes up your session.
-If your shell starts acting up after you exit screen, you should be
-able to fix it with ::
+.. note:: 
 
-  $ reset && clear
+   Using :command:`screen` in this way sometimes messes up your
+   terminal session on OS X.  If your shell starts acting up after you
+   exit screen, you should be able to fix it with ::
+
+       $ reset && clear
 
 .. _toolchain-projects:
 

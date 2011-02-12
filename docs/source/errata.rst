@@ -10,21 +10,21 @@ but are easy ways to break or damage your board permanently. For a
 list of differences between the Maple and Arduinos, see the
 :ref:`compatibility reference <compatibility>`.
 
+The errata are grouped by Maple version ("Rev").  Rev 5 is currently
+on sale.  If you are unsure which version you own, the :ref:`Maple
+hardware page <maple-hardware-identify-rev>` has pictures and
+descriptions of each version.
+
 .. contents:: Contents
    :local:
 
 Maple Rev 5
 -----------
 
-These boards went on sale in November 2010.  They have white buttons,
-and "r5" in small print near the "LeafLabs Maple" text next to the
-"infinity-leaf" logo, among other changes:
-
-.. figure:: /_static/img/maple_rev5.png
-   :align: center
-   :alt: Maple Rev 5
-
 Known issues:
+
+* **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
+    corresponding "AIN" is missing from its silkscreen.
 
 * **GPIO 39-43 not configured**: this is really more of a software
   "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
@@ -42,13 +42,6 @@ Potential failure modes:
 
 Maple Rev 3
 -----------
-
-This batch of boards went on sale beginning in May 2010. They have a
-darker red silkscreen and the "infinity-leaf" logo:
-
-.. figure:: /_static/img/maple_rev3.png
-   :align: center
-   :alt: Maple Rev 3
 
 Known issues:
 
@@ -105,13 +98,6 @@ Potential failure modes:
 
 Maple Rev 1
 -----------
-
-This batch of 100 boards shipped in later 2009. They have a red
-silkscreen and the logo is a single pixelated leaf:
-
-.. figure:: /_static/img/maple_rev1.png
-   :align: center
-   :alt: Maple Rev 1
 
 Known issues:
 

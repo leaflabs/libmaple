@@ -20,7 +20,7 @@ Have fun!
 
    Quickstart <maple-quickstart>
    IDE Installation <maple-ide-install>
-   IDE Anatomy <ide>
+   IDE Usage <ide>
    Command-Line Toolchain <unix-toolchain>
 
 .. _index-maple-programming:
@@ -30,12 +30,12 @@ Have fun!
 .. toctree::
    :maxdepth: 1
 
-   Maple Language <language>
-   Maple Libraries <libraries>
+   Language <language>
+   Libraries <libraries>
    Arduino Compatibility <compatibility>
+   libmaple <libmaple>
    External Interrupts <external-interrupts>
    Bootloader <bootloader>
-   libmaple <libmaple>
    Troubleshooting <troubleshooting>
    Known Problems <errata>
 
@@ -46,15 +46,15 @@ Have fun!
 .. toctree::
    :maxdepth: 1
 
-   i2c
-   pwm
-   gpio
-   usb
-   jtag
    adc
+   gpio
+   i2c
+   jtag
+   pwm
    spi
-   usart
    timers
+   usb
+   usart
 
 .. _index-schematics:
 
@@ -64,6 +64,12 @@ Have fun!
    :maxdepth: 1
 
    hardware/maple.rst
+
+.. TODO write/include these upon Mini and Native release
+
+.. toctree::
+   :hidden:
+
    hardware/maple-mini.rst
    hardware/maple-native.rst
 

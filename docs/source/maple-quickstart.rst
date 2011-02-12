@@ -6,7 +6,7 @@
  Maple Quickstart Guide
 ========================
 
-You'll need a `Maple board <http://leaflabs.com/store/>`_, a `mini-b
+You'll need a `Maple board <http://leaflabs.com/store/>`_, a `Mini-B
 USB cable <http://www.google.com/products?q=mini-b+usb+cable>`_, a
 functional computer, and possibly root (or "administrator") access to
 that computer.

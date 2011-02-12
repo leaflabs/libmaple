@@ -32,12 +32,12 @@ USB_Line_Coding line_coding = {
  datatype:    0x08
 };
 
-uint8 vcomBufferRx[VCOM_RX_EPSIZE];
-volatile uint8 countTx    = 0;
-volatile uint8 recvBufIn  = 0;
-volatile uint8 recvBufOut = 0;
-volatile uint8 maxNewBytes   = VCOM_RX_EPSIZE;
-
+uint8 vcomBufferRx[VCOM_RX_BUFLEN];
+volatile uint32 countTx    = 0;
+volatile uint32 recvBufIn  = 0;
+volatile uint32 recvBufOut = 0;
+volatile uint32 maxNewBytes   = VCOM_RX_BUFLEN;
+volatile uint32 newBytes = 0;
 RESET_STATE reset_state = DTR_UNSET;
 uint8       line_dtr_rts = 0;
 
@@ -46,7 +46,7 @@ void vcomDataTxCb(void) {
 
     /* allows usbSendBytes to stop blocking */
 
-
+    /* assumes tx transactions are atomic 64 bytes (nearly certain they are) */
     countTx = 0;
 }
 
@@ -56,84 +56,65 @@ void vcomDataTxCb(void) {
    in the fifo. this number will be reincremented after calls
    to usbReceiveBytes */
 void vcomDataRxCb(void) {
-    /* do whatever after data has been received from host */
+  /* do whatever after data has been received from host */
 
-    /* setEPRxCount on the previous cycle should garuntee
-       we havnt received more bytes than we can fit */
-    uint8 newBytes = GetEPRxCount(VCOM_RX_ENDP);
-    /* assert (newBytes <= maxNewBytes); */
+  /* setEPRxCount on the previous cycle should garuntee
+     we havnt received more bytes than we can fit */
+  newBytes = GetEPRxCount(VCOM_RX_ENDP);
+  SetEPRxStatus(VCOM_RX_ENDP,EP_RX_NAK);
 
-    /* todo, not checking very carefully for edge cases. USUALLY,
-       if we emit the reset pulse and send 4 bytes, then newBytes 
-       should be 4. But its POSSIBLE that this would be violated
-       in some cases */
+  /* todo, not checking very carefully for edge cases. USUALLY,
+     if we emit the reset pulse and send 4 bytes, then newBytes
+     should be 4. But its POSSIBLE that this would be violated
+     in some cases */
 
-    /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
-    char chkBuf[4];
-    char cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
-    if (reset_state == DTR_NEGEDGE) {
-        reset_state = DTR_LOW;
+  /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
+  char chkBuf[4];
+  char cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
+  if (reset_state == DTR_NEGEDGE) {
+    reset_state = DTR_LOW;
 
-        if  (newBytes >= 4) {
-            unsigned int target = (unsigned int)usbWaitReset | 0x1;
+    if  (newBytes >= 4) {
+      unsigned int target = (unsigned int)usbWaitReset | 0x1;
 
-            PMAToUserBufferCopy(chkBuf,VCOM_RX_ADDR,4);
+      PMAToUserBufferCopy(chkBuf,VCOM_RX_ADDR,4);
 
-            int i;
-            USB_Bool cmpMatch = TRUE;
-            for (i=0; i<4; i++) {
-                if (chkBuf[i] != cmpBuf[i]) {
-                    cmpMatch = FALSE;
-                }
-            }
+      int i;
+      USB_Bool cmpMatch = TRUE;
+      for (i=0; i<4; i++) {
+          if (chkBuf[i] != cmpBuf[i]) {
+              cmpMatch = FALSE;
+          }
+      }
 
-            if (cmpMatch) {
-                asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
-                             "mov sp, r0                \n\t"
-                             "mov r0, #1                \n\t"
-                             "mov r1, %[target_addr]    \n\t"
-                             "mov r2, %[cpsr]           \n\t"
-                             "push {r2}                 \n\t"             // Fake xPSR
-                             "push {r1}                 \n\t"             // Target address for PC
-                             "push {r0}                 \n\t"             // Fake LR
-                             "push {r0}                 \n\t"             // Fake R12
-                             "push {r0}                 \n\t"             // Fake R3
-                             "push {r0}                 \n\t"             // Fake R2
-                             "push {r0}                 \n\t"             // Fake R1
-                             "push {r0}                 \n\t"             // Fake R0
-                             "mov lr, %[exc_return]     \n\t"
-                             "bx lr"
-                             :
-                             : [stack_top] "r" (STACK_TOP),
-                               [target_addr] "r" (target),
-                               [exc_return] "r" (EXC_RETURN),
-                               [cpsr] "r" (DEFAULT_CPSR)
-                             : "r0", "r1", "r2");
-                /* should never get here */
-            }
-        }
+      if (cmpMatch) {
+          asm volatile("mov r0, %[stack_top]      \n\t"             // Reset the stack
+                       "mov sp, r0                \n\t"
+                       "mov r0, #1                \n\t"
+                       "mov r1, %[target_addr]    \n\t"
+                       "mov r2, %[cpsr]           \n\t"
+                       "push {r2}                 \n\t"             // Fake xPSR
+                       "push {r1}                 \n\t"             // Target address for PC
+                       "push {r0}                 \n\t"             // Fake LR
+                       "push {r0}                 \n\t"             // Fake R12
+                       "push {r0}                 \n\t"             // Fake R3
+                       "push {r0}                 \n\t"             // Fake R2
+                       "push {r0}                 \n\t"             // Fake R1
+                       "push {r0}                 \n\t"             // Fake R0
+                       "mov lr, %[exc_return]     \n\t"
+                       "bx lr"
+                       :
+                       : [stack_top] "r" (STACK_TOP),
+                         [target_addr] "r" (target),
+                         [exc_return] "r" (EXC_RETURN),
+                         [cpsr] "r" (DEFAULT_CPSR)
+                       : "r0", "r1", "r2");
+          /* should never get here */
+      }
     }
+  }
 
-
-
-    if (recvBufIn + newBytes < VCOM_RX_EPSIZE) {
-        PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,newBytes);
-        recvBufIn += newBytes;
-    } else {
-        /* we have to copy the data in two chunks because we roll over
-           the edge of the circular buffer */
-        uint8 tailBytes = VCOM_RX_EPSIZE - recvBufIn;
-        uint8 remaining = newBytes - tailBytes;
-
-        PMAToUserBufferCopy(&vcomBufferRx[recvBufIn],VCOM_RX_ADDR,tailBytes);
-        PMAToUserBufferCopy(&vcomBufferRx[0],        VCOM_RX_ADDR,remaining);
-
-        recvBufIn = (recvBufIn + newBytes ) % VCOM_RX_EPSIZE;
-    }
-  
-    maxNewBytes    -= newBytes;
-    SetEPRxCount(VCOM_RX_ENDP,maxNewBytes);
-    SetEPRxValid(VCOM_RX_ENDP);
+  PMAToUserBufferCopy(&vcomBufferRx[0],VCOM_RX_ADDR,newBytes);
 }
 
 void vcomManagementCb(void) {
@@ -177,7 +158,7 @@ void usbReset(void) {
     _SetEPRxAddr(ENDP0,VCOM_CTRL_RX_ADDR);
     _SetEPTxAddr(ENDP0,VCOM_CTRL_TX_ADDR);
     Clear_Status_Out(ENDP0);
-  
+
     SetEPRxCount(ENDP0, pProperty->MaxPacketSize);
     SetEPRxValid(ENDP0);
 
@@ -232,11 +213,11 @@ RESULT usbDataSetup(uint8 request) {
 
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
         switch (request) {
-        case (GET_LINE_CODING): 
+        case (GET_LINE_CODING):
             CopyRoutine = vcomGetSetLineCoding;
             last_request = GET_LINE_CODING;
             break;
-        case (SET_LINE_CODING): 
+        case (SET_LINE_CODING):
             CopyRoutine = vcomGetSetLineCoding;
             last_request = SET_LINE_CODING;
             break;
@@ -284,7 +265,7 @@ RESULT usbNoDataSetup(u8 request) {
                     reset_state = DTR_NEGEDGE;
                 } else {
                     reset_state = DTR_HIGH;
-                }	
+                }
                 break;
 
             case DTR_NEGEDGE:

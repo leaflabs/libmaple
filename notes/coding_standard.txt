@@ -60,7 +60,7 @@ Whitespace/Indentation
 
 - Files end in exactly one newline. [The presence of a newline at EOF
   is already done by `c-require-final-newline' in recent versions of
-  emacs.]
+  Emacs.]
 
 - Exactly two newlines separate source paragraphs (you do separate
   your code into paragraphs, don't you?).
@@ -140,9 +140,8 @@ Naming conventions
 - Structs: pick a style from "Variables" or "Classes" depending on how
   you mean it (since it might be either a simple record type, in which
   case do like c variables, or you might be faking an object in c, in
-  which case do like classes).  If it's in a typedef, should also
-  probably put _t at the end, but maybe you won't, and I don't really
-  feel too strongly about it.
+  which case do like classes).  If it's in a typedef, don't feel
+  obliged to put "_t" at the end of the name; we don't.
 
 - Macros and constants: all caps, separated by underscores.  Variables
   with the "const" qualifier aren't considered "constants" for the
@@ -169,7 +168,7 @@ Naming conventions
 Documentation
 -------------
 
-- Document your code!
+- Document your code.  This should go without saying.
 
 - For complicated peripherals, it would be nice if you put longer-form
   comments into this directory (notes/), with a comment in the
@@ -184,6 +183,21 @@ Documentation
   that I won't explain here (though you can look into the LeafLabs or
   michaeljones breathe repos on github and potentially figure out
   why).
+
+- Doxygen comments generally just belong on types, functions,
+  etc. that are part of the public user-facing API.  This generally
+  means that if there's ReST documentation for it under docs/source/,
+  it needs Doxygen comments, and that ReST should use Breathe to pull
+  that Doxygen comment out. (For more info on this, see docs/README).
+
+  There are some exceptions to this rule since Breathe isn't totally
+  mature yet and Sphinx's C++ domain is still in flux.  In these
+  cases, document the code "manually" in ReST.
+
+  This should be avoided if at all possible, since it creates a
+  maintenance burden of documenting things in two places at once, and
+  provides an opportunity for bad documentation to slip in, when the
+  code comments fall out of sync with the ReST docs.
 
 General Formatting
 ------------------
@@ -201,14 +215,9 @@ General Formatting
   Then put the file somewhere in your load-path, and:
 
     (require 'lineker)
-    (dolist (hook programming-mode-hooks)
+    (dolist (hook '(c-mode-hook c++-mode-hook))
       (add-hook hook (lambda () (lineker-mode 1))))
 
-  Where "programming-mode-hooks" is a list that should at least
-  include c-mode-hook and c++-mode-hook; e.g.:
-
-    (setq programming-mode-hooks '(c-mode-hook
-                                   c++-mode-hook
-                                   python-mode-hook
-                                   ...
-                                   ))
+  There are only a few exceptional situations.  The most important one
+  is when specifying a lookup table like PIN_MAP where it'd be ugly to
+  split each entry over multiple lines.

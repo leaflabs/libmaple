@@ -34,11 +34,12 @@ typedef enum {
 
 extern RESET_STATE reset_state;  /* tracks DTR/RTS */
 extern uint8       line_dtr_rts;  
-extern volatile uint8 countTx;
-extern uint8 vcomBufferRx[VCOM_RX_EPSIZE];  /* no reason this has to be VCOM_RX_EPSIZE, could be bigger */
-extern volatile uint8 recvBufIn;   /* the FIFO in index to the recvbuffer */
-extern volatile uint8 recvBufOut;  /* the FIFO out index to the recvbuffer */
-extern volatile uint8 maxNewBytes;
+extern volatile uint32 countTx;
+extern uint8 vcomBufferRx[VCOM_RX_BUFLEN];  /* no reason this has to be VCOM_RX_EPSIZE, could be bigger */
+extern volatile uint32 recvBufIn;   /* the FIFO in index to the recvbuffer */
+extern volatile uint32 recvBufOut;  /* the FIFO out index to the recvbuffer */
+extern volatile uint32 maxNewBytes;
+extern volatile uint32 newBytes;
 
 void vcomDataTxCb(void);
 void vcomDataRxCb(void);

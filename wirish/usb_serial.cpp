@@ -101,17 +101,27 @@ uint32 USBSerial::available(void) {
     return usbBytesAvailable();
 }
 
+/* blocks forever until len_bytes is received */
 uint32 USBSerial::read(void *buf, uint32 len) {
     if (!buf) {
         return 0;
     }
 
-    return usbReceiveBytes((uint8*)buf, len);
+    uint32 bytes_in = 0;
+    while (len > 0) {
+        uint32 new_bytes = usbReceiveBytes((uint8*)((uint8*)buf+bytes_in), len);
+        len -= new_bytes;
+        bytes_in += new_bytes;
+    }
+
+    return len;
 }
 
+/* blocks forever until 1 byte is received */
 uint8 USBSerial::read(void) {
     uint8 ch;
-    usbReceiveBytes(&ch, 1);
+
+    while (usbReceiveBytes(&ch, 1) == 0);
     return ch;
 }
 

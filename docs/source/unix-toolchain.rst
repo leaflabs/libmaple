@@ -55,7 +55,7 @@ First I'll give the commands to run, then explain::
 
 You'll want to install a bunch of developer "basics" like
 :command:`make`, :command:`tar`, etc.  A good catch-all for these
-tools is the "build-essential" meta-package on most debian platforms:
+tools is the "build-essential" meta-package on most Debian platforms:
 installing this fake package will pull in dozens of useful tools
 without bogging your system down too much. ``git-core`` is the name of
 the git package; `Git <http://git-scm.com/>`_ is a distributed code
@@ -104,6 +104,9 @@ where you put the toolchain, make sure to preserve its internal
 directory layout, as the binaries make relative path calls and
 references.
 
+After you're done, you'll probably want to update your shell startup
+script so :file:`~/libmaple/arm/bin` stays in your ``PATH``.
+
 .. _toolchain-udev:
 
 **3. Install udev Rules**
@@ -136,15 +139,11 @@ stated previously, this document assumes a general level of Unix
 aptitude on the part of the reader; if you're uncomfortable using
 Terminal (or if you don't know what that means), then you should
 probably stick with using the `Maple IDE
-<http://leaflabs.com/docs/maple-ide/>`_ to develop programs. Some of
-these software packages might be available on `MacPorts
-<http://www.macports.org/>`_. The author had some bad experiences with
-MacPorts a few years ago, though, and hasn't touched it since. Of
-course, your mileage may vary.
+<http://leaflabs.com/docs/maple-ide/>`_ to develop programs.
 
 **1. Collect and Install Tools**
 
-You will need the following tools to get started:
+You will need the following tools\ [#fmacports]_ to get started:
 
  1. `XCode <http://developer.apple.com/technologies/xcode.html>`_: If
  you're reading this, you've probably already got this. Provides
@@ -349,6 +348,8 @@ able to fix it with ::
 Starting your own projects
 --------------------------
 
+.. TODO fix the build-targets.mk mess, note the "library" target
+
 So everything worked, and you want to start your own project? Great!
 It's easy. Just set the environment variable ``LIB_MAPLE_HOME`` in
 your shell startup script to point to the libmaple repository you
@@ -402,87 +403,6 @@ TODO. For now see `this great guide
 <http://fun-tech.se/stm32/OpenOCD/index.php>`_ from fun-tech.se, and
 the ``jtag`` Makefile target.
 
-.. _toolchain-codeblocks:
-
-Do it all with Code::Blocks
----------------------------
-
-.. TODO this really should reflect the new, more pleasant build system
-
-Optional. `Code::Blocks <http://www.codeblocks.org/>`_ is a generic
-cross platform IDE.  We don't personally use it for development, so we
-haven't worked out all the kinks (e.g., debugging isn't integrated),
-but it might be helpful for people who are allergic to `vim
-<http://www.vim.org/>`_ and/or `Emacs
-<http://www.gnu.org/software/emacs/>`_. The simple configuration
-described here just calls down to the :file:`Makefile`, so follow the
-above directions to get the command line tools configured (you'll
-definitely need the arm-none-eabi-* tools on your ``PATH``), then
-`install Code::Blocks <http://www.codeblocks.org/downloads/26>`_. You
-can do this on Linux with::
-
-  $ sudo aptitude install codeblocks
-
-The first time it runs you'll maybe want to disable all the glitzy
-"Getting Started" crap (when will they learn?). We've added a .cbp
-"projects" file to the libmaple repository: you can try using that one
-by copying it from :file:`support/codeblocks/libmaple.cbp` to the top
-level directory, but no promises (it might be missing new source files
-etc). It's probably worth reading through these instructions as well
-to get a feel for how it all works.
-
-To create your own "libmaple" project, start with an "Empty Project"
-with the "Folder to create project in" set to your
-``LIB_MAPLE_HOME``. Make sure that the "Resulting filename" is in the
-top level directory as well.
-
-.. image:: /_static/img/codeblocks_newproject.png
-   :align: center
-   :alt: Code::Blocks new project wizard
-
-Select the "GNU GCC Compiler" (it won't be used, anyway) and disable
-the "Debug" configuration in the next window. Now you should have a
-project with no files; add files by right clicking on the project in
-the left panel file hierarchy and "Add files recursively". Import both
-the :file:`wirish` and :file:`libmaple` directories recursively, then
-add :file:`main.cpp` separately.
-
-.. image:: /_static/img/codeblocks_makefile.png
-   :align: center
-   :alt: Code::Blocks targets options
-
-Next we have to configure the Makefile targets. Go to the
-"Properties..." menu under "Project" and check the "This is a custom
-Makefile" box. Then go to the "Build targets" tab and create "ram" and
-"flash" targets, both of type "Console application" and without the
-Auto-generated filename prefixes or extensions. Set the Output
-filename to :file:`support/codeblocks/program_flash.sh` and
-:file:`support/codeblocks/program_ram.sh` respectively; these scripts
-just call the program_ram/program_flash make targets and are a hack to
-get the "run" button to upload code to the Maple. The IDE will warn
-that these files will be overwritten, but they won't be. For both the
-"flash" and "ram" targets, click the "Build options..." button (below
-"Virtual targets..." etc) and go to the far right tab ("'Make'
-commands"). Edit the Clean project/target line so it's just "clean"
-(not "clean$target"), and set the "Build project/target" and "Compile
-single file" commands to ``$make -f $makefile MAPLE_TARGET=$target``
-and ``$make -f $makefile MAPLE_TARGET=$target $file``, respectively.
-
-.. image:: /_static/img/codeblocks_maketargets.png
-   :align: center
-   :alt: Code::Blocks make targets
-
-Save all these changes, go back to the main IDE window, and try to
-build/run. "Build" will compile everything, "Run" will run the upload
-script in a terminal window (if there are problems they will flash by
-very quickly; you can start Code::Blocks in a terminal window and
-check the output in that base window if necessary), and "Rebuild" will
-clean before rebuilding.
-
-.. image:: /_static/img/codeblocks_build.png
-   :align: center
-   :alt: Success!
-
 .. _toolchain-exuberantly:
 
 Go forth exuberantly!
@@ -491,3 +411,10 @@ Go forth exuberantly!
 Let us know what you come up with! Use #leaflabs on Twitter, post in
 the `forum`_, track us down in the real world, whatever. We love
 projects!
+
+.. rubric:: Footnotes
+
+.. [#fmacports] Some of these software packages might be available on
+   `MacPorts <http://www.macports.org/>`_. The author had some bad
+   experiences with MacPorts a few years ago, though, and hasn't
+   touched it since. Of course, your mileage may vary.

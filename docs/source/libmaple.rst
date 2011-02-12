@@ -2,8 +2,8 @@
 
 .. _libmaple:
 
-``libmaple`` Reference
-======================
+``libmaple``
+============
 
 .. image:: /_static/img/libmaple-screenshot-small.png
    :align: center
@@ -35,7 +35,6 @@ wrappers and code to imitate the Arduino programming library.
 .. toctree::
    :maxdepth: 2
 
-   Unix Toolchain Quickstart <unix-toolchain>
    Guide to using GCC's ARM target <arm-gcc>
 
 .. TODO LATER create, style, and host a pure Doxygen libmaple

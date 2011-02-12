@@ -16,27 +16,26 @@ Have fun!
 **Usage Guides:**
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    Quickstart <maple-quickstart>
    IDE Installation <maple-ide-install>
    IDE Anatomy <ide>
+   Command-Line Toolchain <unix-toolchain>
 
 .. _index-maple-programming:
 
 **Maple Programming:**
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
-   Maple Language<language>
+   Maple Language <language>
    Maple Libraries <libraries>
    Arduino Compatibility <compatibility>
    External Interrupts <external-interrupts>
-   Command-Line Tools & APIs <libmaple>
    Bootloader <bootloader>
-
-
+   libmaple <libmaple>
    Troubleshooting <troubleshooting>
    Known Problems <errata>
 
@@ -56,6 +55,17 @@ Have fun!
    spi
    usart
    timers
+
+.. _index-schematics:
+
+**Board Hardware Documentation:**
+
+.. toctree::
+   :maxdepth: 1
+
+   hardware/maple.rst
+   hardware/maple-mini.rst
+   hardware/maple-native.rst
 
 .. _index-reference:
 

@@ -39,16 +39,28 @@ pins for other purposes.
 Library Documentation
 ---------------------
 
+Using the SPI Class
+^^^^^^^^^^^^^^^^^^^
+
+You can declare that you want to use SPI in your sketch by putting
+``HardwareSPI Spi(number);`` with your variables, where ``number`` is
+1 or 2, depending on which SPI you want to use.  Then you can use the
+functions described in the next section.  For example::
+
+   // Use SPI 1
+   HardwareSpi Spi(1);
+
+   void setup() {
+       Spi.begin(SPI_18MHZ);
+   }
+
+   void loop() {
+       // Get the next byte from the peripheral
+       uint8 byte = Spi.recv();
+   }
+
 HardwareSPI Class Reference
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-You can use the SPI interface by including a declaration ``HardwareSPI
-Spi(number);`` at the start of the sketch or program.  The ``number``
-must be either 1 or 2 and specifies which port to use.  Once this is
-done, you can call any of the methods documented here using
-``Spi.method(arguments)``; for example, ``Spi.send(0x13)`` would send
-the value ``0x13`` into the port buffer to be transmitted as soon as
-possible.
 
 .. cpp:class:: HardwareSPI
 

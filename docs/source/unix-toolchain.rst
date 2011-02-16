@@ -6,11 +6,12 @@
  Unix Toolchain Quickstart
 ===========================
 
-This is a tutorial for using the Maple with a standard Unix toolchain.
-It's not necessary to do this in order to program the Maple; you can
-always :ref:`install the Maple IDE <maple-ide-install>` instead.
+This is a tutorial for using the Maple with a standard Unix toolchain
+(make, gcc, etc.).  It's not necessary to do this in order to program
+the Maple; you can always :ref:`install the Maple IDE
+<maple-ide-install>` instead.
 
-You'll need a Maple board, a mini-b USB cable, a functional computer,
+You'll need a Maple board, a Mini-B USB cable, a functional computer,
 and root access to that computer. This guide assumes you've had
 success with the IDE on your machine and that you are fairly
 comfortable with the Unix command line; some previous experience with

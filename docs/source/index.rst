@@ -67,11 +67,11 @@ Have fun!
 
 .. TODO write/include these upon Mini and Native release
 
-.. toctree::
-   :hidden:
+.. .. toctree::
+..    :hidden:
 
-   hardware/maple-mini.rst
-   hardware/maple-native.rst
+..    hardware/maple-mini.rst
+..    hardware/maple-native.rst
 
 .. _index-reference:
 

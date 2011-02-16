@@ -6,6 +6,8 @@
  Maple Quickstart Guide
 ========================
 
+.. TODO update the images since we changed "to FLASH" -> "to Flash"
+
 You'll need a `Maple board <http://leaflabs.com/store/>`_, a `Mini-B
 USB cable <http://www.google.com/products?q=mini-b+usb+cable>`_, a
 functional computer, and possibly root (or "administrator") access to
@@ -58,9 +60,9 @@ Next, select Tools > Board > "LeafLabs Maple ... to FLASH":
    :align: left
    :alt: Verify button
 
-Now press the "verify" button (furthest to the left with a "play"
-arrow) to compile the code.  Some output should scroll by in the
-bottom window, and then a confirmation message will appear:
+Now press the "Verify" button (the "play" symbol; see image at left)
+to compile the code.  Some output should scroll by in the bottom
+window, and then a confirmation message will appear:
 
 .. image:: /_static/img/verify-success.png
    :align: center
@@ -71,11 +73,12 @@ bottom window, and then a confirmation message will appear:
 Upload that program!
 --------------------
 
-Now it's (finally!) time to plug in your Maple. Use a mini-b cable,
-making sure that the power source jumper is on the USB header first.
-We ship Maples with the power source jumper configured that way, so
-you shouldn't have to do anything.  For reference, it should look like
-this:
+Now it's time to plug in your Maple.  Use a Mini-B cable, making sure
+that the :ref:`power source jumper <hardware-maple-powering>` is on
+the USB header first.  We ship the Maple with the power source jumper
+configured that way, so you shouldn't have to do anything.  For
+reference, it should look like this (don't worry if a jumper is
+hanging half off of the CHRG header):
 
 .. image:: /_static/img/plugged-in-maple.png
    :align: center
@@ -105,10 +108,10 @@ it's there.  If it ever starts throbbing in a slow, smooth pattern,
 then you've got a problem: see the :ref:`troubleshooting
 <troubleshooting>` page for help.
 
-If all systems are go, select the Board type and Serial Port
-(something like :file:`COM3`, :file:`/dev/ttyACM0`, or
-:file:`/dev/tty.usbmodemfa221`, depending on your platform, from the
-Tools menu:
+If all systems are go, select the Maple's serial port in the Tools >
+Serial Port menu.  The Maple will appear as something like
+:file:`COMx`, :file:`/dev/ttyACMx`, or :file:`/dev/tty.usbmodemxxxxx`,
+depending on your platform, like so:
 
 Windows XP:
 
@@ -137,12 +140,13 @@ Maple.
 
 You should see some text and a progress bar flash by in the status
 window of the IDE, then some blinky patterns on the Maple, and then a
-constant blinking on and off.
+constant blinking on and off.  Congratulations!  You've successfully
+uploaded your first program to the Maple.
 
-Go ahead and modify the file a little bit: if you change the
-'delay(1000);' numbers to a different value the speed of the blink
-will change. The value is a time in milliseconds to pause before
-continuing with the program, so by default the LED will be on for 1
+Next, go ahead and modify the file a little bit.  If you change the
+``delay(1000);`` lines to a different value, the speed of the blink
+will change.  The value is a time in milliseconds to pause before
+continuing with the program, so by default, the LED will be on for 1
 second, then off for 1 second, etc.  Any time you make any changes, go
 through the same Verify and Upload process to upload the new version
 of your program to your Maple.
@@ -166,18 +170,18 @@ Use the serial port monitor!
 ----------------------------
 
 As a last step to make sure everything has been configured correctly,
-let's upload a hello world program that will send text from the Maple
-back to the IDE over the USB connection. From the File menu, select
-Examples > Stubs > HelloWorld (similarly to when you selected the
-Blink program), and make sure the correct board and serial port
-targets are selected from the Tools pull-down.
+let's upload a "Hello, world!" program that will send text from the
+Maple back to the IDE over the USB connection. From the File menu,
+select Examples > Stubs > HelloWorld (similarly to when you selected
+the Blink program), and make sure the correct board and serial port
+targets are selected from the Tools menu.
 
-Open the serial monitor window (button on the far right) and make sure
-the 9600 baud speed is selected. Then go back to the code editing
-window and upload your program (Upload will recompile your code
-automatically if there's been any change since the last Verify). You
-should get text spit at you over the serial monitor right after the
-program is uploaded. Shout back! We can hear you!
+Open the Serial Monitor window (on the far right of the toolbar) and
+make sure the 9600 baud speed is selected. Then go back to the code
+editing window and upload your program (Upload will recompile your
+code automatically if there's been any change since the last
+Verify). You should get text spit at you over the serial monitor right
+after the program is uploaded.  Shout back!  We can hear you!
 
 Go forth exuberantly!
 ---------------------
@@ -191,10 +195,11 @@ or maybe now is a good time for a trip to the kitchen for a delicious
 If you blew through this guide and are the kind of person who drinks
 their coffee straight, has more than a 100 lines of vim or emacs
 customization, and doesn't even have a mouse plugged into their
-computer, you may want to look at the :ref:`Unix Toolchain quickstart
+computer, you may want to look at the :ref:`Unix toolchain quickstart
 <unix-toolchain>` guide.  It's the tutorial for getting working with
-your old friends :command:`make`, :command:`jtag`, and :command:`gcc`.
+your old friends :command:`make`, :command:`gcc`, and :command:`jtag`.
 
 Let us know what you come up with! Tag us with #leaflabs on Twitter,
-post in the `forum`_, track us down in the real world, whatever. We
-love projects!
+post in the `forum`_, post on `our wiki's Projects page
+<http://wiki.leaflabs.com/index.php?title=Projects>`_, track us down
+in the real world, whatever. We love projects!

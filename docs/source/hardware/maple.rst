@@ -28,11 +28,6 @@ have a light red silkscreen and a single pixelated leaf as a logo.
    :align: center
    :alt: Maple Rev 1
 
-.. rubric:: Footnotes
-
-.. [#frev2_4] Revs 2 and 4 were prototypes that didn't pass internal
-   testing.
-
 Rev 3
 ^^^^^
 
@@ -59,6 +54,8 @@ them.
 .. figure:: /_static/img/maple_rev5.png
    :align: center
    :alt: Maple Rev 5
+
+.. _hardware-maple-powering:
 
 Powering the Maple
 ------------------
@@ -101,4 +98,9 @@ with `git <http://git-scm.com/>`_, you can also clone the repository
 at the command line with ::
 
     $ git clone git://github.com/leaflabs/maple.git
+
+.. rubric:: Footnotes
+
+.. [#frev2_4] Revs 2 and 4 were prototypes that didn't pass internal
+   testing.
 

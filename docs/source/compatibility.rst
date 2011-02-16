@@ -13,17 +13,17 @@ Overview
 --------
 
 The biggest difference between the Maple and most Arduino boards is
-that the Maple uses a 32-bit ARM Cortex-M3 architecture chip while the
-Arduinos have 8-bit Atmel AVR chips. The different instruction set
-means that machine code (executable binary programs) is incompatible
-between the two, and a different compiler (actually just a different
-version of `gcc <http://gcc.gnu.org/>`_) is required.
+that the Maple uses a 32-bit ARM Cortex-M3 architecture chip, while
+the Arduinos have 8-bit Atmel AVR chips. The different instruction set
+means that machine code (which makes up executable binary program) is
+incompatible between the two, and a different compiler (actually just
+a different version of `gcc <http://gcc.gnu.org/>`_) is required.
 
-The compiler for the regular Arduino IDE is the popular
-:command:`avr-gcc` package; the compiler for the Maple version of the
-IDE is CodeSourcery's edition of gcc for the ARM EABI target
-(:command:`arm-non-eabi-gcc`).  A (preliminary) reference on
-:ref:`using arm-none-eabi-gcc <arm-gcc>` is available.
+The compiler for the regular Arduino IDE is the popular `avr-gcc
+<http://www.nongnu.org/avr-libc/>`_ package; the compiler for the
+Maple version of the IDE is CodeSourcery's edition of gcc for the ARM
+EABI target (:command:`arm-non-eabi-gcc`).  A (preliminary) reference
+on :ref:`using arm-none-eabi-gcc <arm-gcc>` is available.
 
 The bitwidth of the processor means that the Maple can process 32-bit
 operations (like adding two 32-bit integers) in a single instruction,
@@ -31,12 +31,12 @@ while an Arduino processor would have to split up large operations
 into several smaller ones. In a lot of cases 8-bit operations are
 plenty (integers 0-255, single characters of text, etc.), but if
 you're dealing with higher resolution data, the speed up could be
-significant. A trade-off is that code could be larger as well; program
-instructions and memory locations can be up to 32-bits each, which in
-the worst case would quadruple program size. In reality, the removal
-of extra instructions and fancy packing together of simple
-instructions means that programs aren't much larger (or are even
-smaller).
+significant.
+
+A trade-off is that code could be larger as well; program instructions
+and memory locations can be up to 32 bits each.  However, removal of
+extra instructions and fancy packing together of simple instructions
+means that programs aren't much larger (or are even smaller).
 
 Header Numbering and Incompatibilities
 --------------------------------------
@@ -63,9 +63,9 @@ The incompatible hardware differences are:
   peripheral internally using low level configuration, but we haven't
   looked in to it.
 
-* **No External Voltage Reference**: The Arduino has an Aref pin which
+* **No External Voltage Reference**: The Arduino has an AREF pin which
   allows the use of an external ADC voltage reference; the Maple has
-  an extra GPIO pin (14) with PWM capability in this spot, and does
+  an extra GPIO pin (D14) with PWM capability in this spot, and does
   not allow an external voltage reference to be configured.
 
 * **EEPROM**: the Maple does not have any internal EEPROM. This
@@ -93,11 +93,13 @@ differences, most of which are improvements:
 
 * :ref:`pinMode() <lang-pinmode>` **types**: any :ref:`GPIO <gpio>`
   (including analog pins) can be configured into one of the following
-  modes with a single call to ```pinMode()``: ``OUTPUT``,
+  modes with a single call to ``pinMode()``: ``OUTPUT``,
   ``OUTPUT_OPEN_DRAIN``, ``INPUT_FLOATING``, ``INPUT_PULLUP``,
-  ``INPUT_PULLDOWN``. Additionally, the PWM and Analog Input pins can
-  be configured as ``INPUT_ANALOG`` and ``PWM`` respectively. See the
-  :ref:`GPIO documentation <gpio>` for more information.
+  ``INPUT_PULLDOWN``. Additionally, the PWM pins (labeled "PWM" on the
+  Maple's silkscreen) can be configured in ``PWM`` and
+  ``PWM_OPEN_DRAIN`` modes, and the analog input pins (labeled "AIN")
+  can be configured in ``INPUT_ANALOG`` mode. See the :ref:`GPIO
+  documentation <gpio>` for more information.
 
 * :ref:`Serial port <lang-serial>` **syntax**: like the `Arduino Mega
   <http://arduino.cc/en/Main/ArduinoBoardMega>`_, the Maple has

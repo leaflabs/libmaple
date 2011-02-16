@@ -11,7 +11,7 @@ silkscreen.
 Many of these pins may additionally be used for special features or
 peripheral functions.  This page documents those capabilities, by pin.
 
-The current and voltage limitations have not been copied over from the
+The current and voltage limitations have been copied over from the
 STM32 datasheet (see the :ref:`Recommended Reading
 <gpio-recommended-reading>` for a link).  In particular, a number of
 GPIO pins are 5V tolerant (which means that applying 5 volts to a pin
@@ -30,6 +30,9 @@ This table shows the available functionality on every GPIO pin, by
 peripheral type. The "STM32" column refers to the port and number that
 the header is connected to on the microcontroller.  The "5V?" column
 documents whether or not the pin is 5 volt tolerant (see above).
+
+.. TODO silkscreen pictures which let you know what each abbreviation
+.. means, with links to the relevant documentation.
 
 .. csv-table::
    :header: "Pin", "STM32", ":ref:`ADC <adc>`", ":ref:`Timer <timers>`", ":ref:`I2C <i2c>`", ":ref:`UART <usart>`", ":ref:`SPI <spi>`", "5v?"
@@ -83,13 +86,17 @@ GPIO Modes
 Function Reference
 ------------------
 
-.. doxygenfunction:: pinMode
+- :ref:`pinMode() <lang-pinmode>`
 
-.. doxygenfunction:: digitalRead
+- :ref:`digitalRead() <lang-digitalread>`
 
-.. doxygenfunction:: digitalWrite
+- :ref:`digitalWrite() <lang-digitalwrite>`
 
-.. doxygenfunction:: analogRead
+- :ref:`analogRead() <lang-analogread>`
+
+- :ref:`pwmWrite() <lang-pwmwrite>` (Maple's equivalent to
+  ``analogWrite()``; see the :ref:`analogWrite() reference
+  <lang-analogwrite>` for differences from the Arduino version).
 
 .. _gpio-recommended-reading:
 

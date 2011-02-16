@@ -24,20 +24,20 @@ Maple Rev 5
 Known issues:
 
 * **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
-    corresponding "AIN" is missing from its silkscreen.
+  corresponding "AIN" is missing from its silkscreen.
 
 * **GPIO 39-43 not configured**: this is really more of a software
   "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
-  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when the a
+  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when a
   :ref:`JTAG <jtag>` device is not connected, but we have not enabled
   them in software and thus they can not be accessed with the regular
   :ref:`lang-pinmode` or :ref:`lang-digitalwrite` functions.
 
 Potential failure modes:
 
-* **TTL voltage on non-tolerant pins**: not all header pins are 5V
-  compatible; connecting certain serial devices in the wrong way could
-  over voltage the pins.  The :ref:`Pin-Mapping Mega Table
+* **High voltage on non-tolerant pins**: not all header pins are 5V
+  compatible; so e.g. connecting certain serial devices in the wrong
+  way could over-voltage the pins.  The :ref:`Pin-Mapping Mega Table
   <pin-mapping-mega-table>` details which pins are 5V-tolerant.
 
 Maple Rev 3

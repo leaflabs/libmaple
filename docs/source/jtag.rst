@@ -4,6 +4,9 @@
  JTAG
 ======
 
+.. TODO update adapter schematic, add information on using it with our
+.. devices.
+
 JTAG is an interface for low-level debugging of digital devices. It
 gives instruction by instruction control over the microprocessor and
 allows data to be read and written to arbitrary memory and register

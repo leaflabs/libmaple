@@ -106,10 +106,10 @@ A classic! Make sure you have selected a board from the pulldown menu.
 -----------------------------------------
 
 Your sketch/program either does not include one of the :ref:`setup()
-<lang-setup>` or `loop() <lang-loop>` functions, or it was not found
-by the compiler. Your program must include both ``void setup()`` and
-``void loop()`` functions; they don't have to do anything, but they
-**must** be there.
+<lang-setup>` or :ref:`loop() <lang-loop>` functions, or it was not
+found by the compiler. Your program must include both ``void setup()``
+and ``void loop()`` functions; they don't have to do anything, but
+they **must** be there.
 
 You can start with an example program (to see one in the IDE, click on
 File > Examples > Stubs > BareMinimum) to get the basic structure.

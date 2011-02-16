@@ -63,8 +63,8 @@ enum {
     NVIC_USART1       = 37,
     NVIC_USART2       = 38,
     NVIC_USART3       = 39,
-    NVIC_USART4       = 52,   // high density only
-    NVIC_USART5       = 53,   // high density only
+    NVIC_UART4        = 52,   // high density only
+    NVIC_UART5        = 53,   // high density only
 
     NVIC_EXTI0        = 6,
     NVIC_EXTI1        = 7,

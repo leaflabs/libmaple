@@ -36,8 +36,8 @@
 #define USART1_BASE    0x40013800
 #define USART2_BASE    0x40004400
 #define USART3_BASE    0x40004800
-#define USART4_BASE    0x40004C00  // High-density devices only (Maple Native)
-#define USART5_BASE    0x40005000  // High-density devices only (Maple Native)
+#define UART4_BASE     0x40004C00  // High-density devices only (Maple Native)
+#define UART5_BASE     0x40005000  // High-density devices only (Maple Native)
 
 #define USART_UE       BIT(13)
 #define USART_M        BIT(12)
@@ -65,15 +65,15 @@ struct usart_dev usart_dev_table[] = {
     },
 #if NR_USART >= 5
     /* TODO test */
-    [USART4] = {
-        .base = (usart_port*)USART4_BASE,
-        .rcc_dev_num = RCC_USART4,
-        .nvic_dev_num = NVIC_USART4
+    [UART4] = {
+        .base = (usart_port*)UART4_BASE,
+        .rcc_dev_num = RCC_UART4,
+        .nvic_dev_num = NVIC_UART4
     },
-    [USART5] = {
-        .base = (usart_port*)USART5_BASE,
-        .rcc_dev_num = RCC_USART5,
-        .nvic_dev_num = NVIC_USART5
+    [UART5] = {
+        .base = (usart_port*)UART5_BASE,
+        .rcc_dev_num = RCC_UART5,
+        .nvic_dev_num = NVIC_UART5
     },
 #endif
 };
@@ -107,12 +107,12 @@ void USART3_IRQHandler(void) {
 }
 
 #if NR_USART >= 5
-void USART4_IRQHandler(void) {
-    usart_irq(USART4);
+void UART4_IRQHandler(void) {
+    usart_irq(UART4);
 }
 
-void USART5_IRQHandler(void) {
-    usart_irq(USART5);
+void UART5_IRQHandler(void) {
+    usart_irq(UART5);
 }
 #endif
 

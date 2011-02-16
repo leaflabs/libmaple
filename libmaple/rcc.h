@@ -158,8 +158,8 @@ enum {
     RCC_USART1,
     RCC_USART2,
     RCC_USART3,
-    RCC_USART4,      // High-density devices only (Maple Native)
-    RCC_USART5,      // High-density devices only (Maple Native)
+    RCC_UART4,      // High-density devices only (Maple Native)
+    RCC_UART5,      // High-density devices only (Maple Native)
     RCC_TIMER1,
     RCC_TIMER2,
     RCC_TIMER3,

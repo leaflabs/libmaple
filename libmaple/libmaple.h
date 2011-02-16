@@ -101,7 +101,8 @@
     #define NR_GPIO_PORTS             7
     #define NR_GPIO_PINS             63
     #define NR_TIMERS                 8
-    #define NR_USART                  3
+    // 3 USART, plus UART4 and UART5
+    #define NR_USART                  5
     #define NR_FSMC                   1
     #define NR_DAC_PINS               2
 

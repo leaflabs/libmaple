@@ -30,17 +30,16 @@
 #ifndef _TIME_H
 #define _TIME_H
 
-#ifdef __cplusplus
-extern "C"{
-#endif
-
+#include "libmaple.h"
 #include "nvic.h"
 #include "systick.h"
 #include "boards.h"
 
-#define US_PER_MS               1000
+#ifdef __cplusplus
+extern "C"{
+#endif
 
-extern volatile uint32 systick_timer_millis;
+#define US_PER_MS               1000
 
 /**
  * Returns time (in milliseconds) since the beginning of program

@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Michael Hope.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,34 @@
  *****************************************************************************/
 
 /**
- * @file systick.h
+ *  @file iwdg.c
  *
- * @brief Various system timer definitions
+ *  @brief Independent watchdog support
  */
 
-#ifndef _SYSTICK_H_
-#define _SYSTICK_H_
-
 #include "libmaple.h"
+#include "iwdg.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+#define IWDG_UNLOCK   0x5555
+#define IWDG_START    0xCCCC
+#define IWDG_FEED     0xAAAA
 
-#define SYSTICK_CSR             0xE000E010  // Control and status register
-#define SYSTICK_CNT             0xE000E018  // Current value register
+/**
+ *  @brief Initialise and start the watchdog
+ *
+ *  The prescaler and reload set the timeout.  A prescaler of 3 divides
+ *  the 40 kHz clock by 32 and gives roughly 1 ms per reload.
+ */
+void iwdg_init(uint8 prescaler, uint16 reload) {
+    __write(IWDG_KR, IWDG_UNLOCK);
+    __write(IWDG_PR, prescaler);
+    __write(IWDG_RLR, reload);
 
-#define SYSTICK_CSR_COUNTFLAG   BIT(16)
-
-/** System elapsed time in milliseconds */
-extern volatile uint32 systick_timer_millis;
-
-void systick_init(uint32 reload_val);
-void systick_disable();
-void systick_resume();
-
-static inline uint32 systick_get_count(void) {
-    return __read(SYSTICK_CNT);
+    /* Start things off */
+    __write(IWDG_KR, IWDG_START);
+    __write(IWDG_KR, IWDG_FEED);
 }
 
-static inline uint32 systick_check_underflow(void) {
-    return (__read(SYSTICK_CSR) & SYSTICK_CSR_COUNTFLAG);
+void iwdg_feed(void) {
+    __write(IWDG_KR, IWDG_FEED);
 }
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
-
-#endif
-

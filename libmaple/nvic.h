@@ -30,46 +30,41 @@
 #ifndef _NVIC_H_
 #define _NVIC_H_
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #define NVIC_INT_USBHP      19
 #define NVIC_INT_USBLP      20
 
 /* NVIC Interrupt Enable registers  */
 #define NVIC_ISER0          0xE000E100
 #define NVIC_ISER1          0xE000E104
-#define NVIC_ISER2          0xE000E108
-#define NVIC_ISER3          0xE000E10C  // Non existant?
+/* NVIC_ISER2 only on connectivity line */
 
 /* NVIC Interrupt Clear registers  */
 #define NVIC_ICER0          0xE000E180
 #define NVIC_ICER1          0xE000E184
-#define NVIC_ICER2          0xE000E188
-#define NVIC_ICER3          0xE000E18C  // Non existant?
+/* NVIC_ICER2 only on connectivity line */
 
 /* System control registers  */
 #define SCB_VTOR            0xE000ED08  // Vector table offset register
-
-#define NVIC_VectTab_RAM             ((u32)0x20000000)
-#define NVIC_VectTab_FLASH           ((u32)0x08000000)
-
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 enum {
     NVIC_TIMER1       = 27,
     NVIC_TIMER2       = 28,
     NVIC_TIMER3       = 29,
     NVIC_TIMER4       = 30,
-    NVIC_TIMER5       = 50,   // high density only (Maple Native)
-    NVIC_TIMER6       = 54,   // high density only (Maple Native)
-    NVIC_TIMER7       = 55,   // high density only (Maple Native)
-    NVIC_TIMER8       = 46,   // high density only (Maple Native)
+    NVIC_TIMER5       = 50,   // high density only (Maple Native, Maple Audio)
+    NVIC_TIMER6       = 54,   // high density only
+    NVIC_TIMER7       = 55,   // high density only
+    NVIC_TIMER8       = 46,   // high density only
 
     NVIC_USART1       = 37,
     NVIC_USART2       = 38,
     NVIC_USART3       = 39,
-    NVIC_USART4       = 52,   // high density only (Maple Native)
-    NVIC_USART5       = 53,   // high density only (Maple Native)
+    NVIC_UART4        = 52,   // high density only
+    NVIC_UART5        = 53,   // high density only
 
     NVIC_EXTI0        = 6,
     NVIC_EXTI1        = 7,
@@ -78,6 +73,14 @@ enum {
     NVIC_EXTI4        = 10,
     NVIC_EXTI9_5      = 23,
     NVIC_EXTI15_10    = 40,
+
+    NVIC_DMA_CH1      = 11,
+    NVIC_DMA_CH2      = 12,
+    NVIC_DMA_CH3      = 13,
+    NVIC_DMA_CH4      = 14,
+    NVIC_DMA_CH5      = 15,
+    NVIC_DMA_CH6      = 16,
+    NVIC_DMA_CH7      = 17
 };
 
 

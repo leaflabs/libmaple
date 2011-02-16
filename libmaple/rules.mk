@@ -12,24 +12,27 @@ LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH) -I$(LIBMAPLE_PATH)/usb -I$(LIBMAPLE_PATH
 CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -D$(VECT_BASE_ADDR)
 
 # Local rules and targets
-cSRCS_$(d) := systick.c                \
-              timers.c                 \
-              adc.c                    \
-              syscalls.c               \
+cSRCS_$(d) := adc.c                    \
+              bkp.c                    \
+              dac.c                    \
+              dma.c                    \
               exti.c                   \
+              flash.c                  \
+              fsmc.c                   \
               gpio.c                   \
+              iwdg.c                   \
               nvic.c                   \
+              rcc.c                    \
+              spi.c                    \
+              syscalls.c               \
+              systick.c                \
+              timers.c                 \
               usart.c                  \
               util.c                   \
-              rcc.c                    \
-              flash.c                  \
-              spi.c                    \
-              fsmc.c                   \
-              dac.c                    \
+              usb/descriptors.c        \
               usb/usb.c                \
               usb/usb_callbacks.c      \
               usb/usb_hardware.c       \
-              usb/descriptors.c        \
               usb/usb_lib/usb_core.c   \
               usb/usb_lib/usb_init.c   \
               usb/usb_lib/usb_int.c    \

@@ -153,8 +153,9 @@
 extern "C"{
 #endif
 
-void exti_attach_interrupt(uint32, uint32, voidFuncPtr, uint32);
-void exti_detach_interrupt(uint32);
+void exti_attach_interrupt(uint32 port, uint32 pin, voidFuncPtr handler,
+                           uint32 mode);
+void exti_detach_interrupt(uint32 channel);
 
 #ifdef __cplusplus
 } // extern "C"

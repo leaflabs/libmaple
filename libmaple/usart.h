@@ -77,11 +77,11 @@ extern struct usart_dev usart_dev_table[];
 static inline void usart_putc(uint8 usart_num, uint8 byte) {
     usart_port *port = usart_dev_table[usart_num].base;
 
-    port->DR = byte;
-
-    /* Wait for transmission to complete  */
+    /* Wait for the buffer to empty */
     while ((port->SR & USART_TXE) == 0)
         ;
+
+    port->DR = byte;
 }
 
 /**

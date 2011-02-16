@@ -180,11 +180,11 @@ void exti_attach_interrupt(uint32 port,
         break;
     }
 
-    /* Configure the enable interrupt bits for the NVIC  */
-    nvic_irq_enable(exti_channels[channel].irq_line);
-
     /* Register the handler  */
     exti_channels[channel].handler = handler;
+
+    /* Configure the enable interrupt bits for the NVIC  */
+    nvic_irq_enable(exti_channels[channel].irq_line);
 }
 
 

@@ -61,45 +61,59 @@ struct usart_dev usart_dev_table[] = {
         .rcc_dev_num = RCC_USART3,
         .nvic_dev_num = NVIC_USART3
     },
-    /*
-      #if NR_USART >= 5
-      [UART4] = {
-      .base = (usart_port*)UART4_BASE,
-      .rcc_dev_num = RCC_UART4,
-      .nvic_dev_num = NVIC_UART4
-      },
-      [UART5] = {
-      .base = (usart_port*)UART5_BASE,
-      .rcc_dev_num = RCC_UART5,
-      .nvic_dev_num = NVIC_UART5
-      },
-      #endif
-    */
+#if NR_USART >= 5
+    /* TODO test */
+    [UART4] = {
+        .base = (usart_port*)UART4_BASE,
+        .rcc_dev_num = RCC_UART4,
+        .nvic_dev_num = NVIC_UART4
+    },
+    [UART5] = {
+        .base = (usart_port*)UART5_BASE,
+        .rcc_dev_num = RCC_UART5,
+        .nvic_dev_num = NVIC_UART5
+    },
+#endif
 };
 
-/* usart interrupt handlers  */
+/*
+ * Usart interrupt handlers.
+ */
+
+static inline void usart_irq(int usart_num) {
+#ifdef USART_SAFE_INSERT
+    /* Ignore old bytes if the user defines USART_SAFE_INSERT. */
+    rb_safe_insert(&(usart_dev_table[usart_num].rb),
+                   (uint8)((usart_dev_table[usart_num].base)->DR));
+#else
+    /* By default, push bytes around in the ring buffer. */
+    rb_push_insert(&(usart_dev_table[usart_num].rb),
+                   (uint8)((usart_dev_table[usart_num].base)->DR));
+#endif
+}
+
+/* TODO: Check the disassembly for the following functions to make
+   sure GCC inlined properly. */
+
 void USART1_IRQHandler(void) {
-    rb_insert(&(usart_dev_table[USART1].rb),
-              (uint8)(((usart_port*)(USART1_BASE))->DR));
+    usart_irq(USART1);
 }
 
 void USART2_IRQHandler(void) {
-    rb_insert(&(usart_dev_table[USART2].rb),
-              (uint8)(((usart_port*)(USART2_BASE))->DR));
+    usart_irq(USART2);
 }
 
 void USART3_IRQHandler(void) {
-    rb_insert(&usart_dev_table[USART3].rb,
-              (uint8)(((usart_port*)(USART3_BASE))->DR));
+    usart_irq(USART3);
 }
+
 #if NR_USART >= 5
 void UART4_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART4].rb,
-              (uint8)(((usart_port*)(UART4_BASE))->DR));
+    usart_irq(UART4);
 }
+
 void UART5_IRQHandler(void) {
-    rb_insert(&usart_dev_table[UART5].rb,
-              (uint8)(((usart_port*)(UART5_BASE))->DR));
+    usart_irq(UART5);
 }
 #endif
 

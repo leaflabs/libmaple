@@ -53,15 +53,20 @@ void nvic_irq_disable(uint32 n) {
 }
 
 void nvic_irq_disable_all(void) {
-    short n;
-    for(n=0; n<65; n++) {
-        nvic_irq_disable(n);
-    }
+    /* Each ICER register contains 1 bit per interrupt.  Writing a 1
+       to that bit disables the corresponding interrupt.  So each of
+       the following lines disables up to 32 interrupts at a time.
+       Since low, medium, and high-density devices all have less than
+       64 interrupts, this suffices. */
+    /* TODO: fix for connectivity line: __write(NVIC_ICER2,1),
+       requires connectivity line support in libmaple.h */
+    __write(NVIC_ICER0, 0xFFFFFFFF);
+    __write(NVIC_ICER1, 0xFFFFFFFF);
 }
 
 /**
- * @brief Initialice the NVIC at address addr
- * @param addr Address to set the vector table at
+ * @brief Initialize the NVIC according to VECT_TAB_FLASH,
+ * VECT_TAB_RAM, or VECT_TAB_BASE.
  */
 void nvic_init(void) {
 #ifdef VECT_TAB_FLASH

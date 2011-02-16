@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Michael Hope.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,43 +23,39 @@
  *****************************************************************************/
 
 /**
- * @file systick.h
+ *  @file iwdg.h
  *
- * @brief Various system timer definitions
+ *  @brief Independent watchdog support
  */
 
-#ifndef _SYSTICK_H_
-#define _SYSTICK_H_
-
-#include "libmaple.h"
+#ifndef _IWDG_H_
+#define _IWDG_H_
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-#define SYSTICK_CSR             0xE000E010  // Control and status register
-#define SYSTICK_CNT             0xE000E018  // Current value register
+#define IWDG_BASE               0x40003000
+#define IWDG_KR                 (IWDG_BASE + 0x0)
+#define IWDG_PR                 (IWDG_BASE + 0x4)
+#define IWDG_RLR                (IWDG_BASE + 0x8)
+#define IWDG_SR                 (IWDG_BASE + 0xC)
 
-#define SYSTICK_CSR_COUNTFLAG   BIT(16)
+enum {
+    IWDG_PRE_4,
+    IWDG_PRE_8,
+    IWDG_PRE_16,
+    IWDG_PRE_32,
+    IWDG_PRE_64,
+    IWDG_PRE_128,
+    IWDG_PRE_256
+};
 
-/** System elapsed time in milliseconds */
-extern volatile uint32 systick_timer_millis;
-
-void systick_init(uint32 reload_val);
-void systick_disable();
-void systick_resume();
-
-static inline uint32 systick_get_count(void) {
-    return __read(SYSTICK_CNT);
-}
-
-static inline uint32 systick_check_underflow(void) {
-    return (__read(SYSTICK_CSR) & SYSTICK_CSR_COUNTFLAG);
-}
+void iwdg_init(uint8 prescaler, uint16 reload);
+void iwdg_feed(void);
 
 #ifdef __cplusplus
 } // extern "C"
 #endif
 
 #endif
-

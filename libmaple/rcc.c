@@ -57,8 +57,8 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_USART1] = { .clk_domain = APB2, .line_num = 14 },
     [RCC_USART2] = { .clk_domain = APB1, .line_num = 17 },
     [RCC_USART3] = { .clk_domain = APB1, .line_num = 18 },
-    [RCC_USART4] = { .clk_domain = APB1, .line_num = 19 }, // High-density only
-    [RCC_USART5] = { .clk_domain = APB1, .line_num = 20 }, // High-density only
+    [RCC_UART4]  = { .clk_domain = APB1, .line_num = 19 }, // High-density only
+    [RCC_UART5]  = { .clk_domain = APB1, .line_num = 20 }, // High-density only
     [RCC_TIMER1] = { .clk_domain = APB2, .line_num = 11 },
     [RCC_TIMER2] = { .clk_domain = APB1, .line_num = 0 },
     [RCC_TIMER3] = { .clk_domain = APB1, .line_num = 1 },
@@ -71,6 +71,8 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
     [RCC_FSMC]   = { .clk_domain = AHB,  .line_num = 8 }, // High-density only
     [RCC_DAC]    = { .clk_domain = APB1, .line_num = 9 }, // High-density only
+    [RCC_DMA1]   = { .clk_domain = AHB,  .line_num = 0 },
+    [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 }, // High-density only
 };
 
 /**

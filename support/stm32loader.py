@@ -25,6 +25,11 @@
 import sys, getopt
 import serial
 import time
+import glob
+import time
+import tempfile
+import os
+import subprocess
 
 try:
     from progressbar import *
@@ -53,28 +58,28 @@ class CommandInterface:
             stopbits=1,
             xonxoff=0,              # enable software flow control
             rtscts=0,               # disable RTS/CTS flow control
-            timeout=5               # set a timeout value, None for waiting forever
+            timeout=0.5             # set a timeout value, None for waiting forever
         )
 
 
     def _wait_for_ask(self, info = ""):
-        # wait for ask
-        try:
-            ask = ord(self.sp.read())
-        except:
-            raise CmdException("Can't read port or timeout")
-        else:
-            if ask == 0x79:
-                # ACK
-                return 1
-            else:
-                if ask == 0x1F:
-                    # NACK
-                    raise CmdException("NACK "+info)
-                else:
-                    # Unknow responce
-                    raise CmdException("Unknow response. "+info+": "+hex(ask))
+        got = self.sp.read(1)
 
+        if not got:
+            raise CmdException("No response to %s" % info)
+
+        # wait for ask
+        ask = ord(got)
+
+        if ask == 0x79:
+            # ACK
+            return 1
+        elif ask == 0x1F:
+            # NACK
+            raise CmdException("Chip replied with a NACK during %s" % info)
+
+        # Unknown response
+        raise CmdException("Unrecognised response 0x%x to %s" % (ask, info))
 
     def reset(self):
         self.sp.setDTR(0)
@@ -87,8 +92,21 @@ class CommandInterface:
         self.sp.setRTS(0)
         self.reset()
 
-        self.sp.write("\x7F")       # Syncro
-        return self._wait_for_ask("Syncro")
+        # Be a bit more persistent when trying to initialise the chip
+        stop = time.time() + 5.0
+
+        while time.time() <= stop:
+            self.sp.write('\x7f')
+
+            got = self.sp.read()
+
+            # The chip will ACK a sync the very first time and
+            # NACK it every time afterwards
+            if got and got in '\x79\x1f':
+                # Synced up
+                return
+
+        raise CmdException('No response while trying to sync')
 
     def releaseChip(self):
         self.sp.setRTS(1)
@@ -257,7 +275,7 @@ class CommandInterface:
         if usepbar:
             widgets = ['Reading: ', Percentage(),', ', ETA(), ' ', Bar()]
             pbar = ProgressBar(widgets=widgets,maxval=lng, term_width=79).start()
-        
+
         while lng > 256:
             if usepbar:
                 pbar.update(pbar.maxval-lng)
@@ -279,7 +297,7 @@ class CommandInterface:
         if usepbar:
             widgets = ['Writing: ', Percentage(),' ', ETA(), ' ', Bar()]
             pbar = ProgressBar(widgets=widgets, maxval=lng, term_width=79).start()
-        
+
         offs = 0
         while lng > 256:
             if usepbar:
@@ -300,7 +318,7 @@ class CommandInterface:
 
 
 
-	def __init__(self) :
+        def __init__(self) :
         pass
 
 
@@ -314,7 +332,7 @@ def usage():
     -v          Verify
     -r          Read
     -l length   Length of read
-    -p port     Serial port (default: /dev/tty.usbserial-ftCYPMYJ)
+    -p port     Serial port (default: first USB-like port in /dev)
     -b baud     Baud speed (default: 115200)
     -a addr     Target address
 
@@ -322,9 +340,37 @@ def usage():
 
     """ % sys.argv[0]
 
+def read(filename):
+    """Read the file to be programmed and turn it into a binary"""
+    with open(filename, 'rb') as f:
+        bytes = f.read()
+
+    if bytes.startswith('\x7FELF'):
+        # Actually an ELF file.  Convert to binary
+        handle, path = tempfile.mkstemp(suffix='.bin', prefix='stm32loader')
+
+        try:
+            os.close(handle)
+
+            # Try a couple of options for objcopy
+            for name in ['arm-none-eabi-objcopy', 'arm-linux-gnueabi-objcopy']:
+                try:
+                    code = subprocess.call([name, '-Obinary', filename, path])
+
+                    if code == 0:
+                        return read(path)
+                except OSError:
+                    pass
+            else:
+                raise Exception('Error %d while converting to a binary file' % code)
+        finally:
+            # Remove the temporary file
+            os.unlink(path)
+    else:
+        return [ord(x) for x in bytes]
 
 if __name__ == "__main__":
-    
+
     # Import Psyco if available
     try:
         import psyco
@@ -334,7 +380,7 @@ if __name__ == "__main__":
         pass
 
     conf = {
-            'port': '/dev/tty.usbserial-FTD3TMCH',
+            'port': 'auto',
             'baud': 115200,
             'address': 0x08000000,
             'erase': 0,
@@ -386,26 +432,51 @@ if __name__ == "__main__":
         else:
             assert False, "unhandled option"
 
+    # Try and find the port automatically
+    if conf['port'] == 'auto':
+        ports = []
+
+        # Get a list of all USB-like names in /dev
+        for name in ['tty.usbserial', 'ttyUSB']:
+            ports.extend(glob.glob('/dev/%s*' % name))
+
+        ports = sorted(ports)
+
+        if ports:
+            # Found something - take it
+            conf['port'] = ports[0]
+
     cmd = CommandInterface()
     cmd.open(conf['port'], conf['baud'])
-    mdebug(10, "Open port %(port)s, baud %(baud)d" % {'port':conf['port'], 'baud':conf['baud']})
+    mdebug(10, "Open port %(port)s, baud %(baud)d" % {'port':conf['port'],
+                                                      'baud':conf['baud']})
     try:
+        if (conf['write'] or conf['verify']):
+            data = read(args[0])
+
         try:
             cmd.initChip()
-        except:
+        except CmdException:
             print "Can't init. Ensure that BOOT0 is enabled and reset device"
 
         bootversion = cmd.cmdGet()
-        mdebug(0, "Bootloader version %X" % bootversion)
-        mdebug(0, "Chip id `%s'" % str(map(lambda c: hex(ord(c)), cmd.cmdGetID())))
+
+        mdebug(0, "Bootloader version 0x%X" % bootversion)
+
+        if bootversion < 20 or bootversion >= 100:
+            raise Exception('Unreasonable bootloader version %d' % bootversion)
+
+        id = [ord(x) for x in cmd.cmdGetID()]
+        mdebug(0, "Chip id '%s'" % ' '.join('0x%x' % x for x in id))
+
+        if len(id) < 2 or id[0] != 0x04:
+            raise Exception('Unrecognised chip ID')
+
 #    cmd.cmdGetVersion()
 #    cmd.cmdGetID()
 #    cmd.cmdReadoutUnprotect()
 #    cmd.cmdWriteUnprotect()
 #    cmd.cmdWriteProtect([0, 1])
-
-        if (conf['write'] or conf['verify']):
-            data = map(lambda c: ord(c), file(args[0]).read())
 
         if conf['erase']:
             cmd.cmdEraseMemory()

@@ -52,14 +52,14 @@
 #define REG_SET_MASK(reg, mask)   (*(volatile uint32*)(reg) |= (uint32)(mask))
 #define REG_CLEAR_MASK(reg, mask) (*(volatile uint32*)(reg) &= (uint32)~(mask))
 
-#define REG_GET(reg)              *(volatile uint32*)(reg)
+#define REG_GET(reg)              (*(volatile uint32*)(reg))
 
-#define __set_bits(addr, mask)    *(volatile uint32*)(addr) |= (uint32)(mask)
+#define __set_bits(addr, mask)   (*(volatile uint32*)(addr) |= (uint32)(mask))
 #define __clear_bits(addr, mask) (*(volatile uint32*)(addr) &= (uint32)~(mask))
 #define __get_bits(addr, mask)   (*(volatile uint32*)(addr) & (uint32)(mask))
 
-#define __read(reg)               *(volatile uint32*)(reg)
-#define __write(reg, value)       *(volatile uint32*)(reg) = (value)
+#define __read(reg)              (*(volatile uint32*)(reg))
+#define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
 
 #define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
 

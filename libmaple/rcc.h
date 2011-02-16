@@ -30,6 +30,10 @@
 #ifndef _RCC_H_
 #define _RCC_H_
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 /* registers  */
 #define RCC_BASE               0x40021000
 #define RCC_CR                 (RCC_BASE + 0x0)
@@ -155,8 +159,8 @@ enum {
     RCC_USART1,
     RCC_USART2,
     RCC_USART3,
-    RCC_USART4,      // High-density devices only (Maple Native)
-    RCC_USART5,      // High-density devices only (Maple Native)
+    RCC_UART4,      // High-density devices only (Maple Native)
+    RCC_UART5,      // High-density devices only (Maple Native)
     RCC_TIMER1,
     RCC_TIMER2,
     RCC_TIMER3,
@@ -169,6 +173,8 @@ enum {
     RCC_SPI2,
     RCC_FSMC,        // High-density devices only (Maple Native)
     RCC_DAC,         // High-density devices only (Maple Native)
+    RCC_DMA1,
+    RCC_DMA2,        // High-density devices only (Maple Native)
 };
 
 
@@ -177,5 +183,8 @@ void rcc_clk_enable(uint32 dev);
 void rcc_reset_dev(uint32 dev);
 void rcc_set_prescaler(uint32 prescaler, uint32 divider);
 
+#ifdef __cplusplus
+} // extern "C"
 #endif
 
+#endif

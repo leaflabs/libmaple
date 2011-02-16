@@ -37,7 +37,7 @@
 #define SYSTICK_TICKINT         BIT(1)    // Interrupt on systick countdown
 #define SYSTICK_ENABLE          BIT(0)    // Turn on the counter
 
-volatile uint32 systick_timer_millis = 0;
+volatile uint32 systick_timer_millis;
 
 void systick_init(uint32 reload_val) {
     /* Set the reload counter to tick every 1ms  */
@@ -57,14 +57,13 @@ void systick_disable() {
 }
 
 void systick_resume() {
-    /* re-enable init registers without changing relead_val */
+    /* re-enable init registers without changing reload val */
     __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
             SYSTICK_ENABLE                |
             SYSTICK_TICKINT);
 }
 
+/** SysTick interrupt handler.  Bumps up the tick counter. */
 void SysTickHandler(void) {
     systick_timer_millis++;
 }
-
-

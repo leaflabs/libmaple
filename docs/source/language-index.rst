@@ -7,9 +7,8 @@ Complete Language Index
 This is the index of Maple's :ref:`language reference
 <language-lang-docs>` documentation.  The "Maple API" column provides
 API references for documented libmaple functionality. The "C++ for
-Maple"..  pages are adaptations of the Arduino C++ documentation to the
-.. Maple, and are intended as a minimal reference/refresher for
-.. programmers familiar with the Arduino language.
+Maple" pages are intended as a minimal reference/refresher for
+programmers familiar with the Arduino language.
 
 .. _index-language-index-cpp:
 .. _index-language-index-api:

@@ -64,7 +64,7 @@
     /* Has an FSMC bus? */
     #define NR_FSMC                   0
 
-    /* Has an FSMC bus? */
+    /* Has a DAC? */
     #define NR_DAC_PINS               0
 
     /* USB Identifier numbers */

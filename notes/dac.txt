@@ -35,6 +35,26 @@ time, as follows:
 
 Buffering will be enabled by default.
 
+HOWTOs
+-------------------------------------------------------------------------------
+
+In order to generate a full-amplitude triangle wave:
+
+   - Make the following settings in dac->CR, for the DAC channel you
+     want: set MAMP to 1011 (amplitude 4095), WAVE to 10 (triangle),
+     TSEL to 111 (software trigger), TEN to 1 (trigger enabled), and
+     EN to 1 (chanel enabled).
+
+   - Set dac->DHR12Rx to 0 (where x is your channel).  This gets added
+     to the triangle wave value at each trigger step.
+
+   - Now, forever: set DAC_SWTRIGR_SWTRIGx in dac->SWTRIGR, and wait
+     for it to get cleared by hardware.
+
+You can do something similar for noise (by setting WAVE to 01
+instead).  You can also cause the waves to advance due to timer events
+or external line 9, by making appropriate settings to TSEL.
+
 TODO
 -------------------------------------------------------------------------------
 - sine wave demo using Timer interrupts

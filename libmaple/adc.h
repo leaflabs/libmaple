@@ -70,8 +70,24 @@ extern "C"{
 #define SR_EOC_BIT      *(volatile uint32*)(BITBAND_PERI(ADC1_BASE+0, 1))
 /* (NR_ANALOG_PINS is board specific) */
 
-/** Initialize ADC1 to do one-shot conversions  */
-void adc_init(void);
+/** ADC per-sample conversion times, in ADC clock cycles */
+typedef enum {
+    ADC_SMPR_1_5,
+    ADC_SMPR_7_5,
+    ADC_SMPR_13_5,
+    ADC_SMPR_28_5,
+    ADC_SMPR_41_5,
+    ADC_SMPR_55_5,
+    ADC_SMPR_71_5,
+    ADC_SMPR_239_5
+} adc_smp_rate;
+
+/** Initialize ADC1 to do one-shot conversions at the given sample
+    rate. */
+void adc_init(adc_smp_rate smp_rate);
+
+void adc_set_sample_rate(adc_smp_rate smp_rate);
+
 void adc_disable(void);
 
 /**

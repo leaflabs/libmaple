@@ -54,7 +54,7 @@ void init(void) {
 #if NR_DAC_PINS > 0
     dac_init();
 #endif
- 
+
     /* initialize clocks  */
     rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
     rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
@@ -64,7 +64,9 @@ void init(void) {
     nvic_init();
     systick_init(SYSTICK_RELOAD_VAL);
     gpio_init();
-    adc_init();
+    /* Initialize the ADC for slow conversions, to allow for high
+       impedance inputs. */
+    adc_init(ADC_SMPR_55_5);
     timer_init(TIMER1, 1);
     timer_init(TIMER2, 1);
     timer_init(TIMER3, 1);

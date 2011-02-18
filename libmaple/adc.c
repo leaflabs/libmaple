@@ -60,7 +60,9 @@
  *
  * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
 
-void adc_init(void) {
+void set_adc_smprx(adc_smp_rate smp_rate);
+
+void adc_init(adc_smp_rate smp_rate) {
     rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
     rcc_clk_enable(RCC_ADC1);
     rcc_reset_dev(RCC_ADC1);
@@ -70,11 +72,9 @@ void adc_init(void) {
     ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;
     ADC_SQR1 = 0;
 
-    /* Up the sample conversion time to 55.5 cycles/sec, see note
-       above */
-    /* TODO: fix magic numbers */
-    ADC_SMPR1 = 0xB6DB6D;
-    ADC_SMPR2 = 0x2DB6DB6D;
+    /* Set the sample conversion time.  See note above for impedance
+       requirements. */
+    adc_set_sample_rate(smp_rate);
 
     /* Enable the ADC */
     CR2_ADON_BIT = 1;
@@ -92,4 +92,24 @@ void adc_init(void) {
 
 void adc_disable(void) {
     CR2_ADON_BIT = 0;
+}
+
+/* Turn the given sample rate into values for ADC_SMPRx.  (Don't
+ * precompute in order to avoid wasting space).
+ *
+ * Don't call this during conversion!
+ */
+void adc_set_sample_rate(adc_smp_rate smp_rate) {
+    uint32 adc_smpr1_val = 0, adc_smpr2_val = 0;
+    int i;
+    for (i = 0; i < 10; i++) {
+        if (i < 8) {
+            /* ADC_SMPR1 determines sample time for channels [10,17] */
+            adc_smpr1_val |= smp_rate << (i * 3);
+        }
+        /* ADC_SMPR2 determines sample time for channels [0,9] */
+        adc_smpr2_val |= smp_rate << (i * 3);
+    }
+    ADC_SMPR1 = adc_smpr1_val;
+    ADC_SMPR2 = adc_smpr2_val;
 }

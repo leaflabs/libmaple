@@ -55,6 +55,8 @@ typedef struct {
     volatile uint32 DOR2;
 } DAC_Map;
 
+/* There's only one DAC, so expose it. */
+extern DAC_Map *dac;
 
 // And here are the register bit ranges
 #define DAC_CR_EN1      BIT(0)

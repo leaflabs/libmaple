@@ -31,12 +31,11 @@
  * @brief DAC peripheral routines.
  */
 
-/* Only one, so global to this file */
-DAC_Map *dac = (DAC_Map*)(DAC_BASE);
-
 /* This numbering follows the registers (1-indexed) */
-#define DAC_CHA     1
-#define DAC_CHB     2
+#define DAC_CH1     1
+#define DAC_CH2     2
+
+DAC_Map *dac = (DAC_Map*)(DAC_BASE);
 
 /* Sets up the DAC peripheral */
 void dac_init(void) {
@@ -49,16 +48,15 @@ void dac_init(void) {
 
     /* Then do register stuff.  Default does no triggering, and
      * buffered output, so all good. */
-    dac->CR |= DAC_CR_EN1;
-    dac->CR |= DAC_CR_EN2;
+    dac->CR = DAC_CR_EN1 | DAC_CR_EN2;
 }
 
 void dac_write(uint8 chan, uint16 val) {
     switch(chan) {
-    case DAC_CHA:
+    case DAC_CH1:
         dac->DHR12R1 = 0x0FFF & val;
         break;
-    case DAC_CHB:
+    case DAC_CH2:
         dac->DHR12R2 = 0x0FFF & val;
         break;
     default:

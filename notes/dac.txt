@@ -13,11 +13,25 @@ control, and timer events. We'll just use software triggering for now.
 
 There is (obviously) DMA support for DAC output.
 
-There are noise output and triangle wave output features with variable
-amplitude.
+There are noise (via LFSR) output and triangle wave output features
+with variable amplitude.
 
-There are many additional modes to tigger output to both channels at the same
-time.
+There are eleven modes to trigger output to both channels at the same
+time, as follows:
+
+    - Independent trigger:
+                  (1) No wave generation
+                  (2) Same LFSR
+                  (3) Different LFSR
+                  (4) Same triangle
+                  (5) Different triangle
+    - (6) Simultaneous software start
+    - Simultaneous trigger:
+                   (7) Without wave generation
+                   (8) Same LFSR
+                   (9) Different LFSR
+                   (10) Same triangle
+                   (11) Different triangle
 
 Buffering will be enabled by default.
 

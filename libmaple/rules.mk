@@ -22,6 +22,7 @@ cSRCS_$(d) := adc.c                    \
               gpio.c                   \
               iwdg.c                   \
               nvic.c                   \
+              i2c.c                    \
               rcc.c                    \
               spi.c                    \
               syscalls.c               \

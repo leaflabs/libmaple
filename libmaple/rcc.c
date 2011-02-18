@@ -73,6 +73,8 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 }, // High-density only
     [RCC_DMA1]   = { .clk_domain = AHB,  .line_num = 0 },
     [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 }, // High-density only
+    [RCC_I2C1]   = { .clk_domain = APB1, .line_num = 21 }, // High-density only
+    [RCC_I2C2]   = { .clk_domain = APB1, .line_num = 22 }, // High-density only
 };
 
 /**

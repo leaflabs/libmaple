@@ -64,18 +64,19 @@ void init(void) {
     nvic_init();
     systick_init(SYSTICK_RELOAD_VAL);
     gpio_init();
+
     /* Initialize the ADC for slow conversions, to allow for high
        impedance inputs. */
     adc_init(ADC_SMPR_55_5);
-    timer_init(TIMER1, 1);
-    timer_init(TIMER2, 1);
-    timer_init(TIMER3, 1);
-    timer_init(TIMER4, 1);
-#if NR_TIMERS >= 8
-    timer_init(TIMER5, 1);
-    timer_init(TIMER8, 1);
-#endif
-    setupUSB();
+//    timer_init(TIMER1, 1);
+//    timer_init(TIMER2, 1);
+//    timer_init(TIMER3, 1);
+//    timer_init(TIMER4, 1);
+//#if NR_TIMERS >= 8
+//    timer_init(TIMER5, 1);
+//    timer_init(TIMER8, 1);
+//#endif
+//    setupUSB();
 
     /* include the board-specific init macro */
     BOARD_INIT;

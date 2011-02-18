@@ -175,6 +175,8 @@ enum {
     RCC_DAC,         // High-density devices only (Maple Native)
     RCC_DMA1,
     RCC_DMA2,        // High-density devices only (Maple Native)
+    RCC_I2C1,
+    RCC_I2C2
 };
 
 

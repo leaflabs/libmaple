@@ -44,6 +44,7 @@
 .globl HardFaultException
 .thumb_func
 HardFaultException:
+    b HardFaultException
    ldr r0, CPSR_MASK           @ Set default CPSR
    push {r0}
    ldr r0, TARGET_PC           @ Set target pc

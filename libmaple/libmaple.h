@@ -32,6 +32,7 @@
 #define _LIBMAPLE_H_
 
 #include "libmaple_types.h"
+#include "stm32.h"
 
 /* General configuration */
 #define DEBUG_NONE      0
@@ -66,6 +67,9 @@
 
     /* Has a DAC? */
     #define NR_DAC_PINS               0
+
+    /* Number of maskable interrupts */
+    #define NR_INTERRUPTS            43
 
     /* USB Identifier numbers */
     /* Descriptor strings must be modified by hand in
@@ -111,6 +115,7 @@
     #define NR_USART                  5 /* NB: 4 and 5 are UART only */
     #define NR_FSMC                   1
     #define NR_DAC_PINS               2
+    #define NR_INTERRUPTS            60
 
     #define VCOM_ID_VENDOR    0x1EAF
     #define VCOM_ID_PRODUCT   0x0004

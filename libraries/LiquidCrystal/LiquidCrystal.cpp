@@ -70,6 +70,10 @@ void LiquidCrystal::init(uint8 fourbitmode, uint8 rs, uint8 rw, uint8 enable,
   _data_pins[6] = d6;
   _data_pins[7] = d7;
 
+  for (int i = 0; i < 8 - fourbitmode * 4; i++) {
+      pinMode(_data_pins[i], OUTPUT);
+  }
+
   pinMode(_rs_pin, OUTPUT);
   // we can save 1 pin by not using RW. Indicate by passing 255 instead of pin#
   if (_rw_pin != 255) {
@@ -294,20 +298,25 @@ void LiquidCrystal::send(uint8 value, uint8 mode) {
 }
 
 void LiquidCrystal::pulseEnable(void) {
+  // _enable_pin should already be LOW (unless someone else messed
+  // with it), so don't sit around waiting for long.
   digitalWrite(_enable_pin, LOW);
-  delay(1);     // Maple mod
-  //delayMicroseconds(1);
+  delayMicroseconds(1);
+
+  // Enable pulse must be > 450 ns.  Value chosen here is the max
+  // of the following two reports:
+  // http://forums.leaflabs.com/topic.php?id=640&page=2
+  // http://forums.leaflabs.com/topic.php?id=512
   digitalWrite(_enable_pin, HIGH);
-  delay(1);     // Maple mod
-  //delayMicroseconds(1);    // enable pulse must be >450ns
+  delayMicroseconds(30);
+
+  // Commands needs > 37us to settle.
   digitalWrite(_enable_pin, LOW);
-  delay(1);     // Maple mod
-  //delayMicroseconds(100);   // commands need > 37us to settle
+  delayMicroseconds(45);
 }
 
 void LiquidCrystal::write4bits(uint8 value) {
   for (int i = 0; i < 4; i++) {
-    pinMode(_data_pins[i], OUTPUT);
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
 
@@ -316,7 +325,6 @@ void LiquidCrystal::write4bits(uint8 value) {
 
 void LiquidCrystal::write8bits(uint8 value) {
   for (int i = 0; i < 8; i++) {
-    pinMode(_data_pins[i], OUTPUT);
     digitalWrite(_data_pins[i], (value >> i) & 0x01);
   }
 

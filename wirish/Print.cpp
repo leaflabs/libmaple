@@ -1,91 +1,127 @@
-/*
- * Print.cpp - Base class that provides print() and println()
- * Copyright (c) 2008 David A. Mellis.  All right reserved.
+/******************************************************************************
+ * The MIT License
  *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
+ * Copyright (c) 2011 LeafLabs, LLC.
  *
- * This library is distributed in the hope that it will be useful, but
- * WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
  *
- * Modified 23 November 2006 by David A. Mellis
- */
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
 
-#include "wirish.h"
 #include "Print.h"
 
-//------------------------------ Public Methods -------------------------------
+#include <cstdio>
+#include <climits>
+#include <cstring>
+
+// We'll allocate character buffers of size INT_BUF_SIZE to hold the
+// string representations of numbers; this value ensures that they're
+// big enough to accomodate the biggest integral value + null byte.
+//
+// E.g., consider -(2^63-1) = -9223372036854775807, which is 20
+// characters long, including the minus sign.  The other edge cases
+// are similar.
+//
+// (Nonetheless, use snprintf everywhere, just in case of error).
+#define INT_BUF_SIZE 21
+
+// An IEEE-754 double buys you about 16 digits of precision; there's
+// the possibility of minus signs, a decimal point, 'e+'/'e-', etc.
+// While the Right Thing is to follow Steele and White, I'm just going
+// to double what I consider a safe number of bytes and hope for the
+// best.
+#define DOUBLE_BUF_SIZE 40
+
+static void fillBase(char *buf, int buf_size, int64 n,
+                     uint8 n_real_bits, int base);
+static void fillBinary(char *buf, int64 n, int start_bit);
+static char baseToFmtSpec(int base);
 
 void Print::write(const char *str) {
-    while (*str)
-        write(*str++);
-}
-
-void Print::write(void *buffer, uint32 size) {
-    uint8 *ch = (uint8*)buffer;
-    while (size--) {
-        write(*ch++);
+    for (const char *c = str; *c != '\0'; c++) {
+        write(*c);
     }
 }
 
-void Print::print(uint8 b) {
-    this->write(b);
+void Print::write(void *buffer, uint32 size) {
+    for (uint32 i = 0; i < size; i++) {
+        write(*((uint8*)buffer + i));
+    }
 }
 
 void Print::print(char c) {
-    print((byte) c);
+    print((uint8) c);
 }
 
 void Print::print(const char str[]) {
     write(str);
 }
 
-void Print::print(int n) {
-    print((long) n);
+void Print::print(uint8 b) {
+    write(b);
 }
 
-void Print::print(unsigned int n) {
-    print((unsigned long) n);
+void Print::print(int32 n) {
+    print(n, DEC);
 }
 
-void Print::print(long n) {
-    if (n < 0) {
-        print('-');
-        n = -n;
-    }
-    printNumber(n, 10);
+void Print::print(uint32 n) {
+    print((uint64) n);
 }
 
-void Print::print(unsigned long n) {
-    printNumber(n, 10);
+void Print::print(int64 n) {
+    print(n, DEC);
 }
 
-void Print::print(long n, int base) {
-    if (base == 0) {
-        print((char) n);
-    } else if (base == 10) {
-        print(n);
-    } else {
-        printNumber(n, base);
-    }
+void Print::print(uint64 n) {
+    char buf[INT_BUF_SIZE];
+    snprintf(buf, INT_BUF_SIZE, "%llu", n);
+    write(buf);
+}
+
+void Print::print(int32 n, int base) {
+    // Worst case: sign bit set && base == BIN: 32 bytes for digits +
+    // 1 null (base == BIN means no minus sign).
+    char buf[33];
+    fillBase(buf, sizeof(buf), (int64)n, 32, base);
+    write(buf);
+}
+
+void Print::print(int64 n, int base) {
+    // As above, but now 64 bytes for bits + 1 null
+    char buf[65];
+    fillBase(buf, sizeof(buf), n, 64, base);
+    write(buf);
 }
 
 void Print::print(double n) {
-    printFloat(n, 2);
+    char buf[DOUBLE_BUF_SIZE];
+    // This breaks strict compliance with the Arduino library behavior
+    // (which is equivalent to using "%.2f"), but that's really not
+    // enough.  According to Stroustrup, "%f" without precision is
+    // equivalent to ".6f", which is much better.
+    snprintf(buf, DOUBLE_BUF_SIZE, "%f", n);
+    write(buf);
 }
 
 void Print::println(void) {
-    print('\r');
-    print('\n');
+    print("\r\n");
 }
 
 void Print::println(char c) {
@@ -103,27 +139,32 @@ void Print::println(uint8 b) {
     println();
 }
 
-void Print::println(int n) {
+void Print::println(int32 n) {
     print(n);
     println();
 }
 
-void Print::println(unsigned int n) {
+void Print::println(uint32 n) {
     print(n);
     println();
 }
 
-void Print::println(long n) {
+void Print::println(int64 n) {
     print(n);
     println();
 }
 
-void Print::println(unsigned long n) {
+void Print::println(uint64 n) {
     print(n);
     println();
 }
 
-void Print::println(long n, int base) {
+void Print::println(int32 n, int base) {
+    print(n, base);
+    println();
+}
+
+void Print::println(int64 n, int base) {
     print(n, base);
     println();
 }
@@ -133,58 +174,54 @@ void Print::println(double n) {
     println();
 }
 
-//------------------------------ Private Methods ------------------------------
+// -- Auxiliary functions -----------------------------------------------------
 
-void Print::printNumber(unsigned long n, uint8 base) {
-    unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars.
-    unsigned long i = 0;
+static void fillBase(char *buf, int buf_size, int64 n,
+                     uint8 n_real_bits, int base) {
+    if (base == BIN) {
+        fillBinary(buf, n, n_real_bits - 1);
+    } else {
+        char spec = baseToFmtSpec(base);
+        char fmt[5];
 
-    if (n == 0) {
-        print('0');
-        return;
+        if (base == BYTE)
+            n = (uint8)n;
+
+        if (n_real_bits == 32) {
+            snprintf(fmt, sizeof(fmt), "%%l%c", spec);
+            snprintf(buf, buf_size, fmt, (int32)n);
+        } else {
+            snprintf(fmt, sizeof(fmt), "%%ll%c", spec);
+            snprintf(buf, buf_size, fmt, n);
+        }
     }
-
-    while (n > 0) {
-        buf[i++] = n % base;
-        n /= base;
-    }
-
-    for (; i > 0; i--)
-        print((char) (buf[i - 1] < 10 ?
-                      '0' + buf[i - 1] :
-                      'A' + buf[i - 1] - 10));
 }
 
-void Print::printFloat(double number, uint8 digits) {
-    // Handle negative numbers
-    if (number < 0.0) {
-        print('-');
-        number = -number;
+// Assumes sizeof(buf) > start_bit.
+static void fillBinary(char *buf, int64 n, int start_bit) {
+    int b = 0;                // position in buf
+    int i = start_bit;        // position in n's bits
+    while(!(n & (1 << i))) {
+        i--;
     }
-
-    // Round correctly so that print(1.999, 2) prints as "2.00"
-    double rounding = 0.5;
-    for (uint8 i=0; i<digits; ++i) {
-        rounding /= 10.0;
+    for(; i >= 0; i--) {
+        buf[b++] = '0' + ((n >> i) & 0x1);
     }
+    buf[b] = '\0';
+}
 
-    number += rounding;
-
-    // Extract the integer part of the number and print it
-    unsigned long int_part = (unsigned long)number;
-    double remainder = number - (double)int_part;
-    print(int_part);
-
-    // Print the decimal point, but only if there are digits beyond
-    if (digits > 0) {
-        print(".");
-    }
-
-    // Extract digits from the remainder one at a time
-    while (digits-- > 0) {
-        remainder *= 10.0;
-        int toPrint = int(remainder);
-        print(toPrint);
-        remainder -= toPrint;
+static char baseToFmtSpec(int base) {
+    switch (base) {
+    case DEC:
+        return 'd';
+    case HEX:
+        return 'x';
+    case OCT:
+        return 'o';
+    case BYTE:
+        return 'd';
+    default:
+        // Shouldn't happen, but give a sensible default
+        return 'd';
     }
 }

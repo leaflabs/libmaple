@@ -105,11 +105,16 @@ void digitalWrite(uint8 pin, uint8 val) {
 }
 
 void togglePin(uint8 pin) {
+    if (pin >= NR_GPIO_PINS) {
+        return;
+    }
+    
     gpio_toggle_pin(PIN_MAP[pin].port, PIN_MAP[pin].pin);
 }
 
 uint8 isButtonPressed() {
     if (digitalRead(BOARD_BUTTON_PIN)) {
+        delay(1);
         while (digitalRead(BOARD_BUTTON_PIN))
             ;
         return true;

@@ -303,16 +303,16 @@ void LiquidCrystal::pulseEnable(void) {
   digitalWrite(_enable_pin, LOW);
   delayMicroseconds(1);
 
-  // Enable pulse must be > 450 ns.  Value chosen here is the max
-  // of the following two reports:
-  // http://forums.leaflabs.com/topic.php?id=640&page=2
+  // Enable pulse must be > 450 ns.  Value chosen here according to
+  // the following threads:
+  // http://forums.leaflabs.com/topic.php?id=640
   // http://forums.leaflabs.com/topic.php?id=512
-  digitalWrite(_enable_pin, HIGH);
-  delayMicroseconds(30);
+  togglePin(_enable_pin);
+  delayMicroseconds(1);
+  togglePin(_enable_pin);
 
   // Commands needs > 37us to settle.
-  digitalWrite(_enable_pin, LOW);
-  delayMicroseconds(45);
+  delayMicroseconds(42);
 }
 
 void LiquidCrystal::write4bits(uint8 value) {

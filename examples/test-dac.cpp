@@ -16,7 +16,7 @@ void setup() {
     Serial1.println("**** Beginning DAC test");
 
     Serial1.print("Init... ");
-    dac_init();
+    dac_init(DAC_CH1 | DAC_CH2);
     Serial1.println("Done.");
 }
 
@@ -29,8 +29,8 @@ void loop() {
         count = 0;
     }
 
-    dac_write(1, 2048);
-    dac_write(2, count);
+    dac_write_channel(1, 4095 - count);
+    dac_write_channel(2, count);
 }
 
 int main(void) {

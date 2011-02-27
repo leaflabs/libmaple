@@ -23,7 +23,6 @@
  *****************************************************************************/
 
 #include "libmaple.h"
-#include "rcc.h"
 #include "gpio.h"
 #include "dac.h"
 
@@ -31,35 +30,81 @@
  * @brief DAC peripheral routines.
  */
 
-/* This numbering follows the registers (1-indexed) */
-#define DAC_CH1     1
-#define DAC_CH2     2
+dac_dev dac = {
+    .regs = DAC_BASE,
+};
+const dac_dev *DAC = &dac;
 
-DAC_Map *dac = (DAC_Map*)(DAC_BASE);
-
-/* Sets up the DAC peripheral */
-void dac_init(void) {
+/**
+ * @brief Initialize the digital to analog converter
+ * @param flags Flags:
+ *      DAC_CH1: Enable channel 1
+ *      DAC_CH2: Enable channel 2
+ * @sideeffect May set PA4 or PA5 to INPUT_ANALOG
+ */
+void dac_init(uint32 flags) {
     /* First turn on the clock */
     rcc_clk_enable(RCC_DAC);
+    rcc_reset_dev(RCC_DAC);
 
-    /* Then setup ANALOG mode on PA4 and PA5 */
-    gpio_set_mode(GPIOA_BASE,  4, CNF_INPUT_ANALOG);
-    gpio_set_mode(GPIOA_BASE,  5, CNF_INPUT_ANALOG);
+    if (flags & DAC_CH1) {
+        dac_enable_channel(1);
+    }
 
-    /* Then do register stuff.  Default does no triggering, and
-     * buffered output, so all good. */
-    dac->CR = DAC_CR_EN1 | DAC_CR_EN2;
+    if (flags & DAC_CH2) {
+        dac_enable_channel(2);
+    }
 }
 
-void dac_write(uint8 chan, uint16 val) {
-    switch(chan) {
-    case DAC_CH1:
-        dac->DHR12R1 = 0x0FFF & val;
+/**
+ * @brief Write a 12-bit value to the DAC to output
+ * @param channel channel to select (1 or 2)
+ * @param val value to write
+ */
+void dac_write_channel(uint8 channel, uint16 val) {
+    switch(channel) {
+    case 1:
+        DAC->regs->DHR12R1 = DAC_DHR12R1_DACC1DHR & val;
         break;
-    case DAC_CH2:
-        dac->DHR12R2 = 0x0FFF & val;
+    case 2:
+        DAC->regs->DHR12R2 = DAC_DHR12R2_DACC2DHR & val;
         break;
-    default:
-        ASSERT(0);  // can't happen
+    }
+}
+
+/**
+ * @brief Enable a DAC channel
+ * @param channel channel to enable, either 1 or 2
+ * @sideeffect May change pin mode of PA4 or PA5
+ */
+void dac_enable_channel(uint8 channel) {
+    /*
+     * Setup ANALOG mode on PA4 and PA5. This mapping is consistent across
+     * all STM32 chips with a DAC. See RM008 12.2.
+     */
+    switch (channel) {
+    case 1:
+        gpio_set_mode(GPIOA_BASE, 4, GPIO_MODE_INPUT_ANALOG);
+        DAC->regs->CR |= DAC_CR_EN1;
+        break;
+    case 2:
+        gpio_set_mode(GPIOA_BASE, 5, GPIO_MODE_INPUT_ANALOG);
+        DAC->regs->CR |= DAC_CR_EN2;
+        break;
+    }
+}
+
+/**
+ * @brief Disable a DAC channel
+ * @param channel channel to disable, either 1 or 2
+ */
+void dac_disable_channel(uint8 channel) {
+    switch (channel) {
+    case 1:
+        DAC->regs->CR &= ~DAC_CR_EN1;
+        break;
+    case 2:
+        DAC->regs->CR &= ~DAC_CR_EN2;
+        break;
     }
 }

@@ -178,12 +178,14 @@ typedef enum {
     RCC_DAC,         // High-density devices only (Maple Native)
     RCC_DMA1,
     RCC_DMA2,        // High-density devices only (Maple Native)
+    RCC_PWR,
+    RCC_BKP,
 } rcc_clk_id;
 
 
 void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul);
-void rcc_clk_enable(uint32 dev);
-void rcc_reset_dev(uint32 dev);
+void rcc_clk_enable(rcc_clk_id device);
+void rcc_reset_dev(rcc_clk_id device);
 void rcc_set_prescaler(uint32 prescaler, uint32 divider);
 
 #ifdef __cplusplus

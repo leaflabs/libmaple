@@ -74,6 +74,8 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 }, // High-density only
     [RCC_DMA1]   = { .clk_domain = AHB,  .line_num = 0 },
     [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 }, // High-density only
+    [RCC_PWR]    = { .clk_domain = APB1, .line_num = 28},
+    [RCC_BKP]    = { .clk_domain = APB1, .line_num = 27}
 };
 
 /**
@@ -117,18 +119,18 @@ void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul) {
 
 /**
  * @brief Turn on the clock line on a device
- * @param dev_num device to turn on
+ * @param device Clock ID of the device to turn on.
  */
-void rcc_clk_enable(uint32 dev_num) {
+void rcc_clk_enable(rcc_clk_id device) {
     static const uint32 enable_regs[] = {
         [APB1] = RCC_APB1ENR,
         [APB2] = RCC_APB2ENR,
         [AHB] = RCC_AHBENR,
     };
 
-    uint8 clk_domain = rcc_dev_table[dev_num].clk_domain;
+    uint8 clk_domain = rcc_dev_table[device].clk_domain;
 
-    __set_bits(enable_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
+    __set_bits(enable_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
 }
 
 /**
@@ -154,16 +156,16 @@ void rcc_set_prescaler(uint32 prescaler, uint32 divider) {
 
 /**
  * @brief reset a device
- * @param dev_num device to reset
+ * @param device Clock ID of the device to reset.
  */
-void rcc_reset_dev(uint32 dev_num) {
+void rcc_reset_dev(rcc_clk_id device) {
     static const uint32 reset_regs[] = {
         [APB1] = RCC_APB1RSTR,
         [APB2] = RCC_APB2RSTR,
     };
 
-    uint8 clk_domain = rcc_dev_table[dev_num].clk_domain;
+    uint8 clk_domain = rcc_dev_table[device].clk_domain;
 
-    __set_bits(reset_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
-    __clear_bits(reset_regs[clk_domain], BIT(rcc_dev_table[dev_num].line_num));
+    __set_bits(reset_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
+    __clear_bits(reset_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
 }

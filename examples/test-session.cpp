@@ -512,7 +512,7 @@ void cmd_sequential_gpio_writes(void) {
     // make sure to skip the TX/RX headers
     for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
         COMM.print("GPIO write out on header D");
-        COMM.print(i, DEC);
+        COMM.print((int)i, DEC);
         COMM.println("...");
         pinMode(i, OUTPUT);
         do {

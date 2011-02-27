@@ -77,31 +77,31 @@ static inline void dispatch_handler(uint8 channel_idx) {
     }
 }
 
-void DMAChannel1_IRQHandler(void) {
+void __irq_dma1_channel1(void) {
     dispatch_handler(0);
 }
 
-void DMAChannel2_IRQHandler(void) {
+void __irq_dma1_channel2(void) {
     dispatch_handler(1);
 }
 
-void DMAChannel3_IRQHandler(void) {
+void __irq_dma2_channel3(void) {
     dispatch_handler(2);
 }
 
-void DMAChannel4_IRQHandler(void) {
+void __irq_dma2_channel4(void) {
     dispatch_handler(3);
 }
 
-void DMAChannel5_IRQHandler(void) {
+void __irq_dma2_channel5(void) {
     dispatch_handler(4);
 }
 
-void DMAChannel6_IRQHandler(void) {
+void __irq_dma2_channel6(void) {
     dispatch_handler(5);
 }
 
-void DMAChannel7_IRQHandler(void) {
+void __irq_dma2_channel7(void) {
     dispatch_handler(6);
 }
 

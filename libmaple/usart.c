@@ -95,24 +95,24 @@ static inline void usart_irq(int usart_num) {
 /* TODO: Check the disassembly for the following functions to make
    sure GCC inlined properly. */
 
-void USART1_IRQHandler(void) {
+void __irq_usart1(void) {
     usart_irq(USART1);
 }
 
-void USART2_IRQHandler(void) {
+void __irq_usart2(void) {
     usart_irq(USART2);
 }
 
-void USART3_IRQHandler(void) {
+void __irq_usart3(void) {
     usart_irq(USART3);
 }
 
 #ifdef STM32_HIGH_DENSITY
-void UART4_IRQHandler(void) {
+void __irq_uart4(void) {
     usart_irq(UART4);
 }
 
-void UART5_IRQHandler(void) {
+void __irq_uart5(void) {
     usart_irq(UART5);
 }
 #endif

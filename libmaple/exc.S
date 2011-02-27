@@ -41,16 +41,42 @@
 #    SP-->  r0
 
 .text
-.globl HardFaultException
+.globl __exc_hardfault
+.globl __exc_nmi
+.globl __exc_hardfault
+.globl __exc_memmanage
+.globl __exc_busfault
+.globl __exc_usagefault
+
+/* TODO: Fix this up. */
 .thumb_func
-HardFaultException:
-   ldr r0, CPSR_MASK           @ Set default CPSR
-   push {r0}
-   ldr r0, TARGET_PC           @ Set target pc
-   push {r0}
-   sub sp, sp, #24             @ its not like i even care
-   ldr r0, EXC_RETURN          @ Return to thread mode
-   mov lr, r0
+__exc_nmi:
+    mov r0, #1
+
+.thumb_func
+__exc_hardfault:
+    mov r0, #2
+
+.thumb_func
+__exc_memmanage:
+    mov r0, #3
+
+.thumb_func
+__exc_busfault:
+    mov r0, #4
+
+.thumb_func
+__exc_usagefault:
+    mov r0, #5
+
+__default:
+   ldr r1, CPSR_MASK           @ Set default CPSR
+   push {r1}
+   ldr r1, TARGET_PC           @ Set target pc
+   push {r1}
+   sub sp, sp, #24             @ Don't care
+   ldr r1, EXC_RETURN          @ Return to thread mode
+   mov lr, r1
    bx lr                       @ Exception exit
 
  .align 4

@@ -74,32 +74,32 @@ static inline void dispatch_handler(uint32 channel) {
  * is associated with each channel, so we
  * don't have to keep track of which channel
  * we came from */
-void EXTI0_IRQHandler(void) {
+void __irq_exti0(void) {
     dispatch_handler(EXTI0);
     clear_pending(EXTI0);
 }
 
-void EXTI1_IRQHandler(void) {
+void __irq_exti1(void) {
     dispatch_handler(EXTI1);
     clear_pending(EXTI1);
 }
 
-void EXTI2_IRQHandler(void) {
+void __irq_exti2(void) {
     dispatch_handler(EXTI2);
     clear_pending(EXTI2);
 }
 
-void EXTI3_IRQHandler(void) {
+void __irq_exti3(void) {
     dispatch_handler(EXTI3);
     clear_pending(EXTI3);
 }
 
-void EXTI4_IRQHandler(void) {
+void __irq_exti4(void) {
     dispatch_handler(EXTI4);
     clear_pending(EXTI4);
 }
 
-void EXTI9_5_IRQHandler(void) {
+void __irq_exti9_5(void) {
     /* Figure out which channel it came from  */
     uint32 pending;
     uint32 i;
@@ -116,7 +116,7 @@ void EXTI9_5_IRQHandler(void) {
     }
 }
 
-void EXTI15_10_IRQHandler(void) {
+void __irq_exti15_10(void) {
     /* Figure out which channel it came from  */
     uint32 pending;
     uint32 i;

@@ -241,7 +241,7 @@ void usbDsbISR(void) {
 }
 
 /* overloaded ISR routine, this is the main usb ISR */
-void usb_lpIRQHandler(void) {
+void __irq_usb_lp_can_rx0(void) {
 wIstr = _GetISTR();
 
 /* go nuts with the preproc switches since this is an ISTR and must be FAST */

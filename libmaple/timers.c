@@ -382,7 +382,7 @@ void timer_generate_update(timer_dev_num timer_num) {
  * registers /or/ has overflowed.
  *
  * This is a rather long implementation... */
-void TIM1_CC_IRQHandler(void) {
+void __irq_tim1_cc(void) {
     timer_port *timer = (timer_port*)TIMER1_BASE;
     uint16 sr_buffer;
     sr_buffer = timer->SR;
@@ -418,7 +418,7 @@ void TIM1_CC_IRQHandler(void) {
         //timer->EGR  = 1;
     }
 }
-void TIM2_IRQHandler(void) {
+void __irq_tim2(void) {
     /* This is a rather long implementation... */
     timer_port *timer = (timer_port*)TIMER2_BASE;
     uint16 sr_buffer;
@@ -453,7 +453,7 @@ void TIM2_IRQHandler(void) {
         //timer->EGR  = 1;
     }
 }
-void TIM3_IRQHandler(void) {
+void __irq_tim3(void) {
     /* This is a rather long implementation... */
     timer_port *timer = (timer_port*)TIMER3_BASE;
     uint16 sr_buffer;
@@ -489,7 +489,7 @@ void TIM3_IRQHandler(void) {
     }
 }
 
-void TIM4_IRQHandler(void) {
+void __irq_tim4(void) {
     /* This is a rather long implementation... */
     timer_port*timer = (timer_port*)TIMER4_BASE;
     uint16 sr_buffer;

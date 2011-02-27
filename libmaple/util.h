@@ -44,7 +44,8 @@
 /* Convert SRAM address */
 #define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE+(a-BITBAND_SRAM_REF)*32+(b*4)))
 /* Convert PERI address */
-#define BITBAND_PERI(a,b) ((BITBAND_PERI_BASE+(a-BITBAND_PERI_REF)*32+(b*4)))
+#define BITBAND_PERI(a, b) ((BITBAND_PERI_BASE +                \
+                            ((uint32)a - BITBAND_PERI_REF) * 32 + (b * 4)))
 
 #define REG_SET(reg, val)         (*(volatile uint32*)(reg)  = (val))
 #define REG_SET_BIT(reg, bit)     (*(volatile uint32*)(reg) |= BIT(bit))

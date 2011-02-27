@@ -48,7 +48,7 @@ void _fail(const char* file, int line, const char* exp) {
     timer_disable_all();
 
     /* Turn off ADC */
-    adc_disable();
+    adc_disable_all();
 
     /* Turn off all usarts */
     usart_disable_all();

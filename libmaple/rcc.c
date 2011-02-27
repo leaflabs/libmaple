@@ -54,6 +54,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_AFIO]   = { .clk_domain = APB2, .line_num = 0 },
     [RCC_ADC1]   = { .clk_domain = APB2, .line_num = 9 },
     [RCC_ADC2]   = { .clk_domain = APB2, .line_num = 10 },
+    [RCC_ADC3]   = { .clk_domain = APB2, .line_num = 15 },
     [RCC_USART1] = { .clk_domain = APB2, .line_num = 14 },
     [RCC_USART2] = { .clk_domain = APB1, .line_num = 17 },
     [RCC_USART3] = { .clk_domain = APB1, .line_num = 18 },

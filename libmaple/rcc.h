@@ -144,8 +144,10 @@ enum {
     RCC_PRESCALER_ADC
 };
 
-// RCC Devices
-enum {
+/*
+ * Identifies bus and clock line for a device
+ */
+typedef enum {
     RCC_GPIOA,
     RCC_GPIOB,
     RCC_GPIOC,
@@ -156,6 +158,7 @@ enum {
     RCC_AFIO,
     RCC_ADC1,
     RCC_ADC2,
+    RCC_ADC3,
     RCC_USART1,
     RCC_USART2,
     RCC_USART3,
@@ -175,7 +178,7 @@ enum {
     RCC_DAC,         // High-density devices only (Maple Native)
     RCC_DMA1,
     RCC_DMA2,        // High-density devices only (Maple Native)
-};
+} rcc_clk_id;
 
 
 void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul);

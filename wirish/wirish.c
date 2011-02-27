@@ -64,7 +64,7 @@ void init(void) {
     /* Initialize the ADC for slow conversions, to allow for high
        impedance inputs. */
     adc_init(ADC1, 0);
-    adc_set_sample_rate(ADC1->regs, ADC_SMPR_55_5);
+    adc_set_sample_rate(ADC1, ADC_SMPR_55_5);
 
     timer_init(TIMER1, 1);
     timer_init(TIMER2, 1);

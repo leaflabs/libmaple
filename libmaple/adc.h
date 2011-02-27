@@ -75,9 +75,9 @@ extern const adc_dev *ADC3;
 /*
  * ADC peripheral base addresses
  */
-#define ADC1_BASE                 0x40012400
-#define ADC2_BASE                 0x40012800
-#define ADC3_BASE                 0x40013C00
+#define ADC1_BASE               ((adc_reg_map*)0x40012400)
+#define ADC2_BASE               ((adc_reg_map*)0x40012800)
+#define ADC3_BASE               ((adc_reg_map*)0x40013C00)
 
 /*
  * Register bit definitions
@@ -120,7 +120,7 @@ extern const adc_dev *ADC3;
 #define ADC_CR2_TSEREFE         BIT(23)
 
 void adc_init(const adc_dev *dev, uint32 flags);
-void adc_set_extsel(adc_reg_map *regs, uint8 trigger);
+void adc_set_extsel(const adc_dev *dev, uint8 trigger);
 
 /** ADC per-sample conversion times, in ADC clock cycles */
 typedef enum {
@@ -134,7 +134,7 @@ typedef enum {
     ADC_SMPR_239_5              ///< 239.5 ADC cycles
 } adc_smp_rate;
 
-void adc_set_sample_rate(adc_reg_map *regs, adc_smp_rate smp_rate);
+void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
 
 /**
  * @brief Perform a single synchronous software triggered conversion on a
@@ -143,7 +143,9 @@ void adc_set_sample_rate(adc_reg_map *regs, adc_smp_rate smp_rate);
  * @param channel channel to convert
  * @return conversion result
  */
-static inline uint32 adc_read(adc_reg_map *regs, uint8 channel) {
+static inline uint32 adc_read(const adc_dev *dev, uint8 channel) {
+    adc_reg_map *regs = dev->regs;
+
     /* Set target channel */
     regs->SQR3 = channel;
 
@@ -159,34 +161,38 @@ static inline uint32 adc_read(adc_reg_map *regs, uint8 channel) {
 
 /**
  * @brief Set external trigger conversion mode event for regular channels
- * @param regs adc register map
+ * @param dev adc device
  * @param enable if 1, conversion on external events is enabled, 0 to disable
  */
-static inline void adc_set_exttrig(adc_reg_map *regs, uint8 enable) {
-    __write(BITBAND_PERI(&(regs->CR2), 20), enable);
+static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
+    __write(BITBAND_PERI(&(dev->regs->CR2), 20), enable);
 }
 
 /**
  * @brief Enable an adc peripheral
  * @param regs register map of peripheral to enable
  */
-static inline void adc_enable(adc_reg_map *regs) {
-    __write(BITBAND_PERI(&(regs->CR2), 0), 1);
+static inline void adc_enable(const adc_dev *dev) {
+    __write(BITBAND_PERI(&(dev->regs->CR2), 0), 1);
 }
 
 /**
  * @brief Disable an adc peripheral
  * @param regs register map of peripheral to disable
  */
-static inline void adc_disable(adc_reg_map *regs) {
-    __write(BITBAND_PERI(&(regs->CR2), 0), 0);
+static inline void adc_disable(const adc_dev *dev) {
+    __write(BITBAND_PERI(&(dev->regs->CR2), 0), 0);
 }
 
 /**
  * @brief Disable all ADCs
  */
 static inline void adc_disable_all(void) {
-    adc_disable(ADC1->regs);
+    adc_disable(ADC1);
+    adc_disable(ADC2);
+#if NR_ADCS >= 3
+    adc_disable(ADC3);
+#endif
 }
 
 #ifdef __cplusplus

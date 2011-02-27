@@ -38,26 +38,26 @@
 #include "adc.h"
 
 adc_dev adc1 = {
-    .regs   = (adc_reg_map*)ADC1_BASE,
+    .regs   = ADC1_BASE,
     .clk_id = RCC_ADC1
 };
 const adc_dev *ADC1 = &adc1;
 
 adc_dev adc2 = {
-    .regs   = (adc_reg_map*)ADC2_BASE,
+    .regs   = ADC2_BASE,
     .clk_id = RCC_ADC2
 };
 const adc_dev *ADC2 = &adc2;
 
 #if NR_ADCS >= 3
 adc_dev adc3 = {
-    .regs   = (adc_reg_map*)ADC3_BASE,
+    .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3
 };
 const adc_dev *ADC3 = &adc3;
 #endif
 
-static void adc_calibrate(adc_reg_map *regs);
+static void adc_calibrate(const adc_dev *dev);
 
 /**
  * @brief Initialize an ADC peripheral. Only supports software triggered
@@ -72,39 +72,40 @@ void adc_init(const adc_dev *dev, uint32 flags) {
     rcc_reset_dev(dev->clk_id);
 
     /* Software triggers conversions, conversion on external events */
-    adc_set_extsel(dev->regs, 7);
-    adc_set_exttrig(dev->regs, 1);
+    adc_set_extsel(dev, 7);
+    adc_set_exttrig(dev, 1);
 
     /* Enable the ADC */
-    adc_enable(dev->regs);
+    adc_enable(dev);
 
     /* Calibrate ADC */
-    adc_calibrate(dev->regs);
+    adc_calibrate(dev);
 }
 
 /**
  * @brief Set external event select for regular group
- * @param regs adc register map
+ * @param dev adc device
  * @param trigger event to select. See ADC_CR2 EXTSEL[2:0] bits.
  */
-void adc_set_extsel(adc_reg_map *regs, uint8 trigger) {
-    uint32 cr2 = regs->CR2;
+void adc_set_extsel(const adc_dev *dev, uint8 trigger) {
+    uint32 cr2 = dev->regs->CR2;
     cr2 &= ~ADC_CR2_EXTSEL;
     cr2 |= (trigger & 0x7) << 17;
-    regs->CR2 = cr2;
+    dev->regs->CR2 = cr2;
 }
 
 
 /**
  * @brief Turn the given sample rate into values for ADC_SMPRx. Don't
  * call this during conversion.
- * @param regs adc register map
+ * @param dev adc device
  * @param smp_rate sample rate to set
  * @see adc_smp_rate
  */
-void adc_set_sample_rate(adc_reg_map *regs, adc_smp_rate smp_rate) {
+void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate) {
     uint32 adc_smpr1_val = 0, adc_smpr2_val = 0;
     int i;
+
     for (i = 0; i < 10; i++) {
         if (i < 8) {
             /* ADC_SMPR1 determines sample time for channels [10,17] */
@@ -113,17 +114,18 @@ void adc_set_sample_rate(adc_reg_map *regs, adc_smp_rate smp_rate) {
         /* ADC_SMPR2 determines sample time for channels [0,9] */
         adc_smpr2_val |= smp_rate << (i * 3);
     }
-    regs->SMPR1 = adc_smpr1_val;
-    regs->SMPR2 = adc_smpr2_val;
+
+    dev->regs->SMPR1 = adc_smpr1_val;
+    dev->regs->SMPR2 = adc_smpr2_val;
 }
 
 /**
  * @brief Calibrate an ADC peripheral
- * @param regs adc register map
+ * @param dev adc device
  */
-static void adc_calibrate(adc_reg_map *regs) {
-    __io uint32 *rstcal_bit = (__io uint32*)BITBAND_PERI(&(regs->CR2), 3);
-    __io uint32 *cal_bit = (__io uint32*)BITBAND_PERI(&(regs->CR2), 2);
+static void adc_calibrate(const adc_dev *dev) {
+    __io uint32 *rstcal_bit = (__io uint32*)BITBAND_PERI(&(dev->regs->CR2), 3);
+    __io uint32 *cal_bit = (__io uint32*)BITBAND_PERI(&(dev->regs->CR2), 2);
 
     *rstcal_bit = 1;
     while (*rstcal_bit)

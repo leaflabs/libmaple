@@ -37,5 +37,5 @@ uint32 analogRead(uint8 pin) {
         return 0;
     }
 
-    return adc_read(ADC1->regs, PIN_MAP[pin].adc_channel);
+    return adc_read(ADC1, PIN_MAP[pin].adc_channel);
 }

@@ -37,26 +37,37 @@
 extern "C"{
 #endif
 
+/** DAC register map. */
 typedef struct dac_reg_map {
-    __io uint32 CR;             ///< Control register
-    __io uint32 SWTRIGR;        ///< Software trigger register
-    __io uint32 DHR12R1;        ///< Channel 1 12-bit right aligned data holding register
-    __io uint32 DHR12L1;        ///< Channel 1 12-bit left aligned data holding register
-    __io uint32 DHR8R1;         ///< Channel 1 8-bit left aligned data holding register
-    __io uint32 DHR12R2;        ///< Channel 2 12-bit right aligned data holding register
-    __io uint32 DHR12L2;        ///< Channel 2 12-bit left aligned data holding register
-    __io uint32 DHR8R2;         ///< Channel 2 8-bit left aligned data holding register
-    __io uint32 DHR12RD;        ///< Dual DAC 12-bit right aligned data holding register
-    __io uint32 DHR12LD;        ///< Dual DAC 12-bit left aligned data holding register
-    __io uint32 DHR8RD;         ///< Dual DAC 8-bit left aligned data holding register
-    __io uint32 DOR1;           ///< Channel 1 data output register
-    __io uint32 DOR2;           ///< Channel 2 data output register
+    __io uint32 CR;      /**< Control register */
+    __io uint32 SWTRIGR; /**< Software trigger register */
+    __io uint32 DHR12R1; /**< Channel 1 12-bit right-aligned data
+                              holding register */
+    __io uint32 DHR12L1; /**< Channel 1 12-bit left-aligned data
+                              holding register */
+    __io uint32 DHR8R1;  /**< Channel 1 8-bit left-aligned data
+                              holding register */
+    __io uint32 DHR12R2; /**< Channel 2 12-bit right-aligned data
+                              holding register */
+    __io uint32 DHR12L2; /**< Channel 2 12-bit left-aligned data
+                              holding register */
+    __io uint32 DHR8R2;  /**< Channel 2 8-bit left-aligned data
+                              holding register */
+    __io uint32 DHR12RD; /**< Dual DAC 12-bit right-aligned data
+                              holding register */
+    __io uint32 DHR12LD; /**< Dual DAC 12-bit left-aligned data
+                              holding register */
+    __io uint32 DHR8RD;  /**< Dual DAC 8-bit left-aligned data holding
+                              register */
+    __io uint32 DOR1;    /**< Channel 1 data output register */
+    __io uint32 DOR2;    /**< Channel 2 data output register */
 } dac_reg_map;
 
 typedef struct dac_dev {
     dac_reg_map *regs;
 } dac_dev;
 
+/** DAC device. */
 extern const dac_dev *DAC;
 
 /*
@@ -69,52 +80,54 @@ extern const dac_dev *DAC;
  */
 
 /* Control register */
-#define DAC_CR_EN1                   BIT(0)     // Channel 1 enable
-#define DAC_CR_BOFF1                 BIT(1)     // Channel 1 output buffer disable
-#define DAC_CR_TEN1                  BIT(2)     // Channel 1 trigger enable
-#define DAC_CR_TSEL1             (0x7 << 3)     // Channel 1 trigger selection
-#define DAC_CR_WAVE1             (0x3 << 6)     // Channel 1 noise/triangle wave generationg enable
-#define DAC_CR_MAMP1             (0xF << 8)     // Channel 1 mask/amplitude selector
-#define DAC_CR_DMAEN1               BIT(12)     // Channel 1 DMA enable
-#define DAC_CR_EN2                  BIT(16)     // Channel 2 enable
-#define DAC_CR_BOFF2                BIT(17)     // Channel 2 output buffer disable
-#define DAC_CR_TEN2                 BIT(18)     // Channel 2 trigger enable
-#define DAC_CR_TSEL2            (0x7 << 19)     // Channel 2 trigger selection
-#define DAC_CR_WAVE2            (0x3 << 22)     // Channel 2 noise/triangle wave generationg enable
-#define DAC_CR_MAMP2            (0xF << 24)     // Channel 2 mask/amplitude selector
-#define DAC_CR_DMAEN2               BIT(28)     // Channel 2 DMA enable
+/* Channel 1 control */
+#define DAC_CR_EN1                   BIT(0) /* Enable */
+#define DAC_CR_BOFF1                 BIT(1) /* Output buffer disable */
+#define DAC_CR_TEN1                  BIT(2) /* Trigger enable */
+#define DAC_CR_TSEL1             (0x7 << 3) /* Trigger selection */
+#define DAC_CR_WAVE1             (0x3 << 6) /* Noise/triangle wave enable */
+#define DAC_CR_MAMP1             (0xF << 8) /* Mask/amplitude selector */
+#define DAC_CR_DMAEN1               BIT(12) /* DMA enable */
+/* Channel 2 control */
+#define DAC_CR_EN2                  BIT(16) /* Enable */
+#define DAC_CR_BOFF2                BIT(17) /* Output buffer disable */
+#define DAC_CR_TEN2                 BIT(18) /* Trigger enable */
+#define DAC_CR_TSEL2            (0x7 << 19) /* Trigger selection */
+#define DAC_CR_WAVE2            (0x3 << 22) /* Noise/triangle wave generation*/
+#define DAC_CR_MAMP2            (0xF << 24) /* Mask/amplitude selector */
+#define DAC_CR_DMAEN2               BIT(28) /* DMA enable */
 
 /* Software trigger register */
-#define DAC_SWTRIGR_SWTRIG1          BIT(0)     // Channel 1 software trigger
-#define DAC_SWTRIGR_SWTRIG2          BIT(1)     // Channel 2 software trigger
+#define DAC_SWTRIGR_SWTRIG1          BIT(0) /* Channel 1 software trigger */
+#define DAC_SWTRIGR_SWTRIG2          BIT(1) /* Channel 2 software trigger */
 
-/* Channel 1 12-bit right aligned data holding register */
+/* Channel 1 12-bit right-aligned data holding register */
 #define DAC_DHR12R1_DACC1DHR     0x00000FFF
 
-/* Channel 1 12-bit left aligned data holding register */
+/* Channel 1 12-bit left-aligned data holding register */
 #define DAC_DHR12L1_DACC1DHR     0x0000FFF0
 
-/* Channel 1 8-bit left aligned data holding register */
+/* Channel 1 8-bit left-aligned data holding register */
 #define DAC_DHR8R1_DACC1DHR      0x000000FF
 
-/* Channel 2 12-bit right aligned data holding register */
+/* Channel 2 12-bit right-aligned data holding register */
 #define DAC_DHR12R2_DACC2DHR     0x00000FFF
 
-/* Channel 2 12-bit left aligned data holding register */
+/* Channel 2 12-bit left-aligned data holding register */
 #define DAC_DHR12L2_DACC2DHR     0x0000FFF0
 
-/* Channel 2 8-bit left aligned data holding register */
+/* Channel 2 8-bit left-aligned data holding register */
 #define DAC_DHR8R2_DACC2DHR      0x000000FF
 
-/* Dual DAC 12-bit right aligned data holding register */
+/* Dual DAC 12-bit right-aligned data holding register */
 #define DAC_DHR12RD_DACC1DHR     0x00000FFF
 #define DAC_DHR12RD_DACC2DHR     0x0FFF0000
 
-/* Dual DAC 12-bit left aligned data holding register */
+/* Dual DAC 12-bit left-aligned data holding register */
 #define DAC_DHR12LD_DACC1DHR     0x0000FFF0
 #define DAC_DHR12LD_DACC2DHR     0xFFF00000
 
-/* Dual DAC 8-bit left aligned data holding register */
+/* Dual DAC 8-bit left-aligned data holding register */
 #define DAC_DHR8RD_DACC1DHR      0x000000FF
 #define DAC_DHR8RD_DACC2DHR      0x0000FF00
 
@@ -135,6 +148,5 @@ void dac_disable_channel(uint8 channel);
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
 
 #endif

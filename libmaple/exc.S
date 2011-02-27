@@ -48,40 +48,50 @@
 .globl __exc_busfault
 .globl __exc_usagefault
 
-/* TODO: Fix this up. */
+.code 16
 .thumb_func
 __exc_nmi:
     mov r0, #1
+    b __default_exc
 
 .thumb_func
 __exc_hardfault:
     mov r0, #2
+    b __default_exc
 
 .thumb_func
 __exc_memmanage:
     mov r0, #3
+    b __default_exc
 
 .thumb_func
 __exc_busfault:
     mov r0, #4
+    b __default_exc
 
 .thumb_func
 __exc_usagefault:
     mov r0, #5
+    b __default_exc
 
-__default:
-   ldr r1, CPSR_MASK           @ Set default CPSR
-   push {r1}
-   ldr r1, TARGET_PC           @ Set target pc
-   push {r1}
-   sub sp, sp, #24             @ Don't care
-   ldr r1, EXC_RETURN          @ Return to thread mode
-   mov lr, r1
-   bx lr                       @ Exception exit
+.thumb_func
+__default_exc:
+    ldr r2, NVIC_CCR            @ Enabling returning to thread mode from an
+    mov r1 ,#1                  @ exception. See flag NONEBASETHRDENA.
+    str r1, [r2]
+    cpsid i                     @ Disable global interrupts
+    ldr r1, CPSR_MASK           @ Set default CPSR
+    push {r1}
+    ldr r1, TARGET_PC           @ Set target pc
+    push {r1}
+    sub sp, sp, #24             @ Don't care
+    ldr r1, EXC_RETURN          @ Return to thread mode
+    mov lr, r1
+    bx lr                       @ Exception exit
 
- .align 4
- CPSR_MASK:  .word 0x61000000
- EXC_RETURN: .word 0xFFFFFFF9
- TARGET_PC:  .word throb
-
+.align 4
+CPSR_MASK:  .word 0x61000000
+EXC_RETURN: .word 0xFFFFFFF9
+TARGET_PC:  .word __error
+NVIC_CCR:   .word 0xE000ED14    @ NVIC configuration control register
 

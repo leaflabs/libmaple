@@ -79,6 +79,7 @@ extern "C"{
 #define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
 
 #define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
+void __error(void);
 void _fail(const char*, int, const char*);
 void throb(void);
 

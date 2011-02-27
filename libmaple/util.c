@@ -49,14 +49,14 @@
 #define HAVE_ERROR_LED
 #endif
 
-/* Error assert + fade */
-void _fail(const char* file, int line, const char* exp) {
-    int32  slope   = 1;
-    uint32 CC      = 0x0000;
-    uint32 TOP_CNT = 0x02FF;
-    uint32 i       = 0;
-
-    /* Turn off interrupts */
+/**
+ * @brief Disables all peripheral interrupts except USB and fades the
+ * error LED.
+ *
+ * Called from exc.S with global interrupts disabled.
+ */
+void __error(void) {
+    /* Turn off peripheral interrupts */
     nvic_irq_disable_all();
 
     /* Turn off timers  */
@@ -68,6 +68,24 @@ void _fail(const char* file, int line, const char* exp) {
     /* Turn off all usarts */
     usart_disable_all();
 
+    /* Turn the USB interrupt back on so the bootloader keeps on functioning */
+    nvic_irq_enable(NVIC_INT_USBHP);
+    nvic_irq_enable(NVIC_INT_USBLP);
+
+    /* Reenable global interrupts */
+    nvic_globalirq_enable();
+    throb();
+}
+
+/**
+ * @brief Prints an error message on a uart upon a failed assertion
+ *      and error throbs.
+ * @param file Source file of failed assertion
+ * @param line Source line of failed assertion
+ * @param exp String representation of failed assertion
+ * @sideeffect Turns of all peripheral interrupts except USB.
+ */
+void _fail(const char* file, int line, const char* exp) {
     /* Initialize the error usart */
     gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
     usart_init(ERROR_USART_NUM, ERROR_USART_BAUD);
@@ -82,19 +100,15 @@ void _fail(const char* file, int line, const char* exp) {
     usart_putc(ERROR_USART_NUM, '\n');
     usart_putc(ERROR_USART_NUM, '\r');
 
-#ifdef HAVE_ERROR_LED
-    /* Turn on the error LED */
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
-#endif
-
-    /* Turn the USB interrupt back on so the bootloader keeps on functioning */
-    nvic_irq_enable(NVIC_INT_USBHP);
-    nvic_irq_enable(NVIC_INT_USBLP);
-
     /* Error fade */
-    throb();
+    __error();
 }
 
+
+/**
+ * @brief Fades the error LED on and off
+ * @sideeffect Sets output push-pull on ERROR_LED_PIN.
+ */
 void throb(void) {
 #ifdef HAVE_ERROR_LED
     int32  slope   = 1;

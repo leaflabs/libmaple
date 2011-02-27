@@ -80,6 +80,9 @@ __default_exc:
     mov r1 ,#1                  @ exception. See flag NONEBASETHRDENA.
     str r1, [r2]
     cpsid i                     @ Disable global interrupts
+    ldr r2, SYSTICK_CSR         @ Disable systick handler
+    mov r1, #0
+    str r1, [r2]
     ldr r1, CPSR_MASK           @ Set default CPSR
     push {r1}
     ldr r1, TARGET_PC           @ Set target pc
@@ -90,8 +93,9 @@ __default_exc:
     bx lr                       @ Exception exit
 
 .align 4
-CPSR_MASK:  .word 0x61000000
-EXC_RETURN: .word 0xFFFFFFF9
-TARGET_PC:  .word __error
-NVIC_CCR:   .word 0xE000ED14    @ NVIC configuration control register
+CPSR_MASK:     .word 0x61000000
+EXC_RETURN:    .word 0xFFFFFFF9
+TARGET_PC:     .word __error
+NVIC_CCR:      .word 0xE000ED14    @ NVIC configuration control register
+SYSTICK_CSR:   .word 0xE000E010    @ Systick control register
 

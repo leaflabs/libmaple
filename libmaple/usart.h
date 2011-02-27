@@ -43,8 +43,10 @@ enum {
     USART1,
     USART2,
     USART3,
+#ifdef STM32_HIGH_DENSITY
     UART4,
     UART5,
+#endif
 };
 
 /* peripheral register struct  */

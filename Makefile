@@ -9,17 +9,27 @@ VENDOR_ID  := 1EAF
 PRODUCT_ID := 0003
 
 # Guess the MCU based on the BOARD (can be overridden )
+# FIXME the error LED config needs to be in wirish/ instead
 ifeq ($(BOARD), maple)
    MCU := STM32F103RB
    PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOA_BASE
+   ERROR_LED_PIN  := 5
+   DENSITY := STM32_MEDIUM_DENSITY
 endif
 ifeq ($(BOARD), maple_native)
    MCU := STM32F103ZE
    PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOC_BASE
+   ERROR_LED_PIN  := 15
+   DENSITY := STM32_HIGH_DENSITY
 endif
 ifeq ($(BOARD), maple_mini)
    MCU := STM32F103CB
    PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOB_BASE
+   ERROR_LED_PIN  := 1
+   DENSITY := STM32_MEDIUM_DENSITY
 endif
 
 # Useful paths
@@ -32,13 +42,26 @@ BUILD_PATH = build
 LIBMAPLE_PATH := $(SRCROOT)/libmaple
 SUPPORT_PATH := $(SRCROOT)/support
 
-# Useful variables
-GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m -nostdlib \
-                   -ffunction-sections -fdata-sections -Wl,--gc-sections   \
-                   -DBOARD_$(BOARD) -DMCU_$(MCU)
-GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall -DBOARD_$(BOARD) -DMCU_$(MCU)
-GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb -DBOARD_$(BOARD) \
-                   -DMCU_$(MCU) -x assembler-with-cpp
+# Compilation flags.
+# FIXME remove the ERROR_LED config
+GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
+		   -nostdlib						     \
+		   -ffunction-sections -fdata-sections -Wl,--gc-sections     \
+		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
+		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
+		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
+		   -D$(DENSITY)
+GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall			     \
+		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
+		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
+		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
+		   -D$(DENSITY)
+GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
+		   -x assembler-with-cpp				     \
+		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
+		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
+		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
+		   -D$(DENSITY)
 
 LDDIR    := $(SUPPORT_PATH)/ld
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \

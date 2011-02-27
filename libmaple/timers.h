@@ -206,7 +206,7 @@ typedef enum {
     TIMER2,      /*< General purpose timer TIM2 */
     TIMER3,      /*< General purpose timer TIM3 */
     TIMER4,      /*< General purpose timer TIM4 */
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     TIMER5,      /*< General purpose timer TIM5; high density only */
     /* FIXME maple native: put timers 6 and 7 back in and make the
        corresponding changes to timers.c */
@@ -412,8 +412,8 @@ void timer_generate_update(timer_dev_num timer_num);
 /**
  * Turn on PWM with duty_cycle.
  *
- * @param ccr TIMERx_CHn_CCR, where x goes from 1 to NR_TIMERS,
- * and n goes from 1 to 4.
+ * @param ccr TIMERx_CHn_CCR, where x ranges over timers, and n ranges
+ * from 1 to 4.
  *
  * @param duty_cycle: A number between 0 and
  * timer_get_compare_value(TIMERx, y), where x and y are as above.

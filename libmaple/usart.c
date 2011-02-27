@@ -61,7 +61,7 @@ struct usart_dev usart_dev_table[] = {
         .rcc_dev_num = RCC_USART3,
         .nvic_dev_num = NVIC_USART3
     },
-#if NR_USART >= 5
+#ifdef STM32_HIGH_DENSITY
     /* TODO test */
     [UART4] = {
         .base = (usart_port*)UART4_BASE,
@@ -107,7 +107,7 @@ void USART3_IRQHandler(void) {
     usart_irq(USART3);
 }
 
-#if NR_USART >= 5
+#ifdef STM32_HIGH_DENSITY
 void UART4_IRQHandler(void) {
     usart_irq(UART4);
 }
@@ -124,7 +124,11 @@ void UART5_IRQHandler(void) {
  *  @param baud Baud rate to be set at
  */
 void usart_init(uint8 usart_num, uint32 baud) {
-    ASSERT(usart_num <= NR_USART);
+#ifdef STM32_HIGH_DENSITY
+    ASSERT(usart_num <= UART5);
+#else
+    ASSERT(usart_num <= USART3);
+#endif
     usart_port *port;
     ring_buffer *ring_buf;
 
@@ -170,7 +174,7 @@ void usart_disable_all() {
     usart_disable(USART1);
     usart_disable(USART2);
     usart_disable(USART3);
-#if NR_USART >= 5
+#ifdef STM32_HIGH_DENSITY
     usart_disable(UART4);
     usart_disable(UART5);
 #endif

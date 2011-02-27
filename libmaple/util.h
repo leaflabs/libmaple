@@ -32,7 +32,18 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-#include "libmaple.h"
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+/* Debug configuration */
+#define DEBUG_NONE      0
+#define DEBUG_FAULT     1
+#define DEBUG_ALL       2
+
+#ifndef DEBUG_LEVEL
+#define DEBUG_LEVEL DEBUG_ALL
+#endif
 
 #define BIT(shift)                     (1UL << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
@@ -41,9 +52,14 @@
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
 /* Bit-banding macros  */
+/* Bitbanded Memory sections */
+#define BITBAND_SRAM_REF   0x20000000
+#define BITBAND_SRAM_BASE  0x22000000
+#define BITBAND_PERI_REF   0x40000000
+#define BITBAND_PERI_BASE  0x42000000
 /* Convert SRAM address */
 #define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE+(a-BITBAND_SRAM_REF)*32+(b*4)))
-/* Convert PERI address */
+/* Convert peripheral address */
 #define BITBAND_PERI(a, b) ((BITBAND_PERI_BASE +                \
                             ((uint32)a - BITBAND_PERI_REF) * 32 + (b * 4)))
 
@@ -63,17 +79,8 @@
 #define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
 
 #define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
-
-#ifdef __cplusplus
-extern "C"{
-#endif
-
 void _fail(const char*, int, const char*);
 void throb(void);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
 
 /* Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to
  * compile out these checks */
@@ -98,6 +105,10 @@ void throb(void);
 
 #else
 #define ASSERT_FAULT(exp) (void)((0))
+#endif
+
+#ifdef __cplusplus
+} // extern "C"
 #endif
 
 #endif

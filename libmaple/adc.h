@@ -68,7 +68,7 @@ typedef struct adc_dev {
 
 extern const adc_dev *ADC1;
 extern const adc_dev *ADC2;
-#if NR_ADCS >= 3
+#ifdef STM32_HIGH_DENSITY
 extern const adc_dev *ADC3;
 #endif
 
@@ -190,7 +190,7 @@ static inline void adc_disable(const adc_dev *dev) {
 static inline void adc_disable_all(void) {
     adc_disable(ADC1);
     adc_disable(ADC2);
-#if NR_ADCS >= 3
+#ifdef STM32_HIGH_DENSITY
     adc_disable(ADC3);
 #endif
 }

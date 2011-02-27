@@ -70,8 +70,12 @@ typedef struct PinMapping {
     #define CYCLES_PER_MICROSECOND  72
     #define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */
 
-    #define BOARD_BUTTON_PIN   38
-    #define BOARD_LED_PIN      13
+    #define BOARD_BUTTON_PIN        38
+    #define BOARD_LED_PIN           13
+
+    /* Total number of GPIO pins that are broken out to headers and
+       intended for general use. */
+    #define NR_GPIO_PINS            39
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         /* D0/PA3 */
@@ -172,6 +176,8 @@ typedef struct PinMapping {
 
     #define BOARD_LED_PIN           D21
     #define BOARD_BUTTON_PIN        D18
+
+    #define NR_GPIO_PINS            100
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         /* Top header */
@@ -390,11 +396,13 @@ typedef struct PinMapping {
 
 #elif defined(BOARD_maple_mini)
 
-    #define CYCLES_PER_MICROSECOND 72
+    #define CYCLES_PER_MICROSECOND    72
     #define SYSTICK_RELOAD_VAL     71999 /* takes a cycle to reload */
 
-    #define BOARD_BUTTON_PIN 32
-    #define BOARD_LED_PIN    33
+    #define BOARD_BUTTON_PIN          32
+    #define BOARD_LED_PIN             33
+
+    #define NR_GPIO_PINS              34
 
     static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
         /* D0/PB11 */

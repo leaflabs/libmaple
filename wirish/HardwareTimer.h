@@ -382,7 +382,7 @@ extern HardwareTimer Timer2;
 extern HardwareTimer Timer3;
 /** Pre-instantiated timer for use by user code. */
 extern HardwareTimer Timer4;
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
 /** Pre-instantiated timer for use by user code, on devices with
     more than four timers (this does not include the Maple). */
 extern HardwareTimer Timer5;

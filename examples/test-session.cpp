@@ -614,9 +614,8 @@ void init_all_timers(uint16 prescale) {
     timer_init(TIMER1, prescale);
     timer_init(TIMER2, prescale);
     timer_init(TIMER3, prescale);
-#if NR_TIMERS >= 4
     timer_init(TIMER4, prescale);
-#elif NR_TIMERS >= 8 // TODO test this on maple native
+#ifdef STM32_HIGH_DENSITY
     timer_init(TIMER5, prescale);
     timer_init(TIMER6, prescale);
     timer_init(TIMER7, prescale);

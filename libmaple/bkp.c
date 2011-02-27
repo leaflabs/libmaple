@@ -69,7 +69,8 @@ void bkp_disable_writes(void) {
 
 /**
  * Read a value from given backup data register.
- * @param reg Data register to read, from 1 to NR_BKP_REGS (10 on Maple).
+ * @param reg Data register to read, from 1 to BKP_NR_DATA_REGS (10 on
+ *            medium-density devices, 42 on high-density devices).
  */
 uint16 bkp_read(uint8 reg) {
     __io uint32* dr = data_register(reg);
@@ -85,7 +86,8 @@ uint16 bkp_read(uint8 reg) {
  *
  * Write access to backup registers must be enabled.
  *
- * @param reg Data register to write, from 1 to NR_BKP_REGS (10 on Maple).
+ * @param reg Data register to write, from 1 to BKP_NR_DATA_REGS (10
+ *            on medium-density devices, 42 on high-density devices).
  * @param val Value to write into the register.
  * @see bkp_enable_writes()
  */
@@ -101,16 +103,16 @@ void bkp_write(uint8 reg, uint16 val) {
 /*
  * Data register memory layout is not contiguous. It's split up from
  * 1--NR_LOW_DRS, beginning at BKP_BASE->DR1, through to
- * (NR_LOW_DRS+1)--NR_BKP_REGS, beginning at BKP_BASE->DR10.
+ * (NR_LOW_DRS+1)--BKP_NR_DATA_REGS, beginning at BKP_BASE->DR11.
  */
 #define NR_LOW_DRS 10
 
 static inline __io uint32* data_register(uint8 reg) {
-    if (reg < 1 || reg > NR_BKP_REGS) {
+    if (reg < 1 || reg > BKP_NR_DATA_REGS) {
         return 0;
     }
 
-#if NR_BKP_REGS == NR_LOW_DRS
+#if BKP_NR_DATA_REGS == NR_LOW_DRS
     return (uint32*)BKP_BASE + reg;
 #else
     if (reg <= NR_LOW_DRS) {

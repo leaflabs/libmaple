@@ -199,7 +199,7 @@ HardwareTimer Timer1(TIMER1);
 HardwareTimer Timer2(TIMER2);
 HardwareTimer Timer3(TIMER3);
 HardwareTimer Timer4(TIMER4);
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
 HardwareTimer Timer5(TIMER5);    // High-density devices only
 HardwareTimer Timer8(TIMER8);    // High-density devices only
 #endif
@@ -214,7 +214,7 @@ HardwareTimer* getTimer(timer_dev_num timerNum) {
         return &Timer3;
     case TIMER4:
         return &Timer4;
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     case TIMER5:
         return &Timer5;
     case TIMER8:

@@ -34,6 +34,21 @@
 #include "adc.h"
 #include "timers.h"
 
+/* Failed asserts send out a message on this USART. */
+#ifndef ERROR_USART_NUM
+#define ERROR_USART_NUM        USART2
+#define ERROR_USART_BAUD       9600
+#define ERROR_TX_PORT          GPIOA_BASE
+#define ERROR_TX_PIN           2
+#endif
+
+/* If you define ERROR_LED_PORT and ERROR_LED_PIN, then a failed
+   assert will also throb an LED connected to that port an pin.
+   FIXME this should work together with wirish somehow. */
+#if defined(ERROR_LED_PORT) && defined(ERROR_LED_PIN)
+#define HAVE_ERROR_LED
+#endif
+
 /* Error assert + fade */
 void _fail(const char* file, int line, const char* exp) {
     int32  slope   = 1;
@@ -67,8 +82,10 @@ void _fail(const char* file, int line, const char* exp) {
     usart_putc(ERROR_USART_NUM, '\n');
     usart_putc(ERROR_USART_NUM, '\r');
 
+#ifdef HAVE_ERROR_LED
     /* Turn on the error LED */
     gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
+#endif
 
     /* Turn the USB interrupt back on so the bootloader keeps on functioning */
     nvic_irq_enable(NVIC_INT_USBHP);
@@ -79,6 +96,7 @@ void _fail(const char* file, int line, const char* exp) {
 }
 
 void throb(void) {
+#ifdef HAVE_ERROR_LED
     int32  slope   = 1;
     uint32 CC      = 0x0000;
     uint32 TOP_CNT = 0x0200;
@@ -105,5 +123,10 @@ void throb(void) {
         }
         i++;
     }
+#else
+    /* No error LED is connected; do nothing. */
+    while (1)
+        ;
+#endif
 }
 

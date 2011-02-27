@@ -38,6 +38,12 @@
 extern "C" {
 #endif
 
+#if defined(STM32_MEDIUM_DENSITY)
+#define BKP_NR_DATA_REGS 10
+#elif defined(STM32_HIGH_DENSITY)
+#define BKP_NR_DATA_REGS 42
+#endif
+
 typedef struct bkp_reg_map {
     const uint32 RESERVED1;
     __io uint32 DR1;            ///< Data register 1
@@ -53,7 +59,7 @@ typedef struct bkp_reg_map {
     __io uint32 RTCCR;          ///< RTC control register
     __io uint32 CR;             ///< Control register
     __io uint32 CSR;            ///< Control and status register
-#if NR_BKP_REGS > 10
+#ifdef STM32_HIGH_DENSITY
     const uint32 RESERVED2;
     const uint32 RESERVED3;
     __io uint32 DR11;           ///< Data register 11

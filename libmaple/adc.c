@@ -49,7 +49,7 @@ adc_dev adc2 = {
 };
 const adc_dev *ADC2 = &adc2;
 
-#if NR_ADCS >= 3
+#ifdef STM32_HIGH_DENSITY
 adc_dev adc3 = {
     .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3

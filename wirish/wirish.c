@@ -47,7 +47,7 @@ void init(void) {
     flash_enable_prefetch();
     flash_set_latency(FLASH_WAIT_STATE_2);
 
-#if NR_FSMC > 0
+#ifdef STM32_HIGH_DENSITY
     fsmc_native_sram_init();
 #endif
 
@@ -70,7 +70,7 @@ void init(void) {
     timer_init(TIMER2, 1);
     timer_init(TIMER3, 1);
     timer_init(TIMER4, 1);
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     timer_init(TIMER5, 1);
     timer_init(TIMER8, 1);
 #endif

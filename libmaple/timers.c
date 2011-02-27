@@ -55,7 +55,7 @@ struct timer_dev timer_dev_table[] = {
         .rcc_dev_num = RCC_TIMER4,
         .nvic_dev_num = NVIC_TIMER4
     },
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     /* High density devices only (eg, Maple Native) */
     [TIMER5] = {
         .base = (timer_port*)TIMER5_BASE,
@@ -82,7 +82,7 @@ void timer_init(timer_dev_num timer_num, uint16 prescale) {
     if (timer_num == TIMER1) {
         is_advanced = 1;
     }
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     if (timer_num == TIMER8) {
         is_advanced = 1;
     }
@@ -193,12 +193,8 @@ void timer_set_reload(timer_dev_num timer_num, uint16 max_reload) {
  * or similar to prevent interrupts and PWM output without 16 seperate function
  * calls to timer_set_mode */
 void timer_disable_all(void) {
-    // TODO: refactor
-
-    /* Note: this must be very robust because it gets called from,
-       e.g., ASSERT */
     timer_port *timer;
-#if NR_TIMERS >= 8
+#ifdef STM32_HIGH_DENSITY
     timer_port *timers[6] = { (timer_port*)TIMER1_BASE,
                               (timer_port*)TIMER2_BASE,
                               (timer_port*)TIMER3_BASE,

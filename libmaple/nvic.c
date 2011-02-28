@@ -27,6 +27,7 @@
  */
 
 #include "libmaple.h"
+#include "scb.h"
 #include "nvic.h"
 #include "systick.h"
 
@@ -64,11 +65,32 @@ void nvic_irq_disable_all(void) {
     __write(NVIC_ICER1, 0xFFFFFFFF);
 }
 
+
+/**
+ * @brief Set interrupt priority for an interrupt line
+ *      Note: The STM32 only implements 4 bits of priority, ignoring
+ *      the lower 4 bits. This means there are only 16 levels of priority.
+ *      Bits[3:0] read as zero and ignore writes.
+ * @param irqn device to set
+ * @param priority priority to set, 0 being highest priority and 15 being
+ * lowest.
+ */
+void nvic_irq_set_priority(int32 irqn, uint8 priority) {
+    if (irqn < 0) {
+        /* This interrupt is in the system handler block  */
+        SCB->SHP[((uint32)irqn & 0xF) - 4] = (priority & 0xF) << 4;
+    } else {
+        NVIC->IP[irqn] = (priority & 0xF) << 4;
+    }
+}
+
 /**
  * @brief Initialize the NVIC according to VECT_TAB_FLASH,
  * VECT_TAB_RAM, or VECT_TAB_BASE.
  */
 void nvic_init(void) {
+    uint32 i;
+
 #ifdef VECT_TAB_FLASH
     nvic_set_vector_table(USER_ADDR_ROM, 0x0);
 #elif defined VECT_TAB_RAM
@@ -78,4 +100,15 @@ void nvic_init(void) {
 #else
 #error "You must set a base address for the vector table!"
 #endif
+
+    /*
+     * Lower priority level for all peripheral interrupts to lowest
+     * possible.
+     */
+    for (i = 0; i < NR_INTERRUPTS; i++) {
+        nvic_irq_set_priority(i, 0xF);
+    }
+
+    /* Lower systick interrupt priority to lowest level */
+    nvic_irq_set_priority(NVIC_SYSTICK, 0xF);
 }

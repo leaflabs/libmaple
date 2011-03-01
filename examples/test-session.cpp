@@ -78,12 +78,12 @@ void setup() {
 
     // Send a message out over COMM interface
     COMM.println(" ");
-    COMM.println("    __   __             _      _");
-    COMM.println("   |  \\/  | __ _ _ __ | | ___| |");
-    COMM.println("   | |\\/| |/ _` | '_ \\| |/ _ \\ |");
+    COMM.println("    __   __            _      _ ");
+    COMM.println("   |  \/  | __ _ _ __ | | ___| |");
+    COMM.println("   | |\/| |/ _` | '_ \| |/ _ \ |");
     COMM.println("   | |  | | (_| | |_) | |  __/_|");
-    COMM.println("   |_|  |_|\\__,_| .__/|_|\\___(_)");
-    COMM.println("                 |_|");
+    COMM.println("   |_|  |_|\__,_| .__/|_|\___(_)");
+    COMM.println("                |_|");
     COMM.println("                              by leaflabs");
     COMM.println("");
     COMM.println("");
@@ -512,7 +512,7 @@ void cmd_sequential_gpio_writes(void) {
     // make sure to skip the TX/RX headers
     for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
         COMM.print("GPIO write out on header D");
-        COMM.print(i, DEC);
+        COMM.print((int)i, DEC);
         COMM.println("...");
         pinMode(i, OUTPUT);
         do {

@@ -261,7 +261,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
     }
 }
 
-void I2C1_EV_IRQHandler(void) {
+void __irq_i2c1_ev(void) {
    i2c_dev *dev = I2C1;
    i2c_irq_handler(dev);
 }

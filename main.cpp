@@ -1,5 +1,5 @@
-// Sample main.cpp file. Blinks the built-in LED, sends a message out
-// USART2, and turns on PWM on pin 2.
+// Sample i2c master example for development i2c branch. Writes 0-63 to
+// addresses 0-63 on a 24LC256 EEPROM, then reads them back.
 
 #include "wirish.h"
 #include "i2c.h"
@@ -17,50 +17,32 @@ void setup() {
 
     pinMode(BOARD_LED_PIN, OUTPUT);
 
-    i2c_master_enable(I2C1, 0);
     for (i = 0; i < sizeof buf0; i++) {
         buf0[i + 2] = i & 0xFF;
     }
 
-#if 0
+    i2c_master_enable(I2C1, 0);
+
     /* Write some bytes */
     msgs[0].addr = slave_address;
     msgs[0].flags = 0;
     msgs[0].length = sizeof buf0;
     msgs[0].data = buf0;
-
     i2c_master_xfer(I2C1, msgs, 1);
     delay(5);
-    return;
-#endif
 
+    /* Write slave address to read */
     msgs[1].addr = slave_address;
     msgs[1].flags = 0;
-    msgs[1].length = sizeof buf1;
+    msgs[1].length = 2;
     msgs[1].data = buf1;
 
+    /* Repeated start condition, then read NR_ELEMENTS bytes back */
     msgs[2].addr = slave_address;
     msgs[2].flags = I2C_MSG_READ;
     msgs[2].length = sizeof buf2;
     msgs[2].data = buf2;
     i2c_master_xfer(I2C1, msgs + 1, 2);
-#if 0
-    for (i = 0; i < 256; i++) {
-        /* Read it back  */
-        buf1[1] = i;
-        msgs[1].addr = slave_address;
-        msgs[1].flags = 0;
-        msgs[1].length = 2;
-        msgs[1].data = buf1;
-
-        msgs[2].addr = slave_address;
-        msgs[2].flags = I2C_MSG_READ;
-        msgs[2].length = 1;
-        msgs[2].data = buf2;
-        i2c_master_xfer(I2C1, msgs + 1, 2);
-        delay(10);
-    }
-#endif
 }
 
 void loop() {

@@ -1,14 +1,12 @@
-
 #include "wirish.h"
 #include "fsmc.h"
 
-#define LED_PIN  23 // hack for maple native
-#define DISC_PIN 14 // hack for USB on native
+#define LED_PIN BOARD_LED_PIN
 
 // System control block registers
 #define SCB_BASE    (SCB_Reg*)(0xE000ED00)
 
-// This stuff should ultimately get moved to util.h or scb.h or w/e. 
+// This stuff should ultimately get moved to util.h or scb.h or w/e.
 // Also in interactive test program and the HardFault IRQ handler.
 typedef struct {
     volatile uint32 CPUID;
@@ -23,15 +21,14 @@ typedef struct {
     volatile uint32 SHCRS;
     volatile uint32 CFSR;
     volatile uint32 HFSR;
-    uint32 pad1;   
+    uint32 pad1;
     volatile uint32 MMAR;
     volatile uint32 BFAR;
 } SCB_Reg;
 
-SCB_Reg *scb; 
+SCB_Reg *scb;
 
 uint16 *ptr;
-int toggle = 0;
 int count = 0;
 
 void setup() {
@@ -39,8 +36,6 @@ void setup() {
    scb = (SCB_Reg*)SCB_BASE;
 
    pinMode(LED_PIN, OUTPUT);
-   pinMode(DISC_PIN, OUTPUT);
-   digitalWrite(DISC_PIN,1);
    digitalWrite(LED_PIN,1);
 
    Serial1.begin(9600);
@@ -82,15 +77,14 @@ void setup() {
    Serial1.print("BFAR:  ");
    id = scb->BFAR;
    Serial1.println(id,BIN);
-    
+
    Serial1.println("Now testing all memory addresses... (will hardfault at the end)");
    delay(3000);
 }
 
 void loop() {
-   digitalWrite(LED_PIN, toggle);
-   toggle ^= 1;
-   delay(1);
+    toggleLED();
+    delay(1);
 
    for(int i = 0; i<100; i++) {   // modify this to speed things up
         count++;
@@ -102,7 +96,7 @@ void loop() {
                 while(1) { }
         }
    }
-   
+
    Serial1.print((uint32)(ptr),HEX);
    Serial1.print(": ");
    Serial1.println(*ptr,BIN);

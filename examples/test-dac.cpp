@@ -1,8 +1,4 @@
-
 #include "wirish.h"
-#include "fsmc.h"
-#include "rcc.h"
-#include "gpio.h"
 #include "dac.h"
 
 uint16 count = 0;

@@ -224,7 +224,7 @@ running from battery, or connected but not monitored. You may need to
 experiment with the DTR/RTS logic for your platform and device
 configuration. ::
 
-    #define LED_PIN 13
+    #define LED_PIN BOARD_LED_PIN
 
     void setup() {
         /* Set up the LED to blink  */
@@ -232,22 +232,22 @@ configuration. ::
     }
 
     void loop() {
-        // LED will stay off if we are disconnected;
-        // will blink quickly if USB is unplugged (battery etc)
+        // LED will stay off if we are disconnected, and will blink
+        // quickly if USB is unplugged (battery power, etc.).
         if(SerialUSB.isConnected()) {
             digitalWrite(LED_PIN, 1);
         }
         delay(100);
 
-        // If this logic fails to detect if bytes are going to
-        // be read by the USB host, then the println() will fully
-        // many times, causing a very slow LED blink.
-        // If the characters are printed and read, the blink will
-        // only slow a small amount when "really" connected, and fast
-        // when the virtual port is only configured.
+        // If this logic fails to detect if bytes are going to be read
+        // by the USB host, then the println() take a long time,
+        // causing a very slow LED blink.  If the characters are
+        // printed and read, the blink will only slow a small amount
+        // when "really" connected, and will be fast fast when the
+        // virtual port is only configured.
         if(SerialUSB.isConnected() && (SerialUSB.getDTR() || SerialUSB.getRTS())) {
-            for(int i=0; i<10; i++) {
-               SerialUSB.println(123456,BIN);
+            for(int i = 0; i < 10; i++) {
+               SerialUSB.println(123456, BIN);
             }
         }
         digitalWrite(LED_PIN, 0);

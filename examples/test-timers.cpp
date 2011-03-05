@@ -2,7 +2,7 @@
 
 #include "wirish.h"
 
-#define LED_PIN 13
+#define LED_PIN BOARD_LED_PIN
 
 void handler1(void);
 void handler2(void);
@@ -12,7 +12,6 @@ void handler4(void);
 void handler3b(void);
 void handler4b(void);
 
-int toggle = 0;
 int t;
 
 int count1 = 0;
@@ -36,25 +35,24 @@ void setup()
     pinMode(LED_PIN, OUTPUT);
 
     // Setup the button as input
-    pinMode(38, INPUT_PULLUP);
+    pinMode(BOARD_BUTTON_PIN, INPUT);
 
-    /* Send a message out USART2  */
-    //SerialUSB.begin(9600);
-    SerialUSB.println("Begining timer test...");
+    // Wait for user to attach...
+    waitForButtonPress(0);
+
+    // Send a message out SerialUSB
+    SerialUSB.println("Beginning timer test...");
     for(int t=0; t<4; t++) {
         Timers[t].setChannel1Mode(TIMER_OUTPUTCOMPARE);
         Timers[t].setChannel2Mode(TIMER_OUTPUTCOMPARE);
         Timers[t].setChannel3Mode(TIMER_OUTPUTCOMPARE);
         Timers[t].setChannel4Mode(TIMER_OUTPUTCOMPARE);
     }
-    
-    // Wait for user to attach...
-    delay(2000);
 }
 
 void loop() {
     SerialUSB.println("-----------------------------------------------------");
-    SerialUSB.println("Testing setCount/getCount"); 
+    SerialUSB.println("Testing setCount/getCount");
     SerialUSB.print("Timer1.getCount() = "); SerialUSB.println(Timer1.getCount());
     SerialUSB.println("Timer1.setCount(1234)");
     Timer1.setCount(1234);
@@ -63,7 +61,7 @@ void loop() {
     // down Timer4 is in the "pause" state and the timer doesn't increment, so
     // the final counts should reflect the ratio of time that BUT was held down
     SerialUSB.println("-----------------------------------------------------");
-    SerialUSB.println("Testing Pause/Resume; button roughly controls Timer4"); 
+    SerialUSB.println("Testing Pause/Resume; button roughly controls Timer4");
     count3 = 0;
     count4 = 0;
     Timer3.setChannel1Mode(TIMER_OUTPUTCOMPARE);
@@ -80,9 +78,9 @@ void loop() {
     Timer4.attachCompare1Interrupt(handler4b);
     Timer3.resume();
     Timer4.resume();
-    SerialUSB.println("~4 seconds..."); 
+    SerialUSB.println("~4 seconds...");
     for(int i = 0; i<4000; i++) {
-        if(digitalRead(38)) {
+        if(isButtonPressed()) {
             Timer4.pause();
         } else {
             Timer4.resume();
@@ -96,14 +94,14 @@ void loop() {
 
     // These test the setPeriod auto-configure functionality
     SerialUSB.println("-----------------------------------------------------");
-    SerialUSB.println("Testing setPeriod"); 
+    SerialUSB.println("Testing setPeriod");
     Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
     Timer4.setCompare1(1);
-    Timer4.setPeriod(10); 
+    Timer4.setPeriod(10);
     Timer4.pause();
     Timer4.setCount(0);
     Timer4.attachCompare1Interrupt(handler4b);
-    SerialUSB.println("Period 10ms, wait 2 seconds..."); 
+    SerialUSB.println("Period 10ms, wait 2 seconds...");
     count4 = 0;
     Timer4.resume();
     delay(2000);
@@ -114,10 +112,10 @@ void loop() {
     Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
     Timer4.setCompare1(1);
     Timer4.pause();
-    Timer4.setPeriod(30000); 
+    Timer4.setPeriod(30000);
     Timer4.setCount(0);
     Timer4.attachCompare1Interrupt(handler4b);
-    SerialUSB.println("Period 30000ms, wait 2 seconds..."); 
+    SerialUSB.println("Period 30000ms, wait 2 seconds...");
     count4 = 0;
     Timer4.resume();
     delay(2000);
@@ -127,12 +125,12 @@ void loop() {
     SerialUSB.println("(should be around 2sec/30000ms ~ 67)");
 
     Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
-    Timer4.setPeriod(300000); 
+    Timer4.setPeriod(300000);
     Timer4.setCompare1(1);
     Timer4.pause();
     Timer4.setCount(0);
     Timer4.attachCompare1Interrupt(handler4b);
-    SerialUSB.println("Period 300000ms, wait 2 seconds..."); 
+    SerialUSB.println("Period 300000ms, wait 2 seconds...");
     count4 = 0;
     Timer4.resume();
     delay(2000);
@@ -146,9 +144,9 @@ void loop() {
     Timer4.setOverflow(65454);
     Timer4.pause();
     Timer4.setCount(0);
-    Timer4.setCompare1(1); 
+    Timer4.setCompare1(1);
     Timer4.attachCompare1Interrupt(handler4b);
-    SerialUSB.println("Period 30000ms, wait 2 seconds..."); 
+    SerialUSB.println("Period 30000ms, wait 2 seconds...");
     count4 = 0;
     Timer4.resume();
     delay(2000);
@@ -159,11 +157,11 @@ void loop() {
 
     Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
     Timer4.setCompare1(1);
-    Timer4.setPeriod(30000); 
+    Timer4.setPeriod(30000);
     Timer4.pause();
     Timer4.setCount(0);
     Timer4.attachCompare1Interrupt(handler4b);
-    SerialUSB.println("Period 30000ms, wait 2 seconds..."); 
+    SerialUSB.println("Period 30000ms, wait 2 seconds...");
     count4 = 0;
     Timer4.resume();
     delay(2000);
@@ -177,7 +175,7 @@ void loop() {
     // that over time the actual timing rates get blown away by other system
     // interrupts.
     for(t=0; t<4; t++) {
-        toggle ^= 1; digitalWrite(LED_PIN, toggle);
+        toggleLED();
         delay(100);
         SerialUSB.println("-----------------------------------------------------");
         SerialUSB.print("Testing Timer "); SerialUSB.println(t+1);
@@ -214,33 +212,39 @@ void handler1(void) {
     val1 += rate1;
     Timers[t].setCompare1(val1);
     count1++;
-} 
+}
+
 void handler2(void) {
     val2 += rate2;
     Timers[t].setCompare2(val2);
     count2++;
-} 
+}
+
 void handler3(void) {
     val3 += rate3;
     Timers[t].setCompare3(val3);
     count3++;
-} 
+}
+
 void handler4(void) {
     val4 += rate4;
     Timers[t].setCompare4(val4);
     count4++;
-} 
+}
 
 void handler3b(void) {
     count3++;
-} 
+}
+
 void handler4b(void) {
     count4++;
-} 
+}
 
+__attribute__((constructor)) void premain() {
+    init();
+}
 
 int main(void) {
-    init();
     setup();
 
     while (1) {

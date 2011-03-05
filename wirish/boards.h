@@ -134,7 +134,7 @@ typedef struct PinMapping {
         /* D23/PC15 */
         {GPIOC_BASE, 15, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
         /* D24/PB9 */
-        {GPIOB_BASE,  9, ADC_INVALID, TIMER4_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
+        {GPIOB_BASE,  9, ADC_INVALID, TIMER4_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER4,                    4},
         /* D25/PD2 */
         {GPIOD_BASE,  2, ADC_INVALID,              0,  EXTI_CONFIG_PORTD, TIMER_INVALID, TIMER_INVALID},
         /* D26/PC10 */

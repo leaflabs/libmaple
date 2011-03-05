@@ -1,50 +1,72 @@
-// slave mode for QA shield
+// Slave mode for QA shield
 
 #include "wirish.h"
 
-#define LED_PIN 13
-#define NUM_GPIO 38 // not the number of the max...
+#define LED_PIN BOARD_LED_PIN
 
-int i;
+#if defined(BOARD_maple) || defined(BOARD_maple_RET6)
+const uint8 pins_to_skip[] = {LED_PIN};
 
-void setup()
-{
+#elif defined(BOARD_maple_mini)
+#define USB_DP 23
+#define USB_DM 24
+const uint8 pins_to_skip[] = {LED_PIN, USB_DP, USB_DM};
+
+#elif defined(BOARD_maple_native)
+const uint8 pins_to_skip[] = {LED_PIN};
+
+#else
+#error "Board type has not been selected correctly."
+#endif
+
+bool skip_pin_p(uint8 pin);
+
+void setup() {
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, 1);
+    digitalWrite(LED_PIN, HIGH);
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
+    for(int i = 0; i < NR_GPIO_PINS; i++) {
+        if (skip_pin_p(i)) {
+            continue;
+        }
         pinMode(i, OUTPUT);
-        digitalWrite(i,0);
+        digitalWrite(i, LOW);
     }
-    //delay(5000);
     SerialUSB.println("OK, starting...");
-
 }
 
 void loop() {
-    digitalWrite(LED_PIN,1);
+    toggleLED();
     delay(100);
-    digitalWrite(LED_PIN,0);
+    toggleLED();
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
-        digitalWrite(i,1);
+    for(int i = 0; i < NR_GPIO_PINS; i++) {
+        if (skip_pin_p(i)) {
+            continue;
+        }
+        togglePin(i);
         delay(5);
-        digitalWrite(i,0);
+        togglePin(i);
         delay(5);
     }
 }
 
+bool skip_pin_p(uint8 pin) {
+    for (uint8 i = 0; i < sizeof(pins_to_skip); i++) {
+        if (pin == pins_to_skip[i])
+            return true;
+    }
+    return false;
+}
+
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
- __attribute__(( constructor )) void premain() {
+// Otherwise, statically allocated objects that need libmaple may fail.
+__attribute__((constructor)) void premain() {
     init();
 }
 
-int main(void)
-{
+int main(void) {
     setup();
 
     while (1) {

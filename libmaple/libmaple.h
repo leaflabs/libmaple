@@ -162,7 +162,7 @@
     #define STACK_TOP     0x20000800
 
     #define ERROR_LED_PORT   GPIOB_BASE
-    #define ERROR_LED_PIN    12
+    #define ERROR_LED_PIN    1
     #define ERROR_USART_NUM  USART2
     #define ERROR_USART_BAUD 9600
     #define ERROR_TX_PORT    GPIOA_BASE

@@ -99,7 +99,7 @@ void fsmc_native_sram_init(void) {
 
     /* FIXME replace with macros from fsmc.h */
     bank->BCR = (1 << 12) | (1 << 4) | 1;
-    bank->BTR = (0xF << 16) | (0x3 << 8) | 1;
+    bank->BTR = (3 << 8);
 
     /* (FSMC_BWTR3 not used for this simple configuration.) */
 }

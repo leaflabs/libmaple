@@ -49,6 +49,7 @@ void test_all_addresses() {
     uint16 count = 0;
     uint16 *ptr;
     Serial1.println("Now writing all memory addresses (unrolled loop)");
+    SerialUSB.end();
     start = micros();
     for (ptr = ptr_start; ptr < ptr_end;) {
         *ptr++ = count++;
@@ -69,6 +70,7 @@ void test_all_addresses() {
         *ptr++ = count++;
     }
     end = micros();
+    SerialUSB.begin();
     Serial1.print("Done. Elapsed time (us): ");
     Serial1.println(end - start);
 

@@ -44,7 +44,7 @@
 
 volatile uint32 bDeviceState = UNCONNECTED;
 volatile uint16 wIstr = 0;
-volatile bIntPackSOF  = 0;
+volatile uint32 bIntPackSOF = 0;
 
 DEVICE Device_Table =
     {NUM_ENDPTS,
@@ -99,15 +99,13 @@ struct {
 } ResumeS;
 
 void setupUSB (void) {
-  gpio_set_mode(USB_DISC_BANK,
-                USB_DISC_PIN,
-                GPIO_MODE_OUTPUT_PP);
+  gpio_set_mode(USB_DISC_DEV, USB_DISC_PIN, GPIO_OUTPUT_PP);
 
   /* setup the apb1 clock for USB */
   pRCC->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
-  gpio_write_bit(USB_DISC_BANK, USB_DISC_PIN, 0); // presents us to the host
+  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 0); // presents us to the host
   USB_Init();  // low level init routine provided by the ST library
 }
 
@@ -115,7 +113,7 @@ void disableUSB (void) {
   // These are just guesses about how to do this
   // TODO: real disable function
   usbDsbISR();
-  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,1);
+  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 1);
 }
 
 void usbSuspend(void) {
@@ -320,8 +318,29 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask) {
 
 }
 
+static void FIXME_delayMicroseconds_copy(uint32 us) {
+    /* So (2^32)/12 micros max, or less than 6 minutes */
+    us *= 12;
+
+    /* fudge for function call overhead  */
+    us--;
+    asm volatile("   mov r0, %[us]          \n\t"
+                 "1: subs r0, #1            \n\t"
+                 "   bhi 1b                 \n\t"
+                 :
+                 : [us] "r" (us)
+                 : "r0");
+}
+
+static void FIXME_delay_copy(unsigned long ms) {
+    uint32 i;
+    for (i = 0; i < ms; i++) {
+        FIXME_delayMicroseconds_copy(1000);
+    }
+}
+
 void usbWaitReset(void) {
-  delay(RESET_DELAY);
+  FIXME_delay_copy(RESET_DELAY);
   systemHardReset();
 }
 

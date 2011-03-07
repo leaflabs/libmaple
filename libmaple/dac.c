@@ -80,15 +80,15 @@ void dac_write_channel(uint8 channel, uint16 val) {
 void dac_enable_channel(uint8 channel) {
     /*
      * Setup ANALOG mode on PA4 and PA5. This mapping is consistent across
-     * all STM32 chips with a DAC. See RM008 12.2.
+     * all STM32 chips with a DAC. See RM0008 12.2.
      */
     switch (channel) {
     case 1:
-        gpio_set_mode(GPIOA_BASE, 4, GPIO_MODE_INPUT_ANALOG);
+        gpio_set_mode(GPIOA, 4, GPIO_INPUT_ANALOG);
         DAC->regs->CR |= DAC_CR_EN1;
         break;
     case 2:
-        gpio_set_mode(GPIOA_BASE, 5, GPIO_MODE_INPUT_ANALOG);
+        gpio_set_mode(GPIOA, 5, GPIO_INPUT_ANALOG);
         DAC->regs->CR |= DAC_CR_EN2;
         break;
     }

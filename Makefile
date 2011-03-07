@@ -13,21 +13,21 @@ PRODUCT_ID := 0003
 ifeq ($(BOARD), maple)
    MCU := STM32F103RB
    PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOA_BASE
+   ERROR_LED_PORT := GPIOA
    ERROR_LED_PIN  := 5
    DENSITY := STM32_MEDIUM_DENSITY
 endif
 ifeq ($(BOARD), maple_native)
    MCU := STM32F103ZE
    PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOC_BASE
+   ERROR_LED_PORT := GPIOC
    ERROR_LED_PIN  := 15
    DENSITY := STM32_HIGH_DENSITY
 endif
 ifeq ($(BOARD), maple_mini)
    MCU := STM32F103CB
    PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOB_BASE
+   ERROR_LED_PORT := GPIOB
    ERROR_LED_PIN  := 1
    DENSITY := STM32_MEDIUM_DENSITY
 endif
@@ -45,7 +45,7 @@ SUPPORT_PATH := $(SRCROOT)/support
 # Compilation flags.
 # FIXME remove the ERROR_LED config
 GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
-		   -nostdlib						     \
+		   -nostdlib					     \
 		   -ffunction-sections -fdata-sections -Wl,--gc-sections     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \

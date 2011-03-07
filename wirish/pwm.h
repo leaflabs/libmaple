@@ -28,12 +28,8 @@
  *  @brief Arduino-compatible PWM interface.
  */
 
-#ifndef _PWM_H
-#define _PWM_H
-
-#ifdef __cplusplus
-extern "C"{
-#endif
+#ifndef _PWM_H_
+#define _PWM_H_
 
 /**
  * As a convenience, analogWrite is an alias of pwmWrite to ease
@@ -49,11 +45,6 @@ extern "C"{
  * (based on the configured period).
  */
 void pwmWrite(uint8 pin, uint16 duty_cycle);
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif
 

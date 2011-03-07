@@ -25,8 +25,9 @@
 /**
  * @file dac.h
  * @brief Digital to analog converter header file
- *      See notes/dac.txt for more info
  */
+
+/* See notes/dac.txt for more info */
 
 #ifndef _DAC_H_
 #define _DAC_H_
@@ -63,16 +64,15 @@ typedef struct dac_reg_map {
     __io uint32 DOR2;    /**< Channel 2 data output register */
 } dac_reg_map;
 
+/** DAC device type. */
 typedef struct dac_dev {
-    dac_reg_map *regs;
+    dac_reg_map *regs; /**< Register map */
 } dac_dev;
 
 /** DAC device. */
 extern const dac_dev *DAC;
 
-/*
- * DAC peripheral base address
- */
+/** DAC register map base address */
 #define DAC_BASE                ((dac_reg_map*)0x40007400)
 
 /*

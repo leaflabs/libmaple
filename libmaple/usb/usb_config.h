@@ -4,6 +4,7 @@
 #define __USB_CONFIG_H
 
 #include "usb_lib.h"
+#include "gpio.h"
 
 /******************************************************************************
  ******************************************************************************
@@ -31,19 +32,19 @@
 
     /* USB Identifier numbers */
     #define VCOM_ID_PRODUCT      0x0004
-    #define USB_DISC_BANK        GPIOC_BASE
+    #define USB_DISC_DEV         GPIOC
     #define USB_DISC_PIN         12
 
 #elif defined(BOARD_maple_mini)
 
     #define VCOM_ID_PRODUCT      0x0005
-    #define USB_DISC_BANK        GPIOB_BASE
+    #define USB_DISC_DEV         GPIOB
     #define USB_DISC_PIN         9
 
 #elif defined(BOARD_maple_native)
 
     #define VCOM_ID_PRODUCT      0x0006
-    #define USB_DISC_BANK        GPIOB_BASE
+    #define USB_DISC_DEV         GPIOB
     #define USB_DISC_PIN         8
 
 #else

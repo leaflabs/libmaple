@@ -89,7 +89,7 @@ uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     return this->getOverflow();
 }
 
-inline void HardwareTimer::setChannelMode(int channel, TimerMode mode) {
+void HardwareTimer::setChannelMode(int channel, TimerMode mode) {
     timer_set_mode(this->timerNum, channel, mode);
 }
 
@@ -109,7 +109,7 @@ void HardwareTimer::setChannel4Mode(TimerMode mode) {
     this->setChannelMode(4, mode);
 }
 
-inline uint16 HardwareTimer::getCompare(int channel) {
+uint16 HardwareTimer::getCompare(int channel) {
     return timer_get_compare_value(this->timerNum, channel);
 }
 
@@ -129,7 +129,7 @@ uint16 HardwareTimer::getCompare4() {
     return this->getCompare(4);
 }
 
-inline void HardwareTimer::setCompare(int channel, uint16 val) {
+void HardwareTimer::setCompare(int channel, uint16 val) {
     uint16 ovf = this->getOverflow();
     timer_set_compare_value(this->timerNum, channel, min(val, ovf));
 }
@@ -150,7 +150,7 @@ void HardwareTimer::setCompare4(uint16 val) {
     this->setCompare(4, val);
 }
 
-inline void HardwareTimer::attachInterrupt(int channel, voidFuncPtr handler) {
+void HardwareTimer::attachInterrupt(int channel, voidFuncPtr handler) {
     timer_attach_interrupt(this->timerNum, channel, handler);
 }
 
@@ -170,7 +170,7 @@ void HardwareTimer::attachCompare4Interrupt(voidFuncPtr handler) {
     this->attachInterrupt(4, handler);
 }
 
-inline void HardwareTimer::detachInterrupt(int channel) {
+void HardwareTimer::detachInterrupt(int channel) {
     timer_detach_interrupt(this->timerNum, channel);
 }
 
@@ -193,7 +193,6 @@ void HardwareTimer::detachCompare4Interrupt(void) {
 void HardwareTimer::generateUpdate(void) {
     timer_generate_update(this->timerNum);
 }
-
 
 HardwareTimer Timer1(TIMER1);
 HardwareTimer Timer2(TIMER2);

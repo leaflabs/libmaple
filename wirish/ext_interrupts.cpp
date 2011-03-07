@@ -28,52 +28,55 @@
  *  @brief Wiring-like interface for external interrupts
  */
 
-#include "wirish.h"
+#include "boards.h"
+#include "gpio.h"
 #include "exti.h"
 #include "ext_interrupts.h"
 
-/* Attach ISR handler on pin, triggering on the given mode. */
-void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
-    uint8 outMode;
+static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
 
-    /* Parameter checking */
+/**
+ * @brief Attach an interrupt handler to a pin, triggering on the given mode.
+ * @param pin     Pin to attach an interrupt handler onto.
+ * @param handler Function to call when the external interrupt is triggered.
+ * @param mode    Trigger mode for the given interrupt.
+ * @see ExtIntTriggerMode
+ */
+void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
+    if (pin >= NR_GPIO_PINS || !handler) {
+        return;
+    }
+
+    exti_trigger_mode outMode = exti_out_mode(mode);
+
+    exti_attach_interrupt((afio_exti_num)(PIN_MAP[pin].pin),
+                          PIN_MAP[pin].ext_port,
+                          handler,
+                          outMode);
+}
+
+/**
+ * @brief Disable any external interrupt attached to a pin.
+ * @param pin Pin number to detach any interrupt from.
+ */
+void detachInterrupt(uint8 pin) {
     if (pin >= NR_GPIO_PINS) {
         return;
     }
 
-    if (!handler) {
-        return;
-    }
+    exti_detach_interrupt((afio_exti_num)(PIN_MAP[pin].pin));
+}
 
+static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode) {
     switch (mode) {
     case RISING:
-        outMode = EXTI_RISING;
-        break;
+        return EXTI_RISING;
     case FALLING:
-        outMode = EXTI_FALLING;
-        break;
+        return EXTI_FALLING;
     case CHANGE:
-        outMode = EXTI_RISING_FALLING;
-        break;
-    default:
-        ASSERT(0);
-        return;
+        return EXTI_RISING_FALLING;
     }
-
-    exti_attach_interrupt(PIN_MAP[pin].exti_port,
-                          PIN_MAP[pin].pin,
-                          handler,
-                          mode);
-
-    return;
+    // Can't happen
+    ASSERT(0);
+    return (exti_trigger_mode)0;
 }
-
-/* Disable any interrupts */
-void detachInterrupt(uint8 pin) {
-    if (!(pin < NR_GPIO_PINS)) {
-        return;
-    }
-
-    exti_detach_interrupt(PIN_MAP[pin].pin);
-}
-

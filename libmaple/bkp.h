@@ -44,6 +44,7 @@ extern "C" {
 #define BKP_NR_DATA_REGS 42
 #endif
 
+/** Backup peripheral register map type. */
 typedef struct bkp_reg_map {
     const uint32 RESERVED1;
     __io uint32 DR1;            ///< Data register 1
@@ -97,19 +98,16 @@ typedef struct bkp_reg_map {
 #endif
 } bkp_reg_map;
 
+/** Backup peripheral register map base pointer. */
+#define BKP_BASE        ((bkp_reg_map*)0x40006C00)
+
+/** Backup peripheral device type. */
 typedef struct bkp_dev {
-    bkp_reg_map *regs;
+    bkp_reg_map *regs; /**< Register map */
 } bkp_dev;
 
-/**
- * Backup device.
- */
+/** Backup device. */
 extern const bkp_dev *BKP;
-
-/*
- * Backup peripheral base.
- */
-#define BKP_BASE        ((bkp_reg_map*)0x40006C00)
 
 void bkp_init(void);
 void bkp_enable_writes(void);

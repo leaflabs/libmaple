@@ -129,7 +129,7 @@ u8* vcomGetSetLineCoding(uint16 length) {
     return (uint8*)&line_coding;
 }
 
-vcomSetLineState(void) {
+void vcomSetLineState(void) {
 }
 
 void usbInit(void) {

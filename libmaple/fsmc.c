@@ -31,6 +31,8 @@
 #include "gpio.h"
 #include "fsmc.h"
 
+#ifdef STM32_HIGH_DENSITY
+
 /* These values determined for a particular SRAM chip by following the
  * calculations in the ST FSMC application note. */
 #define FSMC_ADDSET 0x0
@@ -45,55 +47,55 @@ void fsmc_native_sram_init(void) {
 
     /* First we setup all the GPIO pins. */
     /* Data lines... */
-    gpio_set_mode(GPIOD_BASE,  0, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE,  1, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE,  8, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE,  9, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE, 10, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE, 14, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE, 15, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE,  7, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE,  8, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE,  9, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 10, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 11, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 12, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 13, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 14, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOE_BASE, 15, MODE_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD,  8, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD,  9, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 10, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 15, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE,  7, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE,  8, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE,  9, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 10, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 11, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOE, 15, GPIO_AF_OUTPUT_PP);
 
     /* Address lines... */
-    gpio_set_mode(GPIOD_BASE, 11, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE, 12, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOD_BASE, 13, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  0, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  1, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  2, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  3, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  4, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE,  5, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE, 12, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE, 13, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE, 14, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOF_BASE, 15, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  0, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  1, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  2, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  3, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  4, MODE_AF_OUTPUT_PP);
-    gpio_set_mode(GPIOG_BASE,  5, MODE_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 11, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOD, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  2, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  3, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  4, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF,  5, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF, 12, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF, 13, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF, 14, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOF, 15, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  0, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  1, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  2, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  3, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  4, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(GPIOG,  5, GPIO_AF_OUTPUT_PP);
 
     /* And control lines... */
-    gpio_set_mode(GPIOD_BASE,  4, MODE_AF_OUTPUT_PP);   // NOE
-    gpio_set_mode(GPIOD_BASE,  5, MODE_AF_OUTPUT_PP);   // NWE
+    gpio_set_mode(GPIOD,  4, GPIO_AF_OUTPUT_PP);   // NOE
+    gpio_set_mode(GPIOD,  5, GPIO_AF_OUTPUT_PP);   // NWE
 
-    gpio_set_mode(GPIOD_BASE,  7, MODE_AF_OUTPUT_PP);   // NE1
-    gpio_set_mode(GPIOG_BASE,  9, MODE_AF_OUTPUT_PP);   // NE2
-    gpio_set_mode(GPIOG_BASE, 10, MODE_AF_OUTPUT_PP);   // NE3
-    gpio_set_mode(GPIOG_BASE, 12, MODE_AF_OUTPUT_PP);   // NE4
+    gpio_set_mode(GPIOD,  7, GPIO_AF_OUTPUT_PP);   // NE1
+    gpio_set_mode(GPIOG,  9, GPIO_AF_OUTPUT_PP);   // NE2
+    gpio_set_mode(GPIOG, 10, GPIO_AF_OUTPUT_PP);   // NE3
+    gpio_set_mode(GPIOG, 12, GPIO_AF_OUTPUT_PP);   // NE4
 
-    gpio_set_mode(GPIOE_BASE,  0, MODE_AF_OUTPUT_PP);   // NBL0
-    gpio_set_mode(GPIOE_BASE,  1, MODE_AF_OUTPUT_PP);   // NBL1
+    gpio_set_mode(GPIOE,  0, GPIO_AF_OUTPUT_PP);   // NBL0
+    gpio_set_mode(GPIOE,  1, GPIO_AF_OUTPUT_PP);   // NBL1
 
     /* Next enable the clock */
     rcc_clk_enable(RCC_FSMC);
@@ -132,3 +134,4 @@ void fsmc_native_sram_init(void) {
     /* (FSMC_BWTR3 not used for this simple configuration.) */
 }
 
+#endif  /* STM32_HIGH_DENSITY */

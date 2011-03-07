@@ -37,6 +37,8 @@
 extern "C"{
 #endif
 
+#ifdef STM32_HIGH_DENSITY
+
 // There are 4 FSMC chip-select devices; here are the SRAM-specific registers
 // for each
 
@@ -82,9 +84,10 @@ typedef struct {
 
 void fsmc_native_sram_init(void);
 
+#endif /* STM32_HIGH_DENSITY */
+
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
 
 #endif

@@ -351,22 +351,22 @@ void cmd_everything(void) { // TODO
 }
 
 void fast_gpio(int maple_pin) {
-    GPIO_Port *port = PIN_MAP[maple_pin].port;
+    gpio_dev *dev = PIN_MAP[maple_pin].gpio_device;
     uint32 pin = PIN_MAP[maple_pin].pin;
 
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
 }
 
 void cmd_serial1_serial3(void) {

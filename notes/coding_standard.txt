@@ -25,12 +25,11 @@ License
 -------
 
 - Put an MIT license at the beginning of the file (look at any of our
-  source files for an example).  Copyright should go to either you or
-  LeafLabs LLC.
+  source files for an example).  Copyright should go either to you or
+  to LeafLabs, LLC.
 
   Emacs: if you don't like seeing the license, you should use
-  elide-head (which will hide it for you).  Here is some elisp you can
-  modify to make this pleasant:
+  elide-head (which will hide it for you).  You can use the following:
 
     (require 'elide-head)
     (setq programming-mode-hooks '(c-mode-hook c++-mode-hook))
@@ -38,7 +37,7 @@ License
                  '("The MIT License" . "DEALINGS IN\n [*] THE SOFTWARE"))
     (add-to-list 'elide-head-headers-to-hide
                  '("The MIT License" . "DEALINGS IN THE\n...SOFTWARE"))
-    (dolist (hook mbolivar-programming-mode-hooks)
+    (dolist (hook programming-mode-hooks)
       (add-hook hook (lambda () (elide-head))))
 
 Whitespace/Indentation
@@ -46,7 +45,8 @@ Whitespace/Indentation
 
 - 4 space indents.  [Set in .dir-locals.el]
 
-- Unix newlines.
+- Unix newlines. [Some exceptions are currently grandfathered in;
+  these will go away in time.]
 
 - No tab characters. [Set in .dir-locals.el]
 
@@ -76,50 +76,53 @@ Whitespace/Indentation
 
         (add-hook 'c-mode-hook c-mode-inextern-lang-hook)
 
-
 Comments
 --------
 
-- Multi-line comments look like this:
+- Multi-line comments are pretty flexible.  Any of these is fine:
 
-    /* text starts here
-     * continued lines have a '*' before them
-     * the comment can end after the last line
+    /* Comment starts here.
+     * Continued lines have a '*' before them.
+     * The comment can end after the last line.
      */
 
-  or this:
+    /* Comment starts here.
+     * The comment can end on the same line. */
 
-    /* comment starts here
-     * the comment can end on the same line */
+    /*
+     * You can also place a newline after the opening "/*".
+     */
 
-- Doxygen comments are newline comments that begin with /** instead.
-  It is not required that the "/**" appear on a line by itself.
+- Doxygen comments are multi-line comments that begin with /** instead.
 
-- Single-line comments on the same line are // in c or c++.
+- Single-line comments on the same line are // in C or C++.
 
-- Single-line comments on their own source line are /* */ in c, but
-  can also be // in c++.  If you think that typing out /* */ is too
-  slow in emacs, use M-; (comment-dwim) when you're on an empty line,
-  and it'll ... well...
-
-      You should be using the (super awesome) comment-dwim; it pretty
-      much does exactly what you want to the comment on the current
-      line, including "create one and put it in the right place".
+- Single-line comments on their own source line should be /* */ in C,
+  but can also be // in C++.  In Emacs, you can use M-;
+  (comment-dwim), and it'll Do What You Mean.
 
 Braces
 ------
 
-- 1TBS.  Nothing more need be said.
+- Mostly 1TBS:
 
       http://en.wikipedia.org/wiki/Indent_style#Variant:_1TBS
+
+  The only difference is that the opening brace of a function's
+  definition occurs exactly one space character after the closing
+  parenthesis in that function's parameter list.  Example:
+
+      void func(void) {
+          ...
+      }
 
 Naming conventions
 ------------------
 
-- There's always a fight about upper and lower case vs. underscores.
-  We'll handle this as follows.
+There's always a fight about upper and lower case vs. underscores.
+We'll handle this as follows.
 
-  First, Dammit_Dont_Mix_Like_This, because It_Looks_Really_Ugly, ok?
+- First, Dammit_Dont_Mix_Like_This, because It_Looks_Really_Ugly, ok?
   [There's been some debate about this, and some exceptions are
   already grandfathered in, so in order to settle it, let's call this
   a "recommendation" instead of "requirement".]
@@ -168,7 +171,7 @@ Naming conventions
 Documentation
 -------------
 
-- Document your code.  This should go without saying.
+- Document your code!
 
 - For complicated peripherals, it would be nice if you put longer-form
   comments into this directory (notes/), with a comment in the
@@ -176,13 +179,8 @@ Documentation
   example.  That lets us keep the source files relatively clean while
   still allowing new readers to have a starting point.
 
-- At least put a doxygen comment with a nonempty @brief for every .h
-  file you add.  See the existing ones for examples.  For now, it'd be
-  better if you didn't put a @brief into any .c[pp] files, since it
-  (currently) interferes with our documentation generator in a way
-  that I won't explain here (though you can look into the LeafLabs or
-  michaeljones breathe repos on github and potentially figure out
-  why).
+- At least put a Doxygen comment with a nonempty @brief for every .h
+  file you add.  See the existing ones for examples.
 
 - Doxygen comments generally just belong on types, functions,
   etc. that are part of the public user-facing API.  This generally
@@ -196,8 +194,13 @@ Documentation
 
   This should be avoided if at all possible, since it creates a
   maintenance burden of documenting things in two places at once, and
-  provides an opportunity for bad documentation to slip in, when the
-  code comments fall out of sync with the ReST docs.
+  makes it easier for documentation to go stale.
+
+- For libmaple proper (the pure C library under libmaple/); the
+  convention is to document any user-facing entity at the point where
+  it is defined.  In particular, this means you should document an
+  externally-linked function defined in a .c file in that .c file, not
+  in the header file where it is declared to the user.
 
 General Formatting
 ------------------
@@ -217,7 +220,3 @@ General Formatting
     (require 'lineker)
     (dolist (hook '(c-mode-hook c++-mode-hook))
       (add-hook hook (lambda () (lineker-mode 1))))
-
-  There are only a few exceptional situations.  The most important one
-  is when specifying a lookup table like PIN_MAP where it'd be ugly to
-  split each entry over multiple lines.

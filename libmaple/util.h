@@ -28,6 +28,8 @@
  *  @brief Various macros and utility procedures.
  */
 
+#include "libmaple_types.h"
+
 /* Generally "useful" utility procedures  */
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -51,40 +53,29 @@ extern "C"{
 /* Return bits m to n of x  */
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
 
-/* Bit-banding macros  */
-/* Bitbanded Memory sections */
-#define BITBAND_SRAM_REF   0x20000000
-#define BITBAND_SRAM_BASE  0x22000000
-#define BITBAND_PERI_REF   0x40000000
-#define BITBAND_PERI_BASE  0x42000000
-/* Convert SRAM address */
-#define BITBAND_SRAM(a,b) ((BITBAND_SRAM_BASE+(a-BITBAND_SRAM_REF)*32+(b*4)))
-/* Convert peripheral address */
-#define BITBAND_PERI(a, b) ((BITBAND_PERI_BASE +                \
-                            ((uint32)a - BITBAND_PERI_REF) * 32 + (b * 4)))
-
-#define REG_SET(reg, val)         (*(volatile uint32*)(reg)  = (val))
-#define REG_SET_BIT(reg, bit)     (*(volatile uint32*)(reg) |= BIT(bit))
-#define REG_CLEAR_BIT(reg, bit)   (*(volatile uint32*)(reg) &= ~BIT(bit))
-#define REG_SET_MASK(reg, mask)   (*(volatile uint32*)(reg) |= (uint32)(mask))
-#define REG_CLEAR_MASK(reg, mask) (*(volatile uint32*)(reg) &= (uint32)~(mask))
-
-#define REG_GET(reg)              (*(volatile uint32*)(reg))
+/*
+ * Register reads and writes
+ */
 
 #define __set_bits(addr, mask)   (*(volatile uint32*)(addr) |= (uint32)(mask))
 #define __clear_bits(addr, mask) (*(volatile uint32*)(addr) &= (uint32)~(mask))
 #define __get_bits(addr, mask)   (*(volatile uint32*)(addr) & (uint32)(mask))
-
 #define __read(reg)              (*(volatile uint32*)(reg))
 #define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
 
 #define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
+
+/*
+ * Failure routines
+ */
+
 void __error(void);
 void _fail(const char*, int, const char*);
 void throb(void);
 
-/* Asserts for sanity checks, redefine DEBUG_LEVEL in libmaple.h to
- * compile out these checks */
+/*
+ * Asserts and debug levels
+ */
 
 #if DEBUG_LEVEL >= DEBUG_ALL
 #define ASSERT(exp)                              \

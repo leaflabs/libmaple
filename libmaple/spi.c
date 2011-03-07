@@ -43,23 +43,23 @@
 
 typedef struct spi_dev {
     SPI *base;
-    GPIO_Port *port;
+    gpio_dev *gpio_d;
     uint8 sck_pin;
     uint8 miso_pin;
     uint8 mosi_pin;
 } spi_dev;
 
-static const spi_dev spi_dev1 = {
+spi_dev spi_dev1 = {
     .base     = (SPI*)SPI1_BASE,
-    .port     = GPIOA_BASE,
+    .gpio_d   = NULL,
     .sck_pin  = 5,
     .miso_pin = 6,
     .mosi_pin = 7
 };
 
-static const spi_dev spi_dev2 = {
+spi_dev spi_dev2 = {
     .base     = (SPI*)SPI2_BASE,
-    .port     = GPIOB_BASE,
+    .gpio_d   = NULL,
     .sck_pin  = 13,
     .miso_pin = 14,
     .mosi_pin = 15
@@ -90,11 +90,13 @@ void spi_init(uint32 spi_num,
         ASSERT(prescale != CR1_BR_PRESCALE_2);
         spi = (SPI*)SPI1_BASE;
         rcc_clk_enable(RCC_SPI1);
+        spi_dev1.gpio_d = GPIOA;
         spi_gpio_cfg(&spi_dev1);
         break;
     case 2:
         spi = (SPI*)SPI2_BASE;
         rcc_clk_enable(RCC_SPI2);
+        spi_dev1.gpio_d = GPIOB,
         spi_gpio_cfg(&spi_dev2);
         break;
     }
@@ -155,7 +157,7 @@ uint8 spi_tx(uint32 spi_num, uint8 *buf, uint32 len) {
 }
 
 static void spi_gpio_cfg(const spi_dev *dev) {
-    gpio_set_mode(dev->port, dev->sck_pin, GPIO_MODE_AF_OUTPUT_PP);
-    gpio_set_mode(dev->port, dev->miso_pin, GPIO_MODE_AF_OUTPUT_PP);
-    gpio_set_mode(dev->port, dev->mosi_pin, GPIO_MODE_AF_OUTPUT_PP);
+    gpio_set_mode(dev->gpio_d, dev->sck_pin, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(dev->gpio_d, dev->miso_pin, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(dev->gpio_d, dev->mosi_pin, GPIO_AF_OUTPUT_PP);
 }

@@ -38,7 +38,7 @@
 #ifndef ERROR_USART_NUM
 #define ERROR_USART_NUM        USART2
 #define ERROR_USART_BAUD       9600
-#define ERROR_TX_PORT          GPIOA_BASE
+#define ERROR_TX_PORT          GPIOA
 #define ERROR_TX_PIN           2
 #endif
 
@@ -87,7 +87,7 @@ void __error(void) {
  */
 void _fail(const char* file, int line, const char* exp) {
     /* Initialize the error usart */
-    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
+    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_AF_OUTPUT_PP);
     usart_init(ERROR_USART_NUM, ERROR_USART_BAUD);
 
     /* Print failed assert message */
@@ -116,7 +116,7 @@ void throb(void) {
     uint32 TOP_CNT = 0x0200;
     uint32 i       = 0;
 
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
+    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_OUTPUT_PP);
     /* Error fade  */
     while (1) {
         if (CC == TOP_CNT)  {

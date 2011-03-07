@@ -30,14 +30,16 @@
 
 #ifndef _ADC_H_
 #define _ADC_H_
-#include "util.h"
 
+#include "libmaple.h"
+#include "bitband.h"
 #include "rcc.h"
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
+/** ADC register map type. */
 typedef struct adc_reg_map {
     __io uint32 SR;             ///< Status register
     __io uint32 CR1;            ///< Control register 1
@@ -61,22 +63,30 @@ typedef struct adc_reg_map {
     __io uint32 DR;             ///< Regular data register
 } adc_reg_map;
 
+/** ADC device type. */
 typedef struct adc_dev {
-    adc_reg_map *regs;
-    rcc_clk_id clk_id;
+    adc_reg_map *regs; /**< Register map */
+    rcc_clk_id clk_id; /**< RCC clock information */
 } adc_dev;
 
+/** ADC1 device. */
 extern const adc_dev *ADC1;
+/** ADC2 device. */
 extern const adc_dev *ADC2;
 #ifdef STM32_HIGH_DENSITY
+/** ADC3 device. */
 extern const adc_dev *ADC3;
 #endif
 
 /*
  * ADC peripheral base addresses
  */
+
+/** ADC1 register map base pointer. */
 #define ADC1_BASE               ((adc_reg_map*)0x40012400)
+/** ADC2 register map base pointer. */
 #define ADC2_BASE               ((adc_reg_map*)0x40012800)
+/** ADC3 register map base pointer. */
 #define ADC3_BASE               ((adc_reg_map*)0x40013C00)
 
 /*
@@ -138,8 +148,8 @@ void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
 
 /**
  * @brief Perform a single synchronous software triggered conversion on a
- * channel
- * @param regs ADC register map
+ * channel.
+ * @param dev ADC device to use for reading.
  * @param channel channel to convert
  * @return conversion result
  */
@@ -161,27 +171,27 @@ static inline uint32 adc_read(const adc_dev *dev, uint8 channel) {
 
 /**
  * @brief Set external trigger conversion mode event for regular channels
- * @param dev adc device
- * @param enable if 1, conversion on external events is enabled, 0 to disable
+ * @param dev    ADC device
+ * @param enable If 1, conversion on external events is enabled, 0 to disable
  */
 static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
-    __write(BITBAND_PERI(&(dev->regs->CR2), 20), enable);
+    *bb_peripv(&dev->regs->CR2, 20) = !!enable;
 }
 
 /**
  * @brief Enable an adc peripheral
- * @param regs register map of peripheral to enable
+ * @param dev ADC device to enable
  */
 static inline void adc_enable(const adc_dev *dev) {
-    __write(BITBAND_PERI(&(dev->regs->CR2), 0), 1);
+    *bb_peripv(&dev->regs->CR2, 0) = 1;
 }
 
 /**
- * @brief Disable an adc peripheral
- * @param regs register map of peripheral to disable
+ * @brief Disable an ADC peripheral
+ * @param dev ADC device to disable
  */
 static inline void adc_disable(const adc_dev *dev) {
-    __write(BITBAND_PERI(&(dev->regs->CR2), 0), 0);
+    *bb_peripv(&dev->regs->CR2, 0) = 0;
 }
 
 /**
@@ -198,5 +208,5 @@ static inline void adc_disable_all(void) {
 #ifdef __cplusplus
 } // extern "C"
 #endif
-#endif
 
+#endif

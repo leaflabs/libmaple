@@ -35,10 +35,6 @@
 #include "adc.h"
 #include "time.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
-
 /**
  * Specifies a GPIO pin behavior.
  *
@@ -68,11 +64,11 @@ typedef enum WiringPinMode {
                           supply through a large resistor). When the
                           pin is high, not much current flows through
                           to ground and the line stays at positive
-                          voltage; when the pin is low the bus
+                          voltage; when the pin is low, the bus
                           "drains" to ground with a small amount of
                           current constantly flowing through the large
                           resistor from the external supply. In this
-                          mode no current is ever actually /sourced/
+                          mode, no current is ever actually sourced
                           from the pin. */
 
     INPUT, /**< Basic digital input. The pin voltage is sampled; when
@@ -220,8 +216,5 @@ uint8 isButtonPressed();
  */
 uint8 waitForButtonPress(uint32 timeout_millis);
 
-#ifdef __cplusplus
-} // extern "C"
-#endif
 #endif
 

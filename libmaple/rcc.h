@@ -27,6 +27,8 @@
  * @brief reset and clock control definitions and prototypes
  */
 
+#include "libmaple_types.h"
+
 #ifndef _RCC_H_
 #define _RCC_H_
 
@@ -181,7 +183,6 @@ typedef enum {
     RCC_PWR,
     RCC_BKP,
 } rcc_clk_id;
-
 
 void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul);
 void rcc_clk_enable(rcc_clk_id device);

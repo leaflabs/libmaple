@@ -30,7 +30,7 @@
 #include "io.h"
 
 void pinMode(uint8 pin, WiringPinMode mode) {
-    uint8 outputMode;
+    gpio_pin_mode outputMode;
     boolean pwm = false;
 
     if (pin >= NR_GPIO_PINS) {
@@ -39,30 +39,30 @@ void pinMode(uint8 pin, WiringPinMode mode) {
 
     switch(mode) {
     case OUTPUT:
-        outputMode = GPIO_MODE_OUTPUT_PP;
+        outputMode = GPIO_OUTPUT_PP;
         break;
     case OUTPUT_OPEN_DRAIN:
-        outputMode = GPIO_MODE_OUTPUT_OD;
+        outputMode = GPIO_OUTPUT_OD;
         break;
     case INPUT:
     case INPUT_FLOATING:
-        outputMode = GPIO_MODE_INPUT_FLOATING;
+        outputMode = GPIO_INPUT_FLOATING;
         break;
     case INPUT_ANALOG:
-        outputMode = GPIO_MODE_INPUT_ANALOG;
+        outputMode = GPIO_INPUT_ANALOG;
         break;
     case INPUT_PULLUP:
-        outputMode = GPIO_MODE_INPUT_PU;
+        outputMode = GPIO_INPUT_PU;
         break;
     case INPUT_PULLDOWN:
-        outputMode = GPIO_MODE_INPUT_PD;
+        outputMode = GPIO_INPUT_PD;
         break;
     case PWM:
-        outputMode = GPIO_MODE_AF_OUTPUT_PP;
+        outputMode = GPIO_AF_OUTPUT_PP;
         pwm = true;
         break;
     case PWM_OPEN_DRAIN:
-        outputMode = GPIO_MODE_AF_OUTPUT_OD;
+        outputMode = GPIO_AF_OUTPUT_OD;
         pwm = true;
         break;
     default:
@@ -70,7 +70,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         return;
     }
 
-    gpio_set_mode(PIN_MAP[pin].port, PIN_MAP[pin].pin, outputMode);
+    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin, outputMode);
 
     if (PIN_MAP[pin].timer_num != TIMER_INVALID) {
         /* enable/disable timer channels if we're switching into or
@@ -93,7 +93,8 @@ uint32 digitalRead(uint8 pin) {
         return 0;
     }
 
-    return gpio_read_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin);
+    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin) ?
+        HIGH : LOW;
 }
 
 void digitalWrite(uint8 pin, uint8 val) {
@@ -101,15 +102,15 @@ void digitalWrite(uint8 pin, uint8 val) {
         return;
     }
 
-    gpio_write_bit(PIN_MAP[pin].port, PIN_MAP[pin].pin, val);
+    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin, val);
 }
 
 void togglePin(uint8 pin) {
     if (pin >= NR_GPIO_PINS) {
         return;
     }
-    
-    gpio_toggle_pin(PIN_MAP[pin].port, PIN_MAP[pin].pin);
+
+    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin);
 }
 
 uint8 isButtonPressed() {

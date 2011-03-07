@@ -28,7 +28,7 @@
 /**
  *  @file ext_interrupts.h
  *
- *  @brief External interrupt wiring prototypes and types
+ *  @brief Wiring-like external interrupt prototypes and types.
  */
 
 #ifndef _EXT_INTERRUPTS_H_
@@ -47,10 +47,6 @@ typedef enum ExtIntTriggerMode_ {
               LOW to HIGH or HIGH to LOW (i.e., when the pin
               changes). */
 } ExtIntTriggerMode;
-
-#ifdef __cplusplus
-extern "C"{
-#endif
 
 /**
  *  @brief Registers an interrupt handler on a pin.
@@ -103,11 +99,6 @@ static inline void interrupts() {
 static inline void noInterrupts() {
     nvic_globalirq_disable();
 }
-
-#ifdef __cplusplus
-}
-#endif
-
 
 #endif
 

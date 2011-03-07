@@ -34,21 +34,21 @@
 #include "gpio.h"
 #include "timers.h"
 
-HardwareSerial Serial1(USART1, 4500000UL, GPIOA_BASE,  9,10, TIMER1, 2);
-HardwareSerial Serial2(USART2, 2250000UL, GPIOA_BASE,  2, 3, TIMER2, 3);
-HardwareSerial Serial3(USART3, 2250000UL, GPIOB_BASE, 10,11, TIMER_INVALID, 0);
+HardwareSerial Serial1(USART1, 4500000UL, GPIOA,  9,10, TIMER1, 2);
+HardwareSerial Serial2(USART2, 2250000UL, GPIOA,  2, 3, TIMER2, 3);
+HardwareSerial Serial3(USART3, 2250000UL, GPIOB, 10,11, TIMER_INVALID, 0);
 // TODO: High density device ports
 
 HardwareSerial::HardwareSerial(uint8 usart_num,
                                uint32 max_baud,
-                               GPIO_Port *gpio_port,
+                               gpio_dev *gpio_device,
                                uint8 tx_pin,
                                uint8 rx_pin,
                                timer_dev_num timer_num,
                                uint8 compare_num) {
     this->usart_num = usart_num;
     this->max_baud = max_baud;
-    this->gpio_port = gpio_port;
+    this->gpio_device = gpio_device;
     this->tx_pin = tx_pin;
     this->rx_pin = rx_pin;
     this->timer_num = timer_num;
@@ -72,8 +72,8 @@ void HardwareSerial::begin(uint32 baud) {
         return;
     }
 
-    gpio_set_mode(gpio_port, tx_pin, GPIO_MODE_AF_OUTPUT_PP);
-    gpio_set_mode(gpio_port, rx_pin, GPIO_MODE_INPUT_FLOATING);
+    gpio_set_mode(gpio_device, tx_pin, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(gpio_device, rx_pin, GPIO_INPUT_FLOATING);
 
     if (timer_num != TIMER_INVALID) {
         /* turn off any pwm if there's a conflict on this usart */

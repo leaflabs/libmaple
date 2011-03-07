@@ -46,7 +46,7 @@ class HardwareSerial : public Print {
  private:
     uint8 usart_num;
     uint32 max_baud;
-    GPIO_Port *gpio_port;
+    gpio_dev *gpio_device;
     uint8 tx_pin;
     uint8 rx_pin;
     timer_dev_num timer_num;
@@ -54,7 +54,7 @@ class HardwareSerial : public Print {
  public:
     HardwareSerial(uint8 usart_num,
                    uint32 max_baud,
-                   GPIO_Port *gpio_port,
+                   gpio_dev *gpio_device,
                    uint8 tx_pin,
                    uint8 rx_pin,
                    timer_dev_num timer_num,

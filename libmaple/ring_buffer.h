@@ -13,21 +13,20 @@
 extern "C"{
 #endif
 
-/* The buffer is empty when head == tail.
+/**
+ * Ring buffer type.
+ *
+ * The buffer is empty when head == tail.
  *
  * The buffer is full when the head is one byte in front of the tail,
  * modulo buffer length.
  *
  * One byte is left free to distinguish empty from full. */
 typedef struct ring_buffer {
-    /** Buffer items are stored into */
-    volatile uint8 *buf;
-    /** Index of the next item to remove */
-    uint16 head;
-    /** Index where the next item will get inserted */
-    uint16 tail;
-    /** Buffer capacity minus one */
-    uint16 size;
+    volatile uint8 *buf; /**< Buffer items are stored into */
+    uint16 head;         /**< Index of the next item to remove */
+    uint16 tail;         /**< Index where the next item will get inserted */
+    uint16 size;         /**< Buffer capacity minus one */
 } ring_buffer;
 
 /**

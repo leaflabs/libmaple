@@ -1,119 +1,109 @@
+#include <stdio.h>
+#include <stddef.h>
 
 #include "wirish.h"
 #include "fsmc.h"
 
-#define LED_PIN  23 // hack for maple native
-#define DISC_PIN 14 // hack for USB on native
+#define LED       BOARD_LED_PIN
 
-// System control block registers
-#define SCB_BASE    (SCB_Reg*)(0xE000ED00)
-
-// This stuff should ultimately get moved to util.h or scb.h or w/e. 
-// Also in interactive test program and the HardFault IRQ handler.
-typedef struct {
-    volatile uint32 CPUID;
-    volatile uint32 ICSR;
-    volatile uint32 VTOR;
-    volatile uint32 AIRCR;
-    volatile uint32 SCR;
-    volatile uint32 CCR;
-    volatile uint32 SHPR1;
-    volatile uint32 SHPR2;
-    volatile uint32 SHPR3;
-    volatile uint32 SHCRS;
-    volatile uint32 CFSR;
-    volatile uint32 HFSR;
-    uint32 pad1;   
-    volatile uint32 MMAR;
-    volatile uint32 BFAR;
-} SCB_Reg;
-
-SCB_Reg *scb; 
-
-uint16 *ptr;
-int toggle = 0;
-int count = 0;
+// Start of FSMC SRAM bank 1
+static uint16 *const ptr_start = (uint16*)0x60000000;
+// End of Maple Native SRAM chip address space (512K 16-bit words)
+static uint16 *const ptr_end = (uint16*)0x60080000;
+// For snprintf
+static char buf[100];
 
 void setup() {
-   uint32 id;
-   scb = (SCB_Reg*)SCB_BASE;
+    pinMode(LED, OUTPUT);
+    digitalWrite(LED, HIGH);
 
-   pinMode(LED_PIN, OUTPUT);
-   pinMode(DISC_PIN, OUTPUT);
-   digitalWrite(DISC_PIN,1);
-   digitalWrite(LED_PIN,1);
+    Serial1.begin(115200);
+    Serial1.println("Hello World!");
 
-   Serial1.begin(9600);
-   Serial1.println("Hello World!");
-
-   Serial1.print("Init... ");
-   fsmc_native_sram_init();
-   Serial1.println("Done.");
-
-   // Start of channel1 SRAM bank (through to 0x63FFFFFF, though only a chunk
-   // of this is valid)
-   ptr = (uint16*)(0x60000000);
-
-   Serial1.print("Writing... ");
-   *ptr = 0x1234;
-   Serial1.println("Done.");
-
-   Serial1.print("Reading... ");
-   id = *ptr;
-   Serial1.print("Done: ");     // shouldn't be 0xFFFFFFFF
-   Serial1.println(id,BIN);
-
-   Serial1.println("Dumping System Control Block Registers");
-   Serial1.print("CPUID: ");
-   id = scb->CPUID;
-   Serial1.println(id,BIN);
-   Serial1.print("ICSR:  ");
-   id = scb->ICSR;
-   Serial1.println(id,BIN);
-   Serial1.print("CFSR:  ");
-   id = scb->CFSR;
-   Serial1.println(id,BIN);
-   Serial1.print("HFSR:  ");
-   id = scb->HFSR;
-   Serial1.println(id,BIN);
-   Serial1.print("MMAR:  ");
-   id = scb->MMAR;
-   Serial1.println(id,BIN);
-   Serial1.print("BFAR:  ");
-   id = scb->BFAR;
-   Serial1.println(id,BIN);
-    
-   Serial1.println("Now testing all memory addresses... (will hardfault at the end)");
-   delay(3000);
+    Serial1.print("Initializing RAM chip... ");
+    fsmc_native_sram_init();
+    Serial1.println("Done.");
 }
 
-void loop() {
-   digitalWrite(LED_PIN, toggle);
-   toggle ^= 1;
-   delay(1);
+void test_single_write() {
+    uint16 *ptr = ptr_start;
+    uint16 tmp;
 
-   for(int i = 0; i<100; i++) {   // modify this to speed things up
-        count++;
-        ptr++;
-        //delay(10);    // tweak this to test SRAM resiliance over time
-        *ptr = (0x0000FFFF & count);
-        if(*ptr != (0x0000FFFF & count)) {
-                Serial1.println("ERROR: mismatch, halting");
-                while(1) { }
+    Serial1.print("Writing 0x1234... ");
+    *ptr = 0x1234;
+    Serial1.println("Done.");
+
+    Serial1.print("Reading... ");
+    tmp = *ptr;
+    Serial1.print("Done: 0x");
+    Serial1.println(tmp, HEX);
+
+    if (tmp != 0x1234) {
+        Serial1.println("Mismatch, abort.");
+        ASSERT(0);
+    }
+}
+
+void test_all_addresses() {
+    uint32 start, end;
+    uint16 count = 0;
+    uint16 *ptr;
+    Serial1.println("Now writing all memory addresses (unrolled loop)");
+    start = micros();
+    for (ptr = ptr_start; ptr < ptr_end;) {
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+        *ptr++ = count++;
+    }
+    end = micros();
+    Serial1.print("Done. Elapsed time (us): ");
+    Serial1.println(end - start);
+
+    Serial1.println("Validating writes.");
+    for (ptr = ptr_start, count = 0; ptr < ptr_end; ptr++, count++) {
+        if (*ptr != count) {
+            snprintf(buf, sizeof buf, "mismatch: %p = 0x%xu, should be 0x%xu.",
+                     ptr, *ptr, count);
+            Serial1.println(buf);
+            ASSERT(0);
         }
-   }
-   
-   Serial1.print((uint32)(ptr),HEX);
-   Serial1.print(": ");
-   Serial1.println(*ptr,BIN);
+    }
+    ptrdiff_t nwrites = ptr_end - ptr_start;
+    double us_per_write = double(end-start) / double(nwrites);
+    Serial1.println("Done; all writes seem valid.");
+    snprintf(buf, sizeof buf,
+             "Number of writes = %d; avg. time per write = %g us (%g MHz)",
+             nwrites, us_per_write, 1 / us_per_write);
+    Serial1.println(buf);
+}
+
+__attribute__((constructor)) void premain() {
+    init();
 }
 
 int main(void) {
-   init();
-   setup();
+    setup();
 
-   while (1) {
-      loop();
-   }
-   return 0;
+    test_single_write();
+    test_all_addresses();
+
+    Serial1.println("Tests pass, finished.");
+
+    while (true)
+        ;
+
+    return 0;
 }

@@ -31,14 +31,7 @@
 #include "gpio.h"
 #include "fsmc.h"
 
-/* Sets up the FSMC peripheral to use the SRAM chip on the maple
- * native as an external segment of system memory space.  This
- * implementation is for the IS62WV51216BLL 8mbit chip (55ns
- * timing) */
-void fsmc_native_sram_init(void) {
-    FSMC_Bank *bank;
-
-    /* First we setup all the GPIO pins. */
+void fsmc_init_gpios(void) {
     /* Data lines... */
     gpio_set_mode(GPIOD_BASE,  0, MODE_AF_OUTPUT_PP); /* D2 */
     gpio_set_mode(GPIOD_BASE,  1, MODE_AF_OUTPUT_PP); /* D3 */
@@ -89,6 +82,17 @@ void fsmc_native_sram_init(void) {
 
     gpio_set_mode(GPIOE_BASE,  0, MODE_AF_OUTPUT_PP); /* NBL0 */
     gpio_set_mode(GPIOE_BASE,  1, MODE_AF_OUTPUT_PP); /* NBL1 */
+}
+
+/* Sets up the FSMC peripheral to use the SRAM chip on the maple
+ * native as an external segment of system memory space.  This
+ * implementation is for the IS62WV51216BLL 8mbit chip (55ns
+ * timing) */
+void fsmc_native_sram_init(void) {
+    FSMC_Bank *bank;
+
+    /* First set up the GPIO pins */
+    fsmc_init_gpios();
 
     /* Next enable the clock */
     rcc_clk_enable(RCC_FSMC);

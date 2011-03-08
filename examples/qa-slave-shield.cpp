@@ -24,7 +24,6 @@ bool skip_pin_p(uint8 pin);
 void setup() {
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
 
     for(int i = 0; i < NR_GPIO_PINS; i++) {
         if (skip_pin_p(i)) {
@@ -39,7 +38,6 @@ void setup() {
 void loop() {
     toggleLED();
     delay(100);
-    toggleLED();
 
     for(int i = 0; i < NR_GPIO_PINS; i++) {
         if (skip_pin_p(i)) {

@@ -55,6 +55,14 @@ const uint8 adc_pins[] = {
     46, 47, 48, 49, 50, 51, 52, 53, 54};
 const uint8 pins_to_skip[] = {LED_PIN};
 
+#elif defined(BOARD_maple_RET6)
+const uint8 pwm_pins[] =
+    {0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28, 35, 37, 37,
+     38};                       // NB 38 is BUT
+const uint8 adc_pins[] =
+    {0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28};
+const uint8 pins_to_skip[] = {LED_PIN};
+
 #else
 #error "Board type has not been selected correctly."
 #endif
@@ -497,10 +505,12 @@ void cmd_gpio_qa(void) {
             COMM.println(i);
             continue;
         }
-        COMM.print("Checking pin ")
+        COMM.print("Checking pin ");
         COMM.print(i, DEC);
         while(digitalRead(i) == 0) continue;
         for(int j = 0; j < NR_GPIO_PINS; j++) {
+            if (skip_pin_p(j))
+                continue;
             if(digitalRead(j) && j != i) {
                 COMM.print(": FAIL ########################### D");
                 COMM.println(j, DEC);
@@ -509,6 +519,8 @@ void cmd_gpio_qa(void) {
         }
         while(digitalRead(i) == 1) continue;
         for(int j = 0; j < NR_GPIO_PINS; j++) {
+            if (skip_pin_p(j))
+                continue;
             if(digitalRead(j) && j != i) {
                 COMM.print(": FAIL ########################### D");
                 COMM.println(j, DEC);

@@ -31,7 +31,9 @@
 #define _LIBMAPLE_H_
 
 #include "libmaple_types.h"
+#include "stm32.h"
 #include "util.h"
+#include "delay.h"
 
 /*
  * Where to put usercode, based on space reserved for bootloader.

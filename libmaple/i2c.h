@@ -72,14 +72,10 @@ typedef struct i2c_dev {
 } i2c_dev;
 
 
-extern i2c_dev i2c_dev1;
-extern i2c_dev i2c_dev2;
+extern i2c_dev* const I2C1;
 
-#define I2C1                    (i2c_dev*)&i2c_dev1
-#define I2C2                    (i2c_dev*)&i2c_dev2
-
-#define I2C1_BASE               0x40005400
-#define I2C2_BASE               0x40005800
+#define I2C1_BASE               (i2c_reg_map*)0x40005400
+#define I2C2_BASE               (i2c_reg_map*)0x40005800
 
 /* i2c enable options */
 #define I2C_FAST_MODE           0x1             // 400 khz
@@ -140,28 +136,98 @@ extern "C" {
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num);
 
-void i2c_start_condition(i2c_reg_map *regs);
-void i2c_stop_condition(i2c_reg_map *regs);
-void i2c_send_slave_addr(i2c_reg_map *regs, uint32 addr, uint32 rw);
-void i2c_set_input_clk(i2c_reg_map *regs, uint32 freq);
-void i2c_set_clk_control(i2c_reg_map *regs, uint32 val);
-void i2c_set_fast_mode(i2c_reg_map *regs);
-void i2c_set_standard_mode(i2c_reg_map *regs);
-void i2c_set_trise(i2c_reg_map *regs, uint32 trise);
-void i2c_enable_ack(i2c_reg_map *regs);
-void i2c_disable_ack(i2c_reg_map *regs);
+static inline void i2c_write(i2c_dev *dev, uint8 byte) {
+    dev->regs->DR = byte;
+}
 
-/* interrupt flags */
+/*
+ * Low level register twiddling functions
+ */
+
+/**
+ * @brief turn on an i2c peripheral
+ * @param map i2c peripheral register base
+ */
+static inline void i2c_peripheral_enable(i2c_dev *dev) {
+    dev->regs->CR1 |= I2C_CR1_PE;
+}
+
+/**
+ * @brief turn off an i2c peripheral
+ * @param map i2c peripheral register base
+ */
+static inline void i2c_peripheral_disable(i2c_dev *dev) {
+    dev->regs->CR1 &= ~I2C_CR1_PE;
+}
+
+/**
+ * @brief Set input clock frequency, in mhz
+ * @param device to configure
+ * @param freq frequency in megahertz (2-36)
+ */
+static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
+    uint32 cr2 = dev->regs->CR2;
+    cr2 &= ~I2C_CR2_FREQ;
+    cr2 |= freq;
+    dev->regs->CR2 = freq;
+}
+
+static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
+    uint32 ccr = dev->regs->CCR;
+    ccr &= ~I2C_CCR_CCR;
+    ccr |= val;
+    dev->regs->CCR = ccr;
+}
+
+static inline void i2c_set_fast_mode(i2c_dev *dev) {
+    dev->regs->CCR |= I2C_CCR_FS;
+}
+
+static inline void i2c_set_standard_mode(i2c_dev *dev) {
+    dev->regs->CCR &= ~I2C_CCR_FS;
+}
+
+/**
+ * @brief Set SCL rise time
+ * @param
+ */
+static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
+    dev->regs->TRISE = trise;
+}
+
+extern void toggle(void);
+static inline void i2c_start_condition(i2c_dev *dev) {
+    uint32 cr1 = dev->regs->CR1;
+//    if (cr1 & (I2C_CR1_START | I2C_CR1_STOP  | I2C_CR1_PEC)) {
+//    }
+    dev->regs->CR1 |= I2C_CR1_START;
+}
+
+static inline void i2c_stop_condition(i2c_dev *dev) {
+    dev->regs->CR1 |= I2C_CR1_STOP;
+}
+
+static inline void i2c_send_slave_addr(i2c_dev *dev, uint32 addr, uint32 rw) {
+    dev->regs->DR = (addr << 1) | rw;
+}
+
 #define I2C_IRQ_ERROR              I2C_CR2_ITERREN
 #define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
 #define I2C_IRQ_BUFFER             I2C_CR2_ITBUFEN
-void i2c_enable_irq(i2c_reg_map *regs, uint32 irqs);
-void i2c_disable_irq(i2c_reg_map *regs, uint32 irqs);
-void i2c_peripheral_enable(i2c_reg_map *regs);
-void i2c_peripheral_disable(i2c_reg_map *regs);
+static inline void i2c_enable_irq(i2c_dev *dev, uint32 irqs) {
+    dev->regs->CR2 |= irqs;
+}
 
-static inline void i2c_write(i2c_reg_map *regs, uint8 byte) {
-    regs->DR = byte;
+static inline void i2c_disable_irq(i2c_dev *dev, uint32 irqs) {
+    dev->regs->CR2 &= ~irqs;
+}
+
+static inline void i2c_enable_ack(i2c_dev *dev) {
+    dev->regs->CR1 |= I2C_CR1_ACK;
+}
+
+static inline void i2c_disable_ack(i2c_dev *dev) {
+    dev->regs->CR1 &= ~I2C_CR1_ACK;
 }
 
 #ifdef __cplusplus

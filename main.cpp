@@ -6,19 +6,29 @@
 
 static const uint8 slave_address = 0b1010001;
 
-#define NR_ELEMENTS 64
+#define NR_ELEMENTS 4
 uint8 buf0[NR_ELEMENTS + 2] = {0x0, 0x0};
 uint8 buf1[] = {0x0, 0x0};
 uint8 buf2[NR_ELEMENTS];
 
+i2c_msg msgs[3];
+
+void toggle(void) {
+    digitalWrite(2, HIGH);
+    digitalWrite(2, LOW);
+}
+
 void setup() {
-    i2c_msg msgs[3];
     uint32 i;
 
     pinMode(BOARD_LED_PIN, OUTPUT);
+    pinMode(2, OUTPUT);
+    Serial2.begin(9600);
+    Serial2.println("Hello!");
+    digitalWrite(2, LOW);
 
-    for (i = 0; i < sizeof buf0; i++) {
-        buf0[i + 2] = i & 0xFF;
+    for (i = 2; i < sizeof buf0; i++) {
+        buf0[i] = i - 2;
     }
 
     i2c_master_enable(I2C1, 0);
@@ -31,6 +41,11 @@ void setup() {
     i2c_master_xfer(I2C1, msgs, 1);
     delay(5);
 
+}
+
+void loop() {
+    delay(100);
+    toggleLED();
     /* Write slave address to read */
     msgs[1].addr = slave_address;
     msgs[1].flags = 0;
@@ -43,11 +58,6 @@ void setup() {
     msgs[2].length = sizeof buf2;
     msgs[2].data = buf2;
     i2c_master_xfer(I2C1, msgs + 1, 2);
-}
-
-void loop() {
-    toggleLED();
-    delay(100);
 }
 
 // Force init to be called *first*, i.e. before static object allocation.

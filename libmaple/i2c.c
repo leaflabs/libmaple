@@ -39,11 +39,12 @@
 /* 2/17 Started 10pm-4am
  * 2/19 Started 7pm-2am
  * 2/20 Started 7pm-7pm
- * 2/23 Started 8pm */
+ * 2/23 Started 8pm-8am
+ * 3/9 Started 11pm */
 
 static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state);
 
-i2c_dev i2c_dev1 = {
+static i2c_dev i2c_dev1 = {
     .regs         = (i2c_reg_map*)I2C1_BASE,
     .gpio_port    = GPIOB_BASE,
     .sda_pin      = 7,
@@ -54,29 +55,12 @@ i2c_dev i2c_dev1 = {
     .state        = I2C_STATE_IDLE
 };
 
+i2c_dev* const I2C1 = &i2c_dev1;
+
 /**
  * @brief IRQ handler for i2c master. Handles transmission/reception.
  * @param dev i2c device
  */
-
-void delay_us(uint32 us) {
-    /* So (2^32)/12 micros max, or less than 6 minutes */
-    us *= 12;
-
-    /* fudge for function call overhead */
-    us--;
-    asm volatile("   mov r0, %[us]          \n\t"
-            "1: subs r0, #1            \n\t"
-            "   bhi 1b                 \n\t"
-            :
-            : [us] "r" (us)
-            : "r0");
-}
-static inline void debug_toggle(uint32 delay) {
-    gpio_write_bit(GPIOA_BASE, 5, 1);
-    delay_us(delay);
-    gpio_write_bit(GPIOA_BASE, 5, 0);
-}
 
 struct crumb {
     uint32 event;
@@ -125,15 +109,15 @@ static void i2c_irq_handler(i2c_dev *dev) {
      */
     if (sr1 & I2C_SR1_SB) {
         msg->xferred = 0;
-        i2c_enable_irq(dev->regs, I2C_IRQ_BUFFER);
+        i2c_enable_irq(dev, I2C_IRQ_BUFFER);
 
         /*
          * Master receiver
          */
         if (read) {
-            i2c_enable_ack(dev->regs);
+            i2c_enable_ack(dev);
         }
-        i2c_send_slave_addr(dev->regs, msg->addr, read);
+        i2c_send_slave_addr(dev, msg->addr, read);
         sr1 = sr2 = 0;
     }
 
@@ -148,13 +132,13 @@ static void i2c_irq_handler(i2c_dev *dev) {
          */
         if (read) {
             if (msg->length == 1) {
-                i2c_disable_ack(dev->regs);
+                i2c_disable_ack(dev);
                 dev->msgs_left--;
                 if (dev->msgs_left) {
-                    i2c_start_condition(dev->regs);
+                    i2c_start_condition(dev);
                     leave_big_crumb(RX_ADDR_START, 0, 0);
                 } else {
-                    i2c_stop_condition(dev->regs);
+                    i2c_stop_condition(dev);
                     leave_big_crumb(RX_ADDR_STOP, 0, 0);
                 }
             }
@@ -163,7 +147,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * Master transmitter: write first byte to fill shift register.
              * We should get another TXE interrupt immediately to fill DR again.
              */
-            i2c_write(dev->regs, msg->data[msg->xferred++]);
+            i2c_write(dev, msg->data[msg->xferred++]);
         }
         sr1 = sr2 = 0;
     }
@@ -176,13 +160,13 @@ static void i2c_irq_handler(i2c_dev *dev) {
     if ((sr1 & I2C_SR1_TXE) && !(sr1 & I2C_SR1_BTF)) {
         leave_big_crumb(TXE_ONLY, 0, 0);
         if (dev->msgs_left) {
-            i2c_write(dev->regs, msg->data[msg->xferred++]);
+            i2c_write(dev, msg->data[msg->xferred++]);
             if (msg->xferred == msg->length) {
                 /*
                  * End of this message. Turn off TXE/RXNE and wait for
                  * BTF to send repeated start or stop condition.
                  */
-                i2c_disable_irq(dev->regs, I2C_IRQ_BUFFER);
+                i2c_disable_irq(dev, I2C_IRQ_BUFFER);
                 dev->msgs_left--;
             }
         } else {
@@ -207,18 +191,21 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * won't interrupt, but if we don't disable ITEVTEN, BTF will
              * continually interrupt us. What the fuck ST?
              */
-            i2c_start_condition(dev->regs);
+            i2c_start_condition(dev);
             while (!(dev->regs->SR1 & I2C_SR1_SB))
                 ;
             dev->msg++;
         } else {
-            i2c_stop_condition(dev->regs);
+            i2c_stop_condition(dev);
+//            while (dev->regs->CR1 & I2C_CR1_STOP) {
+//                ;
+//            }
             /*
              * Turn off event interrupts to keep BTF from firing until the end
              * of the stop condition. Why on earth they didn't have a start/stop
              * condition request clear BTF is beyond me.
              */
-            i2c_disable_irq(dev->regs, I2C_IRQ_EVENT);
+            i2c_disable_irq(dev, I2C_IRQ_EVENT);
             leave_big_crumb(STOP_SENT, 0, 0);
             dev->state = I2C_STATE_XFER_DONE;
         }
@@ -238,12 +225,12 @@ static void i2c_irq_handler(i2c_dev *dev) {
          * RXNE interrupt before shutting things down.
          */
         if (msg->xferred == (msg->length - 1)) {
-            i2c_disable_ack(dev->regs);
+            i2c_disable_ack(dev);
             if (dev->msgs_left > 2) {
-                i2c_start_condition(dev->regs);
+                i2c_start_condition(dev);
                 leave_big_crumb(RXNE_START_SENT, 0, 0);
             } else {
-                i2c_stop_condition(dev->regs);
+                i2c_stop_condition(dev);
                 leave_big_crumb(RXNE_STOP_SENT, 0, 0);
             }
         } else if (msg->xferred == msg->length) {
@@ -262,11 +249,18 @@ static void i2c_irq_handler(i2c_dev *dev) {
 }
 
 void __irq_i2c1_ev(void) {
-   i2c_dev *dev = I2C1;
-   i2c_irq_handler(dev);
+   i2c_irq_handler(&i2c_dev1);
 }
 
-static void i2c_bus_reset(i2c_dev *dev) {
+static void i2c_irq_error_handler(i2c_dev *dev) {
+    __error();
+}
+
+void __irq_i2c1_er(void) {
+    i2c_irq_error_handler(&i2c_dev1);
+}
+
+static void i2c_bus_reset(const i2c_dev *dev) {
     /* Release both lines */
     gpio_write_bit(dev->gpio_port, dev->scl_pin, 1);
     gpio_write_bit(dev->gpio_port, dev->sda_pin, 1);
@@ -322,21 +316,21 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_MODE_AF_OUTPUT_OD);
 
     /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
-    i2c_set_input_clk(dev->regs, 36);
+    i2c_set_input_clk(dev, 36);
 
     /* 100 khz only for now */
-    i2c_set_clk_control(dev->regs, STANDARD_CCR);
+    i2c_set_clk_control(dev, STANDARD_CCR);
 
     /*
      * Set scl rise time, standard mode for now.
      * Max rise time in standard mode: 1000 ns
      * Max rise time in fast mode: 300ns
      */
-    i2c_set_trise(dev->regs, STANDARD_TRISE);
+    i2c_set_trise(dev, STANDARD_TRISE);
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);
-    i2c_enable_irq(dev->regs, I2C_IRQ_EVENT | I2C_IRQ_BUFFER);
+    i2c_enable_irq(dev, I2C_IRQ_EVENT | I2C_IRQ_BUFFER);
 
     /*
      * Important STM32 Errata:
@@ -368,13 +362,12 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     nvic_irq_set_priority(dev->ev_nvic_line, 0);
 
     /* Make it go! */
-    i2c_peripheral_enable(dev->regs);
+    i2c_peripheral_enable(dev);
 }
 
 
 int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num) {
     int32 rc;
-    static int times = 0;
 
     dev->msg = msgs;
     dev->msgs_left = num;
@@ -389,7 +382,7 @@ int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num) {
 
     dev->state = I2C_STATE_BUSY;
 
-    i2c_start_condition(dev->regs);
+    i2c_start_condition(dev);
     rc = wait_for_state_change(dev, I2C_STATE_XFER_DONE);
     if (rc < 0) {
         goto out;
@@ -414,89 +407,6 @@ static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state) {
 }
 
 
-/*
- * Low level register twiddling functions
- */
-
-/**
- * @brief turn on an i2c peripheral
- * @param map i2c peripheral register base
- */
-void i2c_peripheral_enable(i2c_reg_map *regs) {
-    regs->CR1 |= I2C_CR1_PE;
-}
-
-/**
- * @brief turn off an i2c peripheral
- * @param map i2c peripheral register base
- */
-void i2c_peripheral_disable(i2c_reg_map *regs) {
-    regs->CR1 &= ~I2C_CR1_PE;
-}
-
-/**
- * @brief Set input clock frequency, in mhz
- * @param device to configure
- * @param freq frequency in megahertz (2-36)
- */
-void i2c_set_input_clk(i2c_reg_map *regs, uint32 freq) {
-    uint32 cr2 = regs->CR2;
-    cr2 &= ~I2C_CR2_FREQ;
-    cr2 |= freq;
-    regs->CR2 = freq;
-}
-
-void i2c_set_clk_control(i2c_reg_map *regs, uint32 val) {
-    uint32 ccr = regs->CCR;
-    ccr &= ~I2C_CCR_CCR;
-    ccr |= val;
-    regs->CCR = ccr;
-}
-
-void i2c_set_fast_mode(i2c_reg_map *regs) {
-    regs->CCR |= I2C_CCR_FS;
-}
-
-void i2c_set_standard_mode(i2c_reg_map *regs) {
-    regs->CCR &= ~I2C_CCR_FS;
-}
-
-/**
- * @brief Set SCL rise time
- * @param
- */
-
-void i2c_set_trise(i2c_reg_map *regs, uint32 trise) {
-    regs->TRISE = trise;
-}
-
-void i2c_start_condition(i2c_reg_map *regs) {
-    regs->CR1 |= I2C_CR1_START;
-}
-
-void i2c_stop_condition(i2c_reg_map *regs) {
-    regs->CR1 |= I2C_CR1_STOP;
-}
-
-void i2c_send_slave_addr(i2c_reg_map *regs, uint32 addr, uint32 rw) {
-    regs->DR = (addr << 1) | rw;
-}
-
-void i2c_enable_irq(i2c_reg_map *regs, uint32 irqs) {
-    regs->CR2 |= irqs;
-}
-
-void i2c_disable_irq(i2c_reg_map *regs, uint32 irqs) {
-    regs->CR2 &= ~irqs;
-}
-
-void i2c_enable_ack(i2c_reg_map *regs) {
-    regs->CR1 |= I2C_CR1_ACK;
-}
-
-void i2c_disable_ack(i2c_reg_map *regs) {
-    regs->CR1 &= ~I2C_CR1_ACK;
-}
 
 
 

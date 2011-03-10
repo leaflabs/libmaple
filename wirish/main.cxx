@@ -1,4 +1,4 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 LeafLabs LLC.
@@ -20,16 +20,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
- * ****************************************************************************/
+ *****************************************************************************/
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
+// Otherwise, statically allocated objects that need libmaple may fail.
  __attribute__(( constructor )) void premain() {
     init();
 }
 
-int main(void)
-{
+int main(void) {
     setup();
 
     while (1) {

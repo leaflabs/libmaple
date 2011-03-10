@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <stdio.h>              // for snprintf()
 
 #include "wirish.h"
 #include "bkp.h"

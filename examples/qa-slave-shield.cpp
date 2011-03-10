@@ -1,50 +1,51 @@
-// slave mode for QA shield
+// Slave mode for QA shield
 
 #include "wirish.h"
 
-#define LED_PIN 13
-#define NUM_GPIO 38 // not the number of the max...
+// FIXME generalize for Maple Native, Maple Mini (NUM_GPIO, Mini USB
+// breakout pins, etc.)
 
-int i;
+#define LED_PIN BOARD_LED_PIN
+#define NUM_GPIO 38 // Ignore JTAG pins.
 
-void setup()
-{
+void setup() {
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, 1);
+    digitalWrite(LED_PIN, HIGH);
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
+    for(int i = 0; i < NUM_GPIO; i++) {
+        if (i == BOARD_LED_PIN) {
+            continue;
+        }
         pinMode(i, OUTPUT);
-        digitalWrite(i,0);
+        digitalWrite(i, LOW);
     }
-    //delay(5000);
     SerialUSB.println("OK, starting...");
-
 }
 
 void loop() {
-    digitalWrite(LED_PIN,1);
+    toggleLED();
     delay(100);
-    digitalWrite(LED_PIN,0);
+    toggleLED();
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
-        digitalWrite(i,1);
+    for(int i = 0; i < NUM_GPIO; i++) {
+        if (i == BOARD_LED_PIN) {
+            continue;
+        }
+        togglePin(i);
         delay(5);
-        digitalWrite(i,0);
+        togglePin(i);
         delay(5);
     }
 }
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
- __attribute__(( constructor )) void premain() {
+// Otherwise, statically allocated objects that need libmaple may fail.
+__attribute__((constructor)) void premain() {
     init();
 }
 
-int main(void)
-{
+int main(void) {
     setup();
 
     while (1) {

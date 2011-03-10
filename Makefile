@@ -153,7 +153,7 @@ debug:
 
 cscope:
 	rm -rf *.cscope
-	find . -name '*.[hcs]' -o -name '*.cpp' | xargs cscope -b
+	find . -name '*.[hcS]' -o -name '*.cpp' | xargs cscope -b
 
 tags:
 	etags `find . -name "*.c" -o -name "*.cpp" -o -name "*.h"`

@@ -117,25 +117,25 @@ html_theme = 'default'
 # further.  For a list of options available for each theme, see the
 # documentation.
 html_theme_options = {
-	## Sidebar placement options
-	#'stickysidebar' : 'true',
-	'rightsidebar' : 'true',
-	#'collapsiblesidebar' : 'true',
-	
-	## Color
-	'sidebarbgcolor' : '#C8C8C8',
-	'sidebarlinkcolor' : 'green',
-	'sidebartextcolor' : 'black',
+        ## Sidebar placement options
+        #'stickysidebar' : 'true',
+        'rightsidebar' : 'true',
+        #'collapsiblesidebar' : 'true',
+
+        ## Color
+        'sidebarbgcolor' : '#C8C8C8',
+        'sidebarlinkcolor' : 'green',
+        'sidebartextcolor' : 'black',
         #'sidebarbtncolor' : 'black',
-	'footerbgcolor' : 'green',
-	'relbarbgcolor' : 'green',
-	'headlinkcolor' : '#000000',
-	'linkcolor' : 'green',
-	'visitedlinkcolor' : 'green',
-	
-	## Font
-	'headfont' : 'Georgia',
-	'bodyfont' : 'Lucidia'
+        'footerbgcolor' : 'green',
+        'relbarbgcolor' : 'green',
+        'headlinkcolor' : '#000000',
+        'linkcolor' : 'green',
+        'visitedlinkcolor' : 'green',
+
+        ## Font
+        'headfont' : 'Georgia',
+        'bodyfont' : 'Lucidia'
 }
 
 # Add any paths that contain custom themes here, relative to this directory.
@@ -174,7 +174,7 @@ html_last_updated_fmt = '%b %d, %Y'
 # re-add commented line when custom template for api finished
 html_sidebars = {
    '**': ['globaltoc.html', 'searchbox.html'],
-   #'lang/api**':['searchbox.html', 'apilist.html'], 
+   #'lang/api**':['searchbox.html', 'apilist.html'],
 }
 
 

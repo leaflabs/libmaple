@@ -23,6 +23,8 @@
  *****************************************************************************/
 
 /**
+ * @file adc.c
+ *
  * @brief Analog to digital converter routines
  *
  * IMPORTANT: maximum external impedance must be below 0.4kOhms for 1.5
@@ -30,7 +32,7 @@
  *
  * At 55.5 cycles/sample, the external input impedance < 50kOhms.
  *
- * See stm32 manual RM008 for how to calculate this.
+ * See STM32 manual RM0008 for how to calculate this.
  */
 
 #include "libmaple.h"

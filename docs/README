@@ -1,16 +1,42 @@
-This directory contains the Sphinx documentation for libmaple, as well
-as a Doxygen configuration file; we turn Doxygen XML output into
-Sphinx documentation.  You can generate HTML documentation using the
-Makefile if you have make, or using make.bat from Windows.
+This directory contains source files used to generate libmaple's
+documentation.  
+
+The generated documentation for the latest libmaple release is
+available online in HTML form at http://leaflabs.com/docs/.  The web
+interface is the recommended way for users to read the documentation.
+
+This file contains instructions for generating the HTML files.
+
+About the Documentation
+-----------------------
+
+The docs are written in Sphinx's extensions to reStructuredText
+(reST).  You can read more about Sphinx here:
+
+    http://sphinx.pocoo.org/tutorial.html
+
+Much of the documentation is pulled out of the libmaple source code;
+we use Doxygen XML output into Sphinx documentation.  You can read
+more about Doxygen here:
+
+    http://doxygen.org
+
+We use a Sphinx plugin called Breathe to parse Doxygen's XML output
+into a form usable by Sphinx.  You can read more about Breathe here:
+
+    http://michaeljones.github.com/breathe/
 
 Documentation Build Steps
 -------------------------
+
+You first need to produce Doxygen XML output, then you can generate
+the HTML documentation.
 
 1. You need a recent-ish version of Doxygen in your PATH:
 
     http://www.stack.nl/~dimitri/doxygen/download.html#latestsrc
 
-2. Install breathe, which does Doxygen-to-Sphinx conversion:
+2. Install Breathe, which does Doxygen-to-Sphinx conversion:
 
    Read/write version (for LeafLabs developers):
 
@@ -37,9 +63,11 @@ Documentation Build Steps
 
     $ sudo easy_install -U Sphinx
 
+   You need Sphinx version >= 1.0.6.
+
 4. Before the first time you run Sphinx (and any time the Doxygen
    comments in the libmaple source code are changed), you'll need to
-   rebuild the Doxygen XML output:
+   build the Doxygen XML output:
 
     $ cd libmaple/docs/source
     $ doxygen
@@ -48,36 +76,23 @@ Documentation Build Steps
 
     $ make html
 
-   (Read the Makefile for more targets).
+   On Windows, use the batch file make.bat instead.
 
 Reading and Modifying the Documentation
 ---------------------------------------
 
-The net effect of the above is to produce Doxygen XML output (ignore
-this) in libmaple/docs/doxygen/xml, and HTML documentation (this is
-what you want) in libmaple/docs/build/html.
-
 Just point your web browser at the file
 
-  libmaple/docs/build/html/index.html
+  /docs/build/html/index.html
 
-it corresponds to the Sphinx file
+It corresponds to the Sphinx file
 
-  libmaple/docs/source/index.rst
+  /docs/source/index.rst
 
-All of the documentation itself lives in libmaple/docs/source/.  The
-directory source/_static/ is for static content (like style sheets);
-source/_templates/ contains Sphinx templates (or, it would, if we had
-any).
+The file /docs/source/conf.py is the Sphinx configuration file; you
+can go read it for more information about our setup.
 
-The docs are written in Sphinx's version of reStructuredText (reST);
-it's a Python thing that they use to produce the docs at
-http://python.org.  You can read more about Sphinx here:
-
-    http://sphinx.pocoo.org/tutorial.html
-
-You can view the source for any generated page of documentation by
-clicking the "Show Source" link in the sidebar.
-
-The file libmaple/docs/source/conf.py is the Sphinx configuration
-file; you can go read it for more information about our setup.
+All of the documentation which isn't pulled out of source code
+comments lives in /docs/source/.  The directory /docs/source/_static/
+is for static content (like style sheets); /docs/source/_templates/
+contains Sphinx templates.

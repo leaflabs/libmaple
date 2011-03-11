@@ -75,7 +75,7 @@ void init(void) {
     timer_init(TIMER5, 1);
     timer_init(TIMER8, 1);
 #endif
-    // setupUSB();
+    setupUSB();
 
     /* include the board-specific init macro */
     BOARD_INIT;

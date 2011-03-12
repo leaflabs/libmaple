@@ -61,14 +61,6 @@ pin is configured as an ``INPUT`` (using :ref:`pinMode()
 <lang-digitalread>`, the microcontroller will report ``HIGH`` if a
 voltage of 3 volts or more is present at the pin.
 
-.. TODO? Following seems false; check it out sometime, leave out for now:
-
-.. A pin may also be configured as an ``INPUT`` with ``pinMode()``, and
-.. subsequently made ``HIGH`` with :ref:`digitalWrite()
-.. <lang-digitalwrite>`, this will set the internal pullup resistors,
-.. which will *steer* the input pin to a HIGH reading unless it is pulled
-.. LOW by external circuitry.
-
 When a pin is configured to ``OUTPUT`` with pinMode, and set to
 ``HIGH`` with :ref:`digitalWrite() <lang-digitalwrite>`, the pin is at
 3.3 volts. In this state it can *source* current, e.g. light an LED

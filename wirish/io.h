@@ -216,5 +216,21 @@ uint8 isButtonPressed();
  */
 uint8 waitForButtonPress(uint32 timeout_millis);
 
+/**
+ * Shift out a byte of data, one bit at a time.
+ *
+ * This function starts at either the most significant or least
+ * significant bit in a byte value, and shifts out each byte in order
+ * onto a data pin.  After each bit is written to the data pin, a
+ * separate clock pin is pulsed to indicate that the new bit is
+ * available.
+ *
+ * @param dataPin  Pin to shift data out on
+ * @param clockPin Pin to pulse after each bit is shifted out
+ * @param bitOrder Either MSBFIRST (big-endian) or LSBFIRST (little-endian).
+ * @param val      Value to shift out
+ */
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 value);
+
 #endif
 

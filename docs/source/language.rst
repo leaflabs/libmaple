@@ -61,7 +61,7 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |* :ref:`boolean <lang-boolean>` (1 byte)      |                                                   |
 |* :ref:`{} (curly braces)                   |                                              |* noTone(): TODO                                   |
 |  <lang-curly-braces>`                      |* :ref:`char <lang-char>` (1 byte)            |                                                   |
-|                                            |                                              |* shiftOut(): TODO                                 |
+|                                            |                                              |* :ref:`shiftOut() <lang-shiftout>`                |
 |* :ref:`// (single-line comment)            |* :ref:`unsigned char                         |                                                   |
 |  <lang-comments-singleline>`               |  <lang-unsignedchar>` (1 byte)               |* pulseIn(): TODO                                  |
 |                                            |                                              |                                                   |
@@ -187,11 +187,13 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |                                              |                                                   |
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 
+.. _language-assert:
+
 ``ASSERT(...)``
 ---------------
 
 The ``ASSERT()`` function can be very useful for basic program
-debugging. The function accepts a boolean; for example::
+debugging. It accepts a boolean; for example::
 
   ASSERT(state == WAIT);
 
@@ -255,11 +257,10 @@ Unimplemented Arduino Features
 The following Wiring/Arduino features are currently unimplemented on
 the Maple.  However, they will be present in future versions:
 
+- `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 - `noTone() <http://www.arduino.cc/en/Reference/NoTone>`_
 - `pulseIn() <http://www.arduino.cc/en/Reference/PulseIn>`_
-- `shiftOut() <http://www.arduino.cc/en/Reference/ShiftOut>`_
 - `String <http://arduino.cc/en/Reference/StringObject>`_
-- `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 
 .. _our reference page: http://leaflabs.com/docs/external-interrupts/
 

@@ -66,7 +66,7 @@ have embedded USB support. Thus, Maple doesn’t need the extra FTDI
 chip. Firmware is uploaded via the standard DFU protocol (also used by
 iPhone and openMoko). Since DFU is a standard, there is no need for
 custom software running on the host to upload the firmware. Any DFU
-compliant program will work. The maple ide is based around
+compliant program will work. The Maple IDE is based around
 :command:`dfu-util`, openMoko’s DFU utility. Using DFU came at a cost,
 however. The USB port must additionally implement a separate serial
 port at the same time (we use the CDC ACM class for serial
@@ -87,11 +87,11 @@ important what this means, except for two things.
 1. Four drivers were necessary to make everything work.
 2. IAD is not supported by OS X.
 
-Mac, on the other hand, only supported Compound USB, a different trick
-that is not supported by Windows. While a perpetual background
+Mac OS X, on the other hand, only supported Compound USB, a different
+trick that is not supported by Windows. While a perpetual background
 bootloader was attractive, it became clear, after much toiling, we
-were going to have to write some custom drivers across several
-platforms to make everything work this way.
+were going to have to write custom drivers across several platforms to
+make everything work this way.
 
 .. _bootloader-rev3:
 
@@ -103,22 +103,21 @@ Arduino.  In Rev 3, the device resets into bootloader mode, which
 stays alive for a few moments to receive commands, and then jumps to
 user code. The bootloader is implemented as a DFU device -- just a DFU
 device, no serial port. This requires one driver for Windows
-(:file:`drivers/mapleDrv/dfu` in the Windows IDE directory). As part
-of the :ref:`libmaple <libmaple>` library, user code is automatically
-supplied with serial support via some behind the scenes work that
-happens automatically when you compile (``setupUSB()`` is appended to
-``setup()``). This user mode code only implements a CDC ACM class USB
-device, giving you functions like ``Usb.print()``. Separating these
-two modes fixed the driver issue, required no complicated compound USB
-device nonsense, and works well across platforms, requiring only two
-drivers (serial and DFU) on Windows.
+(:file:`drivers/mapleDrv/dfu` in the Windows IDE directory).
+
+As part of the :ref:`libmaple <libmaple>` library, user code is
+automatically supplied with serial support via some behind the scenes
+work (``setupUSB()`` is called from ``init()``). This user mode code
+only implements a CDC ACM class USB device, giving you functions like
+:ref:`SerialUSB.read() <lang-serialusb-read>`. Separating these two
+modes fixed the driver issues and works well across platforms,
+requiring only two drivers (serial and DFU) on Windows.
 
 However, it is no longer possible to upload code at will, since there
-is no bootloader quietly listening in the background. Instead you have
-to reset the board, then initiate a DFU transaction. This reset is
-performed automatically by the IDE by sending a command over the USB
-serial port. You can generate this reset on your own using a Python
-script or some other scheme. All you need do is:
+is no bootloader quietly listening in the background. Instead, you
+must reset the board, then initiate a DFU transaction. The IDE
+performs this reset automatically by performing a special sequence of
+changes on the USB serial port:
 
 1. Pulse DTR (high and then low, so that you've created a negative
    edge)
@@ -128,15 +127,16 @@ script or some other scheme. All you need do is:
    negative edge, rather than just ensuring DTR is low.
 
 After the reset, the host OS takes a few moments (.5-2 seconds) to
-re-enumerate the device as DFU. This delay is unpredictable, and its
-the reason the bootloader on Maple Rev3 stays alive for so
-long. Sometimes the bootloader was exiting before the OS had even
-enumerated the device! Once in bootloader mode, however,
-:command:`dfu-util` uploads your sketch into either flash or RAM (DFU
-alternate setting 0 or 1, respectively) and resets the board again.
-This time, however, no DFU transaction is initiated, and the
-bootloader gives way to user code, closing down the DFU pipe and
-bringing up the USB serial.
+re-enumerate the device as DFU. This delay is unpredictable, and is
+the reason the bootloader on Maple Rev 3/Rev 5 stays alive for so
+long. (Sometimes, the bootloader was exiting before the OS had even
+enumerated the device.)
+
+Once in bootloader mode, :command:`dfu-util` uploads your sketch into
+either flash or RAM (DFU alternate setting 0 or 1, respectively) and
+resets the board again.  This time, however, no DFU transaction is
+initiated, and the bootloader gives way to user code, closing down the
+DFU pipe and bringing up the USB serial port.
 
 .. .. _bootloader-rev6:
 

@@ -33,7 +33,6 @@ programmers familiar with the Arduino language.
 
    lang/unimplemented/notone.rst
    lang/unimplemented/pulsein.rst
-   lang/unimplemented/shiftout.rst
    lang/unimplemented/stringclass.rst
    lang/unimplemented/stringobject.rst
    lang/unimplemented/tone.rst

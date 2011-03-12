@@ -35,18 +35,7 @@
 #define BB_PERI_REF      0x40000000
 #define BB_PERI_BASE     0x42000000
 
-static inline uint32* __bb_addr(void*, uint32, uint32, uint32);
-static inline __io uint32* __bb_addrv(__io void*, uint32, uint32, uint32);
-
-/**
- * @brief Obtain a pointer to the bit-band address corresponding to a
- * bit in an SRAM address.
- * @param address Address in the bit-banded SRAM region
- * @param bit     Bit in address to bit-band
- */
-static inline uint32* bb_sramp(void *address, uint32 bit) {
-    return __bb_addr(address, bit, BB_SRAM_BASE, BB_SRAM_REF);
-}
+static inline __io uint32* __bb_addr(__io void*, uint32, uint32, uint32);
 
 /**
  * @brief Obtain a pointer to the bit-band address corresponding to a
@@ -54,8 +43,8 @@ static inline uint32* bb_sramp(void *address, uint32 bit) {
  * @param address Address in the bit-banded SRAM region
  * @param bit     Bit in address to bit-band
  */
-static inline __io uint32* bb_srampv(__io void *address, uint32 bit) {
-    return __bb_addrv(address, bit, BB_SRAM_BASE, BB_SRAM_REF);
+static inline __io uint32* bb_sramp(__io void *address, uint32 bit) {
+    return __bb_addr(address, bit, BB_SRAM_BASE, BB_SRAM_REF);
 }
 
 /**
@@ -64,20 +53,13 @@ static inline __io uint32* bb_srampv(__io void *address, uint32 bit) {
  * @param address Address in the bit-banded peripheral region
  * @param bit     Bit in address to bit-band
  */
-static inline __io uint32* bb_peripv(__io void *address, uint32 bit) {
-    return __bb_addrv(address, bit, BB_PERI_BASE, BB_PERI_REF);
+static inline __io uint32* bb_perip(__io void *address, uint32 bit) {
+    return __bb_addr(address, bit, BB_PERI_BASE, BB_PERI_REF);
 }
 
-static inline uint32* __bb_addr(void *address,
-                                uint32 bit,
-                                uint32 bb_base,
-                                uint32 bb_ref) {
-    return (uint32*)(bb_base + ((uint32)address - bb_ref) * 32 + bit * 4);
-}
-
-static inline __io uint32* __bb_addrv(__io void *address,
-                                      uint32 bit,
-                                      uint32 bb_base,
-                                      uint32 bb_ref) {
-    return (__io uint32*)__bb_addr((void*)address, bit, bb_base, bb_ref);
+static inline __io uint32* __bb_addr(__io void *address,
+                                     uint32 bit,
+                                     uint32 bb_base,
+                                     uint32 bb_ref) {
+    return (__io uint32*)(bb_base + ((uint32)address - bb_ref) * 32 + bit * 4);
 }

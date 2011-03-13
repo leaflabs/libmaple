@@ -32,6 +32,8 @@
 #ifndef _DAC_H_
 #define _DAC_H_
 
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
+
 #include "rcc.h"
 
 #ifdef __cplusplus
@@ -148,5 +150,7 @@ void dac_disable_channel(uint8 channel);
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+#endif  /* STM32_HIGH_DENSITY, STM32_XL_DENSITY */
 
 #endif

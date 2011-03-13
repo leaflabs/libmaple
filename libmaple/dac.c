@@ -26,6 +26,8 @@
 #include "gpio.h"
 #include "dac.h"
 
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
+
 /**
  * @brief DAC peripheral routines.
  */
@@ -108,3 +110,5 @@ void dac_disable_channel(uint8 channel) {
         break;
     }
 }
+
+#endif

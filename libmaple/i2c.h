@@ -136,17 +136,13 @@ extern "C" {
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num);
 
-static inline void i2c_write(i2c_dev *dev, uint8 byte) {
-    dev->regs->DR = byte;
-}
-
 /*
  * Low level register twiddling functions
  */
 
 /**
  * @brief turn on an i2c peripheral
- * @param map i2c peripheral register base
+ * @param dev i2c device
  */
 static inline void i2c_peripheral_enable(i2c_dev *dev) {
     dev->regs->CR1 |= I2C_CR1_PE;
@@ -154,15 +150,25 @@ static inline void i2c_peripheral_enable(i2c_dev *dev) {
 
 /**
  * @brief turn off an i2c peripheral
- * @param map i2c peripheral register base
+ * @param dev i2c device
  */
 static inline void i2c_peripheral_disable(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_PE;
 }
 
 /**
+ * @brief Fill transmit register
+ * @param dev i2c device
+ * @param byte byte to write
+ */
+static inline void i2c_write(i2c_dev *dev, uint8 byte) {
+    dev->regs->DR = byte;
+}
+
+
+/**
  * @brief Set input clock frequency, in mhz
- * @param device to configure
+ * @param dev i2c
  * @param freq frequency in megahertz (2-36)
  */
 static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
@@ -172,6 +178,13 @@ static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
     dev->regs->CR2 = freq;
 }
 
+
+/**
+ * @brief Set i2c clock control register. See RM008
+ * @param dev i2c device
+ * @return
+ * @sideeffect
+ */
 static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
     uint32 ccr = dev->regs->CCR;
     ccr &= ~I2C_CCR_CCR;
@@ -195,15 +208,23 @@ static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
 }
 
-extern void toggle(void);
 static inline void i2c_start_condition(i2c_dev *dev) {
-    uint32 cr1 = dev->regs->CR1;
-//    if (cr1 & (I2C_CR1_START | I2C_CR1_STOP  | I2C_CR1_PEC)) {
-//    }
+    uint32 cr1;
+    while ((cr1 = dev->regs->CR1) & (I2C_CR1_START |
+                                     I2C_CR1_STOP  |
+                                     I2C_CR1_PEC)) {
+        ;
+    }
     dev->regs->CR1 |= I2C_CR1_START;
 }
 
 static inline void i2c_stop_condition(i2c_dev *dev) {
+    uint32 cr1;
+    while ((cr1 = dev->regs->CR1) & (I2C_CR1_START |
+                                     I2C_CR1_STOP  |
+                                     I2C_CR1_PEC)) {
+        ;
+    }
     dev->regs->CR1 |= I2C_CR1_STOP;
 }
 

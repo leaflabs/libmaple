@@ -23,9 +23,7 @@
  * ****************************************************************************/
 
 /**
- *  @brief 
- *  TODO: Rejigger hard fault handler and error throbs to turn off all
- *  interrupts and jump to error throb to reenable usb bootloader
+ *  @brief
  */
 
 #include "libmaple.h"
@@ -35,12 +33,6 @@
 #include "nvic.h"
 #include "i2c.h"
 #include "string.h"
-
-/* 2/17 Started 10pm-4am
- * 2/19 Started 7pm-2am
- * 2/20 Started 7pm-7pm
- * 2/23 Started 8pm-8am
- * 3/9 Started 11pm */
 
 static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state);
 
@@ -57,22 +49,18 @@ static i2c_dev i2c_dev1 = {
 
 i2c_dev* const I2C1 = &i2c_dev1;
 
-/**
- * @brief IRQ handler for i2c master. Handles transmission/reception.
- * @param dev i2c device
- */
-
 struct crumb {
     uint32 event;
     uint32 sr1;
     uint32 sr2;
 };
 
-static struct crumb crumbs[100];
+#define NR_CRUMBS 128
+static struct crumb crumbs[NR_CRUMBS];
 static uint32 cur_crumb = 0;
 
 static inline void leave_big_crumb(uint32 event, uint32 sr1, uint32 sr2) {
-    if (cur_crumb < 100) {
+    if (cur_crumb < NR_CRUMBS) {
         struct crumb *crumb = &crumbs[cur_crumb++];
         crumb->event = event;
         crumb->sr1 = sr1;
@@ -93,8 +81,13 @@ enum {
     RXNE_START_SENT     = 10,
     RXNE_STOP_SENT      = 11,
     RXNE_DONE           = 12,
+    ERROR_ENTRY         = 13,
 };
 
+/**
+ * @brief IRQ handler for i2c master. Handles transmission/reception.
+ * @param dev i2c device
+ */
 static void i2c_irq_handler(i2c_dev *dev) {
     i2c_msg *msg = dev->msg;
 
@@ -117,6 +110,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
         if (read) {
             i2c_enable_ack(dev);
         }
+
         i2c_send_slave_addr(dev, msg->addr, read);
         sr1 = sr2 = 0;
     }
@@ -133,8 +127,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
         if (read) {
             if (msg->length == 1) {
                 i2c_disable_ack(dev);
-                dev->msgs_left--;
-                if (dev->msgs_left) {
+                if (dev->msgs_left > 1) {
                     i2c_start_condition(dev);
                     leave_big_crumb(RX_ADDR_START, 0, 0);
                 } else {
@@ -197,9 +190,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
             dev->msg++;
         } else {
             i2c_stop_condition(dev);
-//            while (dev->regs->CR1 & I2C_CR1_STOP) {
-//                ;
-//            }
+
             /*
              * Turn off event interrupts to keep BTF from firing until the end
              * of the stop condition. Why on earth they didn't have a start/stop
@@ -253,7 +244,13 @@ void __irq_i2c1_ev(void) {
 }
 
 static void i2c_irq_error_handler(i2c_dev *dev) {
-    __error();
+    uint32 sr1 = dev->regs->SR1;
+    uint32 sr2 = dev->regs->SR2;
+    leave_big_crumb(ERROR_ENTRY, sr1, sr2);
+
+    i2c_stop_condition(dev);
+    i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
+    dev->state = I2C_STATE_ERROR;
 }
 
 void __irq_i2c1_er(void) {
@@ -330,7 +327,8 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);
-    i2c_enable_irq(dev, I2C_IRQ_EVENT | I2C_IRQ_BUFFER);
+    nvic_irq_enable(dev->er_nvic_line);
+    i2c_enable_irq(dev, I2C_IRQ_EVENT | I2C_IRQ_BUFFER | I2C_IRQ_ERROR);
 
     /*
      * Important STM32 Errata:
@@ -360,6 +358,7 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
      * been initialized to priority level 16. See nvic_init().
      */
     nvic_irq_set_priority(dev->ev_nvic_line, 0);
+    nvic_irq_set_priority(dev->er_nvic_line, 0);
 
     /* Make it go! */
     i2c_peripheral_enable(dev);
@@ -372,15 +371,11 @@ int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num) {
     dev->msg = msgs;
     dev->msgs_left = num;
 
-    memset(crumbs, 0, sizeof crumbs);
-
-    dev->regs->CR2 |= I2C_CR2_ITEVTEN;
-
-    /* Is this necessary? */
     while (dev->regs->SR2 & I2C_SR2_BUSY)
         ;
 
     dev->state = I2C_STATE_BUSY;
+    i2c_enable_irq(dev, I2C_IRQ_EVENT);
 
     i2c_start_condition(dev);
     rc = wait_for_state_change(dev, I2C_STATE_XFER_DONE);

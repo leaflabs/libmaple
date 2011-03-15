@@ -68,23 +68,23 @@ __cs3_stm32_vector_table:
 	.long	__irq_rtcalarm
 	.long	__irq_usbwakeup
 #if defined (STM32_HIGH_DENSITY)
-	.weak	__irq_tim8_brk
-	.weak	__irq_tim8_up
-	.weak	__irq_tim8_trg_com
-	.weak	__irq_tim8_cc
-	.weak	__irq_adc3
-	.weak	__irq_fsmc
-	.weak	__irq_sdio
-	.weak	__irq_tim5
-	.weak	__irq_spi3
-	.weak	__irq_uart4
-	.weak	__irq_uart5
-	.weak	__irq_tim6
-	.weak	__irq_tim7
-	.weak	__irq_dma2_channel1
-	.weak	__irq_dma2_channel2
-	.weak	__irq_dma2_channel3
-	.weak	__irq_dma2_channel4_5
+	.long	__irq_tim8_brk
+	.long	__irq_tim8_up
+	.long	__irq_tim8_trg_com
+	.long	__irq_tim8_cc
+	.long	__irq_adc3
+	.long	__irq_fsmc
+	.long	__irq_sdio
+	.long	__irq_tim5
+	.long	__irq_spi3
+	.long	__irq_uart4
+	.long	__irq_uart5
+	.long	__irq_tim6
+	.long	__irq_tim7
+	.long	__irq_dma2_channel1
+	.long	__irq_dma2_channel2
+	.long	__irq_dma2_channel3
+	.long	__irq_dma2_channel4_5
 #endif /* STM32_HIGH_DENSITY */
 
 	.size	__cs3_stm32_vector_table, . - __cs3_stm32_vector_table

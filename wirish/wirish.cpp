@@ -41,6 +41,7 @@
 #include "fsmc.h"
 #include "dac.h"
 #include "flash.h"
+#include "native_sram.h"
 
 void init(void) {
     /* make sure the flash is ready before spinning the high speed clock up */
@@ -48,7 +49,7 @@ void init(void) {
     flash_set_latency(FLASH_WAIT_STATE_2);
 
 #ifdef BOARD_maple_native
-    fsmc_native_sram_init();
+    initNativeSRAM();
 #endif
 
     /* initialize clocks  */

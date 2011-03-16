@@ -33,19 +33,10 @@
 
 #ifdef STM32_HIGH_DENSITY
 
-/* These values determined for a particular SRAM chip by following the
- * calculations in the ST FSMC application note. */
-#define FSMC_ADDSET 0x0
-#define FSMC_DATAST 0x3
-
-/* Sets up the FSMC peripheral to use the SRAM chip on the maple
- * native as an external segment of system memory space.  This
- * implementation is for the IS62WV51216BLL 8mbit chip (55ns
- * timing) */
-void fsmc_native_sram_init(void) {
-    FSMC_Bank *bank;
-
-    /* First we setup all the GPIO pins. */
+/**
+ * Configure FSMC GPIOs for use with SRAM.
+ */
+void fsmc_sram_init_gpios(void) {
     /* Data lines... */
     gpio_set_mode(GPIOD,  0, GPIO_AF_OUTPUT_PP);
     gpio_set_mode(GPIOD,  1, GPIO_AF_OUTPUT_PP);
@@ -96,42 +87,6 @@ void fsmc_native_sram_init(void) {
 
     gpio_set_mode(GPIOE,  0, GPIO_AF_OUTPUT_PP);   // NBL0
     gpio_set_mode(GPIOE,  1, GPIO_AF_OUTPUT_PP);   // NBL1
-
-    /* Next enable the clock */
-    rcc_clk_enable(RCC_FSMC);
-
-    /* Then we configure channel 1 the FSMC SRAM peripheral (all SRAM
-     * channels are in "Bank 1" of the FSMC) */
-    bank = (FSMC_Bank*)(FSMC1_BASE);
-
-    /* Everything else is cleared (BCR1) */
-    bank->BCR = 0x0000;
-
-    /* Memory type is SRAM */
-    bank->BCR &= ~(FSMC_BCR_MTYP);  // '00'
-
-    /* Databus width is 16bits */
-    bank->BCR &= ~(FSMC_BCR_MWID);
-    bank->BCR |= 0x1 << 4;          // '01'
-
-    /* Memory is nonmultiplexed */
-    bank->BCR &= ~(FSMC_BCR_MUXEN); // '0'
-
-    /* Need write enable to write to the chip */
-    bank->BCR |= FSMC_BCR_WREN;
-
-    /* Set ADDSET */
-    bank->BTR &= ~(FSMC_BTR_ADDSET);
-    bank->BTR |= (FSMC_BTR_ADDSET | FSMC_ADDSET);
-
-    /* Set DATAST */
-    bank->BTR &= ~(FSMC_BTR_DATAST);
-    bank->BTR |= (FSMC_BTR_DATAST | (FSMC_DATAST << 8));
-
-    /* Enable channel 1 */
-    bank->BCR |= FSMC_BCR_MBKEN;    // '1'
-
-    /* (FSMC_BWTR3 not used for this simple configuration.) */
 }
 
 #endif  /* STM32_HIGH_DENSITY */

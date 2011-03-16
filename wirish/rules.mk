@@ -27,6 +27,7 @@ cppSRCS_$(d) := wirish_math.cpp		 \
 		pwm.cpp 		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp	 \
+		native_sram.cpp		 \
 		boards.cpp
 
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)

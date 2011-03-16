@@ -47,7 +47,7 @@ void init(void) {
     flash_enable_prefetch();
     flash_set_latency(FLASH_WAIT_STATE_2);
 
-#ifdef STM32_HIGH_DENSITY
+#ifdef BOARD_maple_native
     fsmc_native_sram_init();
 #endif
 

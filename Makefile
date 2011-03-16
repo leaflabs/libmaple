@@ -31,6 +31,13 @@ ifeq ($(BOARD), maple_mini)
    ERROR_LED_PIN  := 1
    DENSITY := STM32_MEDIUM_DENSITY
 endif
+ifeq ($(BOARD), maple_RET6)
+   MCU := STM32F103RE
+   PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOA
+   ERROR_LED_PIN := 5
+   DENSITY := STM32_HIGH_DENSITY
+endif
 
 # Useful paths
 ifeq ($(LIB_MAPLE_HOME),)

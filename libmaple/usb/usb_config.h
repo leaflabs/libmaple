@@ -28,7 +28,7 @@
 #define RESET_DELAY               (100)
 #define USB_CONFIG_MAX_POWER      (100 >> 1)
 
-#if defined(BOARD_maple)
+#if defined(BOARD_maple) || defined(BOARD_maple_RET6)
 
     /* USB Identifier numbers */
     #define VCOM_ID_PRODUCT      0x0004
@@ -37,13 +37,13 @@
 
 #elif defined(BOARD_maple_mini)
 
-    #define VCOM_ID_PRODUCT      0x0005
+    #define VCOM_ID_PRODUCT      0x0004
     #define USB_DISC_DEV         GPIOB
     #define USB_DISC_PIN         9
 
 #elif defined(BOARD_maple_native)
 
-    #define VCOM_ID_PRODUCT      0x0006
+    #define VCOM_ID_PRODUCT      0x0004
     #define USB_DISC_DEV         GPIOB
     #define USB_DISC_PIN         8
 
@@ -51,8 +51,8 @@
 
 #error ("Sorry! the USB stack relies on LeafLabs board-specific "       \
         "configuration right now.  If you want, you can pretend you're one " \
-        "of our boards; i.e., #define BOARD_maple, BOARD_maple_mini, or "  \
-        "BOARD_maple_native according to what matches your MCU best. " \
+        "of our boards; i.e., #define BOARD_maple, BOARD_maple_mini, or " \
+        "BOARD_maple_native according to what matches your MCU best. "  \
         "You should also take a look at libmaple/usb/descriptors.c; we make " \
         "some assumptions there that you probably won't like.")
 

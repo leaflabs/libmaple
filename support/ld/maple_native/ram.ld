@@ -19,4 +19,3 @@ REGION_ALIAS("REGION_DATA", ram);
 REGION_ALIAS("REGION_BSS", ram);
 
 INCLUDE common_ram.inc
-

@@ -20,7 +20,7 @@
 
 int rate = 0;
 
-#if defined(BOARD_maple)
+#if defined(BOARD_maple) || defined(BOARD_maple_RET6)
 const uint8 pwm_pins[] =
     {0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28};
 const uint8 adc_pins[] =
@@ -617,15 +617,14 @@ void init_all_timers(uint16 prescale) {
     timer_init(TIMER4, prescale);
 #ifdef STM32_HIGH_DENSITY
     timer_init(TIMER5, prescale);
-    timer_init(TIMER6, prescale);
-    timer_init(TIMER7, prescale);
+    // timer_init(TIMER6, prescale);
+    // timer_init(TIMER7, prescale);
     timer_init(TIMER8, prescale);
 #endif
 }
 
-
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
+// Otherwise, statically allocated objects that need libmaple may fail.
 __attribute__(( constructor )) void premain() {
     init();
 }

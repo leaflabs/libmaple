@@ -28,7 +28,7 @@
 #include "rcc.h"
 
 pwr_dev pwr = {
-    .regs = PWR_BASE;
+    .regs = PWR_BASE,
 };
 
 const pwr_dev *PWR = &pwr;

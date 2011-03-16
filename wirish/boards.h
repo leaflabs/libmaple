@@ -113,6 +113,21 @@ extern PinMapping PIN_MAP[];
             afio_mapr_swj_config(AFIO_MAPR_SWJ_NO_JTAG_NO_SW);          \
         } while (0)
 
+#elif defined(BOARD_maple_RET6)
+
+    #define CYCLES_PER_MICROSECOND  72
+    #define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */
+
+    #define BOARD_BUTTON_PIN        38
+    #define BOARD_LED_PIN           13
+
+    /* Total number of GPIO pins that are broken out to headers and
+       intended for general use. */
+    #define NR_GPIO_PINS            39
+
+    #define BOARD_INIT do {                           \
+        } while(0)
+
 #else
 
 #error "Board type has not been selected correctly."

@@ -56,7 +56,6 @@
     /* e.g., LeafLabs Maple Native */
 
     #define NR_GPIO_PORTS              7
-
     #define SRAM_SIZE            0x10000
 
 #elif defined(MCU_STM32F103CB)
@@ -68,6 +67,12 @@
     #define NR_GPIO_PORTS              3
 
     #define SRAM_SIZE             0x5000
+
+#elif defined(MCU_STM32F103RE)
+    /* e.g., LeafLabs Maple RET6 edition */
+
+    #define NR_GPIO_PORTS              4
+    #define SRAM_SIZE            0x10000
 
 #else
 

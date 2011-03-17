@@ -79,6 +79,17 @@ static inline uint8 rb_remove(ring_buffer *rb) {
 }
 
 /**
+ * If the ring buffer is nonempty, removes and returns its first item.
+ * If it is empty, does nothing and returns a negative value.
+ */
+static inline int16 rb_safe_remove(ring_buffer *rb) {
+    if (rb_full_count(rb) == 0) {
+        return -1;
+    }
+    return rb_remove(rb);
+}
+
+/**
  * If rb is not full, appends element and returns true; otherwise,
  * does nothing and returns false. */
 static inline int rb_safe_insert(ring_buffer *rb, uint8 element) {

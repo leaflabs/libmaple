@@ -65,6 +65,11 @@ static inline int rb_is_full(ring_buffer *rb) {
         (rb->tail == rb->size && rb->head == 0);
 }
 
+/** Return true if and only if the ring buffer is empty. */
+static inline int rb_is_empty(ring_buffer *rb) {
+    return rb->head == rb->tail;
+}
+
 /** Append element onto the end of the ring buffer. */
 static inline void rb_insert(ring_buffer *rb, uint8 element) {
     rb->buf[rb->tail] = element;
@@ -83,10 +88,7 @@ static inline uint8 rb_remove(ring_buffer *rb) {
  * If it is empty, does nothing and returns a negative value.
  */
 static inline int16 rb_safe_remove(ring_buffer *rb) {
-    if (rb_full_count(rb) == 0) {
-        return -1;
-    }
-    return rb_remove(rb);
+    return rb_is_empty(rb) ? -1 : rb_remove(rb);
 }
 
 /**

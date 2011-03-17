@@ -61,7 +61,7 @@ extern "C" {
     uint16 bString[len];			\
   }
 
-#define CDC_FUCNTIONAL_DESCRIPTOR(DataSize)	\
+#define CDC_FUNCTIONAL_DESCRIPTOR(DataSize)	\
   struct					\
   {						\
     uint8 bLength;				\

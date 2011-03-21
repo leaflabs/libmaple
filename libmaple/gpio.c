@@ -33,55 +33,48 @@
  * GPIO devices
  */
 
-static gpio_dev gpioa = {
+gpio_dev gpioa = {
     .regs   = GPIOA_BASE,
     .clk_id = RCC_GPIOA
 };
-/** GPIO port A device. */
-gpio_dev *GPIOA = &gpioa;
+gpio_dev* const GPIOA = &gpioa;
 
-static gpio_dev gpiob = {
+gpio_dev gpiob = {
     .regs   = GPIOB_BASE,
     .clk_id = RCC_GPIOB
 };
-/** GPIO port B device. */
-gpio_dev *GPIOB = &gpiob;
+gpio_dev* const GPIOB = &gpiob;
 
-static gpio_dev gpioc = {
+gpio_dev gpioc = {
     .regs   = GPIOC_BASE,
     .clk_id = RCC_GPIOC
 };
-/** GPIO port C device. */
-gpio_dev *GPIOC = &gpioc;
+gpio_dev* const GPIOC = &gpioc;
 
-static gpio_dev gpiod = {
+gpio_dev gpiod = {
     .regs   = GPIOD_BASE,
     .clk_id = RCC_GPIOD
 };
-/** GPIO port D device. */
-gpio_dev *GPIOD = &gpiod;
+gpio_dev* const GPIOD = &gpiod;
 
-#ifdef STM32_HIGH_
-static gpio_dev gpioe = {
+#ifdef STM32_HIGH_DENSITY
+gpio_dev gpioe = {
     .regs   = GPIOE_BASE,
     .clk_id = RCC_GPIOE
 };
-/** GPIO port E device. */
-gpio_dev *GPIOE = &gpioe;
+gpio_dev* const GPIOE = &gpioe;
 
-static gpio_dev gpiof = {
+gpio_dev gpiof = {
     .regs   = GPIOF_BASE,
     .clk_id = RCC_GPIOF
 };
-/** GPIO port F device. */
-gpio_dev *GPIOF = &gpiof;
+gpio_dev* const GPIOF = &gpiof;
 
-static gpio_dev gpiog = {
+gpio_dev gpiog = {
     .regs   = GPIOG_BASE,
     .clk_id = RCC_GPIOG
 };
-/** GPIO port G device. */
-gpio_dev *GPIOG = &gpiog;
+gpio_dev* const GPIOG = &gpiog;
 #endif
 
 /*

@@ -23,6 +23,7 @@ cSRCS_$(d) := adc.c                    \
               iwdg.c                   \
               nvic.c                   \
               pwr.c		       \
+              i2c.c                    \
               rcc.c                    \
               spi.c                    \
               syscalls.c               \

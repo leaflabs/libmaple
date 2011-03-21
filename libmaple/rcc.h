@@ -182,6 +182,8 @@ typedef enum {
     RCC_DMA2,        // High-density devices only (Maple Native)
     RCC_PWR,
     RCC_BKP,
+    RCC_I2C1,
+    RCC_I2C2
 } rcc_clk_id;
 
 void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul);

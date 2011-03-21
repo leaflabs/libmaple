@@ -47,10 +47,43 @@ extern "C"{
 #define NVIC_ICER1          0xE000E184
 /* NVIC_ICER2 only on connectivity line */
 
+/* NVIC Priority  */
+#define NVIC_PRI_BASE       0xE000E400
+
 /* System control registers  */
 #define SCB_VTOR            0xE000ED08  // Vector table offset register
 
+#define NVIC_VectTab_RAM             ((u32)0x20000000)
+#define NVIC_VectTab_FLASH           ((u32)0x08000000)
+
+#define NVIC_BASE           0xE000E100
+#define NVIC                ((nvic_reg_map*)NVIC_BASE)
+
+typedef struct nvic_reg_map {
+  __io uint32 ISER[8];                 // Interrupt Set Enable Registers
+       uint32 RESERVED0[24];
+  __io uint32 ICER[8];                 // Interrupt Clear Enable Registers
+       uint32 RSERVED1[24];
+  __io uint32 ISPR[8];                 // Interrupt Set Pending Registers
+       uint32 RESERVED2[24];
+  __io uint32 ICPR[8];                 // Interrupt Clear Pending Registers
+       uint32 RESERVED3[24];
+  __io uint32 IABR[8];                 // Interrupt Active bit Registers
+       uint32 RESERVED4[56];
+  __io uint8  IP[240];                 // Interrupt Priority Registers
+       uint32 RESERVED5[644];
+  __io uint32 STIR;                    // Software Trigger Interrupt Registers
+} nvic_reg_map;
+
 enum {
+    NVIC_NMI          = -14,
+    NVIC_MEM_MANAGE   = -12,
+    NVIC_BUS_FAULT    = -11,
+    NVIC_USAGE_FAULT  = -10,
+    NVIC_SVC          = -5,
+    NVIC_DEBUG_MON    = -4,
+    NVIC_PEND_SVC     = -2,
+    NVIC_SYSTICK      = -1,
     NVIC_TIMER1       = 27,
     NVIC_TIMER2       = 28,
     NVIC_TIMER3       = 29,
@@ -80,7 +113,12 @@ enum {
     NVIC_DMA_CH4      = 14,
     NVIC_DMA_CH5      = 15,
     NVIC_DMA_CH6      = 16,
-    NVIC_DMA_CH7      = 17
+    NVIC_DMA_CH7      = 17,
+
+    NVIC_I2C1_EV      = 31,
+    NVIC_I2C1_ER      = 32,
+    NVIC_I2C2_EV      = 33,
+    NVIC_I2C2_ER      = 34
 };
 
 
@@ -91,6 +129,7 @@ void nvic_init(void);
 void nvic_irq_enable(uint32 device);
 void nvic_irq_disable(uint32 device);
 void nvic_irq_disable_all(void);
+void nvic_set_priority(int32 irqn, uint8 priority);
 
 #ifdef __cplusplus
 }

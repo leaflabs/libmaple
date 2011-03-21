@@ -30,6 +30,7 @@
 #include "libmaple.h"
 #include "flash.h"
 #include "rcc.h"
+#include "bitband.h"
 
 enum {
     APB1,
@@ -42,15 +43,13 @@ struct rcc_dev_info {
     const uint8 line_num;
 };
 
-/* device descriptor tables  */
+/* Device descriptor table, maps rcc_clk_id onto bus and enable/reset
+ * register bit numbers. */
 static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_GPIOA]  = { .clk_domain = APB2, .line_num = 2 },
     [RCC_GPIOB]  = { .clk_domain = APB2, .line_num = 3 },
     [RCC_GPIOC]  = { .clk_domain = APB2, .line_num = 4 },
     [RCC_GPIOD]  = { .clk_domain = APB2, .line_num = 5 },
-    [RCC_GPIOE]  = { .clk_domain = APB2, .line_num = 6 }, // High-density only
-    [RCC_GPIOF]  = { .clk_domain = APB2, .line_num = 7 }, // High-density only
-    [RCC_GPIOG]  = { .clk_domain = APB2, .line_num = 8 }, // High-density only
     [RCC_AFIO]   = { .clk_domain = APB2, .line_num = 0 },
     [RCC_ADC1]   = { .clk_domain = APB2, .line_num = 9 },
     [RCC_ADC2]   = { .clk_domain = APB2, .line_num = 10 },
@@ -58,26 +57,43 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_USART1] = { .clk_domain = APB2, .line_num = 14 },
     [RCC_USART2] = { .clk_domain = APB1, .line_num = 17 },
     [RCC_USART3] = { .clk_domain = APB1, .line_num = 18 },
-    [RCC_UART4]  = { .clk_domain = APB1, .line_num = 19 }, // High-density only
-    [RCC_UART5]  = { .clk_domain = APB1, .line_num = 20 }, // High-density only
     [RCC_TIMER1] = { .clk_domain = APB2, .line_num = 11 },
     [RCC_TIMER2] = { .clk_domain = APB1, .line_num = 0 },
     [RCC_TIMER3] = { .clk_domain = APB1, .line_num = 1 },
     [RCC_TIMER4] = { .clk_domain = APB1, .line_num = 2 },
-    [RCC_TIMER5] = { .clk_domain = APB1, .line_num = 3 }, // High-density only
-    [RCC_TIMER6] = { .clk_domain = APB1, .line_num = 4 }, // High-density only
-    [RCC_TIMER7] = { .clk_domain = APB1, .line_num = 5 }, // High-density only
-    [RCC_TIMER8] = { .clk_domain = APB2, .line_num = 13 }, // High-density only
     [RCC_SPI1]   = { .clk_domain = APB2, .line_num = 12 },
     [RCC_SPI2]   = { .clk_domain = APB1, .line_num = 14 },
-    [RCC_FSMC]   = { .clk_domain = AHB,  .line_num = 8 }, // High-density only
-    [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 }, // High-density only
     [RCC_DMA1]   = { .clk_domain = AHB,  .line_num = 0 },
-    [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 }, // High-density only
     [RCC_PWR]    = { .clk_domain = APB1, .line_num = 28},
     [RCC_BKP]    = { .clk_domain = APB1, .line_num = 27},
-    [RCC_I2C1]   = { .clk_domain = APB1, .line_num = 21 }, // High-density only
-    [RCC_I2C2]   = { .clk_domain = APB1, .line_num = 22 }, // High-density only
+    [RCC_I2C1]   = { .clk_domain = APB1, .line_num = 21 },
+    [RCC_CRC]    = { .clk_domain = AHB,  .line_num = 6},
+    [RCC_FLITF]  = { .clk_domain = AHB,  .line_num = 4},
+    [RCC_SRAM]   = { .clk_domain = AHB,  .line_num = 2},
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
+    [RCC_GPIOE]  = { .clk_domain = APB2, .line_num = 6 },
+    [RCC_GPIOF]  = { .clk_domain = APB2, .line_num = 7 },
+    [RCC_GPIOG]  = { .clk_domain = APB2, .line_num = 8 },
+    [RCC_UART4]  = { .clk_domain = APB1, .line_num = 19 },
+    [RCC_UART5]  = { .clk_domain = APB1, .line_num = 20 },
+    [RCC_TIMER5] = { .clk_domain = APB1, .line_num = 3 },
+    [RCC_TIMER6] = { .clk_domain = APB1, .line_num = 4 },
+    [RCC_TIMER7] = { .clk_domain = APB1, .line_num = 5 },
+    [RCC_TIMER8] = { .clk_domain = APB2, .line_num = 13 },
+    [RCC_FSMC]   = { .clk_domain = AHB,  .line_num = 8 },
+    [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 },
+    [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 },
+    [RCC_I2C2]   = { .clk_domain = APB1, .line_num = 22 },
+    [RCC_SDIO]   = { .clk_domain = AHB,  .line_num = 10 },
+#endif
+#ifdef STM32_XL_DENSITY
+    [RCC_TIMER9]  = { .clk_domain = APB2, .line_num = 19 },
+    [RCC_TIMER10] = { .clk_domain = APB2, .line_num = 20 },
+    [RCC_TIMER11] = { .clk_domain = APB2, .line_num = 21 },
+    [RCC_TIMER12] = { .clk_domain = APB1, .line_num = 6 },
+    [RCC_TIMER13] = { .clk_domain = APB1, .line_num = 7 },
+    [RCC_TIMER14] = { .clk_domain = APB1, .line_num = 8 },
+#endif
 };
 
 /**
@@ -87,35 +103,38 @@ static const struct rcc_dev_info rcc_dev_table[] = {
  * @param pll_src pll clock source, must be HSE
  * @param pll_mul pll multiplier
  */
-void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul) {
+void rcc_clk_init(rcc_sysclk_src sysclk_src,
+                  rcc_pllsrc pll_src,
+                  rcc_pll_multiplier pll_mul) {
+    uint32 cfgr;
+    uint32 cr;
+
     /* Assume that we're going to clock the chip off the PLL, fed by
      * the HSE */
     ASSERT(sysclk_src == RCC_CLKSRC_PLL &&
            pll_src    == RCC_PLLSRC_HSE);
 
-    uint32 cfgr = 0;
-    uint32 cr = RCC_READ_CR();
+    RCC_BASE->CFGR = pll_src | pll_mul;
 
-    cfgr =  (pll_src | pll_mul);
-    RCC_WRITE_CFGR(cfgr);
-
-    /* Turn on the HSE  */
+    /* Turn on the HSE */
+    /* FIXME WTF why doesn't bit-banding work here? */
+    cr = RCC_BASE->CR;
     cr |= RCC_CR_HSEON;
-    RCC_WRITE_CR(cr);
-    while (!(RCC_READ_CR() & RCC_CR_HSERDY))
+    RCC_BASE->CR = cr;
+    while (!(RCC_BASE->CR & RCC_CR_HSERDY))
         ;
 
     /* Now the PLL  */
     cr |= RCC_CR_PLLON;
-    RCC_WRITE_CR(cr);
-    while (!(RCC_READ_CR() & RCC_CR_PLLRDY))
+    RCC_BASE->CR = cr;
+    while (!(RCC_BASE->CR & RCC_CR_PLLRDY))
         ;
 
     /* Finally, let's switch over to the PLL  */
     cfgr &= ~RCC_CFGR_SW;
     cfgr |= RCC_CFGR_SW_PLL;
-    RCC_WRITE_CFGR(cfgr);
-    while ((RCC_READ_CFGR() & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL)
+    RCC_BASE->CFGR = cfgr;
+    while ((RCC_BASE->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL)
         ;
 }
 
@@ -124,15 +143,35 @@ void rcc_clk_init(uint32 sysclk_src, uint32 pll_src, uint32 pll_mul) {
  * @param device Clock ID of the device to turn on.
  */
 void rcc_clk_enable(rcc_clk_id device) {
-    static const uint32 enable_regs[] = {
-        [APB1] = RCC_APB1ENR,
-        [APB2] = RCC_APB2ENR,
-        [AHB] = RCC_AHBENR,
+    static const __io uint32* enable_regs[] = {
+        [APB1] = &RCC_BASE->APB1ENR,
+        [APB2] = &RCC_BASE->APB2ENR,
+        [AHB] = &RCC_BASE->AHBENR,
     };
 
     uint8 clk_domain = rcc_dev_table[device].clk_domain;
+    __io uint32* enr = (__io uint32*)enable_regs[clk_domain];
+    uint8 lnum = rcc_dev_table[device].line_num;
 
-    __set_bits(enable_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
+    bb_peri_set_bit(enr, lnum, 1);
+}
+
+/**
+ * @brief reset a device
+ * @param device Clock ID of the device to reset.
+ */
+void rcc_reset_dev(rcc_clk_id device) {
+    static const __io uint32* reset_regs[] = {
+        [APB1] = &RCC_BASE->APB1RSTR,
+        [APB2] = &RCC_BASE->APB2RSTR,
+    };
+
+    uint8 clk_domain = rcc_dev_table[device].clk_domain;
+    __io void* addr = (__io void*)reset_regs[clk_domain];
+    uint8 lnum = rcc_dev_table[device].line_num;
+
+    bb_peri_set_bit(addr, lnum, 1);
+    bb_peri_set_bit(addr, lnum, 0);
 }
 
 /**
@@ -140,7 +179,7 @@ void rcc_clk_enable(rcc_clk_id device) {
  * @param prescaler prescaler to set
  * @param divider prescaler divider
  */
-void rcc_set_prescaler(uint32 prescaler, uint32 divider) {
+void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     static const uint32 masks[] = {
         [RCC_PRESCALER_AHB] = RCC_CFGR_HPRE,
         [RCC_PRESCALER_APB1] = RCC_CFGR_PPRE1,
@@ -149,25 +188,8 @@ void rcc_set_prescaler(uint32 prescaler, uint32 divider) {
         [RCC_PRESCALER_ADC] = RCC_CFGR_ADCPRE,
     };
 
-    uint32 cfgr = RCC_READ_CFGR();
-
+    uint32 cfgr = RCC_BASE->CFGR;
     cfgr &= ~masks[prescaler];
     cfgr |= divider;
-    RCC_WRITE_CFGR(cfgr);
-}
-
-/**
- * @brief reset a device
- * @param device Clock ID of the device to reset.
- */
-void rcc_reset_dev(rcc_clk_id device) {
-    static const uint32 reset_regs[] = {
-        [APB1] = RCC_APB1RSTR,
-        [APB2] = RCC_APB2RSTR,
-    };
-
-    uint8 clk_domain = rcc_dev_table[device].clk_domain;
-
-    __set_bits(reset_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
-    __clear_bits(reset_regs[clk_domain], BIT(rcc_dev_table[device].line_num));
+    RCC_BASE->CFGR = cfgr;
 }

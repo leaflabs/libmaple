@@ -98,14 +98,14 @@ void exti_attach_interrupt(afio_exti_num num,
     /* Set trigger mode */
     switch (mode) {
     case EXTI_RISING:
-        *bb_peripv(&EXTI_BASE->RTSR, num) = 1;
+        *bb_perip(&EXTI_BASE->RTSR, num) = 1;
         break;
     case EXTI_FALLING:
-        *bb_peripv(&EXTI_BASE->FTSR, num) = 1;
+        *bb_perip(&EXTI_BASE->FTSR, num) = 1;
         break;
     case EXTI_RISING_FALLING:
-        *bb_peripv(&EXTI_BASE->RTSR, num) = 1;
-        *bb_peripv(&EXTI_BASE->FTSR, num) = 1;
+        *bb_perip(&EXTI_BASE->RTSR, num) = 1;
+        *bb_perip(&EXTI_BASE->FTSR, num) = 1;
         break;
     }
 
@@ -113,7 +113,7 @@ void exti_attach_interrupt(afio_exti_num num,
     afio_exti_select(num, port);
 
     /* Unmask external interrupt request */
-    *bb_peripv(&EXTI_BASE->IMR, num) = 1;
+    *bb_perip(&EXTI_BASE->IMR, num) = 1;
 
     /* Enable the interrupt line */
     enable_irq(num);
@@ -126,11 +126,11 @@ void exti_attach_interrupt(afio_exti_num num,
  */
 void exti_detach_interrupt(afio_exti_num num) {
     /* First, mask the interrupt request */
-    *bb_peripv(&EXTI_BASE->IMR, num) = 0;
+    *bb_perip(&EXTI_BASE->IMR, num) = 0;
 
     /* Then, clear the trigger selection registers */
-    *bb_peripv(&EXTI_BASE->FTSR, num) = 0;
-    *bb_peripv(&EXTI_BASE->RTSR, num) = 0;
+    *bb_perip(&EXTI_BASE->FTSR, num) = 0;
+    *bb_perip(&EXTI_BASE->RTSR, num) = 0;
 
     /* Next, disable the IRQ, unless it's multiplexed and there are
      * other active external interrupts on the same IRQ line */
@@ -210,7 +210,7 @@ void __irq_exti15_10(void) {
  */
 
 static inline void clear_pending(uint32 exti_num) {
-    *bb_peripv(&EXTI_BASE->PR, exti_num) = 1;
+    *bb_perip(&EXTI_BASE->PR, exti_num) = 1;
     /* If the pending bit is cleared as the last instruction in an ISR,
      * it won't actually be cleared in time and the ISR will fire again.
      * Insert a 2-cycle buffer to allow it to take effect. */

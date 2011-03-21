@@ -175,7 +175,7 @@ static inline uint32 adc_read(const adc_dev *dev, uint8 channel) {
  * @param enable If 1, conversion on external events is enabled, 0 to disable
  */
 static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
-    *bb_perip(&dev->regs->CR2, 20) = !!enable;
+    *bb_peripv(&dev->regs->CR2, 20) = !!enable;
 }
 
 /**
@@ -183,7 +183,7 @@ static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
  * @param dev ADC device to enable
  */
 static inline void adc_enable(const adc_dev *dev) {
-    *bb_perip(&dev->regs->CR2, 0) = 1;
+    *bb_peripv(&dev->regs->CR2, 0) = 1;
 }
 
 /**
@@ -191,7 +191,7 @@ static inline void adc_enable(const adc_dev *dev) {
  * @param dev ADC device to disable
  */
 static inline void adc_disable(const adc_dev *dev) {
-    *bb_perip(&dev->regs->CR2, 0) = 0;
+    *bb_peripv(&dev->regs->CR2, 0) = 0;
 }
 
 /**

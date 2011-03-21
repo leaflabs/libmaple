@@ -304,7 +304,7 @@ PinMapping PIN_MAP[NR_GPIO_PINS] = {
     /* D98/PG5 */
     {GPIOG,  5, ADCx,              0, TIMERx, TIMERx, AFIO_EXTI_PG},
     /* D99/PD10 */
-    {GPIOD, 10, ADCx,              0, TIMERx, TIMERx, AFIO_EXTI_PD}
+    {GPIOD, 10, ADCx,              0, TIMERx, TIMERx, AFIO_EXTI_PDD}
 };
 
 #elif defined(BOARD_maple_mini)

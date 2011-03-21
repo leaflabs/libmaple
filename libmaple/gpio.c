@@ -61,7 +61,7 @@ static gpio_dev gpiod = {
 /** GPIO port D device. */
 gpio_dev *GPIOD = &gpiod;
 
-#ifdef STM32_HIGH_DENSITY
+#ifdef STM32_HIGH_
 static gpio_dev gpioe = {
     .regs   = GPIOE_BASE,
     .clk_id = RCC_GPIOE

@@ -48,6 +48,26 @@ static inline __io uint32* bb_sramp(__io void *address, uint32 bit) {
 }
 
 /**
+ * @brief Get a bit from an address in the SRAM bit-band region.
+ * @param address Address in the SRAM bit-band region to read from
+ * @param bit Bit in address to read
+ * @return bit's value in address.
+ */
+static inline uint8 bb_sram_get_bit(__io void *address, uint32 bit) {
+    return *bb_sramp(address, bit);
+}
+
+/**
+ * @brief Set a bit in an address in the SRAM bit-band region.
+ * @param address Address in the SRAM bit-band region to write to
+ * @param bit Bit in address to write to
+ * @param val Value to write for bit, either 0 or 1.
+ */
+static inline void bb_sram_set_bit(__io void *address, uint32 bit, uint8 val) {
+    *bb_sramp(address, bit) = val;
+}
+
+/**
  * @brief Obtain a pointer to the bit-band address corresponding to a
  * bit in a peripheral address.
  * @param address Address in the bit-banded peripheral region
@@ -55,6 +75,26 @@ static inline __io uint32* bb_sramp(__io void *address, uint32 bit) {
  */
 static inline __io uint32* bb_perip(__io void *address, uint32 bit) {
     return __bb_addr(address, bit, BB_PERI_BASE, BB_PERI_REF);
+}
+
+/**
+ * @brief Get a bit from an address in the peripheral bit-band region.
+ * @param address Address in the peripheral bit-band region to read from
+ * @param bit Bit in address to read
+ * @return bit's value in address.
+ */
+static inline uint8 bb_peri_get_bit(__io void *address, uint32 bit) {
+    return *bb_perip(address, bit);
+}
+
+/**
+ * @brief Set a bit in an address in the peripheral bit-band region.
+ * @param address Address in the peripheral bit-band region to write to
+ * @param bit Bit in address to write to
+ * @param val Value to write for bit, either 0 or 1.
+ */
+static inline void bb_peri_set_bit(__io void *address, uint32 bit, uint8 val) {
+    *bb_perip(address, bit) = val;
 }
 
 static inline __io uint32* __bb_addr(__io void *address,

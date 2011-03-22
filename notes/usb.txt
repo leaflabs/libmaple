@@ -1,3 +1,7 @@
+XXX
+XXX This file may be out of date!
+XXX
+
 [NOTE: this is a long term proposal. The current implementation just does a 
 2ms TIMEOUT]
 

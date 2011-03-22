@@ -28,6 +28,7 @@
 #include <stdint.h>
 
 #include "wirish.h"             /* hack for IDE compile */
+#include "HardwareTimer.h"
 
 /* Note on Arduino compatibility:
 

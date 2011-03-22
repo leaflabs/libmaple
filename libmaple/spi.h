@@ -31,6 +31,9 @@
 #ifndef _SPI_H_
 #define _SPI_H_
 
+#include "libmaple_types.h"
+#include "util.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif

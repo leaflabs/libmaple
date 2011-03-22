@@ -28,7 +28,7 @@ cSRCS_$(d) := adc.c                    \
               spi.c                    \
               syscalls.c               \
               systick.c                \
-              timers.c                 \
+              timer.c                  \
               usart.c                  \
               util.c                   \
               usb/descriptors.c        \

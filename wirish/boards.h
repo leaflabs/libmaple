@@ -33,7 +33,8 @@
 
 #include "libmaple.h"
 #include "gpio.h"
-#include "timers.h"
+#include "timer.h"
+#include "native_sram.h"
 
 /* Set of all possible pin names; not all boards have all these (note
    that we use the Dx convention since all of the Maple's pins are
@@ -56,9 +57,8 @@ typedef struct PinMapping {
     gpio_dev *gpio_device;
     uint32 pin;
     uint32 adc_channel;
-    TimerCCR timer_ccr;
-    timer_dev_num timer_num;
-    uint32 timer_chan;
+    timer_dev* timer_device;
+    uint8 timer_chan;
     afio_exti_port ext_port;
 } PinMapping;
 
@@ -94,6 +94,7 @@ extern PinMapping PIN_MAP[];
     #define NR_GPIO_PINS            100
 
     #define BOARD_INIT do {                           \
+           initNativeSRAM();
         } while(0)
 
 #elif defined(BOARD_maple_mini)

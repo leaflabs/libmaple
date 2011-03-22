@@ -31,7 +31,9 @@
 #ifndef _HARDWARESERIAL_H_
 #define _HARDWARESERIAL_H_
 
-#include "timers.h"
+#include "libmaple_types.h"
+#include "gpio.h"
+#include "timer.h"
 
 #include "Print.h"
 
@@ -49,16 +51,16 @@ class HardwareSerial : public Print {
     gpio_dev *gpio_device;
     uint8 tx_pin;
     uint8 rx_pin;
-    timer_dev_num timer_num;
-    uint8 compare_num;
+    timer_dev *timer_device;
+    uint8 channel_num;
  public:
     HardwareSerial(uint8 usart_num,
                    uint32 max_baud,
                    gpio_dev *gpio_device,
                    uint8 tx_pin,
                    uint8 rx_pin,
-                   timer_dev_num timer_num,
-                   uint8 compare_num);
+                   timer_dev *timer_device,
+                   uint8 channel_num);
     void begin(uint32 baud);
     void end(void);
     uint32 available(void);

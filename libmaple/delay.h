@@ -1,5 +1,5 @@
 /**
- *  @brief 
+ *  @brief Delay implementation
  */
 
 #ifndef _DELAY_H_

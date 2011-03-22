@@ -1,98 +1,28 @@
+Board portability is implemented in boards.h, libmaple.h, and stm32.h.
 
-Disclaimer text:  // High-density devices only (Maple Native)
+At compile time, we currently expect one of STM32_MEDIUM_DENSITY or
+STM32_HIGH_DENSITY to be defined.  There's no support for low-density
+chips.  XL-density isn't in the near horizon; patches welcome.  You'll
+also need to define some BOARD_foo if you expect to use Wirish; this
+comes along with some additional assumptions about your board's layout.
 
+The code in usb/ is not very portable at all right now; expect this to
+change in the future, but for now, we're focusing on rolling out a
+more complete backend.
 
-Board portability is implemented by adding a header file to ./libmaple with the
-name of the BOARD target, and then editing libmaple.h to add this file as an
-option.
-
-A pin maple file should be added to ./notes describing the pin numbering
-
-Files to check by hand:
-#   adc.c
-#   adc.h
-#   exc.c
-#   exti.c
-#   exti.h
-#   flash.c
-#   flash.h
-#   gpio.c
-#   gpio.h
-#   libmaple_types.h
-#   nvic.c
-#   nvic.h
-#   rcc.c
-#   rcc.h
-#   ring_buffer.h
-#   rules.mk
-#   spi.c
--   spi.h
-#   syscalls.c
-#   systick.c
-#   systick.h
-#   timers.c
-#   timers.h
-#   usart.c
-#   usart.h
-#   util.c
-#   util.h
-#   libmaple.h
-#   usb/*
-
-wirish/:
-#   bits.h
-#   boards.h
-#   cxxabi-compat.cpp
-#   ext_interrupts.c
-#   ext_interrupts.h
-#   HardwareTimer.cpp
-#   HardwareTimer.h
-#   io.h
-#   main.cxx
-#   Print.cpp
-#   Print.h
-#   pwm.c
-#   pwm.h
-#   rules.mk
-#   time.c
-#   time.h
-#   usb_serial.cpp
-#   usb_serial.h
-#   wirish_analog.c
-#   wirish.c
-#   wirish_digital.c
-#   wirish.h
-#   wirish_math.cpp
-#   wirish_math.h
-#   wirish_shift.c
-#   WProgram.h
--   comm/
-
-
-
-ADC Notes:
-    only using ADC1?
-    untested
-
-EXTI Notes:
-    need to update huge table in comments?
-    untested
+A file should be added to ./notes describing the pin numbering of any
+new board you add.
 
 NVIC Notes:
-    I don't think NVIC_ISER3 and NVIC_ICER3 actually exist?
     Only CANBUS and USB OTG use interrupts above #63, but I updated the nvic code anyways
 
 RCC Notes:
     Added some clock stuff to all boards even though they aren't usable... blah.
 
 SPI Notes:
-    SPI3 is only in XL chips so didn't really handle that
+    SPI3 is only in XL chips, so we don't handle that.
 
 TIMER Notes:
-    High-density devices add an advanced timer (TIMER8) and another normal one (TIMER5).
-    TIMER6 and TIMER7 are much less useful.
-    There is some partial progress towards adding timer5/timer8 functionality,
-    but not much. This should probably all be rewritten.
     The wirish timer implementation should be refactored to use pin numbers.
 
 USART Notes:

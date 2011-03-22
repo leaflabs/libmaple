@@ -53,9 +53,6 @@ extern "C"{
 /* System control registers  */
 #define SCB_VTOR            0xE000ED08  // Vector table offset register
 
-#define NVIC_VectTab_RAM             ((u32)0x20000000)
-#define NVIC_VectTab_FLASH           ((u32)0x08000000)
-
 #define NVIC_BASE           0xE000E100
 #define NVIC                ((nvic_reg_map*)NVIC_BASE)
 
@@ -75,52 +72,58 @@ typedef struct nvic_reg_map {
   __io uint32 STIR;                    // Software Trigger Interrupt Registers
 } nvic_reg_map;
 
-enum {
-    NVIC_NMI          = -14,
-    NVIC_MEM_MANAGE   = -12,
-    NVIC_BUS_FAULT    = -11,
-    NVIC_USAGE_FAULT  = -10,
-    NVIC_SVC          = -5,
-    NVIC_DEBUG_MON    = -4,
-    NVIC_PEND_SVC     = -2,
-    NVIC_SYSTICK      = -1,
-    NVIC_TIMER1       = 27,
-    NVIC_TIMER2       = 28,
-    NVIC_TIMER3       = 29,
-    NVIC_TIMER4       = 30,
-    NVIC_TIMER5       = 50,   // high density only (Maple Native, Maple Audio)
-    NVIC_TIMER6       = 54,   // high density only
-    NVIC_TIMER7       = 55,   // high density only
-    NVIC_TIMER8       = 46,   // high density only
+typedef enum nvic_irq_num {
+    NVIC_NMI            = -14,
+    NVIC_MEM_MANAGE     = -12,
+    NVIC_BUS_FAULT      = -11,
+    NVIC_USAGE_FAULT    = -10,
+    NVIC_SVC            = -5,
+    NVIC_DEBUG_MON      = -4,
+    NVIC_PEND_SVC       = -2,
+    NVIC_SYSTICK        = -1,
 
-    NVIC_USART1       = 37,
-    NVIC_USART2       = 38,
-    NVIC_USART3       = 39,
-    NVIC_UART4        = 52,   // high density only
-    NVIC_UART5        = 53,   // high density only
+    NVIC_TIMER1_BRK     = 24,
+    NVIC_TIMER1_UP      = 25,
+    NVIC_TIMER1_TRG_COM = 26,
+    NVIC_TIMER1_CC      = 27,
+    NVIC_TIMER2         = 28,
+    NVIC_TIMER3         = 29,
+    NVIC_TIMER4         = 30,
+    NVIC_TIMER5         = 50,
+    NVIC_TIMER6         = 54,
+    NVIC_TIMER7         = 55,
+    NVIC_TIMER8_BRK     = 43,
+    NVIC_TIMER8_UP      = 44,
+    NVIC_TIMER8_TRG_COM = 45,
+    NVIC_TIMER8_CC      = 46,
 
-    NVIC_EXTI0        = 6,
-    NVIC_EXTI1        = 7,
-    NVIC_EXTI2        = 8,
-    NVIC_EXTI3        = 9,
-    NVIC_EXTI4        = 10,
-    NVIC_EXTI9_5      = 23,
-    NVIC_EXTI15_10    = 40,
+    NVIC_USART1         = 37,
+    NVIC_USART2         = 38,
+    NVIC_USART3         = 39,
+    NVIC_UART4          = 52,
+    NVIC_UART5          = 53,
 
-    NVIC_DMA_CH1      = 11,
-    NVIC_DMA_CH2      = 12,
-    NVIC_DMA_CH3      = 13,
-    NVIC_DMA_CH4      = 14,
-    NVIC_DMA_CH5      = 15,
-    NVIC_DMA_CH6      = 16,
-    NVIC_DMA_CH7      = 17,
+    NVIC_EXTI0          = 6,
+    NVIC_EXTI1          = 7,
+    NVIC_EXTI2          = 8,
+    NVIC_EXTI3          = 9,
+    NVIC_EXTI4          = 10,
+    NVIC_EXTI9_5        = 23,
+    NVIC_EXTI15_10      = 40,
 
-    NVIC_I2C1_EV      = 31,
-    NVIC_I2C1_ER      = 32,
-    NVIC_I2C2_EV      = 33,
-    NVIC_I2C2_ER      = 34
-};
+    NVIC_DMA_CH1        = 11,
+    NVIC_DMA_CH2        = 12,
+    NVIC_DMA_CH3        = 13,
+    NVIC_DMA_CH4        = 14,
+    NVIC_DMA_CH5        = 15,
+    NVIC_DMA_CH6        = 16,
+    NVIC_DMA_CH7        = 17,
 
+    NVIC_I2C1_EV        = 31,
+    NVIC_I2C1_ER        = 32,
+    NVIC_I2C2_EV        = 33,
+    NVIC_I2C2_ER        = 34
+} nvic_irq_num;
 
 #define nvic_globalirq_enable()   asm volatile("cpsie i")
 #define nvic_globalirq_disable()  asm volatile("cpsid i")

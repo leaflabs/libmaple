@@ -32,7 +32,7 @@
 #include "gpio.h"
 #include "nvic.h"
 #include "adc.h"
-#include "timers.h"
+#include "timer.h"
 
 /* Failed asserts send out a message on this USART. */
 #ifndef ERROR_USART_NUM

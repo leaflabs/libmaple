@@ -23,26 +23,20 @@
  *****************************************************************************/
 
 /**
- *  @brief Arduino-compatible PWM implementation.
+ *  @brief Arduino-style PWM implementation.
  */
 
-#include "wirish.h"
-#include "timers.h"
-#include "io.h"
+#include "libmaple_types.h"
+#include "timer.h"
+
+#include "boards.h"
 #include "pwm.h"
 
 void pwmWrite(uint8 pin, uint16 duty_cycle) {
-    TimerCCR ccr;
-
-    if (pin >= NR_GPIO_PINS) {
+    timer_dev *dev = PIN_MAP[pin].timer_device;
+    if (pin >= NR_GPIO_PINS || dev == NULL || dev->type == TIMER_BASIC) {
         return;
     }
 
-    ccr = PIN_MAP[pin].timer_ccr;
-
-    if (ccr == 0) {
-        return;
-    }
-
-    timer_pwm_write_ccr(ccr, duty_cycle);
+    timer_set_compare(dev, PIN_MAP[pin].timer_chan, duty_cycle);
 }

@@ -23,61 +23,107 @@
  *****************************************************************************/
 
 /**
- * @brief generic maple board bring up:
+ * @brief Generic Maple board initialization.
  *
- * By default, we bring up all maple boards running on the stm32 to 72mhz,
- * clocked off the PLL, driven by the 8MHz external crystal.
- *
- * AHB and APB2 are clocked at 72MHz
- * APB1 is clocked at 36MHz
+ * By default, we bring up all Maple boards to 72MHz, clocked off the
+ * PLL, driven by the 8MHz external crystal. AHB and APB2 are clocked
+ * at 72MHz.  APB1 is clocked at 36MHz.
  */
 
 #include "wirish.h"
+
+#include "flash.h"
+#include "rcc.h"
+#include "nvic.h"
 #include "systick.h"
 #include "gpio.h"
-#include "nvic.h"
+#include "adc.h"
+#include "timer.h"
 #include "usb.h"
-#include "rcc.h"
-#include "fsmc.h"
-#include "dac.h"
-#include "flash.h"
-#include "native_sram.h"
 
+static void setupFlash(void);
+static void setupClocks(void);
+static void setupADC(void);
+static void setupTimers(void);
+
+/**
+ * Board-wide initialization function.  Called before main().
+ */
 void init(void) {
-    /* make sure the flash is ready before spinning the high speed clock up */
-    flash_enable_prefetch();
-    flash_set_latency(FLASH_WAIT_STATE_2);
-
-#ifdef BOARD_maple_native
-    initNativeSRAM();
-#endif
-
-    /* initialize clocks  */
-    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
-    rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
-    rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
-    rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
-
+    setupFlash();
+    setupClocks();
     nvic_init();
     systick_init(SYSTICK_RELOAD_VAL);
     gpio_init_all();
     afio_init();
-
-    /* Initialize the ADC for slow conversions, to allow for high
-       impedance inputs. */
-    adc_init(ADC1, 0);
-    adc_set_sample_rate(ADC1, ADC_SMPR_55_5);
-
-    timer_init(TIMER1, 1);
-    timer_init(TIMER2, 1);
-    timer_init(TIMER3, 1);
-    timer_init(TIMER4, 1);
-#ifdef STM32_HIGH_DENSITY
-    timer_init(TIMER5, 1);
-    timer_init(TIMER8, 1);
-#endif
+    setupADC();
+    setupTimers();
     setupUSB();
 
-    /* include the board-specific init macro */
     BOARD_INIT;
+}
+
+static void setupFlash(void) {
+    flash_enable_prefetch();
+    flash_set_latency(FLASH_WAIT_STATE_2);
+}
+
+/*
+ * Clock setup.  Note that some of this only takes effect if we're
+ * running bare metal and the bootloader hasn't done it for us
+ * already.
+ *
+ * If you change this function, you MUST change the file-level Doxygen
+ * comment above.
+ */
+static void setupClocks() {
+    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
+    rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
+    rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
+    rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
+}
+
+/* TODO initialize more ADCs on high density boards. */
+static void setupADC() {
+    adc_init(ADC1, 0);
+    adc_set_sample_rate(ADC1, ADC_SMPR_55_5); // for high impedance inputs
+}
+
+static void timerDefaultConfig(timer_dev*);
+
+static void setupTimers() {
+    timer_foreach(timerDefaultConfig);
+}
+
+static void timerDefaultConfig(timer_dev *dev) {
+    timer_adv_reg_map *regs = (dev->regs).adv;
+    const uint16 full_overflow = 0xFFFF;
+    const uint16 half_duty = 0x8FFF;
+
+    timer_init(dev);
+    timer_pause(dev);
+
+    regs->CR1 = TIMER_CR1_ARPE;
+    regs->PSC = 1;
+    regs->SR = 0;
+    regs->DIER = 0;
+    regs->EGR = TIMER_EGR_UG;
+
+    switch (dev->type) {
+    case TIMER_ADVANCED:
+        regs->BDTR = TIMER_BDTR_MOE | TIMER_BDTR_LOCK_OFF;
+        // fall-through
+    case TIMER_GENERAL:
+        timer_set_reload(dev, full_overflow);
+
+        for (int channel = 1; channel <= 4; channel++) {
+            timer_set_compare(dev, channel, half_duty);
+            timer_oc_set_mode(dev, channel, TIMER_OC_MODE_PWM_1, TIMER_OC_PE);
+        }
+        // fall-through
+    case TIMER_BASIC:
+        break;
+    }
+
+    timer_resume(dev);
 }

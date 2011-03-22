@@ -30,6 +30,9 @@
  * @brief Bit-banding utility functions
  */
 
+#ifndef _BITBAND_H_
+#define _BITBAND_H_
+
 #define BB_SRAM_REF      0x20000000
 #define BB_SRAM_BASE     0x22000000
 #define BB_PERI_REF      0x40000000
@@ -103,3 +106,5 @@ static inline __io uint32* __bb_addr(__io void *address,
                                      uint32 bb_ref) {
     return (__io uint32*)(bb_base + ((uint32)address - bb_ref) * 32 + bit * 4);
 }
+
+#endif  /* _BITBAND_H_ */

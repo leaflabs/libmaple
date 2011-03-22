@@ -47,8 +47,10 @@
  * TODO: Do the complementary PWM outputs mess up SPI2?
  * */
 
-#include "wirish.h"
 #include "spi.h"
+#include "timer.h"
+
+#include "wirish.h"
 #include "HardwareSPI.h"
 
 static const uint32 prescaleFactors[MAX_SPI_FREQS] = {

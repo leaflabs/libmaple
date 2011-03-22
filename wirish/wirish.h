@@ -32,7 +32,6 @@
 #define _WIRISH_H_
 
 #include "libmaple.h"
-#include "timers.h"
 
 #include "boards.h"
 #include "io.h"
@@ -44,7 +43,6 @@
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
 #include "usb_serial.h"
-#include "HardwareTimer.h"
 
 /* Arduino wiring macros and bit defines  */
 #define HIGH 0x1
@@ -69,7 +67,6 @@ typedef uint8 boolean;
 typedef uint8 byte;
 
 void init(void);
-void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
 
 #endif
 

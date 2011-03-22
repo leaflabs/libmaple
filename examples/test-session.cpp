@@ -15,7 +15,6 @@
 //#define COMM Serial2
 //#define COMM Serial3
 
-
 #define ESC       ((uint8)27)
 
 int rate = 0;
@@ -610,17 +609,15 @@ void cmd_servo_sweep(void) {
     COMM.println("(reset serial port)");
 }
 
+static uint16 init_all_timers_prescale = 0;
+
+static void set_prescale(timer_dev *dev) {
+    timer_set_prescaler(dev, init_all_timers_prescale);
+}
+
 void init_all_timers(uint16 prescale) {
-    timer_init(TIMER1, prescale);
-    timer_init(TIMER2, prescale);
-    timer_init(TIMER3, prescale);
-    timer_init(TIMER4, prescale);
-#ifdef STM32_HIGH_DENSITY
-    timer_init(TIMER5, prescale);
-    // timer_init(TIMER6, prescale);
-    // timer_init(TIMER7, prescale);
-    timer_init(TIMER8, prescale);
-#endif
+    init_all_timers_prescale = prescale;
+    timer_foreach(set_prescale);
 }
 
 // Force init to be called *first*, i.e. before static object allocation.

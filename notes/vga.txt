@@ -7,8 +7,7 @@ gpio_write_bit() is about 360ns (2.78MHz)
 
 Writing to GPIO?_BASE is about 60ns (16.6MHz -> 18MHz)
 
-pwm write 0x0001 is about 30ns (33MHz) with prescaler as 1 (default)
-pwm write 0x0001 is about 14ns (72MHz) with prescaler as 0 (!)
+PWM write 0x0001 is about 14ns (72MHz) with prescaler as 0 (!)
 
 VGA Timing
 ------------------------------------------------------------------------------
@@ -34,9 +33,3 @@ Crude 640x480 directions:
     11 lines front porch
     2 lines Vsync (low)
     31 lines back porch
-
-Currently, setting vs. clearing GPIO registers seems to take a different amount
-of time? Or perhaps i'm not analyzing branching correctly. Regardless, if you
-SET 100x times then UNSET on one line, then UNSET 100x then SET the next line,
-the two changes in color will generally not line up. 
-

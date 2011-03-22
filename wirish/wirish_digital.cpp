@@ -72,15 +72,15 @@ void pinMode(uint8 pin, WiringPinMode mode) {
 
     gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin, outputMode);
 
-    if (PIN_MAP[pin].timer_num != TIMER_INVALID) {
+    if (PIN_MAP[pin].timer_device != NULL) {
         /* enable/disable timer channels if we're switching into or
            out of pwm  */
         if (pwm) {
-            timer_set_mode(PIN_MAP[pin].timer_num,
+            timer_set_mode(PIN_MAP[pin].timer_device,
                            PIN_MAP[pin].timer_chan,
                            TIMER_PWM);
         } else {
-            timer_set_mode(PIN_MAP[pin].timer_num,
+            timer_set_mode(PIN_MAP[pin].timer_device,
                            PIN_MAP[pin].timer_chan,
                            TIMER_DISABLED);
         }

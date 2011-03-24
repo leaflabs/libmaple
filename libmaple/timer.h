@@ -170,7 +170,7 @@ extern timer_dev *TIMER5;
 extern timer_dev *TIMER6;
 /** Timer 7 device (basic) */
 extern timer_dev *TIMER7;
-/** Timer 8 device (basic) */
+/** Timer 8 device (advanced) */
 extern timer_dev *TIMER8;
 #endif
 
@@ -855,7 +855,7 @@ static inline uint8 timer_get_dma_burst_length(timer_dev *dev) {
 static inline void timer_set_dma_burst_length(timer_dev *dev, uint8 length) {
     uint32 tmp = (dev->regs).gen->DCR;
     tmp &= ~TIMER_DCR_DBL;
-    tmp |= (length << 8) - 1;
+    tmp |= (length - 1) << 8;
     (dev->regs).gen->DCR = tmp;
 }
 

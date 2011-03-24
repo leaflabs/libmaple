@@ -47,19 +47,37 @@ extern "C"{
 
 /** GPIO register map type */
 typedef struct gpio_reg_map {
-    __io uint32 CRL;      ///< Port configuration register low
-    __io uint32 CRH;      ///< Port configuration register high
-    __io uint32 IDR;      ///< Port input data register
-    __io uint32 ODR;      ///< Port output data register
-    __io uint32 BSRR;     ///< Port bit set/reset register
-    __io uint32 BRR;      ///< Port bit reset register
-    __io uint32 LCKR;     ///< Port configuration lock register
+    __io uint32 CRL;      /**< Port configuration register low */
+    __io uint32 CRH;      /**< Port configuration register high */
+    __io uint32 IDR;      /**< Port input data register */
+    __io uint32 ODR;      /**< Port output data register */
+    __io uint32 BSRR;     /**< Port bit set/reset register */
+    __io uint32 BRR;      /**< Port bit reset register */
+    __io uint32 LCKR;     /**< Port configuration lock register */
 } gpio_reg_map;
+
+
+/**
+ * External interrupt line port selector.  Used to determine which
+ * GPIO port to map an external interrupt line onto. */
+/* (See AFIO sections, below) */
+typedef enum {
+    AFIO_EXTI_PA,               /**< Use PAx pin. */
+    AFIO_EXTI_PB,               /**< Use PBx pin. */
+    AFIO_EXTI_PC,               /**< Use PCx pin. */
+    AFIO_EXTI_PD,               /**< Use PDx pin. */
+#ifdef STM32_HIGH_DENSITY
+    AFIO_EXTI_PE,               /**< Use PEx pin. */
+    AFIO_EXTI_PF,               /**< Use PFx pin. */
+    AFIO_EXTI_PG,               /**< Use PGx pin. */
+#endif
+} afio_exti_port;
 
 /** GPIO device type */
 typedef struct gpio_dev {
-    gpio_reg_map *regs; ///< Register map
-    rcc_clk_id clk_id;  ///< RCC clock information
+    gpio_reg_map *regs;       /**< Register map */
+    rcc_clk_id clk_id;        /**< RCC clock information */
+    afio_exti_port exti_port; /**< AFIO external interrupt port value */
 } gpio_dev;
 
 extern gpio_dev gpioa;
@@ -143,6 +161,14 @@ typedef enum gpio_pin_mode {
 void gpio_init(gpio_dev *dev);
 void gpio_init_all(void);
 void gpio_set_mode(gpio_dev *dev, uint8 pin, gpio_pin_mode mode);
+
+/**
+ * @brief Get a GPIO port's corresponding afio_exti_port.
+ * @param dev GPIO device whose afio_exti_port to return.
+ */
+static inline afio_exti_port gpio_exti_port(gpio_dev *dev) {
+    return dev->exti_port;
+}
 
 /**
  * Set or reset a GPIO pin.
@@ -258,21 +284,6 @@ typedef struct afio_reg_map {
 #define AFIO_MAPR_SPI1_REMAP                   BIT(0)
 
 /* External interrupt configuration registers */
-
-/**
- * External interrupt line port selector.  Used to determine which
- * GPIO port to map an external interrupt line onto. */
-typedef enum {
-    AFIO_EXTI_PA,               /**< Use PAx pin. */
-    AFIO_EXTI_PB,               /**< Use PBx pin. */
-    AFIO_EXTI_PC,               /**< Use PCx pin. */
-    AFIO_EXTI_PD,               /**< Use PDx pin. */
-#ifdef STM32_HIGH_DENSITY
-    AFIO_EXTI_PE,               /**< Use PEx pin. */
-    AFIO_EXTI_PF,               /**< Use PFx pin. */
-    AFIO_EXTI_PG,               /**< Use PGx pin. */
-#endif
-} afio_exti_port;
 
 /**
  * External interrupt line numbers.

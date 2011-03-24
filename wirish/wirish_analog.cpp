@@ -33,7 +33,7 @@
 /* Assumes that the ADC has been initialized and that the pin is set
  * to ANALOG_INPUT */
 uint32 analogRead(uint8 pin) {
-    if(PIN_MAP[pin].adc_channel == ADC_INVALID) {
+    if(PIN_MAP[pin].adc_channel == ADCx) {
         return 0;
     }
 

@@ -1,0 +1,64 @@
+/******************************************************************************
+ * The MIT License
+ *
+ * Copyright (c) 2011 LeafLabs, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
+
+/**
+ * @file   maple_native.h
+ * @author Marti Bolivar <mbolivar@leaflabs.com>
+ * @brief  Private include file for Maple Native in boards.h
+ *
+ * See maple.h for more information on these definitions.
+ */
+
+#include "gpio.h"
+#include "timer.h"
+
+#include "wirish_types.h"
+
+#ifndef _BOARD_MAPLE_NATIVE_H_
+#define _BOARD_MAPLE_NATIVE_H_
+
+#define CYCLES_PER_MICROSECOND  72
+#define SYSTICK_RELOAD_VAL      71999
+
+#define BOARD_LED_PIN           D21
+#define BOARD_BUTTON_PIN        D18
+
+#define NR_USARTS               5
+
+#define BOARD_USART1_TX_PIN     25
+#define BOARD_USART1_RX_PIN     26
+#define BOARD_USART2_TX_PIN     51
+#define BOARD_USART2_RX_PIN     52
+#define BOARD_USART3_TX_PIN     0
+#define BOARD_USART3_RX_PIN     1
+#define BOARD_UART4_TX_PIN      18
+#define BOARD_UART4_RX_PIN      19
+#define BOARD_UART5_TX_PIN      20
+#define BOARD_UART5_RX_PIN      28
+
+#define NR_GPIO_PINS            100
+
+#endif

@@ -33,6 +33,7 @@
 
 #include "libmaple.h"
 
+#include "wirish_types.h"
 #include "boards.h"
 #include "io.h"
 #include "bits.h"

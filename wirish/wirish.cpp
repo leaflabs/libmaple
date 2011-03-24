@@ -59,8 +59,7 @@ void init(void) {
     setupADC();
     setupTimers();
     setupUSB();
-
-    BOARD_INIT;
+    boardInit();
 }
 
 static void setupFlash(void) {

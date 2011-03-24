@@ -4,8 +4,9 @@ dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
 BUILDDIRS       += $(BUILD_PATH)/$(d)/comm
+BUILDDIRS       += $(BUILD_PATH)/$(d)/boards
 
-WIRISH_INCLUDES := -I$(d) -I$(d)/comm
+WIRISH_INCLUDES := -I$(d) -I$(d)/comm -I$(d)/boards
 
 # Local flags
 CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
@@ -15,6 +16,10 @@ cSRCS_$(d) :=
 
 cppSRCS_$(d) := wirish_math.cpp		 \
                 Print.cpp		 \
+                boards/maple.cpp	 \
+                boards/maple_mini.cpp	 \
+                boards/maple_native.cpp	 \
+                boards/maple_RET6.cpp	 \
                 comm/HardwareSerial.cpp	 \
                 comm/HardwareSPI.cpp	 \
                 usb_serial.cpp		 \
@@ -27,9 +32,8 @@ cppSRCS_$(d) := wirish_math.cpp		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp	 \
 		native_sram.cpp		 \
-		boards.cpp
 
-cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
+cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)
 
 OBJS_$(d)     := $(cFILES_$(d):%.c=$(BUILD_PATH)/%.o) \

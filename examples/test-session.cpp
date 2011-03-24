@@ -351,7 +351,7 @@ void cmd_everything(void) { // TODO
 
 void fast_gpio(int maple_pin) {
     gpio_dev *dev = PIN_MAP[maple_pin].gpio_device;
-    uint32 pin = PIN_MAP[maple_pin].pin;
+    uint32 pin = PIN_MAP[maple_pin].gpio_pin;
 
     gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
     gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);

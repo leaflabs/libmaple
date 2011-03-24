@@ -34,45 +34,52 @@
  */
 
 gpio_dev gpioa = {
-    .regs   = GPIOA_BASE,
-    .clk_id = RCC_GPIOA
+    .regs      = GPIOA_BASE,
+    .clk_id    = RCC_GPIOA,
+    .exti_port = AFIO_EXTI_PA,
 };
 gpio_dev* const GPIOA = &gpioa;
 
 gpio_dev gpiob = {
-    .regs   = GPIOB_BASE,
-    .clk_id = RCC_GPIOB
+    .regs      = GPIOB_BASE,
+    .clk_id    = RCC_GPIOB,
+    .exti_port = AFIO_EXTI_PB,
 };
 gpio_dev* const GPIOB = &gpiob;
 
 gpio_dev gpioc = {
-    .regs   = GPIOC_BASE,
-    .clk_id = RCC_GPIOC
+    .regs      = GPIOC_BASE,
+    .clk_id    = RCC_GPIOC,
+    .exti_port = AFIO_EXTI_PC,
 };
 gpio_dev* const GPIOC = &gpioc;
 
 gpio_dev gpiod = {
-    .regs   = GPIOD_BASE,
-    .clk_id = RCC_GPIOD
+    .regs      = GPIOD_BASE,
+    .clk_id    = RCC_GPIOD,
+    .exti_port = AFIO_EXTI_PD,
 };
 gpio_dev* const GPIOD = &gpiod;
 
 #ifdef STM32_HIGH_DENSITY
 gpio_dev gpioe = {
-    .regs   = GPIOE_BASE,
-    .clk_id = RCC_GPIOE
+    .regs      = GPIOE_BASE,
+    .clk_id    = RCC_GPIOE,
+    .exti_port = AFIO_EXTI_PE,
 };
 gpio_dev* const GPIOE = &gpioe;
 
 gpio_dev gpiof = {
-    .regs   = GPIOF_BASE,
-    .clk_id = RCC_GPIOF
+    .regs      = GPIOF_BASE,
+    .clk_id    = RCC_GPIOF,
+    .exti_port = AFIO_EXTI_PF,
 };
 gpio_dev* const GPIOF = &gpiof;
 
 gpio_dev gpiog = {
-    .regs   = GPIOG_BASE,
-    .clk_id = RCC_GPIOG
+    .regs      = GPIOG_BASE,
+    .clk_id    = RCC_GPIOG,
+    .exti_port = AFIO_EXTI_PG,
 };
 gpio_dev* const GPIOG = &gpiog;
 #endif

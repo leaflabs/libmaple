@@ -70,7 +70,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         return;
     }
 
-    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin, outputMode);
+    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin, outputMode);
 
     if (PIN_MAP[pin].timer_device != NULL) {
         /* enable/disable timer channels if we're switching into or
@@ -93,7 +93,7 @@ uint32 digitalRead(uint8 pin) {
         return 0;
     }
 
-    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin) ?
+    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin) ?
         HIGH : LOW;
 }
 
@@ -102,7 +102,7 @@ void digitalWrite(uint8 pin, uint8 val) {
         return;
     }
 
-    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin, val);
+    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin, val);
 }
 
 void togglePin(uint8 pin) {
@@ -110,7 +110,7 @@ void togglePin(uint8 pin) {
         return;
     }
 
-    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].pin);
+    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin);
 }
 
 uint8 isButtonPressed() {

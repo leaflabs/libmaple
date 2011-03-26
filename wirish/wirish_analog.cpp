@@ -31,11 +31,12 @@
 #include "io.h"
 
 /* Assumes that the ADC has been initialized and that the pin is set
- * to ANALOG_INPUT */
-uint32 analogRead(uint8 pin) {
-    if(PIN_MAP[pin].adc_channel == ADCx) {
+ * to INPUT_ANALOG */
+uint16 analogRead(uint8 pin) {
+    const adc_dev *dev = PIN_MAP[pin].adc_device;
+    if (dev == NULL) {
         return 0;
     }
 
-    return adc_read(ADC1, PIN_MAP[pin].adc_channel);
+    return adc_read(dev, PIN_MAP[pin].adc_channel);
 }

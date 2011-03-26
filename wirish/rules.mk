@@ -16,6 +16,7 @@ cSRCS_$(d) :=
 
 cppSRCS_$(d) := wirish_math.cpp		 \
                 Print.cpp		 \
+		boards.cpp               \
                 boards/maple.cpp	 \
                 boards/maple_mini.cpp	 \
                 boards/maple_native.cpp	 \
@@ -24,14 +25,13 @@ cppSRCS_$(d) := wirish_math.cpp		 \
                 comm/HardwareSPI.cpp	 \
                 usb_serial.cpp		 \
                 cxxabi-compat.cpp	 \
-		wirish.cpp		 \
 		wirish_shift.cpp	 \
 		wirish_analog.cpp	 \
 		time.cpp		 \
 		pwm.cpp 		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp	 \
-		native_sram.cpp		 \
+		native_sram.cpp
 
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)

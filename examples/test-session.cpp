@@ -27,16 +27,13 @@ const uint8 adc_pins[] =
 
 #elif defined(BOARD_maple_mini)
 const uint8 pwm_pins[] = {3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27};
-const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33}; // NB: 33 is LED
+const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33};
 
 #elif defined(BOARD_maple_native)
 const uint8 pwm_pins[] = {12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45,
                           46, 47, 48, 49, 50, 53, 54};
-const uint8 adc_pins[] = {6, 7, 8, 9, 10, 11,
-                          /* the following are on ADC3, which lacks support:
-                             39, 40, 41, 42, 43, 45, */
+const uint8 adc_pins[] = {6, 7, 8, 9, 10, 11, 39, 40, 41, 42, 43, 45,
                           46, 47, 48, 49, 50, 51, 52, 53, 54};
-
 #else
 #error "Board type has not been selected correctly"
 
@@ -351,21 +348,34 @@ void cmd_everything(void) { // TODO
 
 void fast_gpio(int maple_pin) {
     gpio_dev *dev = PIN_MAP[maple_pin].gpio_device;
-    uint32 pin = PIN_MAP[maple_pin].gpio_pin;
+    uint32 bit = PIN_MAP[maple_pin].gpio_bit;
 
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
-    gpio_write_bit(dev, pin, 1); gpio_write_bit(dev, pin, 0);
+    gpio_write_bit(dev, bit, 1);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
 }
 
 void cmd_serial1_serial3(void) {

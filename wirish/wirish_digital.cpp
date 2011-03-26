@@ -70,20 +70,14 @@ void pinMode(uint8 pin, WiringPinMode mode) {
         return;
     }
 
-    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin, outputMode);
+    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, outputMode);
 
     if (PIN_MAP[pin].timer_device != NULL) {
-        /* enable/disable timer channels if we're switching into or
-           out of pwm  */
-        if (pwm) {
-            timer_set_mode(PIN_MAP[pin].timer_device,
-                           PIN_MAP[pin].timer_chan,
-                           TIMER_PWM);
-        } else {
-            timer_set_mode(PIN_MAP[pin].timer_device,
-                           PIN_MAP[pin].timer_chan,
-                           TIMER_DISABLED);
-        }
+        /* Enable/disable timer channels if we're switching into or
+         * out of PWM. */
+        timer_set_mode(PIN_MAP[pin].timer_device,
+                       PIN_MAP[pin].timer_channel,
+                       pwm ? TIMER_PWM : TIMER_DISABLED);
     }
 }
 
@@ -93,7 +87,7 @@ uint32 digitalRead(uint8 pin) {
         return 0;
     }
 
-    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin) ?
+    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit) ?
         HIGH : LOW;
 }
 
@@ -102,7 +96,7 @@ void digitalWrite(uint8 pin, uint8 val) {
         return;
     }
 
-    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin, val);
+    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, val);
 }
 
 void togglePin(uint8 pin) {
@@ -110,12 +104,14 @@ void togglePin(uint8 pin) {
         return;
     }
 
-    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_pin);
+    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit);
 }
+
+#define BUTTON_DEBOUNCE_DELAY 10
 
 uint8 isButtonPressed() {
     if (digitalRead(BOARD_BUTTON_PIN)) {
-        delay(1);
+        delay(BUTTON_DEBOUNCE_DELAY);
         while (digitalRead(BOARD_BUTTON_PIN))
             ;
         return true;

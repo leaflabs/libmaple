@@ -28,8 +28,8 @@
  *  @brief Arduino-compatible digital pin I/O interface.
  */
 
-#ifndef _IO_H
-#define _IO_H
+#ifndef _IO_H_
+#define _IO_H_
 
 #include "gpio.h"
 #include "adc.h"
@@ -45,8 +45,8 @@
  * This enum specifies the complete set of possible configurations;
  * not every pin can have all of these modes.  For example, on the
  * Maple, pin 15 may be configured as INPUT_ANALOG, but not as PWM.
- * See your device's silkscreen and and the GPIO documentation for
- * more information.
+ * See your board's documentation and silkscreen for more information
+ * on what functionality is available on each pin.
  *
  * @see pinMode()
  */
@@ -114,8 +114,7 @@ typedef enum WiringPinMode {
 /**
  * Configure behavior of a GPIO pin.
  *
- * @param pin Pin to configure. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Number of pin to configure.
  * @param mode Mode corresponding to desired pin behavior.
  * @see WiringPinMode
  */
@@ -136,8 +135,7 @@ void digitalWrite(uint8 pin, uint8 value);
  * Read a digital value from a pin.  The pin must have its mode set to
  * one of INPUT, INPUT_PULLUP, and INPUT_PULLDOWN.
  *
- * @param pin Pin to read from. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Pin to read from.
  * @return LOW or HIGH.
  * @see pinMode()
  */
@@ -146,18 +144,14 @@ uint32 digitalRead(uint8 pin);
 /**
  * Read an analog value from pin.  This function blocks during ADC
  * conversion, and has 12 bits of resolution.  The pin must have its
- * mode set to INPUT_ANALOG.  Ignoring function call overhead,
- * conversion time is 55.5 cycles.
+ * mode set to INPUT_ANALOG.
  *
- * @param pin Pin to read from. One of: 0, 1, 2, 3, 10, 11, 12, 13,
- * 15, 16, 17, 18, 19, 20, 27, 28.
-
- * @return ADC-converted voltage, in the range 0--4095, inclusive
- * (i.e. a 12-bit ADC conversion).
-
+ * @param pin Pin to read from.
+ * @return Converted voltage, in the range 0--4095, (i.e. a 12-bit ADC
+ *         conversion).
  * @see pinMode()
  */
-uint32 analogRead(uint8 pin);
+uint16 analogRead(uint8 pin);
 
 /**
  * Toggles the digital value at the given pin.
@@ -207,14 +201,15 @@ uint8 isButtonPressed();
  * pinMode(BOARD_BUTTON_PIN, INPUT).
  *
  * @param timeout_millis Number of milliseconds to wait until the
- * button is pressed.  If timeout_millis is 0, wait forever.
+ * button is pressed.  If timeout_millis is left out (or 0), wait
+ * forever.
  *
  * @return true, if the button was pressed; false, if the timeout was
  * reached.
  *
  * @see pinMode()
  */
-uint8 waitForButtonPress(uint32 timeout_millis);
+uint8 waitForButtonPress(uint32 timeout_millis=0);
 
 /**
  * Shift out a byte of data, one bit at a time.

@@ -189,8 +189,8 @@ void timer_set_mode(timer_dev *dev, uint8 channel, timer_mode mode) {
 }
 
 /**
- * @brief Call a given function on all timers.
- * @param fn Function to call on each timer.
+ * @brief Call a function on timer devices.
+ * @param fn Function to call on each timer device.
  */
 void timer_foreach(void (*fn)(timer_dev*)) {
     fn(TIMER1);

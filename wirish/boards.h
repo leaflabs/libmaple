@@ -60,12 +60,22 @@ enum {
     D106, D107, D108, D109, D110, D111, };
 
 /**
- * @brief Maps each pin to a corresponding struct stm32_pin_info.
- * @see struct stm32_pin_info
+ * @brief Maps each Maple pin to a corresponding stm32_pin_info.
+ * @see stm32_pin_info
  */
 extern stm32_pin_info PIN_MAP[];
 
-/** Board-specific initialization function. */
+void init(void);
+
+/**
+ * @brief Board-specific initialization function.
+ *
+ * This function is called from init() after all generic board
+ * initialization has been performed.  Each board is required to
+ * define its own.
+ *
+ * @see init()
+ */
 extern void boardInit(void);
 
 #ifdef BOARD_maple

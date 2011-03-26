@@ -79,103 +79,253 @@ extern const adc_dev *ADC3;
 #endif
 
 /*
- * ADC peripheral base addresses
+ * Register map base pointers
  */
 
 /** ADC1 register map base pointer. */
-#define ADC1_BASE               ((adc_reg_map*)0x40012400)
+#define ADC1_BASE                       ((adc_reg_map*)0x40012400)
 /** ADC2 register map base pointer. */
-#define ADC2_BASE               ((adc_reg_map*)0x40012800)
+#define ADC2_BASE                       ((adc_reg_map*)0x40012800)
 /** ADC3 register map base pointer. */
-#define ADC3_BASE               ((adc_reg_map*)0x40013C00)
+#define ADC3_BASE                       ((adc_reg_map*)0x40013C00)
 
 /*
  * Register bit definitions
  */
 
 /* Status register */
-#define ADC_SR_AWD              BIT(0)
-#define ADC_SR_EOC              BIT(1)
-#define ADC_SR_JEOC             BIT(2)
-#define ADC_SR_JSTRT            BIT(3)
-#define ADC_SR_STRT             BIT(4)
+
+#define ADC_SR_AWD_BIT                  0
+#define ADC_SR_EOC_BIT                  1
+#define ADC_SR_JEOC_BIT                 2
+#define ADC_SR_JSTRT_BIT                3
+#define ADC_SR_STRT_BIT                 4
+
+#define ADC_SR_AWD                      BIT(ADC_SR_AWD_BIT)
+#define ADC_SR_EOC                      BIT(ADC_SR_EOC_BIT)
+#define ADC_SR_JEOC                     BIT(ADC_SR_JEOC_BIT)
+#define ADC_SR_JSTRT                    BIT(ADC_SR_JSTRT_BIT)
+#define ADC_SR_STRT                     BIT(ADC_SR_STRT_BIT)
 
 /* Control register 1 */
-#define ADC_CR1_AWDCH           (0x1F)
-#define ADC_CR1_EOCIE           BIT(5)
-#define ADC_CR1_AWDIE           BIT(6)
-#define ADC_CR1_JEOCIE          BIT(7)
-#define ADC_CR1_SCAN            BIT(8)
-#define ADC_CR1_AWDSGL          BIT(9)
-#define ADC_CR1_JAUTO           BIT(10)
-#define ADC_CR1_DISCEN          BIT(11)
-#define ADC_CR1_JDISCEN         BIT(12)
-#define ADC_CR1_DISCNUM         (0xE000)
-#define ADC_CR1_JAWDEN          BIT(22)
-#define ADC_CR1_AWDEN           BIT(23)
+
+#define ADC_CR1_EOCIE_BIT               5
+#define ADC_CR1_AWDIE_BIT               6
+#define ADC_CR1_JEOCIE_BIT              7
+#define ADC_CR1_SCAN_BIT                8
+#define ADC_CR1_AWDSGL_BIT              9
+#define ADC_CR1_JAUTO_BIT               10
+#define ADC_CR1_DISCEN_BIT              11
+#define ADC_CR1_JDISCEN_BIT             12
+#define ADC_CR1_JAWDEN_BIT              22
+#define ADC_CR1_AWDEN_BIT               23
+
+#define ADC_CR1_AWDCH                   (0x1F)
+#define ADC_CR1_EOCIE                   BIT(ADC_CR1_EOCIE_BIT)
+#define ADC_CR1_AWDIE                   BIT(ADC_CR1_AWDIE_BIT)
+#define ADC_CR1_JEOCIE                  BIT(ADC_CR1_JEOCIE_BIT)
+#define ADC_CR1_SCAN                    BIT(ADC_CR1_SCAN_BIT)
+#define ADC_CR1_AWDSGL                  BIT(ADC_CR1_AWDSGL_BIT)
+#define ADC_CR1_JAUTO                   BIT(ADC_CR1_JAUTO_BIT)
+#define ADC_CR1_DISCEN                  BIT(ADC_CR1_DISCEN_BIT)
+#define ADC_CR1_JDISCEN                 BIT(ADC_CR1_JDISCEN_BIT)
+#define ADC_CR1_DISCNUM                 (0xE000)
+#define ADC_CR1_JAWDEN                  BIT(ADC_CR1_JAWDEN_BIT)
+#define ADC_CR1_AWDEN                   BIT(ADC_CR1_AWDEN_BIT)
 
 /* Control register 2 */
-#define ADC_CR2_ADON            BIT(0)
-#define ADC_CR2_CONT            BIT(1)
-#define ADC_CR2_CAL             BIT(2)
-#define ADC_CR2_RSTCAL          BIT(3)
-#define ADC_CR2_DMA             BIT(8)
-#define ADC_CR2_ALIGN           BIT(11)
-#define ADC_CR2_JEXTSEL         (0x7000)
-#define ADC_CR2_JEXTTRIG        BIT(15)
-#define ADC_CR2_EXTSEL          (0xE0000)
-#define ADC_CR2_EXTTRIG         BIT(20)
-#define ADC_CR2_JSWSTART        BIT(21)
-#define ADC_CR2_SWSTART         BIT(22)
-#define ADC_CR2_TSEREFE         BIT(23)
 
-void adc_init(const adc_dev *dev, uint32 flags);
-void adc_set_extsel(const adc_dev *dev, uint8 trigger);
+#define ADC_CR2_ADON_BIT                0
+#define ADC_CR2_CONT_BIT                1
+#define ADC_CR2_CAL_BIT                 2
+#define ADC_CR2_RSTCAL_BIT              3
+#define ADC_CR2_DMA_BIT                 8
+#define ADC_CR2_ALIGN_BIT               11
+#define ADC_CR2_JEXTTRIG_BIT            15
+#define ADC_CR2_EXTTRIG_BIT             20
+#define ADC_CR2_JSWSTART_BIT            21
+#define ADC_CR2_SWSTART_BIT             22
+#define ADC_CR2_TSEREFE_BIT             23
+
+#define ADC_CR2_ADON                    BIT(ADC_CR2_ADON_BIT)
+#define ADC_CR2_CONT                    BIT(ADC_CR2_CONT_BIT)
+#define ADC_CR2_CAL                     BIT(ADC_CR2_CAL_BIT)
+#define ADC_CR2_RSTCAL                  BIT(ADC_CR2_RSTCAL_BIT)
+#define ADC_CR2_DMA                     BIT(ADC_CR2_DMA_BIT)
+#define ADC_CR2_ALIGN                   BIT(ADC_CR2_ALIGN_BIT)
+#define ADC_CR2_JEXTSEL                 (0x7000)
+#define ADC_CR2_JEXTTRIG                BIT(ADC_CR2_JEXTTRIG_BIT)
+#define ADC_CR2_EXTSEL                  (0xE0000)
+#define ADC_CR2_EXTTRIG                 BIT(ADC_CR2_EXTTRIG_BIT)
+#define ADC_CR2_JSWSTART                BIT(ADC_CR2_JSWSTART_BIT)
+#define ADC_CR2_SWSTART                 BIT(ADC_CR2_SWSTART_BIT)
+#define ADC_CR2_TSEREFE                 BIT(ADC_CR2_TSEREFE_BIT)
+
+/* Sample time register 1 */
+
+#define ADC_SMPR1_SMP17                 (0x7 << 21)
+#define ADC_SMPR1_SMP16                 (0x7 << 18)
+#define ADC_SMPR1_SMP15                 (0x7 << 15)
+#define ADC_SMPR1_SMP14                 (0x7 << 12)
+#define ADC_SMPR1_SMP13                 (0x7 << 9)
+#define ADC_SMPR1_SMP12                 (0x7 << 6)
+#define ADC_SMPR1_SMP11                 (0x7 << 3)
+#define ADC_SMPR1_SMP10                 0x7
+
+/* Sample time register 2 */
+
+#define ADC_SMPR2_SMP9                  (0x7 << 27)
+#define ADC_SMPR2_SMP8                  (0x7 << 24)
+#define ADC_SMPR2_SMP7                  (0x7 << 21)
+#define ADC_SMPR2_SMP6                  (0x7 << 18)
+#define ADC_SMPR2_SMP5                  (0x7 << 15)
+#define ADC_SMPR2_SMP4                  (0x7 << 12)
+#define ADC_SMPR2_SMP3                  (0x7 << 9)
+#define ADC_SMPR2_SMP2                  (0x7 << 6)
+#define ADC_SMPR2_SMP1                  (0x7 << 3)
+#define ADC_SMPR2_SMP0                  0x7
+
+/* Injected channel data offset register */
+
+#define ADC_JOFR_JOFFSET                0x3FF
+
+/* Watchdog high threshold register */
+
+#define ADC_HTR_HT                      0x3FF
+
+/* Watchdog low threshold register */
+
+#define ADC_LTR_LT                      0x3FF
+
+/* Regular sequence register 1 */
+
+#define ADC_SQR1_L                      (0x1F << 20)
+#define ADC_SQR1_SQ16                   (0x1F << 15)
+#define ADC_SQR1_SQ15                   (0x1F << 10)
+#define ADC_SQR1_SQ14                   (0x1F << 5)
+#define ADC_SQR1_SQ13                   0x1F
+
+/* Regular sequence register 2 */
+
+#define ADC_SQR2_SQ12                   (0x1F << 25)
+#define ADC_SQR2_SQ11                   (0x1F << 20)
+#define ADC_SQR2_SQ10                   (0x1F << 16)
+#define ADC_SQR2_SQ9                    (0x1F << 10)
+#define ADC_SQR2_SQ8                    (0x1F << 5)
+#define ADC_SQR2_SQ7                    0x1F
+
+/* Regular sequence register 3 */
+
+#define ADC_SQR3_SQ6                    (0x1F << 25)
+#define ADC_SQR3_SQ5                    (0x1F << 20)
+#define ADC_SQR3_SQ4                    (0x1F << 16)
+#define ADC_SQR3_SQ3                    (0x1F << 10)
+#define ADC_SQR3_SQ2                    (0x1F << 5)
+#define ADC_SQR3_SQ1                    0x1F
+
+/* Injected sequence register */
+
+#define ADC_JSQR_JL                     (0x3 << 20)
+#define ADC_JSQR_JL_1CONV               (0x0 << 20)
+#define ADC_JSQR_JL_2CONV               (0x1 << 20)
+#define ADC_JSQR_JL_3CONV               (0x2 << 20)
+#define ADC_JSQR_JL_4CONV               (0x3 << 20)
+#define ADC_JSQR_JSQ4                   (0x1F << 15)
+#define ADC_JSQR_JSQ3                   (0x1F << 10)
+#define ADC_JSQR_JSQ2                   (0x1F << 5)
+#define ADC_JSQR_JSQ1                   0x1F
+
+/* Injected data registers */
+
+#define ADC_JDR_JDATA                   0xFFFF
+
+/* Regular data register */
+
+#define ADC_DR_ADC2DATA                 (0xFFFF << 16)
+#define ADC_DR_DATA                     0xFFFF
+
+void adc_init(const adc_dev *dev);
+
+/**
+ * @brief External event selector for regular group conversion.
+ * @see adc_set_extsel
+ */
+typedef enum adc_extsel_event {
+    ADC_ADC12_TIM1_CC1  = (0 << 17), /**< ADC1 and ADC2: Timer 1 CC1 event */
+    ADC_ADC12_TIM1_CC2  = (1 << 17), /**< ADC1 and ADC2: Timer 1 CC2 event */
+    ADC_ADC12_TIM1_CC3  = (2 << 17), /**< ADC1 and ADC2: Timer 1 CC3 event */
+    ADC_ADC12_TIM2_CC2  = (3 << 17), /**< ADC1 and ADC2: Timer 2 CC2 event */
+    ADC_ADC12_TIM3_TRGO = (4 << 17), /**< ADC1 and ADC2: Timer 3 TRGO event */
+    ADC_ADC12_TIM4_CC4  = (5 << 17), /**< ADC1 and ADC2: Timer 4 CC4 event */
+    ADC_ADC12_EXTI11    = (6 << 17), /**< ADC1 and ADC2: EXTI11 event */
+#ifdef STM32_HIGH_DENSITY
+    ADC_ADC12_TIM8_TRGO = (6 << 17), /**< ADC1 and ADC2: Timer 8 TRGO
+                                        event (high density only) */
+#endif
+    ADC_ADC12_SWSTART   = (7 << 17), /**< ADC1 and ADC2: Software start */
+#ifdef STM32_HIGH_DENSITY
+    ADC_ADC3_TIM3_CC1   = (0 << 17), /**< ADC3: Timer 3 CC1 event
+                                        (high density only) */
+    ADC_ADC3_TIM2_CC3   = (1 << 17), /**< ADC3: Timer 2 CC3 event
+                                        (high density only) */
+    ADC_ADC3_TIM1_CC3   = (2 << 17), /**< ADC3: Timer 1 CC3 event
+                                        (high density only) */
+    ADC_ADC3_TIM8_CC1   = (3 << 17), /**< ADC3: Timer 8 CC1 event
+                                        (high density only) */
+    ADC_ADC3_TIM8_TRGO  = (4 << 17), /**< ADC3: Timer 8 TRGO event
+                                        (high density only) */
+    ADC_ADC3_TIM5_CC1   = (5 << 17), /**< ADC3: Timer 5 CC1 event
+                                        (high density only) */
+    ADC_ADC3_TIM5_CC3   = (6 << 17), /**< ADC3: Timer 5 CC3 event
+                                        (high density only) */
+    ADC_ADC3_SWSTART    = (7 << 17), /**< ADC3: Software start (high
+                                        density only) */
+#endif
+    ADC_SWSTART         = (7 << 17) /**< ADC1, ADC2, ADC3: Software start */
+} adc_extsel_event;
+
+void adc_set_extsel(const adc_dev *dev, adc_extsel_event event);
+void adc_foreach(void (*fn)(const adc_dev*));
 
 /** ADC per-sample conversion times, in ADC clock cycles */
 typedef enum {
-    ADC_SMPR_1_5,               ///< 1.5 ADC cycles
-    ADC_SMPR_7_5,               ///< 7.5 ADC cycles
-    ADC_SMPR_13_5,              ///< 13.5 ADC cycles
-    ADC_SMPR_28_5,              ///< 28.5 ADC cycles
-    ADC_SMPR_41_5,              ///< 41.5 ADC cycles
-    ADC_SMPR_55_5,              ///< 55.5 ADC cycles
-    ADC_SMPR_71_5,              ///< 71.5 ADC cycles
-    ADC_SMPR_239_5              ///< 239.5 ADC cycles
+    ADC_SMPR_1_5,               /**< 1.5 ADC cycles */
+    ADC_SMPR_7_5,               /**< 7.5 ADC cycles */
+    ADC_SMPR_13_5,              /**< 13.5 ADC cycles */
+    ADC_SMPR_28_5,              /**< 28.5 ADC cycles */
+    ADC_SMPR_41_5,              /**< 41.5 ADC cycles */
+    ADC_SMPR_55_5,              /**< 55.5 ADC cycles */
+    ADC_SMPR_71_5,              /**< 71.5 ADC cycles */
+    ADC_SMPR_239_5              /**< 239.5 ADC cycles */
 } adc_smp_rate;
 
 void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
+void adc_calibrate(const adc_dev *dev);
+uint16 adc_read(const adc_dev *dev, uint8 channel);
 
 /**
- * @brief Perform a single synchronous software triggered conversion on a
- * channel.
- * @param dev ADC device to use for reading.
- * @param channel channel to convert
- * @return conversion result
+ * @brief Set the regular channel sequence length.
+ *
+ * Defines the total number of conversions in the regular channel
+ * conversion sequence.
+ *
+ * @param length Regular channel sequence length, from 1 to 16.
  */
-static inline uint32 adc_read(const adc_dev *dev, uint8 channel) {
-    adc_reg_map *regs = dev->regs;
-
-    /* Set target channel */
-    regs->SQR3 = channel;
-
-    /* Start the conversion */
-    regs->CR2 |= ADC_CR2_SWSTART;
-
-    /* Wait for it to finish */
-    while((regs->SR & ADC_SR_EOC) == 0)
-        ;
-
-    return regs->DR;
+static inline void adc_set_reg_seqlen(const adc_dev *dev, uint8 length) {
+    uint32 tmp = dev->regs->SQR1;
+    tmp &= ~ADC_SQR1_L;
+    tmp |= (length - 1) << 20;
+    dev->regs->SQR1 = tmp;
 }
 
 /**
  * @brief Set external trigger conversion mode event for regular channels
  * @param dev    ADC device
- * @param enable If 1, conversion on external events is enabled, 0 to disable
+ * @param enable If 1, conversion on external events is enabled; if 0,
+ *               disabled.
  */
 static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
-    *bb_perip(&dev->regs->CR2, 20) = !!enable;
+    *bb_perip(&dev->regs->CR2, ADC_CR2_EXTTRIG_BIT) = !!enable;
 }
 
 /**
@@ -183,7 +333,7 @@ static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
  * @param dev ADC device to enable
  */
 static inline void adc_enable(const adc_dev *dev) {
-    *bb_perip(&dev->regs->CR2, 0) = 1;
+    *bb_perip(&dev->regs->CR2, ADC_CR2_ADON_BIT) = 1;
 }
 
 /**
@@ -191,18 +341,14 @@ static inline void adc_enable(const adc_dev *dev) {
  * @param dev ADC device to disable
  */
 static inline void adc_disable(const adc_dev *dev) {
-    *bb_perip(&dev->regs->CR2, 0) = 0;
+    *bb_perip(&dev->regs->CR2, ADC_CR2_ADON_BIT) = 0;
 }
 
 /**
- * @brief Disable all ADCs
+ * @brief Disable all ADC peripherals.
  */
 static inline void adc_disable_all(void) {
-    adc_disable(ADC1);
-    adc_disable(ADC2);
-#ifdef STM32_HIGH_DENSITY
-    adc_disable(ADC3);
-#endif
+    adc_foreach(adc_disable);
 }
 
 #ifdef __cplusplus

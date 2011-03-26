@@ -32,20 +32,28 @@
 
 #include "gpio.h"
 #include "timer.h"
+#include "adc.h"
 
 #ifndef _WIRISH_TYPES_H_
 #define _WIRISH_TYPES_H_
 
-/** Stores STM32-specific information related to a given pin. */
-typedef struct stm32_pin_info {
-    gpio_dev *gpio_device;   /**< Maple pin's GPIO device */
-    timer_dev *timer_device; /**< Maple pin's timer device, or NULL if none. */
-    uint8 gpio_pin;          /**< GPIO pin */
-    uint8 timer_chan;        /**< Timer channel, or 0 if none. */
-    uint8 adc_channel;       /**< Pin ADC channel, or ADCx if none. */
-} stm32_pin_info;
-
-/** Invalid adc_channel value */
+/**
+ * Invalid stm32_pin_info adc_channel value.
+ * @see stm32_pin_info
+ */
 #define ADCx 0xFF
+
+/**
+ * @brief Stores STM32-specific information related to a given Maple pin.
+ * @see PIN_MAP
+ */
+typedef struct stm32_pin_info {
+    gpio_dev *gpio_device;      /**< Maple pin's GPIO device */
+    timer_dev *timer_device;    /**< Pin's timer device, if any. */
+    const adc_dev *adc_device;  /**< ADC device, if any. */
+    uint8 gpio_bit;             /**< Pin's GPIO port bit. */
+    uint8 timer_channel;        /**< Timer channel, or 0 if none. */
+    uint8 adc_channel;          /**< Pin ADC channel, or ADCx if none. */
+} stm32_pin_info;
 
 #endif

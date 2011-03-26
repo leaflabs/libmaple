@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @brief Generic Maple board initialization.
+ * @brief Generic board initialization routines.
  *
  * By default, we bring up all Maple boards to 72MHz, clocked off the
  * PLL, driven by the 8MHz external crystal. AHB and APB2 are clocked
@@ -47,7 +47,13 @@ static void setupADC(void);
 static void setupTimers(void);
 
 /**
- * Board-wide initialization function.  Called before main().
+ * @brief Generic board initialization function.
+ *
+ * This function is called before main().  It ensures that the clocks
+ * and peripherals are configured properly for use with wirish, then
+ * calls boardInit().
+ *
+ * @see boardInit()
  */
 void init(void) {
     setupFlash();
@@ -82,16 +88,27 @@ static void setupClocks() {
     rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
 }
 
-/* TODO initialize more ADCs on high density boards. */
+static void adcDefaultConfig(const adc_dev* dev);
+
 static void setupADC() {
-    adc_init(ADC1, 0);
-    adc_set_sample_rate(ADC1, ADC_SMPR_55_5); // for high impedance inputs
+    adc_foreach(adcDefaultConfig);
 }
 
 static void timerDefaultConfig(timer_dev*);
 
 static void setupTimers() {
     timer_foreach(timerDefaultConfig);
+}
+
+static void adcDefaultConfig(const adc_dev *dev) {
+    adc_init(dev);
+
+    adc_set_extsel(dev, ADC_SWSTART);
+    adc_set_exttrig(dev, true);
+
+    adc_enable(dev);
+    adc_calibrate(dev);
+    adc_set_sample_rate(dev, ADC_SMPR_55_5);
 }
 
 static void timerDefaultConfig(timer_dev *dev) {

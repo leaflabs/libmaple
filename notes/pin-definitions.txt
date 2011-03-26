@@ -1,4 +1,4 @@
-Maple Native (STM32F103ZE) pin definitions, by GPIO bank.
+Pin definitions by GPIO bank.
 
 Source: ST DOC ID 14611, Datasheet for STM32F103xC, STM32F103xD,
 STM32F103xE, Table 5, pp. 30--35.
@@ -9,13 +9,13 @@ bank's main table.  Non-default alternate functions are not listed. If
 wirish will/does remap the pin's main function after reset, the main
 function is listed under "Other".
 
-This document was prepared carefully and is believed to be complete
-and correct, but the final arbiter of truth is the ST datasheet.
+This document was prepared carefully and is believed to be correct,
+but the final arbiter of truth is the ST datasheet.
 
 *** NB: UART 4 and 5 are NOT USART (columns are labeled appropriately).
 
 ---------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
+GPIO    ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
 ---------------------------------------------------------------------------
 PA0     123in0  2ch1etr -       -       -       2cts    -       -       -
                 5ch1
@@ -52,7 +52,7 @@ PA14: JTCK-SWCLK (default)
 PA15: JTDI (default)
 
 -------------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC    5v? SDIO
+GPIO    ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC    5v? SDIO
 -------------------------------------------------------------------------------
 PB0     12in8   3ch3    -       -       -       -       -       -      -   -
                 8ch2n
@@ -80,7 +80,7 @@ PB3: JTDO (default)
 PB4: NJTRST (default)
 
 -------------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     UART    SPI     DAC    5v? SDIO
+GPIO    ADC     Timer   FSMC    I2S     I2C     UART    SPI     DAC    5v? SDIO
 -------------------------------------------------------------------------------
 PC0     123in10 -       -       -       -       -       -       -      -   -
 PC1     123in11 -       -       -       -       -       -       -      -   -
@@ -106,7 +106,7 @@ PC14: OSC32_IN
 PC15: OSC32_OUT
 
 -------------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     UART    SPI     DAC    5v? SDIO
+GPIO    ADC     Timer   FSMC    I2S     I2C     UART    SPI     DAC    5v? SDIO
 -------------------------------------------------------------------------------
 PD0     -       -       D2      -       -       -       -       -      Y   -
 PD1     -       -       D3      -       -       -       -       -      Y   -
@@ -132,7 +132,7 @@ PD0: OSC_IN (default)
 PD1: OSC_OUT (default)
 
 ---------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
+GPIO    ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
 ---------------------------------------------------------------------------
 PE0     -       4etr    NBL0    -       -       -       -       -       Y
 PE1     -       -       NBL1    -       -       -       -       -       Y
@@ -159,7 +159,7 @@ PE5: TRACED2
 PE6: TRACED3
 
 ---------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
+GPIO    ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
 ---------------------------------------------------------------------------
 PF0     -       -       A0      -       -       -       -       -       Y
 PF1     -       -       A1      -       -       -       -       -       Y
@@ -179,7 +179,7 @@ PF14    -       -       A8      -       -       -       -       -       Y
 PF15    -       -       A9      -       -       -       -       -       Y
 
 ---------------------------------------------------------------------------
-STM32   ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
+GPIO    ADC     Timer   FSMC    I2S     I2C     USART   SPI     DAC     5v?
 ---------------------------------------------------------------------------
 PG0     -       -       A10     -       -       -       -       -       Y
 PG1     -       -       A11     -       -       -       -       -       Y

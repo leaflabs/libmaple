@@ -38,5 +38,5 @@ void pwmWrite(uint8 pin, uint16 duty_cycle) {
         return;
     }
 
-    timer_set_compare(dev, PIN_MAP[pin].timer_chan, duty_cycle);
+    timer_set_compare(dev, PIN_MAP[pin].timer_channel, duty_cycle);
 }

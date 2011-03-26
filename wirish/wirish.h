@@ -67,7 +67,5 @@
 typedef uint8 boolean;
 typedef uint8 byte;
 
-void init(void);
-
 #endif
 

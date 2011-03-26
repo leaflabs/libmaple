@@ -220,3 +220,47 @@ General Formatting
     (require 'lineker)
     (dolist (hook '(c-mode-hook c++-mode-hook))
       (add-hook hook (lambda () (lineker-mode 1))))
+
+Language Features and Compiler Extensions
+-----------------------------------------
+
+- In libmaple proper, aim for C99 compatibility.  Some GCC extensions
+  are OK, but let's not go crazy.  
+
+- If you'd like to get code into libmaple which uses a GCC extension
+  not already in use elsewhere, ask a LeafLabs developer (or another
+  one, if you are one) what they think about it first.
+
+- Explicitly approved GCC extensions:
+
+  * asm volatile:
+    http://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
+
+  * Nested functions:
+    http://gcc.gnu.org/onlinedocs/gcc/Nested-Functions.html
+
+- In wirish, generally be very conservative when using C++ features
+  that aren't part of C.  We are forced to use C++ for Arduino
+  compatibility (and the general Arduino style of pretending that an
+  object is a library), but it's an angry beast, and we don't want to
+  provoke it.  The mantra is "C with classes".
+
+- Explicitly approved C++ features:
+
+  * Initializers that aren't constant; e.g. the gpio_dev* values in
+    PIN_MAPs.
+
+  * Default arguments: e.g., the timeout argument defaulting to 0
+    (meaning to wait forever) in waitForButtonPress().
+
+- Explicitly forbidden C++ features:
+
+  * Templates
+
+- C++ features that are conditionally allowed, but require explicit
+  approval from at least two libmaple developers (one of which may be
+  yourself):
+
+  * Operator overloading: Never allowed when it's just for style.
+    Potentially allowed when you're implementing a class that models a
+    mathematical structure, and you'd like to implement e.g. operator+().

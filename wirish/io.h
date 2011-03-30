@@ -223,7 +223,7 @@ uint8 waitForButtonPress(uint32 timeout_millis=0);
  * @param dataPin  Pin to shift data out on
  * @param clockPin Pin to pulse after each bit is shifted out
  * @param bitOrder Either MSBFIRST (big-endian) or LSBFIRST (little-endian).
- * @param val      Value to shift out
+ * @param value    Value to shift out
  */
 void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 value);
 

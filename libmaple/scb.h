@@ -29,6 +29,8 @@
 #ifndef _SCB_H_
 #define _SCB_H_
 
+/* FIXME this definition is missing doxygen comments */
+
 typedef struct scb_reg_map {
   __io uint32 CPUID;            // CPU ID Base Register
   __io uint32 ICSR;             // Interrupt Control State Register
@@ -50,6 +52,8 @@ typedef struct scb_reg_map {
   __io uint32 MMFR[4];          // Memory Model Feature Register
   __io uint32 ISAR[5];          // ISA Feature Register
 } scb_reg_map;
+
+/* FIXME these names violate the libmaple naming conventions */
 
 #define SCB_BASE            0xE000ED00
 #define SCB                 ((scb_reg_map*)(SCB_BASE))

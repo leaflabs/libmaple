@@ -23,6 +23,8 @@ LMAPLE_SRC="LICENSE
     ./wirish/*.cpp
     ./wirish/comm/*.cpp
     ./wirish/comm/*.h
+    ./wirish/boards/*.h
+    ./wirish/boards/*.cpp
     ./support/ld/common_ram.inc
     ./support/ld/common_rom.inc
     ./support/ld/libcs3_stm32_high_density.a
@@ -52,6 +54,10 @@ cp -R $LMAPLE_SRC $DEST_CORES
 echo Copying over libraries
 cp -R libraries/* $DEST_LIBS
 
+# libmaple version
+echo Creating libmaple-version.txt
+git show-ref HEAD | cut -c 1-10 > $DEST/libmaple-version.txt
+
 # docs
 echo Deleting old reference directory contents
 rm -rf $DEST_REF/*
@@ -61,6 +67,5 @@ echo Rebuilding documentation
 
 echo Copying over documentation
 cp -R $LMAPLE_DOCS_BUILD/* $DEST_REF
-
 
 echo Done.

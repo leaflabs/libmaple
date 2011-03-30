@@ -33,7 +33,8 @@
 
 #include "gpio.h"
 #include "adc.h"
-#include "time.h"
+
+#include "wirish_time.h"
 
 /**
  * Specifies a GPIO pin behavior.

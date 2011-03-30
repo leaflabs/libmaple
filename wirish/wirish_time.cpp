@@ -28,7 +28,7 @@
 
 #include "libmaple.h"
 #include "systick.h"
-#include "time.h"
+#include "wirish_time.h"
 #include "delay.h"
 
 void delay(unsigned long ms) {

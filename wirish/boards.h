@@ -119,19 +119,22 @@ bool boardUsesPin(uint8 pin);
 
 /* Include the appropriate private header from boards/: */
 
+/* FIXME put boards/ before these paths once you stick make into the
+ * IDE; current situation is a hack. */
+
 #ifdef BOARD_maple
-#include "boards/maple.h"
+#include "maple.h"
 #elif defined(BOARD_maple_native)
-#include "boards/maple_native.h"
+#include "maple_native.h"
 #elif defined(BOARD_maple_mini)
-#include "boards/maple_mini.h"
+#include "maple_mini.h"
 #elif defined(BOARD_maple_RET6)
 /*
  * **NOT** MAPLE REV6.  This the **Maple RET6 EDITION**, which is a
  * Maple with an STM32F103RET6 (...RET6) instead of an STM32F103RBT6
  * (...RBT6) on it.  Maple Rev6 (as of March 2011) DOES NOT EXIST.
  */
-#include "boards/maple_RET6.h"
+#include "maple_RET6.h"
 #else
 #error "Board type has not been selected correctly."
 #endif

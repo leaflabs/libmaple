@@ -40,7 +40,7 @@
 #include "pwm.h"
 #include "ext_interrupts.h"
 #include "wirish_math.h"
-#include "time.h"
+#include "wirish_time.h"
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
 #include "usb_serial.h"

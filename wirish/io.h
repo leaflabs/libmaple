@@ -122,10 +122,9 @@ void pinMode(uint8 pin, WiringPinMode mode);
 
 /**
  * Writes a (digital) value to a pin.  The pin must have its
- * mode set to <code>OUTPUT</code> or <code>OUTPUT_OPEN_DRAIN</code>.
+ * mode set to OUTPUT or OUTPUT_OPEN_DRAIN.
  *
- * @param pin Pin to write to. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Pin to write to.
  * @param value Either LOW (write a 0) or HIGH (write a 1).
  * @see pinMode()
  */

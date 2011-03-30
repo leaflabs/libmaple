@@ -35,6 +35,8 @@ have to do this once, so it's usually done in :ref:`lang-setup`\ ).
 Parameter Discussion
 --------------------
 
+.. FIXME generalize Maple-specific information
+
 The pin parameter is the number of the analog input pin to read from.
 Header pins on the Maple with ADC functionality (marked as "AIN" on
 the silkscreen) are:
@@ -49,24 +51,25 @@ Note
 ----
 
 If the analog input pin is not connected to anything, the value
-returned by analogRead() will fluctuate based on a number of factors
-(e.g. the values of the other analog inputs, how close your hand is to
-the board, etc.) in a seemingly random way.
+returned by ``analogRead()`` will fluctuate due to a number of reasons
+(like the values of the other analog inputs, how close your hand is to
+the board, etc.) in a "random" way.
 
 
 Example
 -------
 
- ::
+::
 
+    int analogPin = 3;     // Potentiometer wiper (middle terminal) connected
+                           // to analog pin 3. outside leads to ground and +3.3V.
+                           // You may have to change this value if your board
+                           // cannot perform ADC conversion on pin 3.
 
-    int analogPin = 3;     // potentiometer wiper (middle terminal) connected
-                           // to analog pin 3. outside leads to ground and +3.3V
     int val = 0;           // variable to store the value read
 
     void setup() {
       pinMode(analogPin, INPUT_ANALOG); // set up pin for analog input
-      SerialUSB.begin();                // set up usb virtual COM port
     }
 
     void loop() {
@@ -97,23 +100,27 @@ shift <lang-bitshift>` the value of a Maple readout by 2, like so::
     // be aware that you're losing a lot of precision if you do this
     int adc_reading = analogRead(pin) >> 2;
 
+.. FIXME Mention Native can do analogReference(), when it's time
+
 On the Arduino, the input range and resolution can be changed using
 their implementation of `analogReference()
 <http://arduino.cc/en/Reference/AnalogReference>`_\ . Because of the
 way its hardware (as of Rev 5) was designed, it's not possible to
 implement analogReference on the Maple, so this function doesn't
 exist.  If your inputs lie in a different voltage range than 0V--3.3V,
-you'll need to bring them into that range before using analogRead.
-Some basic tools to accomplish this are `resistor dividers
-<http://en.wikipedia.org/wiki/Voltage_divider>`_ and `Zener diodes
+you'll need to bring them into that range before using
+``analogRead()``.  Some basic tools to accomplish this are `resistor
+dividers <http://en.wikipedia.org/wiki/Voltage_divider>`_ and `Zener
+diodes
 <http://en.wikipedia.org/wiki/Voltage_source#Zener_voltage_source>`_\
-. However, opamps and other powered components can also be used if
-greater precision is required.
+. However, `operational amplifiers
+<http://en.wikipedia.org/wiki/Operational_amplifier>`_ and other
+powered components can also be used if greater precision is required.
 
 See also
 --------
 
-- :ref:`ADC note <adc>`
+- :ref:`ADC tutorial <adc>`
 - `(Arduino) Tutorial: Analog Input Pins <http://arduino.cc/en/Tutorial/AnalogInputPins>`_
 
 .. include:: cc-attribution.txt

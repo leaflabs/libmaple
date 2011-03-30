@@ -63,8 +63,39 @@ enum {
  * @brief Maps each Maple pin to a corresponding stm32_pin_info.
  * @see stm32_pin_info
  */
-extern stm32_pin_info PIN_MAP[];
+extern const stm32_pin_info PIN_MAP[];
 
+/**
+ * @brief Pins capable of PWM output.
+ *
+ * Its length is BOARD_NR_PWM_PINS.
+ */
+extern const uint8 boardPWMPins[];
+
+/**
+ * @brief Array of pins capable of analog input.
+ *
+ * Its length is BOARD_NR_ADC_PINS.
+ */
+extern const uint8 boardADCPins[];
+
+/**
+ * @brief Pins which are connected to external hardware.
+ *
+ * For example, on Maple boards, it always at least includes
+ * BOARD_LED_PIN.  Its length is BOARD_NR_USED_PINS.
+ */
+extern const uint8 boardUsedPins[];
+
+/**
+ * @brief Generic board initialization function.
+ *
+ * This function is called before main().  It ensures that the clocks
+ * and peripherals are configured properly for use with wirish, then
+ * calls boardInit().
+ *
+ * @see boardInit()
+ */
 void init(void);
 
 /**
@@ -77,6 +108,16 @@ void init(void);
  * @see init()
  */
 extern void boardInit(void);
+
+/**
+ * @brief Test if a pin is used for a special purpose on your board.
+ * @param pin Pin to test
+ * @return true if the given pin is in boardUsedPins, and false otherwise.
+ * @see boardUsedPins
+ */
+bool boardUsesPin(uint8 pin);
+
+/* Include the appropriate private header from boards/: */
 
 #ifdef BOARD_maple
 #include "boards/maple.h"

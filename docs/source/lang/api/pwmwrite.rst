@@ -11,6 +11,8 @@ pwmWrite(), the pin will output a steady square wave with the given
 duty cycle.  You can change the duty cycle later by calling pwmWrite()
 again with the same pin and a different duty.
 
+.. FIXME board-specific information
+
 On the Maple, the pins which support PWM are: 0, 1, 2, 3, 5, 6, 7, 8,
 9, 11, 12, 14, 24, 27, and 28.
 

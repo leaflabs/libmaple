@@ -41,6 +41,8 @@ means that programs aren't much larger (or are even smaller).
 Header Numbering and Incompatibilities
 --------------------------------------
 
+.. FIXME generalize Maple-specific information
+
 The numbering of headers is different; on the Maple each GPIO has a
 unique number: D0, D1, D2, all the way up to D37 (actually, there are
 :ref:`a few more <jtag>`...). On the Arduino, the analog pins are

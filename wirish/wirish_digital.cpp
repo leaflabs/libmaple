@@ -33,7 +33,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
     gpio_pin_mode outputMode;
     boolean pwm = false;
 
-    if (pin >= NR_GPIO_PINS) {
+    if (pin >= BOARD_NR_GPIO_PINS) {
         return;
     }
 
@@ -83,7 +83,7 @@ void pinMode(uint8 pin, WiringPinMode mode) {
 
 
 uint32 digitalRead(uint8 pin) {
-    if (pin >= NR_GPIO_PINS) {
+    if (pin >= BOARD_NR_GPIO_PINS) {
         return 0;
     }
 
@@ -92,7 +92,7 @@ uint32 digitalRead(uint8 pin) {
 }
 
 void digitalWrite(uint8 pin, uint8 val) {
-    if (pin >= NR_GPIO_PINS) {
+    if (pin >= BOARD_NR_GPIO_PINS) {
         return;
     }
 
@@ -100,14 +100,14 @@ void digitalWrite(uint8 pin, uint8 val) {
 }
 
 void togglePin(uint8 pin) {
-    if (pin >= NR_GPIO_PINS) {
+    if (pin >= BOARD_NR_GPIO_PINS) {
         return;
     }
 
     gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit);
 }
 
-#define BUTTON_DEBOUNCE_DELAY 10
+#define BUTTON_DEBOUNCE_DELAY 1
 
 uint8 isButtonPressed() {
     if (digitalRead(BOARD_BUTTON_PIN)) {

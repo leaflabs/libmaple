@@ -10,6 +10,12 @@ built-in timer peripherals.  More information on these peripherals
 (including code examples) is available in the :ref:`timers reference
 <timers>`.
 
+.. FIXME update HardwareTimer documentation after redoing it in terms
+.. of the new timer interface.
+
+.. warning:: This class has been deprecated.  It is not available in
+   the current build.
+
 Library Documentation
 ---------------------
 

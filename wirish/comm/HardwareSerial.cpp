@@ -32,10 +32,12 @@
 #include "HardwareSerial.h"
 #include "usart.h"
 
+// FIXME: High density device ports, usages of BOARD_USARTx_yX_PIN
+// instead of holding onto a gpio_dev, tx_pin, rx_pin, timer_dev, and
+// channel_num -- that stuff is all in the PIN_MAP.
 HardwareSerial Serial1(USART1, 4500000UL, GPIOA,  9, 10, TIMER1, 2);
 HardwareSerial Serial2(USART2, 2250000UL, GPIOA,  2,  3, TIMER2, 3);
 HardwareSerial Serial3(USART3, 2250000UL, GPIOB, 10, 11,   NULL, 0);
-// TODO: High density device ports
 
 HardwareSerial::HardwareSerial(uint8 usart_num,
                                uint32 max_baud,

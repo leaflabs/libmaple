@@ -30,6 +30,7 @@
  * @brief  Wirish library type definitions.
  */
 
+#include "libmaple_types.h"
 #include "gpio.h"
 #include "timer.h"
 #include "adc.h"
@@ -55,5 +56,7 @@ typedef struct stm32_pin_info {
     uint8 timer_channel;        /**< Timer channel, or 0 if none. */
     uint8 adc_channel;          /**< Pin ADC channel, or ADCx if none. */
 } stm32_pin_info;
+
+#define __FLASH__ __attr_flash
 
 #endif

@@ -34,7 +34,7 @@
 
 void pwmWrite(uint8 pin, uint16 duty_cycle) {
     timer_dev *dev = PIN_MAP[pin].timer_device;
-    if (pin >= NR_GPIO_PINS || dev == NULL || dev->type == TIMER_BASIC) {
+    if (pin >= BOARD_NR_GPIO_PINS || dev == NULL || dev->type == TIMER_BASIC) {
         return;
     }
 

@@ -40,7 +40,7 @@
 void boardInit(void) {
 }
 
-stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
+extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 
     /* Top header */
 
@@ -89,6 +89,18 @@ stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
     {GPIOC,   NULL, NULL,  7, 0, ADCx}, /* D36/PC7 */
     {GPIOC,   NULL, NULL,  8, 0, ADCx}, /* D37/PC8 */
     {GPIOC,   NULL, NULL,  9, 0, ADCx}  /* D38/PC9 (BUT) */
+};
+
+extern const uint8 boardPWMPins[] __FLASH__ = {
+    0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28
+};
+
+extern const uint8 boardADCPins[] __FLASH__ = {
+    0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28
+};
+
+extern const uint8 boardUsedPins[] __FLASH__ = {
+    BOARD_LED_PIN, BOARD_BUTTON_PIN
 };
 
 #endif

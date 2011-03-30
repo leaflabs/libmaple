@@ -293,23 +293,16 @@ exponent indicators.  Some examples are given in the following table:
 Board-Specific Constants
 ------------------------
 
-This section documents constants whose value might change across
-different LeafLabs boards.  You can use these constants to help ensure
-that your code will be portable across different boards.
+There are several :ref:`board-specific constants <lang-board-values>`
+whose value depends on which LeafLabs board you have.  If you use
+them, it will help make sure that your code will work well on all
+LeafLabs boards, not just the one you have.  This will make it much
+easier to share your code with others.
 
-.. TODO replace "upcoming" when Mini, Native come out
-
-.. _lang-constants-led:
-
-- ``BOARD_LED_PIN``: the number of the pin which connects to the
-  built-in LED.  On the Maple, this is pin 13, but it's not guaranteed
-  to be the same in upcoming boards like the Maple Mini.
-
-.. _lang-constants-but:
-
-- ``BOARD_BUTTON_PIN``: the number of the pin which connects to the
-  built-in button (labeled "BUT").  On the Maple, this is pin 38, but
-  it's not guaranteed to be the same in other boards.
+For example, the pin number connected to the board's built-in LED is
+different on the different boards, but the board-specific constant
+:ref:`BOARD_LED_PIN <lang-board-values-led>` will always be the
+correct value for each board.
 
 See Also
 --------
@@ -325,5 +318,6 @@ See Also
 - :ref:`unsigned long long <lang-unsignedlonglong>`
 - :ref:`float <lang-float>`
 - :ref:`double <lang-double>`
+- :ref:`Board-Specific Values <lang-board-values>`
 
 .. include:: cc-attribution.txt

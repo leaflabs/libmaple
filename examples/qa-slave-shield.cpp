@@ -1,22 +1,20 @@
-// Slave mode for QA shield
+// Slave mode for Quality Assurance test
 
 #include "wirish.h"
 
-// FIXME generalize for Maple Native, Maple Mini (NUM_GPIO, Mini USB
-// breakout pins, etc.)
+#define INTER_TOGGLE_DELAY_NORMAL 5
+#define INTER_TOGGLE_DELAY_SLOW   80
 
-#define LED_PIN BOARD_LED_PIN
-#define NUM_GPIO 38 // Ignore JTAG pins.
+void interToggleDelay(void);
 
 void setup() {
-    /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, HIGH);
+    pinMode(BOARD_LED_PIN, OUTPUT);
+    pinMode(BOARD_BUTTON_PIN, INPUT);
 
-    for(int i = 0; i < NUM_GPIO; i++) {
-        if (i == BOARD_LED_PIN) {
+    // All unused pins start out low.
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
             continue;
-        }
         pinMode(i, OUTPUT);
         digitalWrite(i, LOW);
     }
@@ -28,16 +26,28 @@ void loop() {
     delay(100);
     toggleLED();
 
-    for(int i = 0; i < NUM_GPIO; i++) {
-        if (i == BOARD_LED_PIN) {
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
             continue;
-        }
-        togglePin(i);
-        delay(5);
-        togglePin(i);
-        delay(5);
+
+        // Bring just this pin high.
+        digitalWrite(i, HIGH);
+        // Give the master time to detect if any other pins also went high.
+        interToggleDelay();
+        // Bring this pin back low again; all pins should now be low.
+        digitalWrite(i, LOW);
+        // Give the master time to detect if any pins are still high.
+        interToggleDelay();
     }
 }
+
+void interToggleDelay(void) {
+    if (digitalRead(BOARD_BUTTON_PIN)) { // don't pay the debouncing time
+        delay(INTER_TOGGLE_DELAY_SLOW);
+    } else {
+        delay(INTER_TOGGLE_DELAY_NORMAL);
+    }
+ }
 
 // Force init to be called *first*, i.e. before static object allocation.
 // Otherwise, statically allocated objects that need libmaple may fail.
@@ -48,7 +58,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

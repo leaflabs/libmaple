@@ -30,7 +30,7 @@
  * at 72MHz.  APB1 is clocked at 36MHz.
  */
 
-#include "wirish.h"
+#include "boards.h"
 
 #include "flash.h"
 #include "rcc.h"
@@ -46,15 +46,6 @@ static void setupClocks(void);
 static void setupADC(void);
 static void setupTimers(void);
 
-/**
- * @brief Generic board initialization function.
- *
- * This function is called before main().  It ensures that the clocks
- * and peripherals are configured properly for use with wirish, then
- * calls boardInit().
- *
- * @see boardInit()
- */
 void init(void) {
     setupFlash();
     setupClocks();
@@ -66,6 +57,17 @@ void init(void) {
     setupTimers();
     setupUSB();
     boardInit();
+}
+
+/* You could farm this out to the files in boards/ if e.g. it takes
+ * too long to test on Maple Native (all those FSMC pins...). */
+bool boardUsesPin(uint8 pin) {
+    for (int i = 0; i < BOARD_NR_USED_PINS; i++) {
+        if (pin == boardUsedPins[i]) {
+            return true;
+        }
+    }
+    return false;
 }
 
 static void setupFlash(void) {

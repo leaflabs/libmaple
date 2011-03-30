@@ -43,7 +43,7 @@ static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
  * @see ExtIntTriggerMode
  */
 void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
-    if (pin >= NR_GPIO_PINS || !handler) {
+    if (pin >= BOARD_NR_GPIO_PINS || !handler) {
         return;
     }
 
@@ -60,7 +60,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
  * @param pin Pin number to detach any interrupt from.
  */
 void detachInterrupt(uint8 pin) {
-    if (pin >= NR_GPIO_PINS) {
+    if (pin >= BOARD_NR_GPIO_PINS) {
         return;
     }
 

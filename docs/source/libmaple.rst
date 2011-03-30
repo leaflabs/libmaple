@@ -30,12 +30,12 @@ wrappers and code to imitate the Arduino programming library.
 
     git clone git://github.com/leaflabs/libmaple.git
 
-**Table of contents:**
+.. TODO after finishing refactor: create, style, and host a pure
+.. Doxygen libmaple reference docs.  This implies determining a stable
+.. API.
 
-.. toctree::
-   :maxdepth: 2
+.. **Table of contents:**
 
-   Guide to using GCC's ARM target <arm-gcc>
+.. .. toctree::
+..    :maxdepth: 2
 
-.. TODO LATER create, style, and host a pure Doxygen libmaple
-.. reference docs.  This implies determining a stable API.

@@ -47,8 +47,7 @@
 #define BOARD_LED_PIN           13
 
 /* Note: UART4 and UART5 have pins which aren't broken out :( */
-#define NR_USARTS               3
-
+#define BOARD_NR_USARTS         3
 #define BOARD_USART1_TX_PIN     7
 #define BOARD_USART1_RX_PIN     8
 #define BOARD_USART2_TX_PIN     1
@@ -56,6 +55,9 @@
 #define BOARD_USART3_TX_PIN     29
 #define BOARD_USART3_RX_PIN     30
 
-#define NR_GPIO_PINS            39
+#define BOARD_NR_GPIO_PINS      39
+#define BOARD_NR_PWM_PINS       16
+#define BOARD_NR_ADC_PINS       15
+#define BOARD_NR_USED_PINS      2
 
 #endif

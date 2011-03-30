@@ -10,6 +10,9 @@ The Maple can be programmed in the `Wiring
 <http://www.wiring.org.co/reference/>`_ language, which is the same
 language used to program the `Arduino <http://arduino.cc/>`_ boards.
 
+.. TODO Wiring tutorial -- just describe setup()/loop(), then link to
+.. some of the the bajillion external tutorials
+
 C or C++ programmers curious about the differences between the Wiring
 language and C++ may wish to skip to the
 :ref:`arduino_c_for_c_hackers`.
@@ -24,6 +27,21 @@ Maple Language Reference
 
 The following table summarizes the available core language features.
 A more exhaustive index is available at the :ref:`language-index`.
+
+**Looking for something else?** 
+
+- See the :ref:`libraries` for extra built-in libraries for dealing
+  with different kinds of hardware.
+
+.. FIXME mention Maple Native supports malloc(), free(), operator
+.. new(), and operator delete(), when that is a true thing to say.
+
+- If you're looking for something from the C standard library (like
+  ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
+  <arm-gcc>` used to compile your programs is configured to link
+  against `newlib <http://sourceware.org/newlib/>`_, and allows the
+  use of any of its header files.  However, dynamic memory allocation
+  (``malloc()``, etc.) is not available.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -40,13 +58,13 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |* :ref:`true <lang-constants-true>` |         |* :ref:`togglePin() <lang-togglepin>`              |
 |* :ref:`for <lang-for>`                     |  :ref:`false <lang-constants-false>`         |                                                   |
 |                                            |                                              |* :ref:`toggleLED() <lang-toggleled>`              |
-|* :ref:`switch/case <lang-switchcase>`      |* :ref:`BOARD_LED_PIN <lang-constants-led>` | |                                                   |
-|                                            |  :ref:`BOARD_BUTTON_PIN <lang-constants-but>`|* :ref:`isButtonPressed() <lang-isbuttonpressed>`  |
-|* :ref:`while <lang-while>`                 |                                              |                                                   |
-|                                            |* :ref:`Constants                             |* :ref:`waitForButtonPress()                       |
-|* :ref:`do...while <lang-dowhile>`          |  <lang-constants>` (:ref:`integers           |  <lang-waitforbuttonpress>`                       |
-|                                            |  <lang-constants-integers>`, :ref:`floating  |                                                   |
-|* :ref:`break <lang-break>`                 |  point <lang-constants-fp>`)                 |**Analog I/O**                                     |
+|* :ref:`switch/case <lang-switchcase>`      |* :ref:`Constants                             |                                                   |
+|                                            |  <lang-constants>` (:ref:`integers           |* :ref:`isButtonPressed() <lang-isbuttonpressed>`  |
+|* :ref:`while <lang-while>`                 |  <lang-constants-integers>`, :ref:`floating  |                                                   |
+|                                            |  point <lang-constants-fp>`)                 |* :ref:`waitForButtonPress()                       |
+|* :ref:`do...while <lang-dowhile>`          |                                              |  <lang-waitforbuttonpress>`                       |
+|                                            |* :ref:`Board-specific values                 |                                                   |
+|* :ref:`break <lang-break>`                 |  <lang-board-values>`                        |**Analog I/O**                                     |
 |                                            |                                              |                                                   |
 |* :ref:`continue <lang-continue>`           |**Data Types**                                |* :ref:`analogRead() <lang-analogread>`            |
 |                                            |                                              |                                                   |
@@ -76,7 +94,7 @@ A more exhaustive index is available at the :ref:`language-index`.
 |**Arithmetic Operators**                    |  <lang-int>`                                 |                                                   |
 |                                            |                                              |* :ref:`delayMicroseconds()                        |
 |* :ref:`= <lang-assignment>`                |* ``unsigned long`` (4 bytes), synonym for    |  <lang-delaymicroseconds>`                        |
-|  (assignment operator)                     |  :ref:`unsigned int <lang-unsignedint>`      |                                                   |
+|  (assignment)                              |  :ref:`unsigned int <lang-unsignedint>`      |                                                   |
 |                                            |                                              |                                                   |
 |* :ref:`+ <lang-arithmetic>` (addition)     |* :ref:`long long <lang-longlong>` (8 bytes)  |**Math**                                           |
 |                                            |                                              |                                                   |
@@ -153,13 +171,13 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |                                              |                                                   |
 |* :ref:`++ <lang-increment>`                |                                              |* :ref:`Serial <lang-serial>`                      |
 |  (increment)                               |                                              |                                                   |
-|                                            |                                              |**Looking for something else?**                    |
+|                                            |                                              |                                                   |
 |* :ref:`- - <lang-increment>`               |                                              |                                                   |
-|  (decrement)                               |                                              | See the :ref:`libraries` page for interfacing with|
-|                                            |                                              | particular types of hardware.  Maple links        |
-|* :ref:`+= <lang-compoundarithmetic>`       |                                              | against `newlib <http://sourceware.org/newlib/>`_ |
-|  (compound add)                            |                                              | and allows the use of any of its functions; see   |
-|                                            |                                              | its documentation for more details.               |
+|  (decrement)                               |                                              |                                                   |
+|                                            |                                              |                                                   |
+|* :ref:`+= <lang-compoundarithmetic>`       |                                              |                                                   |
+|  (compound add)                            |                                              |                                                   |
+|                                            |                                              |                                                   |
 |* :ref:`-=                                  |                                              |                                                   |
 |  <lang-compoundarithmetic>` (compound      |                                              |                                                   |
 |  subtract)                                 |                                              |                                                   |

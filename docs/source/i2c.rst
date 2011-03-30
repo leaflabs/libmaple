@@ -4,11 +4,16 @@
 |i2c|
 =====
 
+.. FIXME update this documentation once you write the Wire library on
+.. top of libmaple i2c.
+
+.. FIXME generalize Maple-specific documentation
+
 .. note::
 
-   The |i2c| interface is currently only available from the 'i2c' branch
-   of the github `libmaple <http://github.com/leaflabs/libmaple>`_
-   repository.
+   The |i2c| interface is currently only available from the 'refactor'
+   branch of the github `libmaple
+   <http://github.com/leaflabs/libmaple>`_ repository.
 
 |i2c| is a crude and easy-to-hack serial protocol that requires only
 two wires/channels for communication between many devices.  Every
@@ -56,10 +61,8 @@ Function Reference
 ------------------
 
 The function API for |i2c| is not finished! See the `source code
-<http://github.com/leaflabs/libmaple/blob/i2c/libmaple/i2c.h>`_ for
-now.
-
-.. TODO link to libmaple I2C docs once (1) finished, (2) in master
+<https://github.com/leaflabs/libmaple/blob/refactor/libmaple/i2c.h>`_
+for now.
 
 SMBus
 -----
@@ -67,8 +70,6 @@ SMBus
 The STM32 microcontroller has hardware support for SMBus; we simply
 have not written software for it. The SMBAL line for i2c1 is on header
 D4 and for i2c2 is on D31.
-
-.. TODO link to libmaple SMBus docs once (1) finished, (2) in master
 
 .. _i2c-recommended-reading:
 

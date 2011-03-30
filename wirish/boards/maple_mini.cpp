@@ -41,7 +41,7 @@ void boardInit(void) {
     afio_mapr_swj_config(AFIO_MAPR_SWJ_NO_JTAG_NO_SW);
 }
 
-stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
+extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 
     /* Top header */
 
@@ -82,6 +82,21 @@ stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
     {GPIOB,   NULL, NULL, 12, 0, ADCx}, /* D31/PB12 */
     {GPIOB, TIMER4, NULL,  8, 3, ADCx}, /* D32/PB8 */
     {GPIOB, TIMER3, ADC1,  1, 4,    9}, /* D33/PB1 */
+};
+
+extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
+    3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27
+};
+
+extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
+    3, 4, 5, 6, 7, 8, 9, 10, 11, 33  // NB 33 is LED
+};
+
+#define USB_DP 23
+#define USB_DM 24
+
+extern const uint8 boardUsedPins[BOARD_NR_USED_PINS] __FLASH__ = {
+    BOARD_LED_PIN, BOARD_BUTTON_PIN, USB_DP, USB_DM
 };
 
 #endif

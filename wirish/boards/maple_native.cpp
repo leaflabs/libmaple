@@ -39,7 +39,7 @@ void boardInit(void) {
     initNativeSRAM();
 }
 
-stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
+extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 
     /* Top header */
 
@@ -150,6 +150,20 @@ stm32_pin_info PIN_MAP[NR_GPIO_PINS] = {
     {GPIOD,   NULL, NULL,  9, 0, ADCx}, /* D97/PD9 */
     {GPIOG,   NULL, NULL,  5, 0, ADCx}, /* D98/PG5 */
     {GPIOD,   NULL, NULL, 10, 0, ADCx}  /* D99/PD10 */
+};
+
+extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
+    12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45, 46, 47, 48, 49, 50, 53, 54
+};
+
+extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
+    6, 7, 8, 9, 10, 11, 39, 40, 41, 42, 43, 45, 46, 47, 48, 49, 50, 51, 52, 53,
+    54
+};
+
+/* FIXME! see comment by BOARD_NR_USED_PINS in maple_native.h */
+extern const uint8 boardUsedPins[BOARD_NR_USED_PINS] __FLASH__ = {
+    BOARD_LED_PIN, BOARD_BUTTON_PIN
 };
 
 #endif

@@ -46,8 +46,7 @@
 #define BOARD_BUTTON_PIN          32
 #define BOARD_LED_PIN             33
 
-#define NR_USARTS                 3
-
+#define BOARD_NR_USARTS           3
 #define BOARD_USART1_TX_PIN       26
 #define BOARD_USART1_RX_PIN       25
 #define BOARD_USART2_TX_PIN       9
@@ -55,6 +54,9 @@
 #define BOARD_USART3_TX_PIN       1
 #define BOARD_USART3_RX_PIN       0
 
-#define NR_GPIO_PINS              34
+#define BOARD_NR_GPIO_PINS        34
+#define BOARD_NR_PWM_PINS         12
+#define BOARD_NR_ADC_PINS         10
+#define BOARD_NR_USED_PINS         4
 
 #endif

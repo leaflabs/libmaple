@@ -38,6 +38,7 @@ Have fun!
    Bootloader <bootloader>
    Troubleshooting <troubleshooting>
    Known Problems <errata>
+   Notes on GCC's ARM target <arm-gcc>
 
 .. _index-hardware:
 

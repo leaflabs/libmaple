@@ -13,5 +13,5 @@ Library Documentation
 See Also
 --------
 
-- :ref:`BOARD_LED_PIN <lang-constants-led>`
+- :ref:`BOARD_LED_PIN <lang-board-values-led>`
 - :ref:`togglePin() <lang-togglepin>`

@@ -42,7 +42,7 @@
 #define BOARD_LED_PIN           13
 
 /* Number of USARTs/UARTs whose pins are broken out to headers */
-#define NR_USARTS               3
+#define BOARD_NR_USARTS         3
 
 /* Default USART pin numbers (not considering AFIO remap) */
 #define BOARD_USART1_TX_PIN     7
@@ -53,7 +53,17 @@
 #define BOARD_USART3_RX_PIN     30
 
 /* Total number of GPIO pins that are broken out to headers and
-   intended for general use. */
-#define NR_GPIO_PINS            39
+ * intended for general use. */
+#define BOARD_NR_GPIO_PINS      39
+
+/* Number of pins capable of PWM output */
+#define BOARD_NR_PWM_PINS       16
+
+/* Number of pins capable of ADC conversion */
+#define BOARD_NR_ADC_PINS       15
+
+/* Number of pins already connected to external hardware.  For Maple,
+ * these are just BOARD_LED_PIN and BOARD_BUTTON_PIN. */
+#define BOARD_NR_USED_PINS       2
 
 #endif

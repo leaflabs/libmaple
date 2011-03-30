@@ -14,4 +14,6 @@ Library Documentation
 See Also
 --------
 
+- :ref:`Board-specific values <lang-board-values>`
+- :ref:`BOARD_BUTTON_PIN <lang-board-values-but>`
 - :ref:`lang-isbuttonpressed`

@@ -26,13 +26,13 @@ programmers familiar with the Arduino language.
 |                                  |                                    |
 +----------------------------------+------------------------------------+
 
-.. Unimplemented in libmaple or not part of current release:
+.. Unimplemented or not part of current release:
 
 .. toctree::
    :hidden:
 
+   lang/unimplemented/tone.rst
    lang/unimplemented/notone.rst
    lang/unimplemented/pulsein.rst
    lang/unimplemented/stringclass.rst
    lang/unimplemented/stringobject.rst
-   lang/unimplemented/tone.rst

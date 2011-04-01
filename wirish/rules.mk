@@ -27,7 +27,7 @@ cppSRCS_$(d) := wirish_math.cpp		 \
                 cxxabi-compat.cpp	 \
 		wirish_shift.cpp	 \
 		wirish_analog.cpp	 \
-		time.cpp		 \
+		wirish_time.cpp		 \
 		pwm.cpp 		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp	 \

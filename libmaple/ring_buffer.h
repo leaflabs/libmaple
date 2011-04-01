@@ -67,15 +67,17 @@ typedef struct ring_buffer {
  *
  *  @param buf  Buffer to store items into
  */
-__attribute__((unused))
-static void rb_init(ring_buffer *rb, uint16 size, uint8 *buf) {
+static inline void rb_init(ring_buffer *rb, uint16 size, uint8 *buf) {
     rb->head = 0;
     rb->tail = 0;
     rb->size = size - 1;
     rb->buf = buf;
 }
 
-/** Return the number of elements stored in the ring buffer. */
+/**
+ * @brief Return the number of elements stored in the ring buffer.
+ * @param rb Buffer whose elements to count.
+ */
 static inline uint16 rb_full_count(ring_buffer *rb) {
     volatile ring_buffer *arb = rb;
     int32 size = arb->tail - arb->head;
@@ -85,24 +87,37 @@ static inline uint16 rb_full_count(ring_buffer *rb) {
     return (uint16)size;
 }
 
-/** Return true if and only if the ring buffer is full. */
+/**
+ * @brief Returns true if and only if the ring buffer is full.
+ * @brief rb Buffer to test.
+ */
 static inline int rb_is_full(ring_buffer *rb) {
     return (rb->tail + 1 == rb->head) ||
         (rb->tail == rb->size && rb->head == 0);
 }
 
-/** Return true if and only if the ring buffer is empty. */
+/**
+ * @brief Returns true if and only if the ring buffer is empty.
+ * @param rb Buffer to test.
+ */
 static inline int rb_is_empty(ring_buffer *rb) {
     return rb->head == rb->tail;
 }
 
-/** Append element onto the end of the ring buffer. */
+/**
+ * Append element onto the end of a ring buffer.
+ * @param rb Buffer to append onto.
+ * @param element Value to append.
+ */
 static inline void rb_insert(ring_buffer *rb, uint8 element) {
     rb->buf[rb->tail] = element;
     rb->tail = (rb->tail == rb->size) ? 0 : rb->tail + 1;
 }
 
-/** Remove and return the first item from the ring buffer. */
+/**
+ * @brief Remove and return the first item from a ring buffer.
+ * @param rb Buffer to remove from, must contain at least one element.
+ */
 static inline uint8 rb_remove(ring_buffer *rb) {
     uint8 ch = rb->buf[rb->head];
     rb->head = (rb->head == rb->size) ? 0 : rb->head + 1;
@@ -110,8 +125,12 @@ static inline uint8 rb_remove(ring_buffer *rb) {
 }
 
 /**
+ * @brief Attempt to remove the first item from a ring buffer.
+ *
  * If the ring buffer is nonempty, removes and returns its first item.
  * If it is empty, does nothing and returns a negative value.
+ *
+ * @param rb Buffer to attempt to remove from.
  */
 static inline int16 rb_safe_remove(ring_buffer *rb) {
     return rb_is_empty(rb) ? -1 : rb_remove(rb);
@@ -133,12 +152,16 @@ static inline int rb_safe_insert(ring_buffer *rb, uint8 element) {
 }
 
 /**
- * Append an item onto the end of a non-full ring buffer.  If the
- * buffer is full, removes its first item, then inserts the new
+ * @brief Append an item onto the end of a non-full ring buffer.
+ *
+ * If the buffer is full, removes its first item, then inserts the new
  * element at the end.
  *
- * On success, returns -1.  If an element was popped, returns the
- * popped value. */
+ * @param rb Ring buffer to insert into.
+ * @param element Value to insert into ring buffer.
+ * @return On success, returns -1.  If an element was popped, returns
+ *         the popped value.
+ */
 static inline int rb_push_insert(ring_buffer *rb, uint8 element) {
     int ret = -1;
     if (rb_is_full(rb)) {
@@ -148,7 +171,10 @@ static inline int rb_push_insert(ring_buffer *rb, uint8 element) {
     return ret;
 }
 
-/** Discard all items from the buffer */
+/**
+ * @brief Discard all items from a ring buffer.
+ * @param rb Ring buffer to discard all items from.
+ */
 static inline void rb_reset(ring_buffer *rb) {
     rb->tail = rb->head;
 }
@@ -156,8 +182,6 @@ static inline void rb_reset(ring_buffer *rb) {
 #ifdef __cplusplus
 } // extern "C"
 #endif
-
-
 
 #endif
 

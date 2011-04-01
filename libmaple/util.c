@@ -69,8 +69,8 @@ void __error(void) {
     usart_disable_all();
 
     /* Turn the USB interrupt back on so the bootloader keeps on functioning */
-    nvic_irq_enable(NVIC_INT_USBHP);
-    nvic_irq_enable(NVIC_INT_USBLP);
+    nvic_irq_enable(NVIC_USB_HP_CAN_TX);
+    nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
 
     /* Reenable global interrupts */
     nvic_globalirq_enable();

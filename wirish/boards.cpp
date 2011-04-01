@@ -43,13 +43,14 @@
 
 static void setupFlash(void);
 static void setupClocks(void);
+static void setupNVIC(void);
 static void setupADC(void);
 static void setupTimers(void);
 
 void init(void) {
     setupFlash();
     setupClocks();
-    nvic_init();
+    setupNVIC();
     systick_init(SYSTICK_RELOAD_VAL);
     gpio_init_all();
     afio_init();
@@ -88,6 +89,18 @@ static void setupClocks() {
     rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
     rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
     rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
+}
+
+static void setupNVIC() {
+#ifdef VECT_TAB_FLASH
+    nvic_init(USER_ADDR_ROM, 0);
+#elif defined VECT_TAB_RAM
+    nvic_init(USER_ADDR_RAM, 0);
+#elif defined VECT_TAB_BASE
+    nvic_init((uint32)0x08000000, 0);
+#else
+#error "You must select a base address for the vector table."
+#endif
 }
 
 static void adcDefaultConfig(const adc_dev* dev);

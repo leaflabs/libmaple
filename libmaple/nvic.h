@@ -24,115 +24,170 @@
 
 /**
  * @file nvic.h
- * @brief Nested interrupt controller defines and prototypes
+ * @brief Nested vector interrupt controller support.
  */
 
 #ifndef _NVIC_H_
 #define _NVIC_H_
 
+#include "libmaple_types.h"
+
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-#define NVIC_INT_USBHP      19
-#define NVIC_INT_USBLP      20
-
-/* NVIC Interrupt Enable registers  */
-#define NVIC_ISER0          0xE000E100
-#define NVIC_ISER1          0xE000E104
-/* NVIC_ISER2 only on connectivity line */
-
-/* NVIC Interrupt Clear registers  */
-#define NVIC_ICER0          0xE000E180
-#define NVIC_ICER1          0xE000E184
-/* NVIC_ICER2 only on connectivity line */
-
-/* NVIC Priority  */
-#define NVIC_PRI_BASE       0xE000E400
-
-/* System control registers  */
-#define SCB_VTOR            0xE000ED08  // Vector table offset register
-
-#define NVIC_BASE           0xE000E100
-#define NVIC                ((nvic_reg_map*)NVIC_BASE)
-
+/** NVIC register map type. */
 typedef struct nvic_reg_map {
-  __io uint32 ISER[8];                 // Interrupt Set Enable Registers
-       uint32 RESERVED0[24];
-  __io uint32 ICER[8];                 // Interrupt Clear Enable Registers
-       uint32 RSERVED1[24];
-  __io uint32 ISPR[8];                 // Interrupt Set Pending Registers
-       uint32 RESERVED2[24];
-  __io uint32 ICPR[8];                 // Interrupt Clear Pending Registers
-       uint32 RESERVED3[24];
-  __io uint32 IABR[8];                 // Interrupt Active bit Registers
-       uint32 RESERVED4[56];
-  __io uint8  IP[240];                 // Interrupt Priority Registers
-       uint32 RESERVED5[644];
-  __io uint32 STIR;                    // Software Trigger Interrupt Registers
+    __io uint32 ISER[8];      /**< Interrupt Set Enable Registers */
+    uint32 RESERVED0[24];     /**< Reserved */
+    __io uint32 ICER[8];      /**< Interrupt Clear Enable Registers */
+    uint32 RSERVED1[24];      /**< Reserved */
+    __io uint32 ISPR[8];      /**< Interrupt Set Pending Registers */
+    uint32 RESERVED2[24];     /**< Reserved */
+    __io uint32 ICPR[8];      /**< Interrupt Clear Pending Registers */
+    uint32 RESERVED3[24];     /**< Reserved */
+    __io uint32 IABR[8];      /**< Interrupt Active bit Registers */
+    uint32 RESERVED4[56];     /**< Reserved */
+    __io uint8  IP[240];      /**< Interrupt Priority Registers */
+    uint32 RESERVED5[644];    /**< Reserved */
+    __io uint32 STIR;         /**< Software Trigger Interrupt Registers */
 } nvic_reg_map;
 
+/** NVIC register map base pointer. */
+#define NVIC_BASE                       ((nvic_reg_map*)0xE000E100)
+
+/**
+ * Interrupt vector table interrupt numbers.  Each enumerator is the
+ * position of the corresponding interrupt in the vector table. */
 typedef enum nvic_irq_num {
-    NVIC_NMI            = -14,
-    NVIC_MEM_MANAGE     = -12,
-    NVIC_BUS_FAULT      = -11,
-    NVIC_USAGE_FAULT    = -10,
-    NVIC_SVC            = -5,
-    NVIC_DEBUG_MON      = -4,
-    NVIC_PEND_SVC       = -2,
-    NVIC_SYSTICK        = -1,
-
-    NVIC_TIMER1_BRK     = 24,
-    NVIC_TIMER1_UP      = 25,
-    NVIC_TIMER1_TRG_COM = 26,
-    NVIC_TIMER1_CC      = 27,
-    NVIC_TIMER2         = 28,
-    NVIC_TIMER3         = 29,
-    NVIC_TIMER4         = 30,
-    NVIC_TIMER5         = 50,
-    NVIC_TIMER6         = 54,
-    NVIC_TIMER7         = 55,
-    NVIC_TIMER8_BRK     = 43,
-    NVIC_TIMER8_UP      = 44,
-    NVIC_TIMER8_TRG_COM = 45,
-    NVIC_TIMER8_CC      = 46,
-
-    NVIC_USART1         = 37,
-    NVIC_USART2         = 38,
-    NVIC_USART3         = 39,
-    NVIC_UART4          = 52,
-    NVIC_UART5          = 53,
-
-    NVIC_EXTI0          = 6,
-    NVIC_EXTI1          = 7,
-    NVIC_EXTI2          = 8,
-    NVIC_EXTI3          = 9,
-    NVIC_EXTI4          = 10,
-    NVIC_EXTI9_5        = 23,
-    NVIC_EXTI15_10      = 40,
-
-    NVIC_DMA_CH1        = 11,
-    NVIC_DMA_CH2        = 12,
-    NVIC_DMA_CH3        = 13,
-    NVIC_DMA_CH4        = 14,
-    NVIC_DMA_CH5        = 15,
-    NVIC_DMA_CH6        = 16,
-    NVIC_DMA_CH7        = 17,
-
-    NVIC_I2C1_EV        = 31,
-    NVIC_I2C1_ER        = 32,
-    NVIC_I2C2_EV        = 33,
-    NVIC_I2C2_ER        = 34
+    NVIC_NMI            = -14,  /**< Non-maskable interrupt */
+    NVIC_HARDFAULT      = -13,  /**< Hard fault (all class of fault) */
+    NVIC_MEM_MANAGE     = -12,  /**< Memory management */
+    NVIC_BUS_FAULT      = -11,  /**< Bus fault: prefetch fault, memory
+                                     access fault. */
+    NVIC_USAGE_FAULT    = -10,  /**< Usage fault: Undefined instruction or
+                                     illegal state. */
+    NVIC_SVC            = -5,   /**< System service call via SWI insruction */
+    NVIC_DEBUG_MON      = -4,   /**< Debug monitor */
+    NVIC_PEND_SVC       = -2,   /**< Pendable request for system service */
+    NVIC_SYSTICK        = -1,   /**< System tick timer */
+    NVIC_WWDG           = 0,    /**< Window watchdog interrupt */
+    NVIC_PVD            = 1,    /**< PVD through EXTI line detection */
+    NVIC_TAMPER         = 2,    /**< Tamper */
+    NVIC_RTC            = 3,    /**< Real-time clock */
+    NVIC_FLASH          = 4,    /**< Flash */
+    NVIC_RCC            = 5,    /**< Reset and clock control */
+    NVIC_EXTI0          = 6,    /**< EXTI line 0 */
+    NVIC_EXTI1          = 7,    /**< EXTI line 1 */
+    NVIC_EXTI2          = 8,    /**< EXTI line 2 */
+    NVIC_EXTI3          = 9,    /**< EXTI line 3 */
+    NVIC_EXTI4          = 10,   /**< EXTI line 4 */
+    NVIC_DMA_CH1        = 11,   /**< DMA1 channel 1 */
+    NVIC_DMA_CH2        = 12,   /**< DMA1 channel 2 */
+    NVIC_DMA_CH3        = 13,   /**< DMA1 channel 3 */
+    NVIC_DMA_CH4        = 14,   /**< DMA1 channel 4 */
+    NVIC_DMA_CH5        = 15,   /**< DMA1 channel 5 */
+    NVIC_DMA_CH6        = 16,   /**< DMA1 channel 6 */
+    NVIC_DMA_CH7        = 17,   /**< DMA1 channel 7 */
+    NVIC_ADC1_2         = 18,   /**< ADC1 and ADC2 */
+    NVIC_USB_HP_CAN_TX  = 19,   /**< USB high priority or CAN TX */
+    NVIC_USB_LP_CAN_RX0 = 20,   /**< USB low priority or CAN RX0 */
+    NVIC_CAN_RX1        = 21,   /**< CAN RX1 */
+    NVIC_CAN_SCE        = 22,   /**< CAN SCE */
+    NVIC_EXTI9_5        = 23,   /**< EXTI line [9:5] */
+    NVIC_TIMER1_BRK     = 24,   /**< Timer 1 break */
+    NVIC_TIMER1_UP      = 25,   /**< Timer 1 update */
+    NVIC_TIMER1_TRG_COM = 26,   /**< Timer 1 trigger and commutation */
+    NVIC_TIMER1_CC      = 27,   /**< Timer 1 capture/compare */
+    NVIC_TIMER2         = 28,   /**< Timer 2 */
+    NVIC_TIMER3         = 29,   /**< Timer 3 */
+    NVIC_TIMER4         = 30,   /**< Timer 4 */
+    NVIC_I2C1_EV        = 31,   /**< I2C1 event */
+    NVIC_I2C1_ER        = 32,   /**< I2C1 error */
+    NVIC_I2C2_EV        = 33,   /**< I2C2 event */
+    NVIC_I2C2_ER        = 34,   /**< I2C2 error */
+    NVIC_SPI1           = 35,   /**< SPI1 */
+    NVIC_SPI2           = 36,   /**< SPI2 */
+    NVIC_USART1         = 37,   /**< USART1 */
+    NVIC_USART2         = 38,   /**< USART2 */
+    NVIC_USART3         = 39,   /**< USART3 */
+    NVIC_EXTI15_10      = 40,   /**< EXTI line [15:10] */
+    NVIC_RTCALARM       = 41,   /**< RTC alarm through EXTI line */
+    NVIC_USBWAKEUP      = 42,   /**< USB wakeup from suspend through
+                                     EXTI line */
+    NVIC_TIMER8_BRK     = 43,   /**< Timer 8 break */
+    NVIC_TIMER8_UP      = 44,   /**< Timer 8 update */
+    NVIC_TIMER8_TRG_COM = 45,   /**< Timer 8 trigger and commutation */
+    NVIC_TIMER8_CC      = 46,   /**< Timer 8 capture/compare */
+#ifdef STM32_HIGH_DENSITY
+    NVIC_ADC3           = 47,   /**< ADC3 */
+    NVIC_FSMC           = 48,   /**< FSMC */
+    NVIC_SDIO           = 49,   /**< SDIO */
+    NVIC_TIMER5         = 50,   /**< Timer 5 */
+    NVIC_SPI3           = 51,   /**< SPI3 */
+    NVIC_UART4          = 52,   /**< UART4 */
+    NVIC_UART5          = 53,   /**< UART5 */
+    NVIC_TIMER6         = 54,   /**< Timer 6 */
+    NVIC_TIMER7         = 55,   /**< Timer 7 */
+    NVIC_DMA2_CH1       = 56,   /**< DMA2 channel 1 */
+    NVIC_DMA2_CH2       = 57,   /**< DMA2 channel 2 */
+    NVIC_DMA2_CH3       = 58,   /**< DMA2 channel 3 */
+    NVIC_DMA2_CH4_5     = 59,   /**< DMA2 channels 4 and 5 */
+#endif
 } nvic_irq_num;
 
-#define nvic_globalirq_enable()   asm volatile("cpsie i")
-#define nvic_globalirq_disable()  asm volatile("cpsid i")
+void nvic_init(uint32 vector_table_address, uint32 offset);
+void nvic_set_vector_table(uint32 address, uint32 offset);
+void nvic_set_priority(nvic_irq_num irqn, uint8 priority);
 
-void nvic_init(void);
-void nvic_irq_enable(uint32 device);
-void nvic_irq_disable(uint32 device);
-void nvic_irq_disable_all(void);
-void nvic_set_priority(int32 irqn, uint8 priority);
+/**
+ * Enables interrupts and configurable fault handlers (clear PRIMASK).
+ */
+static inline void nvic_globalirq_enable() {
+    asm volatile("cpsie i");
+}
+
+/**
+ * Disable interrupts and configurable fault handlers (set PRIMASK).
+ */
+static inline void nvic_globalirq_disable() {
+    asm volatile("cpsid i");
+}
+
+/**
+ * @brief Enable interrupt irq_num
+ * @param irq_num Interrupt to enable
+ */
+static inline void nvic_irq_enable(nvic_irq_num irq_num) {
+    NVIC_BASE->ISER[irq_num / 32] = BIT(irq_num % 32);
+}
+
+/**
+ * @brief Disable interrupt irq_num
+ * @param irq_num Interrupt to disable
+ */
+static inline void nvic_irq_disable(nvic_irq_num irq_num) {
+    NVIC_BASE->ICER[irq_num / 32] = BIT(irq_num % 32);
+}
+
+/**
+ * @brief Quickly disable all interrupts.
+ *
+ * Calling this function is significantly faster than calling
+ * nvic_irq_disable() in a loop.
+ */
+static inline void nvic_irq_disable_all(void) {
+    /* Note: This only works up to XL density.  The fix for
+     * connectivity line is:
+     *
+     *     NVIC_BASE->ICER[2] = 0xF;
+     *
+     * We don't support connectivity line devices (yet), so leave it
+     * alone for now.
+     */
+    NVIC_BASE->ICER[0] = 0xFFFFFFFF;
+    NVIC_BASE->ICER[1] = 0xFFFFFFFF;
+}
 
 #ifdef __cplusplus
 }

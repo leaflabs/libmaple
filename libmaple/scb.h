@@ -29,34 +29,32 @@
 #ifndef _SCB_H_
 #define _SCB_H_
 
-/* FIXME this definition is missing doxygen comments */
-
+/** System control block register map */
 typedef struct scb_reg_map {
-  __io uint32 CPUID;            // CPU ID Base Register
-  __io uint32 ICSR;             // Interrupt Control State Register
-  __io uint32 VTOR;             // Vector Table Offset Register
-  __io uint32 AIRCR;            // Application Interrupt / Reset Control Register
-  __io uint32 SCR;              // System Control Register
-  __io uint32 CCR;              // Configuration Control Register
-  __io uint8  SHP[12];          // System Handlers Priority Registers (4-7, 8-11, 12-15)
-  __io uint32 SHCSR;            // System Handler Control and State Register
-  __io uint32 CFSR;             // Configurable Fault Status Register
-  __io uint32 HFSR;             // Hard Fault Status Register
-  __io uint32 DFSR;             // Debug Fault Status Register
-  __io uint32 MMFAR;            // Mem Manage Address Register
-  __io uint32 BFAR;             // Bus Fault Address Register
-  __io uint32 AFSR;             // Auxiliary Fault Status Register
-  __io uint32 PFR[2];           // Processor Feature Register
-  __io uint32 DFR;              // Debug Feature Register
-  __io uint32 ADR;              // Auxiliary Feature Register
-  __io uint32 MMFR[4];          // Memory Model Feature Register
-  __io uint32 ISAR[5];          // ISA Feature Register
+    __io uint32 CPUID;   /**< CPU ID Base Register */
+    __io uint32 ICSR;    /**< Interrupt Control State Register */
+    __io uint32 VTOR;    /**< Vector Table Offset Register */
+    __io uint32 AIRCR;   /**< Application Interrupt / Reset Control Register */
+    __io uint32 SCR;     /**< System Control Register */
+    __io uint32 CCR;     /**< Configuration Control Register */
+    __io uint8  SHP[12]; /**< System Handlers Priority Registers
+                              (4-7, 8-11, 12-15) */
+    __io uint32 SHCSR;   /**< System Handler Control and State Register */
+    __io uint32 CFSR;    /**< Configurable Fault Status Register */
+    __io uint32 HFSR;    /**< Hard Fault Status Register */
+    __io uint32 DFSR;    /**< Debug Fault Status Register */
+    __io uint32 MMFAR;   /**< Mem Manage Address Register */
+    __io uint32 BFAR;    /**< Bus Fault Address Register */
+    __io uint32 AFSR;    /**< Auxiliary Fault Status Register */
+    __io uint32 PFR[2];  /**< Processor Feature Register */
+    __io uint32 DFR;     /**< Debug Feature Register */
+    __io uint32 ADR;     /**< Auxiliary Feature Register */
+    __io uint32 MMFR[4]; /**< Memory Model Feature Register */
+    __io uint32 ISAR[5]; /**< ISA Feature Register */
 } scb_reg_map;
 
-/* FIXME these names violate the libmaple naming conventions */
-
-#define SCB_BASE            0xE000ED00
-#define SCB                 ((scb_reg_map*)(SCB_BASE))
+/** System control block register map base pointer */
+#define SCB_BASE                        ((struct scb_reg_map*)0xE000ED00)
 
 #endif
 

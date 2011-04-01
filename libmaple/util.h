@@ -23,14 +23,12 @@
  *****************************************************************************/
 
 /**
- *  @file util.h
- *
- *  @brief Various macros and utility procedures.
+ * @file util.h
+ * @brief Miscellaneous utility macros and procedures.
  */
 
 #include "libmaple_types.h"
 
-/* Generally "useful" utility procedures  */
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
@@ -38,32 +36,22 @@
 extern "C"{
 #endif
 
-/* Debug configuration */
-#define DEBUG_NONE      0
-#define DEBUG_FAULT     1
-#define DEBUG_ALL       2
-
-#ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL DEBUG_ALL
-#endif
+/*
+ * Bit manipulation
+ */
 
 #define BIT(shift)                     (1UL << (shift))
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
-
-/* Return bits m to n of x  */
+/* Bits m to n of x */
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+#define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
 
 /*
  * Register reads and writes
  */
 
-#define __set_bits(addr, mask)   (*(volatile uint32*)(addr) |= (uint32)(mask))
-#define __clear_bits(addr, mask) (*(volatile uint32*)(addr) &= (uint32)~(mask))
-#define __get_bits(addr, mask)   (*(volatile uint32*)(addr) & (uint32)(mask))
 #define __read(reg)              (*(volatile uint32*)(reg))
 #define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
-
-#define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
 
 /*
  * Failure routines
@@ -77,13 +65,20 @@ void throb(void);
  * Asserts and debug levels
  */
 
+#define DEBUG_NONE      0
+#define DEBUG_FAULT     1
+#define DEBUG_ALL       2
+
+#ifndef DEBUG_LEVEL
+#define DEBUG_LEVEL DEBUG_ALL
+#endif
+
 #if DEBUG_LEVEL >= DEBUG_ALL
 #define ASSERT(exp)                              \
     if (exp) {                                   \
     } else {                                     \
         _fail(__FILE__, __LINE__, #exp);         \
     }
-
 #else
 #define ASSERT(exp) (void)((0))
 #endif
@@ -94,7 +89,6 @@ void throb(void);
     } else {                                    \
         _fail(__FILE__, __LINE__, #exp);        \
     }
-
 #else
 #define ASSERT_FAULT(exp) (void)((0))
 #endif
@@ -104,4 +98,3 @@ void throb(void);
 #endif
 
 #endif
-

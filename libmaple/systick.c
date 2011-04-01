@@ -26,44 +26,46 @@
  * @brief System timer interrupt handler and initialization routines
  */
 
-#include "libmaple.h"
 #include "systick.h"
-
-#define SYSTICK_RELOAD          0xE000E014  // Reload value register
-#define SYSTICK_CNT             0xE000E018  // Current value register
-#define SYSTICK_CALIB           0xE000E01C  // Calibration value register
-
-#define SYSTICK_SRC_HCLK        BIT(2)    // Use core clock
-#define SYSTICK_TICKINT         BIT(1)    // Interrupt on systick countdown
-#define SYSTICK_ENABLE          BIT(0)    // Turn on the counter
 
 volatile uint32 systick_timer_millis;
 
+/**
+ * @brief Initialize and enable SysTick.
+ *
+ * Clocks the system timer with the core clock, turns it on, and
+ * enables interrupts.
+ *
+ * @param reload_val Appropriate reload counter to tick every 1 ms.
+ */
 void systick_init(uint32 reload_val) {
-    /* Set the reload counter to tick every 1ms  */
-    __write(SYSTICK_RELOAD, reload_val);
-
-    /* Clock the system timer with the core clock and turn it on,
-     * interrrupt every 1ms to keep track of millis() */
-    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
-            SYSTICK_ENABLE                |
-            SYSTICK_TICKINT);
+    SYSTICK_BASE->RVR = reload_val;
+    systick_enable();
 }
 
+/**
+ * Clock the system timer with the core clock, but don't turn it
+ * on or enable interrupt.
+ */
 void systick_disable() {
-    /* clock the system timer with the core clock, but don't turn it
-       on or enable interrupt. */
-    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK);
+    SYSTICK_BASE->CSR = SYSTICK_CSR_CLKSOURCE_CORE;
 }
 
-void systick_resume() {
-    /* re-enable init registers without changing reload val */
-    __write(SYSTICK_CSR, SYSTICK_SRC_HCLK |
-            SYSTICK_ENABLE                |
-            SYSTICK_TICKINT);
+/**
+ * Clock the system timer with the core clock and turn it on;
+ * interrupt every 1 ms, for systick_timer_millis.
+ */
+void systick_enable() {
+    /* re-enables init registers without changing reload val */
+    SYSTICK_BASE->CSR = (SYSTICK_CSR_CLKSOURCE_CORE   |
+                         SYSTICK_CSR_ENABLE           |
+                         SYSTICK_CSR_TICKINT_PEND);
 }
 
-/** SysTick interrupt handler.  Bumps up the tick counter. */
+/*
+ * SysTick ISR
+ */
+
 void __exc_systick(void) {
     systick_timer_millis++;
 }

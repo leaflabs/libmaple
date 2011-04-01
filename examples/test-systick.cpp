@@ -30,7 +30,7 @@ void loop() {
             SerialUSB.println("Disabling SysTick");
         } else {
             SerialUSB.println("Re-enabling SysTick");
-            systick_resume();
+            systick_enable();
         }
         disable = !disable;
     }

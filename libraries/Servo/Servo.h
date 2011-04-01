@@ -25,93 +25,178 @@
 #ifndef _SERVO_H_
 #define _SERVO_H_
 
-#include <stdint.h>
+#include "libmaple_types.h"
+#include "timer.h"
 
+#include "wirish_types.h"
+
+#ifdef MAPLE_IDE
 #include "wirish.h"             /* hack for IDE compile */
-#include "HardwareTimer.h"
+#endif
 
-/* Note on Arduino compatibility:
-
-   In the Arduino implementation, PWM is done "by hand" in the sense
-   that timer channels are hijacked in groups and an ISR is set which
-   toggles Servo::attach()ed pins using digitalWrite().
-
-   While this scheme allows any pin to drive a servo, it chews up
-   cycles and complicates the programmer's notion of when a particular
-   timer channel will be in use.
-
-   This implementation only allows Servo instances to Servo::attach()
-   to pins that already have a timer channel associated with them, and
-   just uses pwmWrite() to drive the wave.
-
-   This introduces an incompatibility: while the Arduino
-   implementation of attach() returns the affected channel on success
-   and 0 on failure, this one returns true on success and false on
-   failure.
-
-   RC Servos expect a pulse every 20ms.  Since periods are set for
-   entire timers, rather than individual channels, attach()ing a Servo
-   to a pin can interfere with other pins associated with the same
-   timer.  As always, the pin mapping mega table is your friend.
+/*
+ * Note on Arduino compatibility:
+ *
+ * In the Arduino implementation, PWM is done "by hand" in the sense
+ * that timer channels are hijacked in groups and an ISR is set which
+ * toggles Servo::attach()ed pins using digitalWrite().
+ *
+ * While this scheme allows any pin to drive a servo, it chews up
+ * cycles and complicates the programmer's notion of when a particular
+ * timer channel will be in use.
+ *
+ * This implementation only allows Servo instances to attach() to pins
+ * that already have a timer channel associated with them, and just
+ * uses pwmWrite() to drive the wave.
+ *
+ * This introduces an incompatibility: while the Arduino
+ * implementation of attach() returns the affected channel on success
+ * and 0 on failure, this one returns true on success and false on
+ * failure.
+ *
+ * RC Servos expect a pulse every 20ms.  Since periods are set for
+ * entire timers, rather than individual channels, attach()ing a Servo
+ * to a pin can interfere with other pins associated with the same
+ * timer.  As always, your board's pin map is your friend.
  */
 
 // Pin number of unattached pins
-#define NOT_ATTACHED (-1)
+#define NOT_ATTACHED                    (-1)
 
 // Maximum angle in degrees you can write(), exclusive.  Value chosen
-// for Arduino compatibility.
-#define SERVO_MAX_WRITE_ANGLE (200)
+// for Arduino compatibility.  This value is part of the public API;
+// DO NOT CHANGE IT.
+#define SERVO_MAX_WRITE_ANGLE           200
 
-// Default min (0 deg)/max(180 deg) pulse widths, in microseconds.
-// Value chosen for Arduino compatibility.
-#define SERVO_DEFAULT_MIN_PW (544)
-#define SERVO_DEFAULT_MAX_PW (2400)
+// Default min/max pulse widths (in microseconds) and angles (in
+// degrees).  Values chosen for Arduino compatibility.  These values
+// are part of the public API; DO NOT CHANGE THEM.
+#define SERVO_DEFAULT_MIN_PW            544
+#define SERVO_DEFAULT_MAX_PW            2400
+#define SERVO_DEFAULT_MIN_ANGLE         0
+#define SERVO_DEFAULT_MAX_ANGLE         180
 
 class Servo {
 public:
+    /**
+     * @brief Construct a new Servo instance.
+     *
+     * The new instance will not be attached to any pin.
+     */
     Servo();
 
-    /* Pin has to have a timer channel associated with it already;
-     * sets pinMode to PWM and returns true iff successful (failure
-     * when pin doesn't support PWM).  doesn't detach any ISRs
-     * associated with timer channel. */
-    bool attach(uint8_t pin);
-
-    /* Like attach(int), but with (inclusive) min (0 degree) and max
-     * (180 degree) pulse widths, in microseconds.
+    /**
+     * @brief Associate this instance with a servomotor whose input is
+     *        connected to pin.
+     *
+     * If this instance is already attached to a pin, it will be
+     * detached before being attached to the new pin. This function
+     * doesn't detach any interrupt attached with the pin's timer
+     * channel.
+     *
+     * @param pin Pin connected to the servo pulse wave input. This
+     *            pin must be capable of PWM output.
+     *
+     * @param minPulseWidth Minimum pulse width to write to pin, in
+     *                      microseconds.  This will be associated
+     *                      with a minAngle degree angle.  Defaults to
+     *                      SERVO_DEFAULT_MIN_PW = 544.
+     *
+     * @param maxPulseWidth Maximum pulse width to write to pin, in
+     *                      microseconds.  This will be associated
+     *                      with a maxAngle degree angle. Defaults to
+     *                      SERVO_DEFAULT_MAX_PW = 2400.
+     *
+     * @param minAngle Target angle (in degrees) associated with
+     *                 minPulseWidth.  Defaults to
+     *                 SERVO_DEFAULT_MIN_ANGLE = 0.
+     *
+     * @param maxAngle Target angle (in degrees) associated with
+     *                 maxPulseWidth.  Defaults to
+     *                 SERVO_DEFAULT_MAX_ANGLE = 180.
+     *
+     * @sideeffect May set pinMode(pin, PWM).
+     *
+     * @return true if successful, false when pin doesn't support PWM.
      */
-    bool attach(uint8_t pin, uint16_t min, uint16_t max);
+    bool attach(uint8 pin,
+                uint16 minPulseWidth=SERVO_DEFAULT_MIN_PW,
+                uint16 maxPulseWidth=SERVO_DEFAULT_MAX_PW,
+                int16 minAngle=SERVO_DEFAULT_MIN_ANGLE,
+                int16 maxAngle=SERVO_DEFAULT_MAX_ANGLE);
 
-    /* Return pin number if currently attach()ed to a pin,
-       NOT_ATTACHED otherwise. */
-    int attached() const { return pin; }
+    /**
+     * @brief Check if this instance is attached to a servo.
+     * @return true if this instance is attached to a servo, false otherwise.
+     * @see Servo::attachedPin()
+     */
+    bool attached() const { return this->pin != NOT_ATTACHED; }
 
-    /* Stop driving the wave by disabling the output compare
-       interrupt.  Returns true if this call did anything. */
+    /**
+     * @brief Get the pin this instance is attached to.
+     * @return Pin number if currently attached to a pin, NOT_ATTACHED
+     *         otherwise.
+     * @see Servo::attach()
+     */
+    int attachedPin() const { return this->pin; }
+
+    /**
+     * @brief Stop driving the servo pulse train.
+     *
+     * If not currently attached to a motor, this function has no effect.
+     *
+     * @return true if this call did anything, false otherwise.
+     */
     bool detach();
 
-    /* If value < MAX_WRITE_ANGLE, treated as an angle in degrees.
-       Otherwise, it's treated as a pulse width. */
-    void write(unsigned int value);
+    /**
+     * @brief Set the servomotor target angle.
+     *
+     * @param angle Target angle, in degrees.  If the target angle is
+     *              outside the range specified at attach() time, it
+     *              will be clamped to lie in that range.
+     *
+     * @see Servo::attach()
+     */
+    void write(int angle);
 
-    /* If outside of [min, max] determined by attach(), it is clamped
-       to lie in that range. */
-    void writeMicroseconds(uint16_t pulseWidth);
 
-    /* Return servo target angle, in degrees. This will lie between 0
-       and 180. */
+    /**
+     * Get the servomotor's target angle, in degrees.  This will
+     * lie inside the range specified at attach() time.
+     *
+     * @see Servo::attach()
+     */
     int read() const;
 
-    /* Returns the current pulse width, in microseconds.  This will
-       lie within the [min, max] range. */
-    uint16_t readMicroseconds() const;
+    /**
+     * @brief Set the pulse width, in microseconds.
+     *
+     * @param pulseWidth Pulse width to send to the servomotor, in
+     *                   microseconds. If outside of the range
+     *                   specified at attach() time, it is clamped to
+     *                   lie in that range.
+     *
+     * @see Servo::attach()
+     */
+    void writeMicroseconds(uint16 pulseWidth);
+
+    /**
+     * Get the current pulse width, in microseconds.  This will
+     * lie within the range specified at attach() time.
+     *
+     * @see Servo::attach()
+     */
+    uint16 readMicroseconds() const;
 
 private:
-    int8_t pin;
-    HardwareTimer *timer;
-    int channel;
-    uint16_t min;
-    uint16_t max;
+    int16 pin;
+    uint16 minPW;
+    uint16 maxPW;
+    int16 minAngle;
+    int16 maxAngle;
+
+    void resetFields(void);
 };
 
 #endif  /* _SERVO_H_ */

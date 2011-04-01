@@ -29,110 +29,120 @@
 #include "pwm.h"
 #include "wirish_math.h"
 
-// Configure prescaler and overflow for a 20msec period (could just
-// use HardwareTimer::setPeriod(), but this lets conversions below
-// happen more statically, in combination with an inlined map() -- a
-// premature optimization? TODO profile speed/size tradeoff)
-#define CYC_20MSEC     (20000 * CYCLES_PER_MICROSECOND)
-#define SERVO_PRE ((uint16)((CYC_20MSEC >> 16) + 1))
-#define SERVO_OVF ((uint16)((CYC_20MSEC / SERVO_PRE) - 1))
-#define SERVO_TAU_USEC \
-    ((uint32)(((double)SERVO_OVF) * SERVO_PRE / CYCLES_PER_MICROSECOND + 0.5))
+// 20 millisecond period config.  For a 1-based prescaler,
+//
+//    (prescaler * overflow / CYC_MSEC) msec = 1 timer cycle = 20 msec
+// => prescaler * overflow = 20 * CYC_MSEC
+//
+// This picks the smallest prescaler that allows an overflow < 2^16.
+#define MAX_OVERFLOW    ((1 << 16) - 1)
+#define CYC_MSEC        (1000 * CYCLES_PER_MICROSECOND)
+#define TAU_MSEC        20
+#define TAU_USEC        (TAU_MSEC * 1000)
+#define TAU_CYC         (TAU_MSEC * CYC_MSEC)
+#define SERVO_PRESCALER (TAU_CYC / MAX_OVERFLOW + 1)
+#define SERVO_OVERFLOW  ((uint16)round((double)TAU_CYC / SERVO_PRESCALER))
 
-#define US_TO_COMPARE(us) ((uint16)map(us, 0, SERVO_TAU_USEC, 0, SERVO_OVF))
-#define COMPARE_TO_US(c)  ((uint32)map(c, 0, SERVO_OVF, 0, SERVO_TAU_USEC))
-
-#define ANGLE_TO_US(a)  ((uint16)(map(a, 0, 180, this->min, this->max)))
-#define US_TO_ANGLE(us) ((uint8)(map(us, this->min, this->max, 0, 180)))
+// Unit conversions
+#define US_TO_COMPARE(us) ((uint16)map((us), 0, TAU_USEC, 0, SERVO_OVERFLOW))
+#define COMPARE_TO_US(c)  ((uint32)map((c), 0, SERVO_OVERFLOW, 0, TAU_USEC))
+#define ANGLE_TO_US(a)    ((uint16)(map((a), this->minAngle, this->maxAngle, \
+                                        this->minPW, this->maxPW)))
+#define US_TO_ANGLE(us)   ((int16)(map((us), this->minPW, this->maxPW,  \
+                                       this->minAngle, this->maxAngle)))
 
 Servo::Servo() {
-    this->pin = NOT_ATTACHED;
-    this->timer = 0;
-    this->channel = TIMER_INVALID;
-    this->min = SERVO_DEFAULT_MIN_PW;
-    this->max = SERVO_DEFAULT_MAX_PW;
+    this->resetFields();
 }
 
-bool Servo::attach(uint8_t pin) {
-    return this->attach(pin, SERVO_DEFAULT_MIN_PW, SERVO_DEFAULT_MAX_PW);
-}
+bool Servo::attach(uint8 pin,
+                   uint16 minPW,
+                   uint16 maxPW,
+                   int16 minAngle,
+                   int16 maxAngle) {
+    timer_dev *tdev = PIN_MAP[pin].timer_device;
 
-bool Servo::attach(uint8_t pin, uint16_t min, uint16_t max) {
-    timer_dev_num timer_num = PIN_MAP[pin].timer_num;
-    uint32_t channel = PIN_MAP[pin].timer_chan;
-    if (timer_num == TIMER_INVALID) {
-        // don't reset any members or ASSERT(0), to keep driving any
+    if (tdev == NULL) {
+        // don't reset any fields or ASSERT(0), to keep driving any
         // previously attach()ed servo.
         return false;
     }
+
+    if (this->attached()) {
+        this->detach();
+    }
+
     this->pin = pin;
-    this->timer = getTimer(timer_num);
-    this->channel = channel;
-    this->min = min;
-    this->max = max;
+    this->minPW = minPW;
+    this->maxPW = maxPW;
+    this->minAngle = minAngle;
+    this->maxAngle = maxAngle;
 
     pinMode(pin, PWM);
 
-    this->timer->pause();
-    this->timer->setPrescaleFactor(SERVO_PRE);
-    this->timer->setOverflow(SERVO_OVF);
-    this->timer->generateUpdate();
-    this->timer->resume();
+    timer_pause(tdev);
+    timer_set_prescaler(tdev, SERVO_PRESCALER - 1); // prescaler is 1-based
+    timer_set_reload(tdev, SERVO_OVERFLOW);
+    timer_generate_update(tdev);
+    timer_resume(tdev);
+
     return true;
 }
 
 bool Servo::detach() {
-    if (this->pin == NOT_ATTACHED) return false;
+    if (!this->attached()) {
+        return false;
+    }
 
-    this->timer->setChannelMode(this->channel, TIMER_DISABLED);
+    timer_dev *tdev = PIN_MAP[this->pin].timer_device;
+    uint8 tchan = PIN_MAP[this->pin].timer_channel;
+    timer_set_mode(tdev, tchan, TIMER_DISABLED);
 
-    this->pin = NOT_ATTACHED;
-    this->timer = 0;
-    this->channel = TIMER_INVALID;
-    this->min = SERVO_DEFAULT_MIN_PW;
-    this->max = SERVO_DEFAULT_MAX_PW;
+    this->resetFields();
 
     return true;
 }
 
-void Servo::write(unsigned int value) {
-    if (value < SERVO_MAX_WRITE_ANGLE) {
-        this->writeMicroseconds(ANGLE_TO_US(value));
-    } else {
-        this->writeMicroseconds(value);
-    }
+void Servo::write(int degrees) {
+    degrees = constrain(degrees, this->minAngle, this->maxAngle);
+    this->writeMicroseconds(ANGLE_TO_US(degrees));
 }
 
-void Servo::writeMicroseconds(uint16_t pulseWidth) {
-    if (this->pin == NOT_ATTACHED) {
+int Servo::read() const {
+    int a = US_TO_ANGLE(this->readMicroseconds());
+    // map() round-trips in a weird way we mostly correct for here;
+    // the round-trip is still sometimes off-by-one for write(1) and
+    // write(179).
+    return a == this->minAngle || a == this->maxAngle ? a : a + 1;
+}
+
+void Servo::writeMicroseconds(uint16 pulseWidth) {
+    if (!this->attached()) {
         ASSERT(0);
         return;
     }
 
-    pulseWidth = constrain(pulseWidth, this->min, this->max);
+    pulseWidth = constrain(pulseWidth, this->minPW, this->maxPW);
     pwmWrite(this->pin, US_TO_COMPARE(pulseWidth));
 }
 
-int Servo::read() const {
-    if (this->pin == NOT_ATTACHED) {
+uint16 Servo::readMicroseconds() const {
+    if (!this->attached()) {
         ASSERT(0);
         return 0;
     }
 
-    unsigned int pw = this->readMicroseconds();
-    int a = US_TO_ANGLE(pw);
-    // map() round-trips in a weird way we correct for here
-    return a == 0 || a == 180 ? a : a + 1;
+    stm32_pin_info pin_info = PIN_MAP[this->pin];
+    uint16 compare = timer_get_compare(pin_info.timer_device,
+                                       pin_info.timer_channel);
+
+    return COMPARE_TO_US(compare);
 }
 
-uint16_t Servo::readMicroseconds() const {
-    if (this->pin == NOT_ATTACHED) {
-        ASSERT(0);
-        return 0;
-    }
-
-    unsigned int compare = this->timer->getCompare(this->channel);
-    uint16_t c = COMPARE_TO_US(compare);
-    // map() round-trips in a weird way we correct for here
-    return c == 0 || c == 180 ? c : c + 1;
+void Servo::resetFields(void) {
+    this->pin = NOT_ATTACHED;
+    this->minAngle = SERVO_DEFAULT_MIN_ANGLE;
+    this->maxAngle = SERVO_DEFAULT_MAX_ANGLE;
+    this->minPW = SERVO_DEFAULT_MIN_PW;
+    this->maxPW = SERVO_DEFAULT_MAX_PW;
 }

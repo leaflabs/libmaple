@@ -5,16 +5,10 @@ d := $(dir)
 BUILDDIRS += $(BUILD_PATH)/$(d)
 
 # Local flags
-CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
+CXXFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
 
 # Local rules and targets
 cSRCS_$(d) :=
-
-# examples/UDPApp/udpapp.c \
-# examples/SocketApp/socketapp.c \
-# examples/WebClient/webclient.c \
-# examples/WebServer/webserver.c \
-# examples/Flash/webserver.c \
 
 cppSRCS_$(d) := Servo.cpp
 
@@ -22,10 +16,10 @@ cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)
 
 OBJS_$(d) := $(cFILES_$(d):%.c=$(BUILD_PATH)/%.o) \
-                 $(cppFILES_$(d):%.cpp=$(BUILD_PATH)/%.o)
+             $(cppFILES_$(d):%.cpp=$(BUILD_PATH)/%.o)
 DEPS_$(d) := $(OBJS_$(d):%.o=%.d)
 
-$(OBJS_$(d)): TGT_CFLAGS := $(CFLAGS_$(d))
+$(OBJS_$(d)): TGT_CXXFLAGS := $(CXXFLAGS_$(d))
 
 TGT_BIN += $(OBJS_$(d))
 

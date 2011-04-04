@@ -118,8 +118,12 @@ static inline int16 rb_safe_remove(ring_buffer *rb) {
 }
 
 /**
- * If rb is not full, appends element and returns true; otherwise,
- * does nothing and returns false. */
+ * @brief Attempt to insert an element into a ring buffer.
+ *
+ * @brief rb Buffer to insert into.
+ * @brief element Value to insert into rb.
+ * @sideeffect If rb is not full, appends element onto buffer.
+ * @return If element was appended, then true; otherwise, false. */
 static inline int rb_safe_insert(ring_buffer *rb, uint8 element) {
     if (rb_is_full(rb)) {
         return 0;

@@ -23,6 +23,7 @@ void cmd_adc_stats(void);
 void cmd_stressful_adc_stats(void);
 void cmd_everything(void);
 void cmd_serial1_serial3(void);
+void cmd_serial1_echo(void);
 void cmd_gpio_monitoring(void);
 void cmd_sequential_adc_reads(void);
 void cmd_gpio_qa(void);
@@ -35,7 +36,8 @@ void cmd_board_info(void);
 // Helper functions
 void measure_adc_noise(uint8 pin);
 void fast_gpio(int pin);
-void usart_baud_test(HardwareSerial **serials, int n, unsigned baud);
+void serial_baud_test(HardwareSerial **serials, int n, unsigned baud);
+void serial_echo_test(HardwareSerial *serial, unsigned baud);
 void init_all_timers(uint16 prescale);
 void enable_usarts(void);
 void disable_usarts(void);
@@ -102,6 +104,10 @@ void loop () {
 
         case 'm':
             cmd_serial1_serial3();
+            break;
+
+        case 'E':
+            cmd_serial1_echo();
             break;
 
         case '.':
@@ -225,8 +231,8 @@ void loop () {
             break;
 
         default: // -------------------------------
-            SerialUSB.print("Unexpected: ");
-            SerialUSB.print(input);
+            SerialUSB.print("Unexpected byte: 0x");
+            SerialUSB.print((int)input, HEX);
             SerialUSB.println(", press h for help.");
         }
 
@@ -243,11 +249,13 @@ void cmd_print_help(void) {
     SerialUSB.println("\th: print this menu");
     SerialUSB.println("\tw: print Hello World on all 3 USARTS");
     SerialUSB.println("\tn: measure noise and do statistics");
-    SerialUSB.println("\tN: measure noise and do statistics with background stuff");
+    SerialUSB.println("\tN: measure noise and do statistics with background "
+                      "stuff");
     SerialUSB.println("\ta: show realtime ADC info");
     SerialUSB.println("\t.: echo '.' until new input");
     SerialUSB.println("\tu: print Hello World on USB");
-    SerialUSB.println("\t_: do as little as possible for a couple seconds (delay)");
+    SerialUSB.println("\t_: do as little as possible for a couple seconds "
+                      "(delay)");
     SerialUSB.println("\tp: test all PWM channels sequentially");
     SerialUSB.println("\tW: dump data as fast as possible on all 3 USARTS");
     SerialUSB.println("\tU: dump data as fast as possible on USB");
@@ -256,7 +264,9 @@ void cmd_print_help(void) {
     SerialUSB.println("\tf: toggle pin 4 as fast as possible in bursts");
     SerialUSB.println("\tr: monitor and print GPIO status changes");
     SerialUSB.println("\ts: output a sweeping servo PWM on all PWM channels");
-    SerialUSB.println("\tm: output data on USART1 and USART3 with various rates");
+    SerialUSB.println("\tm: output data on USART1 and USART3 at various "
+                      "baud rates");
+    SerialUSB.println("\tE: echo data on USART1 at various baud rates");
     SerialUSB.println("\tb: print information about the board.");
     SerialUSB.println("\t+: test shield mode (for quality assurance testing)");
 
@@ -316,22 +326,43 @@ void cmd_serial1_serial3(void) {
 
     SerialUSB.println("Testing 57600 baud on USART1 and USART3. "
                       "Press any key to stop.");
-    usart_baud_test(serial_1_and_3, 2, 57600);
+    serial_baud_test(serial_1_and_3, 2, 57600);
     SerialUSB.read();
 
     SerialUSB.println("Testing 115200 baud on USART1 and USART3. "
                       "Press any key to stop.");
-    usart_baud_test(serial_1_and_3, 2, 115200);
+    serial_baud_test(serial_1_and_3, 2, 115200);
     SerialUSB.read();
 
     SerialUSB.println("Testing 9600 baud on USART1 and USART3. "
                       "Press any key to stop.");
-    usart_baud_test(serial_1_and_3, 2, 9600);
+    serial_baud_test(serial_1_and_3, 2, 9600);
     SerialUSB.read();
 
     SerialUSB.println("Resetting USART1 and USART3...");
     Serial1.begin(BAUD);
     Serial3.begin(BAUD);
+}
+
+void cmd_serial1_echo(void) {
+    SerialUSB.println("Testing serial echo at various baud rates. "
+                      "Press any key for next baud rate, or ESC to quit "
+                      "early.");
+    while (!SerialUSB.available())
+        ;
+    SerialUSB.read();
+
+    SerialUSB.println("Testing 115200 baud on USART1.");
+    serial_echo_test(&Serial1, 115200);
+    if (SerialUSB.read() == ESC) return;
+
+    SerialUSB.println("Testing 57600 baud on USART1.");
+    serial_echo_test(&Serial1, 57600);
+    if (SerialUSB.read() == ESC) return;
+
+    SerialUSB.println("Testing 9600 baud on USART1.");
+    serial_echo_test(&Serial1, 9600);
+    if (SerialUSB.read() == ESC) return;
 }
 
 void cmd_gpio_monitoring(void) {
@@ -615,7 +646,7 @@ void cmd_board_info(void) {     // TODO print more information
     SerialUSB.println("Board information");
     SerialUSB.println("=================");
 
-    SerialUSB.print("* Clock speed (cycles/us): ");
+    SerialUSB.print("* Clock speed (MHz): ");
     SerialUSB.println(CYCLES_PER_MICROSECOND);
 
     SerialUSB.print("* BOARD_LED_PIN: ");
@@ -693,7 +724,7 @@ void fast_gpio(int maple_pin) {
     gpio_toggle_bit(dev, bit);
 }
 
-void usart_baud_test(HardwareSerial **serials, int n, unsigned baud) {
+void serial_baud_test(HardwareSerial **serials, int n, unsigned baud) {
     for (int i = 0; i < n; i++) {
         serials[i]->begin(baud);
     }
@@ -705,6 +736,15 @@ void usart_baud_test(HardwareSerial **serials, int n, unsigned baud) {
                 delay(1000);
             }
         }
+    }
+}
+
+void serial_echo_test(HardwareSerial *serial, unsigned baud) {
+    serial->begin(baud);
+    while (!SerialUSB.available()) {
+        if (!serial->available())
+            continue;
+        serial->print(serial->read());
     }
 }
 

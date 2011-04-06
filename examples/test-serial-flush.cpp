@@ -1,21 +1,26 @@
-// Tests the "flush" Serial function
+/*
+ * Tests the "flush" Serial function.
+ */
 
 #include "wirish.h"
 
+#define COMM Serial1
+
 void setup() {
-    /* Send a message out USART2  */
-    Serial2.begin(9600);
-    Serial2.println("Hello world!");
+    COMM.begin(9600);
+    COMM.println("Hello world!");
 }
 
 void loop() {
-    Serial2.println("Waiting for multiple input...");
-    while(Serial2.available() < 5) { }
-    Serial2.println(Serial2.read());
-    Serial2.println(Serial2.read());
-    Serial2.flush();
-    if(Serial2.available()) {
-        Serial2.println("FAIL! Still had junk in the buffer...");
+    COMM.println("Waiting for multiple input...");
+    while (COMM.available() < 5)
+        ;
+    COMM.println(COMM.read());
+    COMM.println(COMM.read());
+    COMM.flush();
+
+    if (COMM.available()) {
+        COMM.println("FAIL! Still had junk in the buffer...");
     }
 }
 
@@ -28,7 +33,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

@@ -12,6 +12,9 @@ devices.
 Introduction
 ------------
 
+.. FIXME remove Maple-specific documentation
+.. FIXME Serial4, Serial5 updates for high-density devices
+
 The Maple has three serial ports (also known as a UARTs or USARTs):
 ``Serial1``, ``Serial2``, and ``Serial3``. They communicate using the
 pins summarized in the following table:
@@ -221,7 +224,7 @@ Arduino Compatibility Note
 Unlike the Arduino, none of the Maple's serial ports is connected to
 the USB port on the Maple board (for that, use :ref:`SerialUSB
 <lang-serialusb>`).  Thus, to use these pins to communicate with your
-personal computer, you will need an additional USB-to-serial adaptor.
+personal computer, you will need an additional USB-to-serial adapter.
 
 .. TODO LATER port these examples over
 

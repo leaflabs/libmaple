@@ -24,43 +24,33 @@
 
 /**
  * @file HardwareSerial.h
- *
- * @brief Wirish interface to hardware serial communications.
+ * @brief Wirish serial port interface.
  */
 
 #ifndef _HARDWARESERIAL_H_
 #define _HARDWARESERIAL_H_
 
 #include "libmaple_types.h"
-#include "gpio.h"
-#include "timer.h"
+#include "usart.h"
 
 #include "Print.h"
 
-/* NB: this class documented "by hand" (i.e., not using Doxygen) in:
-
-     libmaple/docs/source/lang/serial.rst
-
-   If you alter the public HardwareSerial interface, you must update
-   the documentation accordingly. */
+/*
+ * IMPORTANT:
+ *
+ * This class documented "by hand" (i.e., not using Doxygen) in:
+ *
+ *   libmaple/docs/source/lang/api/serial.rst
+ *
+ * If you alter the public HardwareSerial interface, you MUST update
+ * the documentation accordingly.
+ */
 
 class HardwareSerial : public Print {
- private:
-    uint8 usart_num;
-    uint32 max_baud;
-    gpio_dev *gpio_device;
-    uint8 tx_pin;
-    uint8 rx_pin;
-    timer_dev *timer_device;
-    uint8 channel_num;
- public:
-    HardwareSerial(uint8 usart_num,
-                   uint32 max_baud,
-                   gpio_dev *gpio_device,
+public:
+    HardwareSerial(usart_dev *usart_device,
                    uint8 tx_pin,
-                   uint8 rx_pin,
-                   timer_dev *timer_device,
-                   uint8 channel_num);
+                   uint8 rx_pin);
     void begin(uint32 baud);
     void end(void);
     uint32 available(void);
@@ -68,10 +58,18 @@ class HardwareSerial : public Print {
     void flush(void);
     virtual void write(unsigned char);
     using Print::write;
+private:
+    usart_dev *usart_device;
+    uint8 tx_pin;
+    uint8 rx_pin;
 };
+
 extern HardwareSerial Serial1;
 extern HardwareSerial Serial2;
 extern HardwareSerial Serial3;
-// TODO: high density device ports
+#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
+extern HardwareSerial Serial4;
+extern HardwareSerial Serial5;
 #endif
 
+#endif

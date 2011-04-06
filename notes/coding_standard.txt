@@ -122,7 +122,7 @@ Naming conventions
 There's always a fight about upper and lower case vs. underscores.
 We'll handle this as follows.
 
-- First, Dammit_Dont_Mix_Like_This, because It_Looks_Really_Ugly, ok?
+- First, Dont_Mix_Like_This, because It_Looks_Really_Ugly, ok?
   [There's been some debate about this, and some exceptions are
   already grandfathered in, so in order to settle it, let's call this
   a "recommendation" instead of "requirement".]
@@ -140,11 +140,9 @@ We'll handle this as follows.
 - Functions: C functions are all lowercase, and words are separated by
   underscores.  C++ method names are camel cased (thisIsAnExample).
 
-- Structs: pick a style from "Variables" or "Classes" depending on how
-  you mean it (since it might be either a simple record type, in which
-  case do like c variables, or you might be faking an object in c, in
-  which case do like classes).  If it's in a typedef, don't feel
-  obliged to put "_t" at the end of the name; we don't.
+- Structs: Usually like variables (adc_dev, adc_reg_map, etc.), but
+  it's not crucial.  If it's in a typedef, don't feel obliged to put
+  "_t" at the end of the name; we don't.
 
 - Macros and constants: all caps, separated by underscores.  Variables
   with the "const" qualifier aren't considered "constants" for the
@@ -195,6 +193,10 @@ Documentation
   This should be avoided if at all possible, since it creates a
   maintenance burden of documenting things in two places at once, and
   makes it easier for documentation to go stale.
+
+  If you do have to document something manually, put a comment in the
+  source file informing future maintainers about it, so they'll pay
+  extra attention when making changes.
 
 - For libmaple proper (the pure C library under libmaple/); the
   convention is to document any user-facing entity at the point where

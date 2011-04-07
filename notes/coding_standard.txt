@@ -95,11 +95,13 @@ Comments
 
 - Doxygen comments are multi-line comments that begin with /** instead.
 
-- Single-line comments on the same line are // in C or C++.
+- Single-line comments on the same line are // in C++. (That's OK in C
+  as well).
 
 - Single-line comments on their own source line should be /* */ in C,
   but can also be // in C++.  In Emacs, you can use M-;
-  (comment-dwim), and it'll Do What You Mean.
+  (comment-dwim), and it'll Do What You Mean.  This isn't of great
+  importance.
 
 Braces
 ------
@@ -131,23 +133,27 @@ We'll handle this as follows.
 
     int some_example_name;
 
-  It is strongly advised to do it this way in C++ too, but it's not
-  [yet] mandatory.
+  User-facing C++ variables should be camel cased (thisIsAnExample,
+  boardPWMPins, etc.), for consistency with the Arduino style.  It's
+  probably a good idea for you to case non-user facing C++ variables
+  in the C style; this will help disambiguate what's part of the
+  Wirish API and what's not.
 
 - Classes: Pascal case.  So ThisIsAClassName, but thisIsNot,
   this_is_not, and like I said, Dont_You_DareTryANYTHING_STUPID.
 
 - Functions: C functions are all lowercase, and words are separated by
-  underscores.  C++ method names are camel cased (thisIsAnExample).
+  underscores.  C++ method names are camel cased.
 
 - Structs: Usually like variables (adc_dev, adc_reg_map, etc.), but
-  it's not crucial.  If it's in a typedef, don't feel obliged to put
-  "_t" at the end of the name; we don't.
+  it's not crucial.  Don't feel obliged to put "_t" at the end of the
+  type name; we don't.
 
 - Macros and constants: all caps, separated by underscores.  Variables
   with the "const" qualifier aren't considered "constants" for the
   purposes of this rule; i.e., case them according to the rules for
-  variables.
+  variables.  (We make an exception for PIN_MAP, but that's because
+  it's the central data structure for all of Wirish).
 
 - foo.h gets #ifdef'ed to _FOO_H_.
 
@@ -157,28 +163,30 @@ We'll handle this as follows.
 
       void usb_func() { ... }
 
+      void frob_usb_disc() { ... }
+
       class SomethingUSB {
           void usbInit();
           void initUSB();
       };
 
-  Never do this:
+  DON'T do this:
 
       class BadUsb { ... }; // say "GoodUSB" instead
+
+      void swizzle_USB_disc() { ... } // say "swizzle_usb_disc" instead
 
 Documentation
 -------------
 
-- Document your code!
+- You must document your code.  At a bare minimum, this means Doxygen
+  comments on every user-facing function and type.  Additionally, you
+  need to individually document the fields and enumerator values of
+  structs and enums.  See any register map type's definition for an
+  example.
 
-- For complicated peripherals, it would be nice if you put longer-form
-  comments into this directory (notes/), with a comment in the
-  corresponding .h file referring to it.  See libmaple/dac.h for an
-  example.  That lets us keep the source files relatively clean while
-  still allowing new readers to have a starting point.
-
-- At least put a Doxygen comment with a nonempty @brief for every .h
-  file you add.  See the existing ones for examples.
+- For libmaple proper, you don't need comments for each register bit
+  definition (for now).
 
 - Doxygen comments generally just belong on types, functions,
   etc. that are part of the public user-facing API.  This generally
@@ -198,6 +206,15 @@ Documentation
   source file informing future maintainers about it, so they'll pay
   extra attention when making changes.
 
+- For complicated peripherals, it would be nice if you put longer-form
+  comments into the libmaple notes/ directory, with a comment in the
+  corresponding .h file referring to it.  See libmaple/dac.h for an
+  example.
+
+  This lets us keep the source files relatively clean while still
+  allowing new readers to have a starting point.  These longer-form
+  notes also have a habit of turning into user-facing documentation.
+
 - For libmaple proper (the pure C library under libmaple/); the
   convention is to document any user-facing entity at the point where
   it is defined.  In particular, this means you should document an
@@ -208,16 +225,15 @@ General Formatting
 ------------------
 
 - Keep it 80-column clean.  That means Emacs says the largest column
-  number=79.  If you haven't already, you should turn on column
-  numbers to help you out:
+  number=79.  You should turn on column number mode to help you out:
 
     (column-number-mode 1)
 
-  You can get more help from lineker-mode.  Download it here:
+  You can get more help from lineker-mode:
 
     http://www.helsinki.fi/~sjpaavol/programs/lineker.el
 
-  Then put the file somewhere in your load-path, and:
+  Just put lineker.el somewhere in your load-path, and:
 
     (require 'lineker)
     (dolist (hook '(c-mode-hook c++-mode-hook))

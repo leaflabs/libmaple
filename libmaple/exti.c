@@ -46,22 +46,22 @@ typedef struct exti_channel {
 } exti_channel;
 
 static exti_channel exti_channels[] = {
-    { .handler = NULL, .irq_line = NVIC_EXTI0     },  // EXTI0
-    { .handler = NULL, .irq_line = NVIC_EXTI1     },  // EXTI1
-    { .handler = NULL, .irq_line = NVIC_EXTI2     },  // EXTI2
-    { .handler = NULL, .irq_line = NVIC_EXTI3     },  // EXTI3
-    { .handler = NULL, .irq_line = NVIC_EXTI4     },  // EXTI4
-    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI5
-    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI6
-    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI7
-    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI8
-    { .handler = NULL, .irq_line = NVIC_EXTI9_5   },  // EXTI9
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI10
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI11
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI12
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI13
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI14
-    { .handler = NULL, .irq_line = NVIC_EXTI15_10 },  // EXTI15
+    { .handler = NULL, .irq_line = NVIC_EXTI0      },  // EXTI0
+    { .handler = NULL, .irq_line = NVIC_EXTI1      },  // EXTI1
+    { .handler = NULL, .irq_line = NVIC_EXTI2      },  // EXTI2
+    { .handler = NULL, .irq_line = NVIC_EXTI3      },  // EXTI3
+    { .handler = NULL, .irq_line = NVIC_EXTI4      },  // EXTI4
+    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI5
+    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI6
+    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI7
+    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI8
+    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI9
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI10
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI11
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI12
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI13
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI14
+    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI15
 };
 
 /*

@@ -89,12 +89,12 @@ typedef enum nvic_irq_num {
     NVIC_DMA_CH5        = 15,   /**< DMA1 channel 5 */
     NVIC_DMA_CH6        = 16,   /**< DMA1 channel 6 */
     NVIC_DMA_CH7        = 17,   /**< DMA1 channel 7 */
-    NVIC_ADC1_2         = 18,   /**< ADC1 and ADC2 */
+    NVIC_ADC_1_2        = 18,   /**< ADC1 and ADC2 */
     NVIC_USB_HP_CAN_TX  = 19,   /**< USB high priority or CAN TX */
     NVIC_USB_LP_CAN_RX0 = 20,   /**< USB low priority or CAN RX0 */
     NVIC_CAN_RX1        = 21,   /**< CAN RX1 */
     NVIC_CAN_SCE        = 22,   /**< CAN SCE */
-    NVIC_EXTI9_5        = 23,   /**< EXTI line [9:5] */
+    NVIC_EXTI_9_5       = 23,   /**< EXTI line [9:5] */
     NVIC_TIMER1_BRK     = 24,   /**< Timer 1 break */
     NVIC_TIMER1_UP      = 25,   /**< Timer 1 update */
     NVIC_TIMER1_TRG_COM = 26,   /**< Timer 1 trigger and commutation */
@@ -111,7 +111,7 @@ typedef enum nvic_irq_num {
     NVIC_USART1         = 37,   /**< USART1 */
     NVIC_USART2         = 38,   /**< USART2 */
     NVIC_USART3         = 39,   /**< USART3 */
-    NVIC_EXTI15_10      = 40,   /**< EXTI line [15:10] */
+    NVIC_EXTI_15_10     = 40,   /**< EXTI line [15:10] */
     NVIC_RTCALARM       = 41,   /**< RTC alarm through EXTI line */
     NVIC_USBWAKEUP      = 42,   /**< USB wakeup from suspend through
                                      EXTI line */
@@ -132,7 +132,7 @@ typedef enum nvic_irq_num {
     NVIC_DMA2_CH1       = 56,   /**< DMA2 channel 1 */
     NVIC_DMA2_CH2       = 57,   /**< DMA2 channel 2 */
     NVIC_DMA2_CH3       = 58,   /**< DMA2 channel 3 */
-    NVIC_DMA2_CH4_5     = 59,   /**< DMA2 channels 4 and 5 */
+    NVIC_DMA2_CH_4_5    = 59,   /**< DMA2 channels 4 and 5 */
 #endif
 } nvic_irq_num;
 

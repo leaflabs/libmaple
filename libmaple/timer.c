@@ -32,12 +32,6 @@
 
 #include "timer.h"
 
-#if defined(STM32_MEDIUM_DENSITY)
-#define NR_TIMERS 4
-#elif defined(STM32_HIGH_DENSITY)
-#define NR_TIMERS 8
-#endif
-
 /* Just like the corresponding DIER bits:
  * [0] = Update handler;
  * [1,2,3,4] = capture/compare 1,2,3,4 handlers, respectively;
@@ -51,7 +45,7 @@
 #define NR_BAS_HANDLERS                 1
 
 static timer_dev timer1 = {
-    .regs         = {.adv = TIMER1_BASE},
+    .regs         = { .adv = TIMER1_BASE },
     .clk_id       = RCC_TIMER1,
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
@@ -59,7 +53,7 @@ static timer_dev timer1 = {
 timer_dev *TIMER1 = &timer1;
 
 static timer_dev timer2 = {
-    .regs         = {.gen = TIMER2_BASE},
+    .regs         = { .gen = TIMER2_BASE },
     .clk_id       = RCC_TIMER2,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -67,7 +61,7 @@ static timer_dev timer2 = {
 timer_dev *TIMER2 = &timer2;
 
 static timer_dev timer3 = {
-    .regs         = {.gen = TIMER3_BASE},
+    .regs         = { .gen = TIMER3_BASE },
     .clk_id       = RCC_TIMER3,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -75,7 +69,7 @@ static timer_dev timer3 = {
 timer_dev *TIMER3 = &timer3;
 
 static timer_dev timer4 = {
-    .regs         = {.gen = TIMER4_BASE},
+    .regs         = { .gen = TIMER4_BASE },
     .clk_id       = RCC_TIMER4,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -84,7 +78,7 @@ timer_dev *TIMER4 = &timer4;
 
 #ifdef STM32_HIGH_DENSITY
 static timer_dev timer5 = {
-    .regs         = {.gen = TIMER5_BASE},
+    .regs         = { .gen = TIMER5_BASE },
     .clk_id       = RCC_TIMER5,
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
@@ -92,7 +86,7 @@ static timer_dev timer5 = {
 timer_dev *TIMER5 = &timer5;
 
 static timer_dev timer6 = {
-    .regs         = {.bas = TIMER6_BASE},
+    .regs         = { .bas = TIMER6_BASE },
     .clk_id       = RCC_TIMER6,
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
@@ -100,7 +94,7 @@ static timer_dev timer6 = {
 timer_dev *TIMER6 = &timer6;
 
 static timer_dev timer7 = {
-    .regs         = {.bas = TIMER7_BASE},
+    .regs         = { .bas = TIMER7_BASE },
     .clk_id       = RCC_TIMER7,
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
@@ -108,7 +102,7 @@ static timer_dev timer7 = {
 timer_dev *TIMER7 = &timer7;
 
 static timer_dev timer8 = {
-    .regs         = {.adv = TIMER8_BASE},
+    .regs         = { .adv = TIMER8_BASE },
     .clk_id       = RCC_TIMER8,
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
@@ -168,7 +162,7 @@ void timer_disable(timer_dev *dev) {
  * @param mode New timer mode for channel
  */
 void timer_set_mode(timer_dev *dev, uint8 channel, timer_mode mode) {
-    ASSERT(channel > 0 && channel <= 4);
+    ASSERT_FAULT(channel > 0 && channel <= 4);
 
     /* TODO decide about the basic timers */
     ASSERT(dev->type != TIMER_BASIC);
@@ -351,8 +345,8 @@ static inline void dispatch_cc_irqs(timer_dev *dev) {
     uint32 sr_clear = 0;
     uint32 b;
 
-    ASSERT(sr & (TIMER_SR_CC1IF | TIMER_SR_CC2IF |
-                 TIMER_SR_CC3IF | TIMER_SR_CC4IF));
+    ASSERT_FAULT(sr & (TIMER_SR_CC1IF | TIMER_SR_CC2IF |
+                       TIMER_SR_CC3IF | TIMER_SR_CC4IF));
 
     for (b = TIMER_SR_CC1IF_BIT; b <= TIMER_SR_CC4IF_BIT; b++) {
         uint32 mask = BIT(b);
@@ -443,7 +437,7 @@ static void enable_nonmuxed_irq(timer_dev *dev) {
         break;
 #endif
     default:
-        ASSERT(0);
+        ASSERT_FAULT(0);
         break;
     }
 }

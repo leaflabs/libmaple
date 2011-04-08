@@ -18,6 +18,12 @@ boards.  Some example usages are given :ref:`below
 Constants
 ---------
 
+- ``CLOCK_SPEED_MHZ``: Clock speed of your board, in megahertz
+  (MHz). This is the same as ``CYCLES_PER_MICROSECOND``.
+
+- ``CLOCK_SPEED_HZ``: Clock speed of your board, in hertz (Hz).  This
+  is the same as ``CLOCK_SPEED_MHZ * 1000000``.
+
 - ``CYCLES_PER_MICROSECOND``: Number of CPU cycles per microsecond on
   your board.
 

@@ -119,8 +119,7 @@ bool boardUsesPin(uint8 pin);
 
 /* Include the appropriate private header from boards/: */
 
-/* FIXME put boards/ before these paths once you stick make into the
- * IDE; current situation is a hack. */
+/* FIXME HACK put boards/ before these paths once IDE uses make. */
 
 #ifdef BOARD_maple
 #include "maple.h"
@@ -136,7 +135,21 @@ bool boardUsesPin(uint8 pin);
  */
 #include "maple_RET6.h"
 #else
+/*
+ * TODO turn this into a warning so people can:
+ *
+ * #include "my_board_config.h"
+ * #include "wirish.h"
+ *
+ * This will enable third-party board support without requiring that
+ * anybody hack around in libmaple itself.
+ */
 #error "Board type has not been selected correctly."
 #endif
+
+/* Set derived definitions */
+
+#define CLOCK_SPEED_MHZ                 CYCLES_PER_MICROSECOND
+#define CLOCK_SPEED_HZ                  (CLOCK_SPEED_MHZ * 1000000UL)
 
 #endif

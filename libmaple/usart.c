@@ -120,7 +120,7 @@ void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud) {
  * @brief Enable a serial port.
  *
  * USART is enabled in single buffer transmission mode, multibuffer
- * receiver mode, at the given baud rate, 8n1.
+ * receiver mode, 8n1.
  *
  * Serial port must have a baud rate configured to work properly.
  *
@@ -146,7 +146,7 @@ void usart_disable(usart_dev *dev) {
         ;
 
     /* Disable UE */
-    regs->CR1 = 0;
+    regs->CR1 &= ~USART_CR1_UE;
 
     /* Clean up buffer */
     usart_reset_rx(dev);

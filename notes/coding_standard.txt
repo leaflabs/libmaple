@@ -149,11 +149,11 @@ We'll handle this as follows.
   it's not crucial.  Don't feel obliged to put "_t" at the end of the
   type name; we don't.
 
-- Macros and constants: all caps, separated by underscores.  Variables
-  with the "const" qualifier aren't considered "constants" for the
-  purposes of this rule; i.e., case them according to the rules for
-  variables.  (We make an exception for PIN_MAP, but that's because
-  it's the central data structure for all of Wirish).
+- Macros and constants: all caps, separated by underscores.  C++
+  variables with the "const" qualifier generally aren't considered
+  "constants" for the purposes of this rule; i.e., they are cased
+  according to the rules for variables.  We make an exception for
+  PIN_MAP, because it's the central Wirish data structure.
 
 - foo.h gets #ifdef'ed to _FOO_H_.
 
@@ -216,7 +216,7 @@ Documentation
   notes also have a habit of turning into user-facing documentation.
 
 - For libmaple proper (the pure C library under libmaple/); the
-  convention is to document any user-facing entity at the point where
+  convention is to document any user-facing function at the point where
   it is defined.  In particular, this means you should document an
   externally-linked function defined in a .c file in that .c file, not
   in the header file where it is declared to the user.

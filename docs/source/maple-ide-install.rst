@@ -65,8 +65,8 @@ some drivers.  Sorry!
    changes in Windows 7 mean that you won't be able to install the IDE
    without disabling driver signing on your computer.  We're working
    on resolving this situation.  For now, `users on the forum have
-   reported some workarounds
-   <http://forums.leaflabs.com/topic.php?id=73>`_.
+   reported a workaround
+   <http://forums.leaflabs.com/topic.php?id=73#post-788>`_.
 
 First, install DFU drivers (for uploading code to your Maple) using
 the following steps.

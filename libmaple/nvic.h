@@ -31,6 +31,7 @@
 #define _NVIC_H_
 
 #include "libmaple_types.h"
+#include "util.h"
 
 #ifdef __cplusplus
 extern "C"{

@@ -21,6 +21,9 @@ scattered about this file which will provide you additional help.
 
 Vim customizations to do the same thing would be nice (hint, hint)!
 
+.. contents:: Contents
+   :local:
+
 License
 -------
 
@@ -94,8 +97,8 @@ Whitespace/Indentation
       }
 
 - Exactly one space in between binary arithmetic, logical, and
-  comparison operators and their operands, except for the . and ->
-  operators.  Examples::
+  comparison operators and their operands.  This doesn't apply to the
+  . and -> operators.  Examples::
 
       // This is good:
       int x = a + b * (c - d);

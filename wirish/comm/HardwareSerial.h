@@ -50,7 +50,8 @@ class HardwareSerial : public Print {
 public:
     HardwareSerial(usart_dev *usart_device,
                    uint8 tx_pin,
-                   uint8 rx_pin);
+                   uint8 rx_pin,
+                   uint32 clock_speed);
     void begin(uint32 baud);
     void end(void);
     uint32 available(void);
@@ -62,6 +63,7 @@ private:
     usart_dev *usart_device;
     uint8 tx_pin;
     uint8 rx_pin;
+    uint32 clock_speed;
 };
 
 extern HardwareSerial Serial1;

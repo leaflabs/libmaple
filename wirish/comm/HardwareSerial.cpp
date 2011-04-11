@@ -46,18 +46,21 @@
 #define RX5 BOARD_UART5_RX_PIN
 #endif
 
-HardwareSerial Serial1(USART1, TX1, RX1);
-HardwareSerial Serial2(USART2, TX2, RX2);
-HardwareSerial Serial3(USART3, TX3, RX3);
+// TODO Put these magic numbers into boards.h #defines
+HardwareSerial Serial1(USART1, TX1, RX1, 72000000UL);
+HardwareSerial Serial2(USART2, TX2, RX2, 36000000UL);
+HardwareSerial Serial3(USART3, TX3, RX3, 36000000UL);
 #if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
-HardwareSerial Serial4(UART4,  TX4, RX4);
-HardwareSerial Serial5(UART5,  TX5, RX5);
+HardwareSerial Serial4(UART4,  TX4, RX4, 36000000UL);
+HardwareSerial Serial5(UART5,  TX5, RX5, 36000000UL);
 #endif
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device,
                                uint8 tx_pin,
-                               uint8 rx_pin) {
+                               uint8 rx_pin,
+                               uint32 clock_speed) {
     this->usart_device = usart_device;
+    this->clock_speed = clock_speed;
     this->tx_pin = tx_pin;
     this->rx_pin = rx_pin;
 }
@@ -93,9 +96,7 @@ void HardwareSerial::begin(uint32 baud) {
     }
 
     usart_init(usart_device);
-    usart_set_baud_rate(usart_device,
-                        CYCLES_PER_MICROSECOND * 1000000UL,
-                        baud);
+    usart_set_baud_rate(usart_device, clock_speed, baud);
     usart_enable(usart_device);
 }
 

@@ -99,7 +99,7 @@ void usart_init(usart_dev *dev) {
  * @brief Configure a serial port's baud rate.
  *
  * @param dev         Serial port to be configured
- * @param clock_speed MCU clock speed, in megahertz.
+ * @param clock_speed Clock speed, in megahertz.
  * @param baud        Baud rate for transmit/receive.
  */
 void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud) {

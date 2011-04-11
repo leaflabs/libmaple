@@ -71,8 +71,8 @@ typedef struct i2c_dev {
     i2c_msg *msg;
 } i2c_dev;
 
-
 extern i2c_dev* const I2C1;
+extern i2c_dev* const I2C2;
 
 #define I2C1_BASE               (i2c_reg_map*)0x40005400
 #define I2C2_BASE               (i2c_reg_map*)0x40005800
@@ -100,7 +100,8 @@ extern i2c_dev* const I2C1;
 #define I2C_CR2_FREQ            0xFFF           // Peripheral input frequency
 
 /* Clock control register bits */
-#define I2C_CCR_FS              BIT(15)         // Master mode selection
+#define I2C_CCR_FS              BIT(15)         // Fast mode selection
+#define I2C_CCR_DUTY            BIT(14)         // 16/9 duty ratio
 #define I2C_CCR_CCR             0xFFF           // Clock control bits
 
 /* Status register 1 bits  */

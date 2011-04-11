@@ -449,6 +449,7 @@ typedef enum {
     RCC_PWR,
     RCC_BKP,
     RCC_I2C1,
+    RCC_I2C2,
     RCC_CRC,
     RCC_FLITF,
     RCC_SRAM,
@@ -465,7 +466,6 @@ typedef enum {
     RCC_FSMC,
     RCC_DAC,
     RCC_DMA2,
-    RCC_I2C2,
     RCC_SDIO,
 #endif
 #ifdef STM32_XL_DENSITY

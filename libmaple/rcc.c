@@ -67,6 +67,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_PWR]    = { .clk_domain = APB1, .line_num = 28},
     [RCC_BKP]    = { .clk_domain = APB1, .line_num = 27},
     [RCC_I2C1]   = { .clk_domain = APB1, .line_num = 21 },
+    [RCC_I2C2]   = { .clk_domain = APB1, .line_num = 22 },
     [RCC_CRC]    = { .clk_domain = AHB,  .line_num = 6},
     [RCC_FLITF]  = { .clk_domain = AHB,  .line_num = 4},
     [RCC_SRAM]   = { .clk_domain = AHB,  .line_num = 2},
@@ -83,7 +84,6 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_FSMC]   = { .clk_domain = AHB,  .line_num = 8 },
     [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 },
     [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 },
-    [RCC_I2C2]   = { .clk_domain = APB1, .line_num = 22 },
     [RCC_SDIO]   = { .clk_domain = AHB,  .line_num = 10 },
 #endif
 #ifdef STM32_XL_DENSITY

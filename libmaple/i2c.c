@@ -49,6 +49,19 @@ static i2c_dev i2c_dev1 = {
 
 i2c_dev* const I2C1 = &i2c_dev1;
 
+static i2c_dev i2c_dev2 = {
+    .regs         = I2C2_BASE,
+    .gpio_port    = &gpiob,
+    .sda_pin      = 11,
+    .scl_pin      = 10,
+    .clk_line     = RCC_I2C2,
+    .ev_nvic_line = NVIC_I2C2_EV,
+    .er_nvic_line = NVIC_I2C2_ER,
+    .state        = I2C_STATE_IDLE
+};
+
+i2c_dev* const I2C2 = &i2c_dev2;
+
 struct crumb {
     uint32 event;
     uint32 sr1;
@@ -140,7 +153,8 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * Master transmitter: write first byte to fill shift register.
              * We should get another TXE interrupt immediately to fill DR again.
              */
-            i2c_write(dev, msg->data[msg->xferred++]);
+            if (msg->length != 1) 
+                    i2c_write(dev, msg->data[msg->xferred++]);
         }
         sr1 = sr2 = 0;
     }
@@ -243,6 +257,10 @@ void __irq_i2c1_ev(void) {
    i2c_irq_handler(&i2c_dev1);
 }
 
+void __irq_i2c2_ev(void) {
+   i2c_irq_handler(&i2c_dev2);
+}
+
 static void i2c_irq_error_handler(i2c_dev *dev) {
     uint32 sr1 = dev->regs->SR1;
     uint32 sr2 = dev->regs->SR2;
@@ -255,6 +273,10 @@ static void i2c_irq_error_handler(i2c_dev *dev) {
 
 void __irq_i2c1_er(void) {
     i2c_irq_error_handler(&i2c_dev1);
+}
+
+void __irq_i2c2_er(void) {
+    i2c_irq_error_handler(&i2c_dev2);
 }
 
 static void i2c_bus_reset(const i2c_dev *dev) {
@@ -301,8 +323,11 @@ static void i2c_bus_reset(const i2c_dev *dev) {
  *      I2C_10BIT_ADDRESSING: Enable 10-bit addressing
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
+#define I2C_CLK                (PCLK1/1000000)
 #define STANDARD_CCR           (PCLK1/(100000*2))
-#define STANDARD_TRISE         37
+#define STANDARD_TRISE         (I2C_CLK+1)  
+#define FAST_CCR               (I2C_CLK/10)
+#define FAST_TRISE             ((I2C_CLK*3)/10+1)
     /* Reset the bus. Clock out any hung slaves. */
     i2c_bus_reset(dev);
 
@@ -313,17 +338,24 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_AF_OUTPUT_OD);
 
     /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
-    i2c_set_input_clk(dev, 36);
+    i2c_set_input_clk(dev, I2C_CLK);
 
-    /* 100 khz only for now */
-    i2c_set_clk_control(dev, STANDARD_CCR);
+    if(flags & I2C_FAST_MODE) { 
 
-    /*
-     * Set scl rise time, standard mode for now.
-     * Max rise time in standard mode: 1000 ns
-     * Max rise time in fast mode: 300ns
-     */
-    i2c_set_trise(dev, STANDARD_TRISE);
+	/* 400 kHz for fast mode, set DUTY and F/S bits */
+        i2c_set_clk_control(dev, FAST_CCR|I2C_CCR_DUTY|I2C_CCR_FS);
+
+        /* Set scl rise time, max rise time in fast mode: 300ns */
+        i2c_set_trise(dev, FAST_TRISE);
+
+    } else {
+
+	/* 100 kHz for standard mode */
+        i2c_set_clk_control(dev, STANDARD_CCR);
+
+        /* Max rise time in standard mode: 1000 ns */
+        i2c_set_trise(dev, STANDARD_TRISE);
+    }
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);

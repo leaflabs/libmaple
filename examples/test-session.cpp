@@ -29,6 +29,7 @@ void cmd_sequential_adc_reads(void);
 void cmd_gpio_qa(void);
 void cmd_sequential_gpio_writes(void);
 void cmd_gpio_toggling(void);
+void cmd_but_test(void);
 void cmd_sequential_pwm_test(void);
 void cmd_servo_sweep(void);
 void cmd_board_info(void);
@@ -73,7 +74,7 @@ void setup() {
 
 void loop () {
     toggleLED();
-    delay(100);
+    delay(250);
 
     while (SerialUSB.available()) {
         uint8 input = SerialUSB.read();
@@ -152,6 +153,10 @@ void loop () {
 
         case 'G':
             cmd_gpio_toggling();
+            break;
+
+        case 'B':
+            cmd_but_test();
             break;
 
         case 'f':
@@ -261,6 +266,7 @@ void cmd_print_help(void) {
     SerialUSB.println("\tU: dump data as fast as possible on USB");
     SerialUSB.println("\tg: toggle GPIOs sequentially");
     SerialUSB.println("\tG: toggle GPIOs at the same time");
+    SerialUSB.println("\tB: test the built-in button");
     SerialUSB.println("\tf: toggle pin 4 as fast as possible in bursts");
     SerialUSB.println("\tr: monitor and print GPIO status changes");
     SerialUSB.println("\ts: output a sweeping servo PWM on all PWM channels");
@@ -575,6 +581,20 @@ void cmd_gpio_toggling(void) {
             continue;
         digitalWrite(i, LOW);
     }
+}
+
+void cmd_but_test(void) {
+    SerialUSB.println("Press the button to test.  Press any key to stop.");
+    pinMode(BOARD_BUTTON_PIN, INPUT);
+
+    while (!SerialUSB.available()) {
+        if (isButtonPressed()) {
+            uint32 tstamp = millis();
+            SerialUSB.print("Button press detected, timestamp: ");
+            SerialUSB.println(tstamp);
+        }
+    }
+    SerialUSB.read();
 }
 
 void cmd_sequential_pwm_test(void) {

@@ -160,6 +160,9 @@ static inline void nvic_globalirq_disable() {
  * @param irq_num Interrupt to enable
  */
 static inline void nvic_irq_enable(nvic_irq_num irq_num) {
+    if (irq_num < 0) {
+        return;
+    }
     NVIC_BASE->ISER[irq_num / 32] = BIT(irq_num % 32);
 }
 
@@ -168,6 +171,9 @@ static inline void nvic_irq_enable(nvic_irq_num irq_num) {
  * @param irq_num Interrupt to disable
  */
 static inline void nvic_irq_disable(nvic_irq_num irq_num) {
+    if (irq_num < 0) {
+        return;
+    }
     NVIC_BASE->ICER[irq_num / 32] = BIT(irq_num % 32);
 }
 

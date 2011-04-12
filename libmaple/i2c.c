@@ -153,7 +153,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * Master transmitter: write first byte to fill shift register.
              * We should get another TXE interrupt immediately to fill DR again.
              */
-            if (msg->length != 1) 
+            if (msg->length != 1)
                     i2c_write(dev, msg->data[msg->xferred++]);
         }
         sr1 = sr2 = 0;
@@ -325,7 +325,7 @@ static void i2c_bus_reset(const i2c_dev *dev) {
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 #define I2C_CLK                (PCLK1/1000000)
 #define STANDARD_CCR           (PCLK1/(100000*2))
-#define STANDARD_TRISE         (I2C_CLK+1)  
+#define STANDARD_TRISE         (I2C_CLK+1)
 #define FAST_CCR               (I2C_CLK/10)
 #define FAST_TRISE             ((I2C_CLK*3)/10+1)
     /* Reset the bus. Clock out any hung slaves. */
@@ -340,9 +340,8 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
     i2c_set_input_clk(dev, I2C_CLK);
 
-    if(flags & I2C_FAST_MODE) { 
-
-	/* 400 kHz for fast mode, set DUTY and F/S bits */
+    if(flags & I2C_FAST_MODE) {
+        /* 400 kHz for fast mode, set DUTY and F/S bits */
         i2c_set_clk_control(dev, FAST_CCR|I2C_CCR_DUTY|I2C_CCR_FS);
 
         /* Set scl rise time, max rise time in fast mode: 300ns */
@@ -350,7 +349,7 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 
     } else {
 
-	/* 100 kHz for standard mode */
+        /* 100 kHz for standard mode */
         i2c_set_clk_control(dev, STANDARD_CCR);
 
         /* Max rise time in standard mode: 1000 ns */

@@ -100,7 +100,7 @@ static inline long map(long value, long fromStart, long fromEnd,
 #ifdef abs
 #undef abs
 #endif
-#define abs(x) (((x) > 0) ? (x) : -(unsigned)(x))
+#define abs(x) (((x) > 0) ? (x) : -(x))
 
 /* Following are duplicate declarations (with Doxygen comments) for
  * some of the math.h functions; this is for the convenience of the

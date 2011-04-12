@@ -50,8 +50,8 @@ extern "C"{
  * Register reads and writes
  */
 
-#define __read(reg)              (*(volatile uint32*)(reg))
-#define __write(reg, value)      (*(volatile uint32*)(reg) = (value))
+#define __read(reg)              (*(__io uint32*)(reg))
+#define __write(reg, value)      (*(__io uint32*)(reg) = (value))
 
 /*
  * Failure routines

@@ -28,7 +28,7 @@
 
 #include "systick.h"
 
-volatile uint32 systick_timer_millis;
+__io uint32 systick_timer_millis;
 
 /**
  * @brief Initialize and enable SysTick.

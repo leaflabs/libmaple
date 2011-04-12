@@ -35,6 +35,8 @@
 #ifndef _RING_BUFFER_H_
 #define _RING_BUFFER_H_
 
+#include "libmaple_types.h"
+
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -49,7 +51,7 @@ extern "C"{
  *
  * One byte is left free to distinguish empty from full. */
 typedef struct ring_buffer {
-    volatile uint8 *buf; /**< Buffer items are stored into */
+    __io uint8 *buf;     /**< Buffer items are stored into */
     uint16 head;         /**< Index of the next item to remove */
     uint16 tail;         /**< Index where the next item will get inserted */
     uint16 size;         /**< Buffer capacity minus one */
@@ -79,7 +81,7 @@ static inline void rb_init(ring_buffer *rb, uint16 size, uint8 *buf) {
  * @param rb Buffer whose elements to count.
  */
 static inline uint16 rb_full_count(ring_buffer *rb) {
-    volatile ring_buffer *arb = rb;
+    __io ring_buffer *arb = rb;
     int32 size = arb->tail - arb->head;
     if (arb->tail < arb->head) {
         size += arb->size + 1;

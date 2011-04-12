@@ -28,12 +28,17 @@
   - http://www.epanorama.net/documents/pc/vga_timing.html
 
   This code is released into the public domain.
+
+  Authors:
+
+  Bryan Newbold <bnewbold@leaflabs.com>
+  Marti Bolivar <mbolivar@leaflabs.com>
  */
 
 #include "wirish.h"
 #include "systick.h"
 
-// FIXME generalize for Native and Mini
+// FIXME: generalize for Native and Mini
 
 #define LED_PIN     BOARD_LED_PIN
 #define ANALOG_PIN 18

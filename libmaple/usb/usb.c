@@ -35,6 +35,7 @@
 #include "usb_lib.h"
 #include "gpio.h"
 #include "usb_hardware.h"
+#include "delay.h"
 
 #include "usb_config.h"
 #include "usb_callbacks.h"
@@ -318,29 +319,8 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask) {
 
 }
 
-static void FIXME_delayMicroseconds_copy(uint32 us) {
-    /* So (2^32)/12 micros max, or less than 6 minutes */
-    us *= 12;
-
-    /* fudge for function call overhead  */
-    us--;
-    asm volatile("   mov r0, %[us]          \n\t"
-                 "1: subs r0, #1            \n\t"
-                 "   bhi 1b                 \n\t"
-                 :
-                 : [us] "r" (us)
-                 : "r0");
-}
-
-static void FIXME_delay_copy(unsigned long ms) {
-    uint32 i;
-    for (i = 0; i < ms; i++) {
-        FIXME_delayMicroseconds_copy(1000);
-    }
-}
-
 void usbWaitReset(void) {
-  FIXME_delay_copy(RESET_DELAY);
+  delay_us(RESET_DELAY);
   systemHardReset();
 }
 

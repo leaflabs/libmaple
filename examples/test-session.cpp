@@ -780,17 +780,23 @@ void init_all_timers(uint16 prescale) {
 }
 
 void enable_usarts(void) {
-    // FIXME generalize after USART refactor
     Serial1.begin(BAUD);
     Serial2.begin(BAUD);
     Serial3.begin(BAUD);
+#ifdef STM32_HIGH_DENSITY
+    Serial4.begin(BAUD);
+    Serial5.begin(BAUD);
+#endif
 }
 
 void disable_usarts(void) {
-    // FIXME generalize after USART refactor
     Serial1.end();
     Serial2.end();
     Serial3.end();
+#ifdef STM32_HIGH_DENSITY
+    Serial4.end();
+    Serial5.end();
+#endif
 }
 
 void print_board_array(const char* msg, const uint8 arr[], int len) {

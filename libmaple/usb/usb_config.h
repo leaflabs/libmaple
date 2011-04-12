@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 #define VCOM_ID_VENDOR            0x1EAF
-#define RESET_DELAY               (100)
+#define RESET_DELAY               (100000)
 #define USB_CONFIG_MAX_POWER      (100 >> 1)
 
 #if defined(BOARD_maple) || defined(BOARD_maple_RET6)

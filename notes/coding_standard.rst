@@ -362,10 +362,10 @@ Documentation
 General Formatting
 ------------------
 
+.. highlight:: scheme
+
 - Keep it 80-column clean.  That means Emacs says the largest column
   number=79.  You should turn on column number mode to help you out:
-
-.. highlight:: scheme
 
     (column-number-mode 1)
 
@@ -379,6 +379,8 @@ General Formatting
     (dolist (hook '(c-mode-hook c++-mode-hook))
       (add-hook hook (lambda () (lineker-mode 1))))
 
+.. highlight:: cpp
+
 Language Features and Compiler Extensions
 -----------------------------------------
 
@@ -391,10 +393,10 @@ Language Features and Compiler Extensions
 
 - Explicitly approved GCC extensions:
 
-  * asm volatile:
+  * ``asm volatile``:
     http://gcc.gnu.org/onlinedocs/gcc/Extended-Asm.html
 
-  * Nested functions:
+  * ``Nested functions``:
     http://gcc.gnu.org/onlinedocs/gcc/Nested-Functions.html
 
 - In wirish, generally be very conservative when using C++ features

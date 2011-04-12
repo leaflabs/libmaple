@@ -27,11 +27,11 @@ Vim customizations to do the same thing would be nice (hint, hint)!
 License
 -------
 
+.. highlight:: scheme
+
 - Put an MIT license at the beginning of the file (look at any of our
   source files for an example).  Copyright should go either to you or
   to LeafLabs, LLC.
-
-.. highlight:: scheme
 
   Emacs: if you don't like seeing the license, you should use
   elide-head (which will hide it for you).  You can use the following::

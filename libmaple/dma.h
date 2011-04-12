@@ -417,6 +417,8 @@ static inline uint8 dma_is_channel_enabled(dma_dev *dev, dma_channel channel) {
  * If you're attempting to figure out why a DMA interrupt fired; you
  * may find dma_get_irq_cause() more convenient.
  *
+ * @param dev DMA device
+ * @param channel Channel whose ISR bits to return.
  * @see dma_get_irq_cause().
  */
 static inline uint8 dma_get_isr_bits(dma_dev *dev, dma_channel channel) {
@@ -430,6 +432,8 @@ static inline uint8 dma_get_isr_bits(dma_dev *dev, dma_channel channel) {
  * If you're attempting to clean up after yourself in a DMA interrupt,
  * you may find dma_get_irq_cause() more convenient.
  *
+ * @param dev DMA device
+ * @param channel Channel whose ISR bits to clear.
  * @see dma_get_irq_cause()
  */
 static inline void dma_clear_isr_bits(dma_dev *dev, dma_channel channel) {

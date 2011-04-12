@@ -309,6 +309,7 @@ uint16 adc_read(const adc_dev *dev, uint8 channel);
  * Defines the total number of conversions in the regular channel
  * conversion sequence.
  *
+ * @param dev ADC device.
  * @param length Regular channel sequence length, from 1 to 16.
  */
 static inline void adc_set_reg_seqlen(const adc_dev *dev, uint8 length) {

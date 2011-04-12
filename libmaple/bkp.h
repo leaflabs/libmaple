@@ -46,7 +46,7 @@ extern "C" {
 
 /** Backup peripheral register map type. */
 typedef struct bkp_reg_map {
-    const uint32 RESERVED1;
+    const uint32 RESERVED1;     ///< Reserved
     __io uint32 DR1;            ///< Data register 1
     __io uint32 DR2;            ///< Data register 2
     __io uint32 DR3;            ///< Data register 3
@@ -61,8 +61,8 @@ typedef struct bkp_reg_map {
     __io uint32 CR;             ///< Control register
     __io uint32 CSR;            ///< Control and status register
 #ifdef STM32_HIGH_DENSITY
-    const uint32 RESERVED2;
-    const uint32 RESERVED3;
+    const uint32 RESERVED2;     ///< Reserved
+    const uint32 RESERVED3;     ///< Reserved
     __io uint32 DR11;           ///< Data register 11
     __io uint32 DR12;           ///< Data register 12
     __io uint32 DR13;           ///< Data register 13

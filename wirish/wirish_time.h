@@ -23,7 +23,7 @@
  *****************************************************************************/
 
 /**
- * @file time.h
+ * @file wirish_time.h
  * @brief Timing and delay functions.
  */
 

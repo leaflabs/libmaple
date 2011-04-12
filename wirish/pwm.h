@@ -43,6 +43,9 @@
  *
  * User code is expected to determine and honor the maximum value
  * (based on the configured period).
+ *
+ * @param pin PWM output pin
+ * @param duty_cycle Duty cycle to set.
  */
 void pwmWrite(uint8 pin, uint16 duty_cycle);
 

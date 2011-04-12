@@ -628,8 +628,8 @@ static inline uint16 timer_get_count(timer_dev *dev) {
 
 /**
  * @brief Sets the counter value for the given timer.
- * @param timer_num Timer whose counter to set
- * @param value     New counter value
+ * @param dev Timer whose counter to set
+ * @param value New counter value
  */
 static inline void timer_set_count(timer_dev *dev, uint16 value) {
     (dev->regs).bas->CNT = value;
@@ -804,8 +804,8 @@ static inline void timer_cc_disable(timer_dev *dev, uint8 channel) {
 
 /**
  * @brief Get a channel's capture/compare output polarity
- * @brief dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
- * @brief channel Channel whose capture/compare output polarity to get.
+ * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
+ * @param channel Channel whose capture/compare output polarity to get.
  * @return Polarity, either 0 or 1.
  * @see timer_cc_set_polarity()
  */
@@ -982,6 +982,7 @@ typedef enum timer_oc_mode_flags {
  *
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @param channel Channel to configure in output compare mode.
+ * @param mode Timer mode to set.
  * @param flags OR of timer_oc_mode_flags.
  * @see timer_oc_mode
  * @see timer_oc_mode_flags

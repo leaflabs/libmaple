@@ -57,6 +57,9 @@ typedef struct stm32_pin_info {
     uint8 adc_channel;          /**< Pin ADC channel, or ADCx if none. */
 } stm32_pin_info;
 
+/**
+ * Variable attribute, instructs the linker to place the marked
+ * variable in Flash instead of RAM. */
 #define __FLASH__ __attr_flash
 
 #endif

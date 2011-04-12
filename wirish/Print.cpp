@@ -18,16 +18,38 @@
  * 02110-1301 USA
  *
  * Modified 23 November 2006 by David A. Mellis
+ * Modified 12 April 2011 by Marti Bolivar <mbolivar@leaflabs.com>
  */
+
+#include <math.h>
+#include <limits.h>
+
+#ifndef LLONG_MAX
+/*
+ * Note:
+ *
+ * At time of writing (12 April 2011), the limits.h that came with the
+ * newlib we distributed didn't include LLONG_MAX.  Because we're
+ * staying away from using templates (see /notes/coding_standard.rst,
+ * "Language Features and Compiler Extensions"), this value was
+ * copy-pasted from a println() of the value
+ *
+ *     std::numeric_limits<long long>::max().
+ */
+#define LLONG_MAX 9223372036854775807LL
+#endif
 
 #include "wirish.h"
 #include "Print.h"
 
-//------------------------------ Public Methods -------------------------------
+/*
+ * Public methods
+ */
 
 void Print::write(const char *str) {
-    while (*str)
+    while (*str) {
         write(*str++);
+    }
 }
 
 void Print::write(void *buffer, uint32 size) {
@@ -42,7 +64,7 @@ void Print::print(uint8 b) {
 }
 
 void Print::print(char c) {
-    print((byte) c);
+    print((byte)c);
 }
 
 void Print::print(const char str[]) {
@@ -50,14 +72,22 @@ void Print::print(const char str[]) {
 }
 
 void Print::print(int n) {
-    print((long) n);
+    print((long long)n);
 }
 
 void Print::print(unsigned int n) {
-    print((unsigned long) n);
+    print((unsigned long long)n);
 }
 
 void Print::print(long n) {
+    print((long long)n);
+}
+
+void Print::print(unsigned long n) {
+    print((unsigned long long)n);
+}
+
+void Print::print(long long n) {
     if (n < 0) {
         print('-');
         n = -n;
@@ -65,13 +95,13 @@ void Print::print(long n) {
     printNumber(n, 10);
 }
 
-void Print::print(unsigned long n) {
+void Print::print(unsigned long long n) {
     printNumber(n, 10);
 }
 
-void Print::print(long n, int base) {
+void Print::print(unsigned long long n, int base) {
     if (base == 0) {
-        print((char) n);
+        print((char)n);
     } else if (base == 10) {
         print(n);
     } else {
@@ -114,16 +144,26 @@ void Print::println(unsigned int n) {
 }
 
 void Print::println(long n) {
-    print(n);
+    print((long long)n);
     println();
 }
 
 void Print::println(unsigned long n) {
+    print((unsigned long long)n);
+    println();
+}
+
+void Print::println(long long n) {
     print(n);
     println();
 }
 
-void Print::println(long n, int base) {
+void Print::println(unsigned long long n) {
+    print(n);
+    println();
+}
+
+void Print::println(unsigned long long n, int base) {
     print(n, base);
     println();
 }
@@ -133,10 +173,12 @@ void Print::println(double n) {
     println();
 }
 
-//------------------------------ Private Methods ------------------------------
+/*
+ * Private methods
+ */
 
-void Print::printNumber(unsigned long n, uint8 base) {
-    unsigned char buf[8 * sizeof(long)]; // Assumes 8-bit chars.
+void Print::printNumber(unsigned long long n, uint8 base) {
+    unsigned char buf[CHAR_BIT * sizeof(long long)];
     unsigned long i = 0;
 
     if (n == 0) {
@@ -149,30 +191,57 @@ void Print::printNumber(unsigned long n, uint8 base) {
         n /= base;
     }
 
-    for (; i > 0; i--)
-        print((char) (buf[i - 1] < 10 ?
-                      '0' + buf[i - 1] :
-                      'A' + buf[i - 1] - 10));
+    for (; i > 0; i--) {
+        print((char)(buf[i - 1] < 10 ?
+                     '0' + buf[i - 1] :
+                     'A' + buf[i - 1] - 10));
+    }
 }
 
+/* According to snprintf(),
+ *
+ * nextafter((double)numeric_limits<long long>::max(), 0.0) ~= 9.22337e+18
+ *
+ * This slightly smaller value was picked semi-arbitrarily. */
+#define LARGE_DOUBLE_TRESHOLD (9.1e18)
+
+/* THIS FUNCTION SHOULDN'T BE USED IF YOU NEED ACCURATE RESULTS.
+ *
+ * This implementation is meant to be simple and not occupy too much
+ * code size.  However, printing floating point values accurately is a
+ * subtle task, best left to a well-tested library function.
+ *
+ * See Steele and White 2003 for more details:
+ *
+ * http://kurtstephens.com/files/p372-steele.pdf
+ */
 void Print::printFloat(double number, uint8 digits) {
+    // Hackish fail-fast behavior for large-magnitude doubles
+    if (abs(number) >= LARGE_DOUBLE_TRESHOLD) {
+        if (number < 0.0) {
+            print('-');
+        }
+        print("<large double>");
+        return;
+    }
+
     // Handle negative numbers
     if (number < 0.0) {
         print('-');
         number = -number;
     }
 
-    // Round correctly so that print(1.999, 2) prints as "2.00"
+    // Simplistic rounding strategy so that e.g. print(1.999, 2)
+    // prints as "2.00"
     double rounding = 0.5;
-    for (uint8 i=0; i<digits; ++i) {
+    for (uint8 i = 0; i < digits; i++) {
         rounding /= 10.0;
     }
-
     number += rounding;
 
     // Extract the integer part of the number and print it
-    unsigned long int_part = (unsigned long)number;
-    double remainder = number - (double)int_part;
+    long long int_part = (long long)number;
+    double remainder = number - int_part;
     print(int_part);
 
     // Print the decimal point, but only if there are digits beyond
@@ -183,8 +252,8 @@ void Print::printFloat(double number, uint8 digits) {
     // Extract digits from the remainder one at a time
     while (digits-- > 0) {
         remainder *= 10.0;
-        int toPrint = int(remainder);
-        print(toPrint);
-        remainder -= toPrint;
+        int to_print = (int)remainder;
+        print(to_print);
+        remainder -= to_print;
     }
 }

@@ -16,29 +16,28 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA.
+ *
+ * Modified 12 April 2011 by Marti Bolivar <mbolivar@leaflabs.com>
  */
 
-#ifndef Print_h
-#define Print_h
+#ifndef _PRINT_H_
+#define _PRINT_H_
 
 #include <libmaple_types.h>
-#include <stdio.h> // for size_t
 
-#define DEC 10
-#define HEX 16
-#define OCT 8
-#define BIN 2
-#define BYTE 0
+enum {
+    BYTE = 0,
+    BIN  = 2,
+    OCT  = 8,
+    DEC  = 10,
+    HEX  = 16
+};
 
-class Print
-{
- private:
-    void printNumber(unsigned long, uint8);
-    void printFloat(double, uint8);
- public:
+class Print {
+public:
     virtual void write(uint8) = 0;
     virtual void write(const char *str);
-    virtual void write(void *, uint32);
+    virtual void write(void*, uint32);
     void print(char);
     void print(const char[]);
     void print(uint8);
@@ -46,7 +45,9 @@ class Print
     void print(unsigned int);
     void print(long);
     void print(unsigned long);
-    void print(long, int);
+    void print(long long);
+    void print(unsigned long long);
+    void print(unsigned long long, int);
     void print(double);
     void println(void);
     void println(char);
@@ -56,8 +57,13 @@ class Print
     void println(unsigned int);
     void println(long);
     void println(unsigned long);
-    void println(long, int);
+    void println(long long);
+    void println(unsigned long long);
+    void println(unsigned long long, int);
     void println(double);
+private:
+    void printNumber(unsigned long long, uint8);
+    void printFloat(double, uint8);
 };
 
 #endif

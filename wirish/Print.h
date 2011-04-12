@@ -1,67 +1,62 @@
-/******************************************************************************
- * The MIT License
+/*
+ * Print.h - Base class that provides print() and println()
+ * Copyright (c) 2008 David A. Mellis.  All right reserved.
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
  *
- * Permission is hereby granted, free of charge, to any person
- * obtaining a copy of this software and associated documentation
- * files (the "Software"), to deal in the Software without
- * restriction, including without limitation the rights to use, copy,
- * modify, merge, publish, distribute, sublicense, and/or sell copies
- * of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * This library is distributed in the hope that it will be useful, but
+ * WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
  *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- *****************************************************************************/
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA.
+ */
 
-#ifndef _PRINT_H_
-#define _PRINT_H_
+#ifndef Print_h
+#define Print_h
 
-#include "libmaple_types.h"
+#include <libmaple_types.h>
+#include <stdio.h> // for size_t
 
-#define DEC   10
-#define HEX   16
-#define OCT    8
-#define BIN    2
-#define BYTE   0                // yuck
+#define DEC 10
+#define HEX 16
+#define OCT 8
+#define BIN 2
+#define BYTE 0
 
-class Print {
+class Print
+{
+ private:
+    void printNumber(unsigned long, uint8);
+    void printFloat(double, uint8);
  public:
     virtual void write(uint8) = 0;
     virtual void write(const char *str);
-    virtual void write(void *buf, uint32 size);
-
+    virtual void write(void *, uint32);
     void print(char);
     void print(const char[]);
     void print(uint8);
-    void print(int32);
-    void print(uint32);
-    void print(int64);
-    void print(uint64);
-    void print(int32, int);
-    void print(int64, int);
+    void print(int);
+    void print(unsigned int);
+    void print(long);
+    void print(unsigned long);
+    void print(long, int);
     void print(double);
-
     void println(void);
     void println(char);
     void println(const char[]);
     void println(uint8);
-    void println(int32);
-    void println(uint32);
-    void println(int64);
-    void println(uint64);
-    void println(int32, int);
-    void println(int64, int);
+    void println(int);
+    void println(unsigned int);
+    void println(long);
+    void println(unsigned long);
+    void println(long, int);
     void println(double);
 };
 

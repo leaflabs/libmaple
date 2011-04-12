@@ -109,35 +109,26 @@ world!")``.
 
    Print the argument's digits over the USB connection, in decimal format.
 
-.. cpp:function:: USBSerial::print(long long n)
+.. cpp:function:: USBSerial::print(long n)
 
    Print the argument's digits over the USB connection, in decimal
    format.  Negative values will be prefixed with a ``'-'`` character.
 
-.. cpp:function:: USBSerial::print(unsigned long long n)
+.. cpp:function:: USBSerial::print(unsigned long n)
 
    Print the argument's digits over the USB connection, in decimal
    format.
 
-.. _lang-serial-print-n-base:
+.. cpp:function:: USBSerial::print(long n, int base)
 
-.. cpp:function:: USBSerial::print(int n, int base)
-
-   Print the digits of ``n`` over USB, in base ``base``.  The ``base``
-   value 2 corresponds to binary, 8 to octal, 10 to decimal, and 16 to
-   hexadecimal (you can also use the symbolic constants ``BIN``,
-   ``OCT``, ``DEC``, ``HEX``).  If ``base`` is 10, negative values
-   will be prefixed with a ``'-'`` character (otherwise, ``n`` will be
-   interpreted as an unsigned quantity).
-
-.. cpp:function:: HardwareSerial::print(long long n, int base)
-
-   Same behavior as the above :ref:`print(int n, int base)
-   <lang-serialusb-print-n-base>`, except with 64-bit values.
+   Print the digits of ``n`` over the USB connection, in base ``base``
+   (which may be between 2 and 16).  The ``base`` value 2 corresponds
+   to binary, 8 to octal, 10 to decimal, and 16 to hexadecimal.
+   Negative values will be prefixed with a ``'-'`` character.
 
 .. cpp:function:: USBSerial::print(double n)
 
-   Print ``n``, accurate to 6 digits after the decimal point.
+   Print ``n``, accurate to 2 digits after the decimal point.
 
 .. _lang-serialusb-println:
 
@@ -161,19 +152,15 @@ world!")``.
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(long long n)
+.. cpp:function:: USBSerial::println(long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(unsigned long long n)
+.. cpp:function:: USBSerial::println(unsigned long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(int n, int base)
-
-   Like ``print(n, b)``, followed by ``"\r\n"``.
-
-.. cpp:function:: USBSerial::println(long long n, int base)
+.. cpp:function:: USBSerial::println(long n, int base)
 
    Like ``print(n, b)``, followed by ``"\r\n"``.
 

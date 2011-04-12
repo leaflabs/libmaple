@@ -34,7 +34,10 @@ second problem is the use of :ref:`perpetual bootloader mode
 Recommended Reading
 -------------------
 
-* `USB in a NutShell <http://www.beyondlogic.org/usbnutshell/usb1.htm>`_ overview from Beyond Logic
+* `USB in a Nutshell <http://www.beyondlogic.org/usbnutshell/usb1.htm>`_, an overview from Beyond Logic
+* `USB made simple <http://www.usbmadesimple.co.uk/>`_, an illustrated series of articles on USB
+* The `USB 2.0 Specification <http://www.usb.org/developers/docs/>`_ (`direct link <http://www.usb.org/developers/docs/usb_20_021411.zip>`_)
+* `Embedded USB - a brief tutorial <http://www.computer-solutions.co.uk/info/Embedded_tutorials/usb_tutorial.htm>`_
 * `Wikipedia article on Universal Serial Bus (USB) <http://en.wikipedia.org/wiki/Universal_Serial_Bus>`_
 * Linux Kernel documentation for `USB ACM <http://www.kernel.org/doc/Documentation/usb/acm.txt>`_ and `USB Serial <http://www.kernel.org/doc/Documentation/usb/usb-serial.txt>`_
 * STMicro documentation for STM32F103RB microcontroller:

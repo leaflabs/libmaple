@@ -12,21 +12,25 @@ The latest version of this repository can be found here:
 
     http://github.com/leaflabs/libmaple
 
-Instructions to Compile for ARM Targets
+General information
 ------------------------------------------------------------------------------
 
-A HOWTO is available in the "Unix Toolchain Quickstart" guide at:
+A HOWTO on setting up this library for use in a Unix environment is
+available in our online HTML documentation:
 
     http://leaflabs.com/docs/unix-toolchain.html
 
-HTML documentation for this repository is automatically generated from
-the source code and the files under the top-level /docs/ directory.
-It is available online at:
+The HTML docs for this repository are automatically generated from the
+source code and the files under the top-level /docs/ directory.  For
+more information, see /docs/README.
 
-    http://leaflabs.com/docs/
+Our bugtracker is available at:
 
-(For more information on how this documentation is generated, see
-/docs/README).
+    http://code.google.com/p/leaflabs/issues/list
+
+For changes that block official releases, see our wiki:
+
+    http://wiki.leaflabs.com/index.php?title=Blocking_Changes
 
 Instructions to Create a Library
 ------------------------------------------------------------------------------
@@ -93,10 +97,7 @@ Repository Layout
 
 /notes/
 
-    Unstructured text notes that may be useful. The 45-maple.rules
-    udev file can be placed in /etc/udev/rules.d/ on compatible Linux
-    machines to allow non-root access to the Maple USB device for
-    uploading.
+    Unstructured text notes that may be useful.
 
 /README/
 
@@ -106,19 +107,12 @@ Repository Layout
 
     Support files and scripts for various purposes.
 
-    codeblocks/       [OBSOLETE] Config files for the Code::Blocks IDE.
     gdb/              GDB scripts.
     ld/               Linker scripts.
     make/             Additional scripts used by the top-level Makefile.
     openocd/          OpenOCD scripts for JTAG debugging.
     scripts/          Miscellany.
     stm32loader.py    Script for uploading via the built-in USART bootloader.
-
-TODO
-
-    Various undone tasks.  Also see our bugtracker at
-
-        http://code.google.com/p/leaflabs/issues/list
 
 /wirish/
 

@@ -1,55 +1,7 @@
-Quick TODO --------------------------------------------------------------------
+Bugtracker:
 
-- write language unit test
-- more maple-specific example programs
-- maple mini serial bootloader HOWTO
-- maple and mini jtag HOWTO
+http://code.google.com/p/leaflabs/issues/list
 
-Peripherals -------------------------------------------------------------------
+Blocking changes for official releases:
 
-- I2C wrap up
-- SPI wrap up
-
-Arduino Library functions to port (these are LGPL) ----------------------------
-
-EEPROM:
-    functions:
-        uint8 read(int)
-        void write(int, uint8)
-
-Firmata:
-    edit Firmata.h for capabilities
-
-Matrix:
-    soft spi port stuff
-
-SoftwareSerial:
-    clockCyclesToMicroseconds(int)
-
-Sprite:
-    all good?
-
-LiquidCrystal:
-    timing on soft serial send() commands
-
-Stepper:
-    requires millis()
-
-Wire:
-    reimplementation of the utility/twi.{c/h} code:
-        void twi_init(void);
-        void twi_setAddress(uint8_t);
-        uint8_t twi_readFrom(uint8_t, uint8_t*, uint8_t);
-        uint8_t twi_writeTo(uint8_t, uint8_t*, uint8_t, uint8_t);
-        uint8_t twi_transmit(uint8_t*, uint8_t);
-        void twi_attachSlaveRxEvent( void (*)(uint8_t*, int) );
-        void twi_attachSlaveTxEvent( void (*)(void) );
-        void twi_reply(uint8_t);
-        void twi_stop(void);
-        void twi_releaseBus(void);
-
-Ethernet:
-    ho baby...
-    uses avr/interrupt.h
-    reimplement utility/spi stuff
-
+http://wiki.leaflabs.com/index.php?title=Blocking_Changes

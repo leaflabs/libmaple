@@ -32,21 +32,6 @@ For changes that block official releases, see our wiki:
 
     http://wiki.leaflabs.com/index.php?title=Blocking_Changes
 
-Instructions to Create a Library
-------------------------------------------------------------------------------
-
-TODO: fold this section into the Unix Toolchain Quickstart.
-
-If you have a complicated project with its own Makefile and multiple
-source files, or you're using an IDE that creates its own Makefile,
-you'll probably want to load libmaple from an archive (a build-time
-library, not a DLL).
-
-To create an archive, use the "make library" target, and install
-build/libmaple.a and the appropriate headers in your project's
-directory. At a minimum, the header set will include libmaple.h,
-util.h, and libmaple_types.h.
-
 Repository Layout
 ------------------------------------------------------------------------------
 
@@ -99,7 +84,7 @@ Repository Layout
 
     Unstructured text notes that may be useful.
 
-/README/
+/README
 
     This file.
 

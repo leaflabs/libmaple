@@ -1,29 +1,32 @@
-/* *****************************************************************************
+/******************************************************************************
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- * ****************************************************************************/
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
 
 /**
- *  @brief
+ * @file i2c.c
+ * @brief Inter-Integrated Circuit (I2C) support.
  */
 
 #include "libmaple.h"
@@ -150,8 +153,9 @@ static void i2c_irq_handler(i2c_dev *dev) {
             }
         } else {
             /*
-             * Master transmitter: write first byte to fill shift register.
-             * We should get another TXE interrupt immediately to fill DR again.
+             * Master transmitter: write first byte to fill shift
+             * register.  We should get another TXE interrupt
+             * immediately to fill DR again.
              */
             if (msg->length != 1)
                     i2c_write(dev, msg->data[msg->xferred++]);
@@ -206,9 +210,10 @@ static void i2c_irq_handler(i2c_dev *dev) {
             i2c_stop_condition(dev);
 
             /*
-             * Turn off event interrupts to keep BTF from firing until the end
-             * of the stop condition. Why on earth they didn't have a start/stop
-             * condition request clear BTF is beyond me.
+             * Turn off event interrupts to keep BTF from firing until
+             * the end of the stop condition. Why on earth they didn't
+             * have a start/stop condition request clear BTF is beyond
+             * me.
              */
             i2c_disable_irq(dev, I2C_IRQ_EVENT);
             leave_big_crumb(STOP_SENT, 0, 0);
@@ -395,7 +400,6 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     i2c_peripheral_enable(dev);
 }
 
-
 int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num) {
     int32 rc;
 
@@ -431,8 +435,3 @@ static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state) {
         }
     }
 }
-
-
-
-
-

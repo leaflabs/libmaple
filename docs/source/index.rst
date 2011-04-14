@@ -34,7 +34,6 @@ Have fun!
    Libraries <libraries>
    Arduino Compatibility <compatibility>
    libmaple <libmaple>
-   External Interrupts <external-interrupts>
    Bootloader <bootloader>
    Troubleshooting <troubleshooting>
    Known Problems <errata>
@@ -48,6 +47,7 @@ Have fun!
    :maxdepth: 1
 
    adc
+   external-interrupts
    gpio
    i2c
    jtag

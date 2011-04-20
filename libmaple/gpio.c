@@ -174,3 +174,17 @@ void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port) {
     cr |= gpio_port << shift;
     *exti_cr = cr;
 }
+
+/**
+ * @brief Remap an alternate function peripheral to a different pin
+ * mapping
+ * @param peripheral to remap
+ */
+void afio_remap(AFIORemapPeripheral p) {
+    if (p & AFIO_REMAP_USE_MAPR2) {
+        p &= ~AFIO_REMAP_USE_MAPR2;
+        AFIO_BASE->MAPR2 |= p;
+    } else {
+        AFIO_BASE->MAPR |= p;
+    }
+}

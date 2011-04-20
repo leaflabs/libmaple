@@ -43,7 +43,7 @@
  * @see micros()
  */
 static inline uint32 millis(void) {
-    return systick_timer_millis;
+    return systick_uptime();
 }
 
 /**

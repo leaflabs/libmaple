@@ -28,7 +28,7 @@
 
 #include "systick.h"
 
-volatile uint32 systick_timer_millis;
+volatile uint32 systick_uptime_millis;
 
 /**
  * @brief Initialize and enable SysTick.
@@ -67,5 +67,5 @@ void systick_enable() {
  */
 
 void __exc_systick(void) {
-    systick_timer_millis++;
+    systick_uptime_millis++;
 }

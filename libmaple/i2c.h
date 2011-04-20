@@ -45,9 +45,10 @@ typedef struct i2c_reg_map {
 } i2c_reg_map;
 
 typedef enum i2c_state {
-    I2C_STATE_IDLE,
-    I2C_STATE_XFER_DONE,
-    I2C_STATE_BUSY,
+    I2C_STATE_DISABLED          = 0,
+    I2C_STATE_IDLE              = 1,
+    I2C_STATE_XFER_DONE         = 2,
+    I2C_STATE_BUSY              = 3,
     I2C_STATE_ERROR             = -1
 } i2c_state;
 
@@ -72,6 +73,8 @@ typedef struct i2c_dev {
     volatile uint8 state;
     uint16 msgs_left;
     i2c_msg *msg;
+    volatile uint32 timestamp;
+    uint32 error_flags;
 } i2c_dev;
 
 extern i2c_dev* const I2C1;
@@ -79,10 +82,6 @@ extern i2c_dev* const I2C2;
 
 #define I2C1_BASE               (i2c_reg_map*)0x40005400
 #define I2C2_BASE               (i2c_reg_map*)0x40005800
-
-/* i2c enable options */
-#define I2C_FAST_MODE           0x1           // 400 khz
-#define I2C_DUTY_16_9           0x2           // 16/9 duty ratio
 
 /* Control register 1 bits */
 #define I2C_CR1_SWRST           BIT(15)       // Software reset
@@ -137,9 +136,23 @@ extern i2c_dev* const I2C2;
 extern "C" {
 #endif
 
-void i2c_init(i2c_dev *dev);
+/* i2c enable options */
+#define I2C_FAST_MODE           BIT(0)      // 400 khz
+#define I2C_DUTY_16_9           BIT(1)      // 16/9 duty ratio
+#define I2C_REMAP               BIT(2)      // Use alternate pin mapping
+#define I2C_BUS_RESET           BIT(3)      // Perform a bus reset
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
-int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num);
+
+#define I2C_ERROR_PROTOCOL      (-1)
+#define I2C_ERROR_TIMEOUT       (-2)
+int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num, uint32 timeout);
+
+void i2c_bus_reset(const i2c_dev *dev);
+
+static inline void i2c_disable(i2c_dev *dev) {
+    dev->regs->CR1 &= ~I2C_CR1_PE;
+    dev->state = I2C_STATE_DISABLED;
+}
 
 /*
  * Low level register twiddling functions
@@ -195,22 +208,22 @@ static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
     dev->regs->CCR = ccr;
 }
 
-static inline void i2c_set_fast_mode(i2c_dev *dev) {
-    dev->regs->CCR |= I2C_CCR_FS;
-}
-
-static inline void i2c_set_standard_mode(i2c_dev *dev) {
-    dev->regs->CCR &= ~I2C_CCR_FS;
-}
 
 /**
  * @brief Set SCL rise time
- * @param
+ * @param dev device to configure
+ * @param trise Maximum rise time in fast/standard mode (See RM008 for
+ * formula)
  */
 static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
 }
 
+
+/**
+ * @brief Generate a start condition on the bus.
+ * @param device i2c device to use
+ */
 static inline void i2c_start_condition(i2c_dev *dev) {
     uint32 cr1;
     while ((cr1 = dev->regs->CR1) & (I2C_CR1_START |
@@ -221,6 +234,10 @@ static inline void i2c_start_condition(i2c_dev *dev) {
     dev->regs->CR1 |= I2C_CR1_START;
 }
 
+/**
+ * @brief Generate a stop condition on the bus
+ * @param device i2c device to use
+ */
 static inline void i2c_stop_condition(i2c_dev *dev) {
     uint32 cr1;
     while ((cr1 = dev->regs->CR1) & (I2C_CR1_START |
@@ -229,12 +246,22 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
         ;
     }
     dev->regs->CR1 |= I2C_CR1_STOP;
+    while ((cr1 = dev->regs->CR1) & (I2C_CR1_START |
+                                     I2C_CR1_STOP  |
+                                     I2C_CR1_PEC)) {
+        ;
+    }
+
 }
 
-static inline void i2c_send_slave_addr(i2c_dev *dev, uint32 addr, uint32 rw) {
-    dev->regs->DR = (addr << 1) | rw;
-}
-
+/**
+ * @brief Enable one or more i2c interrupts
+ * @param dev i2c device
+ * @param irqs bitwise-or of:
+ *      I2C_IRQ_ERROR: Error interrupt
+ *      I2C_IRQ_EVENT: Event interrupt
+ *      I2C_IRQ_BUFFER: Buffer interrupt
+ */
 #define I2C_IRQ_ERROR              I2C_CR2_ITERREN
 #define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
 #define I2C_IRQ_BUFFER             I2C_CR2_ITBUFEN
@@ -242,14 +269,31 @@ static inline void i2c_enable_irq(i2c_dev *dev, uint32 irqs) {
     dev->regs->CR2 |= irqs;
 }
 
+/**
+ * @brief Disable one or more i2c interrupts
+ * @param dev i2c device
+ * @param irqs bitwise-or of:
+ *      I2C_IRQ_ERROR: Error interrupt
+ *      I2C_IRQ_EVENT: Event interrupt
+ *      I2C_IRQ_BUFFER: Buffer interrupt
+ */
 static inline void i2c_disable_irq(i2c_dev *dev, uint32 irqs) {
     dev->regs->CR2 &= ~irqs;
 }
 
+
+/**
+ * @brief Enable i2c acknowledgment
+ * @param dev i2c device
+ */
 static inline void i2c_enable_ack(i2c_dev *dev) {
     dev->regs->CR1 |= I2C_CR1_ACK;
 }
 
+/**
+ * @brief Disable i2c acknowledgment
+ * @param dev i2c device
+ */
 static inline void i2c_disable_ack(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_ACK;
 }

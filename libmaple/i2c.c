@@ -26,7 +26,8 @@
 
 /**
  * @file i2c.c
- * @brief Inter-Integrated Circuit (I2C) support.
+ * @brief Inter-Integrated Circuit (I2C) support. Currently supports only master
+ * mode.
  */
 
 #include "libmaple.h"
@@ -36,8 +37,7 @@
 #include "nvic.h"
 #include "i2c.h"
 #include "string.h"
-
-static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state);
+#include "systick.h"
 
 static i2c_dev i2c_dev1 = {
     .regs         = I2C1_BASE,
@@ -47,9 +47,8 @@ static i2c_dev i2c_dev1 = {
     .clk_line     = RCC_I2C1,
     .ev_nvic_line = NVIC_I2C1_EV,
     .er_nvic_line = NVIC_I2C1_ER,
-    .state        = I2C_STATE_IDLE
+    .state        = I2C_STATE_DISABLED
 };
-
 i2c_dev* const I2C1 = &i2c_dev1;
 
 static i2c_dev i2c_dev2 = {
@@ -60,29 +59,52 @@ static i2c_dev i2c_dev2 = {
     .clk_line     = RCC_I2C2,
     .ev_nvic_line = NVIC_I2C2_EV,
     .er_nvic_line = NVIC_I2C2_ER,
-    .state        = I2C_STATE_IDLE
+    .state        = I2C_STATE_DISABLED
 };
-
 i2c_dev* const I2C2 = &i2c_dev2;
 
-struct crumb {
-    uint32 event;
-    uint32 sr1;
-    uint32 sr2;
-};
+static inline int32 wait_for_state_change(i2c_dev *dev,
+                                          i2c_state state,
+                                          uint32 timeout);
 
-#define NR_CRUMBS 128
+/**
+ * @brief Fill data register with slave address
+ * @param dev i2c device
+ * @param addr slave address
+ * @param rw read/write bit
+ */
+static inline void i2c_send_slave_addr(i2c_dev *dev, uint32 addr, uint32 rw) {
+    dev->regs->DR = (addr << 1) | rw;
+}
+
+/*
+ * Simple debugging trail. Define I2C_DEBUG to turn on.
+ */
+#ifdef I2C_DEBUG
+
+#define NR_CRUMBS       128
 static struct crumb crumbs[NR_CRUMBS];
 static uint32 cur_crumb = 0;
 
-static inline void leave_big_crumb(uint32 event, uint32 sr1, uint32 sr2) {
+static inline void i2c_drop_crumb(uint32 event, uint32 arg0, uint32 arg1) {
     if (cur_crumb < NR_CRUMBS) {
         struct crumb *crumb = &crumbs[cur_crumb++];
         crumb->event = event;
-        crumb->sr1 = sr1;
-        crumb->sr2 = sr2;
+        crumb->arg0 = arg0;
+        crumb->arg1 = arg1;
     }
 }
+#define I2C_CRUMB(event, arg0, arg1) i2c_drop_crumb(event, arg0, arg1)
+
+#else
+#define I2C_CRUMB(event, arg0, arg1)
+#endif
+
+struct crumb {
+    uint32 event;
+    uint32 arg0;
+    uint32 arg1;
+};
 
 enum {
     IRQ_ENTRY           = 1,
@@ -100,6 +122,7 @@ enum {
     ERROR_ENTRY         = 13,
 };
 
+
 /**
  * @brief IRQ handler for i2c master. Handles transmission/reception.
  * @param dev i2c device
@@ -111,7 +134,12 @@ static void i2c_irq_handler(i2c_dev *dev) {
 
     uint32 sr1 = dev->regs->SR1;
     uint32 sr2 = dev->regs->SR2;
-    leave_big_crumb(IRQ_ENTRY, sr1, sr2);
+    I2C_CRUMB(IRQ_ENTRY, sr1, sr2);
+
+    /*
+     * Reset timeout counter
+     */
+    dev->timestamp = systick_uptime();
 
     /*
      * EV5: Start condition sent
@@ -145,10 +173,10 @@ static void i2c_irq_handler(i2c_dev *dev) {
                 i2c_disable_ack(dev);
                 if (dev->msgs_left > 1) {
                     i2c_start_condition(dev);
-                    leave_big_crumb(RX_ADDR_START, 0, 0);
+                    I2C_CRUMB(RX_ADDR_START, 0, 0);
                 } else {
                     i2c_stop_condition(dev);
-                    leave_big_crumb(RX_ADDR_STOP, 0, 0);
+                    I2C_CRUMB(RX_ADDR_STOP, 0, 0);
                 }
             }
         } else {
@@ -157,8 +185,9 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * register.  We should get another TXE interrupt
              * immediately to fill DR again.
              */
-            if (msg->length != 1)
-                    i2c_write(dev, msg->data[msg->xferred++]);
+            if (msg->length != 1) {
+                i2c_write(dev, msg->data[msg->xferred++]);
+            }
         }
         sr1 = sr2 = 0;
     }
@@ -169,7 +198,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
      * byte written.
      */
     if ((sr1 & I2C_SR1_TXE) && !(sr1 & I2C_SR1_BTF)) {
-        leave_big_crumb(TXE_ONLY, 0, 0);
+        I2C_CRUMB(TXE_ONLY, 0, 0);
         if (dev->msgs_left) {
             i2c_write(dev, msg->data[msg->xferred++]);
             if (msg->xferred == msg->length) {
@@ -194,9 +223,9 @@ static void i2c_irq_handler(i2c_dev *dev) {
      * Last byte sent, program repeated start/stop
      */
     if ((sr1 & I2C_SR1_TXE) && (sr1 & I2C_SR1_BTF)) {
-        leave_big_crumb(TXE_BTF, 0, 0);
+        I2C_CRUMB(TXE_BTF, 0, 0);
         if (dev->msgs_left) {
-            leave_big_crumb(TEST, 0, 0);
+            I2C_CRUMB(TEST, 0, 0);
             /*
              * Repeated start insanity: We can't disable ITEVTEN or else SB
              * won't interrupt, but if we don't disable ITEVTEN, BTF will
@@ -216,7 +245,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
              * me.
              */
             i2c_disable_irq(dev, I2C_IRQ_EVENT);
-            leave_big_crumb(STOP_SENT, 0, 0);
+            I2C_CRUMB(STOP_SENT, 0, 0);
             dev->state = I2C_STATE_XFER_DONE;
         }
         sr1 = sr2 = 0;
@@ -226,7 +255,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
      * EV7: Master Receiver
      */
     if (sr1 & I2C_SR1_RXNE) {
-        leave_big_crumb(RXNE_ONLY, 0, 0);
+        I2C_CRUMB(RXNE_ONLY, 0, 0);
         msg->data[msg->xferred++] = dev->regs->DR;
 
         /*
@@ -238,10 +267,10 @@ static void i2c_irq_handler(i2c_dev *dev) {
             i2c_disable_ack(dev);
             if (dev->msgs_left > 2) {
                 i2c_start_condition(dev);
-                leave_big_crumb(RXNE_START_SENT, 0, 0);
+                I2C_CRUMB(RXNE_START_SENT, 0, 0);
             } else {
                 i2c_stop_condition(dev);
-                leave_big_crumb(RXNE_STOP_SENT, 0, 0);
+                I2C_CRUMB(RXNE_STOP_SENT, 0, 0);
             }
         } else if (msg->xferred == msg->length) {
             dev->msgs_left--;
@@ -249,7 +278,7 @@ static void i2c_irq_handler(i2c_dev *dev) {
                 /*
                  * We're done.
                  */
-                leave_big_crumb(RXNE_DONE, 0, 0);
+                I2C_CRUMB(RXNE_DONE, 0, 0);
                 dev->state = I2C_STATE_XFER_DONE;
             } else {
                 dev->msg++;
@@ -266,13 +295,25 @@ void __irq_i2c2_ev(void) {
    i2c_irq_handler(&i2c_dev2);
 }
 
+
+/**
+ * @brief Interrupt handler for i2c error conditions
+ * @param dev i2c device
+ * @sideeffect Aborts any pending i2c transactions
+ */
 static void i2c_irq_error_handler(i2c_dev *dev) {
     uint32 sr1 = dev->regs->SR1;
     uint32 sr2 = dev->regs->SR2;
-    leave_big_crumb(ERROR_ENTRY, sr1, sr2);
+    I2C_CRUMB(ERROR_ENTRY, sr1, sr2);
+
+    /* Clear flags */
+    dev->regs->SR1 = 0;
+    dev->regs->SR2 = 0;
 
     i2c_stop_condition(dev);
     i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
+    dev->error_flags = sr2 & (I2C_SR1_BERR | I2C_SR1_ARLO | I2C_SR1_AF |
+                              I2C_SR1_OVR);
     dev->state = I2C_STATE_ERROR;
 }
 
@@ -284,7 +325,14 @@ void __irq_i2c2_er(void) {
     i2c_irq_error_handler(&i2c_dev2);
 }
 
-static void i2c_bus_reset(const i2c_dev *dev) {
+
+/**
+ * @brief Reset an i2c bus by clocking out pulses until any hung
+ * slaves release SDA and SCL, then generate a START condition, then
+ * a STOP condition.
+ * @param dev i2c device
+ */
+void i2c_bus_reset(const i2c_dev *dev) {
     /* Release both lines */
     gpio_write_bit(dev->gpio_port, dev->scl_pin, 1);
     gpio_write_bit(dev->gpio_port, dev->sda_pin, 1);
@@ -335,16 +383,29 @@ void i2c_init(i2c_dev *dev) {
  * @param dev Device to enable
  * @param flags Bitwise or of the following I2C options:
  *      I2C_FAST_MODE: 400 khz operation
+ *      I2C_DUTY_16_9: 16/9 Tlow/Thigh duty cycle (only applicable for fast mode)
+ *      I2C_BUS_RESET: Reset the bus and clock out any hung slaves on initialization
  *      I2C_10BIT_ADDRESSING: Enable 10-bit addressing
+ *      I2C_REMAP: Remap I2C1 to SCL/PB8 SDA/PB9
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 #define I2C_CLK                (PCLK1/1000000)
-#define STANDARD_CCR           (PCLK1/(100000*2))
-#define STANDARD_TRISE         (I2C_CLK+1)
-#define FAST_CCR               (I2C_CLK/10)
-#define FAST_TRISE             ((I2C_CLK*3)/10+1)
+    uint32 ccr   = 0;
+    uint32 trise = 0;
+
+    /* PE must be disabled to configure the device */
+    ASSERT(!(dev->regs->CR1 & I2C_CR1_PE));
+
+    if ((dev == I2C1) && (flags & I2C_REMAP)) {
+        afio_remap(AFIO_REMAP_I2C1);
+        I2C1->sda_pin = 9;
+        I2C1->scl_pin = 8;
+    }
+
     /* Reset the bus. Clock out any hung slaves. */
-    i2c_bus_reset(dev);
+    if (flags & I2C_BUS_RESET) {
+        i2c_bus_reset(dev);
+    }
 
     /* Turn on clock and set GPIO modes */
     i2c_init(dev);
@@ -354,21 +415,32 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
     i2c_set_input_clk(dev, I2C_CLK);
 
-    if(flags & I2C_FAST_MODE) {
-        /* 400 kHz for fast mode, set DUTY and F/S bits */
-        i2c_set_clk_control(dev, FAST_CCR|I2C_CCR_DUTY|I2C_CCR_FS);
+    if (flags & I2C_FAST_MODE) {
+        ccr |= I2C_CCR_FS;
 
-        /* Set scl rise time, max rise time in fast mode: 300ns */
-        i2c_set_trise(dev, FAST_TRISE);
+        if (flags & I2C_DUTY_16_9) {
+            /* Tlow/Thigh = 16/9 */
+            ccr |= I2C_CCR_DUTY;
+            ccr |= PCLK1/(400000 * 25);
+        } else {
+            /* Tlow/Thigh = 2 */
+            ccr |= PCLK1/(400000 * 3);
+        }
 
+        trise = (300 * (I2C_CLK)/1000) + 1;
     } else {
-
-        /* 100 kHz for standard mode */
-        i2c_set_clk_control(dev, STANDARD_CCR);
-
-        /* Max rise time in standard mode: 1000 ns */
-        i2c_set_trise(dev, STANDARD_TRISE);
+        /* Tlow/Thigh = 1 */
+        ccr = PCLK1/(100000 * 2);
+        trise = I2C_CLK + 1;
     }
+
+    /* Set minimum required value if CCR < 1*/
+    if ((ccr & I2C_CCR_CCR) == 0) {
+        ccr |= 0x1;
+    }
+
+    i2c_set_clk_control(dev, ccr);
+    i2c_set_trise(dev, trise);
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);
@@ -407,40 +479,81 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 
     /* Make it go! */
     i2c_peripheral_enable(dev);
+
+    dev->state = I2C_STATE_IDLE;
 }
 
-int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num) {
+
+/**
+ * @brief Process an i2c transaction. Transactions are composed of
+ * one or more i2c_msg's and may be read or write tranfers. Multiple i2c_msg's
+ * will generate a repeated start inbetween messages.
+ * @param dev i2c device
+ * @param msgs messages to send/receive
+ * @param num number of messages to send/receive
+ * @param timeout bus idle timeout in milliseconds before aborting the
+ *      transfer. 0 denotes no timeout.
+ * @return 0 on success
+ *      I2C_ERROR_PROTOCOL if there was a protocol error.
+ *      I2C_ERROR_TIMEOUT if the transfer timed out.
+ */
+int32 i2c_master_xfer(i2c_dev *dev,
+                      i2c_msg *msgs,
+                      uint16 num,
+                      uint32 timeout) {
     int32 rc;
+
+    ASSERT(dev->state == I2C_STATE_IDLE);
 
     dev->msg = msgs;
     dev->msgs_left = num;
-
-    while (dev->regs->SR2 & I2C_SR2_BUSY)
-        ;
-
+    dev->timestamp = systick_uptime();
     dev->state = I2C_STATE_BUSY;
-    i2c_enable_irq(dev, I2C_IRQ_EVENT);
 
+    i2c_enable_irq(dev, I2C_IRQ_EVENT);
     i2c_start_condition(dev);
-    rc = wait_for_state_change(dev, I2C_STATE_XFER_DONE);
+
+    rc = wait_for_state_change(dev, I2C_STATE_XFER_DONE, timeout);
     if (rc < 0) {
         goto out;
     }
 
     dev->state = I2C_STATE_IDLE;
-    rc = num;
 out:
     return rc;
 }
 
-static inline int32 wait_for_state_change(i2c_dev *dev, i2c_state state) {
+
+/**
+ * @brief Wait for an i2c event, or timeout in case of error
+ * @param dev i2c device
+ * @param state i2c_state state to wait for
+ * @param timeout timeout in milliseconds
+ * @return 0 if target state is reached, <0 on error
+ */
+static inline int32 wait_for_state_change(i2c_dev *dev,
+                                          i2c_state state,
+                                          uint32 timeout) {
     int32 rc;
     i2c_state tmp;
 
     while (1) {
         tmp = dev->state;
-        if ((tmp == state) || (tmp == I2C_STATE_ERROR)) {
-            return (tmp == I2C_STATE_ERROR) ? -1 : 0;
+
+        if (tmp == I2C_STATE_ERROR) {
+            return I2C_STATE_ERROR;
+        }
+
+        if (tmp == state) {
+            return 0;
+        }
+
+        if (timeout) {
+            if (systick_uptime() > (dev->timestamp + timeout)) {
+                /* TODO: overflow? */
+                /* TODO: racy? */
+                return I2C_ERROR_TIMEOUT;
+            }
         }
     }
 }

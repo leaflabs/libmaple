@@ -38,6 +38,10 @@
 extern "C"{
 #endif
 
+/*
+ * Register maps
+ */
+
 /** DAC register map. */
 typedef struct dac_reg_map {
     __io uint32 CR;      /**< Control register */
@@ -64,6 +68,13 @@ typedef struct dac_reg_map {
     __io uint32 DOR2;    /**< Channel 2 data output register */
 } dac_reg_map;
 
+/** DAC register map base address */
+#define DAC_BASE                ((dac_reg_map*)0x40007400)
+
+/*
+ * Devices
+ */
+
 /** DAC device type. */
 typedef struct dac_dev {
     dac_reg_map *regs; /**< Register map */
@@ -72,11 +83,8 @@ typedef struct dac_dev {
 /** DAC device. */
 extern const dac_dev *DAC;
 
-/** DAC register map base address */
-#define DAC_BASE                ((dac_reg_map*)0x40007400)
-
 /*
- * Register bit definitions and masks
+ * Register bit definitions
  */
 
 /* Control register */
@@ -137,13 +145,20 @@ extern const dac_dev *DAC;
 /* Channel 1 data output register */
 #define DAC_DOR2_DACC2DOR        0x00000FFF
 
+/*
+ * Convenience functions
+ */
+
+/* We take the dev argument in these convenience functions for
+ * future-proofing */
+
 #define DAC_CH1                         0x1
 #define DAC_CH2                         0x2
-void dac_init(uint32 flags);
+void dac_init(const dac_dev *dev, uint32 flags);
 
-void dac_write_channel(uint8 channel, uint16 val);
-void dac_enable_channel(uint8 channel);
-void dac_disable_channel(uint8 channel);
+void dac_write_channel(const dac_dev *dev, uint8 channel, uint16 val);
+void dac_enable_channel(const dac_dev *dev, uint8 channel);
+void dac_disable_channel(const dac_dev *dev, uint8 channel);
 
 #ifdef __cplusplus
 } // extern "C"

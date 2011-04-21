@@ -1,10 +1,17 @@
+/*
+ * Simple DAC test.
+ *
+ * Author: Marti Bolivar <mbolivar@leaflabs.com>
+ *
+ * This file is released into the public domain.
+ */
+
 #include "wirish.h"
 #include "dac.h"
 
 uint16 count = 0;
 
 void setup() {
-
     pinMode(BOARD_LED_PIN, OUTPUT);
     digitalWrite(BOARD_LED_PIN,1);
 
@@ -12,7 +19,7 @@ void setup() {
     Serial1.println("**** Beginning DAC test");
 
     Serial1.print("Init... ");
-    dac_init(DAC_CH1 | DAC_CH2);
+    dac_init(DAC, DAC_CH1 | DAC_CH2);
     Serial1.println("Done.");
 }
 
@@ -21,12 +28,12 @@ void loop() {
     delay(100);
 
     count += 100;
-    if(count > 4095) {
+    if (count > 4095) {
         count = 0;
     }
 
-    dac_write_channel(1, 4095 - count);
-    dac_write_channel(2, count);
+    dac_write_channel(DAC, 1, 4095 - count);
+    dac_write_channel(DAC, 2, count);
 }
 
 int main(void) {

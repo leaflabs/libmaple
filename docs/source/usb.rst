@@ -34,7 +34,7 @@ second problem is the use of :ref:`perpetual bootloader mode
 Recommended Reading
 -------------------
 
-* `USB in a Nutshell <http://www.beyondlogic.org/usbnutshell/usb1.htm>`_, an overview from Beyond Logic
+* `USB in a Nutshell <http://www.beyondlogic.org/usbnutshell/usb1.shtml>`_, an overview from Beyond Logic
 * `USB made simple <http://www.usbmadesimple.co.uk/>`_, an illustrated series of articles on USB
 * The `USB 2.0 Specification <http://www.usb.org/developers/docs/>`_ (`direct link <http://www.usb.org/developers/docs/usb_20_021411.zip>`_)
 * `Embedded USB - a brief tutorial <http://www.computer-solutions.co.uk/info/Embedded_tutorials/usb_tutorial.htm>`_

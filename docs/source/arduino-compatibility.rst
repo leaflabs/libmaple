@@ -1,6 +1,6 @@
 .. highlight:: cpp
 
-.. _compatibility:
+.. _arduino-compatibility:
 
 =============================
  Maple-Arduino Compatibility
@@ -41,18 +41,19 @@ means that programs aren't much larger (or are even smaller).
 Header Numbering and Incompatibilities
 --------------------------------------
 
-.. FIXME generalize Maple-specific information
+.. FIXME [Maple-specific values]
 
 The numbering of headers is different; on the Maple each GPIO has a
-unique number: D0, D1, D2, all the way up to D37 (actually, there are
+unique number: 0, 1, 2, all the way up to 37 (actually, there are
 :ref:`a few more <jtag>`...). On the Arduino, the analog pins are
 numbered separately (A0-A5) from the digital pins (D0\ -D13).
 
 The incompatible hardware differences are:
 
-* **I2C port**: on most Arduinos, the |i2c| port is Analog Input 4
-  (SDA) and Analog Input 5 (SCL); on the Maple, |i2c| port 1 is D5
-  (SCL) and D9 (SDA), and |i2c| port 2 is D29 (SCL) and D30 (SDA).
+* :ref:`I2C <i2c>` **port**: on most Arduinos, the |i2c| port is Analog
+  Input 4 (SDA) and Analog Input 5 (SCL); on the Maple, |i2c| port 1
+  is D5 (SCL) and D9 (SDA), and |i2c| port 2 is D29 (SCL) and D30
+  (SDA).
 
   It should be possible to skywire, sacrificing signal quality (due to
   increased capacitance). Alternatively, |i2c| can be bit-banged
@@ -61,9 +62,7 @@ The incompatible hardware differences are:
 
 * :ref:`PWM <pwm>` **on D10**: all the other standard Arduino PWM
   headers have PWM functionality on the Maple (D2,D3,D6,D9,D11), but
-  not D10. We did our best! It may be possible to reroute this
-  peripheral internally using low level configuration, but we haven't
-  looked in to it.
+  not D10.
 
 * **No External Voltage Reference**: The Arduino has an AREF pin which
   allows the use of an external ADC voltage reference; the Maple has
@@ -98,15 +97,15 @@ differences, most of which are improvements:
   modes with a single call to ``pinMode()``: ``OUTPUT``,
   ``OUTPUT_OPEN_DRAIN``, ``INPUT_FLOATING``, ``INPUT_PULLUP``,
   ``INPUT_PULLDOWN``. Additionally, the PWM pins (labeled "PWM" on the
-  Maple's silkscreen) can be configured in ``PWM`` and
-  ``PWM_OPEN_DRAIN`` modes, and the analog input pins (labeled "AIN")
-  can be configured in ``INPUT_ANALOG`` mode. See the :ref:`GPIO
-  documentation <gpio>` for more information.
+  silkscreen) can be configured in ``PWM`` and ``PWM_OPEN_DRAIN``
+  modes, and the analog input pins (labeled "AIN") can be configured
+  in ``INPUT_ANALOG`` mode. See the :ref:`GPIO documentation <gpio>`
+  for more information.
 
 * :ref:`Serial port <lang-serial>` **syntax**: like the `Arduino Mega
   <http://arduino.cc/en/Main/ArduinoBoardMega>`_, the Maple has
   multiple :ref:`USART ports <lang-serial>`.  By default, ``Serial``
-  is not mapped to any of them, use ``Serial1`` through ``Serial3``
+  is not mapped to any of them.  Use ``Serial1`` through ``Serial3``
   instead.
 
 * **16-bit** :ref:`PWM <pwm>`: Arduino boards support 8-bit PWM, which
@@ -229,7 +228,8 @@ function.
 
 - Check for ported library functionality. We intend to port all of the
   core and popular libraries (like Wire, Ethernet, and the LCD screen
-  driver), but this task is not yet finished. (Patches are welcome!)
+  driver), but this task is not yet finished. (:ref:`Patches are
+  welcome! <libmaple-contributing>`).
 
 - Check for peripheral conflicts; changing the configuration of timers
   and bus speeds for a feature on one header may impact all the

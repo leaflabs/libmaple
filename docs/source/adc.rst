@@ -71,11 +71,10 @@ Recommended Reading
 -------------------
 
 * `Wikipedia article on Analog-to-digital converter <http://en.wikipedia.org/wiki/Analog-to-digital_converter>`_
-* `Arduino Analog Input Tutorial <http://arduino.cc/en/Tutorial/AnalogInputPins>`_
-* STMicro documentation for STM32F103RB microcontroller:
 
-  * `All <http://www.st.com/mcu/devicedocs-STM32F103RB-110.html>`_
-  * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-  * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+* `Arduino Analog Input Tutorial <http://arduino.cc/en/Tutorial/AnalogInputPins>`_
+
+* STMicro documentation:
+
   * `Application Note on ADC Modes (pdf) <http://www.st.com/stonline/products/literature/an/16840.pdf>`_
   * `Application Note on ADC Oversampling (pdf) <http://www.st.com/stonline/products/literature/an/14183.pdf>`_

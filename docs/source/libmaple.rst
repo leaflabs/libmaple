@@ -5,37 +5,35 @@
 ``libmaple``
 ============
 
-.. image:: /_static/img/libmaple-screenshot-small.png
-   :align: center
-   :alt: libmaple screenshot
+LeafLabs' libmaple (`source code on Github
+<https://github.com/leaflabs/libmaple>`_) is the library we have
+developed for the `STM32 <http://www.st.com/stonline>`_ line of ARM Cortex M3
+microcontrollers.  Its high-level interfaces are :ref:`largely
+compatible <arduino-compatibility>` with the AVR libraries written for
+the `Arduino <http://arduino.cc>`_ and `Wiring
+<http://wiring.org.co/>`_ development boards.
 
-`LeafLabs libmaple <libmaple-libmaple>`_ is the low level library we
-have developed for for the ARM Cortex-M3 chips manufactured by
-STMicroelectronics used in the Maple boards (the `STM32F103x`_
-series). We found the generic peripheral libraries too painful to
-build on top of, and reimplemented the functionality we needed in a
-simpler (and less general) form.
+libmaple is split into two pieces: a lower level layer written in pure
+C, which we call *libmaple proper* (in the `libmaple/
+<https://github.com/leaflabs/libmaple/tree/master/libmaple>`_
+directory of the source repository), and the Wiring-style C++ API
+written on top of it, called *Wirish* (in `wirish/
+<https://github.com/leaflabs/libmaple/tree/master/wirish>`_).
 
-.. _libmaple-libmaple: http://github.com/leaflabs/libmaple
-.. _STM32F103x: http://www.st.com/stonline/stappl/productcatalog/app?path=/pages/stcom/PcStComPartNumberSearch.searchPartNumber&search=stm32f103
+libmaple is bundled with the :ref:`Maple IDE <ide>`.  However, we
+develop it separately, and :ref:`release it standalone
+<unix-toolchain>` for advanced users who might chafe at the "sketch"
+programming model of the IDE.
 
-This library is transparently included in the `Maple IDE
-<http://leaflabs.com/docs/maple-ide/>`_, but we develop it separately
-using good old Unix command line tools and release it for advanced
-users who might chafe at the "sketch" programming model of the
-IDE. Included are some examples, a Makefile, and the compatibility
-wrappers and code to imitate the Arduino programming library.
+As always, :ref:`patches are welcome <libmaple-contributing>`.
 
-**Check out the latest source**::
+**Contents:**
 
-    git clone git://github.com/leaflabs/libmaple.git
+.. toctree::
+   :maxdepth: 1
 
-.. TODO after finishing refactor: create, style, and host a pure
-.. Doxygen libmaple reference docs.  This implies determining a stable
-.. API.
-
-.. **Table of contents:**
-
-.. .. toctree::
-..    :maxdepth: 2
+   libmaple/overview
+   libmaple/apis
+   libmaple/contributing
+   libmaple/coding-standard
 

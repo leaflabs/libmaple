@@ -13,7 +13,7 @@ Flash memory and only runs when the chip is reset).
 
   git clone git://github.com/leaflabs/maple-bootloader.git
 
-**Visit the github development project**: http://github.com/leaflabs/maple-bootloader
+**Visit the github development project**: https://github.com/leaflabs/maple-bootloader
 
 .. contents:: Contents
    :local:
@@ -34,7 +34,7 @@ likely only interesting to a few. If you just want to get the rough
 idea, skim this article. If you want to start hacking on the
 bootloader, get in touch with us to get even more info on how this all
 works.  And finally, you can always `check out the code at github
-<http://github.com/leaflabs/libmaple>`_!
+<https://github.com/leaflabs/libmaple>`_!
 
 Arduino
 -------

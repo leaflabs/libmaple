@@ -10,6 +10,9 @@ API references for documented libmaple functionality. The "C++ for
 Maple" pages are intended as a minimal reference/refresher for
 programmers familiar with the Arduino language.
 
+**Looking for something else?** The low-level :ref:`libmaple library
+interfaces <libmaple>` are documented separately.
+
 .. _index-language-index-cpp:
 .. _index-language-index-api:
 

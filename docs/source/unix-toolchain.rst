@@ -9,7 +9,9 @@
 This is a tutorial for using the Maple with a standard Unix toolchain
 (``make``, ``gcc``, etc.).  It's not necessary to do this in order to
 program the Maple; you can always :ref:`install the Maple IDE
-<maple-ide-install>` instead.
+<maple-ide-install>` instead.  This document is intended for users who
+are comfortable using C or C++ and would like to use :ref:`libmaple`
+directly.
 
 You'll need a Maple board, a Mini-B USB cable, a functional computer,
 and root (or Administrator) access to that computer. This guide
@@ -100,7 +102,7 @@ in `Python <http://python.org>`_, and requires the `PySerial
   $ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up
 
 This step is fairly straightforward: do a git clone of the `libmaple
-repository <http://github.com/leaflabs/libmaple>`_ to some directory,
+repository <https://github.com/leaflabs/libmaple>`_ to some directory,
 then download and extract the ARM compiler toolchain.
 
 The :file:`arm/bin/` directory will need to be added to ``PATH``; you
@@ -169,9 +171,9 @@ You will need the following tools\ [#fpackman]_ to get started:
  <http://wiki.openmoko.org/wiki/Dfu-util#Mac>`_.
 
  If you're in a hurry, you can steal a dfu-util binary from a program
- called `Openmoko Flasher
- <http://www.handheld-linux.com/wiki.php?page=Openmoko%20Flasher>`_. To
- do this, first `download Openmoko Flasher
+ called `OpenMoko Flasher
+ <http://www.handheld-linux.com/wiki.php?page=OpenMoko%20Flasher>`_. To
+ do this, first `download OpenMoko Flasher
  <http://projects.goldelico.com/p/omflasher/downloads/>`_, then copy
  the OpenMoko application into your :file:`/Applications` folder (or
  wherever you like). Let's pretend you saved the .app to the directory
@@ -292,11 +294,11 @@ If it all works out, you should end up seeing something like this::
     21824     200     552   22576    5830 build/maple.out
   Flash build
 
-Woo! It worked. The ``dec`` field at the end gives the total program
-size in bytes. The long listing of object files above the ``Final
-Size`` helps to identify bloated code.  As you write larger projects,
-you may find that they use too much space. If that happens, the
-file-by-file listing will help you track down the culprits.
+The ``dec`` field at the end gives the total program size in
+bytes. The long listing of object files above the ``Final Size`` helps
+to identify bloated code.  As you write larger projects, you may find
+that they use too much space. If that happens, the file-by-file
+listing will help you track down the culprits.
 
 .. _toolchain-upload:
 

@@ -3,11 +3,13 @@
 Maple Documentation Contents
 ============================
 
+.. FIXME [Maple-specific values] errata page links to Maple
+
 Welcome!  This is the Maple documentation index.  If you just bought a
 Maple, you probably want to head to the :ref:`quickstart
 <maple-quickstart>`.  If you're having problems, check out the
-:ref:`troubleshooting <troubleshooting>` and :ref:`known problems
-<errata>` pages.
+:ref:`troubleshooting <troubleshooting>` :ref:`known problems
+<maple-errata>` pages.
 
 Have fun!
 
@@ -32,12 +34,12 @@ Have fun!
 
    Language <language>
    Libraries <libraries>
-   Arduino Compatibility <compatibility>
+   Arduino Compatibility <arduino-compatibility>
    libmaple <libmaple>
    Bootloader <bootloader>
    Troubleshooting <troubleshooting>
-   Known Problems <errata>
    Notes on GCC's ARM target <arm-gcc>
+   Complete Language Index <language-index>
 
 .. _index-hardware:
 
@@ -73,15 +75,3 @@ Have fun!
 
 ..    hardware/maple-mini.rst
 ..    hardware/maple-native.rst
-
-.. _index-reference:
-
-**Reference:**
-
-.. toctree::
-   :maxdepth: 1
-
-   Technical Specifications <specs>
-   Complete Language Index <language-index>
-
-

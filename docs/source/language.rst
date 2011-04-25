@@ -28,13 +28,13 @@ Maple Language Reference
 The following table summarizes the available core language features.
 A more exhaustive index is available at the :ref:`language-index`.
 
+.. FIXME mention Maple Native supports malloc(), free(), operator
+.. new(), and operator delete(), when that is a true thing to say.
+
 **Looking for something else?** 
 
 - See the :ref:`libraries` for extra built-in libraries for dealing
   with different kinds of hardware.
-
-.. FIXME mention Maple Native supports malloc(), free(), operator
-.. new(), and operator delete(), when that is a true thing to say.
 
 - If you're looking for something from the C standard library (like
   ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
@@ -42,6 +42,9 @@ A more exhaustive index is available at the :ref:`language-index`.
   against `newlib <http://sourceware.org/newlib/>`_, and allows the
   use of any of its header files.  However, dynamic memory allocation
   (``malloc()``, etc.) is not available.
+
+- If you're looking for low-level details, see the :ref:`libmaple
+  <libmaple>` reference page.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -273,7 +276,7 @@ Unimplemented Arduino Features
 ------------------------------
 
 The following Wiring/Arduino features are currently unimplemented on
-the Maple.  However, they will be present in future versions:
+the Maple.
 
 - `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 - `noTone() <http://www.arduino.cc/en/Reference/NoTone>`_
@@ -299,16 +302,18 @@ programming ideas and C++.
 Note for C/C++ Hackers
 ----------------------
 
-This is a note for programmers comfortable with C or C++ (although,
-you C programmers should remember that `C++ is not a superset of C
-<http://en.wikipedia.org/wiki/Compatibility_of_C_and_C%2B%2B>`_) who
-want a better understanding of the differences between C++ and the
-Wiring language.  The good news is that the differences are relatively
-few; Wiring is just a thin wrapper around C++.
+This is a note for programmers comfortable with C or C++ who want a
+better understanding of the differences between C++ and the Wiring
+language.  
 
-Some potentially better news is that the Maple can be programmed using
-a :ref:`standard Unix toolchain <unix-toolchain>`, so if you'd rather
-stick with :command:`gcc`, :command:`make`, and friends, you can.
+The good news is that the differences are relatively few; Wiring is
+just a thin wrapper around C++.  Some potentially better news is that
+the Maple can be programmed using a :ref:`standard Unix toolchain
+<unix-toolchain>`, so if you'd rather stick with :command:`gcc`,
+:command:`make`, and friends, you can.  If you're using the Unix
+toolchain and want to skip past the Wiring conveniences and get
+straight to registers, you are encouraged to move on to the
+:ref:`libmaple` documentation.
 
 A *sketch* is the IDE's notion of a project; it consists of one or
 more files written in the Wiring language, which is mostly the same as
@@ -334,9 +339,9 @@ work.  As of |today|, Maple only has 20 KB RAM, anyway, so it's
 doubtful that static allocation is not what you want.
 
 The Wiring language also does not require you to define your own
-``main`` method (in fact, it forbids you from doing so).  Instead, you
-are required to define two functions, ``setup`` and ``loop``, with
-type signatures ::
+``main`` method (in fact, we currently forbid you from doing so).
+Instead, you are required to define two functions, ``setup`` and
+``loop``, with type signatures ::
 
   void setup(void);
   void loop(void);
@@ -351,26 +356,33 @@ parses the result to produce a list of all functions defined in the
 global scope.  (We borrow this stage from the Arduino IDE, which in
 turn borrows it from Wiring.  It uses regular expressions to parse
 C++, which is, of course, `Bad and Wrong
-<http://www.retrologic.com/jargon/B/Bad-and-Wrong.html>`_.  An
-upcoming rewrite of the IDE performs this preprocessing step
-correctly, using a real parser.  Until then, you have our apologies.)
-The order in which the individual sketch files are concatenated is not
-defined; it is unwise to write code that depends on a particular
-ordering.
+<http://www.retrologic.com/jargon/B/Bad-and-Wrong.html>`_.  In the
+future, we'll do this correctly, using a better parser.  Until then,
+you have our apologies.)  The order in which the individual sketch
+files are concatenated is not defined; it is unwise to write code that
+depends on a particular ordering.
 
 The concatenated sketch files are then appended onto a file which
 includes `WProgram.h
-<http://github.com/leaflabs/libmaple/blob/master/wirish/WProgram.h>`_
+<https://github.com/leaflabs/libmaple/blob/master/wirish/WProgram.h>`_
 (which includes the wirish and libmaple libraries, and declares
 ``setup()`` and ``loop()``), and then provides declarations for all
 the function definitions found in the previous step.  At this point,
-we have a file that is a valid C++ translation unit, but lacks a
-``main()`` method.  The final step of compilation provides this
-method, which behaves roughly like::
+we have a file that is a valid C++ translation unit, but lacks
+``main()``.  The final step of compilation provides ``main()``, which
+behaves roughly like::
 
   int main(void) {
+    // Call libmaple's built-in initialization routines
+    init();
+
+    // Perform the user's initialization
     setup();
-    while (true) loop();
+
+    // Call user loop() forever.
+    while (true) {
+        loop(); 
+    }
   }
 
 (The truth is a little bit more complicated, but not by much).
@@ -441,20 +453,19 @@ Which could plausibly be turned into the final source file ::
   }
 
   int main() {
+    init();
     setup();
     while (true) loop();
   }
-
-(Recall that it's legal C++ for a function to be declared multiple
-times, as long as it's defined exactly once).
-
 
 Recommended Reading
 -------------------
 
 * `newlib Documentation <http://sourceware.org/newlib/>`_
-* STMicro documentation for STM32F103RB microcontroller:
 
-    * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
+* :ref:`libmaple Documentation <libmaple>`
+
+* ST documentation:
+
     * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
     * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)

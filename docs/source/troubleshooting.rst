@@ -40,17 +40,17 @@ My 5v peripheral doesn't work! (I2C, SPI, USART, etc)
 -----------------------------------------------------
 
 Yup, the Maple is a 3.3v board. You may need to use a level
-converter. See the :ref:`compatibility <compatibility>`, :ref:`GPIO
-<gpio>`, or other :ref:`hardware specific documentation
-<index-hardware>` for more information.
+converter. See the :ref:`Arduino Compatibility
+<arduino-compatibility>`, :ref:`GPIO <gpio>`, or other :ref:`hardware
+specific documentation <index-hardware>` for more information.
 
 The reset and D38/serial buttons don't seem to work reliably!
 -------------------------------------------------------------
 
-A few rev3 boards shipped in May-June 2010 may have had unreliable
-buttons; see the :ref:`errata page <errata>` for details.  `We're
-happy to replace these for you <http://leaflabs.com/contact>`_\ !
-
+A few Maple Rev3 boards shipped in May-June 2010 may have had
+unreliable buttons; see the :ref:`errata page <maple-errata>` for
+details.  `We're happy to replace these for you
+<http://leaflabs.com/contact>`_\ !
 
 .. _troubleshooting-ide-install:
 

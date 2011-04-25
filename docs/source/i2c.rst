@@ -1,19 +1,7 @@
 .. _i2c:
 
-=====
 |i2c|
 =====
-
-.. FIXME update this documentation once you write the Wire library on
-.. top of libmaple i2c.
-
-.. FIXME generalize Maple-specific documentation
-
-.. note::
-
-   The |i2c| interface is currently only available from the 'refactor'
-   branch of the github `libmaple
-   <http://github.com/leaflabs/libmaple>`_ repository.
 
 |i2c| is a crude and easy-to-hack serial protocol that requires only
 two wires/channels for communication between many devices.  Every
@@ -26,6 +14,8 @@ Higher level functionality, such as reading a particular register
 value, is achieved by writing to set the memory location then reading
 to pull out the data.
 
+.. FIXME [Maple-specific values]
+
 Note that the master/slave designation is on a message-by-message
 basis. The Maple can act as both a master (messages initiated by user
 code) and slave device (responding to requests via configurable
@@ -37,8 +27,8 @@ interrupt handlers) at the same time.
 Hardware/Circuit Design
 -----------------------
 
-The Maple has two |i2c| ports.  Port 1 (i2c1) has SDA on header D9 and
-SCL on D5; Port 2 (i2c2) has SDA on D30 and SCL on D29.
+The Maple has two |i2c| ports.  Port 1 (I2C1) has SDA on header D9 and
+SCL on D5; Port 2 (I2C2) has SDA on D30 and SCL on D29.
 
 The Maple reliably communicates with up to a 400kHz clock speed; this
 doesn't translate into a 400kbps data rate except in extreme cases
@@ -60,16 +50,15 @@ oscilloscope to debug any issues.
 Function Reference
 ------------------
 
-The function API for |i2c| is not finished! See the `source code
-<https://github.com/leaflabs/libmaple/blob/refactor/libmaple/i2c.h>`_
-for now.
+Currently, only low-level support in :ref:`libmaple-i2c` exists.  A
+Wiring-style library is planned for a future release.
 
 SMBus
 -----
 
 The STM32 microcontroller has hardware support for SMBus; we simply
-have not written software for it. The SMBAL line for i2c1 is on header
-D4 and for i2c2 is on D31.
+have not written software for it. The SMBAL line for I2C1 is on header
+D4 and for I2C2 is on D31.
 
 .. _i2c-recommended-reading:
 

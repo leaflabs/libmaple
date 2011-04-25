@@ -3,7 +3,7 @@
 GPIO
 ====
 
-.. FIXME generalize this maple-specific information
+.. FIXME [Maple-specific values]
 
 The Maple features 38 ready-to-use general purpose input/output (GPIO)
 pins for digital input/output, numbered D0 through D37.  These numbers

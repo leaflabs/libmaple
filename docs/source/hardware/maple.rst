@@ -8,6 +8,30 @@ Maple
 .. contents:: Contents
    :local:
 
+Technical Specifications
+------------------------
+
+    * MCU: **STM32F103RBT6**, a 32-bit ARM Cortex M3 microprocessor
+    * Clock Speed: **72 MHz**
+    * Operating Voltage: 3.3V
+    * Input Voltage (recommended): 3V-12V
+    * 39 Digital I/O Pins (:ref:`GPIO <gpio>`)
+    * 16 Analog Input Pins 
+    * 12-bit **ADC** resolution (:ref:`ADC <adc>`)
+    * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
+    * Dedicated **USB** port for programming and communications (:ref:`USB<usb>`)
+    * External **JTAG** interface (:ref:`USB <jtag>`)
+    * **128 Flash** and **20KB SRAM**
+    * 64 Channel nested vector interrupt handler (including external interrupt on GPIOs)
+    * Integrated **SPI** (:ref:`SPI<spi>`)
+    * Integrated **I2C** (:ref:`I2C<i2c>`)
+    * 7 Channels of Direct Memory Access (**DMA**)
+    * 3 **USART** divices (:ref:`USART <usart>`)
+    * Four 4-channel **timers** (:ref:`Timers <timers>`)
+    * Supplies up to 800mA @ 3.3v
+    * Support for low power and sleep modes (<500uA)
+    * Dimensions are 2.05″x2.1″
+
 .. _maple-hardware-identify-rev:
 
 Identifying your Rev
@@ -16,29 +40,7 @@ Identifying your Rev
 We went through three versions ("Revs") of the Maple hardware: Rev 1,
 Rev 3, and Rev 5 [#frev2_4]_; Rev 5, the final design, is currently on
 sale.  The following sections will help you to help you identify your
-Rev.  Known issues are listed in the :ref:`errata <errata>`.
-
-Rev 1
-^^^^^
-
-A small number of Maple Rev 1 boards went on sale in late 2009.  They
-have a light red silkscreen and a single pixelated leaf as a logo.
-
-.. figure:: /_static/img/maple_rev1.png
-   :align: center
-   :alt: Maple Rev 1
-
-Rev 3
-^^^^^
-
-This batch of boards went on sale beginning in May 2010. They have a
-darker red silkscreen and the "infinity leaf" logo.  The Maple Rev 3
-was the first version which includes the built-in button, labeled BUT.
-It also includes a built-in LiPo battery charger.
-
-.. figure:: /_static/img/maple_rev3.png
-   :align: center
-   :alt: Maple Rev 3
+Rev.  Known issues are listed in the :ref:`errata <maple-errata>`.
 
 Rev 5
 ^^^^^
@@ -54,6 +56,28 @@ them.
 .. figure:: /_static/img/maple_rev5.png
    :align: center
    :alt: Maple Rev 5
+
+Rev 3
+^^^^^
+
+This batch of boards went on sale beginning in May 2010. They have a
+darker red silkscreen and the "infinity leaf" logo.  The Maple Rev 3
+was the first version which includes the built-in button, labeled BUT.
+It also includes a built-in LiPo battery charger.
+
+.. figure:: /_static/img/maple_rev3.png
+   :align: center
+   :alt: Maple Rev 3
+
+Rev 1
+^^^^^
+
+A small number of Maple Rev 1 boards went on sale in late 2009.  They
+have a light red silkscreen and a single pixelated leaf as a logo.
+
+.. figure:: /_static/img/maple_rev1.png
+   :align: center
+   :alt: Maple Rev 1
 
 .. _hardware-maple-powering:
 
@@ -99,8 +123,150 @@ at the command line with ::
 
     $ git clone git://github.com/leaflabs/maple.git
 
+.. _maple-errata:
+
+Errata
+------
+
+This section lists known issues and warnings for each revision of the
+Maple board. The failure modes aren't design errors, but are easy ways
+to break or damage your board permanently. For a list of differences
+between the Maple and Arduinos, see the :ref:`Arduino Compatibility
+reference <arduino-compatibility>`.
+
+The errata are grouped by Maple version ("Rev").
+
+Maple Rev 5
+^^^^^^^^^^^
+
+Known issues:
+
+* **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
+  corresponding "AIN" is missing from its silkscreen.
+
+* **GPIO 39-43 not configured**: this is really more of a software
+  "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
+  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when a
+  :ref:`JTAG <jtag>` device is not connected, but we have not enabled
+  them in software and thus they can not be accessed with the regular
+  :ref:`lang-pinmode` or :ref:`lang-digitalwrite` functions.
+
+Potential failure modes:
+
+* **High voltage on non-tolerant pins**: not all header pins are 5V
+  compatible; so e.g. connecting certain serial devices in the wrong
+  way could over-voltage the pins.  The :ref:`Pin-Mapping Mega Table
+  <pin-mapping-mega-table>` details which pins are 5V-tolerant.
+
+Maple Rev 3
+^^^^^^^^^^^
+
+Known issues:
+
+* **Bad/Sticky Buttons**: a number of Rev 3 boards sold in May-June 2010
+  have questionable RESET and BUT buttons.
+
+  What seems to have happened is that the flux remover we used to
+  clean the boards before shipping eroded the plastic internals, which
+  resulted in intermittent functionality. All buttons on all shipped
+  boards did function in testing, but some may have been unreliable in
+  regular use.
+
+  If you have this problem, we will be happy to ship you new buttons
+  if you think you can re-solder them yourself, or you can ship us
+  your board and we will swap out that part.
+
+  For reference, the button part number is KMR211GLFS and the flux
+  remover we used is "Precision Electronics Cleaner" from RadioShack,
+  which is "Safe on most plastics" and contains Dipropylene glycol
+  monomethyl ether, hydrotreated heavy naphtha, dipropylene glycol
+  methyl ether acetate (really?), and carbon dioxide.
+
+* **Resistors on pins 0 and 1**: these header pins, which are RX/TX on
+  USART2 (:ref:`Serial2 <lang-serial>`), have resistors in-line
+  between the STM32 and the headers. These resistors increase the
+  impedance of the lines for ADC reads and affect the open drain GPIO
+  functionality of the pins.
+
+  These resistors were accidentally copied over from older Arduino USB
+  designs, where they appear to protect the USB-Serial converter from
+  TTL voltage on the headers.
+
+* **GPIO 39-43 not configured**: this is really more of a software
+  "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
+  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when the a
+  :ref:`JTAG <jtag>` device is not connected, but we have not enabled
+  them in software and thus they can not be accessed with the regular
+  :ref:`lang-pinmode` or :ref:`lang-digitalwrite` functions.
+
+* **Silkscreen Errors**: the silkscreen on the bottom indicated PWM
+  functionality on pin 25 and listen the external header GND pin as
+  number 38 (actually 38 is connected to the BUT button). We manually
+  sharpied over both of these mistakes.
+
+* **PWM Marketing Mistake**: We originally sold the Maple advertising
+  22 channels of 16-bit hardware PWM; actually the Maple only has 15.
+
+Potential failure modes:
+
+* **TTL voltage on non-tolerant pins**: not all header pins are 5V
+  compatible; connecting certain serial devices in the wrong way could
+  over voltage the pins.  The :ref:`Pin-Mapping Mega Table
+  <pin-mapping-mega-table>` details which pins are 5V-tolerant.
+
+Maple Rev 1
+^^^^^^^^^^^
+
+Known issues:
+
+* **ADC noise**: generally very high, in particular when the USB port
+  is being used for communications (including keep-alive pings when
+  connected to a computer).
+
+  This issue was resolved in Rev 3 with a 4-layer design and a
+  geometrically isolated ADC V\ :sub:`ref` plane.
+
+* **Resistors on pins 0 and 1**: these header pins, which are RX/TX on
+  USART2 (:ref:`Serial2 <lang-serial>`), have resistors in-line
+  between the STM32 and the headers. These resistors increase the
+  impedance of the lines for ADC reads and affect the open drain GPIO
+  functionality of the pins.
+
+  These resistors were accidentally copied over from older Arduino USB
+  designs, where they appear to protect the USB-Serial converter from
+  TTL voltage on the headers.
+
+* **Silkscreen Differences**: the pin numbering scheme on Rev 1 is
+  different from Rev 3, and thus Rev 3 software is difficult to use
+  with Rev 1 boards. Notably, the analog input bank is labeled A0-A4
+  on Rev 1 but 15-20 on Rev 3, and the extra header bank does not have
+  a pinout table on the bottom.
+
+* **No BUT Button**: the BUT button, useful for serial bootloading,
+  was only added in Rev 3. As a workaround, you can directly short the
+  appropriate MCU pin to Vcc; see `this forum posting
+  <http://forums.leaflabs.com/topic.php?id=32#post-126>`_.
+
+* **PWM Marketing Mistake**: We originally sold the Maple advertising
+  22 channels of 16-bit hardware PWM; actually the Maple only has 15.
+
+Potential failure modes:
+
+* **TTL voltage on non-tolerant pins**: not all header pins are 5v
+  compatible; connecting certain serial devices in the wrong way could
+  over voltage the pins. The :ref:`Pin-Mapping Mega Table
+  <pin-mapping-mega-table>` details which pins are 5V-tolerant.
+
+Recommended Reading
+-------------------
+
+* STMicro documentation for STM32F103RB microcontroller:
+
+    * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
+    * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+    * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)
+
 .. rubric:: Footnotes
 
 .. [#frev2_4] Revs 2 and 4 were prototypes that didn't pass internal
    testing.
-

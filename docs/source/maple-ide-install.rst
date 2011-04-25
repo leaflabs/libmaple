@@ -41,9 +41,9 @@ correct version for your operating system:
 
 The package bundles together a compiler, an upload utility, a software
 library, and a simple GUI text editor. All this software is `free and
-open <http://fsf.org/>`_; we are grateful to the `Arduino
+open <http://www.fsf.org/>`_; we are grateful to the `Arduino
 <http://arduino.cc/>`_, `CodeSourcery
-<http://www.codesourcery.com/>`_, `GNU <http://gnu.org/>`_, and
+<http://www.codesourcery.com/>`_, `GNU <http://www.gnu.org/>`_, and
 `OpenMoko <http://openmoko.com/>`_ developers, as well as many others,
 who allow us to reuse their software.
 

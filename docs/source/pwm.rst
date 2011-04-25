@@ -26,7 +26,7 @@ documentation <timers>` for more information.
 
 Note that unlike the Arduino, the Maple does not have PWM
 functionality on pin D10; all other pins are :ref:`compatible
-<compatibility>`.
+<arduino-compatibility>`.
 
 The following table shows which timer can generate which PWM
 outputs. See the :ref:`pin mapping table <pin-mapping-mega-table>` to

@@ -6,6 +6,8 @@
  Servo
 =======
 
+.. FIXME [0.0.10] this is out of date
+
 This documents the Servo library for controlling RC servomotors.  It
 is implemented as a thin layer over the built-in :ref:`timer
 peripherals <timers>`.

@@ -12,8 +12,8 @@ devices.
 Introduction
 ------------
 
-.. FIXME remove Maple-specific documentation
-.. FIXME Serial4, Serial5 updates for high-density devices
+.. FIXME [Maple-specific values]
+.. FIXME [0.0.10] Serial4, Serial5 updates for high-density devices
 
 The Maple has three serial ports (also known as a UARTs or USARTs):
 ``Serial1``, ``Serial2``, and ``Serial3``. They communicate using the
@@ -90,7 +90,7 @@ means that you can use any of these functions on any of ``Serial1``,
 
 .. cpp:function:: HardwareSerial::flush()
 
-   Removes the contents of the Serial's associated USART RX FIFO.
+   Throw away the contents of the serial port's receiver (RX) buffer.
    That is, clears any buffered characters, so that the next character
    read is guaranteed to be new.
 
@@ -213,7 +213,7 @@ the USB port on the Maple board (for that, use :ref:`SerialUSB
 <lang-serialusb>`).  Thus, to use these pins to communicate with your
 personal computer, you will need an additional USB-to-serial adapter.
 
-.. TODO LATER port these examples over
+.. FIXME [0.1.0] port these examples over
 
 .. Examples
 .. --------

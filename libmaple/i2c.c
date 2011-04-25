@@ -321,9 +321,19 @@ static void i2c_bus_reset(const i2c_dev *dev) {
 }
 
 /**
+ * @brief Initialize an I2C device and reset its registers to their
+ *        default values.
+ * @param dev Device to enable.
+ */
+void i2c_init(i2c_dev *dev) {
+    rcc_reset_dev(dev->clk_line);
+    rcc_clk_enable(dev->clk_line);
+}
+
+/**
  * @brief Initialize an i2c device as bus master
- * @param device to enable
- * @param flags bitwise or of the following I2C options:
+ * @param dev Device to enable
+ * @param flags Bitwise or of the following I2C options:
  *      I2C_FAST_MODE: 400 khz operation
  *      I2C_10BIT_ADDRESSING: Enable 10-bit addressing
  */
@@ -337,8 +347,7 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     i2c_bus_reset(dev);
 
     /* Turn on clock and set GPIO modes */
-    rcc_reset_dev(dev->clk_line);
-    rcc_clk_enable(dev->clk_line);
+    i2c_init(dev);
     gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_AF_OUTPUT_OD);
     gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_AF_OUTPUT_OD);
 

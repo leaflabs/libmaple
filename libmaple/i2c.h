@@ -137,6 +137,7 @@ extern i2c_dev* const I2C2;
 extern "C" {
 #endif
 
+void i2c_init(i2c_dev *dev);
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 int32 i2c_master_xfer(i2c_dev *dev, i2c_msg *msgs, uint16 num);
 

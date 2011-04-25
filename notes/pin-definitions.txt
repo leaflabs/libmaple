@@ -3,11 +3,8 @@ Pin definitions by GPIO bank.
 Source: ST DOC ID 14611, Datasheet for STM32F103xC, STM32F103xD,
 STM32F103xE, Table 5, pp. 30--35.
 
-Some peripherals and extra functionality with less/no libmaple
-relevance (at time of writing) are given in "Other" following each
-bank's main table.  Non-default alternate functions are not listed. If
-wirish will/does remap the pin's main function after reset, the main
-function is listed under "Other".
+Some additional peripheral GPIO information is given in the "Other"
+section following each bank's main table.
 
 This document was prepared carefully and is believed to be correct,
 but the final arbiter of truth is the ST datasheet.

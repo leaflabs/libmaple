@@ -23,7 +23,7 @@
 #ifndef _PRINT_H_
 #define _PRINT_H_
 
-#include <libmaple_types.h>
+#include "libmaple_types.h"
 
 enum {
     BYTE = 0,

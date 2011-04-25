@@ -356,19 +356,18 @@ void cmd_serial1_echo(void) {
                       "early.");
     while (!SerialUSB.available())
         ;
-    SerialUSB.read();
 
+    if (SerialUSB.read() == ESC) return;
     SerialUSB.println("Testing 115200 baud on USART1.");
     serial_echo_test(&Serial1, 115200);
-    if (SerialUSB.read() == ESC) return;
 
+    if (SerialUSB.read() == ESC) return;
     SerialUSB.println("Testing 57600 baud on USART1.");
     serial_echo_test(&Serial1, 57600);
-    if (SerialUSB.read() == ESC) return;
 
+    if (SerialUSB.read() == ESC) return;
     SerialUSB.println("Testing 9600 baud on USART1.");
     serial_echo_test(&Serial1, 9600);
-    if (SerialUSB.read() == ESC) return;
 }
 
 void cmd_gpio_monitoring(void) {

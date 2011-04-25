@@ -26,6 +26,8 @@
 
 /**
  * @file usart.c
+ * @author Marti Bolivar <mbolivar@leaflabs.com,
+ *         Perry Hung <perry@leaflabs.com>
  * @brief USART control routines
  */
 
@@ -158,7 +160,7 @@ void usart_disable(usart_dev *dev) {
  *  @brief Call a function on each USART.
  *  @param fn Function to call.
  */
-void usart_foreach(void (*fn)(usart_dev *dev)) {
+void usart_foreach(void (*fn)(usart_dev*)) {
     fn(USART1);
     fn(USART2);
     fn(USART3);
@@ -169,20 +171,27 @@ void usart_foreach(void (*fn)(usart_dev *dev)) {
 }
 
 /**
- * @brief Print a null-terminated string to the specified serial port.
- * @param dev Serial port to send the string on
- * @param str String to send
+ * @brief Nonblocking USART transmit
+ * @param dev Serial port to transmit over
+ * @param buf Buffer to transmit
+ * @param len Maximum number of bytes to transmit
+ * @return Number of bytes transmitted
  */
-void usart_putstr(usart_dev *dev, const char* str) {
-    char ch;
-
-    while ((ch = *(str++)) != '\0') {
-        usart_putc(dev, ch);
+uint32 usart_tx(usart_dev *dev, const uint8 *buf, uint32 len) {
+    usart_reg_map *regs = dev->regs;
+    uint32 txed = 0;
+    while ((regs->SR & USART_SR_TXE) && (txed < len)) {
+        regs->DR = buf[txed++];
     }
+    return txed;
 }
 
 /**
- * @brief Print an unsigned integer to the specified serial port.
+ * @brief Transmit an unsigned integer to the specified serial port in
+ *        decimal format.
+ *
+ * This function blocks until the integer's digits have been
+ * completely transmitted.
  *
  * @param dev Serial port to send on
  * @param val Number to print

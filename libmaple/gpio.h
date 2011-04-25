@@ -56,7 +56,6 @@ typedef struct gpio_reg_map {
     __io uint32 LCKR;     /**< Port configuration lock register */
 } gpio_reg_map;
 
-
 /**
  * External interrupt line port selector.  Used to determine which
  * GPIO port to map an external interrupt line onto. */

@@ -38,17 +38,6 @@
 
 /**
  * Specifies a GPIO pin behavior.
- *
- * Each of the GPIO pins on a Maple board may be configured using
- * pinMode() to behave in a number of ways: as a digital output pin,
- * or as an analog input pin, etc., depending on the particular pin.
- *
- * This enum specifies the complete set of possible configurations;
- * not every pin can have all of these modes.  For example, on the
- * Maple, pin 15 may be configured as INPUT_ANALOG, but not as PWM.
- * See your board's documentation and silkscreen for more information
- * on what functionality is available on each pin.
- *
  * @see pinMode()
  */
 typedef enum WiringPinMode {

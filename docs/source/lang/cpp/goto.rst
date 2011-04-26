@@ -126,5 +126,4 @@ See Also
 
 - Knuth, Donald. `Structured Programming with go to Statements <http://pplab.snu.ac.kr/courses/adv_pl05/papers/p261-knuth.pdf>`_ (PDF)
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

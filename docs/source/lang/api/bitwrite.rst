@@ -32,9 +32,9 @@ Nothing.
 Arduino Compatibility
 ---------------------
 
-Maple's version of ``bitWrite()`` is compatible with Arduino.
+Maple's implementation of ``bitWrite()`` is compatible with Arduino.
 
-See also
+See Also
 --------
 
 -  :ref:`bit() <lang-bit>`
@@ -42,5 +42,4 @@ See also
 -  :ref:`bitSet() <lang-bitSet>`
 -  :ref:`bitClear() <lang-bitClear>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

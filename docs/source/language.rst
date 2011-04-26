@@ -10,8 +10,7 @@ The Maple can be programmed in the `Wiring
 <http://www.wiring.org.co/reference/>`_ language, which is the same
 language used to program the `Arduino <http://arduino.cc/>`_ boards.
 
-.. TODO Wiring tutorial -- just describe setup()/loop(), then link to
-.. some of the the bajillion external tutorials
+.. TODO [0.2.0?] Wiring tutorial
 
 C or C++ programmers curious about the differences between the Wiring
 language and C++ may wish to skip to the
@@ -20,31 +19,29 @@ language and C++ may wish to skip to the
 .. contents:: Contents
    :local:
 
+.. admonition:: **Looking for Something Else?**
+
+   - See the :ref:`libraries` for extra built-in libraries for dealing
+     with different kinds of hardware.
+
+   - If you're looking for something from the C standard library (like
+     ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
+     <arm-gcc>` used to compile your programs is configured to link
+     against `newlib <http://sourceware.org/newlib/>`_, and allows the
+     use of any of its header files.  However, dynamic memory allocation
+     (``malloc()``, etc.) is not available.
+
+   - If you're looking for pointers to low-level details, see this page's
+     :ref:`Recommended Reading <language-recommended-reading>`.
+
 .. _language-lang-docs:
 
 Maple Language Reference
 ------------------------
 
-The following table summarizes the available core language features.
-A more exhaustive index is available at the :ref:`language-index`.
-
-.. FIXME mention Maple Native supports malloc(), free(), operator
-.. new(), and operator delete(), when that is a true thing to say.
-
-**Looking for something else?** 
-
-- See the :ref:`libraries` for extra built-in libraries for dealing
-  with different kinds of hardware.
-
-- If you're looking for something from the C standard library (like
-  ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
-  <arm-gcc>` used to compile your programs is configured to link
-  against `newlib <http://sourceware.org/newlib/>`_, and allows the
-  use of any of its header files.  However, dynamic memory allocation
-  (``malloc()``, etc.) is not available.
-
-- If you're looking for low-level details, see the :ref:`libmaple
-  <libmaple>` reference page.
+The following table summarizes the most important core language
+features.  An exhaustive index is available at the
+:ref:`language-index`.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -458,14 +455,26 @@ Which could plausibly be turned into the final source file ::
     while (true) loop();
   }
 
+.. _language-recommended-reading:
+
 Recommended Reading
 -------------------
 
-* `newlib Documentation <http://sourceware.org/newlib/>`_
-
 * :ref:`libmaple Documentation <libmaple>`
-
-* ST documentation:
-
-    * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
-    * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)
+* Your board's :ref:`Board Hardware Documentation <index-boards>` page
+* ST Documentation:
+    * Reference Manual `RM0008
+      <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
+      (PDF).  This is the most important reference work on the STM32
+      line, and covers the low-level hardware capabilities and
+      interfaces in great detail.
+    * `Programming Manual
+      <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_
+      (PDF). This is an assembly language and register reference for
+      the STM32 line.
+* ARM Documentation:
+    * `Cortex-M3 Technical Reference Manual, Revision r1p1
+      <http://infocenter.arm.com/help/topic/com.arm.doc.ddi0337e/DDI0337E_cortex_m3_r1p1_trm.pdf>`_
+      (PDF).  This ARM manual specifies much of the the Cortex M3
+      Architecture, including instruction timings.
+* `newlib Documentation <http://sourceware.org/newlib/>`_

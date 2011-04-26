@@ -182,5 +182,4 @@ See Also
 - :ref:`Compound bitwise operations <lang-compoundbitwise>` (``&=``,
    ``|=``, ``^=``).
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

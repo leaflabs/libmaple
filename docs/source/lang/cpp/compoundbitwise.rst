@@ -226,5 +226,4 @@ See Also
 - :ref:`Boolean operations <lang-boolean>` (``&&``, ``||``)
 - :ref:`Bitwise operators <lang-bitwisemath>` (``&``, ``|``, ``^``, ``~``)
 
-
 .. include:: cc-attribution.txt

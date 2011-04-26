@@ -24,12 +24,10 @@ Syntax
 
 ``byte(x)``
 
-
 Parameters
 ----------
 
 **x**: a value of any integer type
-
 
 Returns
 -------
@@ -38,13 +36,9 @@ The value, converted to a ``byte``.  Note, however, that if the value
 is larger than the maximum value you can store in a byte (255), then
 the results might be strange and unexpected.
 
-
 See Also
 --------
 
 -  :ref:`lang-byte`
 
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

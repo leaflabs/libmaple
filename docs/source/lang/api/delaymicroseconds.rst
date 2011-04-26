@@ -48,9 +48,9 @@ Arduino Compatibility
 ---------------------
 
 While we have made every effort we could to ensure that the timing of
-delayMicroseconds is as accurate as possible, we cannot guarantee it
-will behave as the Arduino implementation down to the microsecond,
-especially for smaller values of ``us``.
+``delayMicroseconds()`` is as accurate as possible, we cannot
+guarantee it will behave as the Arduino implementation down to the
+microsecond, especially for smaller values of ``us``.
 
 See Also
 --------
@@ -59,7 +59,4 @@ See Also
 -  :ref:`micros <lang-micros>`
 -  :ref:`delay <lang-delay>`
 
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

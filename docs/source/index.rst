@@ -1,15 +1,12 @@
 .. _index:
 
-Maple Documentation Contents
+LeafLabs Documentation Index
 ============================
 
-.. FIXME [Maple-specific values] errata page links to Maple
-
 Welcome!  This is the Maple documentation index.  If you just bought a
-Maple, you probably want to head to the :ref:`quickstart
+Maple board, you probably want to head to the :ref:`quickstart
 <maple-quickstart>`.  If you're having problems, check out the
-:ref:`troubleshooting <troubleshooting>` :ref:`known problems
-<maple-errata>` pages.
+:ref:`troubleshooting <troubleshooting>` page.
 
 Have fun!
 
@@ -59,7 +56,7 @@ Have fun!
    usb
    usart
 
-.. _index-schematics:
+.. _index-boards:
 
 **Board Hardware Documentation:**
 
@@ -67,6 +64,7 @@ Have fun!
    :maxdepth: 1
 
    hardware/maple.rst
+   hardware/maple-ret6.rst
 
 .. TODO write/include these upon Mini and Native release
 

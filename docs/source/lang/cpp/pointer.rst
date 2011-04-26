@@ -28,4 +28,4 @@ See Also
 
 - http://xkcd.com/138/
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

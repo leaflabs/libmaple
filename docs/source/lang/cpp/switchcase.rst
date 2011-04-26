@@ -110,9 +110,9 @@ value as the variable to compare.  In this case, you can write down
 all of the values the ``enum`` takes as ``case`` statements, and be
 sure you've covered all the possibilities.
 
-See also:
+See Also:
 ---------
 
 - :ref:`if/else <lang-if>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

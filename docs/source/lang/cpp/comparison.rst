@@ -83,5 +83,4 @@ Comparison operators, along with :ref:`boolean operators
    appears within a conditional doesn't mean it's automatically wrong.
    Be careful to know what you mean.)
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

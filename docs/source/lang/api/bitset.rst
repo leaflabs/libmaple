@@ -5,12 +5,10 @@ bitSet()
 
 (Macro) Sets (writes a 1 to) a bit of a numeric variable.
 
-
 Syntax
 ------
 
 ``bitSet(x, n)``
-
 
 Parameters
 ----------
@@ -20,18 +18,15 @@ Parameters
 * **n** which bit to set, starting at 0 for the least-significant
   (rightmost) bit
 
-
 Value
 -----
 
 None.
 
-
 Arduino Compatibility
 ---------------------
 
 The Maple implementation of bitSet is compatible with Arduino.
-
 
 See Also
 --------
@@ -41,6 +36,4 @@ See Also
 -  :ref:`lang-bitwrite`
 -  :ref:`lang-bitclear`
 
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

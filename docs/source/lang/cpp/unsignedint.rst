@@ -56,4 +56,4 @@ See Also
 -  :ref:`Integer Constants <lang-constants-integers>`
 -  :ref:`Variables <lang-variables>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

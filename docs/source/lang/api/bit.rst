@@ -12,33 +12,27 @@ Syntax
 
 ``bit(n)``
 
-
 Parameters
 ----------
 
 * **n** the bit to set.
-
 
 Value
 -----
 
 The value of an integer with the given bit set.
 
-
 Arduino Compatibility
 ---------------------
 
-The Maple implementation of bit is compatible with Arduino.
+The Maple implementation of ``bit()`` is compatible with Arduino.
 
-
-See also
+See Also
 --------
-
 
 -  :ref:`lang-bitread`
 -  :ref:`lang-bitwrite`
 -  :ref:`lang-bitset`
 -  :ref:`lang-bitclear`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

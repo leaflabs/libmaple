@@ -47,4 +47,4 @@ See Also
 -  :ref:`double <lang-double>`
 -  :ref:`Variables <lang-variables>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

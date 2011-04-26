@@ -121,4 +121,4 @@ See Also
 
 - :ref:`sizeof <lang-sizeof>`\ ()
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -28,6 +28,4 @@ Example
       // ...
     }
 
-.. TODO doc page on function declaration?
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

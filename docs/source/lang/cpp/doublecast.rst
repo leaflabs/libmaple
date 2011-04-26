@@ -24,4 +24,4 @@ See Also
 -  :ref:`float <lang-float>`
 -  :ref:`float() <lang-floatcast>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

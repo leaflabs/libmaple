@@ -12,48 +12,19 @@ devices.
 Introduction
 ------------
 
-.. FIXME [Maple-specific values]
-.. FIXME [0.0.10] Serial4, Serial5 updates for high-density devices
+.. FIXME [0.0.10] UART4, UART5
 
-The Maple has three serial ports (also known as a UARTs or USARTs):
-``Serial1``, ``Serial2``, and ``Serial3``. They communicate using the
-pins summarized in the following table:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Serial port
-     - TX, RX, CK
-     - CTS, RTS (if present)
-
-   * - ``Serial1``
-     - 7, 8, 6
-     -
-
-   * - ``Serial2``
-     - 1, 0, 10
-     - 2, 3
-
-   * - ``Serial3``
-     - 29, 30, 31
-     - 32, 33
-
-Thus, if you use a particular serial port, you cannot also use its
-communication pins for other purposes at the same time.
-
-If you want to communicate with the Maple using the provided USB port,
-use :ref:`SerialUSB <lang-serialusb>` instead.
-
-To use them to communicate with an external TTL serial device, connect
-the TX pin to your device's RX pin, the RX to your device's TX pin,
-and the ground of your Maple to your device's ground.
+To use a serial port to communicate with an external serial device,
+connect the TX pin to your device's RX pin, the RX to your device's TX
+pin, and your Maple board's ground to your device's ground.
 
 .. warning:: Don't connect these pins directly to an RS232 serial
    port; they operate at +/- 12V and can damage your board.
 
-
 Library Documentation
 ---------------------
+
+.. FIXME [0.1.0] Tutorial-style usage introduction
 
 All of the ``Serial[1,2,3]`` objects are instances of the
 ``HardwareSerial`` class, which is documented in this section.  (This
@@ -209,9 +180,10 @@ Arduino Compatibility Note
 --------------------------
 
 Unlike the Arduino, none of the Maple's serial ports is connected to
-the USB port on the Maple board (for that, use :ref:`SerialUSB
-<lang-serialusb>`).  Thus, to use these pins to communicate with your
-personal computer, you will need an additional USB-to-serial adapter.
+the USB port on the Maple board.  If you want to communicate using the
+built-in USB port, use :ref:`SerialUSB <lang-serialusb>` instead.  You
+will need an additional USB-to-serial adapter to communicate between a
+USART and your computer.
 
 .. FIXME [0.1.0] port these examples over
 
@@ -226,4 +198,4 @@ personal computer, you will need an additional USB-to-serial adapter.
 .. -  `Serial Call Response <http://arduino.cc/en/Tutorial/SerialCallResponse>`_
 .. -  `Serial Call Response ASCII <http://arduino.cc/en/Tutorial/SerialCallResponseASCII>`_
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

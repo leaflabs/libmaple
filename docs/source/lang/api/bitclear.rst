@@ -10,7 +10,6 @@ Syntax
 
 ``bitClear(x, n)``
 
-
 Parameters
 ----------
 
@@ -19,20 +18,17 @@ Parameters
 * **n** which bit to clear, starting at 0 for the least-significant
   (rightmost) bit
 
-
 Returns
 -------
 
-None.
-
+Nothing.
 
 Arduino Compatibility
 ---------------------
 
-This implementation is compatible with that of Arduino.
+The Maple implementation of ``bitClear()`` is compatible with Arduino.
 
-
-See also
+See Also
 --------
 
 -  :ref:`bit <lang-bit>`\ ()
@@ -40,5 +36,4 @@ See also
 -  :ref:`bitWrite <lang-bitwrite>`\ ()
 -  :ref:`bitSet <lang-bitset>`\ ()
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

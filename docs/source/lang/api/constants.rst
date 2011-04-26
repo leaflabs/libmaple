@@ -320,4 +320,4 @@ See Also
 - :ref:`double <lang-double>`
 - :ref:`Board-Specific Values <lang-board-values>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

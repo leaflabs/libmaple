@@ -23,5 +23,4 @@ Example::
       x = readSensors();  // check the sensors
     } while (x < 100);
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

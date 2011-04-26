@@ -30,5 +30,4 @@ See Also
 -  :ref:`byte() <lang-bytecast>` (casting a value to a byte)
 -  :ref:`Variables <lang-variables>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

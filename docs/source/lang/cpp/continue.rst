@@ -27,6 +27,4 @@ Example
         delay(50);
     }
 
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

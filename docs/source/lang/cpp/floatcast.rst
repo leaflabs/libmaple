@@ -25,4 +25,4 @@ See Also
 -  :ref:`double <lang-double>`
 -  :ref:`double() <lang-doublecast>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

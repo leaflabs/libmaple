@@ -42,13 +42,11 @@ Example
       }
     }
 
-See also
+See Also
 --------
-
 
 -  :ref:`Boolean constants <lang-constants-bool>`
 -  :ref:`Boolean operators <lang-boolean>`
 -  :ref:`Variables <lang-variables>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

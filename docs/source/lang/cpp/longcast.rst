@@ -24,4 +24,4 @@ See Also
 - :ref:`long <lang-long>`
 - :ref:`long long <lang-longlong>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

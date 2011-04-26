@@ -165,6 +165,5 @@ See Also
    (usually) stored
    <http://en.wikipedia.org/wiki/Two%27s_complement>`_ on computers.
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt
 

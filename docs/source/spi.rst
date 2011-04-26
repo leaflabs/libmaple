@@ -20,11 +20,15 @@ Recommended Reading
 
 * `Wikipedia Article on Serial Peripheral Interface Bus (SPI)
   <http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus>`_
+
 * `Arduino reference on SPI
   <http://www.arduino.cc/playground/Code/Spi>`_
-* `Hardcore SPI on Arduino <http://klk64.com/arduino-spi/>`_ by kik64
-* STMicro documentation for STM32F103RB microcontroller:
 
-  * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-  * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
+* `Hardcore SPI on Arduino <http://klk64.com/arduino-spi/>`_ by kik64
+
+* ST Documentation:
+
+  * Reference Manual `RM0008
+    <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
+    (PDF), Chapter 25, "Serial Peripheral Interface"
 

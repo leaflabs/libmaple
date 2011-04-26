@@ -100,8 +100,6 @@ a board selected.  The work-around is to restart the IDE. Mysterious!
 
 A classic! Make sure you have selected a board from the pulldown menu.
 
-.. TODO: remove when Python version is released
-
 ``undefined reference to setup()/loop()``
 -----------------------------------------
 
@@ -132,8 +130,6 @@ connected to pins D0 and D1. See also the :ref:`USART docs <usart>`.
 There is an intermittent bug with the temporary directory build system
 that on occasion will lose many of the ``#include``\ d libmaple
 files. If you recompile everything, it should be fine.
-
-.. TODO remove when the Python version is released
 
 .. _troubleshooting-upload:
 

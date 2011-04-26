@@ -21,7 +21,7 @@ method for defining constants than ``#define``.
 Example
 -------
 
-::
+ ::
 
     // this defines a variable called "pi", which cannot be changed:
     const float pi = 3.14;
@@ -32,7 +32,6 @@ Example
     x = pi * 2;    // it's fine to find the value of a const variable
 
     pi = 7;        // illegal - you can't write to (modify) a constant
-
 
 **#define** or **const**
 ------------------------
@@ -48,5 +47,4 @@ See Also
 -  :ref:`#define <lang-define>`
 -  :ref:`volatile <lang-volatile>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

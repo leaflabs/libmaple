@@ -61,7 +61,4 @@ just ignores them. This can be especially useful when trying to locate
 a problem, or when a program refuses to compile and the compiler error
 is cryptic or unhelpful.
 
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -11,10 +11,13 @@ pwmWrite(), the pin will output a steady square wave with the given
 duty cycle.  You can change the duty cycle later by calling pwmWrite()
 again with the same pin and a different duty.
 
-.. FIXME board-specific information
-
-On the Maple, the pins which support PWM are: 0, 1, 2, 3, 5, 6, 7, 8,
-9, 11, 12, 14, 24, 27, and 28.
+The pins which support PWM have ``PWM`` listed underneath their number
+on your board's silkscreen.  These pin numbers are available to your
+program in the :ref:`boardPWMPins <lang-board-values-pwm-pins>`
+board-specific array.  The number of pins which are capable of PWM on
+your board is given by the ``BOARD_NR_PWM_PINS`` constant.  These
+values are documented for each board in the :ref:`Board Hardware
+Documentation <index-boards>` pages.
 
 The Arduino function :ref:`analogWrite() <lang-analogwrite>` is an
 alias for ``pwmWrite()``, but it is badly named, and its use is
@@ -54,4 +57,5 @@ potentiometer::
 See Also
 --------
 
--  :ref:`Maple PWM tutorial <pwm>`
+- :ref:`Maple PWM tutorial <pwm>`
+- :ref:`boardPWMPins <lang-board-values-pwm-pins>`

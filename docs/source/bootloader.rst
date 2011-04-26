@@ -1,8 +1,9 @@
 .. highlight:: sh
 
-=====================
- Maple Bootloader(s)
-=====================
+.. _bootloader:
+
+Maple Bootloader(s)
+===================
 
 The firmware which allows the Maple to be reprogrammed via a USB
 connection. Every Maple board comes programmed with this by default,

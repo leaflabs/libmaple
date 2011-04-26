@@ -34,4 +34,4 @@ See Also
 
 - :ref:`lang-compoundarithmetic`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

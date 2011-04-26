@@ -3,7 +3,8 @@
 
 .. admonition:: License and Attribution
 
-   This documentation page was adapted from the `Arduino Reference
-   Documentation <http://arduino.cc/en/Reference/HomePage>`_\ , which
-   is released under a `Creative Commons Attribution-ShareAlike 3.0
-   License <http://creativecommons.org/licenses/by-sa/3.0/>`_.
+   Some information in this page was adapted from the `Arduino
+   Reference Documentation
+   <http://arduino.cc/en/Reference/HomePage>`_\ , which is released
+   under a `Creative Commons Attribution-ShareAlike 3.0 License
+   <http://creativecommons.org/licenses/by-sa/3.0/>`_.

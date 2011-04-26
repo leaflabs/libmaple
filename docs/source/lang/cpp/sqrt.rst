@@ -21,5 +21,4 @@ See Also
 -  :ref:`pow <lang-pow>`
 -  :ref:`sq <lang-sq>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

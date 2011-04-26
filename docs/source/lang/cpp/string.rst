@@ -124,5 +124,4 @@ See Also
 - :ref:`__attribute__ <arm-gcc-attribute-flash>`
 - :ref:`Variables <lang-variables>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

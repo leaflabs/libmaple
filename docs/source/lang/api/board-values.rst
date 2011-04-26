@@ -12,6 +12,9 @@ it easier to share your code with other people who have different
 boards.  Some example usages are given :ref:`below
 <lang-board-values-examples>`.
 
+The actual values for each board are given in the :ref:`Board Hardware
+Documentation <index-boards>`.
+
 .. contents:: Contents
    :local:
 
@@ -110,8 +113,6 @@ Pin Arrays
 
 Some :ref:`arrays <lang-array>` of pin numbers are available which you
 can use to find out certain important information about a given pin.
-
-.. TODO [0.1.0] links to board-specific hardware information
 
 - ``boardPWMPins``: Pin numbers of each pin capable of :ref:`PWM
   <pwm>` output, using :ref:`pwmWrite() <lang-pwmwrite>`.  The total

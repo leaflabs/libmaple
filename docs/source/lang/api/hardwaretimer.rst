@@ -10,8 +10,7 @@ built-in timer peripherals.  More information on these peripherals
 (including code examples) is available in the :ref:`timers reference
 <timers>`.
 
-.. FIXME update HardwareTimer documentation after redoing it in terms
-.. of the new timer interface.
+.. FIXME [0.0.10] Updated HardwareTimer documentation, with deprecation
 
 .. warning:: This class has been deprecated.  It is not available in
    the current build.
@@ -27,8 +26,7 @@ documented below on one of the predefined ``HardwareTimer`` instances.
 For example, to set the prescale factor on timer 1 to 5, call
 ``Timer1.setPrescaleFactor(5)``.
 
-.. TODO add code examples that people can copy and paste in case
-.. they're unfamiliar with namespace syntax
+.. TODO add tutorial-style examples
 
 .. cpp:class:: HardwareTimer
 
@@ -92,9 +90,8 @@ For example, to set the prescale factor on timer 1 to 5, call
    Set the given channel of this timer to the given :ref:`mode
    <lang-hardwaretimer-modes>`.  The parameter ``channel`` is one of
    1, 2, 3, and 4, and corresponds to the compare channel you would
-   like to set.  Refer to the full :ref:`pin mapping table
-   <pin-mapping-mega-table>` to match up timer channels and pin
-   numbers.
+   like to set.  Refer to your board's :ref:`master pin map
+   <gpio-pin-maps>` to match up timer channels and pin numbers.
 
 .. cpp:function:: void HardwareTimer::setChannel1Mode(TimerMode mode)
 
@@ -377,3 +374,87 @@ different.
 Other Functions
 ^^^^^^^^^^^^^^^
 .. doxygenfunction:: getTimer
+
+Examples
+^^^^^^^^
+
+**LED blink**::
+
+    #define LED_RATE 500000    // in microseconds; should give 0.5Hz toggles
+
+    void handler_led(void);
+
+    void setup()
+    {
+        // Set up the LED to blink
+        pinMode(BOARD_LED_PIN, OUTPUT);
+
+        // Setup Timer
+        Timer2.setChannel1Mode(TIMER_OUTPUTCOMPARE);
+        Timer2.setPeriod(LED_RATE); // in microseconds
+        Timer2.setCompare1(1);      // overflow might be small
+        Timer2.attachCompare1Interrupt(handler_led);
+    }
+
+    void loop() {
+        // Nothing! It's all in the interrupts
+    }
+
+    void handler_led(void) {
+        toggleLED();
+    }
+
+**Racing Counters**::
+
+    void handler_count1(void);
+    void handler_count2(void);
+
+    int count1 = 0;
+    int count2 = 0;
+
+    void setup()
+    {
+        // Set up BUT for input
+        pinMode(BOARD_BUTTON_PIN, INPUT_PULLUP);
+
+        // Setup Counting Timers
+        Timer3.setChannel1Mode(TIMER_OUTPUTCOMPARE);
+        Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
+        Timer3.pause();
+        Timer4.pause();
+        Timer3.setCount(0);
+        Timer4.setCount(0);
+        Timer3.setOverflow(30000);
+        Timer4.setOverflow(30000);
+        Timer3.setCompare1(1000);   // somewhere in the middle
+        Timer4.setCompare1(1000);
+        Timer3.attachCompare1Interrupt(handler1);
+        Timer4.attachCompare1Interrupt(handler2);
+        Timer3.resume();
+        Timer4.resume();
+    }
+
+    void loop() {
+        // Display the running counts
+        SerialUSB.print("Count 1: ");
+        SerialUSB.print(count1);
+        SerialUSB.print("\t\tCount 2: ");
+        SerialUSB.println(count2);
+
+        // Run... while BUT is held, pause Count2
+        for(int i = 0; i<1000; i++) {
+            if(digitalRead(BOARD_BUTTON_PIN)) {
+                Timer4.pause();
+            } else {
+                Timer4.resume();
+            }
+            delay(1);
+        }
+    }
+
+    void handler1(void) {
+        count1++;
+    }
+    void handler2(void) {
+        count2++;
+    }

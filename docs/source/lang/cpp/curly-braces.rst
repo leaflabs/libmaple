@@ -99,11 +99,8 @@ reference page for more information)::
 
 .. rubric:: Footnotes
 
-.. TODO remove this once IDE 0.1.0 released
-
 .. [#fbug] At present this feature is slightly buggy as the IDE will
    often find (incorrectly) a brace in text that has been commented
    out.
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

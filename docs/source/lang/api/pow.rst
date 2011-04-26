@@ -10,8 +10,6 @@ Library Documentation
 
 .. doxygenfunction:: pow
 
-.. TODO LATER some examples
-
 See Also
 --------
 
@@ -19,5 +17,4 @@ See Also
 -  :ref:`float <lang-float>`
 -  :ref:`double <lang-double>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

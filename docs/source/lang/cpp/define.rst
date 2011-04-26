@@ -13,7 +13,6 @@ defined value at compile time.
 This can have some unwanted side effects.  In general, the :ref:`const
 <lang-const>` keyword is preferred for defining constants.
 
-
 Syntax
 ------
 
@@ -42,7 +41,7 @@ is, **don't do this, either**::
 Example
 -------
 
-::
+ ::
 
     #define LED_PIN 13
     // The compiler will replace any mention of LED_PIN with
@@ -52,5 +51,4 @@ See Also
 --------
 -  :ref:`const <lang-const>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

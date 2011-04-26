@@ -65,4 +65,4 @@ See Also
 
 -  :ref:`constrain() <lang-constrain>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

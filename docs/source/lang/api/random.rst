@@ -10,9 +10,7 @@ The ``random()`` function generates pseudo-random numbers.
 Library Documentation
 ---------------------
 
-.. FIXME keep tracking Sphinx/Breathe's ability to reference
-.. overloaded functions so we can use doxygenfunction instead of
-.. manually documenting.
+.. FIXME [Breathe] use doxygenfunction when possible
 
 .. cpp:function:: random(long max)
 
@@ -70,4 +68,4 @@ See Also
 
 -  :ref:`randomSeed() <lang-randomseed>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

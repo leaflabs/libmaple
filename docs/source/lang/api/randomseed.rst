@@ -57,4 +57,4 @@ See Also
 
 -  :ref:`random() <lang-random>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -32,14 +32,12 @@
 #include "rcc.h"
 #include "bitband.h"
 
-enum {
-    APB1,
-    APB2,
-    AHB
-};
+#define APB1                            RCC_APB1
+#define APB2                            RCC_APB2
+#define AHB                             RCC_AHB
 
 struct rcc_dev_info {
-    const uint8 clk_domain;
+    const rcc_clk_domain clk_domain;
     const uint8 line_num;
 };
 
@@ -149,7 +147,7 @@ void rcc_clk_enable(rcc_clk_id device) {
         [AHB] = &RCC_BASE->AHBENR,
     };
 
-    uint8 clk_domain = rcc_dev_table[device].clk_domain;
+    rcc_clk_domain clk_domain = rcc_dev_clk(device);
     __io uint32* enr = (__io uint32*)enable_regs[clk_domain];
     uint8 lnum = rcc_dev_table[device].line_num;
 
@@ -166,12 +164,21 @@ void rcc_reset_dev(rcc_clk_id device) {
         [APB2] = &RCC_BASE->APB2RSTR,
     };
 
-    uint8 clk_domain = rcc_dev_table[device].clk_domain;
+    rcc_clk_domain clk_domain = rcc_dev_clk(device);
     __io void* addr = (__io void*)reset_regs[clk_domain];
     uint8 lnum = rcc_dev_table[device].line_num;
 
     bb_peri_set_bit(addr, lnum, 1);
     bb_peri_set_bit(addr, lnum, 0);
+}
+
+/**
+ * @brief Get a device's clock domain
+ * @param device Device whose clock domain to return
+ * @return Device's clock source
+ */
+rcc_clk_domain rcc_dev_clk(rcc_clk_id device) {
+    return rcc_dev_table[device].clk_domain;
 }
 
 /**

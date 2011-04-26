@@ -484,6 +484,14 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
 void rcc_clk_enable(rcc_clk_id device);
 void rcc_reset_dev(rcc_clk_id device);
 
+typedef enum rcc_clk_domain {
+    RCC_APB1,
+    RCC_APB2,
+    RCC_AHB
+} rcc_clk_domain;
+
+rcc_clk_domain rcc_dev_clk(rcc_clk_id device);
+
 /**
  * Prescaler identifiers
  * @see rcc_set_prescaler()

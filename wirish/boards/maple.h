@@ -54,7 +54,7 @@
 
 /* Total number of GPIO pins that are broken out to headers and
  * intended for general use. */
-#define BOARD_NR_GPIO_PINS      39
+#define BOARD_NR_GPIO_PINS      44
 
 /* Number of pins capable of PWM output */
 #define BOARD_NR_PWM_PINS       16
@@ -64,6 +64,15 @@
 
 /* Number of pins already connected to external hardware.  For Maple,
  * these are just BOARD_LED_PIN and BOARD_BUTTON_PIN. */
-#define BOARD_NR_USED_PINS       2
+#define BOARD_NR_USED_PINS       7
+
+/*
+ * Debug port pins
+ */
+#define BOARD_JTMS_SWDIO_PIN    39
+#define BOARD_JTCK_SWCLK_PIN    40
+#define BOARD_JTDI_PIN          41
+#define BOARD_JTDO_PIN          42
+#define BOARD_NJTRST_PIN        43
 
 #endif

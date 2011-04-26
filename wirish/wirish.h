@@ -39,6 +39,7 @@
 #include "bits.h"
 #include "pwm.h"
 #include "ext_interrupts.h"
+#include "wirish_debug.h"
 #include "wirish_math.h"
 #include "wirish_time.h"
 #include "HardwareSPI.h"

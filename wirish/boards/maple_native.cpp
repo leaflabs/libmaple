@@ -72,7 +72,8 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
     {GPIOB, TIMER4, NULL,  9, 4, ADCx}, /* D26/PB9 */
 
     /* Bottom header */
-    /* Note: D{49, 50, 51} are also TIMER2_CH{2, 3, 4}, respectively. */
+    /* Note: D{48, 49, 50, 51} are also TIMER2_CH{1, 2, 3, 4}, respectively. */
+    /* TODO remap timer 2 in boardInit(); make the appropriate changes here */
 
     {GPIOD,   NULL, NULL,  2, 0, ADCx}, /* D27/PD2 */
     {GPIOD,   NULL, NULL,  3, 0, ADCx}, /* D28/PD3 */
@@ -150,7 +151,15 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
     {GPIOG,   NULL, NULL,  4, 0, ADCx}, /* D97/PG4 */
     {GPIOD,   NULL, NULL,  9, 0, ADCx}, /* D98/PD9 */
     {GPIOG,   NULL, NULL,  5, 0, ADCx}, /* D99/PG5 */
-    {GPIOD,   NULL, NULL, 10, 0, ADCx}  /* D100/PD10 */
+    {GPIOD,   NULL, NULL, 10, 0, ADCx}, /* D100/PD10 */
+
+    /* JTAG header */
+
+    {GPIOA,   NULL, NULL, 13, 0, ADCx}, /* D101/PA13 */
+    {GPIOA,   NULL, NULL, 14, 0, ADCx}, /* D102/PA14 */
+    {GPIOA,   NULL, NULL, 15, 0, ADCx}, /* D103/PA15 */
+    {GPIOB,   NULL, NULL,  3, 0, ADCx}, /* D104/PB3  */
+    {GPIOB,   NULL, NULL,  4, 0, ADCx}  /* D105/PB4  */
 };
 
 extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
@@ -164,7 +173,8 @@ extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
 
 /* FIXME! see comment by BOARD_NR_USED_PINS in maple_native.h */
 extern const uint8 boardUsedPins[BOARD_NR_USED_PINS] __FLASH__ = {
-    BOARD_LED_PIN, BOARD_BUTTON_PIN
+    BOARD_LED_PIN, BOARD_BUTTON_PIN, BOARD_JTMS_SWDIO_PIN,
+    BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN
 };
 
 #endif

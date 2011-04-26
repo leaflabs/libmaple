@@ -84,8 +84,25 @@ Constants
     * ``BOARD_NR_USARTS``: Number of serial ports on the board.  This
       number includes UARTs 4 and 5 if they are available.
 
+.. _lang-board-values-debug:
+
+- Debug (JTAG, SW-Debug) related constants: ``BOARD_JTMS_SWDIO_PIN``,
+  ``BOARD_JTCK_SWCLK_PIN``, ``BOARD_JTDI_PIN``, ``BOARD_JTDO_PIN``,
+  and ``BOARD_NJTRST_PIN``.
+
+  These constants are the pin numbers for :ref:`GPIOs <gpio>` used by
+  the :ref:`jtag` and Serial-Wire Debug peripherals.  Except for the
+  Maple Mini, these pins are usually reserved for special purposes by
+  default (i.e., they are in :ref:`boardUsedPins
+  <lang-board-values-used-pins>`).  However, they can be used as
+  ordinary GPIOs if you call the :ref:`lang-disabledebugports`
+  function.  (Be careful with this on the Maple, as writing to
+  ``BOARD_NJTRST_PIN`` may cause your board to reset!).
+
 .. _lang-board-values-pwm-pins:
+
 .. _lang-board-values-adc-pins:
+
 .. _lang-board-values-used-pins:
 
 Pin Arrays
@@ -94,8 +111,7 @@ Pin Arrays
 Some :ref:`arrays <lang-array>` of pin numbers are available which you
 can use to find out certain important information about a given pin.
 
-.. TODO add links to the board-specific hardware information on what
-.. are in these arrays
+.. TODO [0.1.0] links to board-specific hardware information
 
 - ``boardPWMPins``: Pin numbers of each pin capable of :ref:`PWM
   <pwm>` output, using :ref:`pwmWrite() <lang-pwmwrite>`.  The total
@@ -159,3 +175,5 @@ See Also
 - :ref:`lang-toggleled`
 - :ref:`lang-analogread`
 - :ref:`lang-pwmwrite`
+- :ref:`lang-enabledebugports`
+- :ref:`lang-disabledebugports`

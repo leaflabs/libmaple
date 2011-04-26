@@ -22,7 +22,7 @@
  * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
  * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
- *****************************************************************************/
+*****************************************************************************/
 
 /**
  *  @file gpio.h
@@ -261,22 +261,23 @@ typedef struct afio_reg_map {
 #define AFIO_EVCR_PIN_15                0xF
 
 /* AF remap and debug I/O configuration register */
-#define AFIO_MAPR_SWJ_FULL_SWJ                 (0x0 << 24)
-#define AFIO_MAPR_SWJ_FULL_SWJ_NO_NJRST        (0x1 << 24)
-#define AFIO_MAPR_SWJ_NO_JTAG_SW               (0x2 << 24)
-#define AFIO_MAPR_SWJ_NO_JTAG_NO_SW            (0x4 << 24)
+#define AFIO_MAPR_SWJ_CFG                      (0x7 << 24)
+#define AFIO_MAPR_SWJ_CFG_FULL_SWJ             (0x0 << 24)
+#define AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST    (0x1 << 24)
+#define AFIO_MAPR_SWJ_CFG_NO_JTAG_SW           (0x2 << 24)
+#define AFIO_MAPR_SWJ_CFG_NO_JTAG_NO_SW        (0x4 << 24)
 #define AFIO_MAPR_ADC2_ETRGREG_REMAP           BIT(20)
 #define AFIO_MAPR_ADC2_ETRGINJ_REMAP           BIT(19)
 #define AFIO_MAPR_ADC1_ETRGREG_REMAP           BIT(18)
 #define AFIO_MAPR_ADC1_ETRGINJ_REMAP           BIT(17)
 #define AFIO_MAPR_TIM5CH4_IREMAP               BIT(16)
 #define AFIO_MAPR_PD01_REMAP                   BIT(15)
-#define AFIO_MAPR_CAN_REMAP                    (BIT(14) | BIT(13))
-#define AFIO_MAPR_TIM4_REMAP_FULL              BIT(12)
-#define AFIO_MAPR_TIM3_REMAP                   (BIT(11) | BIT(10))
-#define AFIO_MAPR_TIM2_REMAP                   (BIT(9) | BIT(8))
-#define AFIO_MAPR_TIM1_REMAP                   (BIT(7) | BIT(6))
-#define AFIO_MAPR_USART3_REMAP                 (BIT(5) | BIT(4))
+#define AFIO_MAPR_CAN_REMAP                    (0x3 << 13)
+#define AFIO_MAPR_TIM4_REMAP                   BIT(12)
+#define AFIO_MAPR_TIM3_REMAP                   (0x3 << 10)
+#define AFIO_MAPR_TIM2_REMAP                   (0x3 << 8)
+#define AFIO_MAPR_TIM1_REMAP                   (0x3 << 6)
+#define AFIO_MAPR_USART3_REMAP                 (0x3 << 4)
 #define AFIO_MAPR_USART2_REMAP                 BIT(3)
 #define AFIO_MAPR_USART1_REMAP                 BIT(2)
 #define AFIO_MAPR_I2C1_REMAP                   BIT(1)
@@ -322,17 +323,32 @@ void afio_init(void);
 void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port);
 
 /**
- * Set the SWJ_CONFIG bits in the AFIO MAPR register.
+ * @brief Debug port configuration
  *
- * @param config Desired SWJ_CONFIG bits setting.  One of:
- *        AFIO_MAPR_SWJ_FULL_SWJ (full SWJ),
- *        AFIO_MAPR_SWJ_FULL_SWJ_NO_NJRST (full SWJ, no NJTRST),
- *        AFIO_MAPR_SWJ_NO_JTAG_SW (JTAG-DP disabled, SW-DP enabled),
- *        AFIO_MAPR_SWJ_NO_JTAG_NO_SW (JTAG-DP and SW-DP both disabled).
+ * Used to configure the behavior of JTAG and Serial Wire (SW) debug
+ * ports and their associated GPIO pins.
  */
-static inline void afio_mapr_swj_config(uint32 config) {
+typedef enum afio_debug_cfg {
+    AFIO_DEBUG_FULL_SWJ = AFIO_MAPR_SWJ_CFG_FULL_SWJ, /**<
+                                   Full Serial Wire and JTAG debug */
+    AFIO_DEBUG_FULL_SWJ_NO_NJRST = AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST, /**<
+                                   Full Serial Wire and JTAG, but no NJTRST. */
+    AFIO_DEBUG_SW_ONLY = AFIO_MAPR_SWJ_CFG_NO_JTAG_SW, /**<
+                                   Serial Wire debug only (JTAG-DP disabled,
+                                   SW-DP enabled) */
+    AFIO_DEBUG_NONE = AFIO_MAPR_SWJ_CFG_NO_JTAG_NO_SW /**<
+                                   No debug; all JTAG and SW pins are free
+                                   for use as GPIOs. */
+} afio_debug_cfg;
+
+/**
+ * @brief Enable or disable the JTAG and SW debug ports.
+ * @param config Desired debug port configuration
+ * @see afio_debug_cfg
+ */
+static inline void afio_cfg_debug_ports(afio_debug_cfg config) {
     __io uint32 *mapr = &AFIO_BASE->MAPR;
-    *mapr = (*mapr & ~(0x7 << 24)) | config;
+    *mapr = (*mapr & ~AFIO_MAPR_SWJ_CFG) | config;
 }
 
 #ifdef __cplusplus

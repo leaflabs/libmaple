@@ -40,7 +40,7 @@ Identifying your Rev
 We went through three versions ("Revs") of the Maple hardware: Rev 1,
 Rev 3, and Rev 5 [#frev2_4]_; Rev 5, the final design, is currently on
 sale.  The following sections will help you to help you identify your
-Rev.  Known issues are listed in the :ref:`errata <maple-errata>`.
+Rev.
 
 Rev 5
 ^^^^^
@@ -123,45 +123,37 @@ at the command line with ::
 
     $ git clone git://github.com/leaflabs/maple.git
 
-.. _maple-errata:
+.. _maple-failure-modes:
 
-Errata
-------
+Failure Modes
+-------------
 
-This section lists known issues and warnings for each revision of the
-Maple board. The failure modes aren't design errors, but are easy ways
-to break or damage your board permanently. For a list of differences
-between the Maple and Arduinos, see the :ref:`Arduino Compatibility
-reference <arduino-compatibility>`.
-
-The errata are grouped by Maple version ("Rev").
-
-Maple Rev 5
-^^^^^^^^^^^
-
-Known issues:
-
-* **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
-  corresponding "AIN" is missing from its silkscreen.
-
-* **GPIO 39-43 not configured**: this is really more of a software
-  "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
-  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when a
-  :ref:`JTAG <jtag>` device is not connected, but we have not enabled
-  them in software and thus they can not be accessed with the regular
-  :ref:`lang-pinmode` or :ref:`lang-digitalwrite` functions.
-
-Potential failure modes:
+The following known failure modes apply to all Maple versions.  The
+failure modes aren't design errors, but are easy ways to break or
+damage your board permanently.
 
 * **High voltage on non-tolerant pins**: not all header pins are 5V
   compatible; so e.g. connecting certain serial devices in the wrong
   way could over-voltage the pins.  The :ref:`Pin-Mapping Mega Table
   <pin-mapping-mega-table>` details which pins are 5V-tolerant.
 
-Maple Rev 3
-^^^^^^^^^^^
+Errata
+------
 
+This section lists known issues and warnings for each revision of the
+Maple board.
+
+Rev 5
+^^^^^
 Known issues:
+
+* **Pin 3 AIN missing**: Pin 3 is capable of analog input, but on
+  boards sold in during Fall 2010, the corresponding "AIN" is missing
+  from its silkscreen.  This mistake was fixed in later manufacturing
+  runs.
+
+Rev 3
+^^^^^
 
 * **Bad/Sticky Buttons**: a number of Rev 3 boards sold in May-June 2010
   have questionable RESET and BUT buttons.
@@ -180,7 +172,7 @@ Known issues:
   remover we used is "Precision Electronics Cleaner" from RadioShack,
   which is "Safe on most plastics" and contains Dipropylene glycol
   monomethyl ether, hydrotreated heavy naphtha, dipropylene glycol
-  methyl ether acetate (really?), and carbon dioxide.
+  methyl ether acetate, and carbon dioxide.
 
 * **Resistors on pins 0 and 1**: these header pins, which are RX/TX on
   USART2 (:ref:`Serial2 <lang-serial>`), have resistors in-line
@@ -192,13 +184,6 @@ Known issues:
   designs, where they appear to protect the USB-Serial converter from
   TTL voltage on the headers.
 
-* **GPIO 39-43 not configured**: this is really more of a software
-  "TODO" item.  Some of the JTAG header pins are numbered 39-43. These
-  STM32 pins are indeed fully functional :ref:`GPIO <gpio>` when the a
-  :ref:`JTAG <jtag>` device is not connected, but we have not enabled
-  them in software and thus they can not be accessed with the regular
-  :ref:`lang-pinmode` or :ref:`lang-digitalwrite` functions.
-
 * **Silkscreen Errors**: the silkscreen on the bottom indicated PWM
   functionality on pin 25 and listen the external header GND pin as
   number 38 (actually 38 is connected to the BUT button). We manually
@@ -207,17 +192,8 @@ Known issues:
 * **PWM Marketing Mistake**: We originally sold the Maple advertising
   22 channels of 16-bit hardware PWM; actually the Maple only has 15.
 
-Potential failure modes:
-
-* **TTL voltage on non-tolerant pins**: not all header pins are 5V
-  compatible; connecting certain serial devices in the wrong way could
-  over voltage the pins.  The :ref:`Pin-Mapping Mega Table
-  <pin-mapping-mega-table>` details which pins are 5V-tolerant.
-
-Maple Rev 1
-^^^^^^^^^^^
-
-Known issues:
+Rev 1
+^^^^^
 
 * **ADC noise**: generally very high, in particular when the USB port
   is being used for communications (including keep-alive pings when
@@ -248,14 +224,7 @@ Known issues:
   <http://forums.leaflabs.com/topic.php?id=32#post-126>`_.
 
 * **PWM Marketing Mistake**: We originally sold the Maple advertising
-  22 channels of 16-bit hardware PWM; actually the Maple only has 15.
-
-Potential failure modes:
-
-* **TTL voltage on non-tolerant pins**: not all header pins are 5v
-  compatible; connecting certain serial devices in the wrong way could
-  over voltage the pins. The :ref:`Pin-Mapping Mega Table
-  <pin-mapping-mega-table>` details which pins are 5V-tolerant.
+  22 channels of 16-bit hardware PWM; the correct number is 15.
 
 Recommended Reading
 -------------------

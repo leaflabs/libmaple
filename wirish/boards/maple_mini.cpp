@@ -32,13 +32,14 @@
 
 #include "maple_mini.h"
 #include "gpio.h"
+#include "wirish_debug.h"
 
 #ifdef BOARD_maple_mini
 
 /* Since we want the Serial Wire/JTAG pins as GPIOs, disable both SW
  * and JTAG debug support */
 void boardInit(void) {
-    afio_mapr_swj_config(AFIO_MAPR_SWJ_NO_JTAG_NO_SW);
+    disableDebugPorts();
 }
 
 extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
@@ -89,7 +90,7 @@ extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
 };
 
 extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
-    3, 4, 5, 6, 7, 8, 9, 10, 11, 33  // NB 33 is LED
+    3, 4, 5, 6, 7, 8, 9, 10, 11, 33  // NB: 33 is BOARD_LED_PIN
 };
 
 #define USB_DP 23

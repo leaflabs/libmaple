@@ -88,7 +88,15 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
     {GPIOC,   NULL, NULL,  6, 0, ADCx}, /* D35/PC6 */
     {GPIOC,   NULL, NULL,  7, 0, ADCx}, /* D36/PC7 */
     {GPIOC,   NULL, NULL,  8, 0, ADCx}, /* D37/PC8 */
-    {GPIOC,   NULL, NULL,  9, 0, ADCx}  /* D38/PC9 (BUT) */
+    {GPIOC,   NULL, NULL,  9, 0, ADCx}, /* D38/PC9 (BUT) */
+
+    /* JTAG header */
+
+    {GPIOA,   NULL, NULL, 13, 0, ADCx}, /* D39/PA13 */
+    {GPIOA,   NULL, NULL, 14, 0, ADCx}, /* D40/PA14 */
+    {GPIOA,   NULL, NULL, 15, 0, ADCx}, /* D41/PA15 */
+    {GPIOB,   NULL, NULL,  3, 0, ADCx}, /* D42/PB3  */
+    {GPIOB,   NULL, NULL,  4, 0, ADCx}, /* D43/PB4  */
 };
 
 extern const uint8 boardPWMPins[] __FLASH__ = {
@@ -100,7 +108,8 @@ extern const uint8 boardADCPins[] __FLASH__ = {
 };
 
 extern const uint8 boardUsedPins[] __FLASH__ = {
-    BOARD_LED_PIN, BOARD_BUTTON_PIN
+    BOARD_LED_PIN, BOARD_BUTTON_PIN, BOARD_JTMS_SWDIO_PIN,
+    BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN
 };
 
 #endif

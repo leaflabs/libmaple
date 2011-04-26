@@ -25,44 +25,30 @@
  *****************************************************************************/
 
 /**
- * @file   maple_mini.h
- * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Private include file for Maple Mini in boards.h
- *
- * See maple.h for more information on these definitions.
+ * @file wirish_debug.h
+ * @brief High level debug port configuration
  */
 
-#include "gpio.h"
-#include "timer.h"
+/**
+ * @brief Disable the JTAG and Serial Wire (SW) debug ports.
+ *
+ * You can call this function in order to use the JTAG and SW debug
+ * pins as ordinary GPIOs.
+ *
+ * @see enableDebugPorts()
+ */
+static inline void disableDebugPorts(void) {
+    afio_cfg_debug_ports(AFIO_DEBUG_NONE);
+}
 
-#include "wirish_types.h"
-
-#ifndef _BOARD_MAPLE_MINI_H_
-#define _BOARD_MAPLE_MINI_H_
-
-#define CYCLES_PER_MICROSECOND    72
-#define SYSTICK_RELOAD_VAL     71999 /* takes a cycle to reload */
-
-#define BOARD_BUTTON_PIN          32
-#define BOARD_LED_PIN             33
-
-#define BOARD_NR_USARTS           3
-#define BOARD_USART1_TX_PIN       26
-#define BOARD_USART1_RX_PIN       25
-#define BOARD_USART2_TX_PIN       9
-#define BOARD_USART2_RX_PIN       8
-#define BOARD_USART3_TX_PIN       1
-#define BOARD_USART3_RX_PIN       0
-
-#define BOARD_NR_GPIO_PINS        34
-#define BOARD_NR_PWM_PINS         12
-#define BOARD_NR_ADC_PINS         10
-#define BOARD_NR_USED_PINS         4
-
-#define BOARD_JTMS_SWDIO_PIN      22
-#define BOARD_JTCK_SWCLK_PIN      21
-#define BOARD_JTDI_PIN            20
-#define BOARD_JTDO_PIN            19
-#define BOARD_NJTRST_PIN          18
-
-#endif
+/**
+ * @brief Enable the JTAG and Serial Wire (SW) debug ports.
+ *
+ * After you call this function, the JTAG and SW debug pins will no
+ * longer be usable as GPIOs.
+ *
+ * @see disableDebugPorts()
+ */
+static inline void enableDebugPorts(void) {
+    afio_cfg_debug_ports(AFIO_DEBUG_FULL_SWJ);
+}

@@ -294,7 +294,7 @@ static inline void usart_putc(usart_dev* dev, uint8 byte) {
 static inline void usart_putstr(usart_dev *dev, const char* str) {
     uint32 i = 0;
     while (str[i] != '\0') {
-        usart_putc(dev, str[i]);
+        usart_putc(dev, str[i++]);
     }
 }
 

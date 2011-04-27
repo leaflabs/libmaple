@@ -855,7 +855,7 @@ void enable_usarts(void) {
     Serial1.begin(BAUD);
     Serial2.begin(BAUD);
     Serial3.begin(BAUD);
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
     Serial4.begin(BAUD);
     Serial5.begin(BAUD);
 #endif
@@ -865,7 +865,7 @@ void disable_usarts(void) {
     Serial1.end();
     Serial2.end();
     Serial3.end();
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
     Serial4.end();
     Serial5.end();
 #endif

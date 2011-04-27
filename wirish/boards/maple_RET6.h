@@ -55,9 +55,15 @@
 #define BOARD_USART3_TX_PIN     29
 #define BOARD_USART3_RX_PIN     30
 
-#define BOARD_NR_GPIO_PINS      39
+#define BOARD_NR_GPIO_PINS      44
 #define BOARD_NR_PWM_PINS       16
 #define BOARD_NR_ADC_PINS       15
-#define BOARD_NR_USED_PINS      2
+#define BOARD_NR_USED_PINS      7
+
+#define BOARD_JTMS_SWDIO_PIN    39
+#define BOARD_JTCK_SWCLK_PIN    40
+#define BOARD_JTDI_PIN          41
+#define BOARD_JTDO_PIN          42
+#define BOARD_NJTRST_PIN        43
 
 #endif

@@ -423,7 +423,7 @@ void cmd_sequential_adc_reads(void) {
     SerialUSB.println("Press any key for next port, or ESC to stop.");
 
     for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
-        if (boardUsesPin(i))
+        if (boardUsesPin(boardADCPins[i]))
             continue;
 
         SerialUSB.print("Reading pin ");

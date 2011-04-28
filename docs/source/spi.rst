@@ -8,12 +8,8 @@ The Serial Peripheral Interface Bus (SPI) is a serial data transfer
 protocol useful for interacting with a wide variety of hardware
 peripherals.
 
-The Maple has two SPI ports. The first has NSS on D10, MOSI on
-D11, MISO on D12, and SCK on D13. The second has NSS on D31, SCK on
-D32, MISO on D33, and MOSI on D34.
-
 The public libmaple API for managing the SPI ports is the
-:ref:`HardwareSpi <lang-hardwarespi>` class.
+:ref:`HardwareSPI <lang-hardwarespi>` class.
 
 Recommended Reading
 -------------------

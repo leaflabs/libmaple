@@ -6,8 +6,9 @@ boardUsesPin()
 ==============
 
 Each LeafLabs board connects some pins to external hardware.  The most
-important examples of this are the built-in LED and button.  You can
-check if a board uses a particular pin using this function.
+important examples of this are the pins connected to the built-in LED
+and button.  You can check if a board uses a particular pin using this
+function.
 
 Library Documentation
 ---------------------
@@ -24,4 +25,3 @@ See Also
 - :ref:`BOARD_BUTTON_PIN <lang-board-values-but>`
 - :ref:`isButtonPressed() <lang-isbuttonpressed>`
 - :ref:`waitForButtonPress() <lang-waitforbuttonpress>`
-

@@ -83,6 +83,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_DAC]    = { .clk_domain = APB1, .line_num = 29 },
     [RCC_DMA2]   = { .clk_domain = AHB,  .line_num = 1 },
     [RCC_SDIO]   = { .clk_domain = AHB,  .line_num = 10 },
+    [RCC_SPI3]   = { .clk_domain = APB1, .line_num = 15 },
 #endif
 #ifdef STM32_XL_DENSITY
     [RCC_TIMER9]  = { .clk_domain = APB2, .line_num = 19 },

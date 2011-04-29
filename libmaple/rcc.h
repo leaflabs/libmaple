@@ -467,6 +467,7 @@ typedef enum {
     RCC_DAC,
     RCC_DMA2,
     RCC_SDIO,
+    RCC_SPI3,
 #endif
 #ifdef STM32_XL_DENSITY
     RCC_TIMER9,

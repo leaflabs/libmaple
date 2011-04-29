@@ -26,6 +26,8 @@
  * See ../notes/fsmc.txt for more info
  */
 
+#include "libmaple_types.h"
+
 /**
  * @file fsmc.h
  */
@@ -83,10 +85,10 @@ typedef struct fsmc_reg_map {
     __io uint32 BWTR4; /**< SRAM/NOR-Flash write timing register 4 */
 } __attribute__((packed)) fsmc_reg_map;
 
-#define __FSMC_B                        0xA0000000
+#define __FSMCB                         0xA0000000
 
 /** FSMC register map base pointer */
-#define FSMC_BASE                       ((struct fsmc_reg_map*)__FSMC_B)
+#define FSMC_BASE                       ((struct fsmc_reg_map*)__FSMCB)
 
 /** FSMC NOR/PSRAM register map type */
 typedef struct fsmc_nor_psram_reg_map {
@@ -97,16 +99,16 @@ typedef struct fsmc_nor_psram_reg_map {
 } fsmc_nor_psram_reg_map;
 
 /** FSMC NOR/PSRAM base pointer 1 */
-#define FSMC_NOR_PSRAM1_BASE ((struct fsmc_nor_psram_reg_map*)__FSMC_B)
+#define FSMC_NOR_PSRAM1_BASE ((struct fsmc_nor_psram_reg_map*)__FSMCB)
 
 /** FSMC NOR/PSRAM base pointer 2 */
-#define FSMC_NOR_PSRAM2_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMC_B + 0x8))
+#define FSMC_NOR_PSRAM2_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMCB + 0x8))
 
 /** FSMC NOR/PSRAM base pointer 3 */
-#define FSMC_NOR_PSRAM3_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMC_B+0x10))
+#define FSMC_NOR_PSRAM3_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMCB + 0x10))
 
 /** FSMC NOR/PSRAM base pointer 4 */
-#define FSMC_NOR_PSRAM4_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMC_B+0x18))
+#define FSMC_NOR_PSRAM4_BASE ((struct fsmc_nor_psram_reg_map*)(__FSMCB + 0x18))
 
 /*
  * Register bit definitions

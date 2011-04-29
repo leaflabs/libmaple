@@ -26,10 +26,8 @@
  * @brief
  */
 
-#include "libmaple.h"
-#include "rcc.h"
-#include "gpio.h"
 #include "fsmc.h"
+#include "gpio.h"
 
 #ifdef STM32_HIGH_DENSITY
 

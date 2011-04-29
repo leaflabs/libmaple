@@ -31,12 +31,20 @@
  */
 
 #include "maple_native.h"
-#include "native_sram.h"
+
+#include "fsmc.h"
+#include "gpio.h"
+#include "rcc.h"
+#include "timer.h"
+
+#include "wirish_types.h"
 
 #ifdef BOARD_maple_native
 
+void initSRAMChip(void);
+
 void boardInit(void) {
-    initNativeSRAM();
+    initSRAMChip();
 }
 
 extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
@@ -176,5 +184,16 @@ extern const uint8 boardUsedPins[BOARD_NR_USED_PINS] __FLASH__ = {
     BOARD_LED_PIN, BOARD_BUTTON_PIN, BOARD_JTMS_SWDIO_PIN,
     BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN
 };
+
+void initSRAMChip(void) {
+    fsmc_nor_psram_reg_map *regs = FSMC_NOR_PSRAM1_BASE;
+
+    fsmc_sram_init_gpios();
+    rcc_clk_enable(RCC_FSMC);
+
+    regs->BCR = FSMC_BCR_WREN | FSMC_BCR_MWID_16BITS | FSMC_BCR_MBKEN;
+    fsmc_nor_psram_set_addset(regs, 0);
+    fsmc_nor_psram_set_datast(regs, 3);
+}
 
 #endif

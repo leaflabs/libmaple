@@ -30,8 +30,7 @@ cppSRCS_$(d) := wirish_math.cpp		 \
 		wirish_time.cpp		 \
 		pwm.cpp 		 \
 		ext_interrupts.cpp	 \
-		wirish_digital.cpp	 \
-		native_sram.cpp
+		wirish_digital.cpp
 
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)

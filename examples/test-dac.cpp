@@ -13,7 +13,7 @@ uint16 count = 0;
 
 void setup() {
     pinMode(BOARD_LED_PIN, OUTPUT);
-    digitalWrite(BOARD_LED_PIN,1);
+    digitalWrite(BOARD_LED_PIN, HIGH);
 
     Serial1.begin(9600);
     Serial1.println("**** Beginning DAC test");
@@ -36,11 +36,14 @@ void loop() {
     dac_write_channel(DAC, 2, count);
 }
 
-int main(void) {
+__attribute__((constructor)) void premain() {
     init();
+}
+
+int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

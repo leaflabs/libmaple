@@ -4,23 +4,21 @@
 
 #include "wirish.h"
 
-#define COMM Serial1
-
 void setup() {
-    COMM.begin(9600);
-    COMM.println("Hello world!");
+    Serial1.begin(9600);
+    Serial1.println("Hello world!");
 }
 
 void loop() {
-    COMM.println("Waiting for multiple input...");
-    while (COMM.available() < 5)
+    Serial1.println("Waiting for multiple input...");
+    while (Serial1.available() < 5)
         ;
-    COMM.println(COMM.read());
-    COMM.println(COMM.read());
-    COMM.flush();
+    Serial1.println(Serial1.read());
+    Serial1.println(Serial1.read());
+    Serial1.flush();
 
-    if (COMM.available()) {
-        COMM.println("FAIL! Still had junk in the buffer...");
+    if (Serial1.available()) {
+        Serial1.println("FAIL! Still had junk in the buffer...");
     }
 }
 

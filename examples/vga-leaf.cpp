@@ -28,17 +28,11 @@
  Created 20 July 2010
  By Bryan Newbold for LeafLabs
  This code is released with no strings attached.
-
- Modified 4 March 2011
- By Marti Bolivar
- Disabled SysTick, kept up-to-date with libmaple.
  */
 
 // FIXME: generalize for Native and Mini
 
 #include "wirish.h"
-
-#define LED_PIN BOARD_LED_PIN
 
 // Pinouts -- you also must change the GPIO macros below if you change
 // these
@@ -110,7 +104,7 @@ uint32 logo[y_max][x_max] = {
 
 void setup() {
     // Setup our pins
-    pinMode(LED_PIN, OUTPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
     pinMode(VGA_R, OUTPUT);
     pinMode(VGA_G, OUTPUT);
     pinMode(VGA_B, OUTPUT);
@@ -166,7 +160,6 @@ void loop() {
     // Everything happens in the interrupts!
 }
 
-
 // This ISR will end horizontal sync for most of the image and
 // setup the vertical sync for higher line counts
 void isr_porch(void) {
@@ -174,22 +167,22 @@ void isr_porch(void) {
     y++;
     logo_y = map(y, 0, 478, 0, y_max);
     // Back to the top
-    if(y >= 523) {
+    if (y >= 523) {
         y = 1;
         logo_y = 0;
         v_active = true;
         return;
     }
     // Other vsync stuff below the image
-    if(y >= 492) {
+    if (y >= 492) {
         VGA_V_HIGH;
         return;
     }
-    if(y >= 490) {
+    if (y >= 490) {
         VGA_V_LOW;
         return;
     }
-    if(y >= 479) {
+    if (y >= 479) {
         v_active = false;
         return;
     }
@@ -207,7 +200,7 @@ void isr_start(void) {
     VGA_R_HIGH;
 
     // For each "pixel", go ON_COLOR or OFF_COLOR
-    for(x = 0; x < 16; x++) {
+    for (x = 0; x < 16; x++) {
         // setting the color several times is just an easy way to
         // delay, so the image is wider.  if you only do the following
         // once, you'll be able to make the logo array a lot wider:
@@ -242,7 +235,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

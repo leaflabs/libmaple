@@ -4,7 +4,7 @@
  * Does a basic test of functionality on rb_full_count(), rb_reset(),
  * rb_push_insert(), and rb_safe_insert().
  *
- * To test (no external hardware required):
+ * To test:
  *
  *     - Connect a serial monitor to SerialUSB
  *     - Press any key

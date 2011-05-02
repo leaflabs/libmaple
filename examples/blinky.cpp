@@ -2,11 +2,8 @@
 
 #include "wirish.h"
 
-// Use the pin attached to the built-in LED
-#define PIN BOARD_LED_PIN
-
 void setup() {
-    pinMode(PIN, OUTPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
 }
 
 int toggle = 1;
@@ -14,7 +11,7 @@ int toggle = 1;
 void loop() {
     // You could just use toggleLED() instead, but this illustrates
     // the use of digitalWrite():
-    digitalWrite(PIN, toggle);
+    digitalWrite(BOARD_LED_PIN, toggle);
     toggle ^= 1;
     delay(100);
 }
@@ -28,7 +25,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

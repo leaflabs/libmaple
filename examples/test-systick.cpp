@@ -1,16 +1,11 @@
 // Tests the SysTick enable/disable functions
-//
+
 #include "wirish.h"
 #include "systick.h"
 
-#define LED_PIN BOARD_LED_PIN
-#define PWM_PIN 2
-#define BUT     BOARD_BUTTON_PIN
-
 void setup() {
-    /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
-    pinMode(BUT, INPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
+    pinMode(BOARD_BUTTON_PIN, INPUT);
 }
 
 bool disable = true;
@@ -24,7 +19,7 @@ void loop() {
     for(i = 0; i < 150000; i++)
         ;
 
-    if(isButtonPressed()) {
+    if (isButtonPressed()) {
         if (disable) {
             systick_disable();
             SerialUSB.println("Disabling SysTick");
@@ -47,7 +42,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

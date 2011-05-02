@@ -26,7 +26,7 @@ uint16 val2 = 10000;
 uint16 val3 = 10000;
 uint16 val4 = 10000;
 
-// FIXME high density timer test (especially basic timers + DAC)
+// FIXME [0.1.0] high density timer test (especially basic timers + DAC)
 timer_dev *timers[] = {TIMER1, TIMER2, TIMER3, TIMER4};
 voidFuncPtr handlers[] = {handler1, handler2, handler3, handler4};
 
@@ -46,7 +46,6 @@ void setup() {
     // Send a message out Serial2
     Serial2.begin(115200);
     Serial2.println("*** Initializing timers...");
-    Serial2.println("foo");
     timer_foreach(initTimer);
     Serial2.println("*** Done. Beginning timer test.");
 }
@@ -110,7 +109,7 @@ void loop() {
     testSetTimerPeriod(30000);
 
     Serial2.println("Sanity check (with hand-coded reload and prescaler for "
-                      "72 MHz timers):");
+                    "72 MHz timers):");
     timer_set_mode(TIMER4, TIMER_CH1, TIMER_OUTPUT_COMPARE);
     timer_set_prescaler(TIMER4, 33);
     timer_set_reload(TIMER4, 65454);
@@ -238,7 +237,7 @@ void testTimerChannels(timer_dev *dev) {
     }
 }
 
-// FIXME move this into the new wirish timer implementation
+// FIXME [0.0.10] move this into the new wirish timer implementation
 void setTimerPeriod(timer_dev *dev, uint32 period_us) {
     if (!period_us) {
         // FIXME handle this case
@@ -291,7 +290,7 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

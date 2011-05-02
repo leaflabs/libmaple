@@ -3,12 +3,9 @@
 #include "wirish.h"
 #include "usb.h"
 
-#define LED_PIN BOARD_LED_PIN
-#define PWM_PIN 2
-
 void setup() {
     /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
 
     /* Send a message out USART2  */
     Serial2.begin(9600);

@@ -3,27 +3,24 @@
 #include "wirish.h"
 #include "usb.h"
 
-#define LED_PIN BOARD_LED_PIN
-#define BUT_PIN BOARD_BUTTON_PIN
-
-uint32 state = 0;
 #define QUICKPRINT  0
 #define BIGSTUFF    1
 #define NUMBERS     2
 #define SIMPLE      3
 #define ONOFF       4
 
+uint32 state = 0;
+
 void setup() {
     /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
+    pinMode(BOARD_LED_PIN, OUTPUT);
 
-    /* Set up the Button */
-    pinMode(BUT_PIN, INPUT);
-
+    /* Set up Serial2 for use as a debug channel */
     Serial2.begin(9600);
-    Serial2.println("This is the debug channel. Press BUT.");
-
-    waitForButtonPress(0);
+    Serial2.println("This is the debug channel. Press any key.");
+    while (!Serial2.available())
+        ;
+    Serial2.read();
 }
 
 uint8 c1 = '-';
@@ -32,14 +29,15 @@ void loop() {
     toggleLED();
     delay(1000);
 
-    if(isButtonPressed()) {
+    if (Serial2.available()) {
+        Serial2.read();
         state++;
     }
 
-    switch(state) {
+    switch (state) {
         case QUICKPRINT:
-            for(int i = 0; i<30; i++) {
-                usbSendBytes(&c1,1);
+            for (int i = 0; i < 30; i++) {
+                usbSendBytes(&c1, 1);
                 SerialUSB.print('.');
                 SerialUSB.print('|');
             }
@@ -121,9 +119,8 @@ __attribute__((constructor)) void premain() {
 int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;
 }
-

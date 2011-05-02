@@ -103,18 +103,18 @@ uint32 USBSerial::available(void) {
 
 /* blocks forever until len_bytes is received */
 uint32 USBSerial::read(void *buf, uint32 len) {
-    if (!buf) {
+    if (buf == 0) {
         return 0;
     }
 
     uint32 bytes_in = 0;
     while (len > 0) {
-        uint32 new_bytes = usbReceiveBytes((uint8*)((uint8*)buf+bytes_in), len);
+        uint32 new_bytes = usbReceiveBytes((uint8*)buf + bytes_in, len);
         len -= new_bytes;
         bytes_in += new_bytes;
     }
 
-    return len;
+    return bytes_in;
 }
 
 /* blocks forever until 1 byte is received */

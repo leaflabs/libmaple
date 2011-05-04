@@ -73,7 +73,7 @@ typedef struct systick_reg_map {
 #define SYSTICK_CVR_TENMS               0xFFFFFF
 
 /** System elapsed time, in milliseconds */
-extern __io uint32 systick_timer_millis;
+extern volatile uint32 systick_timer_millis;
 
 void systick_init(uint32 reload_val);
 void systick_disable();

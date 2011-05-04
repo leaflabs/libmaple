@@ -34,6 +34,8 @@
 #include "spi.h"
 #include "bitband.h"
 
+static void spi_reconfigure(spi_dev *dev, uint32 cr1_config);
+
 /*
  * SPI devices
  */
@@ -75,7 +77,9 @@ void spi_init(spi_dev *dev) {
 }
 
 /**
- * @brief Configure GPIO bit modes for use as a SPI bus master's pins.
+ * @brief Configure GPIO bit modes for use as a SPI port's pins.
+ * @param as_master If true, configure bits for use as a bus master.
+ *                  Otherwise, configure bits for use as slave.
  * @param nss_dev NSS pin's GPIO device
  * @param comm_dev SCK, MISO, MOSI pins' GPIO device
  * @param nss_bit NSS pin's GPIO bit on nss_dev
@@ -83,40 +87,25 @@ void spi_init(spi_dev *dev) {
  * @param miso_bit MISO pin's GPIO bit on comm_dev
  * @param mosi_bit MOSI pin's GPIO bit on comm_dev
  */
-void spi_master_gpio_cfg(gpio_dev *nss_dev,
-                         gpio_dev *comm_dev,
-                         uint8 nss_bit,
-                         uint8 sck_bit,
-                         uint8 miso_bit,
-                         uint8 mosi_bit) {
-    gpio_set_mode(nss_dev, nss_bit, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(comm_dev, sck_bit, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(comm_dev, miso_bit, GPIO_INPUT_FLOATING);
-    gpio_set_mode(comm_dev, mosi_bit, GPIO_AF_OUTPUT_PP);
+void spi_gpio_cfg(uint8 as_master,
+                  gpio_dev *nss_dev,
+                  uint8 nss_bit,
+                  gpio_dev *comm_dev,
+                  uint8 sck_bit,
+                  uint8 miso_bit,
+                  uint8 mosi_bit) {
+    if (as_master) {
+        gpio_set_mode(nss_dev, nss_bit, GPIO_AF_OUTPUT_PP);
+        gpio_set_mode(comm_dev, sck_bit, GPIO_AF_OUTPUT_PP);
+        gpio_set_mode(comm_dev, miso_bit, GPIO_INPUT_FLOATING);
+        gpio_set_mode(comm_dev, mosi_bit, GPIO_AF_OUTPUT_PP);
+    } else {
+        gpio_set_mode(nss_dev, nss_bit, GPIO_INPUT_FLOATING);
+        gpio_set_mode(comm_dev, sck_bit, GPIO_INPUT_FLOATING);
+        gpio_set_mode(comm_dev, miso_bit, GPIO_AF_OUTPUT_PP);
+        gpio_set_mode(comm_dev, mosi_bit, GPIO_INPUT_FLOATING);
+    }
 }
-
-/**
- * @brief Configure GPIO bit modes for use as a SPI bus slave's pins.
- * @param nss_dev NSS pin's GPIO device
- * @param comm_dev SCK, MISO, MOSI pins' GPIO device
- * @param nss_bit NSS pin's GPIO bit on nss_dev
- * @param sck_bit SCK pin's GPIO bit on comm_dev
- * @param miso_bit MISO pin's GPIO bit on comm_dev
- * @param mosi_bit MOSI pin's GPIO bit on comm_dev
- */
-void spi_slave_gpio_cfg(gpio_dev *nss_dev,
-                        gpio_dev *comm_dev,
-                        uint8 nss_bit,
-                        uint8 sck_bit,
-                        uint8 miso_bit,
-                        uint8 mosi_bit) {
-    gpio_set_mode(nss_dev, nss_bit, GPIO_INPUT_FLOATING);
-    gpio_set_mode(comm_dev, sck_bit, GPIO_INPUT_FLOATING);
-    gpio_set_mode(comm_dev, miso_bit, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(comm_dev, mosi_bit, GPIO_INPUT_FLOATING);
-}
-
-static void spi_reconfigure(spi_dev *dev, uint32 cr1_config);
 
 /**
  * @brief Configure and enable a SPI device as bus master.
@@ -154,23 +143,19 @@ void spi_slave_enable(spi_dev *dev, spi_mode mode, uint32 flags) {
  * @brief Nonblocking SPI transmit.
  * @param dev SPI port to use for transmission
  * @param buf Buffer to transmit.  The sizeof buf's elements are
- *            inferred from the dev's data frame format (i.e., are
+ *            inferred from dev's data frame format (i.e., are
  *            correctly treated as 8-bit or 16-bit quantities).
  * @param len Maximum number of elements to transmit.
  * @return Number of elements transmitted.
  */
 uint32 spi_tx(spi_dev *dev, const void *buf, uint32 len) {
-    spi_reg_map *regs = dev->regs;
     uint32 txed = 0;
-    if (spi_dff(dev) == SPI_DFF_16_BIT) {
-        const uint8 *buf8 = (const uint8*)buf;
-        while ((regs->SR & SPI_SR_TXE) && (txed < len)) {
-            regs->DR = buf8[txed++];
-        }
-    } else {
-        const uint16 *buf16 = (const uint16*)buf;
-        while ((regs->SR & SPI_SR_TXE) && (txed < len)) {
-            regs->DR = buf16[txed++];
+    uint8 byte_frame = spi_dff(dev) == SPI_DFF_8_BIT;
+    while (spi_is_tx_empty(dev) && (txed < len)) {
+        if (byte_frame) {
+            dev->regs->DR = ((const uint8*)buf)[txed++];
+        } else {
+            dev->regs->DR = ((const uint16*)buf)[txed++];
         }
     }
     return txed;

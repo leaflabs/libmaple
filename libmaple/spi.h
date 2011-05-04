@@ -222,19 +222,13 @@ extern spi_dev *SPI3;
 
 void spi_init(spi_dev *dev);
 
-void spi_master_gpio_cfg(gpio_dev *nss_dev,
-                         gpio_dev *comm_dev,
-                         uint8 nss_bit,
-                         uint8 sck_bit,
-                         uint8 miso_bit,
-                         uint8 mosi_bit);
-
-void spi_slave_gpio_cfg(gpio_dev *nss_dev,
-                        gpio_dev *comm_dev,
-                        uint8 nss_bit,
-                        uint8 sck_bit,
-                        uint8 miso_bit,
-                        uint8 mosi_bit);
+void spi_gpio_cfg(uint8 as_master,
+                  gpio_dev *nss_dev,
+                  uint8 nss_bit,
+                  gpio_dev *comm_dev,
+                  uint8 sck_bit,
+                  uint8 miso_bit,
+                  uint8 mosi_bit);
 
 /**
  * @brief SPI mode configuration.

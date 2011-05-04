@@ -125,11 +125,10 @@ void HardwareSPI::read(uint8 *buf, uint32 len) {
 }
 
 void HardwareSPI::write(uint8 byte) {
-    uint8 buf[] = {byte};
-    this->write(buf, 1);
+    this->write(&byte, 1);
 }
 
-void HardwareSPI::write(uint8 *data, uint32 length) {
+void HardwareSPI::write(const uint8 *data, uint32 length) {
     uint32 txed = 0;
     while (txed < length) {
         txed += spi_tx(this->spi_d, data + txed, length - txed);
@@ -152,7 +151,6 @@ uint8 HardwareSPI::send(uint8 data) {
 
 uint8 HardwareSPI::send(uint8 *buf, uint32 len) {
     if (len == 0) {
-        ASSERT(0);
         return 0;
     }
     uint32 txed = 0;
@@ -183,11 +181,6 @@ static void enable_device(spi_dev *dev,
                           SPIFrequency freq,
                           spi_cfg_flag endianness,
                           spi_mode mode) {
-    if (freq >= MAX_SPI_FREQS) {
-        ASSERT(0);
-        return;
-    }
-
     spi_baud_rate baud = determine_baud_rate(dev, freq);
     uint32 cfg_flags = (endianness | SPI_DFF_8_BIT | SPI_SW_SLAVE |
                         (as_master ? SPI_SOFT_SS : 0));
@@ -261,21 +254,13 @@ static void configure_gpios(spi_dev *dev, bool as_master) {
     disable_pwm(misoi);
     disable_pwm(mosii);
 
-    if (as_master) {
-        spi_master_gpio_cfg(nssi->gpio_device,
-                            scki->gpio_device,
-                            nssi->gpio_bit,
-                            scki->gpio_bit,
-                            misoi->gpio_bit,
-                            mosii->gpio_bit);
-    } else {
-        spi_slave_gpio_cfg(nssi->gpio_device,
-                           scki->gpio_device,
-                           nssi->gpio_bit,
-                           scki->gpio_bit,
-                           misoi->gpio_bit,
-                           mosii->gpio_bit);
-    }
+    spi_gpio_cfg(as_master,
+                 nssi->gpio_device,
+                 nssi->gpio_bit,
+                 scki->gpio_device,
+                 scki->gpio_bit,
+                 misoi->gpio_bit,
+                 mosii->gpio_bit);
 }
 
 static const spi_baud_rate baud_rates[MAX_SPI_FREQS] __FLASH__ = {

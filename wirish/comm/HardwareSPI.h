@@ -140,7 +140,7 @@ public:
      * @param buffer Bytes to transmit.
      * @param length Number of bytes in buffer to transmit.
      */
-    void write(uint8 *buffer, uint32 length);
+    void write(const uint8 *buffer, uint32 length);
 
     /**
      * @brief Transmit a byte, then return the next unread byte.

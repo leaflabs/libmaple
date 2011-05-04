@@ -23,8 +23,7 @@
  *****************************************************************************/
 
 /**
- * @brief wirish usb class for easy goin communication, uses libmaple's
- * virtual com port implementation
+ * @brief Wirish virtual serial port
  */
 
 #ifndef _USB_SERIAL_H_
@@ -32,6 +31,9 @@
 
 #include "Print.h"
 
+/**
+ * @brief Virtual serial terminal.
+ */
 class USBSerial : public Print {
 public:
     USBSerial(void);
@@ -46,7 +48,7 @@ public:
 
     void write(uint8);
     void write(const char *str);
-    void write(void *, uint32);
+    void write(const void*, uint32);
 
     uint8 getRTS();
     uint8 getDTR();

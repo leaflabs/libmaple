@@ -26,7 +26,7 @@
 extern "C" {
 #endif
 
-void UserToPMABufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes);
+void UserToPMABufferCopy(const u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes);
 void PMAToUserBufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes);
 
 #if defined(__cplusplus)

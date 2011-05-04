@@ -16,9 +16,8 @@ Introduction
 In addition to three :ref:`serial ports <lang-serial>`, the Maple's
 STM32 microprocessor includes a dedicated USB peripheral.  This
 peripheral is used to emulate a regular serial port for use as a
-terminal (text read/write).  The emulated terminal is relatively slow
-and inefficient; it is best for transferring data at regular serial
-speeds (kilobaud).
+terminal.  The emulated terminal is relatively slow; it is best for
+transferring data at regular serial speeds (kilobaud).
 
 Library access to the emulated serial port is provided through the
 ``SerialUSB`` object.  You can mostly use ``SerialUSB`` as a drop-in
@@ -30,14 +29,14 @@ replacement for ``Serial1``, ``Serial2``, and ``Serial3``.
 
    This means that if you have a number of calls to one of the
    ``SerialUSB`` ``write()`` or ``print()`` functions in your code,
-   and you are not monitoring the emulated on a computer, your program
-   will run much, much slower than if it is being monitored or totally
-   disconnected (run off of a battery).
+   and you are not monitoring ``SerialUSB`` on a computer, your
+   program will run much slower than if it is being monitored or
+   totally disconnected (run off of a battery).
 
    You can avoid this behavior by :ref:`deciphering the port status
-   using the DTR and RTS line status <lang-serialusb-safe-print>`; the
+   using the DTR and RTS line status <lang-serialusb-safe-print>` (the
    behavior of these control lines is platform dependent and we no
-   longer interpret them by default.
+   longer interpret them by default).
 
 Library Documentation
 ---------------------

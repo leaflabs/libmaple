@@ -44,6 +44,7 @@
 #include "wirish_time.h"
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
+#include "HardwareTimer.h"
 #include "usb_serial.h"
 
 /* Arduino wiring macros and bit defines  */

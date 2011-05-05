@@ -45,6 +45,16 @@ event" interrupt is generated.  You can configure the Maple to notify
 you when this takes place, by registering an interrupt handler, which
 is a function that will be called when the update event occurs.
 
+By default, different compare values only change the relative offsets
+between events on a single timer ("phase").  They don't control the
+frequency with which they occur.  However, a common trick is to
+increment the compare value manually in the interrupt handler so that
+the event will fire again after the increment period.  There can be a
+different increment value for each channel, so this trick allows
+events to be programmed at 4 different rates on a single timer.  Note
+that function call overheads mean that the smallest increment rate is
+at least a few microseconds.
+
 Function Reference
 ------------------
 

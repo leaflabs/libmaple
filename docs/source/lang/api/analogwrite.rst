@@ -52,7 +52,7 @@ you much more precise control over the duty cycle of your PWM output.
 
 If you're porting code from the Arduino and want a quick-and-dirty
 fix, one solution is to :ref:`map <lang-map>` the argument to
-analogWrite into the right range::
+analogWrite() into the right range::
 
     // Arduino code:
     analogWrite(pin, duty);
@@ -71,8 +71,8 @@ that Timer's overflow to 255.  Subsequent calls to analogWrite()
 should work as on the Arduino (with the same loss of precision).
 Note, however, that that affects the overflow for the **entire
 timer**, so other code relying on that timer (such as any
-:ref:`interrupts <lang-attachinterrupt>` the timer controls) will
-likely need to be modified as well.
+:ref:`interrupts <lang-hardwaretimer-interrupts>` the timer controls)
+will likely need to be modified as well.
 
 Difference 2: You must use pinMode() to set up PWM
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -141,23 +141,27 @@ the steps are:
 
 1. Figure out which :ref:`timer <lang-hardwaretimer>` controls PWM
    output on your pin (\ :ref:`your board's Timer Pin Map
-   <gpio-pin-maps>` is your friend here).  Let's say it's ``Timern``\
-   , where ``n`` is some number 1, 2, 3, or 4.
+   <gpio-pin-maps>` is your friend here).
 
-2. Call ``Timern.setPeriod(2041)``\ .  This will set the timer's
-   period to approximately 2041 microseconds, which is a frequency of
-   approximately 490 Hz.
+2. Let's say it's timer ``n``, where ``n`` is some number.  You'll
+   then need to put "``HardwareTimer timer(n);``" with your variables,
+   as described in the :ref:`HardwareTimer
+   <lang-hardwaretimer-getting-started>` reference.
+
+3. In your :ref:`lang-setup`, put "``timer.setPeriod(2041);``".  This
+   will set the timer's period to approximately 2041 microseconds,
+   which is a frequency of approximately 490 Hz.
 
 Be aware that this will change the period for the **entire timer**\ ,
 and will affect anything else in your program that depends on that
 timer.  The important examples are :ref:`timer interrupts
-<lang-hardwaretimer-attachinterrupt>` and :ref:`PWM
+<lang-hardwaretimer-interrupts>` and :ref:`PWM
 <timers-pwm-conflicts>`\ .
 
 See Also
 --------
 
--  :ref:`Maple PWM tutorial <pwm>`
+- :ref:`pwm`
 
 .. rubric:: Footnotes
 

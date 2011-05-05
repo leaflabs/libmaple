@@ -41,55 +41,60 @@ Integral types
 
 .. cpp:type:: int8
 
-   Synonym for ``char``.
+   8-bit integer value.  Synonym for ``signed char``.
 
 .. cpp:type:: uint8
 
-   Synonym for ``unsigned char``.
+   8-bit unsigned integer value.  Synonym for ``unsigned char``.
+
+.. cpp:type:: byte
+
+   8-bit unsigned integer value.  Synonym for ``unsigned char``.
 
 .. cpp:type:: int16
 
-   Synonym for ``short``.
+   16-bit integer value.  Synonym for ``short``.
 
 .. cpp:type:: uint16
 
-   Synonym for ``unsigned short``.
+   16-bit unsigned integer value.  Synonym for ``unsigned short``.
 
 .. cpp:type:: int32
 
-   Synonym for ``int``.
+   32-bit integer value.  Synonym for ``int``.
 
 .. cpp:type:: uint32
 
-   Synonym for ``unsigned int``
+   Unsigned 32-bit integer value.  Synonym for ``unsigned int``
 
 .. cpp:type:: int64
 
-   Synonym for ``long long``
+   64-bit integer value.  Synonym for ``long long``
 
 .. cpp:type:: uint64
 
-   Synonym for ``unsigned long long``.
+   Unsigned 64-bit integer value.  Synonym for ``unsigned long long``.
 
 Floating-Point Types
 --------------------
 
 .. cpp:type:: float
 
-   32-bit, IEEE 754 single-precision floating-point type.
+   32-bit, IEEE-754 single-precision floating-point type.
 
 .. cpp:type:: double
 
-   64-bit, IEEE 754 double-precision floating-point type.
+   64-bit, IEEE-754 double-precision floating-point type.
 
 Other Types
 -----------
 
 .. cpp:type:: voidFuncPtr
 
-   Pointer to a function that takes no arguments and returns nothing, i.e.
-
-   ::
+   Pointer to a function that takes no arguments and returns nothing, i.e. ::
 
        typedef void (*voidFuncPtr)(void);
 
+.. cpp:type:: bool
+
+   Boolean type.

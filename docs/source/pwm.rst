@@ -25,7 +25,7 @@ Each PWM output is driven by an output channel connected to one of 4
 timers.  Some configuration, such as the clock rate or prescaling,
 must be common to the entire timer; see the :ref:`timer documentation
 <timers>` for more information.  See your board's :ref:`pin mapping
-tables <gpio-pin-mapping-tables>` to track down the correspondence
+tables <gpio-pin-maps>` to track down the correspondence
 between timer channels and GPIO pins.
 
 Background

@@ -48,9 +48,9 @@ The reset and D38/serial buttons don't seem to work reliably!
 -------------------------------------------------------------
 
 A few Maple Rev3 boards shipped in May-June 2010 may have had
-unreliable buttons; see the :ref:`errata page <maple-errata>` for
-details.  `We're happy to replace these for you
-<http://leaflabs.com/contact>`_\ !
+unreliable buttons; see the :ref:`Maple Errata
+<maple-rev3-bad-buttons>` for details.  `We're happy to replace these
+for you <http://leaflabs.com/contact>`_\ !
 
 .. _troubleshooting-ide-install:
 

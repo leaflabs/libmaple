@@ -313,6 +313,8 @@ Rev 3
 * **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
   corresponding "AIN" is missing from the Rev 3 silkscreen.
 
+.. _maple-rev3-bad-buttons:
+
 * **Bad/Sticky Buttons**: a number of Rev 3 boards sold in May-June 2010
   have questionable RESET and BUT buttons.
 

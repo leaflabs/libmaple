@@ -40,7 +40,7 @@ library are noted in the library's documentation.
      (``malloc()``, etc.) is not available.
 
    - If you're looking for low-level hardware support libraries, see
-     the :ref:`libmaple Reference`.
+     the :ref:`libmaple Reference <libmaple>`.
 
 .. _libraries-servo:
 

@@ -38,7 +38,7 @@
  * The kind of transition on an external pin which should trigger an
  * interrupt.
  */
-typedef enum ExtIntTriggerMode_ {
+typedef enum ExtIntTriggerMode {
     RISING, /**< To trigger an interrupt when the pin transitions LOW
                to HIGH */
     FALLING, /**< To trigger an interrupt when the pin transitions

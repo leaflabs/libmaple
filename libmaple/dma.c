@@ -187,7 +187,7 @@ void dma_attach_interrupt(dma_dev *dev,
  *
  * @param dev DMA device
  * @param channel Channel whose handler to detach
- * @sideffect Clears interrupt enable bits in the channel's CCR register.
+ * @sideeffect Clears interrupt enable bits in the channel's CCR register.
  * @see dma_attach_interrupt()
  */
 void dma_detach_interrupt(dma_dev *dev, dma_channel channel) {
@@ -281,6 +281,7 @@ void dma_disable(dma_dev *dev, dma_channel channel) {
  *
  * @param dev DMA Device
  * @param channel Channel whose base memory address to set.
+ * @param addr Memory base address to use.
  */
 void dma_set_mem_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
     dma_channel_reg_map *chan_regs;
@@ -303,6 +304,7 @@ void dma_set_mem_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
  *
  * @param dev DMA Device
  * @param channel Channel whose peripheral data register base address to set.
+ * @param addr Peripheral memory base address to use.
  */
 void dma_set_per_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
     dma_channel_reg_map *chan_regs;

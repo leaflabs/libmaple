@@ -52,7 +52,10 @@ void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority) {
 
 /**
  * @brief Initialize the NVIC
- * @param vect_table_address Vector table base address.
+ * @param vector_table_address Vector table base address.
+ * @param offset Offset from vector_table_address.  Some restrictions
+ *               apply to the use of nonzero offsets; see ST RM0008
+ *               and the ARM Cortex M3 Technical Reference Manual.
  */
 void nvic_init(uint32 vector_table_address, uint32 offset) {
     uint32 i;

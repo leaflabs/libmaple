@@ -313,7 +313,7 @@ void spi_rx_dma_disable(spi_dev *dev);
 
 /**
  * @brief Determine if a SPI peripheral is enabled.
- * @parm dev SPI device
+ * @param dev SPI device
  * @return True, if and only if dev's peripheral is enabled.
  */
 static inline uint8 spi_is_enabled(spi_dev *dev) {

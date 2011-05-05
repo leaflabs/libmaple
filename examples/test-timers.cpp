@@ -237,7 +237,7 @@ void testTimerChannels(timer_dev *dev) {
     }
 }
 
-// FIXME [0.0.10] move this into the new wirish timer implementation
+// FIXME [0.1.0] move some incarnation of this into timer.h
 void setTimerPeriod(timer_dev *dev, uint32 period_us) {
     if (!period_us) {
         // FIXME handle this case

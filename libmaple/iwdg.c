@@ -23,34 +23,37 @@
  *****************************************************************************/
 
 /**
- *  @file iwdg.c
- *
- *  @brief Independent watchdog support
+ * @file iwdg.c
+ * @brief Independent watchdog (IWDG) support
  */
 
-#include "libmaple.h"
 #include "iwdg.h"
 
-#define IWDG_UNLOCK   0x5555
-#define IWDG_START    0xCCCC
-#define IWDG_FEED     0xAAAA
-
 /**
- *  @brief Initialise and start the watchdog
+ * @brief Initialise and start the watchdog
  *
- *  The prescaler and reload set the timeout.  A prescaler of 3 divides
- *  the 40 kHz clock by 32 and gives roughly 1 ms per reload.
+ * The prescaler and reload set the timeout.  A prescaler of 3 divides
+ * the 40 kHz clock by 32 and gives roughly 1 ms per reload.
+ *
+ * @param prescaler Prescaler for the 40 KHz IWDG clock.
+ * @param reload Independent watchdog counter reload value.
  */
-void iwdg_init(uint8 prescaler, uint16 reload) {
-    __write(IWDG_KR, IWDG_UNLOCK);
-    __write(IWDG_PR, prescaler);
-    __write(IWDG_RLR, reload);
+void iwdg_init(iwdg_prescaler prescaler, uint16 reload) {
+   IWDG_BASE->KR = IWDG_KR_UNLOCK;
+   IWDG_BASE->PR = prescaler;
+   IWDG_BASE->RLR = reload;
 
-    /* Start things off */
-    __write(IWDG_KR, IWDG_START);
-    __write(IWDG_KR, IWDG_FEED);
+   /* Start things off */
+   IWDG_BASE->KR = IWDG_KR_START;
+   iwdg_feed();
 }
 
+/**
+ * @brief Reset the IWDG counter.
+ *
+ * Calling this function will cause the IWDG counter to be reset to
+ * its reload value.
+ */
 void iwdg_feed(void) {
-    __write(IWDG_KR, IWDG_FEED);
+    IWDG_BASE->KR = IWDG_KR_FEED;
 }

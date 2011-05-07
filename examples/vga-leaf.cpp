@@ -102,6 +102,8 @@ uint32 logo[y_max][x_max] = {
     {0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,},
     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,}, };
 
+HardwareTimer timer(4);
+
 void setup() {
     // Setup our pins
     pinMode(BOARD_LED_PIN, OUTPUT);
@@ -132,25 +134,25 @@ void setup() {
     systick_disable();
 
     // Configure
-    Timer4.pause(); // while we configure
-    Timer4.setPrescaleFactor(1);     // Full speed
-    Timer4.setChannel1Mode(TIMER_OUTPUTCOMPARE);
-    Timer4.setChannel2Mode(TIMER_OUTPUTCOMPARE);
-    Timer4.setChannel3Mode(TIMER_OUTPUTCOMPARE);
-    Timer4.setChannel4Mode(TIMER_OUTPUTCOMPARE);
-    Timer4.setOverflow(2287);   // Total line time
+    timer.pause(); // while we configure
+    timer.setPrescaleFactor(1);     // Full speed
+    timer.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
+    timer.setMode(TIMER_CH2, TIMER_OUTPUT_COMPARE);
+    timer.setMode(TIMER_CH3, TIMER_OUTPUT_COMPARE);
+    timer.setMode(TIMER_CH4, TIMER_OUTPUT_COMPARE);
+    timer.setOverflow(2287);   // Total line time
 
-    Timer4.setCompare1(200);
-    Timer4.attachCompare1Interrupt(isr_porch);
-    Timer4.setCompare2(300);
-    Timer4.attachCompare2Interrupt(isr_start);
-    Timer4.setCompare3(2170);
-    Timer4.attachCompare3Interrupt(isr_stop);
-    Timer4.setCompare4(1);      // Could be zero I guess
-    Timer4.attachCompare4Interrupt(isr_update);
+    timer.setCompare(TIMER_CH1, 200);
+    timer.attachInterrupt(TIMER_CH1, isr_porch);
+    timer.setCompare(TIMER_CH2, 300);
+    timer.attachInterrupt(TIMER_CH2, isr_start);
+    timer.setCompare(TIMER_CH3, 2170);
+    timer.attachInterrupt(TIMER_CH3, isr_stop);
+    timer.setCompare(TIMER_CH4, 1);      // Could be zero, I guess
+    timer.attachInterrupt(TIMER_CH4, isr_update);
 
-    Timer4.setCount(0);         // Ready...
-    Timer4.resume();            // Go!
+    timer.setCount(0);         // Ready...
+    timer.resume();            // Go!
 }
 
 void loop() {
@@ -203,7 +205,7 @@ void isr_start(void) {
     for (x = 0; x < 16; x++) {
         // setting the color several times is just an easy way to
         // delay, so the image is wider.  if you only do the following
-        // once, you'll be able to make the logo array a lot wider:
+        // once, you'll be able to make the logo array bigger:
         VGA_COLOR(logo[logo_y][x]);
         VGA_COLOR(logo[logo_y][x]);
         VGA_COLOR(logo[logo_y][x]);

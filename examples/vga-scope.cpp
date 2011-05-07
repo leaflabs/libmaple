@@ -76,7 +76,7 @@
 
 // set has priority, so clear every bit and set some given bits:
 #define VGA_COLOR(c) (*ABSRR = c |                                      \
-                      BIT(RBIT+16) | BIT(GBIT+16) | BIT(BBIT+16))
+                      BIT(RBIT + 16) | BIT(GBIT + 16) | BIT(BBIT + 16))
 
 #define VGA_V_HIGH *ABSRR = BIT(6)
 #define VGA_V_LOW  *ABRR  = BIT(6)
@@ -116,15 +116,15 @@ void setup() {
 
     timer_pause(TIMER4);
     timer_set_prescaler(TIMER4, 0);
-    timer_set_mode(TIMER4, 1, TIMER_OUTPUTCOMPARE);
-    timer_set_mode(TIMER4, 2, TIMER_OUTPUTCOMPARE);
-    timer_set_mode(TIMER4, 3, TIMER_OUTPUTCOMPARE);
-    timer_set_mode(TIMER4, 4, TIMER_OUTPUTCOMPARE);
+    timer_set_mode(TIMER4, 1, TIMER_OUTPUT_COMPARE);
+    timer_set_mode(TIMER4, 2, TIMER_OUTPUT_COMPARE);
+    timer_set_mode(TIMER4, 3, TIMER_OUTPUT_COMPARE);
+    timer_set_mode(TIMER4, 4, TIMER_OUTPUT_COMPARE);
     timer_set_reload(TIMER4, 2287);
-    timer_set_compare_value(TIMER4, 1, 200);
-    timer_set_compare_value(TIMER4, 2, 250);
-    timer_set_compare_value(TIMER4, 3, 2170);  // 2219 max...
-    timer_set_compare_value(TIMER4, 4, 1);
+    timer_set_compare(TIMER4, 1, 200);
+    timer_set_compare(TIMER4, 2, 250);
+    timer_set_compare(TIMER4, 3, 2170);  // 2219 max...
+    timer_set_compare(TIMER4, 4, 1);
     timer_attach_interrupt(TIMER4, 1, isr_porch);
     timer_attach_interrupt(TIMER4, 2, isr_start);
     timer_attach_interrupt(TIMER4, 3, isr_stop);

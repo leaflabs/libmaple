@@ -22,4 +22,4 @@ Returns
 
 The low byte's value (this will be between 0 and 255).
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

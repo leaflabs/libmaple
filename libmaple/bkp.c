@@ -24,63 +24,101 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#include "libmaple.h"
 #include "bkp.h"
 #include "pwr.h"
 #include "rcc.h"
-#include "util.h"
+#include "bitband.h"
 
-/* Data register memory layout is not contiguous.  It's split up from
-   1--NR_LOW_DRS, beginning at BKP_LOW_OFFSET, through
-   (NR_LOW_DRS+1)--NR_DRS, beginning at BKP_HIGH_OFFSET. */
-#define NR_LOW_DRS 10
-#define BKP_LOW_OFFSET  0x4    /* start offset for data registers 1--10 */
-#define BKP_HIGH_OFFSET 0x40   /* start offset for data registers 11--42 */
+static inline __io uint32* data_register(uint8 reg);
 
-inline volatile uint16* reg_addr(uint8 reg) {
-    if (1 <= reg) {
-        if (reg <= NR_LOW_DRS) {
-            return (volatile uint16*)(BKP_BASE + BKP_LOW_OFFSET +
-                                      (reg - 1) * 4);
-        } else if (reg <= NR_BKP_REGS) {
-            return (volatile uint16*)(BKP_BASE + BKP_HIGH_OFFSET +
-                                      (reg - NR_LOW_DRS - 1) * 4);
-        }
-    }
-    return 0;
-}
+bkp_dev bkp = {
+    .regs = BKP_BASE,
+};
 
+const bkp_dev *BKP = &bkp;
+
+/**
+ * @brief Initialize backup interface.
+ *
+ * Enables the power and backup interface clocks, and resets the
+ * backup device.
+ */
 void bkp_init(void) {
-    /* Set PWREN (28) and BKPEN (27) bits */
-    __set_bits(RCC_APB1ENR, BIT(28) | BIT(27));
+    /* Don't call pwr_init(), or you'll reset the device.  We just
+     * need the clock. */
+    rcc_clk_enable(RCC_PWR);
+    rcc_clk_enable(RCC_BKP);
+    rcc_reset_dev(RCC_BKP);
 }
 
-void bkp_disable(void) {
-    __clear_bits(RCC_APB1ENR, BIT(28) | BIT(27));
-}
-
+/**
+ * Enable write access to the backup registers.  Backup interface must
+ * be initialized for subsequent register writes to work.
+ * @see bkp_init()
+ */
 void bkp_enable_writes(void) {
-    /* Set the DBP bit in PWR_CR */
-    __write(BITBAND_PERI(PWR_CR, PWR_CR_DBP), 1);
+    *bb_perip(&PWR_BASE->CR, PWR_CR_DBP) = 1;
 }
 
+/**
+ * Disable write access to the backup registers.
+ */
 void bkp_disable_writes(void) {
-    __write(BITBAND_PERI(PWR_CR, PWR_CR_DBP), 0);
+    *bb_perip(&PWR_BASE->CR, PWR_CR_DBP) = 0;
 }
 
+/**
+ * Read a value from given backup data register.
+ * @param reg Data register to read, from 1 to BKP_NR_DATA_REGS (10 on
+ *            medium-density devices, 42 on high-density devices).
+ */
 uint16 bkp_read(uint8 reg) {
-    volatile uint16* addr = reg_addr(reg);
-    if (addr != 0) {
-        return *addr;
+    __io uint32* dr = data_register(reg);
+    if (!dr) {
+        ASSERT(0);                  /* nonexistent register */
+        return 0;
     }
-    ASSERT(0);                  /* nonexistent register */
-    return 0;
+    return (uint16)*dr;
 }
 
+/**
+ * @brief Write a value to given data register.
+ *
+ * Write access to backup registers must be enabled.
+ *
+ * @param reg Data register to write, from 1 to BKP_NR_DATA_REGS (10
+ *            on medium-density devices, 42 on high-density devices).
+ * @param val Value to write into the register.
+ * @see bkp_enable_writes()
+ */
 void bkp_write(uint8 reg, uint16 val) {
-    volatile uint16* addr = reg_addr(reg);
-    if (addr != 0) {
-        *addr = val;
+    __io uint32* dr = data_register(reg);
+    if (!dr) {
+        ASSERT(0);                  /* nonexistent register */
+        return;
     }
-    ASSERT(0);                  /* nonexistent register */
+    *dr = (uint32)val;
+}
+
+/*
+ * Data register memory layout is not contiguous. It's split up from
+ * 1--NR_LOW_DRS, beginning at BKP_BASE->DR1, through to
+ * (NR_LOW_DRS+1)--BKP_NR_DATA_REGS, beginning at BKP_BASE->DR11.
+ */
+#define NR_LOW_DRS 10
+
+static inline __io uint32* data_register(uint8 reg) {
+    if (reg < 1 || reg > BKP_NR_DATA_REGS) {
+        return 0;
+    }
+
+#if BKP_NR_DATA_REGS == NR_LOW_DRS
+    return (uint32*)BKP_BASE + reg;
+#else
+    if (reg <= NR_LOW_DRS) {
+        return (uint32*)BKP_BASE + reg;
+    } else {
+        return (uint32*)&(BKP_BASE->DR11) + (reg - NR_LOW_DRS - 1);
+    }
+#endif
 }

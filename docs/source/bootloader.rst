@@ -1,10 +1,9 @@
 .. highlight:: sh
 
-=====================
- Maple Bootloader(s)
-=====================
+.. _bootloader:
 
-.. TODO: add a section on flashing your own bootloader
+Maple Bootloader(s)
+===================
 
 The firmware which allows the Maple to be reprogrammed via a USB
 connection. Every Maple board comes programmed with this by default,
@@ -15,7 +14,7 @@ Flash memory and only runs when the chip is reset).
 
   git clone git://github.com/leaflabs/maple-bootloader.git
 
-**Visit the github development project**: http://github.com/leaflabs/maple-bootloader
+**Visit the github development project**: https://github.com/leaflabs/maple-bootloader
 
 .. contents:: Contents
    :local:
@@ -36,7 +35,7 @@ likely only interesting to a few. If you just want to get the rough
 idea, skim this article. If you want to start hacking on the
 bootloader, get in touch with us to get even more info on how this all
 works.  And finally, you can always `check out the code at github
-<http://github.com/leaflabs/libmaple>`_!
+<https://github.com/leaflabs/libmaple>`_!
 
 Arduino
 -------
@@ -66,7 +65,7 @@ have embedded USB support. Thus, Maple doesn’t need the extra FTDI
 chip. Firmware is uploaded via the standard DFU protocol (also used by
 iPhone and openMoko). Since DFU is a standard, there is no need for
 custom software running on the host to upload the firmware. Any DFU
-compliant program will work. The maple ide is based around
+compliant program will work. The Maple IDE is based around
 :command:`dfu-util`, openMoko’s DFU utility. Using DFU came at a cost,
 however. The USB port must additionally implement a separate serial
 port at the same time (we use the CDC ACM class for serial
@@ -87,11 +86,11 @@ important what this means, except for two things.
 1. Four drivers were necessary to make everything work.
 2. IAD is not supported by OS X.
 
-Mac, on the other hand, only supported Compound USB, a different trick
-that is not supported by Windows. While a perpetual background
+Mac OS X, on the other hand, only supported Compound USB, a different
+trick that is not supported by Windows. While a perpetual background
 bootloader was attractive, it became clear, after much toiling, we
-were going to have to write some custom drivers across several
-platforms to make everything work this way.
+were going to have to write custom drivers across several platforms to
+make everything work this way.
 
 .. _bootloader-rev3:
 
@@ -103,22 +102,21 @@ Arduino.  In Rev 3, the device resets into bootloader mode, which
 stays alive for a few moments to receive commands, and then jumps to
 user code. The bootloader is implemented as a DFU device -- just a DFU
 device, no serial port. This requires one driver for Windows
-(:file:`drivers/mapleDrv/dfu` in the Windows IDE directory). As part
-of the :ref:`libmaple <libmaple>` library, user code is automatically
-supplied with serial support via some behind the scenes work that
-happens automatically when you compile (``setupUSB()`` is appended to
-``setup()``). This user mode code only implements a CDC ACM class USB
-device, giving you functions like ``Usb.print()``. Separating these
-two modes fixed the driver issue, required no complicated compound USB
-device nonsense, and works well across platforms, requiring only two
-drivers (serial and DFU) on Windows.
+(:file:`drivers/mapleDrv/dfu` in the Windows IDE directory).
+
+As part of the :ref:`libmaple <libmaple>` library, user code is
+automatically supplied with serial support via some behind the scenes
+work (``setupUSB()`` is called from ``init()``). This user mode code
+only implements a CDC ACM class USB device, giving you functions like
+:ref:`SerialUSB.read() <lang-serialusb-read>`. Separating these two
+modes fixed the driver issues and works well across platforms,
+requiring only two drivers (serial and DFU) on Windows.
 
 However, it is no longer possible to upload code at will, since there
-is no bootloader quietly listening in the background. Instead you have
-to reset the board, then initiate a DFU transaction. This reset is
-performed automatically by the IDE by sending a command over the USB
-serial port. You can generate this reset on your own using a Python
-script or some other scheme. All you need do is:
+is no bootloader quietly listening in the background. Instead, you
+must reset the board, then initiate a DFU transaction. The IDE
+performs this reset automatically by performing a special sequence of
+changes on the USB serial port:
 
 1. Pulse DTR (high and then low, so that you've created a negative
    edge)
@@ -128,15 +126,16 @@ script or some other scheme. All you need do is:
    negative edge, rather than just ensuring DTR is low.
 
 After the reset, the host OS takes a few moments (.5-2 seconds) to
-re-enumerate the device as DFU. This delay is unpredictable, and its
-the reason the bootloader on Maple Rev3 stays alive for so
-long. Sometimes the bootloader was exiting before the OS had even
-enumerated the device! Once in bootloader mode, however,
-:command:`dfu-util` uploads your sketch into either flash or RAM (DFU
-alternate setting 0 or 1, respectively) and resets the board again.
-This time, however, no DFU transaction is initiated, and the
-bootloader gives way to user code, closing down the DFU pipe and
-bringing up the USB serial.
+re-enumerate the device as DFU. This delay is unpredictable, and is
+the reason the bootloader on Maple Rev 3/Rev 5 stays alive for so
+long. (Sometimes, the bootloader was exiting before the OS had even
+enumerated the device.)
+
+Once in bootloader mode, :command:`dfu-util` uploads your sketch into
+either flash or RAM (DFU alternate setting 0 or 1, respectively) and
+resets the board again.  This time, however, no DFU transaction is
+initiated, and the bootloader gives way to user code, closing down the
+DFU pipe and bringing up the USB serial port.
 
 .. .. _bootloader-rev6:
 
@@ -585,20 +584,25 @@ bringing up the USB serial.
 Flashing A Custom Bootloader
 ----------------------------
 
-The STM32 microprocessor on the Maple comes with a built-in hardware
-bootloader that can be used to flash a new (software) bootloader onto
-the chip.  This section describes how to go about this, using a Maple
-Rev 3 or higher (if you have a Maple Rev 1; you don't have a BUT
-button, and won't be able to follow these directions.  A workaround is
-detailed in `this forum posting
-<http://forums.leaflabs.com/topic.php?id=32#post-126>`_).
+.. warning:: This section is for users who want to put a fresh or
+   custom bootloader on their board.  It's possible to make a mistake
+   in this process and e.g. render your Maple unable to communicate
+   with the IDE.  Know what you're doing, and proceed with caution.
 
-.. warning:: This section is directed at users wishing to write a
-   custom bootloader for the Maple, or update their bootloader to a
-   more recent version.  It's generally not necessary to do so, and it
-   is possible to make a mistake and e.g. render your Maple unable to
-   communicate with the IDE.  Know what you're doing, and proceed with
-   caution.
+The STM32 microprocessor on the Maple comes with a built-in serial
+bootloader that can be used to flash a new (software) bootloader onto
+the chip.  While the Maple bootloader is just a program, the built-in
+serial bootloader is part of the STM32 hardware, so it's always
+available.
+
+This means that you can **always** follow these instructions to put a
+new bootloader program on your board; it **doesn't matter** if there's
+already a copy of the Maple bootloader on it or not.
+
+This section applies to Maple Rev 3 or higher.  If you have a Maple
+Rev 1; you don't have a BUT button, and won't be able to follow these
+directions.  A workaround is detailed in `this forum posting
+<http://forums.leaflabs.com/topic.php?id=32#post-126>`_.
 
 .. highlight:: sh
 
@@ -615,10 +619,20 @@ In order to follow these instructions, you will need:
 
 **Step 1: Obtain a bootloader binary**. The first thing you'll need to
 do is to compile your bootloader binary.  Note that an ASCII
-representation of the binary, such as the Intel .hex format, will not
-suffice.  For example, you can run (on a :ref:`suitably configured
-system <unix-toolchain>`) the following to obtain a binary of the
-bootloader currently used on the Maple::
+representation of the binary, such as the Intel .hex format, won't
+work.
+
+.. FIXME [Mini, Native] links to precompiled bootloaders
+
+If you just want to flash the default Maple bootloader (the one that
+was installed on your Maple when it arrived), we host a `pre-compiled
+copy
+<http://static.leaflabs.com/pub/leaflabs/maple-bootloader/maple_boot-rev3-9c5f8e.bin>`_,
+which works on all Maple Revs.
+
+To obtain the latest development version, you can run (on a
+:ref:`suitably configured system <unix-toolchain>`) the following to
+obtain a binary of the bootloader currently used on the Maple::
 
     $ git checkout git://github.com/leaflabs/maple-bootloader.git
     $ cd maple-bootloader
@@ -632,15 +646,20 @@ could use another Maple, an Arduino, etc. -- anything that allows your
 computer to communicate with the Maple you want to reprogram over a
 serial interface.
 
+.. FIXME [Maple-specific values]
+
 If you do use an FTDI breakout board, first make sure your Maple is
 disconnected from an external power source, be it battery, USB, or
 barrel jack.  Then, connect the FTDI board's TX pin to ``Serial1``\ 's
 RX pin (pin 8), FTDI RX to ``Serial1`` TX (pin 7), FTDI ground to
 Maple's GND, and its 3.3V pin to Maple's Vin (use the Maple's
-silkscreen for help locating these pins).  At this point, you're ready
-to plug the FTDI board into your computer (via USB).
+silkscreen for help locating these pins).
 
-The ``Serial1`` pins are documented :ref:`here <lang-serial>`.
+More information on ``Serial1`` is available :ref:`here
+<lang-serial>`.
+
+At this point, you're ready to plug the FTDI board into your computer
+(via USB).
 
 **Step 3: Put your Maple into serial bootloader mode**.  Do this by
 pressing the RESET button, then *while RESET is held down*, pressing
@@ -648,35 +667,50 @@ and holding the BUT button.  Next, *making sure to keep BUT held
 down*, release the RESET button and wait for a few seconds before
 releasing BUT.
 
-**Step 4: Obtain stm32loader.py**.  The
-script ``stm32loader.py`` is provided with libmaple.  If you have set
-up the :ref:`Unix toolchain <unix-toolchain>`, it is available in
-libmaple/support/stm32loader.py.  Otherwise, you can download it
-directly from `github
+**Step 4: Get stm32loader.py**.  You can download it directly from
+`libmaple's github page
 <https://github.com/leaflabs/libmaple/raw/master/support/stm32loader.py>`_
-(click the link, then save the file somewhere on your system).
+(click the link, then save the file somewhere on your system).  If you
+have set up the :ref:`Unix toolchain <unix-toolchain>`, it's the file
+libmaple/support/stm32loader.py.
 
 Flashing the new Bootloader
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-We'll use ``new-boot.bin``, ``ser-port``, and ``stm32loader.py`` to
-respectively refer to the absolute paths to the bootloader binary
-(from Step 1), the serial port device file or COMM port (from Steps 2
-and 3), and the stm32loader.py script.
+We'll use ``maple_boot.bin`` as the path to the bootloader binary from
+Step 1, and ``ser-port`` as the Maple's serial port device file or COM
+port.
+
+* On **Linux**, ``ser-port`` will probably be something like
+  ``/dev/ttyUSB0``, although the exact number could be different (it
+  could be ``/dev/ttyUSB1``, ``/dev/ttyUSB2``, etc.).
+
+* On **OS X**, ``ser-port`` will probably look like
+  ``/dev/tty.usbserialXXXX``, where ``XXXX`` is some random string of
+  characters.
+
+* On **Windows**, ``ser-port`` will be something like ``COM1``, ``COM2``, etc.
 
 .. highlight:: sh
 
-You can run ::
+To upload a bootloader binary, run this command from the Unix shell::
 
-    $ python stm32loader.py -h
+    python stm32loader.py -p ser-port -evw maple_boot.bin
 
-to obtain usage information.  The incantation for uploading a
-bootloader binary ``new-bootloader.bin`` is ::
+Or this command from the Windows command prompt::
 
-    $ python stm32loader.py -p ser-port -evw new-boot.bin
+    python.exe stm32loader.py -p ser-port -evw maple_boot.bin
+
+You can also run the following to get usage information::
+
+    # Unix:
+    python stm32loader.py -h
+
+    # Windows:
+    python.exe stm32loader.py -h
 
 If all goes well, you'll see a bunch of output, then "Verification
 OK".  If something goes wrong, the `forum`_ is probably your best bet
-for obtaining help, with IRC (irc.freenode.net, #leafblowers) being
-another option.  If all else fails, you can always `contact us
-directly`_!
+for obtaining help, with IRC (server irc.freenode.net, channel
+#leafblowers) being another option.  If all else fails, you can always
+`contact us directly`_!

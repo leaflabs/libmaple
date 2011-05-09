@@ -59,11 +59,10 @@ Arduino Compatibility
 
 Maple's implementation of ``constrain()`` is compatible with Arduino.
 
-See also
+See Also
 --------
 
 -  :ref:`min() <lang-min>`
 -  :ref:`max() <lang-max>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -24,15 +24,13 @@
 
 /**
  * @file wirish_math.h
- * @brief Includes cmath; provides Arduino-compatible math routines.
+ * @brief Includes <math.h>; provides Arduino-compatible math routines.
  */
 
 #ifndef _WIRING_MATH_H_
 #define _WIRING_MATH_H_
 
 #include <math.h>
-
-#ifdef __cplusplus
 
 /**
  * @brief Initialize the pseudo-random number generator.
@@ -78,8 +76,7 @@ long random(long min, long max);
  * @param toEnd the end of the value's mapped range.
  * @return the mapped value.
  */
-/* TODO: profile code bloat due to inlining this */
-inline long map(long value, long fromStart, long fromEnd,
+static inline long map(long value, long fromStart, long fromEnd,
                 long toStart, long toEnd) {
     return (value - fromStart) * (toEnd - toStart) / (fromEnd - fromStart) +
         toStart;
@@ -103,9 +100,7 @@ inline long map(long value, long fromStart, long fromEnd,
 #ifdef abs
 #undef abs
 #endif
-#define abs(x) (((x) > 0) ? (x) : -(unsigned)(x))
-
-#endif
+#define abs(x) (((x) > 0) ? (x) : -(x))
 
 /* Following are duplicate declarations (with Doxygen comments) for
  * some of the math.h functions; this is for the convenience of the

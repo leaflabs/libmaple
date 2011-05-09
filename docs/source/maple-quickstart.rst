@@ -6,7 +6,7 @@
  Maple Quickstart Guide
 ========================
 
-.. TODO update the images since we changed "to FLASH" -> "to Flash"
+.. TODO [0.1.0] Update the images; we've changed "to FLASH" -> "to Flash"
 
 You'll need a `Maple board <http://leaflabs.com/store/>`_, a `Mini-B
 USB cable <http://www.google.com/products?q=mini-b+usb+cable>`_, a
@@ -73,12 +73,14 @@ window, and then a confirmation message will appear:
 Upload that program!
 --------------------
 
+.. FIXME [0.1.0 Maple-specific image; add one for Native]
+
 Now it's time to plug in your Maple.  Use a Mini-B cable, making sure
-that the :ref:`power source jumper <hardware-maple-powering>` is on
-the USB header first.  We ship the Maple with the power source jumper
-configured that way, so you shouldn't have to do anything.  For
-reference, it should look like this (don't worry if a jumper is
-hanging half off of the CHRG header):
+that the :ref:`power source jumper <maple-powering>` is on the USB
+header first.  We ship Maples with the power source jumper configured
+that way, so you shouldn't have to do anything.  For reference, it
+should look like this (don't worry if a jumper is hanging half off of
+the CHRG header):
 
 .. image:: /_static/img/plugged-in-maple.png
    :align: center

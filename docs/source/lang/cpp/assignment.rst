@@ -57,4 +57,4 @@ See Also
    <http://icu-project.org/docs/papers/cpp_report/the_anatomy_of_the_assignment_operator.html>`_
    for more information.
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

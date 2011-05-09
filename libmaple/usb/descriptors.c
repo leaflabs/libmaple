@@ -150,43 +150,50 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
  //  }
 };
 
+/*****************************************************************************
+ *****************************************************************************
+ ***
+ *** FIXME FIXME FIXME NOT THE RIGHT THING! MOVE ALL THIS INTO TO WIRISH!
+ ***
+ *****************************************************************************
+ *****************************************************************************/
+
+const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] = {
+    USB_DESCRIPTOR_STRING_LEN(1),
+    USB_DESCRIPTOR_TYPE_STRING,
+    0x09,
+    0x04
+};
+
+const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] = {
+    USB_DESCRIPTOR_STRING_LEN(8),
+    USB_DESCRIPTOR_TYPE_STRING,
+    'L', 0, 'e', 0, 'a', 0, 'f', 0,
+    'L', 0, 'a', 0, 'b', 0, 's', 0
+};
+
 /*
-   String Identifiers:
+  String Identifiers:
 
-   we may choose to specify any or none of the following string
-   identifiers:
+  we may choose to specify any or none of the following string
+  identifiers:
 
-   iManufacturer:    LeafLabs
-   iProduct:         Maple R3
-   iSerialNumber:    NONE
-   iConfiguration:   NONE
-   iInterface(CCI):  NONE
-   iInterface(DCI):  NONE
+  iManufacturer:    LeafLabs
+  iProduct:         Maple R3
+  iSerialNumber:    NONE
+  iConfiguration:   NONE
+  iInterface(CCI):  NONE
+  iInterface(DCI):  NONE
 
-   additionally we must provide the unicode language identifier,
-   which is 0x0409 for US English
+  additionally we must provide the unicode language identifier,
+  which is 0x0409 for US English
 */
-
-const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] =
-{
-  USB_DESCRIPTOR_STRING_LEN(1),
-  USB_DESCRIPTOR_TYPE_STRING,
-  0x09,
-  0x04
+const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = {
+    USB_DESCRIPTOR_STRING_LEN(8),
+    USB_DESCRIPTOR_TYPE_STRING,
+    'M', 0, 'a', 0, 'p', 0, 'l', 0,
+    'e', 0, ' ', 0, ' ', 0, ' ', 0
 };
 
-const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] =
-{
-  USB_DESCRIPTOR_STRING_LEN(8),
-  USB_DESCRIPTOR_TYPE_STRING,
-  'L', 0, 'e', 0, 'a', 0, 'f', 0,
-  'L', 0, 'a', 0, 'b', 0, 's', 0
-};
-
-const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] =
-{
-  USB_DESCRIPTOR_STRING_LEN(8),
-  USB_DESCRIPTOR_TYPE_STRING,
-  'M', 0, 'a', 0, 'p', 0, 'l', 0,
-  'e', 0, ' ', 0, 'R', 0, '3', 0
-};
+/*****************************************************************************
+ *****************************************************************************/

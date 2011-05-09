@@ -19,14 +19,12 @@ Note that the Maple implementation comes from `newlib
 <http://sourceware.org/newlib/>`_\ , while Arduino's is that of
 `avr-libc <http://avr-libc.nongnu.org/>`_\ .
 
-See also
+See Also
 --------
-
 
 -  :ref:`sin() <lang-sin>`
 -  :ref:`tan() <lang-tan>`
 -  :ref:`float <lang-float>`
 -  :ref:`double <lang-double>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

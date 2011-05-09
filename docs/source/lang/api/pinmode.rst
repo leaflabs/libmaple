@@ -60,13 +60,13 @@ set up a pin for these purposes before a call to, e.g.,
 :ref:`lang-analogRead`.  In practice, this should only add a few lines
 to your :ref:`lang-setup` function.
 
-.. TODO verify following before putting it in:
+.. TODO [0.1.0] verify following before putting it in:
 
 .. ``OUTPUT_OPEN_DRAIN``, ``INPUT_PULLUP``, ``INPUT_PULLDOWN``, and
 .. ``PWM_OPEN_DRAIN`` modes represent functionality not currently
 .. available on Arduino boards.
 
-See also
+See Also
 --------
 
 -  :ref:`lang-constants`
@@ -74,6 +74,4 @@ See also
 -  :ref:`lang-digitalread`
 -  Maple :ref:`GPIO <gpio>` reference page
 
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

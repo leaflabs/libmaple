@@ -28,41 +28,30 @@
 
 #include "libmaple.h"
 #include "flash.h"
-
-/* flash registers  */
-#define FLASH_BASE                      0x40022000
-#define FLASH_ACR                       FLASH_BASE
-
-/* flash prefetcher  */
-#define ACR_PRFTBE                      BIT(4)
-#define ACR_PRFTBE_ENABLE               BIT(4)
-
-/* flash wait states  */
-#define ACR_LATENCY                     (0x7)
-
-#define FLASH_WRITE_ACR(val)            __write(FLASH_ACR, val)
-#define FLASH_READ_ACR()                __read(FLASH_ACR)
+#include "bitband.h"
 
 /**
- * @brief turn on the hardware prefetcher
+ * @brief Turn on the hardware prefetcher.
  */
 void flash_enable_prefetch(void) {
-    uint32 val = FLASH_READ_ACR();
-
-    val |= ACR_PRFTBE_ENABLE;
-
-    FLASH_WRITE_ACR(val);
+    *bb_perip(&FLASH_BASE->ACR, FLASH_ACR_PRFTBE_BIT) = 1;
 }
 
 /**
- * @brief set flash wait states
- * @param number of wait states
+ * @brief Set flash wait states
+ *
+ * See ST PM0042, section 3.1 for restrictions on the acceptable value
+ * of wait_states for a given SYSCLK configuration.
+ *
+ * @param wait_states number of wait states (one of
+ *                    FLASH_WAIT_STATE_0, FLASH_WAIT_STATE_1,
+ *                    FLASH_WAIT_STATE_2).
  */
 void flash_set_latency(uint32 wait_states) {
-    uint32 val = FLASH_READ_ACR();
+    uint32 val = FLASH_BASE->ACR;
 
-    val &= ~ACR_LATENCY;
+    val &= ~FLASH_ACR_LATENCY;
     val |= wait_states;
 
-    FLASH_WRITE_ACR(val);
+    FLASH_BASE->ACR = val;
 }

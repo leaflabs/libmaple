@@ -5,369 +5,341 @@
 HardwareTimer
 =============
 
-This class defines the public API for interfacing with the STM32's
-built-in timer peripherals.  More information on these peripherals
-(including code examples) is available in the :ref:`timers reference
-<timers>`.
+This page describes how to control the built-in timers.  It does not
+describe how the timers work on your board.  For more information on
+that, the :ref:`timers reference <timers>`.
 
-Library Documentation
----------------------
+.. warning:: The timer interface is still taking shape, and is
+   expected to change significantly between releases.  Because of
+   that, the functionality described in this page shouldn't be
+   considered stable.
 
-HardwareTimer Class Reference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   If you want a timer API that will be consistent between releases of
+   the Maple IDE, your best bet for now is to use the low-level
+   support in :ref:`libmaple-timer`.
 
-To interact with a particular timer, call one of the methods
-documented below on one of the predefined ``HardwareTimer`` instances.
-For example, to set the prescale factor on timer 1 to 5, call
-``Timer1.setPrescaleFactor(5)``.
+.. contents:: Contents
+   :local:
 
-.. TODO add code examples that people can copy and paste in case
-.. they're unfamiliar with namespace syntax
+.. _lang-hardwaretimer-getting-started:
 
-.. cpp:class:: HardwareTimer
+Getting Started
+---------------
 
-   Class for interacting with a timer.  There are four predefined
-   instances available on the Maple: ``Timer1``, ``Timer2``,
-   ``Timer3``, and ``Timer4``.
+You'll first need to define a ``HardwareTimer`` variable, which you'll
+use to control the timer.  Do this by putting the line
+"``HardwareTimer timer(number);``" with your variables, where
+``number`` is the timer's number.
 
-.. _lang-hardwaretimer-attachinterrupt:
+Here's an example (we'll fill in :ref:`setup() <lang-setup>` and
+:ref:`loop() <lang-loop>` later)::
 
-.. cpp:function:: void HardwareTimer::attachInterrupt(int channel, voidFuncPtr handler)
+   // Use timer 1
+   HardwareTimer timer(1);
 
-   Attach an interrupt handler to the given ``channel``.  This
-   interrupt handler will be called when the timer's counter reaches
-   the given channel :ref:`compare <lang-hardwaretimer-setcompare>`
-   value.
+   void setup() {
+      // Your setup code
+   }
 
-   ``handler`` should be a function which takes no arguments and has
-   :ref:`void <lang-void>` value; i.e. it should have signature ::
+   void loop() {
+      // ...
+   }
 
-       void handler(void);
+Configuring the Prescaler and Overflow
+--------------------------------------
 
-   You can later detach the interrupt using :ref:`detachInterrupt()
-   <lang-hardwaretimer-detachinterrupt>`.
-
-   .. note:: The function (often called an *interrupt service
-             routine*, or ISR) should attempt to return as quickly as
-             possible.  :ref:`Blinking the LED <lang-toggleled>`, some
-             logic, :ref:`PWM <pwm>` updates, and :ref:`Serial
-             <lang-serial>` writes are fine; writing to
-             :ref:`SerialUSB <lang-serialusb>` or :ref:`waiting
-             <lang-waitforbuttonpress>` for user input can take a long
-             time and prevent other interrupts from firing on time.
-
-             Tip: if you have a :ref:`delay() <lang-delay>` in your
-             ISR, you're probably doing it wrong.
-
-.. cpp:function:: void HardwareTimer::attachCompare1Interrupt(voidFuncPtr handler)
-
-   Equivalent to :ref:`attachInterrupt
-   <lang-hardwaretimer-attachinterrupt>`\ ``(1, handler)``.
-
-.. cpp:function:: void HardwareTimer::attachCompare2Interrupt(voidFuncPtr handler)
-
-   Equivalent to :ref:`attachInterrupt
-   <lang-hardwaretimer-attachinterrupt>`\ ``(2, handler)``.
-
-.. cpp:function:: void HardwareTimer::attachCompare3Interrupt(voidFuncPtr handler)
-
-   Equivalent to :ref:`attachInterrupt
-   <lang-hardwaretimer-attachinterrupt>`\ ``(3, handler)``.
-
-.. cpp:function:: void HardwareTimer::attachCompare4Interrupt(voidFuncPtr handler)
-
-   Equivalent to :ref:`attachInterrupt
-   <lang-hardwaretimer-attachinterrupt>`\ ``(4, handler)``.
-
-.. _lang-hardwaretimer-setchannelmode:
-
-.. cpp:function:: void HardwareTimer::setChannelMode(int channel, TimerMode mode)
-
-   Set the given channel of this timer to the given :ref:`mode
-   <lang-hardwaretimer-modes>`.  The parameter ``channel`` is one of
-   1, 2, 3, and 4, and corresponds to the compare channel you would
-   like to set.  Refer to the full :ref:`pin mapping table
-   <pin-mapping-mega-table>` to match up timer channels and pin
-   numbers.
-
-.. cpp:function:: void HardwareTimer::setChannel1Mode(TimerMode mode)
-
-   Equivalent to :ref:`setChannelMode <lang-hardwaretimer-setchannelmode>`\
-   ``(1, mode)``.
-
-.. cpp:function:: void HardwareTimer::setChannel2Mode(TimerMode mode)
-
-   Equivalent to :ref:`setChannelMode <lang-hardwaretimer-setchannelmode>`\
-   ``(2, mode)``.
-
-.. cpp:function:: void HardwareTimer::setChannel3Mode(TimerMode mode)
-
-   Equivalent to :ref:`setChannelMode <lang-hardwaretimer-setchannelmode>`\
-   ``(3, mode)``.
-
-.. cpp:function:: void HardwareTimer::setChannel4Mode(TimerMode mode)
-
-   Equivalent to :ref:`setChannelMode <lang-hardwaretimer-setchannelmode>`\
-   ``(4, mode)``.
-
-.. _lang-hardwaretimer-getcompare:
-
-.. cpp:function:: uint16 HardwareTimer::getCompare(int channel)
-
-   Gets the compare value for the given ``channel``, from 1 to 4.  See
-   :ref:`setCompare() <lang-hardwaretimer-setcompare>`.
-
-.. cpp:function:: uint16 HardwareTimer::getCompare1()
-
-   Equivalent to :ref:`getCompare <lang-hardwaretimer-getcompare>`\
-   ``(1, mode)``.
-
-.. cpp:function:: uint16 HardwareTimer::getCompare2()
-
-   Equivalent to :ref:`getCompare <lang-hardwaretimer-getcompare>`\
-   ``(2, mode)``.
-
-.. cpp:function:: uint16 HardwareTimer::getCompare3()
-
-   Equivalent to :ref:`getCompare <lang-hardwaretimer-getcompare>`\
-   ``(3, mode)``.
-
-.. cpp:function:: uint16 HardwareTimer::getCompare4()
-
-   Equivalent to :ref:`getCompare <lang-hardwaretimer-getcompare>`\
-   ``(4, mode)``.
-
-.. _lang-hardwaretimer-setcompare:
-
-.. cpp:function:: void HardwareTimer::setCompare(int channel, uint16 compare)
-
-   Sets the compare value for the given ``channel`` to ``compare``.
-   If ``compare`` is greater than this timer's overflow value, it will
-   be truncated to the overflow value.  The default compare value is
-   65,535 (the largest unsigned 16-bit integer value).
-
-   When the counter reaches this value the interrupt for this channel
-   will fire if the given ``channel`` :ref:`mode
-   <lang-hardwaretimer-setchannelmode>` is ``TIMER_OUTPUTCOMPARE`` and
-   an interrupt is :ref:`attached
-   <lang-hardwaretimer-attachinterrupt>`.
-
-   By default, this only changes the relative offsets between events
-   on a single timer ("phase"); they don't control the frequency with
-   which they occur. However, a common trick is to increment the
-   compare value manually in the interrupt handler so that the event
-   will fire again after the increment period. There can be a
-   different increment value for each channel, so this trick allows
-   events to be programmed at 4 different rates on a single
-   timer. Note that function call overheads mean that the smallest
-   increment rate is at least a few microseconds.
-
-.. cpp:function:: void HardwareTimer::setCompare1(uint16 compare)
-
-   Equivalent to :ref:`setCompare <lang-hardwaretimer-setcompare>`\
-   ``(1, compare)``.
-
-.. cpp:function:: void HardwareTimer::setCompare2(uint16 compare)
-
-   Equivalent to :ref:`setCompare <lang-hardwaretimer-setcompare>`\
-   ``(2, compare)``.
-
-.. cpp:function:: void HardwareTimer::setCompare3(uint16 compare)
-
-   Equivalent to :ref:`setCompare <lang-hardwaretimer-setcompare>`\
-   ``(3, compare)``.
-
-.. cpp:function:: void HardwareTimer::setCompare4(uint16 compare)
-
-   Equivalent to :ref:`setCompare <lang-hardwaretimer-setcompare>`\
-   ``(4, compare)``.
-
-.. cpp:function:: uint16 HardwareTimer::getCount()
-
-   Gets the current timer count.  Due to function call overhead, the
-   return value will be increasingly accurate with smaller prescale
-   values.  Also see :ref:`setCount() <lang-hardwaretimer-setcount>`.
-
-.. _lang-hardwaretimer-setcount:
-
-.. cpp:function:: void HardwareTimer::setCount(uint16 val)
-
-    Set the timer's current count to ``val``.
-
-    Note that there is some function call overhead associated with
-    calling this method, so using it is not a robust way to get
-    multiple timers to share a count value.
-
-    If ``val`` exceeds the timer's :ref:`overflow value
-    <lang-hardwaretimer-getoverflow>`, it is truncated to the overflow
-    value.
-
-
-.. _lang-hardwaretimer-detachinterrupt:
-
-.. cpp:function:: void HardwareTimer::detachInterrupt(int channel)
-
-   Remove the interrupt handler attached to the given ``channel``, if
-   any.  The handler will no longer be called by this timer.
-
-.. cpp:function:: void HardwareTimer::detachCompare1Interrupt()
-
-   Equivalent to :ref:`detachInterrupt
-   <lang-hardwaretimer-detachinterrupt>`\ ``(1)``.
-
-.. cpp:function:: void HardwareTimer::detachCompare2Interrupt()
-
-   Equivalent to :ref:`detachInterrupt
-   <lang-hardwaretimer-detachinterrupt>`\ ``(2)``.
-
-.. cpp:function:: void HardwareTimer::detachCompare3Interrupt()
-
-   Equivalent to :ref:`detachInterrupt
-   <lang-hardwaretimer-detachinterrupt>`\ ``(3)``.
-
-.. cpp:function:: void HardwareTimer::detachCompare4Interrupt()
-
-   Equivalent to :ref:`detachInterrupt
-   <lang-hardwaretimer-detachinterrupt>`\ ``(4)``.
-
-.. _lang-hardwaretimer-generateupdate:
-
-.. cpp:function:: void HardwareTimer::generateUpdate()
-
-   Re-initializes the counter (to 0 in upcounting mode, which is the
-   default), and generates an update of the prescale and overflow
-   registers.
-
-.. _lang-hardwaretimer-getoverflow:
-
-.. cpp:function:: uint16 HardwareTimer::getOverflow()
-
-   Gets the timer's overflow value.  See :ref:`setOverflow()
-   <lang-hardwaretimer-setoverflow>`.
-
-.. _lang-hardwaretimer-setoverflow:
-
-.. cpp:function:: void HardwareTimer::setOverflow(uint16 val)
-
-    Sets the timer overflow (or "reload") value to ``val``.
-
-    When the timer's counter reaches this, value it resets to
-    zero. Its default value is 65535 (the largest unsigned 16-bit
-    integer); setting the overflow to anything lower will cause
-    interrupts to be called more frequently (see :ref:`setPeriod()
-    <lang-hardwaretimer-setperiod>` function for a shortcut).
-
-    After the next :ref:`timer update
-    <lang-hardwaretimer-generateupdate>`, this number will be the
-    maximum value for the timer's channel compare values.
-
-.. _lang-hardwaretimer-pause:
-
-.. cpp:function:: void HardwareTimer::pause()
-
-   Stop the timer's counter, without affecting its configuration.
-
-   The timer will no longer count or fire interrupts after this
-   function is called, until it is resumed.  This function is useful
-   during timer setup periods, in order to prevent interrupts from
-   firing before the timer is fully configured.
-
-   Note that there is some function call overhead associated with this
-   method, so using it in concert with :ref:`resume()
-   <lang-hardwaretimer-resume>` is not a robust way to align multiple
-   timers to the same count value.
-
-.. _lang-hardwaretimer-setperiod:
-
-.. cpp:function:: uint16 HardwareTimer::setPeriod(uint32 microseconds)
-
-   Configure the :ref:`prescaler
-   <lang-hardwaretimer-getprescalefactor>` and :ref:`overflow
-   <lang-hardwaretimer-getoverflow>` values to generate a timer reload
-   with a period as close to the given number of ``microseconds`` as
-   possible.
-
-   The return value is the new overflow value, which may be used to
-   set channel compare values.  However, if a clock that fires an
-   interrupt every given number of microseconds is all that is
-   desired, and the relative "phases" are unimportant, channel compare
-   values may all be set to 1.
-
-.. _lang-hardwaretimer-getprescalefactor:
-
-.. cpp:function:: uint16 HardwareTimer::getPrescaleFactor()
-
-    Returns the timer's prescale factor.  See
-    :ref:`setPrescaleFactor() <lang-hardwaretimer-setprescalefactor>`.
+After defining your ``timer`` variable, you'll probably want to
+configure how fast your timer's counter changes (using the prescaler)
+and when it gets reset to zero (using the overflow value).  You can do
+that with the ``setPrescaleFactor()`` and ``setOverflow()`` functions.
 
 .. _lang-hardwaretimer-setprescalefactor:
 
-.. cpp:function:: void HardwareTimer::setPrescaleFactor(uint16 factor)
+.. doxygenfunction:: HardwareTimer::setPrescaleFactor
+   :no-link:
 
-    Set the timer's prescale factor to ``factor``.
+.. _lang-hardwaretimer-setoverflow:
 
-    The prescaler acts as a clock divider to slow down the rate at
-    which the counter increments.
+.. doxygenfunction:: HardwareTimer::setOverflow
+   :no-link:
 
-    For example, the system clock rate is 72MHz, so the counter will
-    reach 65535 in (13.89 nanoseconds) × (65535 counts) = (910.22
-    microseconds), or about a thousand times a second. If the
-    prescaler equals 1098, then the clock rate is effectively 72MHz /
-    1098 = 65.56KHz, and the counter will reach 65536 in (15.25
-    microseconds) × (65536 counts) = (0.999 seconds), or about once
-    per second.
+For example::
 
-    The :ref:`setPeriod() <lang-hardwaretimer-setperiod>` method may
-    also be used as a convenient alternative.
+   // Use timer 1
+   HardwareTimer timer(1);
 
-.. _lang-hardwaretimer-resume:
+   void setup() {
+       timer.setPrescaleFactor(5);
+       timer.setOverflow(255);
+   }
 
-.. cpp:function:: void HardwareTimer::resume()
+   void loop() {
+      // ...
+   }
 
-    Resume a paused timer, without affecting its configuration.
+You may also find the ``setPeriod()`` function useful:
 
-    The timer will resume counting and firing interrupts as
-    appropriate.
+.. _lang-hardwaretimer-setperiod:
 
-    Note that there is some function call overhead associated with
-    using this method, so using it in concert with :ref:`pause()
-    <lang-hardwaretimer-pause>` is not a robust way to align multiple
-    timers to the same count value.
+.. doxygenfunction:: HardwareTimer::setPeriod
+   :no-link:
 
-.. cpp:function:: timer_dev_num HardwareTimer::getTimerNum()
+For example::
 
-   Returns the :ref:`timer device number
-   <lang-hardwaretimer-timer-dev-num>` associated with the timer.  For
-   example, ``Timer1.getTimerNum()`` would return ``TIMER1``.
+   // Use timer 1
+   HardwareTimer timer(1);
 
-   In most cases, you should not need to use this function.  If you do
-   use it, be careful; the constant ``TIMER1`` is *not equal* to the
-   number 1; similarly, ``TIMER2`` is *not* the number 2, etc.  Be
-   sure to refer to the timer device number by name.
+   void setup() {
+       // Have the timer repeat every 20 milliseconds
+       int microseconds_per_millisecond = 1000;
+       timer.setPeriod(20 * microseconds_per_millisecond);
+   }
 
-.. _lang-hardwaretimer-modes:
+   void loop() {
+      // ...
+   }
 
-Timer Modes
-^^^^^^^^^^^
-.. doxygenenum:: TimerMode
+.. _lang-hardwaretimer-interrupts:
 
-.. _lang-hardwaretimer-timer-dev-num:
+Using Timer Interrupts
+----------------------
 
-Timer Device Numbers
-^^^^^^^^^^^^^^^^^^^^
+.. TODO [0.2.0] Improve the interrupts section, here or in timers.rst
 
-These provide a lower-level interface for interacting with timers.
-They are mostly useful in context with the :ref:`getTimer()
-<lang-hardwaretimer-gettimer>` function.  **Be careful** when using
-these not to confuse e.g. ``TIMER1`` with the number 1; they are
-different.
+In order to use timer interrupts, we recommend the following sequence:
 
-.. doxygenenum:: timer_dev_num
+* Pause the timer.
+* Configure the prescaler and overflow.
+* Pick a timer channel to handle the interrupt and set the channel's
+  :ref:`mode <lang-hardwaretimer-timermode>` to ``TIMER_OUTPUT_COMPARE``.
+* Set the channel compare value appropriately (this controls what counter value,
+  from 0 to overflow - 1).  If you just want to make the interrupt fire once
+  every time the timer overflows, and you don't care what the timer count is,
+  the channel compare value can just be 1.
+* Attach an interrupt handler to the channel.
+* Refresh the timer.
+* Resume the timer.
 
-.. _lang-hardwaretimer-convenience:
+Here are two complete examples.
 
-.. _lang-hardwaretimer-gettimer:
+**LED blink**: This example blinks the built-in LED without doing
+anything in ``loop()``. ::
 
-Other Functions
-^^^^^^^^^^^^^^^
-.. doxygenfunction:: getTimer
+    #define LED_RATE 500000    // in microseconds; should give 0.5Hz toggles
+
+    // We'll use timer 2
+    HardwareTimer timer(2);
+
+    void setup() {
+        // Set up the LED to blink
+        pinMode(BOARD_LED_PIN, OUTPUT);
+
+        // Pause the timer while we're configuring it
+        timer.pause();
+
+        // Set up period
+        timer.setPeriod(LED_RATE); // in microseconds
+
+        // Set up an interrupt on channel 1
+        timer.setChannel1Mode(TIMER_OUTPUT_COMPARE);
+        timer.setCompare(TIMER_CH1, 1);  // Interrupt 1 count after each update
+        timer.attachCompare1Interrupt(handler_led);
+
+        // Refresh the timer's count, prescale, and overflow
+        timer.refresh();
+
+        // Start the timer counting
+        timer.resume();
+    }
+
+    void loop() {
+        // Nothing! It's all in the handler_led() interrupt:
+    }
+
+    void handler_led(void) {
+        toggleLED();
+    }
+
+**Racing Counters**: This example shows how to use multiple timers at
+the same time. ::
+
+    int count3 = 0;
+    int count4 = 0;
+
+    // We'll use timers 3 and 4
+    HardwareTimer timer3(3);
+    HardwareTimer timer4(4);
+
+    void setup() {
+        // Set up the button for input
+        pinMode(BOARD_BUTTON_PIN, INPUT_PULLUP);
+
+        // Set up timers to add 1 to their counts each time
+        // their interrupts fire.
+        timer3.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
+        timer4.setMode(TIMER_CH1, TIMER_OUTPUT_COMPARE);
+        timer3.pause();
+        timer4.pause();
+        timer3.setCount(0);
+        timer4.setCount(0);
+        timer3.setOverflow(30000);
+        timer4.setOverflow(30000);
+        timer3.setCompare(TIMER_CH1, 1000);   // somewhere in the middle
+        timer4.setCompare(TIMER_CH1, 1000);
+        timer3.attachCompare1Interrupt(handler3);
+        timer4.attachCompare1Interrupt(handler4);
+        timer3.refresh();
+        timer4.refresh();
+        timer3.resume();
+        timer4.resume();
+    }
+
+    void loop() {
+        // Display the running counts
+        SerialUSB.print("Count 3: ");
+        SerialUSB.print(count3);
+        SerialUSB.print("\t\tCount 4: ");
+        SerialUSB.println(count4);
+
+        // While the button is held down, pause timer 4
+        for (int i = 0; i < 1000; i++) {
+            if (digitalRead(BOARD_BUTTON_PIN)) {
+                timer4.pause();
+            } else {
+                timer4.resume();
+            }
+            delay(1);
+        }
+    }
+
+    void handler3(void) {
+        count3++;
+    }
+
+    void handler4(void) {
+        count4++;
+    }
+
+``HardwareTimer`` Class Reference
+---------------------------------
+
+This section gives a full listing of the capabilities of a
+``HardwareTimer``.
+
+.. doxygenclass:: HardwareTimer
+   :members: HardwareTimer, pause, resume, getPrescaleFactor, setPrescaleFactor, getOverflow, setOverflow, getCount, setCount, setPeriod, setMode, getCompare, setCompare, attachInterrupt, detachInterrupt, refresh
+
+.. _lang-hardwaretimer-timermode:
+
+.. doxygenenum:: timer_mode
+
+Deprecated Functionality
+------------------------
+
+The following functionality exists for now, but it has been
+deprecated, and will be removed in a future Maple IDE release.  You
+shouldn't use it in new programs, and you should change any of your
+programs which do use them to use the up-to-date features described
+above.
+
+The ``TimerMode`` type from previous releases has been renamed
+``timer_mode``.  The mode ``TIMER_OUTPUTCOMPARE`` is still present,
+but will be removed in a future release.  Use ``TIMER_OUTPUT_COMPARE``
+instead.
+
+.. cpp:function:: void HardwareTimer::attachCompare1Interrupt(voidFuncPtr handler)
+
+   Use ``attachInterrupt(1, handler)`` instead.
+
+.. cpp:function:: void HardwareTimer::attachCompare2Interrupt(voidFuncPtr handler)
+
+   Use ``attachInterrupt(2, handler)`` instead.
+
+.. cpp:function:: void HardwareTimer::attachCompare3Interrupt(voidFuncPtr handler)
+
+   Use ``attachInterrupt(3, handler)`` instead.
+
+.. cpp:function:: void HardwareTimer::attachCompare4Interrupt(voidFuncPtr handler)
+
+   Use ``attachInterrupt(4, handler)`` instead.
+
+.. _lang-hardwaretimer-setchannelmode:
+
+.. cpp:function:: void HardwareTimer::setChannelMode(int channel, timer_mode mode)
+
+   Use ``setMode(channel, mode)`` instead.
+
+.. cpp:function:: void HardwareTimer::setChannel1Mode(timer_mode mode)
+
+   Use ``setMode(1, mode)`` instead.
+
+.. cpp:function:: void HardwareTimer::setChannel2Mode(timer_mode mode)
+
+   Use ``setMode(2, mode)`` instead.
+
+.. cpp:function:: void HardwareTimer::setChannel3Mode(timer_mode mode)
+
+   Use ``setMode(3, mode)`` instead.
+
+.. cpp:function:: void HardwareTimer::setChannel4Mode(timer_mode mode)
+
+   Use ``setMode(4, mode)`` instead.
+
+.. cpp:function:: uint16 HardwareTimer::getCompare1()
+
+   Use ``getCompare(1, mode)`` instead.
+
+.. cpp:function:: uint16 HardwareTimer::getCompare2()
+
+   Use ``getCompare(2, mode)`` instead.
+
+.. cpp:function:: uint16 HardwareTimer::getCompare3()
+
+   Use ``getCompare(3, mode)`` instead.
+
+.. cpp:function:: uint16 HardwareTimer::getCompare4()
+
+   Use ``getCompare(4, mode)`` instead.
+
+.. cpp:function:: void HardwareTimer::setCompare1(uint16 compare)
+
+   Use ``setCompare(1, compare)`` instead.
+
+.. cpp:function:: void HardwareTimer::setCompare2(uint16 compare)
+
+   Use ``setCompare(2, compare)`` instead.
+
+.. cpp:function:: void HardwareTimer::setCompare3(uint16 compare)
+
+   Use ``setCompare(3, compare)`` instead.
+
+.. cpp:function:: void HardwareTimer::setCompare4(uint16 compare)
+
+   Use ``setCompare(4, compare)`` instead.
+
+.. cpp:function:: void HardwareTimer::detachCompare1Interrupt()
+
+   Use ``detachInterrupt(1)`` instead.
+
+.. cpp:function:: void HardwareTimer::detachCompare2Interrupt()
+
+   Use ``detachInterrupt(2)`` instead.
+
+.. cpp:function:: void HardwareTimer::detachCompare3Interrupt()
+
+   Use ``detachInterrupt(3)`` instead.
+
+.. cpp:function:: void HardwareTimer::detachCompare4Interrupt()
+
+   Use ``detachInterrupt(4)`` instead.
+
+.. cpp:function:: void HardwareTimer::generateUpdate()
+
+   Use ``refresh()`` instead.
+
+In previous releases, to interact with a particular timers, you would
+use one of the predefined ``HardwareTimer`` instances ``Timer1``,
+``Timer2``, ``Timer3``, and ``Timer4``.  These are still available for
+now, but they are also deprecated, and will be removed in a future
+release.  As detailed in :ref:`lang-hardwaretimer-getting-started`,
+you should define your own ``HardwareTimer`` variables.

@@ -19,29 +19,14 @@ filtering) generate audio waveforms.
 Overview
 --------
 
-The Maple has a large number of 16-bit PWM outputs, each connected to
-one of 4 timers.  Some configuration, such as the clock rate or
-prescaling, must be common to the entire timer; see the :ref:`timer
-documentation <timers>` for more information.
+.. FIXME [0.1.0] More information about how timer channels drive PWM
 
-Note that unlike the Arduino, the Maple does not have PWM
-functionality on pin D10; all other pins are :ref:`compatible
-<compatibility>`.
-
-The following table shows which timer can generate which PWM
-outputs. See the :ref:`pin mapping table <pin-mapping-mega-table>` to
-track down exactly which timer *channel* corresponds to each pin.
-
-.. _pwm-timer-table:
-
-.. csv-table::
-   :header: Timer, PWM Headers
-   :delim: |
-
-   Timer1 | D6,D7,D8
-   Timer2 | D0,D1,D2,D3
-   Timer3 | D11,D12,D27,D28
-   Timer4 | D5,D9,D14,D24
+Each PWM output is driven by an output channel connected to one of 4
+timers.  Some configuration, such as the clock rate or prescaling,
+must be common to the entire timer; see the :ref:`timer documentation
+<timers>` for more information.  See your board's :ref:`pin mapping
+tables <gpio-pin-maps>` to track down the correspondence
+between timer channels and GPIO pins.
 
 Background
 ----------

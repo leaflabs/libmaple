@@ -52,8 +52,4 @@ See Also
 
 -  :ref:`lowByte() <lang-lowbyte>`
 
-
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -24,8 +24,8 @@ for efficiency).
 A variable should be declared ``volatile`` whenever its value can be
 changed by something beyond the control of the code section in which
 it appears, such as an :ref:`external interrupt
-<external-interrupts>`. On the Maple, the only place that this is
-likely to occur is in sections of code associated with interrupts.
+<external-interrupts>`. (The only place that this is likely to occur
+in most programs is inside of code called by interrupts).
 
 Example
 -------
@@ -55,11 +55,11 @@ Example
       }
     }
 
-See also
+See Also
 --------
 
 - :ref:`External Interrupts <external-interrupts>`
 - :ref:`lang-attachinterrupt`
 - :ref:`lang-detachinterrupt`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -67,6 +67,4 @@ root <http://en.wikipedia.org/wiki/Cube_root>`_ of a number::
         SerialUSB.println(cubeRootOf3);
     }
 
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

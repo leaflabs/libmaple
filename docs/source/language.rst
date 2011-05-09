@@ -10,6 +10,8 @@ The Maple can be programmed in the `Wiring
 <http://www.wiring.org.co/reference/>`_ language, which is the same
 language used to program the `Arduino <http://arduino.cc/>`_ boards.
 
+.. TODO [0.2.0?] Wiring tutorial
+
 C or C++ programmers curious about the differences between the Wiring
 language and C++ may wish to skip to the
 :ref:`arduino_c_for_c_hackers`.
@@ -17,43 +19,29 @@ language and C++ may wish to skip to the
 .. contents:: Contents
    :local:
 
-Unique Maple Additions
-----------------------
+.. admonition:: **Looking for Something Else?**
 
-.. _language-assert:
+   - See the :ref:`libraries` for extra built-in libraries for dealing
+     with different kinds of hardware.
 
-``ASSERT(...)``
-    The ``ASSERT()`` function can be very useful for basic program
-    debugging. The function accepts a boolean; for example::
+   - If you're looking for something from the C standard library (like
+     ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
+     <arm-gcc>` used to compile your programs is configured to link
+     against `newlib <http://sourceware.org/newlib/>`_, and allows the
+     use of any of its header files.  However, dynamic memory allocation
+     (``malloc()``, etc.) is not available.
 
-      ASSERT(state == WAIT);
-
-    zero is false and any other number is true. If the boolean is true
-    the assertion passes and the program continues as usual. If it is
-    false, the assertion fails: the program is halted, debug
-    information is printed to USART2, and the status LED begins to
-    throb in intensity (it's noticeably different from blinking). The
-    debug information is printed at 9600 baud and consists of the
-    filename and line number where the particular assertion failed.
-
-    Including assertions in a program increases the program size. When
-    using libmaple **from the command line only**, they can be
-    disabled by making the definition ::
-
-      #define DEBUG_LEVEL DEBUG_NONE
-
-    before including either wirish.h or libmaple.h. In this case, all
-    assertions will pass without any lost clock cycles.  Note that
-    this will **not work in the IDE**; even with this definition,
-    assertions will still be enabled.
+   - If you're looking for pointers to low-level details, see this page's
+     :ref:`Recommended Reading <language-recommended-reading>`.
 
 .. _language-lang-docs:
 
 Maple Language Reference
 ------------------------
 
-The following table summarizes the available core language features.
-A more exhaustive index is available at the :ref:`language-index`.
+The following table summarizes the most important core language
+features.  An exhaustive index is available at the
+:ref:`language-index`.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -70,13 +58,13 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |* :ref:`true <lang-constants-true>` |         |* :ref:`togglePin() <lang-togglepin>`              |
 |* :ref:`for <lang-for>`                     |  :ref:`false <lang-constants-false>`         |                                                   |
 |                                            |                                              |* :ref:`toggleLED() <lang-toggleled>`              |
-|* :ref:`switch/case <lang-switchcase>`      |* :ref:`BOARD_LED_PIN <lang-constants-led>` | |                                                   |
-|                                            |  :ref:`BOARD_BUTTON_PIN <lang-constants-but>`|* :ref:`isButtonPressed() <lang-isbuttonpressed>`  |
-|* :ref:`while <lang-while>`                 |                                              |                                                   |
-|                                            |* :ref:`Constants                             |* :ref:`waitForButtonPress()                       |
-|* :ref:`do...while <lang-dowhile>`          |  <lang-constants>` (:ref:`integers           |  <lang-waitforbuttonpress>`                       |
-|                                            |  <lang-constants-integers>`, :ref:`floating  |                                                   |
-|* :ref:`break <lang-break>`                 |  point <lang-constants-fp>`)                 |**Analog I/O**                                     |
+|* :ref:`switch/case <lang-switchcase>`      |* :ref:`Constants                             |                                                   |
+|                                            |  <lang-constants>` (:ref:`integers           |* :ref:`isButtonPressed() <lang-isbuttonpressed>`  |
+|* :ref:`while <lang-while>`                 |  <lang-constants-integers>`, :ref:`floating  |                                                   |
+|                                            |  point <lang-constants-fp>`)                 |* :ref:`waitForButtonPress()                       |
+|* :ref:`do...while <lang-dowhile>`          |                                              |  <lang-waitforbuttonpress>`                       |
+|                                            |* :ref:`Board-specific values                 |                                                   |
+|* :ref:`break <lang-break>`                 |  <lang-board-values>`                        |**Analog I/O**                                     |
 |                                            |                                              |                                                   |
 |* :ref:`continue <lang-continue>`           |**Data Types**                                |* :ref:`analogRead() <lang-analogread>`            |
 |                                            |                                              |                                                   |
@@ -91,7 +79,7 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |* :ref:`boolean <lang-boolean>` (1 byte)      |                                                   |
 |* :ref:`{} (curly braces)                   |                                              |* noTone(): TODO                                   |
 |  <lang-curly-braces>`                      |* :ref:`char <lang-char>` (1 byte)            |                                                   |
-|                                            |                                              |* shiftOut(): TODO                                 |
+|                                            |                                              |* :ref:`shiftOut() <lang-shiftout>`                |
 |* :ref:`// (single-line comment)            |* :ref:`unsigned char                         |                                                   |
 |  <lang-comments-singleline>`               |  <lang-unsignedchar>` (1 byte)               |* pulseIn(): TODO                                  |
 |                                            |                                              |                                                   |
@@ -106,7 +94,7 @@ A more exhaustive index is available at the :ref:`language-index`.
 |**Arithmetic Operators**                    |  <lang-int>`                                 |                                                   |
 |                                            |                                              |* :ref:`delayMicroseconds()                        |
 |* :ref:`= <lang-assignment>`                |* ``unsigned long`` (4 bytes), synonym for    |  <lang-delaymicroseconds>`                        |
-|  (assignment operator)                     |  :ref:`unsigned int <lang-unsignedint>`      |                                                   |
+|  (assignment)                              |  :ref:`unsigned int <lang-unsignedint>`      |                                                   |
 |                                            |                                              |                                                   |
 |* :ref:`+ <lang-arithmetic>` (addition)     |* :ref:`long long <lang-longlong>` (8 bytes)  |**Math**                                           |
 |                                            |                                              |                                                   |
@@ -183,13 +171,13 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |                                              |                                                   |
 |* :ref:`++ <lang-increment>`                |                                              |* :ref:`Serial <lang-serial>`                      |
 |  (increment)                               |                                              |                                                   |
-|                                            |                                              |**Looking for something else?**                    |
+|                                            |                                              |                                                   |
 |* :ref:`- - <lang-increment>`               |                                              |                                                   |
-|  (decrement)                               |                                              | See the :ref:`libraries` page for interfacing with|
-|                                            |                                              | particular types of hardware.  Maple links        |
-|* :ref:`+= <lang-compoundarithmetic>`       |                                              | against `newlib <http://sourceware.org/newlib/>`_ |
-|  (compound add)                            |                                              | and allows the use of any of its functions; see   |
-|                                            |                                              | its documentation for more details.               |
+|  (decrement)                               |                                              |                                                   |
+|                                            |                                              |                                                   |
+|* :ref:`+= <lang-compoundarithmetic>`       |                                              |                                                   |
+|  (compound add)                            |                                              |                                                   |
+|                                            |                                              |                                                   |
 |* :ref:`-=                                  |                                              |                                                   |
 |  <lang-compoundarithmetic>` (compound      |                                              |                                                   |
 |  subtract)                                 |                                              |                                                   |
@@ -216,6 +204,35 @@ A more exhaustive index is available at the :ref:`language-index`.
 |                                            |                                              |                                                   |
 |                                            |                                              |                                                   |
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
+
+.. _language-assert:
+
+``ASSERT(...)``
+---------------
+
+The ``ASSERT()`` function can be very useful for basic program
+debugging. It accepts a boolean; for example::
+
+  ASSERT(state == WAIT);
+
+Zero is false and any other number is true. If the boolean is true, the
+assertion passes and the program continues as usual. If it is false,
+the assertion fails: the program is halted, debug information is
+printed to USART2, and the status LED begins to throb in intensity
+(it's noticeably different from blinking). The debug information is
+printed at 9600 baud and consists of the filename and line number
+where the particular assertion failed.
+
+Including assertions in a program increases the program size. When
+using libmaple **from the command line only**, they can be disabled by
+making the definition ::
+
+  #define DEBUG_LEVEL DEBUG_NONE
+
+before including either wirish.h or libmaple.h. In this case, all
+assertions will pass without any lost clock cycles.  Note that this
+will **not work in the IDE**; even with this definition, assertions
+will still be enabled.
 
 .. _language-missing-features:
 
@@ -256,13 +273,12 @@ Unimplemented Arduino Features
 ------------------------------
 
 The following Wiring/Arduino features are currently unimplemented on
-the Maple.  However, they will be present in future versions:
+the Maple.
 
+- `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 - `noTone() <http://www.arduino.cc/en/Reference/NoTone>`_
 - `pulseIn() <http://www.arduino.cc/en/Reference/PulseIn>`_
-- `shiftOut() <http://www.arduino.cc/en/Reference/ShiftOut>`_
 - `String <http://arduino.cc/en/Reference/StringObject>`_
-- `tone() <http://www.arduino.cc/en/Reference/Tone>`_
 
 .. _our reference page: http://leaflabs.com/docs/external-interrupts/
 
@@ -283,16 +299,18 @@ programming ideas and C++.
 Note for C/C++ Hackers
 ----------------------
 
-This is a note for programmers comfortable with C or C++ (although,
-you C programmers should remember that `C++ is not a superset of C
-<http://en.wikipedia.org/wiki/Compatibility_of_C_and_C%2B%2B>`_) who
-want a better understanding of the differences between C++ and the
-Wiring language.  The good news is that the differences are relatively
-few; Wiring is just a thin wrapper around C++.
+This is a note for programmers comfortable with C or C++ who want a
+better understanding of the differences between C++ and the Wiring
+language.  
 
-Some potentially better news is that the Maple can be programmed using
-a :ref:`standard Unix toolchain <unix-toolchain>`, so if you'd rather
-stick with :command:`gcc`, :command:`make`, and friends, you can.
+The good news is that the differences are relatively few; Wiring is
+just a thin wrapper around C++.  Some potentially better news is that
+the Maple can be programmed using a :ref:`standard Unix toolchain
+<unix-toolchain>`, so if you'd rather stick with :command:`gcc`,
+:command:`make`, and friends, you can.  If you're using the Unix
+toolchain and want to skip past the Wiring conveniences and get
+straight to registers, you are encouraged to move on to the
+:ref:`libmaple` documentation.
 
 A *sketch* is the IDE's notion of a project; it consists of one or
 more files written in the Wiring language, which is mostly the same as
@@ -318,9 +336,9 @@ work.  As of |today|, Maple only has 20 KB RAM, anyway, so it's
 doubtful that static allocation is not what you want.
 
 The Wiring language also does not require you to define your own
-``main`` method (in fact, it forbids you from doing so).  Instead, you
-are required to define two functions, ``setup`` and ``loop``, with
-type signatures ::
+``main`` method (in fact, we currently forbid you from doing so).
+Instead, you are required to define two functions, ``setup`` and
+``loop``, with type signatures ::
 
   void setup(void);
   void loop(void);
@@ -335,26 +353,33 @@ parses the result to produce a list of all functions defined in the
 global scope.  (We borrow this stage from the Arduino IDE, which in
 turn borrows it from Wiring.  It uses regular expressions to parse
 C++, which is, of course, `Bad and Wrong
-<http://www.retrologic.com/jargon/B/Bad-and-Wrong.html>`_.  An
-upcoming rewrite of the IDE performs this preprocessing step
-correctly, using a real parser.  Until then, you have our apologies.)
-The order in which the individual sketch files are concatenated is not
-defined; it is unwise to write code that depends on a particular
-ordering.
+<http://www.retrologic.com/jargon/B/Bad-and-Wrong.html>`_.  In the
+future, we'll do this correctly, using a better parser.  Until then,
+you have our apologies.)  The order in which the individual sketch
+files are concatenated is not defined; it is unwise to write code that
+depends on a particular ordering.
 
 The concatenated sketch files are then appended onto a file which
 includes `WProgram.h
-<http://github.com/leaflabs/libmaple/blob/master/wirish/WProgram.h>`_
+<https://github.com/leaflabs/libmaple/blob/master/wirish/WProgram.h>`_
 (which includes the wirish and libmaple libraries, and declares
 ``setup()`` and ``loop()``), and then provides declarations for all
 the function definitions found in the previous step.  At this point,
-we have a file that is a valid C++ translation unit, but lacks a
-``main()`` method.  The final step of compilation provides this
-method, which behaves roughly like::
+we have a file that is a valid C++ translation unit, but lacks
+``main()``.  The final step of compilation provides ``main()``, which
+behaves roughly like::
 
   int main(void) {
+    // Call libmaple's built-in initialization routines
+    init();
+
+    // Perform the user's initialization
     setup();
-    while (true) loop();
+
+    // Call user loop() forever.
+    while (true) {
+        loop(); 
+    }
   }
 
 (The truth is a little bit more complicated, but not by much).
@@ -425,20 +450,31 @@ Which could plausibly be turned into the final source file ::
   }
 
   int main() {
+    init();
     setup();
     while (true) loop();
   }
 
-(Recall that it's legal C++ for a function to be declared multiple
-times, as long as it's defined exactly once).
-
+.. _language-recommended-reading:
 
 Recommended Reading
 -------------------
 
+* :ref:`libmaple Documentation <libmaple>`
+* Your board's :ref:`Board Hardware Documentation <index-boards>` page
+* ST Documentation:
+    * Reference Manual `RM0008
+      <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
+      (PDF).  This is the most important reference work on the STM32
+      line, and covers the low-level hardware capabilities and
+      interfaces in great detail.
+    * `Programming Manual
+      <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_
+      (PDF). This is an assembly language and register reference for
+      the STM32 line.
+* ARM Documentation:
+    * `Cortex-M3 Technical Reference Manual, Revision r1p1
+      <http://infocenter.arm.com/help/topic/com.arm.doc.ddi0337e/DDI0337E_cortex_m3_r1p1_trm.pdf>`_
+      (PDF).  This ARM manual specifies much of the the Cortex M3
+      Architecture, including instruction timings.
 * `newlib Documentation <http://sourceware.org/newlib/>`_
-* STMicro documentation for STM32F103RB microcontroller:
-
-    * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-    * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
-    * `Programming Manual <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_ (assembly language and register reference)

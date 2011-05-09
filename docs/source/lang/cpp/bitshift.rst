@@ -140,5 +140,4 @@ See Also
 -  :ref:`lang-bitwrite`
 -  :ref:`lang-bitclear`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -53,7 +53,7 @@ functions inside the parentheses.  It may lead to incorrect results::
 Arduino Compatibility
 ---------------------
 
-The Maple version of ``max()`` is compatible with Arduino.
+The Maple implementation of ``max()`` is compatible with Arduino.
 
 See Also
 --------
@@ -61,5 +61,4 @@ See Also
 -  :ref:`min() <lang-min>`
 -  :ref:`constrain() <lang-constrain>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

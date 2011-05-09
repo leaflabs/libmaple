@@ -17,7 +17,8 @@ us directly`_\ !
 Download
 --------
 
-Choose the correct version for your operating system:
+The current release of the Maple IDE is version 0.0.9.  Choose the
+correct version for your operating system:
 
 .. list-table::
    :widths: 15 30 50
@@ -28,23 +29,27 @@ Choose the correct version for your operating system:
      - IDE Package
    * - Windows
      - Tested on 32bit Windows XP
-     - `maple-ide-LATEST-windowsxp32.zip <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-windowsxp32.zip>`_ (about 75mb)
+     - `maple-ide-0.0.9-windowsxp32.zip <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.9-windowsxp32.zip>`_ (about 75mb)
    * - Linux
      - Tested on Ubuntu 9.10 (64bit) and 10.04 (32bit)
-     - `maple-ide-LATEST-linux32.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-linux32.tgz>`_ (about 30mb)
+     - `maple-ide-0.0.9-linux32.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.9-linux32.tgz>`_ (about 30mb)
 
-       `maple-ide-LATEST-linux64.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-linux64.tgz>`_ (about 30mb)
+       `maple-ide-0.0.9-linux64.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.9-linux64.tgz>`_ (about 30mb)
    * - Mac OSX
      - Tested on Snow Leopard 10.6 (64bit and 32bit)
-     - `maple-ide-LATEST-macosx-10_6.dmg <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-LATEST-macosx-10_6.dmg>`_ (about 40mb)
+     - `maple-ide-0.0.9-macosx-10_6.dmg <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.9-macosx-10_6.dmg>`_ (about 40mb)
 
 The package bundles together a compiler, an upload utility, a software
 library, and a simple GUI text editor. All this software is `free and
-open <http://fsf.org/>`_; we are grateful to the `Arduino
+open <http://www.fsf.org/>`_; we are grateful to the `Arduino
 <http://arduino.cc/>`_, `CodeSourcery
-<http://www.codesourcery.com/>`_, `GNU <http://gnu.org/>`_, and
+<http://www.codesourcery.com/>`_, `GNU <http://www.gnu.org/>`_, and
 `OpenMoko <http://openmoko.com/>`_ developers, as well as many others,
 who allow us to reuse their software.
+
+**Looking for something older?** `Source archives and binaries
+<http://static.leaflabs.com/pub/leaflabs/maple-ide/>`_ are available
+for previously-released versions.
 
 Installation
 ------------
@@ -65,8 +70,8 @@ some drivers.  Sorry!
    changes in Windows 7 mean that you won't be able to install the IDE
    without disabling driver signing on your computer.  We're working
    on resolving this situation.  For now, `users on the forum have
-   reported some workarounds
-   <http://forums.leaflabs.com/topic.php?id=73>`_.
+   reported a workaround
+   <http://forums.leaflabs.com/topic.php?id=73#post-788>`_.
 
 First, install DFU drivers (for uploading code to your Maple) using
 the following steps.

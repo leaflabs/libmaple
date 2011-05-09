@@ -43,4 +43,4 @@ See Also
 -  :ref:`delay() <lang-delay>`
 -  :ref:`delayMicroseconds() <lang-delaymicroseconds>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

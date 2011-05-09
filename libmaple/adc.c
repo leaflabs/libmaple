@@ -23,85 +23,92 @@
  *****************************************************************************/
 
 /**
+ * @file adc.c
+ *
  * @brief Analog to digital converter routines
+ *
+ * IMPORTANT: maximum external impedance must be below 0.4kOhms for 1.5
+ * sample conversion time.
+ *
+ * At 55.5 cycles/sample, the external input impedance < 50kOhms.
+ *
+ * See STM32 manual RM0008 for how to calculate this.
  */
 
 #include "libmaple.h"
 #include "rcc.h"
 #include "adc.h"
 
-/* The ADC input clock is generated from PCLK2/APB2 divided by a prescaler
- * and it must not exceed 14MHz.
+adc_dev adc1 = {
+    .regs   = ADC1_BASE,
+    .clk_id = RCC_ADC1
+};
+const adc_dev *ADC1 = &adc1;
+
+adc_dev adc2 = {
+    .regs   = ADC2_BASE,
+    .clk_id = RCC_ADC2
+};
+const adc_dev *ADC2 = &adc2;
+
+#ifdef STM32_HIGH_DENSITY
+adc_dev adc3 = {
+    .regs   = ADC3_BASE,
+    .clk_id = RCC_ADC3
+};
+const adc_dev *ADC3 = &adc3;
+#endif
+
+/**
+ * @brief Initialize an ADC peripheral.
  *
- * ADC1 and ADC2 are clocked by APB2
+ * Initializes the RCC clock line for the given peripheral, using ADC
+ * prescaler RCC_ADCPRE_PCLK_DIV_6.  Resets ADC device registers.
  *
- * 1) Power on by setting ADON in ADC_CR2
- * Conversion starts when ADON is set for a second time after some
- * time t > t_stab.
- *
- * Up to 16 selected conversion must be selected in ADC_SQRx
- *
- * Single conversion mode:
- * Set the ADON bit in the ADC_CR2 register
- * Once the conversion is complete:
- *  Converted data is stored in ADC_DR
- *  EOC flag is set
- *  Interrupt is generated if EOCIE is set
- *
- * Calibration:
- * Calibration is started by setting the CAL bit in the ADC_CR2 register.
- * Once calibration is over, the CAL bit is reset by hardware and normal
- * conversion can be performed. Calibrate at power-on.
- *
- * ALIGN in ADC_CR2 selects the alignment of data
- *
- * IMPORTANT: maximum external impedance must be below 0.4kOhms for 1.5
- * sample conversion time.
- *
- * At 55.5 cycles/sample, the external input impedance < 50kOhms*/
-
-void set_adc_smprx(adc_smp_rate smp_rate);
-
-void adc_init(adc_smp_rate smp_rate) {
-    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
-    rcc_clk_enable(RCC_ADC1);
-    rcc_reset_dev(RCC_ADC1);
-
-    ADC_CR1  = 0;
-    /* Software triggers conversions */
-    ADC_CR2  = CR2_EXTSEL_SWSTART | CR2_EXTTRIG;
-    ADC_SQR1 = 0;
-
-    /* Set the sample conversion time.  See note above for impedance
-       requirements. */
-    adc_set_sample_rate(smp_rate);
-
-    /* Enable the ADC */
-    CR2_ADON_BIT = 1;
-
-    /* Reset the calibration registers and then perform a reset */
-    CR2_RSTCAL_BIT = 1;
-    while(CR2_RSTCAL_BIT)
-        ;
-
-    CR2_CAL_BIT = 1;
-    while(CR2_CAL_BIT)
-        ;
-}
-
-
-void adc_disable(void) {
-    CR2_ADON_BIT = 0;
-}
-
-/* Turn the given sample rate into values for ADC_SMPRx.  (Don't
- * precompute in order to avoid wasting space).
- *
- * Don't call this during conversion!
+ * @param dev ADC peripheral to initialize
  */
-void adc_set_sample_rate(adc_smp_rate smp_rate) {
+void adc_init(const adc_dev *dev) {
+    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
+    rcc_clk_enable(dev->clk_id);
+    rcc_reset_dev(dev->clk_id);
+}
+
+/**
+ * @brief Set external event select for regular group
+ * @param dev ADC device
+ * @param event Event used to trigger the start of conversion.
+ * @see adc_extsel_event
+ */
+void adc_set_extsel(const adc_dev *dev, adc_extsel_event event) {
+    uint32 cr2 = dev->regs->CR2;
+    cr2 &= ~ADC_CR2_EXTSEL;
+    cr2 |= event;
+    dev->regs->CR2 = cr2;
+}
+
+/**
+ * @brief Call a function on all ADC devices.
+ * @param fn Function to call on each ADC device.
+ */
+void adc_foreach(void (*fn)(const adc_dev*)) {
+    fn(ADC1);
+    fn(ADC2);
+#ifdef STM32_HIGH_DENSITY
+    fn(ADC3);
+#endif
+}
+
+/**
+ * @brief Turn the given sample rate into values for ADC_SMPRx. Don't
+ * call this during conversion.
+ * @param dev adc device
+ * @param smp_rate sample rate to set
+ * @see adc_smp_rate
+ */
+void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate) {
     uint32 adc_smpr1_val = 0, adc_smpr2_val = 0;
     int i;
+
     for (i = 0; i < 10; i++) {
         if (i < 8) {
             /* ADC_SMPR1 determines sample time for channels [10,17] */
@@ -110,6 +117,44 @@ void adc_set_sample_rate(adc_smp_rate smp_rate) {
         /* ADC_SMPR2 determines sample time for channels [0,9] */
         adc_smpr2_val |= smp_rate << (i * 3);
     }
-    ADC_SMPR1 = adc_smpr1_val;
-    ADC_SMPR2 = adc_smpr2_val;
+
+    dev->regs->SMPR1 = adc_smpr1_val;
+    dev->regs->SMPR2 = adc_smpr2_val;
+}
+
+/**
+ * @brief Calibrate an ADC peripheral
+ * @param dev adc device
+ */
+void adc_calibrate(const adc_dev *dev) {
+    __io uint32 *rstcal_bit = bb_perip(&(dev->regs->CR2), 3);
+    __io uint32 *cal_bit = bb_perip(&(dev->regs->CR2), 2);
+
+    *rstcal_bit = 1;
+    while (*rstcal_bit)
+        ;
+
+    *cal_bit = 1;
+    while (*cal_bit)
+        ;
+}
+
+/**
+ * @brief Perform a single synchronous software triggered conversion on a
+ * channel.
+ * @param dev ADC device to use for reading.
+ * @param channel channel to convert
+ * @return conversion result
+ */
+uint16 adc_read(const adc_dev *dev, uint8 channel) {
+    adc_reg_map *regs = dev->regs;
+
+    adc_set_reg_seqlen(dev, 1);
+
+    regs->SQR3 = channel;
+    regs->CR2 |= ADC_CR2_SWSTART;
+    while(!(regs->SR & ADC_SR_EOC))
+        ;
+
+    return (uint16)(regs->DR & ADC_DR_DATA);
 }

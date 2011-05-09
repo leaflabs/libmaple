@@ -113,11 +113,9 @@ Arduino Compatibility
 
 Arrays on Maple are identical those on Arduino.
 
-See also
+See Also
 --------
 
 -  :ref:`Storing arrays in FLASH memory <arm-gcc-attribute-flash>`
 
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

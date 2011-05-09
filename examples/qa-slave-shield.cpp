@@ -1,53 +1,64 @@
-// slave mode for QA shield
+// Slave mode for Quality Assurance test
 
 #include "wirish.h"
 
-#define LED_PIN 13
-#define NUM_GPIO 38 // not the number of the max...
+#define INTER_TOGGLE_DELAY_NORMAL 5
+#define INTER_TOGGLE_DELAY_SLOW   80
 
-int i;
+void interToggleDelay(void);
 
-void setup()
-{
-    /* Set up the LED to blink  */
-    pinMode(LED_PIN, OUTPUT);
-    digitalWrite(LED_PIN, 1);
+void setup() {
+    pinMode(BOARD_LED_PIN, OUTPUT);
+    pinMode(BOARD_BUTTON_PIN, INPUT);
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
+    // All unused pins start out low.
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
         pinMode(i, OUTPUT);
-        digitalWrite(i,0);
+        digitalWrite(i, LOW);
     }
-    //delay(5000);
     SerialUSB.println("OK, starting...");
-
 }
 
 void loop() {
-    digitalWrite(LED_PIN,1);
+    toggleLED();
     delay(100);
-    digitalWrite(LED_PIN,0);
+    toggleLED();
 
-    for(i=0; i<NUM_GPIO; i++) {
-        if(i==13) { continue; }
-        digitalWrite(i,1);
-        delay(5);
-        digitalWrite(i,0);
-        delay(5);
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+
+        // Bring just this pin high.
+        digitalWrite(i, HIGH);
+        // Give the master time to detect if any other pins also went high.
+        interToggleDelay();
+        // Bring this pin back low again; all pins should now be low.
+        digitalWrite(i, LOW);
+        // Give the master time to detect if any pins are still high.
+        interToggleDelay();
     }
 }
 
+void interToggleDelay(void) {
+    if (digitalRead(BOARD_BUTTON_PIN)) { // don't pay the debouncing time
+        delay(INTER_TOGGLE_DELAY_SLOW);
+    } else {
+        delay(INTER_TOGGLE_DELAY_NORMAL);
+    }
+ }
+
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
- __attribute__(( constructor )) void premain() {
+// Otherwise, statically allocated objects that need libmaple may fail.
+__attribute__((constructor)) void premain() {
     init();
 }
 
-int main(void)
-{
+int main(void) {
     setup();
 
-    while (1) {
+    while (true) {
         loop();
     }
     return 0;

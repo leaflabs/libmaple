@@ -117,4 +117,4 @@ See Also
 - `C++ programming Wikibook <http://en.wikibooks.org/wiki/C%2B%2B_Programming/Programming_Languages/C%2B%2B/Code/Statements/Scope>`_.
 - Wikipedia article on `scope <http://en.wikipedia.org/wiki/Scope_%28programming%29>`_
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -16,9 +16,8 @@ Introduction
 In addition to three :ref:`serial ports <lang-serial>`, the Maple's
 STM32 microprocessor includes a dedicated USB peripheral.  This
 peripheral is used to emulate a regular serial port for use as a
-terminal (text read/write).  The emulated terminal is relatively slow
-and inefficient; it is best for transferring data at regular serial
-speeds (kilobaud).
+terminal.  The emulated terminal is relatively slow; it is best for
+transferring data at regular serial speeds (kilobaud).
 
 Library access to the emulated serial port is provided through the
 ``SerialUSB`` object.  You can mostly use ``SerialUSB`` as a drop-in
@@ -30,14 +29,14 @@ replacement for ``Serial1``, ``Serial2``, and ``Serial3``.
 
    This means that if you have a number of calls to one of the
    ``SerialUSB`` ``write()`` or ``print()`` functions in your code,
-   and you are not monitoring the emulated on a computer, your program
-   will run much, much slower than if it is being monitored or totally
-   disconnected (run off of a battery).
+   and you are not monitoring ``SerialUSB`` on a computer, your
+   program will run much slower than if it is being monitored or
+   totally disconnected (run off of a battery).
 
    You can avoid this behavior by :ref:`deciphering the port status
-   using the DTR and RTS line status <lang-serialusb-safe-print>`; the
+   using the DTR and RTS line status <lang-serialusb-safe-print>` (the
    behavior of these control lines is platform dependent and we no
-   longer interpret them by default.
+   longer interpret them by default).
 
 Library Documentation
 ---------------------
@@ -109,35 +108,26 @@ world!")``.
 
    Print the argument's digits over the USB connection, in decimal format.
 
-.. cpp:function:: USBSerial::print(long long n)
+.. cpp:function:: USBSerial::print(long n)
 
    Print the argument's digits over the USB connection, in decimal
    format.  Negative values will be prefixed with a ``'-'`` character.
 
-.. cpp:function:: USBSerial::print(unsigned long long n)
+.. cpp:function:: USBSerial::print(unsigned long n)
 
    Print the argument's digits over the USB connection, in decimal
    format.
 
-.. _lang-serial-print-n-base:
+.. cpp:function:: USBSerial::print(long n, int base)
 
-.. cpp:function:: USBSerial::print(int n, int base)
-
-   Print the digits of ``n`` over USB, in base ``base``.  The ``base``
-   value 2 corresponds to binary, 8 to octal, 10 to decimal, and 16 to
-   hexadecimal (you can also use the symbolic constants ``BIN``,
-   ``OCT``, ``DEC``, ``HEX``).  If ``base`` is 10, negative values
-   will be prefixed with a ``'-'`` character (otherwise, ``n`` will be
-   interpreted as an unsigned quantity).
-
-.. cpp:function:: HardwareSerial::print(long long n, int base)
-
-   Same behavior as the above :ref:`print(int n, int base)
-   <lang-serialusb-print-n-base>`, except with 64-bit values.
+   Print the digits of ``n`` over the USB connection, in base ``base``
+   (which may be between 2 and 16).  The ``base`` value 2 corresponds
+   to binary, 8 to octal, 10 to decimal, and 16 to hexadecimal.
+   Negative values will be prefixed with a ``'-'`` character.
 
 .. cpp:function:: USBSerial::print(double n)
 
-   Print ``n``, accurate to 6 digits after the decimal point.
+   Print ``n``, accurate to 2 digits after the decimal point.
 
 .. _lang-serialusb-println:
 
@@ -161,19 +151,15 @@ world!")``.
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(long long n)
+.. cpp:function:: USBSerial::println(long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(unsigned long long n)
+.. cpp:function:: USBSerial::println(unsigned long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: USBSerial::println(int n, int base)
-
-   Like ``print(n, b)``, followed by ``"\r\n"``.
-
-.. cpp:function:: USBSerial::println(long long n, int base)
+.. cpp:function:: USBSerial::println(long n, int base)
 
    Like ``print(n, b)``, followed by ``"\r\n"``.
 
@@ -224,7 +210,7 @@ running from battery, or connected but not monitored. You may need to
 experiment with the DTR/RTS logic for your platform and device
 configuration. ::
 
-    #define LED_PIN 13
+    #define LED_PIN BOARD_LED_PIN
 
     void setup() {
         /* Set up the LED to blink  */
@@ -232,22 +218,22 @@ configuration. ::
     }
 
     void loop() {
-        // LED will stay off if we are disconnected;
-        // will blink quickly if USB is unplugged (battery etc)
+        // LED will stay off if we are disconnected, and will blink
+        // quickly if USB is unplugged (battery power, etc.).
         if(SerialUSB.isConnected()) {
             digitalWrite(LED_PIN, 1);
         }
         delay(100);
 
-        // If this logic fails to detect if bytes are going to
-        // be read by the USB host, then the println() will fully
-        // many times, causing a very slow LED blink.
-        // If the characters are printed and read, the blink will
-        // only slow a small amount when "really" connected, and fast
-        // when the virtual port is only configured.
+        // If this logic fails to detect if bytes are going to be read
+        // by the USB host, then the println() take a long time,
+        // causing a very slow LED blink.  If the characters are
+        // printed and read, the blink will only slow a small amount
+        // when "really" connected, and will be fast fast when the
+        // virtual port is only configured.
         if(SerialUSB.isConnected() && (SerialUSB.getDTR() || SerialUSB.getRTS())) {
-            for(int i=0; i<10; i++) {
-               SerialUSB.println(123456,BIN);
+            for(int i = 0; i < 10; i++) {
+               SerialUSB.println(123456, BIN);
             }
         }
         digitalWrite(LED_PIN, 0);

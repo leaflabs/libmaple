@@ -57,5 +57,4 @@ See Also
 
 - :ref:`comments <lang-comments>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

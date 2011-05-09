@@ -5,160 +5,161 @@
 HardwareSPI
 ===========
 
-This class is used for creating objects to manage the Maple's built-in
-SPI ports.  The Maple has two SPI ports.  The relevant pins
-corresponding to each port's logic signals are documented in the
-following table (and on the Maple silkscreen):
+This page describes how to use the built-in SPI ports.  It does not
+describe the SPI protocol itself.  For more information about SPI, see
+the :ref:`SPI reference <spi>`.
 
-.. _lang-hardwarespi-pinout:
+.. contents:: Contents
+   :local:
 
-.. list-table::
-   :header-rows: 1
+Getting Started
+---------------
 
-   * - Port number
-     - NSS
-     - MOSI
-     - MISO
-     - SCK
+.. TODO [0.1.0] Add a note about calling disableDebugPorts() when
+.. using SPI3 on Maple Native
 
-   * - 1
-     - 10
-     - 11
-     - 12
-     - 13
+In order to get started, you'll first need to define a ``HardwareSPI``
+variable, which you'll use to control the SPI port.  Do this by
+putting the line "``HardwareSPI spi(number);``" with your variables,
+where ``number`` is the SPI port's number.
 
-   * - 2
-     - 31
-     - 32
-     - 33
-     - 34
+Here's an example (we'll fill in :ref:`setup() <lang-setup>` and
+:ref:`loop() <lang-loop>` later)::
 
-If you use a SPI port, you cannot simultaneously use its associated
-pins for other purposes.
-
-Library Documentation
----------------------
-
-Using the SPI Class
-^^^^^^^^^^^^^^^^^^^
-
-You can declare that you want to use SPI in your sketch by putting
-``HardwareSPI Spi(number);`` with your variables, where ``number`` is
-1 or 2, depending on which SPI you want to use.  Then you can use the
-functions described in the next section.  For example::
-
-   // Use SPI 1
-   HardwareSpi Spi(1);
+   // Use SPI port number 1
+   HardwareSPI spi(1);
 
    void setup() {
-       Spi.begin(SPI_18MHZ);
+      // Your setup code
    }
 
    void loop() {
-       // Get the next byte from the peripheral
-       uint8 byte = Spi.recv();
+      // Do stuff with SPI
+   }
+
+Turning the SPI Port On
+-----------------------
+
+Now it's time to turn your SPI port on.  Do this with the ``begin()``
+function (an example is given below).
+
+.. FIXME [0.0.10] Breathe doesn't include the class; fix & submit pull req
+
+.. doxygenfunction:: HardwareSPI::begin
+
+The speed at which the SPI port communicates is configured using a
+``SPIFrequency`` value:
+
+.. FIXME [0.1.0] Breathe's enum output is enormous; shrink & submit pull req
+
+.. doxygenenum:: SPIFrequency
+
+.. note:: Due to hardware issues, you can't use the frequency
+   ``SPI_140_625KHz`` with SPI port 1.
+
+You'll need to determine the correct values for ``frequency``,
+``bitOrder``, and ``mode`` yourself, by consulting the datasheet for
+the device you're communicating with.  Continuing our example from
+before, we'll add a call to ``begin()`` to our ``setup()``::
+
+   // Use SPI port number 1
+   HardwareSPI spi(1);
+
+   void setup() {
+       // Turn on the SPI port
+       spi.begin(SPI_18MHZ, MSBFIRST, 0);
+   }
+
+   void loop() {
+      // Do stuff with SPI
+   }
+
+If you call ``begin()`` with no arguments (as in "``spi.begin();``"),
+it's the same as if you wrote "``spi.begin(SPI_1_125MHZ, MSBFIRST,
+0);``".
+
+Communicating Over SPI
+----------------------
+
+Now that you've got your SPI port set up, it's time to start
+communicating.  You can send data using ``HardwareSPI::write()``,
+receive data using ``HardwareSPI::read()``, and do both using
+``HardwareSPI::transfer()``.
+
+.. cpp:function:: void HardwareSPI::write(byte data)
+
+   Send a single byte of data.
+
+   **Parameters**:
+
+   - ``data``: Byte to send
+
+.. cpp:function:: byte HardwareSPI::read()
+
+   Get the next available, unread byte.  If there aren't any unread
+   bytes, this function will wait until one is received.
+
+.. cpp:function:: byte HardwareSPI::transmit(byte data)
+
+   Send a byte, then return the next byte received.
+
+   **Parameters:**
+
+   - ``data``: Byte to send
+
+   **Returns:** Next unread byte
+
+Continuing our example from before, let's send a number over SPI and
+print out whatever we get back over :ref:`lang-serialusb`::
+
+   // Use SPI port number 1
+   HardwareSPI spi(1);
+
+   void setup() {
+       // Turn on the SPI port
+       spi.begin(SPI_18MHZ, MSBFIRST, 0);
+   }
+
+   void loop() {
+      // Send 245 over SPI, and wait for a response.
+      spi.write(245);
+      byte response = spi.read();
+      // Print out the response received.
+      SerialUSB.print("response: ");
+      SerialUSB.println(response, DEC);
    }
 
 HardwareSPI Class Reference
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+---------------------------
 
-.. cpp:class:: HardwareSPI
+There are a number of other things you can accomplish with your
+``spi`` object.  A full function listing follows.
 
-   Class for interacting with SPI.
+.. doxygenclass:: HardwareSPI
+   :members: HardwareSPI, begin, beginSlave, end, read, write, transfer
 
-.. cpp:function:: HardwareSPI::HardwareSPI(uint32 spi_num)
+Deprecated Functions
+--------------------
 
-   Construct an object for managing a SPI peripheral.  ``spi_num``
-   must be 1 or 2; see the :ref:`table above
-   <lang-hardwarespi-pinout>` for pinout information.
+The following functions are defined for now, but they have been
+deprecated, and will be removed in a future Maple IDE release.  You
+shouldn't use them in new programs, and you should change any of your
+programs which do use them to the up-to-date functions discussed
+above.
 
-.. cpp:function:: void HardwareSPI::begin(SPIFrequency freq, uint32 endianness, uint32 mode)
-
-   Configure the baudrate of the given SPI port and set up the header
-   pins appropriately.
-
-   Parameters:
-
-   - ``freq``: one of the ``SPIFrequency`` values, given :ref:`below
-     <lang-hardwarespi-spifrequency>`.
-
-   - ``endianness``: either ``LSBFIRST`` (little-endian) or
-     ``MSBFIRST`` (big-endian).
-
-   - ``mode``: one of 0, 1, 2, or 3, and specifies which SPI mode is
-     used.  The mode number determines a combination of polarity and
-     phase according to the following table:
-
-     .. list-table::
-        :header-rows: 1
-
-        * - Mode
-          - Polarity
-          - Phase
-
-        * - 0
-          - 0
-          - 0
-
-        * - 1
-          - 0
-          - 1
-
-        * - 2
-          - 1
-          - 0
-
-        * - 3
-          - 1
-          - 1
-
-     For more information on polarity and phase, see the
-     :ref:`external references, below <lang-hardwarespi-seealso>`.
-
-.. cpp:function:: void HardwareSPI::begin()
-
-   A convenience ``begin()``, equivalent to ``begin(SPI_1_125MHZ,
-   MSBFIRST, 0)``.
-
-.. cpp:function:: uint8 HardwareSpi::send(uint8 *data, uint32 length)
+.. cpp:function:: uint8 HardwareSPI::send(uint8 *data, uint32 length)
 
    Writes ``data`` into the port buffer to be transmitted as soon as
    possible, where ``length`` is the number of bytes to send from
    ``data``.  Returns the last byte shifted back from slave.
 
-.. cpp:function:: uint8 HardwareSpi::send(uint8 data)
+.. cpp:function:: uint8 HardwareSPI::send(uint8 data)
 
    Writes the single byte ``data`` into the port buffer to be
    transmitted as soon as possible.  Returns the data byte shifted
    back from the slave.
 
-.. cpp:function:: uint8 HardwareSpi::recv()
+.. cpp:function:: uint8 HardwareSPI::recv()
 
    Reads a byte from the peripheral.  Returns the next byte in the
    buffer.
-
-SPI Speeds
-^^^^^^^^^^
-
-.. _lang-hardwarespi-spifrequency:
-
-The possible SPI speeds are configured using the ``SPIFrequency`` enum:
-
-.. doxygenenum:: SPIFrequency
-
-.. _lang-hardwarespi-seealso:
-
-See Also
---------
-
-* `Wikipedia Article on Serial Peripheral Interface Bus (SPI)
-  <http://en.wikipedia.org/wiki/Serial_Peripheral_Interface_Bus>`_
-* `Arduino reference on SPI
-  <http://www.arduino.cc/playground/Code/Spi>`_
-* `Hardcore SPI on Arduino <http://klk64.com/arduino-spi/>`_ by kik64
-* STMicro documentation for STM32F103RB microcontroller:
-
-  * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-  * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
-
-

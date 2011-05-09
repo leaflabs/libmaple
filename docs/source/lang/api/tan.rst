@@ -22,10 +22,9 @@ Note that the Maple implementation comes from `newlib
 See Also
 --------
 
-
 -  :ref:`sin <lang-sin>`
 -  :ref:`cos <lang-cos>`
 -  :ref:`float <lang-float>`
 -  :ref:`double <lang-double>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

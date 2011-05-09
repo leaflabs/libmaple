@@ -1,13 +1,12 @@
 .. _index:
 
-Maple Documentation Contents
+LeafLabs Documentation Index
 ============================
 
 Welcome!  This is the Maple documentation index.  If you just bought a
-Maple, you probably want to head to the :ref:`quickstart
+Maple board, you probably want to head to the :ref:`quickstart
 <maple-quickstart>`.  If you're having problems, check out the
-:ref:`troubleshooting <troubleshooting>` and :ref:`known problems
-<errata>` pages.
+:ref:`troubleshooting <troubleshooting>` page.
 
 Have fun!
 
@@ -32,12 +31,12 @@ Have fun!
 
    Language <language>
    Libraries <libraries>
-   Arduino Compatibility <compatibility>
+   Arduino Compatibility <arduino-compatibility>
    libmaple <libmaple>
-   External Interrupts <external-interrupts>
    Bootloader <bootloader>
    Troubleshooting <troubleshooting>
-   Known Problems <errata>
+   Notes on GCC's ARM target <arm-gcc>
+   Complete Language Index <language-index>
 
 .. _index-hardware:
 
@@ -47,6 +46,7 @@ Have fun!
    :maxdepth: 1
 
    adc
+   external-interrupts
    gpio
    i2c
    jtag
@@ -56,7 +56,7 @@ Have fun!
    usb
    usart
 
-.. _index-schematics:
+.. _index-boards:
 
 **Board Hardware Documentation:**
 
@@ -64,6 +64,7 @@ Have fun!
    :maxdepth: 1
 
    hardware/maple.rst
+   hardware/maple-ret6.rst
 
 .. TODO write/include these upon Mini and Native release
 
@@ -72,15 +73,3 @@ Have fun!
 
 ..    hardware/maple-mini.rst
 ..    hardware/maple-native.rst
-
-.. _index-reference:
-
-**Reference:**
-
-.. toctree::
-   :maxdepth: 1
-
-   Technical Specifications <specs>
-   Complete Language Index <language-index>
-
-

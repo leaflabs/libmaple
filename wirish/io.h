@@ -28,30 +28,16 @@
  *  @brief Arduino-compatible digital pin I/O interface.
  */
 
-#ifndef _IO_H
-#define _IO_H
+#ifndef _IO_H_
+#define _IO_H_
 
 #include "gpio.h"
 #include "adc.h"
-#include "time.h"
 
-#ifdef __cplusplus
-extern "C"{
-#endif
+#include "wirish_time.h"
 
 /**
  * Specifies a GPIO pin behavior.
- *
- * Each of the GPIO pins on a Maple board may be configured using
- * pinMode() to behave in a number of ways: as a digital output pin,
- * or as an analog input pin, etc., depending on the particular pin.
- *
- * This enum specifies the complete set of possible configurations;
- * not every pin can have all of these modes.  For example, on the
- * Maple, pin 15 may be configured as INPUT_ANALOG, but not as PWM.
- * See your device's silkscreen and and the GPIO documentation for
- * more information.
- *
  * @see pinMode()
  */
 typedef enum WiringPinMode {
@@ -68,11 +54,11 @@ typedef enum WiringPinMode {
                           supply through a large resistor). When the
                           pin is high, not much current flows through
                           to ground and the line stays at positive
-                          voltage; when the pin is low the bus
+                          voltage; when the pin is low, the bus
                           "drains" to ground with a small amount of
                           current constantly flowing through the large
                           resistor from the external supply. In this
-                          mode no current is ever actually /sourced/
+                          mode, no current is ever actually sourced
                           from the pin. */
 
     INPUT, /**< Basic digital input. The pin voltage is sampled; when
@@ -118,8 +104,7 @@ typedef enum WiringPinMode {
 /**
  * Configure behavior of a GPIO pin.
  *
- * @param pin Pin to configure. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Number of pin to configure.
  * @param mode Mode corresponding to desired pin behavior.
  * @see WiringPinMode
  */
@@ -127,10 +112,9 @@ void pinMode(uint8 pin, WiringPinMode mode);
 
 /**
  * Writes a (digital) value to a pin.  The pin must have its
- * mode set to <code>OUTPUT</code> or <code>OUTPUT_OPEN_DRAIN</code>.
+ * mode set to OUTPUT or OUTPUT_OPEN_DRAIN.
  *
- * @param pin Pin to write to. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Pin to write to.
  * @param value Either LOW (write a 0) or HIGH (write a 1).
  * @see pinMode()
  */
@@ -140,8 +124,7 @@ void digitalWrite(uint8 pin, uint8 value);
  * Read a digital value from a pin.  The pin must have its mode set to
  * one of INPUT, INPUT_PULLUP, and INPUT_PULLDOWN.
  *
- * @param pin Pin to read from. One of: 0-38 (pin numbers as labeled
- *            on silkscreen), or D0-D38 (symbols for same)
+ * @param pin Pin to read from.
  * @return LOW or HIGH.
  * @see pinMode()
  */
@@ -150,18 +133,14 @@ uint32 digitalRead(uint8 pin);
 /**
  * Read an analog value from pin.  This function blocks during ADC
  * conversion, and has 12 bits of resolution.  The pin must have its
- * mode set to INPUT_ANALOG.  Ignoring function call overhead,
- * conversion time is 55.5 cycles.
+ * mode set to INPUT_ANALOG.
  *
- * @param pin Pin to read from. One of: 0, 1, 2, 3, 10, 11, 12, 13,
- * 15, 16, 17, 18, 19, 20, 27, 28.
-
- * @return ADC-converted voltage, in the range 0--4095, inclusive
- * (i.e. a 12-bit ADC conversion).
-
+ * @param pin Pin to read from.
+ * @return Converted voltage, in the range 0--4095, (i.e. a 12-bit ADC
+ *         conversion).
  * @see pinMode()
  */
-uint32 analogRead(uint8 pin);
+uint16 analogRead(uint8 pin);
 
 /**
  * Toggles the digital value at the given pin.
@@ -211,17 +190,31 @@ uint8 isButtonPressed();
  * pinMode(BOARD_BUTTON_PIN, INPUT).
  *
  * @param timeout_millis Number of milliseconds to wait until the
- * button is pressed.  If timeout_millis is 0, wait forever.
+ * button is pressed.  If timeout_millis is left out (or 0), wait
+ * forever.
  *
  * @return true, if the button was pressed; false, if the timeout was
  * reached.
  *
  * @see pinMode()
  */
-uint8 waitForButtonPress(uint32 timeout_millis);
+uint8 waitForButtonPress(uint32 timeout_millis=0);
 
-#ifdef __cplusplus
-} // extern "C"
-#endif
+/**
+ * Shift out a byte of data, one bit at a time.
+ *
+ * This function starts at either the most significant or least
+ * significant bit in a byte value, and shifts out each byte in order
+ * onto a data pin.  After each bit is written to the data pin, a
+ * separate clock pin is pulsed to indicate that the new bit is
+ * available.
+ *
+ * @param dataPin  Pin to shift data out on
+ * @param clockPin Pin to pulse after each bit is shifted out
+ * @param bitOrder Either MSBFIRST (big-endian) or LSBFIRST (little-endian).
+ * @param value    Value to shift out
+ */
+void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 value);
+
 #endif
 

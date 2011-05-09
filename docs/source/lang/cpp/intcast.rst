@@ -23,7 +23,4 @@ See Also
 
 -  :ref:`int <lang-int>`
 
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

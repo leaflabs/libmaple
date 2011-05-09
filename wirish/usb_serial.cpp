@@ -3,28 +3,29 @@
  *
  * Copyright (c) 2010 Perry Hung.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  *****************************************************************************/
 
 /**
- *  @brief Wirish USB class for easy communication, uses libmaple's
- *  virtual com port implementation
+ * @brief USB virtual serial terminal
  */
 
 #include <string.h>
@@ -34,7 +35,7 @@
 
 #define USB_TIMEOUT 50
 
-USBSerial :: USBSerial(void) {
+USBSerial::USBSerial(void) {
 }
 
 void USBSerial::begin(void) {
@@ -46,54 +47,29 @@ void USBSerial::end(void) {
 }
 
 void USBSerial::write(uint8 ch) {
-    if(!(usbIsConnected() && usbIsConfigured())) {
-        return;
-    }
-
-    uint16 status = 0;
-    uint32 start = millis();
-
-    while(status == 0 && (millis() - start <= USB_TIMEOUT)) {
-        status = usbSendBytes(&ch, 1);
-    }
+    const uint8 buf[] = {ch};
+    this->write(buf, 1);
 }
 
 void USBSerial::write(const char *str) {
-    if(!(usbIsConnected() && usbIsConfigured())) {
-        return;
-    }
-
-    uint32 len = strlen(str);
-    uint16 status = 0;
-    uint16 oldstatus = 0;
-    uint32 start = millis();
-
-    while(status < len && (millis() - start < USB_TIMEOUT)) {
-        status += usbSendBytes((uint8*)str+status, len-status);
-        if(oldstatus != status)
-            start = millis();
-        oldstatus = status;
-    }
+    this->write(str, strlen(str));
 }
 
-void USBSerial::write(void *buf, uint32 size) {
-    if(!(usbIsConnected() && usbIsConfigured())) {
+void USBSerial::write(const void *buf, uint32 len) {
+    if (!(usbIsConnected() && usbIsConfigured()) || !buf) {
         return;
     }
 
-    if (!buf) {
-        return;
-    }
-
-    uint16 status = 0;
-    uint16 oldstatus = 0;
+    uint32 txed = 0;
+    uint32 old_txed = 0;
     uint32 start = millis();
 
-    while(status < size && (millis() - start < USB_TIMEOUT)) {
-        status += usbSendBytes((uint8*)buf+status, size-status);
-        if(oldstatus != status)
+    while (txed < len && (millis() - start < USB_TIMEOUT)) {
+        txed += usbSendBytes((const uint8*)buf + txed, len - txed);
+        if (old_txed != txed) {
             start = millis();
-        oldstatus = status;
+        }
+        old_txed = txed;
     }
 }
 
@@ -101,47 +77,40 @@ uint32 USBSerial::available(void) {
     return usbBytesAvailable();
 }
 
-/* blocks forever until len_bytes is received */
 uint32 USBSerial::read(void *buf, uint32 len) {
     if (!buf) {
         return 0;
     }
 
-    uint32 bytes_in = 0;
-    while (len > 0) {
-        uint32 new_bytes = usbReceiveBytes((uint8*)((uint8*)buf+bytes_in), len);
-        len -= new_bytes;
-        bytes_in += new_bytes;
+    uint32 rxed = 0;
+    while (rxed < len) {
+        rxed += usbReceiveBytes((uint8*)buf + rxed, len - rxed);
     }
 
-    return len;
+    return rxed;
 }
 
-/* blocks forever until 1 byte is received */
+/* Blocks forever until 1 byte is received */
 uint8 USBSerial::read(void) {
-    uint8 ch;
-
-    while (usbReceiveBytes(&ch, 1) == 0);
-    return ch;
+    uint8 buf[1];
+    this->read(buf, 1);
+    return buf[0];
 }
 
 uint8 USBSerial::pending(void) {
     return usbGetPending();
 }
 
-// TODO deprecate the crap out of this
+uint8 USBSerial::isConnected(void) {
+    return usbIsConnected() && usbIsConfigured();
+}
+
 uint8 USBSerial::getDTR(void) {
     return usbGetDTR();
 }
 
-// TODO deprecate the crap out of this
 uint8 USBSerial::getRTS(void) {
     return usbGetRTS();
 }
 
-uint8 USBSerial::isConnected(void) {
-    return (usbIsConnected() && usbIsConfigured());
-}
-
 USBSerial SerialUSB;
-

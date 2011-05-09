@@ -7,20 +7,23 @@
 ===========================
 
 This is a tutorial for using the Maple with a standard Unix toolchain
-(make, gcc, etc.).  It's not necessary to do this in order to program
-the Maple; you can always :ref:`install the Maple IDE
-<maple-ide-install>` instead.
+(``make``, ``gcc``, etc.).  It's not necessary to do this in order to
+program the Maple; you can always :ref:`install the Maple IDE
+<maple-ide-install>` instead.  This document is intended for users who
+are comfortable using C or C++ and would like to use :ref:`libmaple`
+directly.
 
 You'll need a Maple board, a Mini-B USB cable, a functional computer,
-and root access to that computer. This guide assumes you've had
-success with the IDE on your machine and that you are fairly
-comfortable with the Unix command line; some previous experience with
-editing your shell startup script (.bashrc, .tcshrc, etc.) and using
-`make <http://www.gnu.org/software/make/>`_ is recommended. For
-generic installation/setup issues, the :ref:`IDE installation
-<maple-ide-install>` and :ref:`troubleshooting` pages may be
-helpful. If all else fails, try our `forum`_, or `contact us
-directly`_\ !
+and root (or Administrator) access to that computer. This guide
+assumes you've had success with the IDE on your machine and that you
+are fairly comfortable with the Unix command line.  Some previous
+experience with editing your shell startup script (.bashrc, .tcshrc,
+etc.) and using `GCC <http://gcc.gnu.org/>`_ and `make
+<http://www.gnu.org/software/make/>`_ is recommended.
+
+For generic installation and setup issues, see the :ref:`IDE
+installation <maple-ide-install>` and :ref:`troubleshooting` pages. If
+all else fails, try our `forum`_, or `contact us directly`_\ !
 
 We currently have instructions for 32- and 64-bit Linux and OS X Snow
 Leopard. If you're on another Unix platform, Windows, or an earlier
@@ -54,36 +57,40 @@ First I'll give the commands to run, then explain::
   $ sudo aptitude install build-essential git-core wget screen dfu-util \
                           openocd python python-serial
 
-You'll want to install a bunch of developer "basics" like
-:command:`make`, :command:`tar`, etc.  A good catch-all for these
-tools is the "build-essential" meta-package on most Debian platforms:
-installing this fake package will pull in dozens of useful tools
-without bogging your system down too much. ``git-core`` is the name of
-the git package; `Git <http://git-scm.com/>`_ is a distributed code
-versioning system we use to track changes in our source
-code. :command:`wget` is a simple tool to download files over http
-from the command line, and is optional (you could pull in the required
-downloads using a browser). :command:`screen` is a really cool virtual
-terminal program; in the context of Maple, we use it to connect to
-serial port devices.
+You'll want to install a bunch of developer "basics" like ``make``,
+``tar``, etc.  A good catch-all for these tools is the
+``build-essential`` meta-package on most Debian platforms: installing
+this fake package will pull in dozens of useful tools without bogging
+your system down too much.
 
-:command:`dfu-util` is a tool from the `OpenMoko`_ project that we use
-to upload programs to the Maple over USB.
+`Git <http://git-scm.com/>`_ is a distributed code versioning system
+we use to track changes in our source code; ``git-core`` is the
+corresponding package. 
+
+``wget`` is a simple tool to download files over http from the command
+line; installing it is optional (you could pull in the required
+downloads using a browser).
+
+``screen`` is a screen manager; in the context of Maple, we use it to
+connect to serial port devices.
+
+``dfu-util`` is a tool from the `OpenMoko`_ project that we use to
+upload programs to the Maple over USB.
 
 .. _OpenMoko: http://openmoko.com/
 
-:command:`openocd` is a `JTAG
+``openocd`` is a `JTAG
 <http://en.wikipedia.org/wiki/Joint_Test_Action_Group>`_ control
 program used in conjunction with an ARM JTAG device to do in circuit
 debugging (pause/resume program execution, upload and download code,
-read out register status, etc). (optional)
+read out register status, etc). It's also optional.
 
 Lastly, our reset script (which sends control signals over the
 USB-serial connection to restart and enter the bootloader) is written
-in Python and requires the `PySerial
-<http://pyserial.sourceforge.net/>`_ library (the ``python-serial``
-package; this could also be installed with `easy_install
-<http://peak.telecommunity.com/DevCenter/EasyInstall>`_).
+in `Python <http://python.org>`_, and requires the `PySerial
+<http://pyserial.sourceforge.net/>`_ library available in the
+``python-serial`` package.  This can also be installed with
+`easy_install <http://peak.telecommunity.com/DevCenter/EasyInstall>`_.
 
 **2. Fetch libmaple and Compiler Toolchain** ::
 
@@ -95,15 +102,15 @@ package; this could also be installed with `easy_install
   $ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up
 
 This step is fairly straightforward: do a git clone of the `libmaple
-repository <http://github.com/leaflabs/libmaple>`_ to some directory,
+repository <https://github.com/leaflabs/libmaple>`_ to some directory,
 then download and extract the ARM compiler toolchain.
 
 The :file:`arm/bin/` directory will need to be added to ``PATH``; you
 can check that this worked by entering ``arm-none-`` and hitting tab
-to auto-complete (bash should show a bunch of results).  Regardless of
-where you put the toolchain, make sure to preserve its internal
-directory layout, as the binaries make relative path calls and
-references.
+to auto-complete (your shell should show a bunch of results).
+Regardless of where you put the toolchain, make sure to preserve its
+internal directory layout, as the binaries make relative path calls
+and references.
 
 After you're done, you'll probably want to update your shell startup
 script so :file:`~/libmaple/arm/bin` stays in your ``PATH``.
@@ -118,12 +125,12 @@ From the libmaple directory, ::
   $ sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules
   $ sudo /etc/init.d/udev restart
 
-As a security precaution on linux, unknown USB devices can only be
-accessed by the superuser. This udev script identifies the Maple based
-on its vendor and product IDs, mounts it to :file:`/dev/maple`, and
-grants read/write permissions to the ``plugdev`` group. After
-restarting :command:`udev` you'll need to fully unplug or power cycle
-any Maples connected to the computer.
+As a security precaution on Linux, unknown USB devices can only be
+accessed by root. This udev script identifies the Maple based on its
+vendor and product IDs, mounts it to :file:`/dev/maple`, and grants
+read/write permissions to the ``plugdev`` group. After restarting
+``udev`` you'll need to fully unplug or power cycle any Maples
+connected to the computer.
 
 **So far, so good?**
 
@@ -140,38 +147,40 @@ stated previously, this document assumes a general level of Unix
 aptitude on the part of the reader; if you're uncomfortable using
 Terminal (or if you don't know what that means), then you should
 probably stick with using the `Maple IDE
-<http://leaflabs.com/docs/maple-ide/>`_ to develop programs.
+<http://leaflabs.com/docs/maple-ide/>`_ to write programs.
 
 **1. Collect and Install Tools**
 
-You will need the following tools\ [#fmacports]_ to get started:
+You will need the following tools\ [#fpackman]_ to get started:
 
  1. `XCode <http://developer.apple.com/technologies/xcode.html>`_: If
  you're reading this, you've probably already got this. Provides
- compilers and other basic tools of the trade. It's a free download,
- but requires registration (gross, we know).
+ compilers and other basic tools of the trade.  While XCode was once
+ free of charge, Apple has since begun charging for it; if you'd
+ rather not pay, you can probably get by with just a `make
+ <http://www.gnu.org/software/make/>`_ binary.
 
  2. `Git <http://git-scm.com/>`_: All of our code is tracked by a
- distributed versioning system called git. A `Mac installer
+ distributed versioning system called Git. A `Mac installer
  <http://code.google.com/p/git-osx-installer/downloads/list?can=3>`_
  is available.
 
- 3. :command:`dfu-util`: A tool from `OpenMoko`_ that we use to upload
- programs to the Maple over USB. If you're feeling masochistic, there
- are instructions for `building dfu-util from source
+ 3. ``dfu-util``: A tool from `OpenMoko`_ that we use to upload
+ programs to the Maple over USB.  If you prefer to compile from
+ source, OpenMoko provides instructions for `building dfu-util
  <http://wiki.openmoko.org/wiki/Dfu-util#Mac>`_.
 
- However, if you've got better things to do, you can steal a dfu-util
- binary from a program called `Openmoko Flasher
- <http://www.handheld-linux.com/wiki.php?page=Openmoko%20Flasher>`_. To
- do this, first `download Openmoko Flasher
+ If you're in a hurry, you can steal a dfu-util binary from a program
+ called `OpenMoko Flasher
+ <http://www.handheld-linux.com/wiki.php?page=OpenMoko%20Flasher>`_. To
+ do this, first `download OpenMoko Flasher
  <http://projects.goldelico.com/p/omflasher/downloads/>`_, then copy
- the .app into your :file:`/Applications` folder (or wherever you
- like). Let's pretend you saved the .app to the directory
+ the OpenMoko application into your :file:`/Applications` folder (or
+ wherever you like). Let's pretend you saved the .app to the directory
 
    :file:`/Applications/OpenMoko Flasher.app`
 
- Then the :command:`dfu-util` binary resides in
+ Then the ``dfu-util`` binary resides in
 
    :file:`/Applications/OpenMoko Flasher.app/Contents/Mac OS/dfu-util`
 
@@ -188,8 +197,9 @@ You will need the following tools\ [#fmacports]_ to get started:
    .app, but you're on your own.
 
  To make sure this worked, try plugging in your Maple, making sure
- it's in bootloader mode (you can do this by pressing RESET, then
- quickly pressing BUT and holding it for several seconds), then
+ it's in :ref:`perpetual bootloader mode
+ <troubleshooting-perpetual-bootloader>` (do this by pressing RESET,
+ then quickly pressing BUT and holding it for several seconds), then
  running ::
 
    $ dfu-util -l
@@ -212,8 +222,8 @@ You will need the following tools\ [#fmacports]_ to get started:
    $ python setup.py build
    $ sudo python setup.py install
 
- The package is also available via :command:`easy_install`, so if
- you're comfortable using that, you could also install it with ::
+ The package is also available via ``easy_install``, so if you're
+ comfortable using that, you could also install it with ::
 
    $ easy_install pyserial
 
@@ -284,24 +294,24 @@ If it all works out, you should end up seeing something like this::
     21824     200     552   22576    5830 build/maple.out
   Flash build
 
-Woo! It worked. The ``dec`` field at the end gives the total program
-size in bytes. The long listing of object files above the ``Final
-Size`` helps to identify bloated code.  As you write larger projects,
-you may find that they use too much space. If that happens, the
-file-by-file listing will help you track down the fatties porking up
-your program.
+The ``dec`` field at the end gives the total program size in
+bytes. The long listing of object files above the ``Final Size`` helps
+to identify bloated code.  As you write larger projects, you may find
+that they use too much space. If that happens, the file-by-file
+listing will help you track down the culprits.
 
 .. _toolchain-upload:
 
 Upload a program
 ----------------
 
-Ok, let's blow away the little example program and upload the
-interactive test session to your Maple.  This will let you interact
-textually with the Maple via USB-serial. If you're on Linux, then
-before executing :command:`make install`, you'll want to have the udev
-rules setup :ref:`as described above <toolchain-udev>`.  Plug in your Maple
-using the mini-b USB cable; then run ::
+Let's blow away the little example program and upload the interactive
+test session to your Maple.  This will let you interact with the Maple
+over a :ref:`USB serial port <usb>`. If you're on Linux, then before
+executing ``make install``, you'll want to have the udev rules setup
+:ref:`as described above <toolchain-udev>`.
+
+Plug in your Maple using the Mini-B USB cable; then run ::
 
   $ cd ~/libmaple
   $ cp examples/test-session.cpp main.cpp
@@ -312,91 +322,106 @@ using the mini-b USB cable; then run ::
 A number of things can go wrong at this stage.  Simple debugging steps
 include using :ref:`perpetual bootloader mode
 <troubleshooting-perpetual-bootloader>`, restarting the Maple a couple
-times, :command:`make clean`, etc. If nothing works, the `forum`_ is
-your friend.
+times, ``make clean``, etc. If nothing works, the `forum`_ is your
+friend.
 
 .. _toolchain-serialusb:
 
-Communicate over USB-serial interface
+Communicate over USB-Serial interface
 -------------------------------------
 
-Okay, now that we've flashed the interactive test session to the
-Maple, let's test it out. The device for the maple should look
-something like :file:`/dev/ttyACMXXX` on Linux or
-:file:`/dev/tty.usbmodemXXX` on OS X, but it might have a slightly
-different name on your system. To open up a session, run ::
+Now let's try out the interactive test session.  The serial port
+device file should look something like :file:`/dev/ttyACMXXX` on Linux
+or :file:`/dev/tty.usbmodemXXX` on OS X, but ``XXX`` will vary
+depending on your system.  Try using one of these to find out which it
+is::
+
+  # Linux
+  $ ls /dev/ttyACM*
+
+  # OS X
+  $ ls /dev/tty.usbmodem*
+
+To open up a session, run ::
 
   $ screen /dev/ttyXXX
 
-If the interactive test program built and uploaded correctly, you
-should be able to connect without any errors reported by
-:command:`screen`. Type ``h`` or hit the space bar to get a response;
-there are a number of commands which demonstrate Maple peripheral
-features. As of October 2010, the HardwareSerial library is blocking,
-so using any commands which would write to the USART Serial ports will
-cause the program to hang. To exit the screen session, type :kbd:`C-a
-C-\\` (control-a, followed by control-backslash) on Mac, or :kbd:`C-a
-k` (control-a k) on Linux, and type ``y`` when prompted if you're
-sure.
+If the interactive test program built and uploaded correctly,
+``screen`` won't report any errors, and will present you an empty
+terminal.  Your board is now waiting for you to send it a command.
+Type ``h`` to print a list of commands which demonstrate various
+features; type any command's letter to run it.
+
+To exit the screen session, type :kbd:`C-a C-\\` (control-a, followed
+by control-backslash) on Mac, or :kbd:`C-a k` (control-a k) on Linux,
+and type ``y`` when prompted if you're sure.
 
 .. note:: 
 
-   Using :command:`screen` in this way sometimes messes up your
-   terminal session on OS X.  If your shell starts acting up after you
-   exit screen, you should be able to fix it with ::
+   Using ``screen`` sometimes messes up your terminal session on OS X.
+   If your shell starts acting funny after you exit ``screen``, you
+   should be able to fix it with ::
 
        $ reset && clear
+
+   If that doesn't work, just close the Terminal window and open up a
+   new one.
 
 .. _toolchain-projects:
 
 Starting your own projects
 --------------------------
 
-.. TODO fix the build-targets.mk mess, note the "library" target
-
 So everything worked, and you want to start your own project? Great!
-It's easy. Just set the environment variable ``LIB_MAPLE_HOME`` in
-your shell startup script to point to the libmaple repository you
-cloned (this tutorial assumes you put it in :file:`~/libmaple`). For
-example, if you use bash as your shell, just put this line in your
-:file:`~/.bashrc` or :file:`~/.bash_profile`::
+There are two ways to go about it.  
 
-  export LIB_MAPLE_HOME=~/libmaple
+If your project is small, all you have to do is replace
+:file:`~/libmaple/main.cpp` with your own code, and you're free to use
+``make`` and ``make install`` in the same way you did when you first
+:ref:`uploaded a program <toolchain-upload>`.
 
-Now, in order to start your own projects, just grab a copy of the
-:file:`Makefile` and skeleton :file:`main.cpp` we provided in the
-libmaple repository, and you're good to go::
+If you have a more complicated project, with its own Makefile and
+multiple source files, or if you're using an IDE that creates its own
+Makefile, you'll probably want to load libmaple from an archive (a
+build-time library, not a DLL).
 
-  $ cd
-  $ mkdir my-awesome-project
-  $ cp ~/libmaple/Makefile ~/libmaple/build-targets.mk my-awesome-project
-  $ cp ~/libmaple/main.cpp.example my-awesome-project/main.cpp
+To create an archive, use the ``library`` Makefile target::
 
-(TEMPORARY: The file :file:`build-targets.mk` is where the rule to
-build the object file for :file:`main.cpp` lives. If you have multiple
-source files, you'll probably need to look at it and edit as
-appropriate. We're sorry about that and will update the Makefile
-structure later to remove this pain point.) Then hack away! You can
-:command:`make`, :command:`make clean`, and :command:`make install`
-from your new directory :file:`my-awesome-project` just like you did
-in the libmaple repository.
+  $ cd ~/libmaple
+  $ make library
 
-.. note::
+This will produce a build-time library in the file
+:file:`~/libmaple/build/libmaple.a`.  To use it, make sure that you
+link against that library, and that the libmaple sources are in your
+include path.  
 
-  We update the libmaple repository fairly frequently with bugfixes
-  and other improvements.  In order get access to these in your local
-  copy of the repository, you should periodically update it with::
+At a minimum, your include path should contain the directories
+:file:`~/libmaple/libmaple` and :file:`~/libmaple/wirish/`.  If you
+want to use one of the officially supported :ref:`libraries
+<libraries>`, those live under :file:`~/libmaple/libraries/`.  The
+main include file for the Wirish library is
+:file:`~/libmaple/wirish/wirish.h`.
 
-    $ cd $LIB_MAPLE_HOME
-    $ git pull
+Getting Updates
+---------------
 
-  The `commits page
-  <http://github.com/leaflabs/libmaple/commits/master>`_ for the
-  github repository is a good place to watch for bleeding-edge
-  updates; our `blog <http://leaflabs.com/blog/>`_ is the place to
-  watch for major releases.  We keep releases of libmaple and the
-  Maple IDE in lockstep, so any IDE updates will have corresponding
-  library updates.
+We update libmaple fairly frequently with bugfixes and other
+improvements.  In order get access to these in your local copy of
+the repository, you should periodically update it with::
+
+  $ cd ~/libmaple
+  $ git pull
+
+We keep releases of libmaple and the Maple IDE in lockstep, so any
+IDE updates will have corresponding library updates.  Our `blog
+<http://leaflabs.com/blog/>`_ is the place to watch for major
+releases; an `RSS feed <http://leaflabs.com/blog/feed/>`_ is
+available.
+
+You can sign up for a free `Github <https://github.com/plans>`_
+account and `watch libmaple
+<https://github.com/leaflabs/libmaple/watchers>`_ to receive
+notifications about bleeding-edge development.
 
 .. _toolchain-openocd:
 
@@ -405,20 +430,25 @@ Debug with OpenOCD
 
 TODO. For now see `this great guide
 <http://fun-tech.se/stm32/OpenOCD/index.php>`_ from fun-tech.se, and
-the ``jtag`` Makefile target.
+the ``jtag`` Makefile target.  There is also a `JTAG How-To
+<http://wiki.leaflabs.com/index.php?title=Maple_JTAG_How_To>`_ page on
+our `wiki <http://wiki.leaflabs.com>`_ which you may find useful.
 
 .. _toolchain-exuberantly:
 
 Go forth exuberantly!
 ---------------------
 
-Let us know what you come up with! Use #leaflabs on Twitter, post in
-the `forum`_, track us down in the real world, whatever. We love
-projects!
+Let us know what you come up with! Use #leaflabs on `Twitter
+<http://twitter.com/leaflabs>`_, post in the `forum`_, join the the
+#leafblowers IRC channel on `freenode
+<http://freenode.net/irc_servers.shtml>`_, whatever. We love projects!
 
 .. rubric:: Footnotes
 
-.. [#fmacports] Some of these software packages might be available on
-   `MacPorts <http://www.macports.org/>`_. The author had some bad
+.. [#fpackman] Some of these software packages might be available on
+   `MacPorts <http://www.macports.org/>`_ or `Homebrew
+   <http://mxcl.github.com/homebrew/>`_. The author had some bad
    experiences with MacPorts a few years ago, though, and hasn't
-   touched it since. Of course, your mileage may vary.
+   touched a package manager on OS X since. Of course, your mileage
+   may vary.

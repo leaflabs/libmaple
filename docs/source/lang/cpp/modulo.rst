@@ -67,4 +67,4 @@ See Also
 
 -  :ref:`Arithmetic <lang-arithmetic>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -12,45 +12,19 @@ devices.
 Introduction
 ------------
 
-The Maple has three serial ports (also known as a UARTs or USARTs):
-``Serial1``, ``Serial2``, and ``Serial3``. They communicate using the
-pins summarized in the following table:
+.. FIXME [0.0.10] UART4, UART5
 
-.. list-table::
-   :header-rows: 1
-
-   * - Serial port
-     - TX, RX, CK
-     - CTS, RTS (if present)
-
-   * - ``Serial1``
-     - 7, 8, 6
-     -
-
-   * - ``Serial2``
-     - 1, 0, 10
-     - 2, 3
-
-   * - ``Serial3``
-     - 29, 30, 31
-     - 32, 33
-
-Thus, if you use a particular serial port, you cannot also use its
-communication pins for other purposes at the same time.
-
-If you want to communicate with the Maple using the provided USB port,
-use :ref:`SerialUSB <lang-serialusb>` instead.
-
-To use them to communicate with an external TTL serial device, connect
-the TX pin to your device's RX pin, the RX to your device's TX pin,
-and the ground of your Maple to your device's ground.
+To use a serial port to communicate with an external serial device,
+connect the TX pin to your device's RX pin, the RX to your device's TX
+pin, and your Maple board's ground to your device's ground.
 
 .. warning:: Don't connect these pins directly to an RS232 serial
    port; they operate at +/- 12V and can damage your board.
 
-
 Library Documentation
 ---------------------
+
+.. FIXME [0.1.0] Tutorial-style usage introduction
 
 All of the ``Serial[1,2,3]`` objects are instances of the
 ``HardwareSerial`` class, which is documented in this section.  (This
@@ -87,7 +61,7 @@ means that you can use any of these functions on any of ``Serial1``,
 
 .. cpp:function:: HardwareSerial::flush()
 
-   Removes the contents of the Serial's associated USART RX FIFO.
+   Throw away the contents of the serial port's receiver (RX) buffer.
    That is, clears any buffered characters, so that the next character
    read is guaranteed to be new.
 
@@ -113,34 +87,25 @@ means that you can use any of these functions on any of ``Serial1``,
 
    Print the argument's digits over the USART, in decimal format.
 
-.. cpp:function:: HardwareSerial::print(long long n)
+.. cpp:function:: HardwareSerial::print(long n)
 
    Print the argument's digits over the USART, in decimal format.
    Negative values will be prefixed with a ``'-'`` character.
 
-.. cpp:function:: HardwareSerial::print(unsigned long long n)
+.. cpp:function:: HardwareSerial::print(unsigned long n)
 
    Print the argument's digits over the USART, in decimal format.
 
-.. _lang-serial-print-n-base:
+.. cpp:function:: HardwareSerial::print(long n, int base)
 
-.. cpp:function:: HardwareSerial::print(int n, int base)
-
-   Print the digits of ``n`` over the USART, in base ``base``.  The
-   ``base`` value 2 corresponds to binary, 8 to octal, 10 to decimal,
-   and 16 to hexadecimal (you can also use the symbolic constants
-   ``BIN``, ``OCT``, ``DEC``, ``HEX``).  If ``base`` is 10, negative
-   values will be prefixed with a ``'-'`` character (otherwise, ``n``
-   will be interpreted as an unsigned quantity).
-
-.. cpp:function:: HardwareSerial::print(long long n, int base)
-
-   Same behavior as the above :ref:`print(int n, int base)
-   <lang-serial-print-n-base>`, except with 64-bit values.
+   Print the digits of ``n`` over the USART, in base ``base`` (which
+   may be between 2 and 16).  The ``base`` value 2 corresponds to
+   binary, 8 to octal, 10 to decimal, and 16 to hexadecimal.  Negative
+   values will be prefixed with a ``'-'`` character.
 
 .. cpp:function:: HardwareSerial::print(double n)
 
-   Print ``n``, accurate to 6 digits after the decimal point.
+   Print ``n``, accurate to 2 digits after the decimal point.
 
 .. _lang-serial-println:
 
@@ -164,19 +129,15 @@ means that you can use any of these functions on any of ``Serial1``,
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: HardwareSerial::println(long long n)
+.. cpp:function:: HardwareSerial::println(long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: HardwareSerial::println(unsigned long long n)
+.. cpp:function:: HardwareSerial::println(unsigned long n)
 
    Like ``print(n)``, followed by ``"\r\n"``.
 
-.. cpp:function:: HardwareSerial::println(int n, int base)
-
-   Like ``print(n, b)``, followed by ``"\r\n"``.
-
-.. cpp:function:: HardwareSerial::println(long long n, int base)
+.. cpp:function:: HardwareSerial::println(long n, int base)
 
    Like ``print(n, b)``, followed by ``"\r\n"``.
 
@@ -219,11 +180,12 @@ Arduino Compatibility Note
 --------------------------
 
 Unlike the Arduino, none of the Maple's serial ports is connected to
-the USB port on the Maple board (for that, use :ref:`SerialUSB
-<lang-serialusb>`).  Thus, to use these pins to communicate with your
-personal computer, you will need an additional USB-to-serial adaptor.
+the USB port on the Maple board.  If you want to communicate using the
+built-in USB port, use :ref:`SerialUSB <lang-serialusb>` instead.  You
+will need an additional USB-to-serial adapter to communicate between a
+USART and your computer.
 
-.. TODO LATER port these examples over
+.. FIXME [0.1.0] port these examples over
 
 .. Examples
 .. --------
@@ -236,4 +198,4 @@ personal computer, you will need an additional USB-to-serial adaptor.
 .. -  `Serial Call Response <http://arduino.cc/en/Tutorial/SerialCallResponse>`_
 .. -  `Serial Call Response ASCII <http://arduino.cc/en/Tutorial/SerialCallResponseASCII>`_
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

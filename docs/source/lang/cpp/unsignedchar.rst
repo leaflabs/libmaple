@@ -16,13 +16,12 @@ won't store negative numbers; it is also subject to the same
 Example
 -------
 
-::
+ ::
 
         unsigned char c = 240;
 
 See Also
 --------
-
 
 - :ref:`byte <lang-byte>`
 - :ref:`int <lang-int>`
@@ -30,4 +29,4 @@ See Also
 - :ref:`SerialUSB.println() <lang-serialusb-println>`
 - :ref:`Serial.println() <lang-serial-println>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

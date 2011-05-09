@@ -53,5 +53,4 @@ then incremented, so it starts out at one.  Subsequent calls to
 it was declared ``static``.  Thus, ``numSensorReadings`` is a count of
 the number of times that ``readSensors()`` has been called.
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

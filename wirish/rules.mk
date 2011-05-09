@@ -4,30 +4,36 @@ dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
 BUILDDIRS       += $(BUILD_PATH)/$(d)/comm
+BUILDDIRS       += $(BUILD_PATH)/$(d)/boards
 
-WIRISH_INCLUDES := -I$(d) -I$(d)/comm
+WIRISH_INCLUDES := -I$(d) -I$(d)/comm -I$(d)/boards
 
 # Local flags
 CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
 
 # Local rules and targets
-cSRCS_$(d) :=  wirish.c 	       \
-               wirish_shift.c          \
-               wirish_analog.c         \
-               time.c 		       \
-               pwm.c 		       \
-               ext_interrupts.c        \
-               wirish_digital.c
+cSRCS_$(d) :=  
 
-cppSRCS_$(d) := wirish_math.cpp          \
-                Print.cpp 		 \
-                comm/HardwareSerial.cpp  \
-                comm/HardwareSPI.cpp 	 \
-                usb_serial.cpp 	         \
-		HardwareTimer.cpp        \
-                cxxabi-compat.cpp        \
+cppSRCS_$(d) := wirish_math.cpp		 \
+                Print.cpp		 \
+		boards.cpp               \
+                boards/maple.cpp	 \
+                boards/maple_mini.cpp	 \
+                boards/maple_native.cpp	 \
+                boards/maple_RET6.cpp	 \
+                comm/HardwareSerial.cpp	 \
+                comm/HardwareSPI.cpp	 \
+		HardwareTimer.cpp	 \
+                usb_serial.cpp		 \
+                cxxabi-compat.cpp	 \
+		wirish_shift.cpp	 \
+		wirish_analog.cpp	 \
+		wirish_time.cpp		 \
+		pwm.cpp 		 \
+		ext_interrupts.cpp	 \
+		wirish_digital.cpp
 
-cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
+cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)
 
 OBJS_$(d)     := $(cFILES_$(d):%.c=$(BUILD_PATH)/%.o) \

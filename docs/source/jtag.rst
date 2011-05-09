@@ -1,11 +1,12 @@
+.. highlight:: cpp
+
 .. _jtag:
 
 ======
  JTAG
 ======
 
-.. TODO update adapter schematic, add information on using it with our
-.. devices.
+.. FIXME [0.1.0] Updated adapter schematic, better information
 
 JTAG is an interface for low-level debugging of digital devices. It
 gives instruction by instruction control over the microprocessor and
@@ -37,32 +38,46 @@ Wiring Diagram
    to connect a standard 20-pin ARM JTAG device to the 8-pin JTAG port
    on the Maple.
 
-The Maple has holes for a 8-pin JTAG header but that header is not
-soldered on by default. If you know ahead of time that you'll be
-needing it, and you order `straight from LeafLabs
-<http://leaflabs.com/store/>`_, add a comment to your order and we can
-probably solder one on for no charge.  Otherwise, you can simply
-attach standard 0.1" pitch male header pins (either the exact 4x2
-block or two 4-pin pieces of breakaway straight header). For a one-off
-usage hack, the header can be jammed in the holes and twisted to
-ensure electrical contact.
+The Maple has holes for a 8-pin JTAG header, but that header is not
+soldered on.  To use JTAG, simply solder on standard 0.1" pitch male
+header pins (either the exact 4 by 2 block, or two 4-pin pieces of
+straight breakaway header).
 
 Compatible Devices
 ------------------
 
 We have had good experience with the `Olimex ARM-USB-OCD
 <http://www.olimex.com/dev/arm-usb-ocd.html>`_ device, which costs
-about 55 euro plus shipping (as of November 2010).
+about €55 plus shipping (as of April 2011).
+
+Function Reference
+------------------
+
+You can disable or enable the JTAG and Serial Wire debugging ports in
+software using the ``disableDebugPorts()`` and ``enableDebugPorts()``
+functions.
+
+* :ref:`lang-disabledebugports`
+* :ref:`lang-enabledebugports`
 
 Recommended Reading
 -------------------
 
-* `Wikipedia Article on Joint Test Action Group (JTAG) <http://en.wikipedia.org/wiki/Joint_Test_Action_Group>`_
-* `STM32/gdb/OpenOCD HOWTO <http://fun-tech.se/stm32/OpenOCD/gdb.php>`_
-* STMicro documentation for STM32F103RB microcontroller:
+* `Wikipedia Article on Joint Test Action Group (JTAG)
+  <http://en.wikipedia.org/wiki/Joint_Test_Action_Group>`_
 
-  * `Datasheet <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_ (pdf)
-  * `Reference Manual <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_ (pdf)
-* There's a `thread on JTAG
-  <http://forums.leaflabs.com/topic.php?id=536>`_ in our `forum`_
-  which you may find useful.
+* `STM32, GDB, OpenOCD How To
+  <http://fun-tech.se/stm32/OpenOCD/gdb.php>`_
+
+* `LeafLabs Wiki JTAG How To
+  <http://wiki.leaflabs.com/index.php?title=Maple_JTAG_How_To>`_
+
+* `LeafLabs forum thread on JTAG
+  <http://forums.leaflabs.com/topic.php?id=536>`_
+
+* ST documentation:
+
+  * Reference Manual `RM0008
+    <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
+    (PDF), Chapter 31, "Debug support", and Chapter 9,
+    "General-purpose and alternate function I/Os".

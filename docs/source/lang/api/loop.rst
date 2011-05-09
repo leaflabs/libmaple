@@ -15,7 +15,6 @@ Example
 
 ::
 
-
     int buttonPin = 38;
 
     // setup initializes serial and the button pin
@@ -42,4 +41,4 @@ See Also
 - :ref:`setup() <lang-setup>`
 
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# This hack copies the necessary library files into the Maple IDE
-# repository.
+# This hack copies libmaple's source, linker scripts, and built
+# documentation into the Maple IDE repository (which is expected as
+# its first argument).
 
 DEST=$1
 
@@ -18,14 +19,20 @@ LMAPLE_SRC="LICENSE
     ./libmaple/usb/usb_lib/*.h
     ./libmaple/usb/usb_lib/*.c
     ./wirish/*.h
-    ./wirish/*.c
     ./wirish/main.cxx
     ./wirish/*.cpp
     ./wirish/comm/*.cpp
     ./wirish/comm/*.h
+    ./wirish/boards/*.h
+    ./wirish/boards/*.cpp
+    ./support/ld/common_ram.inc
+    ./support/ld/common_rom.inc
+    ./support/ld/libcs3_stm32_high_density.a
+    ./support/ld/libcs3_stm32_med_density.a
     ./support/ld/maple
+    ./support/ld/maple_mini
     ./support/ld/maple_native
-    ./support/ld/libcs3-lanchon-stm32.a
+    ./support/ld/maple_RET6
     ./support/ld/names.inc"
 
 LMAPLE_DOCS=./docs
@@ -40,21 +47,25 @@ fi
 
 # source
 echo Copying libmaple source
-rm -rf $DEST_CORES/*.c $DEST_CORES/*.cpp $DEST_CORES/*.h $DEST_CORES/*.cxx $DEST_CORES/*.inc $DEST_CORES/*.a $DEST_CORES/*.S $DEST_CORES/maple $DEST_CORES/maple_native
+rm -rf $DEST_CORES/*.c $DEST_CORES/*.cpp $DEST_CORES/*.h $DEST_CORES/*.cxx $DEST_CORES/*.S
+rm -rf $DEST_CORES/*.inc $DEST_CORES/*.a $DEST_CORES/maple $DEST_CORES/maple_* 
 cp -R $LMAPLE_SRC $DEST_CORES
 
 echo Copying over libraries
 cp -R libraries/* $DEST_LIBS
+
+# libmaple version
+echo Creating libmaple-version.txt
+git show-ref HEAD | cut -c 1-10 > $DEST/libmaple-version.txt
 
 # docs
 echo Deleting old reference directory contents
 rm -rf $DEST_REF/*
 
 echo Rebuilding documentation
-( cd $LMAPLE_DOCS; doxygen && make clean 2>/dev/null 1>/dev/null && make html )
+( cd $LMAPLE_DOCS; doxygen >/dev/null 2>&1 && make clean >/dev/null 2>&1 && make html )
 
 echo Copying over documentation
 cp -R $LMAPLE_DOCS_BUILD/* $DEST_REF
-
 
 echo Done.

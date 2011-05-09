@@ -44,8 +44,7 @@ typedef long long int64;
 typedef void (*voidFuncPtr)(void);
 
 #define __io volatile
-
-#define ALWAYS_INLINE inline __attribute__((always_inline))
+#define __attr_flash __attribute__((section (".USER_FLASH")))
 
 #ifndef NULL
 #define NULL 0

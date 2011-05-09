@@ -29,18 +29,51 @@
  * @brief Power control (PWR) defines.
  */
 
-#define PWR_BASE 0x40007000
+#include "libmaple.h"
 
-#define PWR_CR      (PWR_BASE + 0x0)
-#define PWR_CR_DBP  8 /* Disable backup domain write protection bit */
-#define PWR_CR_PVDE 4 /* Power voltage detector enable bit */
-#define PWR_CR_CSBF 3 /* Clear standby flag bit */
-#define PWR_CR_CWUF 2 /* Clear wakeup flag bit */
-#define PWR_CR_PDDS 1 /* Power down deepsleep bit */
-#define PWR_CR_LPDS 0 /* Low-power deepsleep bit */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define PWR_CSR      (PWR_BASE + 0x4)
-#define PWR_CSR_EWUP 8          /* Enable wakeup pin bit */
-#define PWR_CSR_PVDO 2          /* PVD output bit */
-#define PWR_CSR_SBF  1          /* Standby flag bit */
-#define PWR_CSR_WUF  0          /* Wakeup flag bit */
+/** Power interface register map. */
+typedef struct pwr_reg_map {
+    __io uint32 CR;      /**< Control register */
+    __io uint32 CSR;     /**< Control and status register */
+} pwr_reg_map;
+
+/** Power peripheral register map base pointer. */
+#define PWR_BASE    ((pwr_reg_map*)0x40007000)
+
+/** Power device type. */
+typedef struct pwr_dev {
+    pwr_reg_map *regs; /**< Register map */
+} pwr_dev;
+
+/**
+ * Power device.
+ */
+extern const pwr_dev *PWR;
+
+/*
+ * Register bit definitions
+ */
+
+/* Control register */
+#define PWR_CR_DBP  8 /**< Disable backup domain write protection bit */
+#define PWR_CR_PVDE 4 /**< Power voltage detector enable bit */
+#define PWR_CR_CSBF 3 /**< Clear standby flag bit */
+#define PWR_CR_CWUF 2 /**< Clear wakeup flag bit */
+#define PWR_CR_PDDS 1 /**< Power down deepsleep bit */
+#define PWR_CR_LPDS 0 /**< Low-power deepsleep bit */
+
+/* Control and status register */
+#define PWR_CSR_EWUP 8          /**< Enable wakeup pin bit */
+#define PWR_CSR_PVDO 2          /**< PVD output bit */
+#define PWR_CSR_SBF  1          /**< Standby flag bit */
+#define PWR_CSR_WUF  0          /**< Wakeup flag bit */
+
+void pwr_init(void);
+
+#ifdef __cplusplus
+}
+#endif

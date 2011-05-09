@@ -32,25 +32,20 @@
 #define _WIRISH_H_
 
 #include "libmaple.h"
+
+#include "wirish_types.h"
 #include "boards.h"
-#include "time.h"
-#include "timers.h"
 #include "io.h"
 #include "bits.h"
 #include "pwm.h"
 #include "ext_interrupts.h"
+#include "wirish_debug.h"
 #include "wirish_math.h"
-
-#ifdef __cplusplus
+#include "wirish_time.h"
 #include "HardwareSPI.h"
 #include "HardwareSerial.h"
-#include "usb_serial.h"
 #include "HardwareTimer.h"
-#endif
-
-#ifdef __cplusplus
-extern "C"{
-#endif
+#include "usb_serial.h"
 
 /* Arduino wiring macros and bit defines  */
 #define HIGH 0x1
@@ -73,13 +68,6 @@ extern "C"{
 
 typedef uint8 boolean;
 typedef uint8 byte;
-
-void init(void);
-void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, byte val);
-
-#ifdef __cplusplus
-} // extern "C"
-#endif
 
 #endif
 

@@ -19,7 +19,4 @@ compiler error comes up, one of the first things to check is a
 missing semicolon, in the immediate vicinity, preceding the line at
 which the compiler complained.
 
-
-
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

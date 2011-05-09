@@ -40,5 +40,4 @@ See Also
 
 - :ref:`Arithmetic operators <lang-arithmetic>`
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

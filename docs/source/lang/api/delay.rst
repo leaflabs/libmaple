@@ -57,9 +57,8 @@ Example
 
 .. _lang-delay-seealso:
 
-See also
+See Also
 --------
-
 
 - :ref:`millis() <lang-millis>`
 - :ref:`micros() <lang-micros>`
@@ -68,5 +67,4 @@ See also
   <http://arduino.cc/en/Tutorial/BlinkWithoutDelay>`_ example (works
   unmodified on Maple)
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

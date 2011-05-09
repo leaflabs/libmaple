@@ -294,6 +294,10 @@ class CommandInterface:
 
     def writeMemory(self, addr, data):
         lng = len(data)
+
+        mdebug(5, "Writing %(lng)d bytes to start address 0x%(addr)X" %
+               { 'lng': lng, 'addr': addr})
+
         if usepbar:
             widgets = ['Writing: ', Percentage(),' ', ETA(), ' ', Bar()]
             pbar = ProgressBar(widgets=widgets, maxval=lng, term_width=79).start()
@@ -314,12 +318,6 @@ class CommandInterface:
         else:
             mdebug(5, "Write %(len)d bytes at 0x%(addr)X" % {'addr': addr, 'len': 256})
         self.cmdWriteMemory(addr, data[offs:offs+lng] + ([0xFF] * (256-lng)) )
-
-
-
-
-        def __init__(self) :
-        pass
 
 
 def usage():
@@ -452,6 +450,7 @@ if __name__ == "__main__":
                                                       'baud':conf['baud']})
     try:
         if (conf['write'] or conf['verify']):
+            mdebug(5, "Reading data from %s" % args[0])
             data = read(args[0])
 
         try:

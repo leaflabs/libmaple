@@ -24,7 +24,7 @@
 
 /**
  * @brief Utility procedures for debugging, mostly an error LED fade
- * and messages dumped over a uart for failed asserts.
+ * and messages dumped over a UART for failed asserts.
  */
 
 #include "libmaple.h"
@@ -32,60 +32,92 @@
 #include "gpio.h"
 #include "nvic.h"
 #include "adc.h"
-#include "timers.h"
+#include "timer.h"
 
-/* Error assert + fade */
-void _fail(const char* file, int line, const char* exp) {
-    int32  slope   = 1;
-    uint32 CC      = 0x0000;
-    uint32 TOP_CNT = 0x02FF;
-    uint32 i       = 0;
+/* Failed ASSERT()s send out a message using this USART config. */
+#ifndef ERROR_USART
+#define ERROR_USART            USART2
+#define ERROR_USART_CLK_SPEED  72000000UL
+#define ERROR_USART_BAUD       9600
+#define ERROR_TX_PORT          GPIOA
+#define ERROR_TX_PIN           2
+#endif
 
-    /* Turn off interrupts */
+/* If you define ERROR_LED_PORT and ERROR_LED_PIN, then a failed
+ * ASSERT() will also throb() an LED connected to that port and pin.
+ */
+#if defined(ERROR_LED_PORT) && defined(ERROR_LED_PIN)
+#define HAVE_ERROR_LED
+#endif
+
+/**
+ * @brief Disables all peripheral interrupts except USB and fades the
+ *        error LED.
+ */
+/* (Called from exc.S with global interrupts disabled.) */
+void __error(void) {
+    /* Turn off peripheral interrupts */
     nvic_irq_disable_all();
 
-    /* Turn off timers  */
+    /* Turn off timers */
     timer_disable_all();
 
     /* Turn off ADC */
-    adc_disable();
+    adc_disable_all();
 
-    /* Turn off all usarts */
+    /* Turn off all USARTs */
     usart_disable_all();
 
-    /* Initialize the error usart */
-    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_MODE_AF_OUTPUT_PP);
-    usart_init(ERROR_USART_NUM, ERROR_USART_BAUD);
-
-    /* Print failed assert message */
-    usart_putstr(ERROR_USART_NUM, "ERROR: FAILED ASSERT(");
-    usart_putstr(ERROR_USART_NUM, exp);
-    usart_putstr(ERROR_USART_NUM, "): ");
-    usart_putstr(ERROR_USART_NUM, file);
-    usart_putstr(ERROR_USART_NUM, ": ");
-    usart_putudec(ERROR_USART_NUM, line);
-    usart_putc(ERROR_USART_NUM, '\n');
-    usart_putc(ERROR_USART_NUM, '\r');
-
-    /* Turn on the error LED */
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
-
     /* Turn the USB interrupt back on so the bootloader keeps on functioning */
-    nvic_irq_enable(NVIC_INT_USBHP);
-    nvic_irq_enable(NVIC_INT_USBLP);
+    nvic_irq_enable(NVIC_USB_HP_CAN_TX);
+    nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
 
-    /* Error fade */
+    /* Reenable global interrupts */
+    nvic_globalirq_enable();
     throb();
 }
 
+/**
+ * @brief Print an error message on a UART upon a failed assertion
+ *        and throb the error LED, if there is one defined.
+ * @param file Source file of failed assertion
+ * @param line Source line of failed assertion
+ * @param exp String representation of failed assertion
+ * @sideeffect Turns of all peripheral interrupts except USB.
+ */
+void _fail(const char* file, int line, const char* exp) {
+    /* Initialize the error USART */
+    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_AF_OUTPUT_PP);
+    usart_init(ERROR_USART);
+    usart_set_baud_rate(ERROR_USART, ERROR_USART_CLK_SPEED, ERROR_USART_BAUD);
+
+    /* Print failed assert message */
+    usart_putstr(ERROR_USART, "ERROR: FAILED ASSERT(");
+    usart_putstr(ERROR_USART, exp);
+    usart_putstr(ERROR_USART, "): ");
+    usart_putstr(ERROR_USART, file);
+    usart_putstr(ERROR_USART, ": ");
+    usart_putudec(ERROR_USART, line);
+    usart_putc(ERROR_USART, '\n');
+    usart_putc(ERROR_USART, '\r');
+
+    /* Error fade */
+    __error();
+}
+
+/**
+ * @brief Fades the error LED on and off
+ * @sideeffect Sets output push-pull on ERROR_LED_PIN.
+ */
 void throb(void) {
+#ifdef HAVE_ERROR_LED
     int32  slope   = 1;
     uint32 CC      = 0x0000;
     uint32 TOP_CNT = 0x0200;
     uint32 i       = 0;
 
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT_PP);
-    /* Error fade  */
+    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_OUTPUT_PP);
+    /* Error fade. */
     while (1) {
         if (CC == TOP_CNT)  {
             slope = -1;
@@ -105,5 +137,9 @@ void throb(void) {
         }
         i++;
     }
+#else
+    /* No error LED is defined; do nothing. */
+    while (1)
+        ;
+#endif
 }
-

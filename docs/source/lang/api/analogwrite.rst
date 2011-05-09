@@ -52,7 +52,7 @@ you much more precise control over the duty cycle of your PWM output.
 
 If you're porting code from the Arduino and want a quick-and-dirty
 fix, one solution is to :ref:`map <lang-map>` the argument to
-analogWrite into the right range::
+analogWrite() into the right range::
 
     // Arduino code:
     analogWrite(pin, duty);
@@ -65,14 +65,14 @@ This will convert values in the range 0-255 to values in the range
 which control PWM output.  See the :ref:`timers reference <timers>`
 for more information.
 
-Another fix is to consult the :ref:`pin mapping mega table
-<pin-mapping-mega-table>` to find the timer which controls PWM on the
-pin you're using, then set that Timer's overflow to 255.  Subsequent
-calls to analogWrite() should work as on the Arduino (with the same
-loss of precision).  Note, however, that that affects the overflow for
-the **entire timer**, so other code relying on that timer (such as any
-:ref:`interrupts <lang-attachinterrupt>` the timer controls) will
-likely need to be modified as well.
+Another fix is to consult your board's :ref:`pin maps <gpio-pin-maps>`
+to find the timer which controls PWM on the pin you're using, then set
+that Timer's overflow to 255.  Subsequent calls to analogWrite()
+should work as on the Arduino (with the same loss of precision).
+Note, however, that that affects the overflow for the **entire
+timer**, so other code relying on that timer (such as any
+:ref:`interrupts <lang-hardwaretimer-interrupts>` the timer controls)
+will likely need to be modified as well.
 
 Difference 2: You must use pinMode() to set up PWM
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -140,24 +140,28 @@ If your application definitely requires Arduino's PWM frequency, then
 the steps are:
 
 1. Figure out which :ref:`timer <lang-hardwaretimer>` controls PWM
-   output on your pin (\ :ref:`this table <pwm-timer-table>` is your
-   friend here).  Let's say it's ``Timern``\ , where ``n`` is some
-   number 1, 2, 3, or 4.
+   output on your pin (\ :ref:`your board's Timer Pin Map
+   <gpio-pin-maps>` is your friend here).
 
-2. Call ``Timern.setPeriod(2041)``\ .  This will set the timer's
-   period to approximately 2041 microseconds, which is a frequency of
-   approximately 490 Hz.
+2. Let's say it's timer ``n``, where ``n`` is some number.  You'll
+   then need to put "``HardwareTimer timer(n);``" with your variables,
+   as described in the :ref:`HardwareTimer
+   <lang-hardwaretimer-getting-started>` reference.
+
+3. In your :ref:`lang-setup`, put "``timer.setPeriod(2041);``".  This
+   will set the timer's period to approximately 2041 microseconds,
+   which is a frequency of approximately 490 Hz.
 
 Be aware that this will change the period for the **entire timer**\ ,
 and will affect anything else in your program that depends on that
 timer.  The important examples are :ref:`timer interrupts
-<lang-hardwaretimer-attachinterrupt>` and :ref:`PWM
+<lang-hardwaretimer-interrupts>` and :ref:`PWM
 <timers-pwm-conflicts>`\ .
 
-See also
+See Also
 --------
 
--  :ref:`Maple PWM tutorial <pwm>`
+- :ref:`pwm`
 
 .. rubric:: Footnotes
 
@@ -169,5 +173,4 @@ See also
    Maple uses 2 bytes of memory, and an unsigned (i.e., nonnegative)
    integer with size 2 bytes can hold the values between 0 and 65,535.
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

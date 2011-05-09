@@ -30,9 +30,9 @@
 *                  - wPMABufAddr: address into PMA.
 *                  - wNBytes: no. of bytes to be copied.
 * Output         : None.
-* Return         : None	.
+* Return         : None                           .
 *******************************************************************************/
-void UserToPMABufferCopy(u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
+void UserToPMABufferCopy(const u8 *pbUsrBuf, u16 wPMABufAddr, u16 wNBytes)
 {
   u32 n = (wNBytes + 1) >> 1;   /* n = (wNBytes + 1) / 2 */
   u32 i, temp1, temp2;

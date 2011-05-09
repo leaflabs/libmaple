@@ -60,5 +60,5 @@ would look something like this::
    standard guarantees, however, is that a ``char`` occupies at
    *least* 8 bits.
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt
 

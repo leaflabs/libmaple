@@ -1,112 +1,93 @@
 // Interactive Test Session for LeafLabs Maple
 // Copyright (c) 2010 LeafLabs LLC.
 //
-//  Useful for testing Maple features and troubleshooting. Select a COMM port
-//  (SerialUSB or Serial2) before compiling and then enter 'h' at the prompt
-//  for a list of commands.
+// Useful for testing Maple features and troubleshooting.
+// Communicates over SerialUSB.
 
 #include "wirish.h"
 
-#define LED_PIN BOARD_LED_PIN
-#define PWM_PIN 3
-
-// choose your weapon
-#define COMM SerialUSB
-//#define COMM Serial2
-//#define COMM Serial3
-
-
+// ASCII escape character
 #define ESC       ((uint8)27)
 
-int rate = 0;
+// Default USART baud rate
+#define BAUD     9600
 
-#if defined(BOARD_maple)
-const uint8 pwm_pins[] =
-    {0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28};
-const uint8 adc_pins[] =
-    {0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28};
+uint8 gpio_state[BOARD_NR_GPIO_PINS];
 
-#elif defined(BOARD_maple_mini)
-const uint8 pwm_pins[] = {3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27};
-const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33}; // NB: 33 is LED
+const char* dummy_data = ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="
+                          "qwertyuiopasdfghjklzxcvbnm,./1234567890");
 
-#elif defined(BOARD_maple_native)
-const uint8 pwm_pins[] = {12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45,
-                          46, 47, 48, 49, 50, 53, 54};
-const uint8 adc_pins[] = {6, 7, 8, 9, 10, 11,
-                          /* the following are on ADC3, which lacks support:
-                             39, 40, 41, 42, 43, 45, */
-                          46, 47, 48, 49, 50, 51, 52, 53, 54};
-
-#else
-#error "Board type has not been selected correctly"
-
-#endif
-
-uint8 gpio_state[NR_GPIO_PINS];
-
-const char* const dummy_dat = ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="
-                               "qwertyuiopasdfghjklzxcvbnm,./1234567890");
-
+// Commands
 void cmd_print_help(void);
 void cmd_adc_stats(void);
 void cmd_stressful_adc_stats(void);
 void cmd_everything(void);
 void cmd_serial1_serial3(void);
+void cmd_serial1_echo(void);
 void cmd_gpio_monitoring(void);
 void cmd_sequential_adc_reads(void);
 void cmd_gpio_qa(void);
-void cmd_sequential_gpio_writes(void);
+void cmd_sequential_gpio_toggling(void);
 void cmd_gpio_toggling(void);
+void cmd_sequential_debug_gpio_toggling(void);
+void cmd_debug_gpio_toggling(void);
+void cmd_but_test(void);
 void cmd_sequential_pwm_test(void);
-void cmd_pwm_sweep(void);
 void cmd_servo_sweep(void);
+void cmd_board_info(void);
 
+// Helper functions
 void measure_adc_noise(uint8 pin);
 void fast_gpio(int pin);
-void do_serials(HardwareSerial **serials, int n, unsigned baud);
+void serial_baud_test(HardwareSerial **serials, int n, unsigned baud);
+void serial_echo_test(HardwareSerial *serial, unsigned baud);
 void init_all_timers(uint16 prescale);
+void enable_usarts(void);
+void disable_usarts(void);
+void print_board_array(const char* msg, const uint8 arr[], int len);
+
+// -- setup() and loop() ------------------------------------------------------
 
 void setup() {
     // Set up the LED to blink
     pinMode(BOARD_LED_PIN, OUTPUT);
 
     // Start up the serial ports
-    Serial1.begin(9600);
-    Serial2.begin(9600);
-    Serial3.begin(9600);
+    Serial1.begin(BAUD);
+    Serial2.begin(BAUD);
+    Serial3.begin(BAUD);
 
-    // Send a message out over COMM interface
-    COMM.println(" ");
-    COMM.println("    __   __             _      _");
-    COMM.println("   |  \\/  | __ _ _ __ | | ___| |");
-    COMM.println("   | |\\/| |/ _` | '_ \\| |/ _ \\ |");
-    COMM.println("   | |  | | (_| | |_) | |  __/_|");
-    COMM.println("   |_|  |_|\\__,_| .__/|_|\\___(_)");
-    COMM.println("                 |_|");
-    COMM.println("                              by leaflabs");
-    COMM.println("");
-    COMM.println("");
-    COMM.println("Maple interactive test program (type '?' for help)");
-    COMM.println("----------------------------------------------------------");
-    COMM.print("> ");
+    // Send a message out over SerialUSB interface
+    SerialUSB.println(" ");
+    SerialUSB.println("    __   __             _      _");
+    SerialUSB.println("   |  \\/  | __ _ _ __ | | ___| |");
+    SerialUSB.println("   | |\\/| |/ _` | '_ \\| |/ _ \\ |");
+    SerialUSB.println("   | |  | | (_| | |_) | |  __/_|");
+    SerialUSB.println("   |_|  |_|\\__,_| .__/|_|\\___(_)");
+    SerialUSB.println("                 |_|");
+    SerialUSB.println("                              by leaflabs");
+    SerialUSB.println("");
+    SerialUSB.println("");
+    SerialUSB.println("Maple interactive test program (type '?' for help)");
+    SerialUSB.println("----------------------------------------------------------");
+    SerialUSB.print("> ");
 
 }
 
 void loop () {
     toggleLED();
-    delay(100);
+    delay(250);
 
-    while(COMM.available()) {
-        uint8 input = COMM.read();
-        COMM.println(input);
+    while (SerialUSB.available()) {
+        uint8 input = SerialUSB.read();
+        SerialUSB.println(input);
 
         switch(input) {
         case '\r':
             break;
 
         case ' ':
-            COMM.println("spacebar, nice!");
+            SerialUSB.println("spacebar, nice!");
             break;
 
         case '?':
@@ -128,8 +109,12 @@ void loop () {
             cmd_serial1_serial3();
             break;
 
+        case 'E':
+            cmd_serial1_echo();
+            break;
+
         case '.':
-            while(!COMM.available()) {
+            while (!SerialUSB.available()) {
                 Serial1.print(".");
                 Serial2.print(".");
                 Serial3.print(".");
@@ -150,33 +135,45 @@ void loop () {
             break;
 
         case 'W':
-            while(!COMM.available()) {
-                Serial1.print(dummy_dat);
-                Serial2.print(dummy_dat);
-                Serial3.print(dummy_dat);
+            while (!SerialUSB.available()) {
+                Serial1.print(dummy_data);
+                Serial2.print(dummy_data);
+                Serial3.print(dummy_data);
             }
             break;
 
         case 'U':
-            COMM.println("Dumping data to USB. Press any key.");
-            while(!COMM.available()) {
-                SerialUSB.print(dummy_dat);
+            SerialUSB.println("Dumping data to USB. Press any key.");
+            while (!SerialUSB.available()) {
+                SerialUSB.print(dummy_data);
             }
             break;
 
         case 'g':
-            cmd_sequential_gpio_writes();
+            cmd_sequential_gpio_toggling();
             break;
 
         case 'G':
             cmd_gpio_toggling();
             break;
 
+        case 'j':
+            cmd_sequential_debug_gpio_toggling();
+            break;
+
+        case 'J':
+            cmd_debug_gpio_toggling();
+            break;
+
+        case 'B':
+            cmd_but_test();
+            break;
+
         case 'f':
-            COMM.println("Wiggling D4 as fast as possible in bursts. "
+            SerialUSB.println("Wiggling D4 as fast as possible in bursts. "
                          "Press any key.");
-            pinMode(4,OUTPUT);
-            while(!COMM.available()) {
+            pinMode(4, OUTPUT);
+            while (!SerialUSB.available()) {
                 fast_gpio(4);
                 delay(1);
             }
@@ -186,19 +183,19 @@ void loop () {
             cmd_sequential_pwm_test();
             break;
 
-        case 'P':
-            cmd_pwm_sweep();
-            break;
-
         case '_':
-            COMM.println("Delaying for 5 seconds...");
+            SerialUSB.println("Delaying for 5 seconds...");
             delay(5000);
             break;
 
+        // Be sure to update cmd_print_help() if you implement these:
+
         case 't':               // TODO
+            SerialUSB.println("Unimplemented.");
             break;
 
         case 'T':               // TODO
+            SerialUSB.println("Unimplemented.");
             break;
 
         case 's':
@@ -206,26 +203,30 @@ void loop () {
             break;
 
         case 'd':
-            COMM.println("Pulling down D4, D22. Press any key.");
-            pinMode(22,INPUT_PULLDOWN);
-            pinMode(4,INPUT_PULLDOWN);
-            while(!COMM.available()) {
+            SerialUSB.println("Pulling down D4, D22. Press any key.");
+            pinMode(22, INPUT_PULLDOWN);
+            pinMode(4, INPUT_PULLDOWN);
+            while (!SerialUSB.available()) {
                 continue;
             }
-            COMM.println("Pulling up D4, D22. Press any key.");
-            pinMode(22,INPUT_PULLUP);
-            pinMode(4,INPUT_PULLUP);
-            while(!COMM.available()) {
+            SerialUSB.println("Pulling up D4, D22. Press any key.");
+            pinMode(22, INPUT_PULLUP);
+            pinMode(4, INPUT_PULLUP);
+            while (!SerialUSB.available()) {
                 continue;
             }
-            COMM.read();
-            pinMode(4,OUTPUT);
+            SerialUSB.read();
+            pinMode(4, OUTPUT);
             break;
 
+        // Be sure to update cmd_print_help() if you implement these:
+
         case 'i':               // TODO
+            SerialUSB.println("Unimplemented.");
             break;
 
         case 'I':               // TODO
+            SerialUSB.println("Unimplemented.");
             break;
 
         case 'r':
@@ -236,166 +237,592 @@ void loop () {
             cmd_sequential_adc_reads();
             break;
 
+        case 'b':
+            cmd_board_info();
+            break;
+
         case '+':
             cmd_gpio_qa();
             break;
 
         default: // -------------------------------
-            COMM.print("Unexpected: ");
-            COMM.print(input);
-            COMM.println(", press h for help.");
+            SerialUSB.print("Unexpected byte: 0x");
+            SerialUSB.print((int)input, HEX);
+            SerialUSB.println(", press h for help.");
         }
 
-        COMM.print("> ");
+        SerialUSB.print("> ");
     }
 }
+
+// -- Commands ----------------------------------------------------------------
 
 void cmd_print_help(void) {
-    COMM.println("");
-    //COMM.println("Command Listing\t(# means any digit)");
-    COMM.println("Command Listing");
-    COMM.println("\t?: print this menu");
-    COMM.println("\th: print this menu");
-    COMM.println("\tw: print Hello World on all 3 USARTS");
-    COMM.println("\tn: measure noise and do statistics");
-    COMM.println("\tN: measure noise and do statistics with background stuff");
-    COMM.println("\ta: show realtime ADC info");
-    COMM.println("\t.: echo '.' until new input");
-    COMM.println("\tu: print Hello World on USB");
-    COMM.println("\t_: do as little as possible for a couple seconds (delay)");
-    COMM.println("\tp: test all PWM channels sequentially");
-    COMM.println("\tW: dump data as fast as possible on all 3 USARTS");
-    COMM.println("\tU: dump data as fast as possible on USB");
-    COMM.println("\tg: toggle all GPIOs sequentialy");
-    COMM.println("\tG: toggle all GPIOs at the same time");
-    COMM.println("\tf: toggle GPIO D4 as fast as possible in bursts");
-    COMM.println("\tP: simultaneously test all PWM channels with different "
-                 "speeds/sweeps");
-    COMM.println("\tr: Monitor and print GPIO status changes");
-    COMM.println("\ts: output a sweeping servo PWM on all PWM channels");
-    COMM.println("\tm: output data on USART1 and USART3 with various rates");
-    COMM.println("\t+: test shield mode (for QA, will disrupt Serial2!)");
+    SerialUSB.println("");
+    SerialUSB.println("Command Listing");
+    SerialUSB.println("\t?: print this menu");
+    SerialUSB.println("\th: print this menu");
+    SerialUSB.println("\tw: print Hello World on all 3 USARTS");
+    SerialUSB.println("\tn: measure noise and do statistics");
+    SerialUSB.println("\tN: measure noise and do statistics with background "
+                      "stuff");
+    SerialUSB.println("\ta: show realtime ADC info");
+    SerialUSB.println("\t.: echo '.' until new input");
+    SerialUSB.println("\tu: print Hello World on USB");
+    SerialUSB.println("\t_: do as little as possible for a couple seconds "
+                      "(delay)");
+    SerialUSB.println("\tp: test all PWM channels sequentially");
+    SerialUSB.println("\tW: dump data as fast as possible on all 3 USARTS");
+    SerialUSB.println("\tU: dump data as fast as possible on USB");
+    SerialUSB.println("\tg: toggle GPIOs sequentially");
+    SerialUSB.println("\tG: toggle GPIOs at the same time");
+    SerialUSB.println("\tj: toggle debug port GPIOs sequentially");
+    SerialUSB.println("\tJ: toggle debug port GPIOs simultaneously");
+    SerialUSB.println("\tB: test the built-in button");
+    SerialUSB.println("\tf: toggle pin 4 as fast as possible in bursts");
+    SerialUSB.println("\tr: monitor and print GPIO status changes");
+    SerialUSB.println("\ts: output a sweeping servo PWM on all PWM channels");
+    SerialUSB.println("\tm: output data on USART1 and USART3 at various "
+                      "baud rates");
+    SerialUSB.println("\tE: echo data on USART1 at various baud rates");
+    SerialUSB.println("\tb: print information about the board.");
+    SerialUSB.println("\t+: test shield mode (for quality assurance testing)");
 
-    COMM.println("Unimplemented:");
-    COMM.println("\te: do everything all at once until new input");
-    COMM.println("\tt: output a 1khz squarewave on all GPIOs");
-    COMM.println("\tT: output a 1hz squarewave on all GPIOs");
-    COMM.println("\ti: print out a bunch of info about system state");
-    COMM.println("\tI: print out status of all headers");
-}
-
-void measure_adc_noise(uint8 pin) { // TODO
-    uint16 data[100];
-    float mean = 0;
-    //float stddev = 0;
-    float delta = 0;
-    float M2 = 0;
-    pinMode(pin, INPUT_ANALOG);
-
-    // variance algorithm from knuth; see wikipedia
-    // checked against python
-    for(int i = 0; i<100; i++) {
-        data[i] = analogRead(pin);
-        delta = data[i] - mean;
-        mean = mean + delta/(i+1);
-        M2 = M2 + delta*(data[i] - mean);
-    }
-
-    //sqrt is broken?
-    //stddev = sqrt(variance);
-    COMM.print("header: D"); COMM.print(pin,DEC);
-    COMM.print("\tn: "); COMM.print(100,DEC);
-    COMM.print("\tmean: "); COMM.print(mean);
-    COMM.print("\tvariance: "); COMM.println(M2/99.0);
-    pinMode(pin, OUTPUT);
+    SerialUSB.println("Unimplemented:");
+    SerialUSB.println("\te: do everything all at once until new input");
+    SerialUSB.println("\tt: output a 1khz squarewave on all GPIOs");
+    SerialUSB.println("\tT: output a 1hz squarewave on all GPIOs");
+    SerialUSB.println("\ti: print out a bunch of info about system state");
+    SerialUSB.println("\tI: print out status of all headers");
 }
 
 void cmd_adc_stats(void) {
-    COMM.println("Taking ADC noise stats...");
+    SerialUSB.println("Taking ADC noise stats.");
     digitalWrite(BOARD_LED_PIN, 0);
-    for(uint32 i = 0; i<sizeof(adc_pins); i++) {
+    for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
         delay(5);
-        measure_adc_noise(adc_pins[i]);
+        measure_adc_noise(boardADCPins[i]);
     }
 }
 
 void cmd_stressful_adc_stats(void) {
-    COMM.println("Taking ADC noise stats under duress...");
-    digitalWrite(BOARD_LED_PIN, 0);
-    for(uint32 i = 0; i<sizeof(adc_pins); i++) {
-        // spool up PWM
-        for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
-            if(adc_pins[i] != pwm_pins[j]) {
-                pinMode(pwm_pins[j],PWM);
-                pwmWrite(pwm_pins[j], 1000 + i);
+    SerialUSB.println("Taking ADC noise stats under duress.");
+
+    for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
+        for (uint32 j = 0; j < BOARD_NR_PWM_PINS; j++) {
+            if (boardADCPins[i] != boardPWMPins[j]) {
+                pinMode(boardPWMPins[j], PWM);
+                pwmWrite(boardPWMPins[j], 1000 + i);
             }
         }
-        SerialUSB.print(dummy_dat);
-        SerialUSB.print(dummy_dat);
-        measure_adc_noise(adc_pins[i]);
-        for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
-            if(adc_pins[i] != pwm_pins[j]) {
-                pinMode(pwm_pins[j],OUTPUT);
-                digitalWrite(pwm_pins[j],0);
+
+        Serial1.print(dummy_data);
+
+        measure_adc_noise(boardADCPins[i]);
+
+        for (uint32 j = 0; j < BOARD_NR_PWM_PINS; j++) {
+            if (boardADCPins[i] != boardPWMPins[j]) {
+                pinMode(boardPWMPins[j], OUTPUT);
+                digitalWrite(boardPWMPins[j], LOW);
             }
         }
     }
 }
 
 void cmd_everything(void) { // TODO
+    // Be sure to update cmd_print_help() if you implement this.
+
     // print to usart
     // print to usb
     // toggle gpios
     // enable pwm
-    COMM.println("(unimplemented)");
-}
-
-void fast_gpio(int maple_pin) {
-    GPIO_Port *port = PIN_MAP[maple_pin].port;
-    uint32 pin = PIN_MAP[maple_pin].pin;
-
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
-    gpio_write_bit(port, pin, 1); gpio_write_bit(port, pin, 0);
+    SerialUSB.println("Unimplemented.");
 }
 
 void cmd_serial1_serial3(void) {
     HardwareSerial *serial_1_and_3[] = {&Serial1, &Serial3};
 
-    COMM.println("Testing 57600 baud on USART1 and USART3. Press any key.");
-    do_serials(serial_1_and_3, 2, 57600);
-    COMM.read();
+    SerialUSB.println("Testing 57600 baud on USART1 and USART3. "
+                      "Press any key to stop.");
+    serial_baud_test(serial_1_and_3, 2, 57600);
+    SerialUSB.read();
 
-    COMM.println("Testing 115200 baud on USART1 and USART3. Press any key.");
-    do_serials(serial_1_and_3, 2, 115200);
-    COMM.read();
+    SerialUSB.println("Testing 115200 baud on USART1 and USART3. "
+                      "Press any key to stop.");
+    serial_baud_test(serial_1_and_3, 2, 115200);
+    SerialUSB.read();
 
-    COMM.println("Testing 9600 baud on USART1 and USART3. Press any key.");
-    do_serials(serial_1_and_3, 2, 9600);
-    COMM.read();
+    SerialUSB.println("Testing 9600 baud on USART1 and USART3. "
+                      "Press any key to stop.");
+    serial_baud_test(serial_1_and_3, 2, 9600);
+    SerialUSB.read();
 
-    COMM.println("Resetting USART1 and USART3...");
-    Serial1.begin(9600);
-    Serial3.begin(9600);
+    SerialUSB.println("Resetting USART1 and USART3...");
+    Serial1.begin(BAUD);
+    Serial3.begin(BAUD);
 }
 
-void do_serials(HardwareSerial **serials, int n, unsigned baud) {
-    for (int i = 0; i < n; i++) {
-        serials[i]->begin(9600);
+void cmd_serial1_echo(void) {
+    SerialUSB.println("Testing serial echo at various baud rates. "
+                      "Press any key for next baud rate, or ESC to quit "
+                      "early.");
+    while (!SerialUSB.available())
+        ;
+
+    if (SerialUSB.read() == ESC) return;
+    SerialUSB.println("Testing 115200 baud on USART1.");
+    serial_echo_test(&Serial1, 115200);
+
+    if (SerialUSB.read() == ESC) return;
+    SerialUSB.println("Testing 57600 baud on USART1.");
+    serial_echo_test(&Serial1, 57600);
+
+    if (SerialUSB.read() == ESC) return;
+    SerialUSB.println("Testing 9600 baud on USART1.");
+    serial_echo_test(&Serial1, 9600);
+}
+
+void cmd_gpio_monitoring(void) {
+    SerialUSB.println("Monitoring pin state changes. Press any key to stop.");
+
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        pinMode(i, INPUT_PULLDOWN);
+        gpio_state[i] = (uint8)digitalRead(i);
     }
-    while (!COMM.available()) {
+
+    while (!SerialUSB.available()) {
+        for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+            if (boardUsesPin(i))
+                continue;
+
+            uint8 current_state = (uint8)digitalRead(i);
+            if (current_state != gpio_state[i]) {
+                SerialUSB.print("State change on pin ");
+                SerialUSB.print(i, DEC);
+                if (current_state) {
+                    SerialUSB.println(":\tHIGH");
+                } else {
+                    SerialUSB.println(":\tLOW");
+                }
+                gpio_state[i] = current_state;
+            }
+        }
+    }
+
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        pinMode(i, OUTPUT);
+    }
+}
+
+void cmd_sequential_adc_reads(void) {
+    SerialUSB.print("Sequentially reading most ADC ports.");
+    SerialUSB.println("Press any key for next port, or ESC to stop.");
+
+    for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
+        if (boardUsesPin(boardADCPins[i]))
+            continue;
+
+        SerialUSB.print("Reading pin ");
+        SerialUSB.print(boardADCPins[i], DEC);
+        SerialUSB.println("...");
+        pinMode(boardADCPins[i], INPUT_ANALOG);
+        while (!SerialUSB.available()) {
+            int sample = analogRead(boardADCPins[i]);
+            SerialUSB.print(boardADCPins[i], DEC);
+            SerialUSB.print("\t");
+            SerialUSB.print(sample, DEC);
+            SerialUSB.print("\t");
+            SerialUSB.print("|");
+            for (int j = 0; j < 4096; j += 100) {
+                if (sample >= j) {
+                    SerialUSB.print("#");
+                } else {
+                    SerialUSB.print(" ");
+                }
+            }
+            SerialUSB.print("| ");
+            for (int j = 0; j < 12; j++) {
+                if (sample & (1 << (11 - j))) {
+                    SerialUSB.print("1");
+                } else {
+                    SerialUSB.print("0");
+                }
+            }
+            SerialUSB.println("");
+        }
+        pinMode(boardADCPins[i], OUTPUT);
+        digitalWrite(boardADCPins[i], 0);
+        if (SerialUSB.read() == ESC)
+            break;
+    }
+}
+
+bool test_single_pin_is_high(int high_pin, const char* err_msg) {
+    bool ok = true;
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i)) continue;
+
+        if (digitalRead(i) == HIGH && i != high_pin) {
+            SerialUSB.println();
+            SerialUSB.print("\t*** FAILURE! pin ");
+            SerialUSB.print(i, DEC);
+            SerialUSB.print(' ');
+            SerialUSB.println(err_msg);
+            ok = false;
+        }
+    }
+    return ok;
+}
+
+bool wait_for_low_transition(uint8 pin) {
+    uint32 start = millis();
+    while (millis() - start < 2000) {
+        if (digitalRead(pin) == LOW) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void cmd_gpio_qa(void) {
+    bool all_pins_ok = true;
+    const int not_a_pin = -1;
+    SerialUSB.println("Doing QA testing for unused GPIO pins.");
+
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i)) continue;
+
+        pinMode(i, INPUT);
+    }
+
+    SerialUSB.println("Waiting to start.");
+    ASSERT(!boardUsesPin(0));
+    while (digitalRead(0) == LOW) continue;
+
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i)) {
+            SerialUSB.print("Skipping pin ");
+            SerialUSB.println(i, DEC);
+            continue;
+        }
+        bool pin_ok = true;
+        SerialUSB.print("Checking pin ");
+        SerialUSB.print(i, DEC);
+        while (digitalRead(i) == LOW) continue;
+
+        pin_ok = pin_ok && test_single_pin_is_high(i, "is also HIGH");
+
+        if (!wait_for_low_transition(i)) {
+            SerialUSB.println("Transition to low timed out; something is "
+                              "very wrong.  Aborting test.");
+            return;
+        }
+
+        pin_ok = pin_ok && test_single_pin_is_high(not_a_pin, "is still HIGH");
+
+        if (pin_ok) {
+            SerialUSB.println(": ok");
+        }
+
+        all_pins_ok = all_pins_ok && pin_ok;
+    }
+
+    if (all_pins_ok) {
+        SerialUSB.println("Finished; test passes.");
+    } else {
+        SerialUSB.println("**** TEST FAILS *****");
+    }
+
+    for (int i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i)) continue;
+
+        pinMode(i, OUTPUT);
+        digitalWrite(i, LOW);
+        gpio_state[i] = 0;
+    }
+}
+
+void cmd_sequential_gpio_toggling(void) {
+    SerialUSB.println("Sequentially toggling all unused pins. "
+                      "Press any key for next pin, ESC to stop.");
+
+    for (uint32 i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+
+        SerialUSB.print("Toggling pin ");
+        SerialUSB.print((int)i, DEC);
+        SerialUSB.println("...");
+
+        pinMode(i, OUTPUT);
+        do {
+            togglePin(i);
+        } while (!SerialUSB.available());
+
+        digitalWrite(i, LOW);
+        if (SerialUSB.read() == ESC)
+            break;
+    }
+}
+
+void cmd_gpio_toggling(void) {
+    SerialUSB.println("Toggling all unused pins simultaneously. "
+                      "Press any key to stop.");
+
+    for (uint32 i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        pinMode(i, OUTPUT);
+    }
+
+    while (!SerialUSB.available()) {
+        for (uint32 i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+            if (boardUsesPin(i))
+                continue;
+            togglePin(i);
+        }
+    }
+
+    for (uint32 i = 0; i < BOARD_NR_GPIO_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        digitalWrite(i, LOW);
+    }
+}
+
+uint8 debugGPIOPins[] = {BOARD_JTMS_SWDIO_PIN,
+                         BOARD_JTCK_SWCLK_PIN,
+                         BOARD_JTDI_PIN,
+                         BOARD_JTDO_PIN,
+                         BOARD_NJTRST_PIN};
+
+#define N_DEBUG_PINS 5
+
+void cmd_sequential_debug_gpio_toggling(void) {
+    SerialUSB.println("Toggling all debug (JTAG/SWD) pins sequentially. "
+                      "This will permanently disable debug port "
+                      "functionality.");
+    disableDebugPorts();
+
+    for (int i = 0; i < N_DEBUG_PINS; i++) {
+        pinMode(debugGPIOPins[i], OUTPUT);
+    }
+
+    for (int i = 0; i < N_DEBUG_PINS; i++) {
+        int pin = debugGPIOPins[i];
+        SerialUSB.print("Toggling pin ");
+        SerialUSB.print(pin, DEC);
+        SerialUSB.println("...");
+
+        pinMode(pin, OUTPUT);
+        do {
+            togglePin(pin);
+        } while (!SerialUSB.available());
+
+        digitalWrite(pin, LOW);
+        if (SerialUSB.read() == ESC)
+            break;
+    }
+
+    for (int i = 0; i < N_DEBUG_PINS; i++) {
+        digitalWrite(debugGPIOPins[i], 0);
+    }
+}
+
+void cmd_debug_gpio_toggling(void) {
+    SerialUSB.println("Toggling debug GPIO simultaneously. "
+                      "This will permanently disable JTAG and Serial Wire "
+                      "debug port functionality. "
+                      "Press any key to stop.");
+    disableDebugPorts();
+
+    for (uint32 i = 0; i < N_DEBUG_PINS; i++) {
+        pinMode(debugGPIOPins[i], OUTPUT);
+    }
+
+    while (!SerialUSB.available()) {
+        for (uint32 i = 0; i < N_DEBUG_PINS; i++) {
+            togglePin(debugGPIOPins[i]);
+        }
+    }
+
+    for (uint32 i = 0; i < N_DEBUG_PINS; i++) {
+        digitalWrite(debugGPIOPins[i], LOW);
+    }
+}
+
+void cmd_but_test(void) {
+    SerialUSB.println("Press the button to test.  Press any key to stop.");
+    pinMode(BOARD_BUTTON_PIN, INPUT);
+
+    while (!SerialUSB.available()) {
+        if (isButtonPressed()) {
+            uint32 tstamp = millis();
+            SerialUSB.print("Button press detected, timestamp: ");
+            SerialUSB.println(tstamp);
+        }
+    }
+    SerialUSB.read();
+}
+
+void cmd_sequential_pwm_test(void) {
+    SerialUSB.println("Sequentially testing PWM on all unused pins. "
+                      "Press any key for next pin, ESC to stop.");
+
+    for (uint32 i = 0; i < BOARD_NR_PWM_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+
+        SerialUSB.print("PWM out on header D");
+        SerialUSB.print(boardPWMPins[i], DEC);
+        SerialUSB.println("...");
+        pinMode(boardPWMPins[i], PWM);
+        pwmWrite(boardPWMPins[i], 16000);
+
+        while (!SerialUSB.available()) {
+            delay(10);
+        }
+
+        pinMode(boardPWMPins[i], OUTPUT);
+        digitalWrite(boardPWMPins[i], 0);
+        if (SerialUSB.read() == ESC)
+            break;
+    }
+}
+
+void cmd_servo_sweep(void) {
+    SerialUSB.println("Testing all PWM headers with a servo sweep. "
+                      "Press any key to stop.");
+    SerialUSB.println();
+
+    disable_usarts();
+    init_all_timers(21);
+
+    for (uint32 i = 0; i < BOARD_NR_PWM_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        pinMode(boardPWMPins[i], PWM);
+        pwmWrite(boardPWMPins[i], 4000);
+    }
+
+    // 1.25ms = 4096counts = 0deg
+    // 1.50ms = 4915counts = 90deg
+    // 1.75ms = 5734counts = 180deg
+    int rate = 4096;
+    while (!SerialUSB.available()) {
+        rate += 20;
+        if (rate > 5734)
+            rate = 4096;
+        for (uint32 i = 0; i < BOARD_NR_PWM_PINS; i++) {
+            if (boardUsesPin(i))
+                continue;
+            pwmWrite(boardPWMPins[i], rate);
+        }
+        delay(20);
+    }
+
+    for (uint32 i = 0; i < BOARD_NR_PWM_PINS; i++) {
+        if (boardUsesPin(i))
+            continue;
+        pinMode(boardPWMPins[i], OUTPUT);
+    }
+    init_all_timers(1);
+    enable_usarts();
+}
+
+void cmd_board_info(void) {     // TODO print more information
+    SerialUSB.println("Board information");
+    SerialUSB.println("=================");
+
+    SerialUSB.print("* Clock speed (MHz): ");
+    SerialUSB.println(CYCLES_PER_MICROSECOND);
+
+    SerialUSB.print("* BOARD_LED_PIN: ");
+    SerialUSB.println(BOARD_LED_PIN);
+
+    SerialUSB.print("* BOARD_BUTTON_PIN: ");
+    SerialUSB.println(BOARD_BUTTON_PIN);
+
+    SerialUSB.print("* GPIO information (BOARD_NR_GPIO_PINS = ");
+    SerialUSB.print(BOARD_NR_GPIO_PINS);
+    SerialUSB.println("):");
+    print_board_array("ADC pins", boardADCPins, BOARD_NR_ADC_PINS);
+    print_board_array("PWM pins", boardPWMPins, BOARD_NR_PWM_PINS);
+    print_board_array("Used pins", boardUsedPins, BOARD_NR_USED_PINS);
+}
+
+// -- Helper functions --------------------------------------------------------
+
+void measure_adc_noise(uint8 pin) {
+    uint16 data[100];
+    float mean = 0;
+    float delta = 0;
+    float M2 = 0;
+    pinMode(pin, INPUT_ANALOG);
+
+    // Variance algorithm from Welford, via Knuth, by way of Wikipedia:
+    // http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#On-line_algorithm
+    for (int i = 0; i < 100; i++) {
+        data[i] = analogRead(pin);
+        delta = data[i] - mean;
+        mean = mean + delta / (i + 1);
+        M2 = M2 + delta * (data[i] - mean);
+    }
+
+    SerialUSB.print("header: D");
+    SerialUSB.print(pin, DEC);
+    SerialUSB.print("\tn: ");
+    SerialUSB.print(100, DEC);
+    SerialUSB.print("\tmean: ");
+    SerialUSB.print(mean);
+    SerialUSB.print("\tvariance: ");
+    SerialUSB.println(M2 / 99.0);
+    pinMode(pin, OUTPUT);
+}
+
+void fast_gpio(int maple_pin) {
+    gpio_dev *dev = PIN_MAP[maple_pin].gpio_device;
+    uint32 bit = PIN_MAP[maple_pin].gpio_bit;
+
+    gpio_write_bit(dev, bit, 1);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+    gpio_toggle_bit(dev, bit);
+}
+
+void serial_baud_test(HardwareSerial **serials, int n, unsigned baud) {
+    for (int i = 0; i < n; i++) {
+        serials[i]->begin(baud);
+    }
+    while (!SerialUSB.available()) {
         for (int i = 0; i < n; i++) {
-            serials[i]->println(dummy_dat);
+            serials[i]->println(dummy_data);
             if (serials[i]->available()) {
                 serials[i]->println(serials[i]->read());
                 delay(1000);
@@ -404,235 +831,68 @@ void do_serials(HardwareSerial **serials, int n, unsigned baud) {
     }
 }
 
-void cmd_gpio_monitoring(void) {
-    COMM.println("Monitoring GPIO read state changes. Press any key.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    // make sure to skip the TX/RX headers
-    for(int i = 2; i<NR_GPIO_PINS; i++) {
-        pinMode(i, INPUT_PULLDOWN);
-        gpio_state[i] = (uint8)digitalRead(i);
-    }
-    while(!COMM.available()) {
-        for(int i = 2; i<NR_GPIO_PINS; i++) {
-            uint8 current_state = (uint8)digitalRead(i);
-            if(current_state != gpio_state[i]) {
-                COMM.print("State change on header D");
-                COMM.print(i,DEC);
-                if(current_state) COMM.println(":\tHIGH");
-                else COMM.println(":\tLOW");
-                gpio_state[i] = current_state;
-            }
-        }
-    }
-    for(int i = 2; i<NR_GPIO_PINS; i++) {
-        pinMode(i, OUTPUT);
-    }
-}
-
-void cmd_sequential_adc_reads(void) {
-    COMM.print("Sequentially reading each ADC port.");
-    COMM.println("Press any key for next port, or ESC to stop.");
-    digitalWrite(LED_PIN, 0);
-    // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i<sizeof(adc_pins); i++) {
-        COMM.print("Reading on header D");
-        COMM.print(adc_pins[i], DEC);
-        COMM.println("...");
-        pinMode(adc_pins[i], INPUT_ANALOG);
-        while(!COMM.available()) {
-            int sample = analogRead(adc_pins[i]);
-            COMM.print(adc_pins[i],DEC);
-            COMM.print("\t");
-            COMM.print(sample,DEC);
-            COMM.print("\t");
-            COMM.print("|");
-            for(int j = 0; j<4096; j+= 100) {
-                if(sample >= j) COMM.print("#");
-                else COMM.print(" ");
-            }
-            COMM.print("| ");
-            for(int j = 0; j<12; j++) {
-                if(sample & (1 << (11-j))) COMM.print("1");
-                else COMM.print("0");
-            }
-            COMM.println("");
-        }
-        pinMode(adc_pins[i], OUTPUT);
-        digitalWrite(adc_pins[i], 0);
-        if((uint8)COMM.read() == ESC) break;
-    }
-}
-
-void cmd_gpio_qa(void) {
-    COMM.println("Doing QA testing for most GPIO pins...");
-    digitalWrite(BOARD_LED_PIN, 0);
-    for(int i = 0; i<NR_GPIO_PINS; i++) {
-        pinMode(i, INPUT);
-        gpio_state[i] = 0;
-    }
-    COMM.println("Waiting to start...");
-    while(digitalRead(0) != 1 && !COMM.available()) {
-        continue;
-    }
-    for(int i=0; i<38; i++) {
-        if(i == BOARD_LED_PIN) {
-            COMM.println("Not checking LED");
+void serial_echo_test(HardwareSerial *serial, unsigned baud) {
+    serial->begin(baud);
+    while (!SerialUSB.available()) {
+        if (!serial->available())
             continue;
-        }
-        COMM.print("Checking D");
-        COMM.print(i,DEC);
-        while(digitalRead(i) == 0) continue;
-        for(int j=0; j<NR_GPIO_PINS; j++) {
-            if(digitalRead(j) && j!=i) {
-                COMM.print(": FAIL ########################### D");
-                COMM.println(j, DEC);
-                break;
-            }
-        }
-        while(digitalRead(i) == 1) continue;
-        for(int j=0; j<NR_GPIO_PINS; j++) {
-            if(digitalRead(j) && j!=i) {
-                COMM.print(": FAIL ########################### D");
-                COMM.println(j, DEC);
-                break;
-            }
-        }
-        COMM.println(": Ok!");
-    }
-    for(int i = 0; i<NR_GPIO_PINS; i++) {
-        pinMode(i, OUTPUT);
-        digitalWrite(i, 0);
+        serial->print(serial->read());
     }
 }
 
-void cmd_sequential_gpio_writes(void) {
-    COMM.print("Sequentially toggling all pins except D0, D1. ");
-    COMM.println("Anything for next, ESC to stop.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
-        COMM.print("GPIO write out on header D");
-        COMM.print(i, DEC);
-        COMM.println("...");
-        pinMode(i, OUTPUT);
-        do {
-            togglePin(i);
-        } while(!COMM.available());
-        digitalWrite(i, 0);
-        if((uint8)COMM.read() == ESC) break;
-    }
-}
+static uint16 init_all_timers_prescale = 0;
 
-void cmd_gpio_toggling(void) {
-    COMM.println("Toggling all GPIOs simultaneously. Press any key.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
-        pinMode(i, OUTPUT);
-    }
-    while(!COMM.available()) {
-        for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
-            togglePin(i);
-        }
-    }
-    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
-        digitalWrite(i, 0);
-    }
-}
-
-void cmd_sequential_pwm_test(void) {
-    COMM.println("Sequentially testing PWM on all possible headers "
-                 "except D0 and D1.");
-    COMM.println("Press any key for next, ESC to stop.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-        COMM.print("PWM out on header D");
-        COMM.print(pwm_pins[i], DEC);
-        COMM.println("...");
-        pinMode(pwm_pins[i], PWM);
-        pwmWrite(pwm_pins[i], 16000);
-        while(!COMM.available()) { delay(10); }
-        pinMode(pwm_pins[i], OUTPUT);
-        digitalWrite(pwm_pins[i], 0);
-        if((uint8)COMM.read() == ESC) break;
-    }
-}
-
-void cmd_pwm_sweep(void) {
-    COMM.println("Testing all PWM ports with a sweep. Press any key.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    // make sure to skip the TX/RX pins
-    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-        pinMode(pwm_pins[i], PWM);
-        pwmWrite(pwm_pins[i], 4000);
-    }
-    while(!COMM.available()) {
-        rate += 20;
-        if(rate > 65500) rate = 0;
-        for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-            pwmWrite(pwm_pins[i], rate);
-        }
-        delay(1);
-    }
-    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-        pinMode(pwm_pins[i], OUTPUT);
-    }
-}
-
-void cmd_servo_sweep(void) {
-    COMM.println("Testing all PWM headers with a servo sweep. Press any key.");
-    COMM.println();
-    digitalWrite(BOARD_LED_PIN, 0);
-    init_all_timers(21);
-    // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-        pinMode(pwm_pins[i], PWM);
-        pwmWrite(pwm_pins[i], 4000);
-    }
-    // 1.25ms = 4096counts = 0deg
-    // 1.50ms = 4915counts = 90deg
-    // 1.75ms = 5734counts = 180deg
-    rate = 4096;
-    while(!COMM.available()) {
-        rate += 20;
-        if(rate > 5734) rate = 4096;
-        for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-            pwmWrite(pwm_pins[i], rate);
-        }
-        delay(20);
-    }
-    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
-        pinMode(pwm_pins[i], OUTPUT);
-    }
-    init_all_timers(1);
-    Serial2.begin(9600);
-    COMM.println("(reset serial port)");
+static void set_prescale(timer_dev *dev) {
+    timer_set_prescaler(dev, init_all_timers_prescale);
 }
 
 void init_all_timers(uint16 prescale) {
-    timer_init(TIMER1, prescale);
-    timer_init(TIMER2, prescale);
-    timer_init(TIMER3, prescale);
-#if NR_TIMERS >= 4
-    timer_init(TIMER4, prescale);
-#elif NR_TIMERS >= 8 // TODO test this on maple native
-    timer_init(TIMER5, prescale);
-    timer_init(TIMER6, prescale);
-    timer_init(TIMER7, prescale);
-    timer_init(TIMER8, prescale);
+    init_all_timers_prescale = prescale;
+    timer_foreach(set_prescale);
+}
+
+void enable_usarts(void) {
+    Serial1.begin(BAUD);
+    Serial2.begin(BAUD);
+    Serial3.begin(BAUD);
+#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
+    Serial4.begin(BAUD);
+    Serial5.begin(BAUD);
 #endif
 }
 
+void disable_usarts(void) {
+    Serial1.end();
+    Serial2.end();
+    Serial3.end();
+#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
+    Serial4.end();
+    Serial5.end();
+#endif
+}
+
+void print_board_array(const char* msg, const uint8 arr[], int len) {
+    SerialUSB.print("\t");
+    SerialUSB.print(msg);
+    SerialUSB.print(" (");
+    SerialUSB.print(len);
+    SerialUSB.print("): ");
+    for (int i = 0; i < len; i++) {
+        SerialUSB.print(arr[i], DEC);
+        if (i < len - 1) SerialUSB.print(", ");
+    }
+    SerialUSB.println();
+}
+
+// -- premain() and main() ----------------------------------------------------
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated object that need libmaple may fail.
-__attribute__(( constructor )) void premain() {
+// Otherwise, statically allocated objects that need libmaple may fail.
+__attribute__((constructor)) void premain() {
     init();
 }
 
-int main(void)
-{
+int main(void) {
     setup();
 
     while (1) {

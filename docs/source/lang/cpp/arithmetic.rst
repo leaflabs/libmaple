@@ -117,11 +117,8 @@ See Also
 --------
 
 - The individual sizes (in bits) of various available types are
-  defined in `libmaple_types.h
-  <http://github.com/leaflabs/libmaple/blob/master/libmaple/libmaple_types.h>`_\
-  .
+  defined in :ref:`libmaple_types.h <libmaple-libmaple_types>`.
 
 - :ref:`sizeof <lang-sizeof>`\ ()
 
-
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

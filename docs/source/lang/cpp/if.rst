@@ -118,4 +118,4 @@ See Also
 - :ref:`boolean operators <lang-boolean>`
 - :ref:`comparison operators <lang-comparison>`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

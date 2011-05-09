@@ -123,7 +123,7 @@ questions (answers are in footnote [#fanswers]_\ ):
 
 2. Why does it stop at 64?
 
-See also
+See Also
 --------
 
 - :ref:`while <lang-while>` loops
@@ -139,4 +139,4 @@ See also
       false, and the loop stops.
 
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

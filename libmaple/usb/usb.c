@@ -35,6 +35,7 @@
 #include "usb_lib.h"
 #include "gpio.h"
 #include "usb_hardware.h"
+#include "delay.h"
 
 #include "usb_config.h"
 #include "usb_callbacks.h"
@@ -44,7 +45,7 @@
 
 volatile uint32 bDeviceState = UNCONNECTED;
 volatile uint16 wIstr = 0;
-volatile bIntPackSOF  = 0;
+volatile uint32 bIntPackSOF = 0;
 
 DEVICE Device_Table =
     {NUM_ENDPTS,
@@ -99,15 +100,13 @@ struct {
 } ResumeS;
 
 void setupUSB (void) {
-  gpio_set_mode(USB_DISC_BANK,
-                USB_DISC_PIN,
-                GPIO_MODE_OUTPUT_PP);
+  gpio_set_mode(USB_DISC_DEV, USB_DISC_PIN, GPIO_OUTPUT_PP);
 
   /* setup the apb1 clock for USB */
   pRCC->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
-  gpio_write_bit(USB_DISC_BANK, USB_DISC_PIN, 0); // presents us to the host
+  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 0); // presents us to the host
   USB_Init();  // low level init routine provided by the ST library
 }
 
@@ -115,7 +114,7 @@ void disableUSB (void) {
   // These are just guesses about how to do this
   // TODO: real disable function
   usbDsbISR();
-  gpio_write_bit(USB_DISC_BANK,USB_DISC_PIN,1);
+  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 1);
 }
 
 void usbSuspend(void) {
@@ -241,7 +240,7 @@ void usbDsbISR(void) {
 }
 
 /* overloaded ISR routine, this is the main usb ISR */
-void usb_lpIRQHandler(void) {
+void __irq_usb_lp_can_rx0(void) {
 wIstr = _GetISTR();
 
 /* go nuts with the preproc switches since this is an ISTR and must be FAST */
@@ -321,7 +320,7 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask) {
 }
 
 void usbWaitReset(void) {
-  delay(RESET_DELAY);
+  delay_us(RESET_DELAY);
   systemHardReset();
 }
 
@@ -344,23 +343,21 @@ void usbBlockingSendByte(char ch) {
     countTx = 1;
     while (countTx);
 }
-uint32 usbSendBytes(uint8* sendBuf, uint32 len) {
-  /* any checks on connection (via dtr/rts) done upstream in wirish or
-     by user */
 
-  /* last xmit hasnt finished, abort */
+uint32 usbSendBytes(const uint8* sendBuf, uint32 len) {
+  /* Last transmission hasn't finished, abort */
   if (countTx) {
     return 0;
   }
 
   // We can only put VCOM_TX_EPSIZE bytes in the buffer
-  if(len > VCOM_TX_EPSIZE/2) {
-    len = VCOM_TX_EPSIZE/2;
+  if (len > VCOM_TX_EPSIZE / 2) {
+    len = VCOM_TX_EPSIZE / 2;
   }
 
   // Try to load some bytes if we can
   if (len) {
-    UserToPMABufferCopy(sendBuf,VCOM_TX_ADDR, len);
+    UserToPMABufferCopy(sendBuf, VCOM_TX_ADDR, len);
     _SetEPTxCount(VCOM_TX_ENDP, len);
     countTx += len;
     _SetEPTxValid(VCOM_TX_ENDP);

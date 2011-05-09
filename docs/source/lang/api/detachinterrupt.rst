@@ -9,9 +9,8 @@ Used to disable an interrupt specified with
 Library Documentation
 ---------------------
 
-.. FIXME once breathe knows how to get the correct detachInterupt
-.. (right now it's copying from HardwareTimer), replace with a
-.. doxygenfunction directive
+.. FIXME [Breathe] once we can get the correct detachInterupt(),
+.. replace with doxygenfunction.
 
 .. cpp:function:: void detachInterrupt(uint8 pin)
 
@@ -39,5 +38,6 @@ See Also
 --------
 
 - :ref:`attachInterrupt() <lang-attachInterrupt>`
+- :ref:`external-interrupts`
 
-.. include:: cc-attribution.txt
+.. include:: /arduino-cc-attribution.txt

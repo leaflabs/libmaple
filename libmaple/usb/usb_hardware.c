@@ -33,47 +33,6 @@
 
 #include "usb_hardware.h"
 
-void setPin(u32 bank, u8 pin) {
-    u32 pinMask = 0x1 << (pin);
-    SET_REG(GPIO_BSRR(bank),pinMask);
-}
-
-void resetPin(u32 bank, u8 pin) {
-    u32 pinMask = 0x1 << (16+pin);
-    SET_REG(GPIO_BSRR(bank),pinMask);
-}
-
-void systemReset(void) {
-    SET_REG(RCC_CR, GET_REG(RCC_CR)     | 0x00000001);
-    SET_REG(RCC_CFGR, GET_REG(RCC_CFGR) & 0xF8FF0000);
-    SET_REG(RCC_CR, GET_REG(RCC_CR)     & 0xFEF6FFFF);
-    SET_REG(RCC_CR, GET_REG(RCC_CR)     & 0xFFFBFFFF);
-    SET_REG(RCC_CFGR, GET_REG(RCC_CFGR) & 0xFF80FFFF);
-
-    SET_REG(RCC_CIR, 0x00000000); // disable all RCC interrupts
-}
-
-void setupCLK (void) {
-    /* enable HSE */
-    SET_REG(RCC_CR,GET_REG(RCC_CR) | 0x00010001);
-    /* for it to come on */
-    while ((GET_REG(RCC_CR) & 0x00020000) == 0);
-
-    /* Configure PLL */
-    /* pll=72Mhz,APB1=36Mhz,AHB=72Mhz */
-    SET_REG(RCC_CFGR,GET_REG(RCC_CFGR) | 0x001D0400);
-    /* enable the pll */
-    SET_REG(RCC_CR,GET_REG(RCC_CR)     | 0x01000000);
-    /* wait for it to come on */
-    while ((GET_REG(RCC_CR) & 0x03000000) == 0);
-
-    /* Set SYSCLK as PLL */
-    SET_REG(RCC_CFGR,GET_REG(RCC_CFGR) | 0x00000002);
-    /* wait for it to come on */
-    while ((GET_REG(RCC_CFGR) & 0x00000008) == 0);
-}
-
-
 void nvicInit(NVIC_InitTypeDef* NVIC_InitStruct) {
     u32 tmppriority = 0x00;
     u32 tmpreg      = 0x00;

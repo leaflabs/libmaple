@@ -1,12 +1,14 @@
-// Test sketch for figuring out DTR/RTS behavior on different platforms.
+// Sample main.cpp file. Blinks an LED, sends a message out USART2
+// and turns on PWM on pin 2
 
 #include "wirish.h"
 #include "usb.h"
 
-#define LED_PIN BOARD_LED_PIN
-#define PWM_PIN 2
+#define LED_PIN 13
+#define PWM_PIN  2
 
-void setup() {
+void setup()
+{
     /* Set up the LED to blink  */
     pinMode(LED_PIN, OUTPUT);
 
@@ -16,10 +18,12 @@ void setup() {
 
 }
 
-void loop() {
-    toggleLED();
-    delay(100);
+int toggle = 0;
 
+void loop() {
+    toggle ^= 1;
+    digitalWrite(LED_PIN, toggle);
+    delay(100);
     Serial2.print("DTR: ");
     Serial2.print(usbGetDTR(), DEC);
     Serial2.print("\tRTS: ");
@@ -27,12 +31,13 @@ void loop() {
 }
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated objects that need libmaple may fail.
-__attribute__((constructor)) void premain() {
+// Otherwise, statically allocated object that need libmaple may fail.
+ __attribute__(( constructor )) void premain() {
     init();
 }
 
-int main(void) {
+int main(void)
+{
     setup();
 
     while (1) {

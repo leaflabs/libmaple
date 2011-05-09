@@ -60,12 +60,13 @@ void loop() {
 }
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated objects that need libmaple may fail.
-__attribute__((constructor)) void premain() {
+// Otherwise, statically allocated object that need libmaple may fail.
+ __attribute__(( constructor )) void premain() {
     init();
 }
 
-int main(void) {
+int main(void)
+{
     setup();
 
     while (1) {

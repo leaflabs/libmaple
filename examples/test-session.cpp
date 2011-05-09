@@ -20,51 +20,27 @@
 
 int rate = 0;
 
-#if defined(BOARD_maple) || defined(BOARD_maple_RET6)
-
-#elif defined(BOARD_maple_mini)
-
-#elif defined(BOARD_maple_native)
-const uint8[] pins_to_skip = {LED_PIN};
-
-#else
-#error "Board not selected correctly."
-#endif
-
 #if defined(BOARD_maple)
 const uint8 pwm_pins[] =
     {0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28};
 const uint8 adc_pins[] =
     {0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28};
-const uint8 pins_to_skip[] = {LED_PIN};
 
 #elif defined(BOARD_maple_mini)
-#define USB_DP 23
-#define USB_DM 24
 const uint8 pwm_pins[] = {3, 4, 5, 8, 9, 10, 11, 15, 16, 25, 26, 27};
 const uint8 adc_pins[] = {3, 4, 5, 6, 7, 8, 9, 10, 11, 33}; // NB: 33 is LED
-const uint8 pins_to_skip[] = {LED_PIN, USB_DP, USB_DM};
 
 #elif defined(BOARD_maple_native)
-const uint8 pwm_pins[] = {
-    12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45, 46, 47, 48, 49, 50, 53, 54};
-const uint8 adc_pins[] = {
-    6, 7, 8, 9, 10, 11,
-    /* FIXME These are on ADC3, which lacks support:
-       39, 40, 41, 42, 43, 45, */
-    46, 47, 48, 49, 50, 51, 52, 53, 54};
-const uint8 pins_to_skip[] = {LED_PIN};
-
-#elif defined(BOARD_maple_RET6)
-const uint8 pwm_pins[] =
-    {0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28, 35, 37, 37,
-     38};                       // NB 38 is BUT
-const uint8 adc_pins[] =
-    {0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28};
-const uint8 pins_to_skip[] = {LED_PIN};
+const uint8 pwm_pins[] = {12, 13, 14, 15, 22, 23, 24, 25, 37, 38, 45,
+                          46, 47, 48, 49, 50, 53, 54};
+const uint8 adc_pins[] = {6, 7, 8, 9, 10, 11,
+                          /* the following are on ADC3, which lacks support:
+                             39, 40, 41, 42, 43, 45, */
+                          46, 47, 48, 49, 50, 51, 52, 53, 54};
 
 #else
-#error "Board type has not been selected correctly."
+#error "Board type has not been selected correctly"
+
 #endif
 
 uint8 gpio_state[NR_GPIO_PINS];
@@ -86,7 +62,6 @@ void cmd_sequential_pwm_test(void);
 void cmd_pwm_sweep(void);
 void cmd_servo_sweep(void);
 
-bool skip_pin_p(uint8 pin);
 void measure_adc_noise(uint8 pin);
 void fast_gpio(int pin);
 void do_serials(HardwareSerial **serials, int n, unsigned baud);
@@ -103,12 +78,12 @@ void setup() {
 
     // Send a message out over COMM interface
     COMM.println(" ");
-    COMM.println("    __   __            _      _ ");
+    COMM.println("    __   __             _      _");
     COMM.println("   |  \\/  | __ _ _ __ | | ___| |");
     COMM.println("   | |\\/| |/ _` | '_ \\| |/ _ \\ |");
     COMM.println("   | |  | | (_| | |_) | |  __/_|");
     COMM.println("   |_|  |_|\\__,_| .__/|_|\\___(_)");
-    COMM.println("                |_|");
+    COMM.println("                 |_|");
     COMM.println("                              by leaflabs");
     COMM.println("");
     COMM.println("");
@@ -299,7 +274,7 @@ void cmd_print_help(void) {
     COMM.println("\tr: Monitor and print GPIO status changes");
     COMM.println("\ts: output a sweeping servo PWM on all PWM channels");
     COMM.println("\tm: output data on USART1 and USART3 with various rates");
-    COMM.println("\t+: test shield mode (for QA; will disrupt USARTS)");
+    COMM.println("\t+: test shield mode (for QA, will disrupt Serial2!)");
 
     COMM.println("Unimplemented:");
     COMM.println("\te: do everything all at once until new input");
@@ -319,11 +294,11 @@ void measure_adc_noise(uint8 pin) { // TODO
 
     // variance algorithm from knuth; see wikipedia
     // checked against python
-    for(int i = 0; i < 100; i++) {
+    for(int i = 0; i<100; i++) {
         data[i] = analogRead(pin);
         delta = data[i] - mean;
-        mean = mean + delta/(i + 1);
-        M2 = M2 + delta * (data[i] - mean);
+        mean = mean + delta/(i+1);
+        M2 = M2 + delta*(data[i] - mean);
     }
 
     //sqrt is broken?
@@ -338,7 +313,7 @@ void measure_adc_noise(uint8 pin) { // TODO
 void cmd_adc_stats(void) {
     COMM.println("Taking ADC noise stats...");
     digitalWrite(BOARD_LED_PIN, 0);
-    for(uint32 i = 0; i < sizeof(adc_pins); i++) {
+    for(uint32 i = 0; i<sizeof(adc_pins); i++) {
         delay(5);
         measure_adc_noise(adc_pins[i]);
     }
@@ -347,21 +322,21 @@ void cmd_adc_stats(void) {
 void cmd_stressful_adc_stats(void) {
     COMM.println("Taking ADC noise stats under duress...");
     digitalWrite(BOARD_LED_PIN, 0);
-    for(uint32 i = 0; i < sizeof(adc_pins); i++) {
+    for(uint32 i = 0; i<sizeof(adc_pins); i++) {
         // spool up PWM
-        for(uint32 j = 2; j < (uint32)sizeof(pwm_pins); j++) {
+        for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
             if(adc_pins[i] != pwm_pins[j]) {
-                pinMode(pwm_pins[j], PWM);
+                pinMode(pwm_pins[j],PWM);
                 pwmWrite(pwm_pins[j], 1000 + i);
             }
         }
         SerialUSB.print(dummy_dat);
         SerialUSB.print(dummy_dat);
         measure_adc_noise(adc_pins[i]);
-        for(uint32 j = 2; j < (uint32)sizeof(pwm_pins); j++) {
+        for(uint32 j = 2; j<(uint32)sizeof(pwm_pins); j++) {
             if(adc_pins[i] != pwm_pins[j]) {
-                pinMode(pwm_pins[j], OUTPUT);
-                digitalWrite(pwm_pins[j], 0);
+                pinMode(pwm_pins[j],OUTPUT);
+                digitalWrite(pwm_pins[j],0);
             }
         }
     }
@@ -433,12 +408,12 @@ void cmd_gpio_monitoring(void) {
     COMM.println("Monitoring GPIO read state changes. Press any key.");
     digitalWrite(BOARD_LED_PIN, 0);
     // make sure to skip the TX/RX headers
-    for(int i = 2; i < NR_GPIO_PINS; i++) {
+    for(int i = 2; i<NR_GPIO_PINS; i++) {
         pinMode(i, INPUT_PULLDOWN);
         gpio_state[i] = (uint8)digitalRead(i);
     }
     while(!COMM.available()) {
-        for(int i = 2; i < NR_GPIO_PINS; i++) {
+        for(int i = 2; i<NR_GPIO_PINS; i++) {
             uint8 current_state = (uint8)digitalRead(i);
             if(current_state != gpio_state[i]) {
                 COMM.print("State change on header D");
@@ -449,7 +424,7 @@ void cmd_gpio_monitoring(void) {
             }
         }
     }
-    for(int i = 2; i < NR_GPIO_PINS; i++) {
+    for(int i = 2; i<NR_GPIO_PINS; i++) {
         pinMode(i, OUTPUT);
     }
 }
@@ -459,7 +434,7 @@ void cmd_sequential_adc_reads(void) {
     COMM.println("Press any key for next port, or ESC to stop.");
     digitalWrite(LED_PIN, 0);
     // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i < sizeof(adc_pins); i++) {
+    for(uint32 i = 2; i<sizeof(adc_pins); i++) {
         COMM.print("Reading on header D");
         COMM.print(adc_pins[i], DEC);
         COMM.println("...");
@@ -471,13 +446,13 @@ void cmd_sequential_adc_reads(void) {
             COMM.print(sample,DEC);
             COMM.print("\t");
             COMM.print("|");
-            for(int j = 0; j < 4096; j += 100) {
+            for(int j = 0; j<4096; j+= 100) {
                 if(sample >= j) COMM.print("#");
                 else COMM.print(" ");
             }
             COMM.print("| ");
-            for(int j = 0; j < 12; j++) {
-                if(sample & (1 << (11 - j))) COMM.print("1");
+            for(int j = 0; j<12; j++) {
+                if(sample & (1 << (11-j))) COMM.print("1");
                 else COMM.print("0");
             }
             COMM.println("");
@@ -491,37 +466,32 @@ void cmd_sequential_adc_reads(void) {
 void cmd_gpio_qa(void) {
     COMM.println("Doing QA testing for most GPIO pins...");
     digitalWrite(BOARD_LED_PIN, 0);
-    for(int i = 0; i < NR_GPIO_PINS; i++) {
+    for(int i = 0; i<NR_GPIO_PINS; i++) {
         pinMode(i, INPUT);
         gpio_state[i] = 0;
     }
-    COMM.println("Waiting to start; press a key.");
+    COMM.println("Waiting to start...");
     while(digitalRead(0) != 1 && !COMM.available()) {
         continue;
     }
-    for(int i = 0; i < NR_GPIO_PINS; i++) {
-        if(skip_pin_p(i)) {
-            COMM.print("Not checking pin ");
-            COMM.println(i);
+    for(int i=0; i<38; i++) {
+        if(i == BOARD_LED_PIN) {
+            COMM.println("Not checking LED");
             continue;
         }
-        COMM.print("Checking pin ");
-        COMM.print(i, DEC);
+        COMM.print("Checking D");
+        COMM.print(i,DEC);
         while(digitalRead(i) == 0) continue;
-        for(int j = 0; j < NR_GPIO_PINS; j++) {
-            if (skip_pin_p(j))
-                continue;
-            if(digitalRead(j) && j != i) {
+        for(int j=0; j<NR_GPIO_PINS; j++) {
+            if(digitalRead(j) && j!=i) {
                 COMM.print(": FAIL ########################### D");
                 COMM.println(j, DEC);
                 break;
             }
         }
         while(digitalRead(i) == 1) continue;
-        for(int j = 0; j < NR_GPIO_PINS; j++) {
-            if (skip_pin_p(j))
-                continue;
-            if(digitalRead(j) && j != i) {
+        for(int j=0; j<NR_GPIO_PINS; j++) {
+            if(digitalRead(j) && j!=i) {
                 COMM.print(": FAIL ########################### D");
                 COMM.println(j, DEC);
                 break;
@@ -529,18 +499,10 @@ void cmd_gpio_qa(void) {
         }
         COMM.println(": Ok!");
     }
-    for(int i = 0; i < NR_GPIO_PINS; i++) {
+    for(int i = 0; i<NR_GPIO_PINS; i++) {
         pinMode(i, OUTPUT);
         digitalWrite(i, 0);
     }
-}
-
-bool skip_pin_p(uint8 pin) {
-    for (uint8 i = 0; i < sizeof(pins_to_skip); i++) {
-        if (pin == pins_to_skip[i])
-            return true;
-    }
-    return false;
 }
 
 void cmd_sequential_gpio_writes(void) {
@@ -548,9 +510,9 @@ void cmd_sequential_gpio_writes(void) {
     COMM.println("Anything for next, ESC to stop.");
     digitalWrite(BOARD_LED_PIN, 0);
     // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i < NR_GPIO_PINS; i++) {
+    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
         COMM.print("GPIO write out on header D");
-        COMM.print((int)i, DEC);
+        COMM.print(i, DEC);
         COMM.println("...");
         pinMode(i, OUTPUT);
         do {
@@ -565,15 +527,15 @@ void cmd_gpio_toggling(void) {
     COMM.println("Toggling all GPIOs simultaneously. Press any key.");
     digitalWrite(BOARD_LED_PIN, 0);
     // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i < NR_GPIO_PINS; i++) {
+    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
         pinMode(i, OUTPUT);
     }
     while(!COMM.available()) {
-        for(uint32 i = 2; i < NR_GPIO_PINS; i++) {
+        for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
             togglePin(i);
         }
     }
-    for(uint32 i = 2; i < NR_GPIO_PINS; i++) {
+    for(uint32 i = 2; i<NR_GPIO_PINS; i++) {
         digitalWrite(i, 0);
     }
 }
@@ -584,7 +546,7 @@ void cmd_sequential_pwm_test(void) {
     COMM.println("Press any key for next, ESC to stop.");
     digitalWrite(BOARD_LED_PIN, 0);
     // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
         COMM.print("PWM out on header D");
         COMM.print(pwm_pins[i], DEC);
         COMM.println("...");
@@ -601,19 +563,19 @@ void cmd_pwm_sweep(void) {
     COMM.println("Testing all PWM ports with a sweep. Press any key.");
     digitalWrite(BOARD_LED_PIN, 0);
     // make sure to skip the TX/RX pins
-    for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
         pinMode(pwm_pins[i], PWM);
         pwmWrite(pwm_pins[i], 4000);
     }
     while(!COMM.available()) {
         rate += 20;
         if(rate > 65500) rate = 0;
-        for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+        for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
             pwmWrite(pwm_pins[i], rate);
         }
         delay(1);
     }
-    for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
         pinMode(pwm_pins[i], OUTPUT);
     }
 }
@@ -624,7 +586,7 @@ void cmd_servo_sweep(void) {
     digitalWrite(BOARD_LED_PIN, 0);
     init_all_timers(21);
     // make sure to skip the TX/RX headers
-    for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
         pinMode(pwm_pins[i], PWM);
         pwmWrite(pwm_pins[i], 4000);
     }
@@ -635,12 +597,12 @@ void cmd_servo_sweep(void) {
     while(!COMM.available()) {
         rate += 20;
         if(rate > 5734) rate = 4096;
-        for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+        for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
             pwmWrite(pwm_pins[i], rate);
         }
         delay(20);
     }
-    for(uint32 i = 2; i < sizeof(pwm_pins); i++) {
+    for(uint32 i = 2; i<sizeof(pwm_pins); i++) {
         pinMode(pwm_pins[i], OUTPUT);
     }
     init_all_timers(1);
@@ -664,12 +626,13 @@ void init_all_timers(uint16 prescale) {
 
 
 // Force init to be called *first*, i.e. before static object allocation.
-// Otherwise, statically allocated objects that need libmaple may fail.
-__attribute__((constructor)) void premain() {
+// Otherwise, statically allocated object that need libmaple may fail.
+__attribute__(( constructor )) void premain() {
     init();
 }
 
-int main(void) {
+int main(void)
+{
     setup();
 
     while (1) {

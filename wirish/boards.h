@@ -134,7 +134,7 @@ typedef struct PinMapping {
         /* D23/PC15 */
         {GPIOC_BASE, 15, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
         /* D24/PB9 */
-        {GPIOB_BASE,  9, ADC_INVALID, TIMER4_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER4,                    4},
+        {GPIOB_BASE,  9, ADC_INVALID, TIMER4_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
         /* D25/PD2 */
         {GPIOD_BASE,  2, ADC_INVALID,              0,  EXTI_CONFIG_PORTD, TIMER_INVALID, TIMER_INVALID},
         /* D26/PC10 */
@@ -479,108 +479,6 @@ typedef struct PinMapping {
         do {                                                            \
             *AFIO_MAPR = (*AFIO_MAPR | BIT(26)) & ~(BIT(25) | BIT(24)); \
         } while (0)
-
-#elif defined(BOARD_maple_RET6)
-
-    // Just like Maple, except PC6 -- PC9 have Timer 8 capture/compare
-    // channels 1 -- 4 hooked up (which makes PC9 an unfortunate
-    // choice for the button).
-
-    #define CYCLES_PER_MICROSECOND  72
-    #define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */
-
-    #define BOARD_BUTTON_PIN   38
-    #define BOARD_LED_PIN      13
-
-    static __attribute__ ((unused)) PinMapping PIN_MAP[NR_GPIO_PINS] = {
-        /* D0/PA3 */
-        {GPIOA_BASE,  3,        ADC3, TIMER2_CH4_CCR,  EXTI_CONFIG_PORTA, TIMER2, 4},
-        /* D1/PA2 */
-        {GPIOA_BASE,  2,        ADC2, TIMER2_CH3_CCR,  EXTI_CONFIG_PORTA, TIMER2, 3},
-        /* D2/PA0 */
-        {GPIOA_BASE,  0,        ADC0, TIMER2_CH1_CCR,  EXTI_CONFIG_PORTA, TIMER2, 1},
-        /* D3/PA1 */
-        {GPIOA_BASE,  1,        ADC1, TIMER2_CH2_CCR,  EXTI_CONFIG_PORTA, TIMER2, 2},
-        /* D4/PB5 */
-        {GPIOB_BASE,  5, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D5/PB6 */
-        {GPIOB_BASE,  6, ADC_INVALID, TIMER4_CH1_CCR,  EXTI_CONFIG_PORTB, TIMER4, 1},
-        /* D6/PA8 */
-        {GPIOA_BASE,  8, ADC_INVALID, TIMER1_CH1_CCR,  EXTI_CONFIG_PORTA, TIMER1, 1},
-        /* D7/PA9 */
-        {GPIOA_BASE,  9, ADC_INVALID, TIMER1_CH2_CCR,  EXTI_CONFIG_PORTA, TIMER1, 2},
-        /* D8/PA10 */
-        {GPIOA_BASE, 10, ADC_INVALID, TIMER1_CH3_CCR,  EXTI_CONFIG_PORTA, TIMER1, 3},
-        /* D9/PB7 */
-        {GPIOB_BASE,  7, ADC_INVALID, TIMER4_CH2_CCR,  EXTI_CONFIG_PORTB, TIMER4, 2},
-        /* D10/PA4 */
-        {GPIOA_BASE,  4,        ADC4,              0,  EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D11/PA7 */
-        {GPIOA_BASE,  7,        ADC7, TIMER3_CH2_CCR,  EXTI_CONFIG_PORTA, TIMER3, 2},
-        /* D12/PA6 */
-        {GPIOA_BASE,  6,        ADC6, TIMER3_CH1_CCR,  EXTI_CONFIG_PORTA, TIMER3, 1},
-        /* D13/PA5 */
-        {GPIOA_BASE,  5,        ADC5,              0,  EXTI_CONFIG_PORTA, TIMER_INVALID, TIMER_INVALID},
-        /* D14/PB8 */
-        {GPIOB_BASE,  8, ADC_INVALID, TIMER4_CH3_CCR,  EXTI_CONFIG_PORTB, TIMER4, 3},
-
-        /* Little header */
-
-        /* D15/PC0 */
-        {GPIOC_BASE,  0,       ADC10,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D16/PC1 */
-        {GPIOC_BASE,  1,       ADC11,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D17/PC2 */
-        {GPIOC_BASE,  2,       ADC12,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D18/PC3 */
-        {GPIOC_BASE,  3,       ADC13,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D19/PC4 */
-        {GPIOC_BASE,  4,       ADC14,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D20/PC5 */
-        {GPIOC_BASE,  5,       ADC15,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-
-        /* External header */
-
-        /* D21/PC13 */
-        {GPIOC_BASE, 13, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D22/PC14 */
-        {GPIOC_BASE, 14, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D23/PC15 */
-        {GPIOC_BASE, 15, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D24/PB9 */
-        {GPIOB_BASE,  9, ADC_INVALID, TIMER4_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER4,                    4},
-        /* D25/PD2 */
-        {GPIOD_BASE,  2, ADC_INVALID,              0,  EXTI_CONFIG_PORTD, TIMER_INVALID, TIMER_INVALID},
-        /* D26/PC10 */
-        {GPIOC_BASE, 10, ADC_INVALID,              0,  EXTI_CONFIG_PORTC, TIMER_INVALID, TIMER_INVALID},
-        /* D27/PB0 */
-        {GPIOB_BASE,  0,        ADC8, TIMER3_CH3_CCR,  EXTI_CONFIG_PORTB, TIMER3, 3},
-        /* D28/PB1 */
-        {GPIOB_BASE,  1,        ADC9, TIMER3_CH4_CCR,  EXTI_CONFIG_PORTB, TIMER3, 4},
-        /* D29/PB10 */
-        {GPIOB_BASE, 10, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D30/PB11 */
-        {GPIOB_BASE, 11, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D31/PB12 */
-        {GPIOB_BASE, 12, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D32/PB13 */
-        {GPIOB_BASE, 13, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D33/PB14 */
-        {GPIOB_BASE, 14, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D34/PB15 */
-        {GPIOB_BASE, 15, ADC_INVALID,              0,  EXTI_CONFIG_PORTB, TIMER_INVALID, TIMER_INVALID},
-        /* D35/PC6 */
-        {GPIOC_BASE,  6, ADC_INVALID, TIMER8_CH1_CCR,  EXTI_CONFIG_PORTC,        TIMER8,             1},
-        /* D36/PC7 */
-        {GPIOC_BASE,  7, ADC_INVALID, TIMER8_CH2_CCR,  EXTI_CONFIG_PORTC,        TIMER8,             2},
-        /* D37/PC8 */
-        {GPIOC_BASE,  8, ADC_INVALID, TIMER8_CH3_CCR,  EXTI_CONFIG_PORTC,        TIMER8,             3},
-        /* D38/PC9 (BUT) */
-        {GPIOC_BASE,  9, ADC_INVALID, TIMER8_CH4_CCR,  EXTI_CONFIG_PORTC,        TIMER8,             4}
-    };
-
-    #define BOARD_INIT do {                           \
-        } while(0)
 
 #else
 

@@ -80,7 +80,6 @@ typedef struct {
 #define FSMC_BWTR_DATLAT    0b00001111000000000000000000000000
 #define FSMC_BWTR_ACCMOD    0b00110000000000000000000000000000
 
-void fsmc_init_gpios(void);
 void fsmc_native_sram_init(void);
 
 #ifdef __cplusplus

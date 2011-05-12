@@ -15,7 +15,7 @@ Technical Specifications
     * Clock Speed: **72 MHz**
     * Operating Voltage: 3.3V
     * Input Voltage (recommended): 3V-12V
-    * 39 Digital I/O Pins (:ref:`GPIO <gpio>`)
+    * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC <adc>`)
     * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
     * Dedicated **USB** port for programming and communications (:ref:`USB <usb>`)

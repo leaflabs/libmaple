@@ -15,15 +15,15 @@ Technical Specifications
     * Clock Speed: **72 MHz**
     * Operating Voltage: 3.3V
     * Input Voltage (recommended): 3V-12V
-    * 39 Digital I/O Pins (:ref:`GPIO <gpio>`)
+    * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input pins, 12 bit **ADC** resolution (:ref:`ADC <adc>`)
-    * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
+    * 19 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
     * Dedicated **USB** port for programming and communications (:ref:`USB<usb>`)
     * External **JTAG** interface (:ref:`JTAG <jtag>`)
     * **512KB Flash** and **64KB SRAM**
     * 64 Channel nested vector interrupt handler (including external interrupt on GPIOs)
     * Integrated **SPI** (:ref:`SPI <spi>`)
-    * Integrated **I2C** (:ref:`I2C <i2c>`)
+    * Integrated **I2C** and **I2S** (:ref:`I2C <i2c>`)
     * 12 Channels of Direct Memory Access (**DMA**)
     * 3 **USART** and 2 **UART** devices (:ref:`USART <usart>`)
     * Six 4-channel and two basic **timers** (:ref:`Timers <timers>`)

@@ -13,22 +13,23 @@ Technical Specifications
 
     * MCU: **STM32F103RBT6**, a 32-bit ARM Cortex M3 microprocessor
     * Clock Speed: **72 MHz**
-    * Operating Voltage: 3.3V
-    * Input Voltage (recommended): 3V-12V
+    * **128KB Flash** and **20KB SRAM**
     * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC <adc>`)
     * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
     * Dedicated **USB** port for programming and communications (:ref:`USB <usb>`)
     * External **JTAG** interface (:ref:`JTAG <jtag>`)
-    * **128KB Flash** and **20KB SRAM**
-    * 64 Channel nested vector interrupt handler (including external interrupt on GPIOs)
+    * 64 Channel nested vector interrupt handler (including
+      :ref:`external interrupt <lang-attachinterrupt>` on GPIOs)
     * Integrated **SPI** (:ref:`SPI <spi>`)
     * Integrated **I2C** (:ref:`I2C <i2c>`)
-    * 7 Channels of Direct Memory Access (**DMA**)
+    * 7 Channels of Direct Memory Access (**DMA**) (:ref:`libmaple.dma`)
     * 3 **USART** divices (:ref:`USART <usart>`)
     * Four 4-channel **timers** (:ref:`Timers <timers>`)
     * Supplies up to 800mA @ 3.3v
     * Support for low power and sleep modes (<500uA)
+    * Operating Voltage: 3.3V
+    * Input Voltage (recommended): 3V-12V
     * Dimensions are 2.05″x2.1″
 
 .. _maple-identify-rev:
@@ -307,6 +308,13 @@ Rev 5
   from its silkscreen.  This mistake was fixed in later manufacturing
   runs.
 
+* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
+  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
+  43 as a GPIO will reset your board (and also prevents the JTAG
+  "reset halt") command from working properly.  It's possible to cut
+  the trace, but doing so will damage your board, so we *do not
+  recommend it* unless you're very sure about what you're doing.
+
 Rev 3
 ^^^^^
 
@@ -352,6 +360,13 @@ Rev 3
 * **PWM Marketing Mistake**: We originally sold the Maple advertising
   22 channels of 16-bit hardware PWM; actually the Maple only has 15.
 
+* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
+  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
+  43 as a GPIO will reset your board (and also prevents the JTAG
+  "reset halt") command from working properly.  It's possible to cut
+  the trace, but doing so will damage your board, so we *do not
+  recommend it* unless you're very sure about what you're doing.
+
 Rev 1
 ^^^^^
 
@@ -385,6 +400,13 @@ Rev 1
 
 * **PWM Marketing Mistake**: We originally sold the Maple advertising
   22 channels of 16-bit hardware PWM; the correct number is 15.
+
+* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
+  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
+  43 as a GPIO will reset your board (and also prevents the JTAG
+  "reset halt") command from working properly.  It's possible to cut
+  the trace, but doing so will damage your board, so we *do not
+  recommend it* unless you're very sure about what you're doing.
 
 Recommended Reading
 -------------------

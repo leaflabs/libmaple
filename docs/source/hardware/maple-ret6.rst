@@ -13,22 +13,27 @@ Technical Specifications
 
     * MCU: **STM32F103RET6**, a 32-bit ARM Cortex M3 microprocessor
     * Clock Speed: **72 MHz**
-    * Operating Voltage: 3.3V
-    * Input Voltage (recommended): 3V-12V
+    * **512KB Flash** and **64KB SRAM**
     * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input pins, 12 bit **ADC** resolution (:ref:`ADC <adc>`)
+    * Built-in, 2 channel **DAC** at 12 bit resolution
+      (:ref:`libmaple-dac`).
     * 19 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
     * Dedicated **USB** port for programming and communications (:ref:`USB<usb>`)
     * External **JTAG** interface (:ref:`JTAG <jtag>`)
-    * **512KB Flash** and **64KB SRAM**
-    * 64 Channel nested vector interrupt handler (including external interrupt on GPIOs)
+    * 64 Channel nested vector interrupt handler (including
+      :ref:`external interrupt <lang-attachinterrupt>` on GPIOs)
     * Integrated **SPI** (:ref:`SPI <spi>`)
+    * Integrated **SDIO**
     * Integrated **I2C** and **I2S** (:ref:`I2C <i2c>`)
-    * 12 Channels of Direct Memory Access (**DMA**)
+    * 12 Channels of Direct Memory Access (**DMA**) (:ref:`libmaple-dma`)
     * 3 **USART** and 2 **UART** devices (:ref:`USART <usart>`)
-    * Six 4-channel and two basic **timers** (:ref:`Timers <timers>`)
+    * Two advanced control, four general purpose, two basic **timers**
+      (:ref:`timers`)
     * Supplies up to 800mA @ 3.3v
     * Support for low power and sleep modes (<500uA)
+    * Operating Voltage: 3.3V
+    * Input Voltage (recommended): 3V-12V
     * Dimensions are 2.05″x2.1″
 
 .. _maple-ret6-powering:
@@ -256,11 +261,20 @@ Errata
 
 This section lists known issues and warnings for the Maple RET6 Edition.
 
-* **DAC, UART4, UART5 GPIOs unavailable**: Pins related to the digital
+* **UART4, UART5 GPIOs unavailable**: Pins related to the digital
   to analog converter (DAC) and UARTs 4 and 5 are not broken out to
   headers.  The RET6 Edition's hardware layout is identical to that of
   the Maple Rev 5, which wasn't designed for use with these
   STM32F103RET6-only peripherals.
+
+* **DAC channel 2 on BOARD_LED_PIN**: The Maple Rev 5 connects PA5 to
+  the board's built-in LED; this is the same GPIO bit which is
+  connected to the DAC's channel 2 output.
+
+* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
+  PB4, the NJTRST (JTAG reset) pin, which is pin 43.  Thus, attempting
+  to use pin 43 as a GPIO will reset your board (and also prevents the
+  JTAG "reset halt" command from working properly).
 
 Recommended Reading
 -------------------

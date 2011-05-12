@@ -69,8 +69,8 @@ void vcomDataRxCb(void) {
      in some cases */
 
   /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
-  char chkBuf[4];
-  char cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
+  uint8 chkBuf[4];
+  uint8 cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
   if (reset_state == DTR_NEGEDGE) {
     reset_state = DTR_LOW;
 

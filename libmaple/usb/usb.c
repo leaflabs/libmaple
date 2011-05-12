@@ -337,7 +337,7 @@ void usbWaitReset(void) {
  */
 void usbBlockingSendByte(char ch) {
     while (countTx);
-    UserToPMABufferCopy(&ch,VCOM_TX_ADDR,1);
+    UserToPMABufferCopy((uint8*)&ch,VCOM_TX_ADDR,1);
     _SetEPTxCount(VCOM_TX_ENDP,1);
     _SetEPTxValid(VCOM_TX_ENDP);
     countTx = 1;
@@ -397,8 +397,6 @@ uint32 usbReceiveBytes(uint8* recvBuf, uint32 len) {
 }
 
 void usbSendHello(void) {
-  char* myStr = "hello!";
-
   uint8 bufin = 48 + recvBufIn;;
   uint8 bufout = 48 + recvBufOut;
   uint8 avail  = 48 + usbBytesAvailable();

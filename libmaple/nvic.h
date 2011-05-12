@@ -139,7 +139,7 @@ typedef enum nvic_irq_num {
 
 void nvic_init(uint32 vector_table_address, uint32 offset);
 void nvic_set_vector_table(uint32 address, uint32 offset);
-void nvic_set_priority(nvic_irq_num irqn, uint8 priority);
+void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority);
 
 /**
  * Enables interrupts and configurable fault handlers (clear PRIMASK).

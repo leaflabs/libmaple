@@ -32,7 +32,6 @@
 
 #include "libmaple.h"
 #include "rcc.h"
-#include "nvic.h"
 #include "gpio.h"
 #include "nvic.h"
 #include "i2c.h"
@@ -302,18 +301,18 @@ void __irq_i2c2_ev(void) {
  * @sideeffect Aborts any pending i2c transactions
  */
 static void i2c_irq_error_handler(i2c_dev *dev) {
-    uint32 sr1 = dev->regs->SR1;
-    uint32 sr2 = dev->regs->SR2;
-    I2C_CRUMB(ERROR_ENTRY, sr1, sr2);
+    I2C_CRUMB(ERROR_ENTRY, dev->regs->SR1, dev->regs->SR2);
 
+    dev->error_flags = dev->regs->SR2 & (I2C_SR1_BERR |
+                                         I2C_SR1_ARLO |
+                                         I2C_SR1_AF |
+                                         I2C_SR1_OVR);
     /* Clear flags */
     dev->regs->SR1 = 0;
     dev->regs->SR2 = 0;
 
     i2c_stop_condition(dev);
     i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
-    dev->error_flags = sr2 & (I2C_SR1_BERR | I2C_SR1_ARLO | I2C_SR1_AF |
-                              I2C_SR1_OVR);
     dev->state = I2C_STATE_ERROR;
 }
 
@@ -534,7 +533,6 @@ out:
 static inline int32 wait_for_state_change(i2c_dev *dev,
                                           i2c_state state,
                                           uint32 timeout) {
-    int32 rc;
     i2c_state tmp;
 
     while (1) {

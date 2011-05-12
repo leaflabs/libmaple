@@ -244,9 +244,9 @@ dma_irq_cause dma_get_irq_cause(dma_dev *dev, dma_channel channel) {
          * order to fail fast, mimic the DMA controller's behavior
          * when an error occurs. */
         dma_disable(dev, channel);
-        return DMA_TRANSFER_ERROR;
     }
 #endif
+    return DMA_TRANSFER_ERROR;
 }
 
 /**

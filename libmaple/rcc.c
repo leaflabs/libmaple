@@ -105,7 +105,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul) {
-    uint32 cfgr;
+    uint32 cfgr = 0;
     uint32 cr;
 
     /* Assume that we're going to clock the chip off the PLL, fed by

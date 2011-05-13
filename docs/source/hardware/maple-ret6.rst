@@ -15,22 +15,26 @@ Technical Specifications
     * Clock Speed: **72 MHz**
     * **512KB Flash** and **64KB SRAM**
     * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
-    * 16 Analog Input pins, 12 bit **ADC** resolution (:ref:`ADC <adc>`)
+    * 16 Analog Input pins, 12 bit **ADC** resolution (:ref:`ADC
+      <adc>`)
     * Built-in, 2 channel **DAC** at 12 bit resolution
       (:ref:`libmaple-dac`).
     * 19 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
-    * Dedicated **USB** port for programming and communications (:ref:`USB<usb>`)
+    * Dedicated **USB** port for programming and communications
+      (:ref:`USB<usb>`)
     * External **JTAG** interface (:ref:`JTAG <jtag>`)
     * 64 Channel nested vector interrupt handler (including
       :ref:`external interrupt <lang-attachinterrupt>` on GPIOs)
     * Integrated **SPI** (:ref:`SPI <spi>`)
     * Integrated **SDIO**
     * Integrated **I2C** and **I2S** (:ref:`I2C <i2c>`)
-    * 12 Channels of Direct Memory Access (**DMA**) (:ref:`libmaple-dma`)
+    * 12 Channels of Direct Memory Access (**DMA**)
+      (:ref:`libmaple-dma`)
     * 3 **USART** and 2 **UART** devices (:ref:`USART <usart>`)
     * Two advanced control, four general purpose, two basic **timers**
       (:ref:`timers`)
-    * Supplies up to 800mA @ 3.3v
+    * Supplies up to 500mA @ 3.3v (with separate 250 mA digital and
+      analog regulators)
     * Support for low power and sleep modes (<500uA)
     * Operating Voltage: 3.3V
     * Input Voltage (recommended): 3V-12V
@@ -260,6 +264,10 @@ Errata
 ------
 
 This section lists known issues and warnings for the Maple RET6 Edition.
+
+* **Power Supply Marketing Mistake**: We originally sold the Maple
+  advertising that it was capable of supplying up to 800 mA; the
+  correct value is 500 mA.
 
 * **UART4, UART5 GPIOs unavailable**: Pins related to the digital
   to analog converter (DAC) and UARTs 4 and 5 are not broken out to

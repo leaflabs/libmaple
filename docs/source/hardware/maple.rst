@@ -15,18 +15,22 @@ Technical Specifications
     * Clock Speed: **72 MHz**
     * **128KB Flash** and **20KB SRAM**
     * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
-    * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC <adc>`)
+    * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC
+      <adc>`)
     * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
-    * Dedicated **USB** port for programming and communications (:ref:`USB <usb>`)
+    * Dedicated **USB** port for programming and communications
+      (:ref:`USB <usb>`)
     * External **JTAG** interface (:ref:`JTAG <jtag>`)
     * 64 Channel nested vector interrupt handler (including
       :ref:`external interrupt <lang-attachinterrupt>` on GPIOs)
     * Integrated **SPI** (:ref:`SPI <spi>`)
     * Integrated **I2C** (:ref:`I2C <i2c>`)
-    * 7 Channels of Direct Memory Access (**DMA**) (:ref:`libmaple.dma`)
+    * 7 Channels of Direct Memory Access (**DMA**)
+      (:ref:`libmaple.dma`)
     * 3 **USART** divices (:ref:`USART <usart>`)
     * Four 4-channel **timers** (:ref:`Timers <timers>`)
-    * Supplies up to 800mA @ 3.3v
+    * Supplies up to 500mA @ 3.3v (with separate 250 mA digital and
+      analog regulators)
     * Support for low power and sleep modes (<500uA)
     * Operating Voltage: 3.3V
     * Input Voltage (recommended): 3V-12V
@@ -297,11 +301,21 @@ permanently.
 Errata
 ------
 
-This section lists known issues and warnings for each revision of the
-Maple board.
+General
+^^^^^^^
+
+* **Power Supply Marketing Mistake**: We originally sold the Maple
+  advertising that it was capable of supplying up to 800 mA; the
+  correct value is 500 mA.
+
+By Rev
+^^^^^^
+
+The following subsections lists known issues and warnings for each
+revision of the Maple board.
 
 Rev 5
-^^^^^
+~~~~~
 
 * **Pin 3 AIN missing**: Pin 3 is capable of analog input, but on Rev
   5s manufactured during Fall 2010, the corresponding "AIN" is missing
@@ -316,7 +330,7 @@ Rev 5
   recommend it* unless you're very sure about what you're doing.
 
 Rev 3
-^^^^^
+~~~~~
 
 * **Pin 3 AIN missing**: Pin 3 is capable of analog input, but the
   corresponding "AIN" is missing from the Rev 3 silkscreen.
@@ -368,7 +382,7 @@ Rev 3
   recommend it* unless you're very sure about what you're doing.
 
 Rev 1
-^^^^^
+~~~~~
 
 * **ADC noise**: generally very high, in particular when the USB port
   is being used for communications (including keep-alive pings when

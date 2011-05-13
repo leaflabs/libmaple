@@ -322,12 +322,10 @@ Rev 5
   from its silkscreen.  This mistake was fixed in later manufacturing
   runs.
 
-* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
-  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
-  43 as a GPIO will reset your board (and also prevents the JTAG
-  "reset halt") command from working properly.  It's possible to cut
-  the trace, but doing so will damage your board, so we *do not
-  recommend it* unless you're very sure about what you're doing.
+* **Reset and NJTRST tied together**: The MCU's reset pin is connected
+  to PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use
+  pin 43 as a GPIO will reset your board (and also prevents the JTAG
+  "reset halt") command from working properly.
 
 Rev 3
 ~~~~~

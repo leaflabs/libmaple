@@ -279,10 +279,10 @@ This section lists known issues and warnings for the Maple RET6 Edition.
   the board's built-in LED; this is the same GPIO bit which is
   connected to the DAC's channel 2 output.
 
-* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
-  PB4, the NJTRST (JTAG reset) pin, which is pin 43.  Thus, attempting
-  to use pin 43 as a GPIO will reset your board (and also prevents the
-  JTAG "reset halt" command from working properly).
+* **Reset and NJTRST tied together**: The MCU's reset pin is connected
+  to PB4, the NJTRST (JTAG reset) pin, which is pin 43.  Thus,
+  attempting to use pin 43 as a GPIO will reset your board (and also
+  prevents the JTAG "reset halt" command from working properly).
 
 Recommended Reading
 -------------------

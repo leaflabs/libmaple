@@ -31,7 +31,7 @@ Technical Specifications
     * Four 4-channel **timers** (:ref:`Timers <timers>`)
     * Supplies up to 500mA @ 3.3v (with separate 250 mA digital and
       analog regulators)
-    * Support for low power and sleep modes (<500uA)
+    * Support for low power, sleep, and standby modes (<500uA)
     * Operating Voltage: 3.3V
     * Input Voltage (recommended): 3V-12V
     * Dimensions are 2.05″x2.1″

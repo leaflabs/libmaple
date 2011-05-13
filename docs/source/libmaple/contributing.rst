@@ -60,14 +60,14 @@ source tree when the time comes.
 
 The steps to submit a pull request are as follows:
 
-1. If you don't already have one, get a `Github account
+1. If you don't already have one, get a `GitHub account
    <https://github.com/plans>`_ (free).
 
 2. Fork libmaple, then clone your fork to the computer you code on.
-   Github provides detailed instructions on `forking and cloning a
+   GitHub provides detailed instructions on `forking and cloning a
    repository <http://help.github.com/fork-a-repo/>`_.
 
-3. Push your commits to your Github libmaple fork (see instructions
+3. Push your commits to your GitHub libmaple fork (see instructions
    linked in Step 2 for a step-by-step walkthrough on how to do this).
 
 4. `Submit a pull request <http://help.github.com/pull-requests/>`_ to
@@ -78,7 +78,7 @@ The steps to submit a pull request are as follows:
 Submitting Via Email
 --------------------
 
-If you're unfamiliar with Git or would prefer not to use Github, you
+If you're unfamiliar with Git or would prefer not to use GitHub, you
 can always send us a patch via email at info@leaflabs.com.  We'd love
 it if you used the `Linux kernel patch format
 <http://linux.yyz.us/patch-format.html>`_, but please at least include

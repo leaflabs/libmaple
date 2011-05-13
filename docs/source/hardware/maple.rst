@@ -308,7 +308,7 @@ design files for Rev 1, Rev 3, and Rev 5 are respectively in the
 schematic for a JTAG adapter suitable for use with Maple is available
 in the ``jtagadapter`` directory.
 
-From the Github repository main page, you can download the entire
+From the GitHub repository main page, you can download the entire
 repository by clicking the "Download" button.  If you are familiar
 with `git <http://git-scm.com/>`_, you can also clone the repository
 at the command line with ::

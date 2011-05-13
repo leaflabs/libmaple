@@ -75,7 +75,7 @@ GPIO Information
 The RET6 Edition features 38 ready-to-use general purpose input/output
 (GPIO) pins for digital input/output, numbered ``D0`` through ``D37``.
 These numbers correspond to the numeric values next to each header on
-the Maple silkscreen.  More GPIOs (numbered ``D39``\ --``43``) are
+the Maple silkscreen.  More GPIOs (numbered ``D39``\ --``D43``) are
 available through use in combination with the
 :ref:`lang-disabledebugports` function; see the :ref:`board-specific
 debug pin constants <lang-board-values-debug>` for more information.
@@ -207,11 +207,10 @@ The following table shows which pins connect to which :ref:`EXTI lines
 USART Pin Map
 ^^^^^^^^^^^^^
 
-.. FIXME [0.0.10] UART4 and UART5 information
-
-The Maple RET6 Edition has three serial ports (also known as a UARTs
-or USARTs): ``Serial1``, ``Serial2``, and ``Serial3``. They
-communicate using the pins summarized in the following table:
+The Maple RET6 Edition has three serial ports whose pins are broken
+out to headers (also known as a UARTs or USARTs): ``Serial1``,
+``Serial2``, and ``Serial3``. They communicate using the pins
+summarized in the following table:
 
 .. csv-table::
    :header: Serial Port, TX, RX, CK, CTS, RTS
@@ -221,12 +220,53 @@ communicate using the pins summarized in the following table:
    ``Serial2`` | 1  | 0  | 10 | 2  | 3
    ``Serial3`` | 29 | 30 | 31 | 32 | 33
 
+Unfortunately, :ref:`UART4 and UART5 aren't completely available
+<maple-ret6-uart-errata>`.
+
 Board-Specific Values
 ---------------------
 
-.. TODO [0.0.10]
+This section lists the Maple RET6 Edition's :ref:`board-specific
+values <lang-board-values>`.
 
-Stub.
+- ``CYCLES_PER_MICROSECOND``: 72
+- ``BOARD_BUTTON_PIN``: 38
+- ``BOARD_LED_PIN``: 13
+- ``BOARD_NR_GPIO_PINS``: 44
+- ``BOARD_NR_PWM_PINS``: 16
+- ``boardPWMPins``: 0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28
+- ``BOARD_NR_ADC_PINS``: 15
+- ``boardADCPins``: 0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28
+- ``BOARD_NR_USED_PINS``: 7
+- ``boardUsedPins``: ``BOARD_LED_PIN``, ``BOARD_BUTTON_PIN``,
+  ``BOARD_JTMS_SWDIO_PIN``, ``BOARD_JTCK_SWCLK_PIN``,
+  ``BOARD_JTDI_PIN``, ``BOARD_JTDO_PIN``, ``BOARD_NJTRST_PIN``
+- ``BOARD_NR_USARTS``: 3 (unfortunately, due to the Maple Rev 5
+  design, UARTs 4 and 5 have pins which are not broken out)
+- ``BOARD_USART1_TX_PIN``: 7
+- ``BOARD_USART1_RX_PIN``: 8
+- ``BOARD_USART2_TX_PIN``: 1
+- ``BOARD_USART2_RX_PIN``: 0
+- ``BOARD_USART3_TX_PIN``: 29
+- ``BOARD_USART3_RX_PIN``: 30
+- ``BOARD_NR_SPI``: 3
+- ``BOARD_SPI1_NSS_PIN``: 10
+- ``BOARD_SPI1_MOSI_PIN``: 11
+- ``BOARD_SPI1_MISO_PIN``: 12
+- ``BOARD_SPI1_SCK_PIN``: 13
+- ``BOARD_SPI2_NSS_PIN``: 31
+- ``BOARD_SPI2_MOSI_PIN``: 34
+- ``BOARD_SPI2_MISO_PIN``: 33
+- ``BOARD_SPI2_SCK_PIN``: 32
+- ``BOARD_SPI3_NSS_PIN``: 41
+- ``BOARD_SPI3_MOSI_PIN``: 4
+- ``BOARD_SPI3_MISO_PIN``: 43
+- ``BOARD_SPI3_SCK_PIN``: 42
+- ``BOARD_JTMS_SWDIO_PIN``: 39
+- ``BOARD_JTCK_SWCLK_PIN``: 40
+- ``BOARD_JTDI_PIN``: 41
+- ``BOARD_JTDO_PIN``: 42
+- ``BOARD_NJTRST_PIN``: 43
 
 Hardware Design Files
 ---------------------
@@ -268,6 +308,8 @@ This section lists known issues and warnings for the Maple RET6 Edition.
 * **Power Supply Marketing Mistake**: We originally sold the Maple
   advertising that it was capable of supplying up to 800 mA; the
   correct value is 500 mA.
+
+.. _maple-ret6-uart-errata:
 
 * **UART4, UART5 GPIOs unavailable**: Pins related to the digital
   to analog converter (DAC) and UARTs 4 and 5 are not broken out to

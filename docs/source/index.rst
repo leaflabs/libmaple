@@ -54,6 +54,7 @@ Have fun!
    pwm
    spi
    timers
+   systick
    usb
    usart
 

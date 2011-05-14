@@ -5,8 +5,6 @@
 Timers
 ======
 
-.. FIXME [0.0.10] links to systick.h in a few places on this page
-
 There are four general purpose timers in the Maple microcontroller
 that can be configured to generate periodic or delayed events with
 minimal work done by the microcontroller. For example, the :ref:`PWM
@@ -55,10 +53,11 @@ events to be programmed at 4 different rates on a single timer.  Note
 that function call overheads mean that the smallest increment rate is
 at least a few microseconds.
 
-Function Reference
-------------------
+Library Documentation
+---------------------
 
-* :ref:`HardwareTimer <lang-hardwaretimer>`
+See the :ref:`HardwareTimer <lang-hardwaretimer>` reference for more
+information on controlling the built-in timers.
 
 Caveats
 -------
@@ -109,12 +108,12 @@ you put your Maple into :ref:`perpetual bootloader mode
 to it (or somehow causing your program to re-enable serial over USB
 using :ref:`SerialUSB.begin() <lang-serialusb-begin>`).
 
-The SysTick peripheral another way to perform periodic or delayed
-events.  Its separate timer does not conflict with any other
-peripherals, but the associated 1 kHz interrupt can jitter the general
-purpose timer interrupts.  The SysTick peripheral can be disabled by
-calling :ref:`systick_disable() <libmaple-systick_disable>`, and
-re-enabled using :ref:`systick_resume() <libmaple-systick_resume>`.
-However, be aware that calling ``systick_disable()`` will stop the
-values coming from :ref:`lang-micros` and :ref:`lang-millis` from
-increasing.
+The :ref:`SysTick <systick>` peripheral another way to perform
+periodic or delayed events.  Its separate timer does not conflict with
+any other peripherals, but the associated 1 kHz interrupt can jitter
+the general purpose timer interrupts.  The SysTick peripheral can be
+disabled by calling :ref:`systick_disable()
+<libmaple-systick_disable>`, and re-enabled using
+:ref:`systick_resume() <libmaple-systick_resume>`.  However, be aware
+that calling ``systick_disable()`` will stop the values coming from
+:ref:`lang-micros` and :ref:`lang-millis` from increasing.

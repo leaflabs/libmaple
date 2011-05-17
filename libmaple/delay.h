@@ -1,10 +1,20 @@
 /**
- *  @brief Delay implementation
+ * @file delay.h
+ * @brief Delay implementation
  */
 
 #ifndef _DELAY_H_
 #define _DELAY_H_
 
+/**
+ * @brief Delay the given number of microseconds.
+ *
+ * Note that this function currently assumes you are on a LeafLabs
+ * board, and will only work properly if you follow the LeafLabs RCC
+ * configuration.
+ *
+ * @param us Number of microseconds to delay.
+ */
 static inline void delay_us(uint32 us) {
     /* TODO this makes unwarranted assumptions about the RCC
      * config; add a hook so users can make their own decisions. */

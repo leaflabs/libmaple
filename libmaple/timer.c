@@ -221,7 +221,7 @@ void timer_attach_interrupt(timer_dev *dev,
                             uint8 interrupt,
                             voidFuncPtr handler) {
     dev->handlers[interrupt] = handler;
-    timer_enable_interrupt(dev, interrupt);
+    timer_enable_irq(dev, interrupt);
     enable_irq(dev, interrupt);
 }
 
@@ -235,7 +235,7 @@ void timer_attach_interrupt(timer_dev *dev,
  * @see timer_channel
  */
 void timer_detach_interrupt(timer_dev *dev, uint8 interrupt) {
-    timer_disable_interrupt(dev, interrupt);
+    timer_disable_irq(dev, interrupt);
     dev->handlers[interrupt] = NULL;
 }
 
@@ -378,7 +378,7 @@ static void disable_channel(timer_dev *dev, uint8 channel) {
 }
 
 static void pwm_mode(timer_dev *dev, uint8 channel) {
-    timer_disable_interrupt(dev, channel);
+    timer_disable_irq(dev, channel);
     timer_oc_set_mode(dev, channel, TIMER_OC_MODE_PWM_1, TIMER_OC_PE);
     timer_cc_enable(dev, channel);
 }

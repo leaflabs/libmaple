@@ -715,7 +715,7 @@ static inline void timer_generate_update(timer_dev *dev) {
  * @brief Enable a timer's trigger DMA request
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL
  */
-static inline void timer_trigger_dma_enable_request(timer_dev *dev) {
+static inline void timer_dma_enable_trg_req(timer_dev *dev) {
     *bb_perip(&(dev->regs).gen->DIER, TIMER_DIER_TDE_BIT) = 1;
 }
 
@@ -723,7 +723,7 @@ static inline void timer_trigger_dma_enable_request(timer_dev *dev) {
  * @brief Disable a timer's trigger DMA request
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL
  */
-static inline void timer_trigger_dma_disable_request(timer_dev *dev) {
+static inline void timer_dma_disable_trg_req(timer_dev *dev) {
     *bb_perip(&(dev->regs).gen->DIER, TIMER_DIER_TDE_BIT) = 0;
 }
 
@@ -732,7 +732,7 @@ static inline void timer_trigger_dma_disable_request(timer_dev *dev) {
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL
  * @param channel Channel whose DMA request to enable.
  */
-static inline void timer_dma_enable_request(timer_dev *dev, uint8 channel) {
+static inline void timer_dma_enable_req(timer_dev *dev, uint8 channel) {
     *bb_perip(&(dev->regs).gen->DIER, channel + 8) = 1;
 }
 
@@ -741,7 +741,7 @@ static inline void timer_dma_enable_request(timer_dev *dev, uint8 channel) {
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @param channel Channel whose DMA request to disable.
  */
-static inline void timer_dma_disable_request(timer_dev *dev, uint8 channel) {
+static inline void timer_dma_disable_req(timer_dev *dev, uint8 channel) {
     *bb_perip(&(dev->regs).gen->DIER, channel + 8) = 0;
 }
 
@@ -753,7 +753,7 @@ static inline void timer_dma_disable_request(timer_dev *dev, uint8 channel) {
  * @see timer_interrupt_id
  * @see timer_channel
  */
-static inline void timer_enable_interrupt(timer_dev *dev, uint8 interrupt) {
+static inline void timer_enable_irq(timer_dev *dev, uint8 interrupt) {
     *bb_perip(&(dev->regs).adv->DIER, interrupt) = 1;
 }
 
@@ -765,7 +765,7 @@ static inline void timer_enable_interrupt(timer_dev *dev, uint8 interrupt) {
  * @see timer_interrupt_id
  * @see timer_channel
  */
-static inline void timer_disable_interrupt(timer_dev *dev, uint8 interrupt) {
+static inline void timer_disable_irq(timer_dev *dev, uint8 interrupt) {
     *bb_perip(&(dev->regs).adv->DIER, interrupt) = 0;
 }
 
@@ -801,7 +801,7 @@ static inline void timer_cc_disable(timer_dev *dev, uint8 channel) {
  * @return Polarity, either 0 or 1.
  * @see timer_cc_set_polarity()
  */
-static inline uint8 timer_cc_get_polarity(timer_dev *dev, uint8 channel) {
+static inline uint8 timer_cc_get_pol(timer_dev *dev, uint8 channel) {
     return *bb_perip(&(dev->regs).gen->CCER, 4 * (channel - 1) + 1);
 }
 
@@ -822,9 +822,7 @@ static inline uint8 timer_cc_get_polarity(timer_dev *dev, uint8 channel) {
  * @param channel Channel whose capture/compare output polarity to set.
  * @param pol New polarity, 0 or 1.
  */
-static inline void timer_cc_set_polarity(timer_dev *dev,
-                                         uint8 channel,
-                                         uint8 pol) {
+static inline void timer_cc_set_pol(timer_dev *dev, uint8 channel, uint8 pol) {
     *bb_perip(&(dev->regs).gen->CCER, 4 * (channel - 1) + 1) = pol;
 }
 
@@ -833,7 +831,7 @@ static inline void timer_cc_set_polarity(timer_dev *dev,
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @return Number of bytes to be transferred per DMA request, from 1 to 18.
  */
-static inline uint8 timer_get_dma_burst_length(timer_dev *dev) {
+static inline uint8 timer_dma_get_burst_len(timer_dev *dev) {
     uint32 dbl = ((dev->regs).gen->DCR & TIMER_DCR_DBL) >> 8;
     return dbl + 1;             /* 0 means 1 byte, etc. */
 }
@@ -844,7 +842,7 @@ static inline uint8 timer_get_dma_burst_length(timer_dev *dev) {
  * @param length DMA burst length; i.e., number of bytes to transfer
  *               per DMA request, from 1 to 18.
  */
-static inline void timer_set_dma_burst_length(timer_dev *dev, uint8 length) {
+static inline void timer_dma_set_burst_len(timer_dev *dev, uint8 length) {
     uint32 tmp = (dev->regs).gen->DCR;
     tmp &= ~TIMER_DCR_DBL;
     tmp |= (length - 1) << 8;
@@ -856,7 +854,7 @@ static inline void timer_set_dma_burst_length(timer_dev *dev, uint8 length) {
  *
  * Defines the base address for DMA transfers.
  */
-typedef enum timer_dma_base_address {
+typedef enum timer_dma_base_addr {
     TIMER_DMA_BASE_CR1 = TIMER_DCR_DBA_CR1, /**< Base is control register 1 */
     TIMER_DMA_BASE_CR2 = TIMER_DCR_DBA_CR2, /**< Base is control register 2 */
     TIMER_DMA_BASE_SMCR = TIMER_DCR_DBA_SMCR, /**< Base is slave mode
@@ -892,7 +890,7 @@ typedef enum timer_dma_base_address {
                                                      register */
     TIMER_DMA_BASE_DMAR = TIMER_DCR_DBA_DMAR    /**< Base is DMA address for
                                                      full transfer */
-} timer_dma_base_address;
+} timer_dma_base_addr;
 
 /**
  * @brief Get the timer's DMA base address.
@@ -902,10 +900,9 @@ typedef enum timer_dma_base_address {
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @return DMA base address
  */
-static inline timer_dma_base_address
-timer_get_dma_base_address(timer_dev *dev) {
+static inline timer_dma_base_addr timer_dma_get_base_addr(timer_dev *dev) {
     uint32 dcr = (dev->regs).gen->DCR;
-    return (timer_dma_base_address)(dcr & TIMER_DCR_DBA);
+    return (timer_dma_base_addr)(dcr & TIMER_DCR_DBA);
 }
 
 /**
@@ -916,8 +913,8 @@ timer_get_dma_base_address(timer_dev *dev) {
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @param dma_base DMA base address.
  */
-static inline void
-timer_set_dma_base_address(timer_dev *dev, timer_dma_base_address dma_base) {
+static inline void timer_dma_set_base_addr(timer_dev *dev,
+                                           timer_dma_base_addr dma_base) {
     uint32 tmp = (dev->regs).gen->DCR;
     tmp &= ~TIMER_DCR_DBA;
     tmp |= dma_base;

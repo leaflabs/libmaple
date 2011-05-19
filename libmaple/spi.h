@@ -207,12 +207,9 @@ typedef struct spi_dev {
     nvic_irq_num irq_num;
 } spi_dev;
 
-/** SPI device 1 */
 extern spi_dev *SPI1;
-/** SPI device 2 */
 extern spi_dev *SPI2;
 #ifdef STM32_HIGH_DENSITY
-/** SPI device 3 */
 extern spi_dev *SPI3;
 #endif
 

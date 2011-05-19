@@ -49,18 +49,34 @@ typedef struct pwr_reg_map {
  */
 
 /* Control register */
-#define PWR_CR_DBP  8 /**< Disable backup domain write protection bit */
-#define PWR_CR_PVDE 4 /**< Power voltage detector enable bit */
-#define PWR_CR_CSBF 3 /**< Clear standby flag bit */
-#define PWR_CR_CWUF 2 /**< Clear wakeup flag bit */
-#define PWR_CR_PDDS 1 /**< Power down deepsleep bit */
-#define PWR_CR_LPDS 0 /**< Low-power deepsleep bit */
+
+/** Disable backup domain write protection bit */
+#define PWR_CR_DBP  8
+/** Power voltage detector enable bit */
+#define PWR_CR_PVDE 4
+/** Clear standby flag bit */
+#define PWR_CR_CSBF 3
+/** Clear wakeup flag bit */
+#define PWR_CR_CWUF 2
+/** Power down deepsleep bit */
+#define PWR_CR_PDDS 1
+/** Low-power deepsleep bit */
+#define PWR_CR_LPDS 0
 
 /* Control and status register */
-#define PWR_CSR_EWUP 8          /**< Enable wakeup pin bit */
-#define PWR_CSR_PVDO 2          /**< PVD output bit */
-#define PWR_CSR_SBF  1          /**< Standby flag bit */
-#define PWR_CSR_WUF  0          /**< Wakeup flag bit */
+
+/** Enable wakeup pin bit */
+#define PWR_CSR_EWUP 8
+/** PVD output bit */
+#define PWR_CSR_PVDO 2
+/** Standby flag bit */
+#define PWR_CSR_SBF  1
+/** Wakeup flag bit */
+#define PWR_CSR_WUF  0
+
+/*
+ * Convenience functions
+ */
 
 void pwr_init(void);
 

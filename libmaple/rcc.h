@@ -427,7 +427,7 @@ typedef enum rcc_pll_multiplier {
  *
  * Also generally useful as a unique identifier for that device.
  */
-typedef enum {
+typedef enum rcc_clk_id {
     RCC_GPIOA,
     RCC_GPIOB,
     RCC_GPIOC,

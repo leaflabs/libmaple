@@ -106,6 +106,7 @@ static void setupNVIC() {
 static void adcDefaultConfig(const adc_dev* dev);
 
 static void setupADC() {
+    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
     adc_foreach(adcDefaultConfig);
 }
 

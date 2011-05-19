@@ -62,13 +62,12 @@ const adc_dev *ADC3 = &adc3;
 /**
  * @brief Initialize an ADC peripheral.
  *
- * Initializes the RCC clock line for the given peripheral, using ADC
- * prescaler RCC_ADCPRE_PCLK_DIV_6.  Resets ADC device registers.
+ * Initializes the RCC clock line for the given peripheral.  Resets
+ * ADC device registers.
  *
  * @param dev ADC peripheral to initialize
  */
 void adc_init(const adc_dev *dev) {
-    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
     rcc_clk_enable(dev->clk_id);
     rcc_reset_dev(dev->clk_id);
 }

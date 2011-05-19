@@ -70,7 +70,7 @@ typedef struct i2c_dev {
     uint8 clk_line;
     uint8 ev_nvic_line;
     uint8 er_nvic_line;
-    volatile uint8 state;
+    volatile i2c_state state;
     uint16 msgs_left;
     i2c_msg *msg;
     volatile uint32 timestamp;

@@ -145,7 +145,7 @@ void gpio_set_mode(gpio_dev *dev, uint8 pin, gpio_pin_mode mode) {
  */
 
 /**
- * Initialize the AFIO clock, and reset the AFIO registers.
+ * @brief Initialize the AFIO clock, and reset the AFIO registers.
  */
 void afio_init(void) {
     rcc_clk_enable(RCC_AFIO);
@@ -155,15 +155,12 @@ void afio_init(void) {
 #define AFIO_EXTI_SEL_MASK 0xF
 
 /**
- * Select a source input for an external interrupt.
+ * @brief Select a source input for an external interrupt.
  *
- * @param exti      External interrupt.  One of: AFIO_EXTI_0,
- *                  AFIO_EXTI_1, ..., AFIO_EXTI_15.
+ * @param exti      External interrupt.
  * @param gpio_port Port which contains pin to use as source input.
- *                  One of: AFIO_EXTI_PA, AFIO_EXTI_PB, AFIO_EXTI_PC,
- *                  AFIO_EXTI_PD, and, on high density devices,
- *                  AFIO_EXTI_PE, AFIO_EXTI_PF, AFIO_EXTI_PG.
- * @see exti_port
+ * @see afio_exti_num
+ * @see afio_exti_port
  */
 void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port) {
     __io uint32 *exti_cr = &AFIO_BASE->EXTICR1 + exti / 4;
@@ -176,15 +173,14 @@ void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port) {
 }
 
 /**
- * @brief Remap an alternate function peripheral to a different pin
- * mapping
- * @param peripheral to remap
+ * @brief Perform an alternate function remap.
+ * @param remapping Remapping to perform.
  */
-void afio_remap(AFIORemapPeripheral p) {
-    if (p & AFIO_REMAP_USE_MAPR2) {
-        p &= ~AFIO_REMAP_USE_MAPR2;
-        AFIO_BASE->MAPR2 |= p;
+void afio_remap(afio_remap_peripheral remapping) {
+    if (remapping & AFIO_REMAP_USE_MAPR2) {
+        remapping &= ~AFIO_REMAP_USE_MAPR2;
+        AFIO_BASE->MAPR2 |= remapping;
     } else {
-        AFIO_BASE->MAPR |= p;
+        AFIO_BASE->MAPR |= remapping;
     }
 }

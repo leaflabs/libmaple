@@ -57,8 +57,10 @@ typedef struct gpio_reg_map {
 } gpio_reg_map;
 
 /**
- * External interrupt line port selector.  Used to determine which
- * GPIO port to map an external interrupt line onto. */
+ * @brief External interrupt line port selector.
+ *
+ * Used to determine which GPIO port to map an external interrupt line
+ * onto. */
 /* (See AFIO sections, below) */
 typedef enum {
     AFIO_EXTI_PA,               /**< Use PAx pin. */
@@ -80,19 +82,26 @@ typedef struct gpio_dev {
 } gpio_dev;
 
 extern gpio_dev gpioa;
+/** GPIO port A device. */
 extern gpio_dev* const GPIOA;
 extern gpio_dev gpiob;
+/** GPIO port B device. */
 extern gpio_dev* const GPIOB;
 extern gpio_dev gpioc;
+/** GPIO port C device. */
 extern gpio_dev* const GPIOC;
 extern gpio_dev gpiod;
+/** GPIO port D device. */
 extern gpio_dev* const GPIOD;
 #ifdef STM32_HIGH_DENSITY
 extern gpio_dev gpioe;
+/** GPIO port E device. */
 extern gpio_dev* const GPIOE;
 extern gpio_dev gpiof;
+/** GPIO port F device. */
 extern gpio_dev* const GPIOF;
 extern gpio_dev gpiog;
+/** GPIO port G device. */
 extern gpio_dev* const GPIOG;
 #endif
 
@@ -118,6 +127,8 @@ extern gpio_dev* const GPIOG;
  */
 
 /* Control registers, low and high */
+
+#define GPIO_CR_CNF                     (0x3 << 2)
 #define GPIO_CR_CNF_INPUT_ANALOG        (0x0 << 2)
 #define GPIO_CR_CNF_INPUT_FLOATING      (0x1 << 2)
 #define GPIO_CR_CNF_INPUT_PU_PD         (0x2 << 2)
@@ -125,6 +136,7 @@ extern gpio_dev* const GPIOG;
 #define GPIO_CR_CNF_OUTPUT_OD           (0x1 << 2)
 #define GPIO_CR_CNF_AF_OUTPUT_PP        (0x2 << 2)
 #define GPIO_CR_CNF_AF_OUTPUT_OD        (0x3 << 2)
+#define GPIO_CR_MODE                    0x3
 #define GPIO_CR_MODE_INPUT              0x0
 #define GPIO_CR_MODE_OUTPUT_10MHZ       0x1
 #define GPIO_CR_MODE_OUTPUT_2MHZ        0x2
@@ -237,6 +249,7 @@ typedef struct afio_reg_map {
  */
 
 /* Event control register */
+
 #define AFIO_EVCR_EVOE                  (0x1 << 7)
 #define AFIO_EVCR_PORT_PA               (0x0 << 4)
 #define AFIO_EVCR_PORT_PB               (0x1 << 4)
@@ -261,6 +274,7 @@ typedef struct afio_reg_map {
 #define AFIO_EVCR_PIN_15                0xF
 
 /* AF remap and debug I/O configuration register */
+
 #define AFIO_MAPR_SWJ_CFG                      (0x7 << 24)
 #define AFIO_MAPR_SWJ_CFG_FULL_SWJ             (0x0 << 24)
 #define AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST    (0x1 << 24)
@@ -273,22 +287,121 @@ typedef struct afio_reg_map {
 #define AFIO_MAPR_TIM5CH4_IREMAP               BIT(16)
 #define AFIO_MAPR_PD01_REMAP                   BIT(15)
 #define AFIO_MAPR_CAN_REMAP                    (0x3 << 13)
+#define AFIO_MAPR_CAN_REMAP_NONE               (0x0 << 13)
+#define AFIO_MAPR_CAN_REMAP_PB8_PB9            (0x2 << 13)
+#define AFIO_MAPR_CAN_REMAP_PD0_PD1            (0x3 << 13)
 #define AFIO_MAPR_TIM4_REMAP                   BIT(12)
 #define AFIO_MAPR_TIM3_REMAP                   (0x3 << 10)
+#define AFIO_MAPR_TIM3_REMAP_NONE              (0x0 << 10)
+#define AFIO_MAPR_TIM3_REMAP_PARTIAL           (0x2 << 10)
+#define AFIO_MAPR_TIM3_REMAP_FULL              (0x3 << 10)
 #define AFIO_MAPR_TIM2_REMAP                   (0x3 << 8)
+#define AFIO_MAPR_TIM2_REMAP_NONE              (0x0 << 8)
+#define AFIO_MAPR_TIM2_REMAP_PA15_PB3_PA2_PA3  (0x1 << 8)
+#define AFIO_MAPR_TIM2_REMAP_PA0_PA1_PB10_PB11 (0x2 << 8)
+#define AFIO_MAPR_TIM2_REMAP_FULL              (0x3 << 8)
 #define AFIO_MAPR_TIM1_REMAP                   (0x3 << 6)
+#define AFIO_MAPR_TIM1_REMAP_NONE              (0x0 << 6)
+#define AFIO_MAPR_TIM1_REMAP_PARTIAL           (0x1 << 6)
+#define AFIO_MAPR_TIM1_REMAP_FULL              (0x3 << 6)
 #define AFIO_MAPR_USART3_REMAP                 (0x3 << 4)
+#define AFIO_MAPR_USART3_REMAP_NONE            (0x0 << 4)
+#define AFIO_MAPR_USART3_REMAP_PARTIAL         (0x1 << 4)
+#define AFIO_MAPR_USART3_REMAP_FULL            (0x3 << 4)
 #define AFIO_MAPR_USART2_REMAP                 BIT(3)
 #define AFIO_MAPR_USART1_REMAP                 BIT(2)
 #define AFIO_MAPR_I2C1_REMAP                   BIT(1)
 #define AFIO_MAPR_SPI1_REMAP                   BIT(0)
 
-/* External interrupt configuration registers */
+/* External interrupt configuration register 1 */
+
+#define AFIO_EXTICR1_EXTI3              (0xF << 12)
+#define AFIO_EXTICR1_EXTI3_PA           (0x0 << 12)
+#define AFIO_EXTICR1_EXTI3_PB           (0x1 << 12)
+#define AFIO_EXTICR1_EXTI3_PC           (0x2 << 12)
+#define AFIO_EXTICR1_EXTI3_PD           (0x3 << 12)
+#define AFIO_EXTICR1_EXTI3_PE           (0x4 << 12)
+#define AFIO_EXTICR1_EXTI3_PF           (0x5 << 12)
+#define AFIO_EXTICR1_EXTI3_PG           (0x6 << 12)
+#define AFIO_EXTICR1_EXTI2              (0xF << 8)
+#define AFIO_EXTICR1_EXTI2_PA           (0x0 << 8)
+#define AFIO_EXTICR1_EXTI2_PB           (0x1 << 8)
+#define AFIO_EXTICR1_EXTI2_PC           (0x2 << 8)
+#define AFIO_EXTICR1_EXTI2_PD           (0x3 << 8)
+#define AFIO_EXTICR1_EXTI2_PE           (0x4 << 8)
+#define AFIO_EXTICR1_EXTI2_PF           (0x5 << 8)
+#define AFIO_EXTICR1_EXTI2_PG           (0x6 << 8)
+#define AFIO_EXTICR1_EXTI1              (0xF << 4)
+#define AFIO_EXTICR1_EXTI1_PA           (0x0 << 4)
+#define AFIO_EXTICR1_EXTI1_PB           (0x1 << 4)
+#define AFIO_EXTICR1_EXTI1_PC           (0x2 << 4)
+#define AFIO_EXTICR1_EXTI1_PD           (0x3 << 4)
+#define AFIO_EXTICR1_EXTI1_PE           (0x4 << 4)
+#define AFIO_EXTICR1_EXTI1_PF           (0x5 << 4)
+#define AFIO_EXTICR1_EXTI1_PG           (0x6 << 4)
+#define AFIO_EXTICR1_EXTI0              0xF
+#define AFIO_EXTICR1_EXTI0_PA           0x0
+#define AFIO_EXTICR1_EXTI0_PB           0x1
+#define AFIO_EXTICR1_EXTI0_PC           0x2
+#define AFIO_EXTICR1_EXTI0_PD           0x3
+#define AFIO_EXTICR1_EXTI0_PE           0x4
+#define AFIO_EXTICR1_EXTI0_PF           0x5
+#define AFIO_EXTICR1_EXTI0_PG           0x6
+
+/* External interrupt configuration register 2 */
+
+#define AFIO_EXTICR2_EXTI7              (0xF << 12)
+#define AFIO_EXTICR2_EXTI7_PA           (0x0 << 12)
+#define AFIO_EXTICR2_EXTI7_PB           (0x1 << 12)
+#define AFIO_EXTICR2_EXTI7_PC           (0x2 << 12)
+#define AFIO_EXTICR2_EXTI7_PD           (0x3 << 12)
+#define AFIO_EXTICR2_EXTI7_PE           (0x4 << 12)
+#define AFIO_EXTICR2_EXTI7_PF           (0x5 << 12)
+#define AFIO_EXTICR2_EXTI7_PG           (0x6 << 12)
+#define AFIO_EXTICR2_EXTI6              (0xF << 8)
+#define AFIO_EXTICR2_EXTI6_PA           (0x0 << 8)
+#define AFIO_EXTICR2_EXTI6_PB           (0x1 << 8)
+#define AFIO_EXTICR2_EXTI6_PC           (0x2 << 8)
+#define AFIO_EXTICR2_EXTI6_PD           (0x3 << 8)
+#define AFIO_EXTICR2_EXTI6_PE           (0x4 << 8)
+#define AFIO_EXTICR2_EXTI6_PF           (0x5 << 8)
+#define AFIO_EXTICR2_EXTI6_PG           (0x6 << 8)
+#define AFIO_EXTICR2_EXTI5              (0xF << 4)
+#define AFIO_EXTICR2_EXTI5_PA           (0x0 << 4)
+#define AFIO_EXTICR2_EXTI5_PB           (0x1 << 4)
+#define AFIO_EXTICR2_EXTI5_PC           (0x2 << 4)
+#define AFIO_EXTICR2_EXTI5_PD           (0x3 << 4)
+#define AFIO_EXTICR2_EXTI5_PE           (0x4 << 4)
+#define AFIO_EXTICR2_EXTI5_PF           (0x5 << 4)
+#define AFIO_EXTICR2_EXTI5_PG           (0x6 << 4)
+#define AFIO_EXTICR2_EXTI4              0xF
+#define AFIO_EXTICR2_EXTI4_PA           0x0
+#define AFIO_EXTICR2_EXTI4_PB           0x1
+#define AFIO_EXTICR2_EXTI4_PC           0x2
+#define AFIO_EXTICR2_EXTI4_PD           0x3
+#define AFIO_EXTICR2_EXTI4_PE           0x4
+#define AFIO_EXTICR2_EXTI4_PF           0x5
+#define AFIO_EXTICR2_EXTI4_PG           0x6
+
+/* AF remap and debug I/O configuration register 2 */
+
+#define AFIO_MAPR2_FSMC_NADV            BIT(10)
+#define AFIO_MAPR2_TIM14_REMAP          BIT(9)
+#define AFIO_MAPR2_TIM13_REMAP          BIT(8)
+#define AFIO_MAPR2_TIM11_REMAP          BIT(7)
+#define AFIO_MAPR2_TIM10_REMAP          BIT(6)
+#define AFIO_MAPR2_TIM9_REMAP           BIT(5)
+
+/*
+ * AFIO convenience routines
+ */
+
+void afio_init(void);
 
 /**
  * External interrupt line numbers.
  */
-typedef enum {
+typedef enum afio_exti_num {
     AFIO_EXTI_0,                /**< External interrupt line 0. */
     AFIO_EXTI_1,                /**< External interrupt line 1. */
     AFIO_EXTI_2,                /**< External interrupt line 2. */
@@ -307,50 +420,73 @@ typedef enum {
     AFIO_EXTI_15,               /**< External interrupt line 15. */
 } afio_exti_num;
 
-/* AF remap and debug I/O configuration register 2 */
-#define AFIO_MAPR2_FSMC_NADV            BIT(10)
-#define AFIO_MAPR2_TIM14_REMAP          BIT(9)
-#define AFIO_MAPR2_TIM13_REMAP          BIT(8)
-#define AFIO_MAPR2_TIM11_REMAP          BIT(7)
-#define AFIO_MAPR2_TIM10_REMAP          BIT(6)
-#define AFIO_MAPR2_TIM9_REMAP           BIT(5)
+void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port);
 
 /* HACK: Use upper bit to denote MAPR2, Bit 31 is reserved and
  * not used in either MAPR or MAPR2 */
 #define AFIO_REMAP_USE_MAPR2            (1 << 31)
-typedef enum AFIORemapPeripheral {
-    AFIO_REMAP_ADC2_ETRGREG  = AFIO_MAPR_ADC2_ETRGREG_REMAP,
-    AFIO_REMAP_ADC2_ETRGINJ  = AFIO_MAPR_ADC2_ETRGINJ_REMAP,
-    AFIO_REMAP_ADC1_ETRGREG  = AFIO_MAPR_ADC1_ETRGREG_REMAP,
-    AFIO_REMAP_ADC1_ETRGINJ  = AFIO_MAPR_ADC1_ETRGINJ_REMAP,
-    AFIO_REMAP_TIM5CH4_I     = AFIO_MAPR_TIM5CH4_IREMAP,
-    AFIO_REMAP_PD01          = AFIO_MAPR_PD01_REMAP,
-    AFIO_REMAP_CAN           = AFIO_MAPR_CAN_REMAP,
-    AFIO_REMAP_TIM4          = AFIO_MAPR_TIM4_REMAP,
-    AFIO_REMAP_TIM3          = AFIO_MAPR_TIM3_REMAP,
-    AFIO_REMAP_TIM2          = AFIO_MAPR_TIM2_REMAP,
-    AFIO_REMAP_TIM1          = AFIO_MAPR_TIM1_REMAP,
-    AFIO_REMAP_USART3        = AFIO_MAPR_USART3_REMAP,
-    AFIO_REMAP_USART2        = AFIO_MAPR_USART2_REMAP,
-    AFIO_REMAP_USART1        = AFIO_MAPR_USART1_REMAP,
-    AFIO_REMAP_I2C1          = AFIO_MAPR_I2C1_REMAP,
-    AFIO_REMAP_SPI1          = AFIO_MAPR_SPI1_REMAP,
-    AFIO_REMAP_FSMC_NADV     = AFIO_MAPR2_FSMC_NADV | AFIO_REMAP_USE_MAPR2,
-    AFIO_REMAP_TIM14         = AFIO_MAPR2_TIM14_REMAP | AFIO_REMAP_USE_MAPR2,
-    AFIO_REMAP_TIM13         = AFIO_MAPR2_TIM13_REMAP | AFIO_REMAP_USE_MAPR2,
-    AFIO_REMAP_TIM11         = AFIO_MAPR2_TIM11_REMAP | AFIO_REMAP_USE_MAPR2,
-    AFIO_REMAP_TIM10         = AFIO_MAPR2_TIM10_REMAP | AFIO_REMAP_USE_MAPR2,
-    AFIO_REMAP_TIM9          = AFIO_MAPR2_TIM9_REMAP | AFIO_REMAP_USE_MAPR2
-} AFIORemapPeripheral;
 
-void afio_remap(AFIORemapPeripheral p);
+/** Available peripheral remaps. */
+typedef enum afio_remap_peripheral {
+    AFIO_REMAP_ADC2_ETRGREG  = AFIO_MAPR_ADC2_ETRGREG_REMAP, /**<
+        ADC 2 external trigger regular conversion remapping */
+    AFIO_REMAP_ADC2_ETRGINJ  = AFIO_MAPR_ADC2_ETRGINJ_REMAP, /**<
+        ADC 2 external trigger injected conversion remapping */
+    AFIO_REMAP_ADC1_ETRGREG  = AFIO_MAPR_ADC1_ETRGREG_REMAP, /**<
+        ADC 1 external trigger regular conversion remapping */
+    AFIO_REMAP_ADC1_ETRGINJ  = AFIO_MAPR_ADC1_ETRGINJ_REMAP, /**<
+        ADC 1 external trigger injected conversion remapping */
+    AFIO_REMAP_TIM5CH4_I     = AFIO_MAPR_TIM5CH4_IREMAP, /**<
+        Timer 5 channel 4 internal remapping */
+    AFIO_REMAP_PD01          = AFIO_MAPR_PD01_REMAP, /**<
+        Port D0/Port D1 mapping on OSC_IN/OSC_OUT */
+    AFIO_REMAP_CAN_1         = AFIO_MAPR_CAN_REMAP_PB8_PB9, /**<
+        CAN alternate function remapping 1 (RX on PB8, TX on PB9) */
+    AFIO_REMAP_CAN_2         = AFIO_MAPR_CAN_REMAP_PD0_PD1, /**<
+        CAN alternate function remapping 2 (RX on PD0, TX on PD1) */
+    AFIO_REMAP_TIM4          = AFIO_MAPR_TIM4_REMAP, /**<
+        Timer 4 remapping */
+    AFIO_REMAP_TIM3_PARTIAL  = AFIO_MAPR_TIM3_REMAP_PARTIAL, /**<
+        Timer 3 partial remapping */
+    AFIO_REMAP_TIM3_FULL      = AFIO_MAPR_TIM3_REMAP_FULL, /**<
+        Timer 3 full remapping */
+    AFIO_REMAP_TIM2_PARTIAL_1 = AFIO_MAPR_TIM2_REMAP_PA15_PB3_PA2_PA3, /**<
+        Timer 2 partial remapping 1 (CH1 and ETR on PA15, CH2 on PB3, CH3
+        on PA2, CH4 on PA3) */
+    AFIO_REMAP_TIM2_PARTIAL_2 = AFIO_MAPR_TIM2_REMAP_PA0_PA1_PB10_PB11, /**<
+        Timer 2 partial remapping 2 (CH1 and ETR on PA0, CH2 on PA1, CH3
+        on PB10, CH4 on PB11) */
+    AFIO_REMAP_TIM2_FULL      = AFIO_MAPR_TIM2_REMAP_FULL, /**<
+        Timer 2 full remapping */
+    AFIO_REMAP_USART2        = AFIO_MAPR_USART2_REMAP, /**<
+        USART 2 remapping */
+    AFIO_REMAP_USART1        = AFIO_MAPR_USART1_REMAP, /**<
+        USART 1 remapping */
+    AFIO_REMAP_I2C1          = AFIO_MAPR_I2C1_REMAP, /**<
+        I2C 1 remapping */
+    AFIO_REMAP_SPI1          = AFIO_MAPR_SPI1_REMAP, /**<
+        SPI 1 remapping */
+    AFIO_REMAP_FSMC_NADV     = (AFIO_MAPR2_FSMC_NADV |
+                                AFIO_REMAP_USE_MAPR2), /**<
+        NADV signal not connected */
+    AFIO_REMAP_TIM14         = (AFIO_MAPR2_TIM14_REMAP |
+                                AFIO_REMAP_USE_MAPR2), /**<
+        Timer 14 remapping */
+    AFIO_REMAP_TIM13         = (AFIO_MAPR2_TIM13_REMAP |
+                                AFIO_REMAP_USE_MAPR2), /**<
+        Timer 13 remapping */
+    AFIO_REMAP_TIM11         = (AFIO_MAPR2_TIM11_REMAP |
+                                AFIO_REMAP_USE_MAPR2), /**<
+        Timer 11 remapping */
+    AFIO_REMAP_TIM10         = (AFIO_MAPR2_TIM10_REMAP |
+                                AFIO_REMAP_USE_MAPR2), /**<
+        Timer 10 remapping */
+    AFIO_REMAP_TIM9          = (AFIO_MAPR2_TIM9_REMAP |
+                                AFIO_REMAP_USE_MAPR2) /**<
+        Timer 9 */
+} afio_remap_peripheral;
 
-/*
- * AFIO convenience routines
- */
-
-void afio_init(void);
-void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port);
+void afio_remap(afio_remap_peripheral p);
 
 /**
  * @brief Debug port configuration

@@ -76,20 +76,33 @@ typedef struct systick_reg_map {
 extern volatile uint32 systick_uptime_millis;
 
 /**
- *
+ * @brief Returns the system uptime, in milliseconds.
  */
 static inline uint32 systick_uptime(void) {
     return systick_uptime_millis;
 }
 
+
 void systick_init(uint32 reload_val);
 void systick_disable();
 void systick_enable();
 
+/**
+ * @brief Returns the current value of the SysTick counter.
+ */
 static inline uint32 systick_get_count(void) {
     return SYSTICK_BASE->CNT;
 }
 
+/**
+ * @brief Check for underflow.
+ *
+ * This function returns 1 if the SysTick timer has counter to 0 since
+ * the last time it was called.  However, any reads of any part of the
+ * SysTick Control and Status Register SYSTICK_BASE->CSR will
+ * interfere with this functionality.  See the ARM Cortex M3 Technical
+ * Reference Manual for more details (e.g. Table 8-3 in revision r1p1).
+ */
 static inline uint32 systick_check_underflow(void) {
     return SYSTICK_BASE->CSR & SYSTICK_CSR_COUNTFLAG;
 }

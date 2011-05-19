@@ -155,22 +155,14 @@ typedef struct timer_dev {
     voidFuncPtr handlers[];
 } timer_dev;
 
-/** Timer 1 device (advanced) */
 extern timer_dev *TIMER1;
-/** Timer 2 device (general-purpose) */
 extern timer_dev *TIMER2;
-/** Timer 3 device (general-purpose) */
 extern timer_dev *TIMER3;
-/** Timer 4 device (general-purpose) */
 extern timer_dev *TIMER4;
 #ifdef STM32_HIGH_DENSITY
-/** Timer 5 device (general-purpose) */
 extern timer_dev *TIMER5;
-/** Timer 6 device (basic) */
 extern timer_dev *TIMER6;
-/** Timer 7 device (basic) */
 extern timer_dev *TIMER7;
-/** Timer 8 device (advanced) */
 extern timer_dev *TIMER8;
 #endif
 

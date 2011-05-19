@@ -50,6 +50,7 @@ static timer_dev timer1 = {
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
 };
+/** Timer 1 device (advanced) */
 timer_dev *TIMER1 = &timer1;
 
 static timer_dev timer2 = {
@@ -58,6 +59,7 @@ static timer_dev timer2 = {
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
 };
+/** Timer 2 device (general-purpose) */
 timer_dev *TIMER2 = &timer2;
 
 static timer_dev timer3 = {
@@ -66,6 +68,7 @@ static timer_dev timer3 = {
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
 };
+/** Timer 3 device (general-purpose) */
 timer_dev *TIMER3 = &timer3;
 
 static timer_dev timer4 = {
@@ -74,6 +77,7 @@ static timer_dev timer4 = {
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
 };
+/** Timer 4 device (general-purpose) */
 timer_dev *TIMER4 = &timer4;
 
 #ifdef STM32_HIGH_DENSITY
@@ -83,6 +87,7 @@ static timer_dev timer5 = {
     .type         = TIMER_GENERAL,
     .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
 };
+/** Timer 5 device (general-purpose) */
 timer_dev *TIMER5 = &timer5;
 
 static timer_dev timer6 = {
@@ -91,6 +96,7 @@ static timer_dev timer6 = {
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
 };
+/** Timer 6 device (basic) */
 timer_dev *TIMER6 = &timer6;
 
 static timer_dev timer7 = {
@@ -99,6 +105,7 @@ static timer_dev timer7 = {
     .type         = TIMER_BASIC,
     .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
 };
+/** Timer 7 device (basic) */
 timer_dev *TIMER7 = &timer7;
 
 static timer_dev timer8 = {
@@ -107,6 +114,7 @@ static timer_dev timer8 = {
     .type         = TIMER_ADVANCED,
     .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
 };
+/** Timer 8 device (advanced) */
 timer_dev *TIMER8 = &timer8;
 #endif
 

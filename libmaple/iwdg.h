@@ -89,7 +89,7 @@ typedef struct iwdg_reg_map {
 #define IWDG_SR_PVU                     BIT(IWDG_SR_PVU_BIT)
 
 /** Independent watchdog prescalers */
-typedef enum {
+typedef enum iwdg_prescaler {
     IWDG_PRE_4 = IWDG_PR_DIV_4,
     IWDG_PRE_8 = IWDG_PR_DIV_8,
     IWDG_PRE_16 = IWDG_PR_DIV_16,

@@ -240,16 +240,11 @@ typedef struct usart_dev {
     nvic_irq_num irq_num;
 } usart_dev;
 
-/** USART1 device */
 extern usart_dev *USART1;
-/** USART2 device */
 extern usart_dev *USART2;
-/** USART3 device */
 extern usart_dev *USART3;
 #ifdef STM32_HIGH_DENSITY
-/** UART4 device */
 extern usart_dev *UART4;
-/** UART5 device */
 extern usart_dev *UART5;
 #endif
 

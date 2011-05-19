@@ -135,13 +135,13 @@ typedef struct timer_bas_reg_map {
  * Timer devices
  */
 
-typedef union {
+typedef union timer_reg_map {
     timer_adv_reg_map *adv;
     timer_gen_reg_map *gen;
     timer_bas_reg_map *bas;
-} timer_reg_map_union;
+} timer_reg_map;
 
-typedef enum {
+typedef enum timer_type {
     TIMER_ADVANCED,
     TIMER_GENERAL,
     TIMER_BASIC
@@ -149,7 +149,7 @@ typedef enum {
 
 /** Timer device type */
 typedef struct timer_dev {
-    timer_reg_map_union regs;
+    timer_reg_map regs;
     rcc_clk_id clk_id;
     timer_type type;
     voidFuncPtr handlers[];

@@ -44,16 +44,6 @@ typedef struct pwr_reg_map {
 /** Power peripheral register map base pointer. */
 #define PWR_BASE    ((pwr_reg_map*)0x40007000)
 
-/** Power device type. */
-typedef struct pwr_dev {
-    pwr_reg_map *regs; /**< Register map */
-} pwr_dev;
-
-/**
- * Power device.
- */
-extern const pwr_dev *PWR;
-
 /*
  * Register bit definitions
  */

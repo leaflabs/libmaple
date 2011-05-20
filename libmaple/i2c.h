@@ -69,7 +69,7 @@ typedef struct i2c_msg {
 } i2c_msg;
 
 /**
- * I2C device type.
+ * @brief I2C device type.
  */
 typedef struct i2c_dev {
     i2c_reg_map *regs;          /**< Register map */
@@ -214,17 +214,17 @@ static inline void i2c_peripheral_disable(i2c_dev *dev) {
 
 /**
  * @brief Fill transmit register
- * @param dev i2c device
- * @param byte byte to write
+ * @param dev I2C device
+ * @param byte Byte to write
  */
 static inline void i2c_write(i2c_dev *dev, uint8 byte) {
     dev->regs->DR = byte;
 }
 
 /**
- * @brief Set input clock frequency, in mhz
- * @param dev i2c
- * @param freq frequency in megahertz (2-36)
+ * @brief Set input clock frequency, in MHz
+ * @param dev I2C device
+ * @param freq Frequency in megahertz (2-36)
  */
 static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
     uint32 cr2 = dev->regs->CR2;
@@ -234,10 +234,10 @@ static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
 }
 
 /**
- * @brief Set i2c clock control register. See RM008
- * @param dev i2c device
- * @return
- * @sideeffect
+ * @brief Set I2C clock control register. See RM008
+ * @param dev I2C device
+ * @param val Value to use for clock control register (in
+ *            Fast/Standard mode)
  */
 static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
     uint32 ccr = dev->regs->CCR;
@@ -249,9 +249,9 @@ static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
 
 /**
  * @brief Set SCL rise time
- * @param dev device to configure
- * @param trise Maximum rise time in fast/standard mode (See RM008 for
- * formula)
+ * @param dev I2C device
+ * @param trise Maximum rise time in fast/standard mode (see RM0008
+ *              for relevant formula).
  */
 static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
@@ -260,7 +260,7 @@ static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
 
 /**
  * @brief Generate a start condition on the bus.
- * @param device i2c device to use
+ * @param dev I2C device
  */
 static inline void i2c_start_condition(i2c_dev *dev) {
     uint32 cr1;
@@ -274,7 +274,7 @@ static inline void i2c_start_condition(i2c_dev *dev) {
 
 /**
  * @brief Generate a stop condition on the bus
- * @param device i2c device to use
+ * @param dev I2C device
  */
 static inline void i2c_stop_condition(i2c_dev *dev) {
     uint32 cr1;
@@ -293,12 +293,12 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
 }
 
 /**
- * @brief Enable one or more i2c interrupts
- * @param dev i2c device
- * @param irqs bitwise-or of:
- *      I2C_IRQ_ERROR: Error interrupt
- *      I2C_IRQ_EVENT: Event interrupt
- *      I2C_IRQ_BUFFER: Buffer interrupt
+ * @brief Enable one or more I2C interrupts
+ * @param dev I2C device
+ * @param irqs Bitwise or of:
+ *             I2C_IRQ_ERROR (error interrupt),
+ *             I2C_IRQ_EVENT (event interrupt), and
+ *             I2C_IRQ_BUFFER (buffer interrupt).
  */
 #define I2C_IRQ_ERROR              I2C_CR2_ITERREN
 #define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
@@ -308,12 +308,12 @@ static inline void i2c_enable_irq(i2c_dev *dev, uint32 irqs) {
 }
 
 /**
- * @brief Disable one or more i2c interrupts
- * @param dev i2c device
- * @param irqs bitwise-or of:
- *      I2C_IRQ_ERROR: Error interrupt
- *      I2C_IRQ_EVENT: Event interrupt
- *      I2C_IRQ_BUFFER: Buffer interrupt
+ * @brief Disable one or more I2C interrupts
+ * @param dev I2C device
+ * @param irqs Bitwise or of:
+ *             I2C_IRQ_ERROR (error interrupt),
+ *             I2C_IRQ_EVENT (event interrupt), and
+ *             I2C_IRQ_BUFFER (buffer interrupt).
  */
 static inline void i2c_disable_irq(i2c_dev *dev, uint32 irqs) {
     dev->regs->CR2 &= ~irqs;
@@ -321,16 +321,16 @@ static inline void i2c_disable_irq(i2c_dev *dev, uint32 irqs) {
 
 
 /**
- * @brief Enable i2c acknowledgment
- * @param dev i2c device
+ * @brief Enable I2C acknowledgment
+ * @param dev I2C device
  */
 static inline void i2c_enable_ack(i2c_dev *dev) {
     dev->regs->CR1 |= I2C_CR1_ACK;
 }
 
 /**
- * @brief Disable i2c acknowledgment
- * @param dev i2c device
+ * @brief Disable I2C acknowledgment
+ * @param dev I2C device
  */
 static inline void i2c_disable_ack(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_ACK;

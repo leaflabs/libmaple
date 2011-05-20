@@ -135,24 +135,37 @@ typedef struct timer_bas_reg_map {
  * Timer devices
  */
 
+/**
+ * @brief Timer register map type.
+ *
+ * Just holds a pointer to the correct type of register map, based on
+ * the timer's type.
+ */
 typedef union timer_reg_map {
-    timer_adv_reg_map *adv;
-    timer_gen_reg_map *gen;
-    timer_bas_reg_map *bas;
+    timer_adv_reg_map *adv;     /**< Advanced register map */
+    timer_gen_reg_map *gen;     /**< General purpose register map */
+    timer_bas_reg_map *bas;     /**< Basic register map */
 } timer_reg_map;
 
+/**
+ * @brief Timer type
+ *
+ * Type marker for timer_dev.
+ *
+ * @see timer_dev
+ */
 typedef enum timer_type {
-    TIMER_ADVANCED,
-    TIMER_GENERAL,
-    TIMER_BASIC
+    TIMER_ADVANCED,             /**< Advanced type */
+    TIMER_GENERAL,              /**< General purpose type */
+    TIMER_BASIC                 /**< Basic type */
 } timer_type;
 
 /** Timer device type */
 typedef struct timer_dev {
-    timer_reg_map regs;
-    rcc_clk_id clk_id;
-    timer_type type;
-    voidFuncPtr handlers[];
+    timer_reg_map regs;         /**< Register map */
+    rcc_clk_id clk_id;          /**< RCC clock information */
+    timer_type type;            /**< Timer's type */
+    voidFuncPtr handlers[];     /**< User IRQ handlers */
 } timer_dev;
 
 extern timer_dev *TIMER1;

@@ -269,8 +269,9 @@ typedef struct dma_reg_map {
 
 /** Encapsulates state related to a DMA channel interrupt. */
 typedef struct dma_handler_config {
-    void (*handler)(void);
-    nvic_irq_num irq_line;
+    void (*handler)(void);      /**< User-specified channel interrupt
+                                     handler */
+    nvic_irq_num irq_line;      /**< Channel's NVIC interrupt number */
 } dma_handler_config;
 
 /** DMA device type */
@@ -280,10 +281,8 @@ typedef struct dma_dev {
     dma_handler_config handlers[]; /**< IRQ handlers and NVIC numbers. */
 } dma_dev;
 
-/** DMA1 device */
 extern dma_dev *DMA1;
 #ifdef STM32_HIGH_DENSITY
-/** DMA2 device */
 extern dma_dev *DMA2;
 #endif
 

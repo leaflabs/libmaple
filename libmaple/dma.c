@@ -48,6 +48,7 @@ static dma_dev dma1 = {
                  { .handler = NULL, .irq_line = NVIC_DMA_CH6 },
                  { .handler = NULL, .irq_line = NVIC_DMA_CH7 }}
 };
+/** DMA1 device */
 dma_dev *DMA1 = &dma1;
 
 #ifdef STM32_HIGH_DENSITY
@@ -60,6 +61,7 @@ static dma_dev dma2 = {
                  { .handler = NULL, .irq_line = NVIC_DMA2_CH_4_5 },
                  { .handler = NULL, .irq_line = NVIC_DMA2_CH_4_5 }} /* !@#$ */
 };
+/** DMA2 device */
 dma_dev *DMA2 = &dma2;
 #endif
 

@@ -202,9 +202,9 @@ typedef struct spi_reg_map {
 
 /** SPI device type */
 typedef struct spi_dev {
-    spi_reg_map *regs;
-    rcc_clk_id clk_id;
-    nvic_irq_num irq_num;
+    spi_reg_map *regs;          /**< Register map */
+    rcc_clk_id clk_id;          /**< RCC clock information */
+    nvic_irq_num irq_num;       /**< NVIC interrupt number */
 } spi_dev;
 
 extern spi_dev *SPI1;

@@ -14,7 +14,7 @@ Technical Specifications
     * MCU: **STM32F103RET6**, a 32-bit ARM Cortex M3 microprocessor
     * Clock Speed: **72 MHz**
     * **512KB Flash** and **64KB SRAM**
-    * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
+    * 43 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input pins, 12 bit **ADC** resolution (:ref:`ADC
       <adc>`)
     * Built-in, 2 channel **DAC** at 12 bit resolution
@@ -73,12 +73,22 @@ GPIO Information
 ----------------
 
 The RET6 Edition features 38 ready-to-use general purpose input/output
-(GPIO) pins for digital input/output, numbered ``D0`` through ``D37``.
-These numbers correspond to the numeric values next to each header on
-the Maple silkscreen.  More GPIOs (numbered ``D39``\ --``D43``) are
-available through use in combination with the
+(see :ref:`gpio`) pins for digital input/output, numbered ``D0``
+through ``D37``.  These numbers correspond to the numeric values next
+to each header on the Maple silkscreen.
+
+.. _maple-ret6-but:
+
+Pin ``D38`` is the board's :ref:`button pin <lang-board-values-but>`.
+It is thus mainly useful as an :ref:`input <lang-pin-levels>`.  The
+pin will :ref:`read <lang-digitalread>` ``HIGH`` when the :ref:`button
+is pressed <lang-isbuttonpressed>`.
+
+More GPIOs (numbered ``D39``\ --``D42``) are available if you use the
 :ref:`lang-disabledebugports` function; see the :ref:`board-specific
 debug pin constants <lang-board-values-debug>` for more information.
+(See :ref:`this erratum <maple-ret6-nrst-pb4>` for information about
+the pin numbered ``43`` on the silkscreen).
 
 .. TODO [0.1.0] silkscreen pictures which expand abbreviations
 
@@ -87,64 +97,65 @@ debug pin constants <lang-board-values-debug>` for more information.
 Master Pin Map
 ^^^^^^^^^^^^^^
 
-.. TODO [0.0.10] Update from base Maple information
-
 This table shows the available functionality on every GPIO pin, by
 peripheral type. The "STM32" column refers to the port and number that
 the header is connected to on the microcontroller.  The "5V?" column
 documents whether or not the pin is 5 volt tolerant.
 
 .. csv-table::
-   :header: "Pin", "STM32", ":ref:`ADC <adc>`", ":ref:`Timer <timers>`", ":ref:`I2C <i2c>`", ":ref:`UART <usart>`", ":ref:`SPI <spi>`", "5v?"
+   :header: Pin, STM32, :ref:`ADC <adc>`, :ref:`Timer <timers>`, :ref:`I2C <i2c>`, :ref:`UART <usart>`, :ref:`SPI <spi>`, 5v?
 
-   "D0",  "PA3",  "ADC3",  "TIM2_CH4",     "-",          "USART2_RX",  "-",         "No"
-   "D1",  "PA2",  "ADC2",  "TIM2_CH3",     "-",          "USART2_TX",  "-",         "No"
-   "D2",  "PA0",  "ADC0",  "TIM2_CH1_ETR", "-",          "USART2_CTS", "-",         "No"
-   "D3",  "PA1",  "ADC1",  "TIM2_CH2",     "-",          "USART2_RTS", "-",         "No"
-   "D4",  "PB5",  "-",     "-",            "ISC1_SMBA",  "-",          "-",         "No"
-   "D5",  "PB6",  "-",     "TIM4_CH1",     "I2C1_SCL",   "-",          "-",         "Yes"
-   "D6",  "PA8",  "-",     "TIM1_CH1",     "-",          "USART1_CK",  "-",         "Yes"
-   "D7",  "PA9",  "-",     "TIM1_CH2",     "-",          "USART1_TX",  "-",         "Yes"
-   "D8",  "PA10", "-",     "TIM1_CH3",     "-",          "USART1_RX",  "-",         "Yes"
-   "D9",  "PB7",  "-",     "TIM4_CH2",     "I2C1_SDA",   "-",          "-",         "Yes"
-   "D10", "PA4",  "ADC4",  "-",            "-",          "USART2_CK",  "SPI1_NSS",  "No"
-   "D11", "PA7",  "ADC7",  "TIM3_CH2",     "-",          "-",          "SPI1_MOSI", "No"
-   "D12", "PA6",  "ADC6",  "TIM3_CH1",     "-",          "-",          "SPI1_MISO", "No"
-   "D13", "PA5",  "ADC5",  "-",            "-",          "-",          "SPI1_SCK",  "No"
-   "D14", "PB8",  "-",     "TIM4_CH3",     "-",          "-",          "-",         "Yes"
-   "D15", "PC0",  "ADC10", "-",            "-",          "-",          "-",         "No"
-   "D16", "PC1",  "ADC11", "-",            "-",          "-",          "-",         "No"
-   "D17", "PC2",  "ADC12", "-",            "-",          "-",          "-",         "No"
-   "D18", "PC3",  "ADC13", "-",            "-",          "-",          "-",         "No"
-   "D19", "PC4",  "ADC14", "-",            "-",          "-",          "-",         "No"
-   "D20", "PC5",  "ADC15", "-",            "-",          "-",          "-",         "No"
-   "D21", "PC13", "-",     "-",            "-",          "-",          "-",         "No"
-   "D22", "PC14", "-",     "-",            "-",          "-",          "-",         "No"
-   "D23", "PC15", "-",     "-",            "-",          "-",          "-",         "No"
-   "D24", "PB9",  "-",     "TIM4_CH4",     "-",          "-",          "-",         "Yes"
-   "D25", "PD2",  "-",     "TIM3_ETR",     "-",          "-",          "-",         "Yes"
-   "D26", "PC10", "-",     "-",            "-",          "-",          "-",         "Yes"
-   "D27", "PB0",  "ADC8",  "TIM3_CH3",     "-",          "-",          "-",         "No"
-   "D28", "PB1",  "ADC9",  "TIM3_CH4",     "-",          "-",          "-",         "No"
-   "D29", "PB10", "-",     "-",            "I2C2_SCL",   "USART3_TX",  "-",         "Yes"
-   "D30", "PB11", "-",     "-",            "I2C2_SDA",   "USART3_RX",  "-",         "Yes"
-   "D31", "PB12", "-",     "TIM1_BKIN",    "I2C2_SMBA",  "USART3_CK",  "SPI2_NSS",  "Yes"
-   "D32", "PB13", "-",     "TIM1_CH1N",    "-",          "USART3_CTS", "SPI2_SCK",  "Yes"
-   "D33", "PB14", "-",     "TIM1_CH2N",    "-",          "USART3_RTS", "SPI2_MISO", "Yes"
-   "D34", "PB15", "-",     "TIM1_CH3N",    "-",          "-",          "SPI2_MOSI", "Yes"
-   "D35", "PC6",  "-",     "-",            "-",          "-",          "-",         "Yes"
-   "D36", "PC7",  "-",     "-",            "-",          "-",          "-",         "Yes"
-   "D37", "PC8",  "-",     "-",            "-",          "-",          "-",         "Yes"
-
-.. TODO [0.0.10] Another table for the JTAG pins
+   D0,  PA3,  ADC3,  TIM2_CH4,     -,          USART2_RX,  -,         -
+   D1,  PA2,  ADC2,  TIM2_CH3,     -,          USART2_TX,  -,         -
+   D2,  PA0,  ADC0,  TIM2_CH1_ETR, -,          USART2_CTS, -,         -
+   D3,  PA1,  ADC1,  TIM2_CH2,     -,          USART2_RTS, -,         -
+   D4,  PB5,  -,     -,            ISC1_SMBA,  -,          SPI3_MOSI, -
+   D5,  PB6,  -,     TIM4_CH1,     I2C1_SCL,   -,          -,         Yes
+   D6,  PA8,  -,     TIM1_CH1,     -,          USART1_CK,  -,         Yes
+   D7,  PA9,  -,     TIM1_CH2,     -,          USART1_TX,  -,         Yes
+   D8,  PA10, -,     TIM1_CH3,     -,          USART1_RX,  -,         Yes
+   D9,  PB7,  -,     TIM4_CH2,     I2C1_SDA,   -,          -,         Yes
+   D10, PA4,  ADC4,  -,            -,          USART2_CK,  SPI1_NSS,  -
+   D11, PA7,  ADC7,  TIM3_CH2,     -,          -,          SPI1_MOSI, -
+   D12, PA6,  ADC6,  TIM3_CH1,     -,          -,          SPI1_MISO, -
+   D13, PA5,  ADC5,  -,            -,          -,          SPI1_SCK,  -
+   D14, PB8,  -,     TIM4_CH3,     -,          -,          -,         Yes
+   D15, PC0,  ADC10, -,            -,          -,          -,         -
+   D16, PC1,  ADC11, -,            -,          -,          -,         -
+   D17, PC2,  ADC12, -,            -,          -,          -,         -
+   D18, PC3,  ADC13, -,            -,          -,          -,         -
+   D19, PC4,  ADC14, -,            -,          -,          -,         -
+   D20, PC5,  ADC15, -,            -,          -,          -,         -
+   D21, PC13, -,     -,            -,          -,          -,         -
+   D22, PC14, -,     -,            -,          -,          -,         -
+   D23, PC15, -,     -,            -,          -,          -,         -
+   D24, PB9,  -,     TIM4_CH4,     -,          -,          -,         Yes
+   D25, PD2,  -,     TIM3_ETR,     -,          -,          UART5_RX,  Yes
+   D26, PC10, -,     -,            -,          -,          UART4_TX,  Yes
+   D27, PB0,  ADC8,  TIM3_CH3,     -,          -,          -,         -
+   D28, PB1,  ADC9,  TIM3_CH4,     -,          -,          -,         -
+   D29, PB10, -,     -,            I2C2_SCL,   USART3_TX,  -,         Yes
+   D30, PB11, -,     -,            I2C2_SDA,   USART3_RX,  -,         Yes
+   D31, PB12, -,     TIM1_BKIN,    I2C2_SMBA,  USART3_CK,  SPI2_NSS,  Yes
+   D32, PB13, -,     TIM1_CH1N,    -,          USART3_CTS, SPI2_SCK,  Yes
+   D33, PB14, -,     TIM1_CH2N,    -,          USART3_RTS, SPI2_MISO, Yes
+   D34, PB15, -,     TIM1_CH3N,    -,          -,          SPI2_MOSI, Yes
+   D35, PC6,  -,     TIM8_CH1,     -,          -,          -,         Yes
+   D36, PC7,  -,     TIM8_CH2,     -,          -,          -,         Yes
+   D37, PC8,  -,     TIM8_CH3,     -,          -,          -,         Yes
+   D38, PC9,  -,     TIM8_CH4,     -,          -,          -,         Yes
+   D39, PA13, -,     -,            -,          -,          -,         Yes
+   D40, PA14, -,     -,            -,          -,          -,         Yes
+   D41, PA15, -,     -,            -,          -,          SPI3_NSS,  Yes
+   D42, PB3,  -,     -,            -,          -,          SPI3_SCK,  Yes
 
 Timer Pin Map
 ^^^^^^^^^^^^^
 
-.. TODO [0.0.10] Add Timer 5,6,7,8 information
-
 The following table shows what pins are associated with a particular
-timer's capture/compare channels.
+timer's capture/compare channels.  Note that timer 5's channels share
+pins with timer 2 (e.g., timer 5 channel 1 is also available on D2,
+channel 2 on D3, etc.).
 
 .. csv-table::
    :header: Timer, Ch. 1, Ch. 2, Ch. 3, Ch. 4
@@ -154,6 +165,7 @@ timer's capture/compare channels.
    2 | D2  | D3  | D1  | D0
    3 | D12 | D11 | D27 | D28
    4 | D5  | D9  | D14 | D24
+   8 | D35 | D36 | D37 | :ref:`D38 <maple-ret6-but>`
 
 .. _maple-ret6-exti-map:
 
@@ -306,25 +318,31 @@ Errata
 This section lists known issues and warnings for the Maple RET6 Edition.
 
 * **Power Supply Marketing Mistake**: We originally sold the Maple
-  advertising that it was capable of supplying up to 800 mA; the
-  correct value is 500 mA.
+  RET6 Edition advertising that it was capable of supplying up to 800
+  mA; the correct value is 500 mA.
 
 .. _maple-ret6-uart-errata:
 
-* **UART4, UART5 GPIOs unavailable**: Pins related to the digital
-  to analog converter (DAC) and UARTs 4 and 5 are not broken out to
-  headers.  The RET6 Edition's hardware layout is identical to that of
-  the Maple Rev 5, which wasn't designed for use with these
+* **UART4, UART5 GPIOs unavailable**: Pins related to UARTs 4 and 5
+  are not broken out to headers (specifically, PC11/UART4_RX and
+  PC12/UART5_TX).  The RET6 Edition's hardware layout is identical to
+  that of the Maple Rev 5, which wasn't designed for use with these
   STM32F103RET6-only peripherals.
 
 * **DAC channel 2 on BOARD_LED_PIN**: The Maple Rev 5 connects PA5 to
   the board's built-in LED; this is the same GPIO bit which is
-  connected to the DAC's channel 2 output.
+  connected to the DAC's channel 2 output.  This is also due to the
+  RET6 Edition's board layout being copied from the base Maple Rev 5.
 
-* **Reset and NJTRST tied together**: The MCU's reset pin is connected
-  to PB4, the NJTRST (JTAG reset) pin, which is pin 43.  Thus,
-  attempting to use pin 43 as a GPIO will reset your board (and also
-  prevents the JTAG "reset halt" command from working properly).
+.. _maple-ret6-nrst-pb4:
+
+* **Reset and PB4 tied together**: The Maple's reset line is also
+  connected to PB4, which is labeled on the silkscreen as pin 43.
+  Thus, attempting to use pin 43 as a GPIO may reset your board.  This
+  has other implications.  Since PB4 is also the JTAG NJTRST line,
+  this prevents the :ref:`JTAG <jtag>` "reset halt" command from
+  working properly.  Also, since PB4 is SPI3_MISO, the SPI3 peripheral
+  is not fully usable.
 
 Recommended Reading
 -------------------
@@ -338,3 +356,5 @@ Recommended Reading
     * `Programming Manual
       <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_
       (PDF; assembly language and register reference)
+    * `ST's STM32F103RE reference page
+      <http://www.st.com/internet/mcu/product/164485.jsp>`_

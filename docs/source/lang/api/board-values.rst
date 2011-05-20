@@ -23,9 +23,6 @@ Documentation <index-boards>`.
 Constants
 ---------
 
-.. TODO [systick.rst] Add a link to systick.rst instead of systick.h
-.. below, when systick.rst exists.
-
 - ``CYCLES_PER_MICROSECOND``: Number of CPU cycles per microsecond on
   your board.
 
@@ -35,9 +32,8 @@ Constants
 - ``CLOCK_SPEED_HZ``: Clock speed of your board, in hertz (Hz).  This
   is the same as ``CLOCK_SPEED_MHZ`` × 1,000,000.
 
-- ``SYSTICK_RELOAD_VAL``: Value used when reloading the :ref:`SysTick
-  <libmaple-systick>` timer's counter.  For :ref:`lang-millis` to work
-  properly, this must be ``CYCLES_PER_MICROSECOND`` × 1,000 - 1.
+- ``SYSTICK_RELOAD_VAL``: Value used when reloading the :ref:`systick`
+  timer's counter [#fmillis]_.
 
 .. _lang-board-values-but:
 
@@ -205,3 +201,8 @@ See Also
 - :ref:`lang-pwmwrite`
 - :ref:`lang-enabledebugports`
 - :ref:`lang-disabledebugports`
+
+.. rubric:: Footnotes
+
+.. [#fmillis] In order for :ref:`lang-millis` to work properly, this
+   must be ``CYCLES_PER_MICROSECOND`` × 1,000 - 1.

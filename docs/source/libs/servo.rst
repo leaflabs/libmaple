@@ -29,13 +29,6 @@ servomotor attached to pin 9, you could write ::
 
      servo.attach(9);
 
-.. TODO [0.0.10] figure out the cpp domain well enough to replace
-.. references here
-
-.. _libs-servo-attach:
-
-.. _libs-servo-attached:
-
 .. doxygenclass:: Servo
    :members:
 
@@ -54,7 +47,8 @@ the servos with "bit-banged" :ref:`PWM <pwm>`, the Maple
 implementation uses :ref:`timers <timers>` to drive the PWM directly.
 
 Consequently, **the Maple implementation only allows Servo instances
-to** :ref:`attach <libs-servo-attach>` **to pins that support PWM**.
+to attach (via** :cpp:func:Servo::attach() **) to pins that support
+PWM**.
 
 To determine if a pin supports PWM, you can either check if "PWM"
 appears next to its number on your board's silkscreen, or look for it

@@ -43,7 +43,7 @@ Turning the SPI Port On
 Now it's time to turn your SPI port on.  Do this with the ``begin()``
 function (an example is given below).
 
-.. FIXME [0.0.10] Breathe doesn't include the class; fix & submit pull req
+.. FIXME [0.0.11] Breathe doesn't include the class; fix & submit pull req
 
 .. doxygenfunction:: HardwareSPI::begin
 

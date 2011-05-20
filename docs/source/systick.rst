@@ -1,3 +1,5 @@
+.. _systick:
+
 SysTick
 =======
 

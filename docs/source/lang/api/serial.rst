@@ -12,7 +12,7 @@ devices.
 Introduction
 ------------
 
-.. FIXME [0.0.10] UART4, UART5
+.. FIXME [0.0.12/Maple Native] UART4, UART5
 
 To use a serial port to communicate with an external serial device,
 connect the TX pin to your device's RX pin, the RX to your device's TX

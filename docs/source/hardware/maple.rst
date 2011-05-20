@@ -14,7 +14,7 @@ Technical Specifications
     * MCU: **STM32F103RBT6**, a 32-bit ARM Cortex M3 microprocessor
     * Clock Speed: **72 MHz**
     * **128KB Flash** and **20KB SRAM**
-    * 44 Digital I/O Pins (:ref:`GPIO <gpio>`)
+    * 43 Digital I/O Pins (:ref:`GPIO <gpio>`)
     * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC
       <adc>`)
     * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
@@ -26,7 +26,7 @@ Technical Specifications
     * Integrated **SPI** (:ref:`SPI <spi>`)
     * Integrated **I2C** (:ref:`I2C <i2c>`)
     * 7 Channels of Direct Memory Access (**DMA**)
-      (:ref:`libmaple.dma`)
+      (:ref:`libmaple-dma`)
     * 3 **USART** divices (:ref:`USART <usart>`)
     * Four 4-channel **timers** (:ref:`Timers <timers>`)
     * Supplies up to 500mA @ 3.3v (with separate 250 mA digital and
@@ -115,13 +115,23 @@ DONE will also light up.
 GPIO Information
 ----------------
 
-The Maple features 38 ready-to-use general purpose input/output (GPIO)
-pins for digital input/output, numbered ``D0`` through ``D37``.  These
-numbers correspond to the numeric values next to each header on the
-Maple silkscreen.  More GPIOs (numbered ``D39``\ --``D43``) are
-available through use in combination with the
+The Maple features 38 ready-to-use general purpose input/output (see
+:ref:`gpio`) pins for digital input/output, numbered ``D0`` through
+``D37``.  These numbers correspond to the numeric values next to each
+header on the Maple silkscreen.
+
+.. _maple-ret6-but:
+
+Pin ``D38`` is the board's :ref:`button pin <lang-board-values-but>`.
+It is thus mainly useful as an :ref:`input <lang-pin-levels>`.  The
+pin will :ref:`read <lang-digitalread>` ``HIGH`` when the :ref:`button
+is pressed <lang-isbuttonpressed>`.
+
+More GPIOs (numbered ``D39``\ --``D42``) are available if you use the
 :ref:`lang-disabledebugports` function; see the :ref:`board-specific
 debug pin constants <lang-board-values-debug>` for more information.
+(See :ref:`this erratum <maple-nrst-pb4>` for information about the
+pin numbered ``43`` on the silkscreen).
 
 .. TODO [0.1.0] silkscreen pictures which expand abbreviations
 
@@ -138,35 +148,35 @@ documents whether or not the pin is 5 volt tolerant.
 .. csv-table::
    :header: Pin, STM32, :ref:`ADC <adc>`, :ref:`Timer <timers>`, :ref:`I2C <i2c>`, :ref:`UART <usart>`, :ref:`SPI <spi>`, 5v?
 
-   D0,  PA3,  ADC3,  TIM2_CH4,     -,          USART2_RX,  -,         No
-   D1,  PA2,  ADC2,  TIM2_CH3,     -,          USART2_TX,  -,         No
-   D2,  PA0,  ADC0,  TIM2_CH1_ETR, -,          USART2_CTS, -,         No
-   D3,  PA1,  ADC1,  TIM2_CH2,     -,          USART2_RTS, -,         No
-   D4,  PB5,  -,     -,            ISC1_SMBA,  -,          -,         No
+   D0,  PA3,  ADC3,  TIM2_CH4,     -,          USART2_RX,  -,         -
+   D1,  PA2,  ADC2,  TIM2_CH3,     -,          USART2_TX,  -,         -
+   D2,  PA0,  ADC0,  TIM2_CH1_ETR, -,          USART2_CTS, -,         -
+   D3,  PA1,  ADC1,  TIM2_CH2,     -,          USART2_RTS, -,         -
+   D4,  PB5,  -,     -,            ISC1_SMBA,  -,          -,         -
    D5,  PB6,  -,     TIM4_CH1,     I2C1_SCL,   -,          -,         Yes
    D6,  PA8,  -,     TIM1_CH1,     -,          USART1_CK,  -,         Yes
    D7,  PA9,  -,     TIM1_CH2,     -,          USART1_TX,  -,         Yes
    D8,  PA10, -,     TIM1_CH3,     -,          USART1_RX,  -,         Yes
    D9,  PB7,  -,     TIM4_CH2,     I2C1_SDA,   -,          -,         Yes
-   D10, PA4,  ADC4,  -,            -,          USART2_CK,  SPI1_NSS,  No
-   D11, PA7,  ADC7,  TIM3_CH2,     -,          -,          SPI1_MOSI, No
-   D12, PA6,  ADC6,  TIM3_CH1,     -,          -,          SPI1_MISO, No
-   D13, PA5,  ADC5,  -,            -,          -,          SPI1_SCK,  No
+   D10, PA4,  ADC4,  -,            -,          USART2_CK,  SPI1_NSS,  -
+   D11, PA7,  ADC7,  TIM3_CH2,     -,          -,          SPI1_MOSI, -
+   D12, PA6,  ADC6,  TIM3_CH1,     -,          -,          SPI1_MISO, -
+   D13, PA5,  ADC5,  -,            -,          -,          SPI1_SCK,  -
    D14, PB8,  -,     TIM4_CH3,     -,          -,          -,         Yes
-   D15, PC0,  ADC10, -,            -,          -,          -,         No
-   D16, PC1,  ADC11, -,            -,          -,          -,         No
-   D17, PC2,  ADC12, -,            -,          -,          -,         No
-   D18, PC3,  ADC13, -,            -,          -,          -,         No
-   D19, PC4,  ADC14, -,            -,          -,          -,         No
-   D20, PC5,  ADC15, -,            -,          -,          -,         No
-   D21, PC13, -,     -,            -,          -,          -,         No
-   D22, PC14, -,     -,            -,          -,          -,         No
-   D23, PC15, -,     -,            -,          -,          -,         No
+   D15, PC0,  ADC10, -,            -,          -,          -,         -
+   D16, PC1,  ADC11, -,            -,          -,          -,         -
+   D17, PC2,  ADC12, -,            -,          -,          -,         -
+   D18, PC3,  ADC13, -,            -,          -,          -,         -
+   D19, PC4,  ADC14, -,            -,          -,          -,         -
+   D20, PC5,  ADC15, -,            -,          -,          -,         -
+   D21, PC13, -,     -,            -,          -,          -,         -
+   D22, PC14, -,     -,            -,          -,          -,         -
+   D23, PC15, -,     -,            -,          -,          -,         -
    D24, PB9,  -,     TIM4_CH4,     -,          -,          -,         Yes
    D25, PD2,  -,     TIM3_ETR,     -,          -,          -,         Yes
    D26, PC10, -,     -,            -,          -,          -,         Yes
-   D27, PB0,  ADC8,  TIM3_CH3,     -,          -,          -,         No
-   D28, PB1,  ADC9,  TIM3_CH4,     -,          -,          -,         No
+   D27, PB0,  ADC8,  TIM3_CH3,     -,          -,          -,         -
+   D28, PB1,  ADC9,  TIM3_CH4,     -,          -,          -,         -
    D29, PB10, -,     -,            I2C2_SCL,   USART3_TX,  -,         Yes
    D30, PB11, -,     -,            I2C2_SDA,   USART3_RX,  -,         Yes
    D31, PB12, -,     TIM1_BKIN,    I2C2_SMBA,  USART3_CK,  SPI2_NSS,  Yes
@@ -176,13 +186,11 @@ documents whether or not the pin is 5 volt tolerant.
    D35, PC6,  -,     -,            -,          -,          -,         Yes
    D36, PC7,  -,     -,            -,          -,          -,         Yes
    D37, PC8,  -,     -,            -,          -,          -,         Yes
-
-.. TODO [0.0.10] JTAG pins
-
-.. The following pins are used for :ref:`jtag` debugging by default, but
-.. can be used as ordinary GPIOs through the use of the
-.. :ref:`lang-disabledebugports` function.  (Though see :ref:`this
-.. erratum <maple-reset-njtrst>`).
+   D38, PC9,  -,     -,            -,          -,          -,         Yes
+   D39, PA13, -,     -,            -,          -,          -,         Yes
+   D40, PA14, -,     -,            -,          -,          -,         Yes
+   D41, PA15, -,     -,            -,          -,          -,         Yes
+   D42, PB3,  -,     -,            -,          -,          -,         Yes
 
 Timer Pin Map
 ^^^^^^^^^^^^^
@@ -288,7 +296,7 @@ This section lists the Maple's :ref:`board-specific values
 - ``BOARD_USART2_RX_PIN``: 0
 - ``BOARD_USART3_TX_PIN``: 29
 - ``BOARD_USART3_RX_PIN``: 30
-- ``BOARD_NR_SPI``: 2 
+- ``BOARD_NR_SPI``: 2
 - ``BOARD_SPI1_NSS_PIN``: 10
 - ``BOARD_SPI1_MOSI_PIN``: 11
 - ``BOARD_SPI1_MISO_PIN``: 12
@@ -358,12 +366,14 @@ Rev 5
   from its silkscreen.  This mistake was fixed in later manufacturing
   runs.
 
-.. _maple-reset-njtrst:
+.. _maple-nrst-pb4:
 
-* **Reset and NJTRST tied together**: The MCU's reset pin is connected
-  to PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use
-  pin 43 as a GPIO will reset your board (and also prevents the JTAG
-  "reset halt") command from working properly.
+* **Reset and PB4 tied together**: The Maple's reset line is also
+  connected to PB4, which is labeled on the silkscreen as pin 43.
+  Thus, attempting to use pin 43 as a GPIO may reset your board.  This
+  has other implications.  Since PB4 is also the JTAG NJTRST line,
+  this prevents the :ref:`JTAG <jtag>` "reset halt" command from
+  working properly.
 
 Rev 3
 ~~~~~

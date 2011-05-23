@@ -329,6 +329,8 @@ This section lists known issues and warnings for the Maple RET6 Edition.
   that of the Maple Rev 5, which wasn't designed for use with these
   STM32F103RET6-only peripherals.
 
+.. _maple-ret6-dac-ch2:
+
 * **DAC channel 2 on BOARD_LED_PIN**: The Maple Rev 5 connects PA5 to
   the board's built-in LED; this is the same GPIO bit which is
   connected to the DAC's channel 2 output.  This is also due to the
@@ -336,8 +338,8 @@ This section lists known issues and warnings for the Maple RET6 Edition.
 
 .. _maple-ret6-nrst-pb4:
 
-* **Reset and PB4 tied together**: The Maple's reset line is also
-  connected to PB4, which is labeled on the silkscreen as pin 43.
+* **Reset and PB4 tied together**: The RET6 Edition's reset line is
+  also connected to PB4, which is labeled on the silkscreen as pin 43.
   Thus, attempting to use pin 43 as a GPIO may reset your board.  This
   has other implications.  Since PB4 is also the JTAG NJTRST line,
   this prevents the :ref:`JTAG <jtag>` "reset halt" command from

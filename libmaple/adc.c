@@ -43,12 +43,14 @@ adc_dev adc1 = {
     .regs   = ADC1_BASE,
     .clk_id = RCC_ADC1
 };
+/** ADC1 device. */
 const adc_dev *ADC1 = &adc1;
 
 adc_dev adc2 = {
     .regs   = ADC2_BASE,
     .clk_id = RCC_ADC2
 };
+/** ADC2 device. */
 const adc_dev *ADC2 = &adc2;
 
 #ifdef STM32_HIGH_DENSITY
@@ -56,6 +58,7 @@ adc_dev adc3 = {
     .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3
 };
+/** ADC3 device. */
 const adc_dev *ADC3 = &adc3;
 #endif
 

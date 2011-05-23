@@ -69,12 +69,9 @@ typedef struct adc_dev {
     rcc_clk_id clk_id; /**< RCC clock information */
 } adc_dev;
 
-/** ADC1 device. */
 extern const adc_dev *ADC1;
-/** ADC2 device. */
 extern const adc_dev *ADC2;
 #ifdef STM32_HIGH_DENSITY
-/** ADC3 device. */
 extern const adc_dev *ADC3;
 #endif
 

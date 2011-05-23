@@ -54,7 +54,7 @@ the jumper to the desired selector before reconnecting power.
 
 You can also power the Maple via the pin labeled "Vin" on the lower
 header.  However, don't do this while simultaneously powering the
-board from another source, or you could damage the it.
+board from another source, or you could damage the board.
 
 Using the Built-in Battery Charger
 ----------------------------------

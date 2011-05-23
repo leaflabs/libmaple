@@ -16,6 +16,9 @@ If you are using the :ref:`Unix toolchain <unix-toolchain>`, the
 library is located in the ``/libraries/Servo/`` :ref:`libmaple`
 directory.
 
+.. contents:: Contents
+   :local:
+
 Servo Class Reference
 ---------------------
 
@@ -43,12 +46,12 @@ However, there are some differences, essentially at the level of
 implementation details.
 
 The major difference is that while the Arduino implementation drives
-the servos with "bit-banged" :ref:`PWM <pwm>`, the Maple
-implementation uses :ref:`timers <timers>` to drive the PWM directly.
+servos with "bit-banged" PWM (in the sense that timer interrupt
+handlers are used to manually toggle pins), the Maple implementation
+uses :ref:`timers <timers>` to drive the PWM directly.
 
 Consequently, **the Maple implementation only allows Servo instances
-to attach (via** :cpp:func:Servo::attach() **) to pins that support
-PWM**.
+to attach to pins that support PWM**.
 
 To determine if a pin supports PWM, you can either check if "PWM"
 appears next to its number on your board's silkscreen, or look for it

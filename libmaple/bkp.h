@@ -106,7 +106,6 @@ typedef struct bkp_dev {
     bkp_reg_map *regs; /**< Register map */
 } bkp_dev;
 
-/** Backup device. */
 extern const bkp_dev *BKP;
 
 /*

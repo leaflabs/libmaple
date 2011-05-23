@@ -82,26 +82,19 @@ typedef struct gpio_dev {
 } gpio_dev;
 
 extern gpio_dev gpioa;
-/** GPIO port A device. */
 extern gpio_dev* const GPIOA;
 extern gpio_dev gpiob;
-/** GPIO port B device. */
 extern gpio_dev* const GPIOB;
 extern gpio_dev gpioc;
-/** GPIO port C device. */
 extern gpio_dev* const GPIOC;
 extern gpio_dev gpiod;
-/** GPIO port D device. */
 extern gpio_dev* const GPIOD;
 #ifdef STM32_HIGH_DENSITY
 extern gpio_dev gpioe;
-/** GPIO port E device. */
 extern gpio_dev* const GPIOE;
 extern gpio_dev gpiof;
-/** GPIO port F device. */
 extern gpio_dev* const GPIOF;
 extern gpio_dev gpiog;
-/** GPIO port G device. */
 extern gpio_dev* const GPIOG;
 #endif
 

@@ -34,7 +34,7 @@ static inline __io uint32* data_register(uint8 reg);
 bkp_dev bkp = {
     .regs = BKP_BASE,
 };
-
+/** Backup device. */
 const bkp_dev *BKP = &bkp;
 
 /**

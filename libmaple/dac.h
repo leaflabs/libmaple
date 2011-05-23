@@ -80,7 +80,6 @@ typedef struct dac_dev {
     dac_reg_map *regs; /**< Register map */
 } dac_dev;
 
-/** DAC device. */
 extern const dac_dev *DAC;
 
 /*

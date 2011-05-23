@@ -99,20 +99,20 @@ extern gpio_dev* const GPIOG;
 #endif
 
 /** GPIO port A register map base pointer */
-#define GPIOA_BASE ((gpio_reg_map*)0x40010800)
+#define GPIOA_BASE                      ((struct gpio_reg_map*)0x40010800)
 /** GPIO port B register map base pointer */
-#define GPIOB_BASE ((gpio_reg_map*)0x40010C00)
+#define GPIOB_BASE                      ((struct gpio_reg_map*)0x40010C00)
 /** GPIO port C register map base pointer */
-#define GPIOC_BASE ((gpio_reg_map*)0x40011000)
+#define GPIOC_BASE                      ((struct gpio_reg_map*)0x40011000)
 /** GPIO port D register map base pointer */
-#define GPIOD_BASE ((gpio_reg_map*)0x40011400)
+#define GPIOD_BASE                      ((struct gpio_reg_map*)0x40011400)
 #ifdef STM32_HIGH_DENSITY
 /** GPIO port E register map base pointer */
-#define GPIOE_BASE ((gpio_reg_map*)0x40011800)
+#define GPIOE_BASE                      ((struct gpio_reg_map*)0x40011800)
 /** GPIO port F register map base pointer */
-#define GPIOF_BASE ((gpio_reg_map*)0x40011C00)
+#define GPIOF_BASE                      ((struct gpio_reg_map*)0x40011C00)
 /** GPIO port G register map base pointer */
-#define GPIOG_BASE ((gpio_reg_map*)0x40012000)
+#define GPIOG_BASE                      ((struct gpio_reg_map*)0x40012000)
 #endif
 
 /*
@@ -235,7 +235,7 @@ typedef struct afio_reg_map {
 } afio_reg_map;
 
 /** AFIO register map base pointer. */
-#define AFIO_BASE ((afio_reg_map *)0x40010000)
+#define AFIO_BASE                       ((struct afio_reg_map *)0x40010000)
 
 /*
  * AFIO register bit definitions

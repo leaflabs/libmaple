@@ -55,7 +55,7 @@ typedef struct nvic_reg_map {
 } nvic_reg_map;
 
 /** NVIC register map base pointer. */
-#define NVIC_BASE                       ((nvic_reg_map*)0xE000E100)
+#define NVIC_BASE                       ((struct nvic_reg_map*)0xE000E100)
 
 /**
  * Interrupt vector table interrupt numbers.  Each enumerator is the

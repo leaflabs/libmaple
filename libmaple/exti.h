@@ -50,7 +50,7 @@ typedef struct exti_reg_map {
 } exti_reg_map;
 
 /** EXTI register map base pointer */
-#define EXTI_BASE             ((exti_reg_map*)0x40010400)
+#define EXTI_BASE                       ((struct exti_reg_map*)0x40010400)
 
 /** External interrupt trigger mode */
 typedef enum exti_trigger_mode {

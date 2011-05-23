@@ -69,7 +69,7 @@ typedef struct dac_reg_map {
 } dac_reg_map;
 
 /** DAC register map base address */
-#define DAC_BASE                ((dac_reg_map*)0x40007400)
+#define DAC_BASE                ((struct dac_reg_map*)0x40007400)
 
 /*
  * Devices

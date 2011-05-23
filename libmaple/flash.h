@@ -49,7 +49,7 @@ typedef struct flash_reg_map {
 } flash_reg_map;
 
 /** Flash register map base pointer */
-#define FLASH_BASE                      ((flash_reg_map*)0x40022000)
+#define FLASH_BASE                      ((struct flash_reg_map*)0x40022000)
 
 /*
  * Register bit definitions

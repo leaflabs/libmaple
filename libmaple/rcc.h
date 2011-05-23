@@ -51,7 +51,7 @@ typedef struct rcc_reg_map {
 } rcc_reg_map;
 
 /** RCC register map base pointer */
-#define RCC_BASE                        ((rcc_reg_map*)0x40021000)
+#define RCC_BASE                        ((struct rcc_reg_map*)0x40021000)
 
 /*
  * Register bit definitions

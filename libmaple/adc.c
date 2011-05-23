@@ -39,14 +39,14 @@
 #include "rcc.h"
 #include "adc.h"
 
-adc_dev adc1 = {
+static adc_dev adc1 = {
     .regs   = ADC1_BASE,
     .clk_id = RCC_ADC1
 };
 /** ADC1 device. */
 const adc_dev *ADC1 = &adc1;
 
-adc_dev adc2 = {
+static adc_dev adc2 = {
     .regs   = ADC2_BASE,
     .clk_id = RCC_ADC2
 };

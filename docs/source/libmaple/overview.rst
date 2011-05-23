@@ -5,9 +5,9 @@
 Overview
 ========
 
-This page is a general overview of the low-level aspects of libmaple
-proper.  It provides a general perspective of the library's goals and
-design.  Examples are given from the libmaple sources.
+This page is a general overview of libmaple proper.  It provides a
+general perspective of the library's goals and design.  Examples are
+given from libmaple's sources.
 
 .. contents:: Contents
    :local:
@@ -22,10 +22,10 @@ on the STM32 line.
 Let's start with the basics. If you're interested in low-level details
 on the STM32, then you're going to spend a lot of quality time wading
 through `ST RM0008
-<http://www.st.com/stonline/products/literature/rm/13902.pdf>`_.
-RM0008 is the single most important tool in your toolbox.  It is the
-authoritative documentation for the capabilities and low-level
-programming interfaces of ST's line of ARM Cortex M3 microcontrollers.
+<http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/REFERENCE_MANUAL/CD00171190.pdf>`_.
+That document is the single most important tool in your toolbox.  It
+is the authoritative documentation for the capabilities and register
+interfaces of the STM32 line.
 
 Perhaps you haven't read it in detail, but maybe you've at least
 thumbed through a few of the sections, trying to gain some
@@ -33,11 +33,9 @@ understanding of what's going on.  If you've done that (and if you
 haven't, just take our word for it), then you know that underneath the
 covers, *everything* is controlled by messing with bits in the
 seemingly endless collections of registers specific to every
-peripheral.  The `USARTs <http://leaflabs.com/docs/usart.html>`_ have
-data registers; (some of the) the `timers
-<http://leaflabs.com/docs/timers.html>`_ have capture/compare
-registers, the `GPIOs <http://leaflabs.com/docs/gpio.html>`_ have
-output data registers, etc.
+peripheral.  The :ref:`USARTs <usart>` have data registers; (some of
+the) the :ref:`timers <timers>` have capture/compare registers, the
+:ref:`GPIOs <gpio>` have output data registers, etc.
 
 For the most part, Wirish does everything it can to hide this truth
 from you.  That's because when you really just want to get your robot
@@ -107,10 +105,10 @@ The timers on the STM32 line are more involved than the ADCs, so a
 
     /** Timer device type */
     typedef struct timer_dev {
-        timer_reg_map_union regs;
-        rcc_clk_id clk_id;
-        timer_type type;
-        voidFuncPtr handlers[];
+        timer_reg_map regs;         /**< Register map */
+        rcc_clk_id clk_id;          /**< RCC clock information */
+        timer_type type;            /**< Timer's type */
+        voidFuncPtr handlers[];     /**< User IRQ handlers */
     } timer_dev;
 
 However, as you can see, both ADC and timer devices are named
@@ -223,7 +221,7 @@ you want?  That depends on if there's more than one xxx or not.  If
 there's only one xxx, then libmaple guarantees there will be a
 ``#define`` that looks like like this::
 
-    #define XXX_BASE                    ((xxx_reg_map*)0xDEADBEEF)
+    #define XXX_BASE                    ((struct xxx_reg_map*)0xDEADBEEF)
 
 That is, you're guaranteed there will be a pointer to the (only)
 ``xxx_reg_map`` you want, and it will be called
@@ -231,9 +229,9 @@ That is, you're guaranteed there will be a pointer to the (only)
 the fixed location in memory where the register map begins).  Here's a
 concrete example from ``dac.h``::
 
-    #define DAC_BASE                    ((dac_reg_map*)0x40007400)
+    #define DAC_BASE                        ((struct dac_reg_map*)0x40007400)
 
-How can you use these?  This is perhaps best explained by example.  
+How can you use these?  This is perhaps best explained by example.
 
 * In order to write 2048 to the channel 1 12-bit left-aligned data
   holding register (RM0008: DAC_DHR12L1), you could write::
@@ -252,24 +250,20 @@ That covers the case where there's a single xxx peripheral.  If
 there's more than one (say, if there are *n*), then ``xxx.h`` provides
 the following::
 
-    #define XXX1_BASE                   ((xxx_reg_map*)0xDEADBEEF)
-    #define XXX2_BASE                   ((xxx_reg_map*)0xF00DF00D)
+    #define XXX1_BASE                       ((struct xxx_reg_map*)0xDEADBEEF)
+    #define XXX2_BASE                       ((struct xxx_reg_map*)0xF00DF00D)
     ...
-    #define XXXn_BASE                   ((xxx_reg_map*)0x13AF1AB5)
+    #define XXXn_BASE                       ((struct xxx_reg_map*)0x13AF1AB5)
 
-Here's a concrete example from ``adc.h``::
+Here are some examples from ``adc.h``::
 
-    /** ADC1 register map base pointer. */
-    #define ADC1_BASE               ((adc_reg_map*)0x40012400)
-    /** ADC2 register map base pointer. */
-    #define ADC2_BASE               ((adc_reg_map*)0x40012800)
-    /** ADC3 register map base pointer. */
-    #define ADC3_BASE               ((adc_reg_map*)0x40013C00)
+    #define ADC1_BASE                       ((struct adc_reg_map*)0x40012400)
+    #define ADC2_BASE                       ((struct adc_reg_map*)0x40012800)
 
 In order to read from the ADC1's regular data register (where the
 results of ADC conversion are stored), you might write::
 
-      uint32 converted_result = ADC1->DR;
+    uint32 converted_result = ADC1_BASE->DR;
 
 Register Bit Definitions
 ------------------------

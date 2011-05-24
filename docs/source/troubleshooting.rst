@@ -133,35 +133,35 @@ files. If you recompile everything, it should be fine.
 
 .. _troubleshooting-upload:
 
-========================
- Common upload problems
-========================
+======================
+Common upload problems
+======================
 
 My program is too large!
 ------------------------
 
-First, make sure you're using the FLASH target instead of RAM; there
-is several times more FLASH memory available for user programs.
+First, make sure you're using the Flash target instead of RAM; there
+is several times more Flash memory available for user programs.
 
 ``No DFU capable USB device found``
 -----------------------------------
 
-This probably means you don't have a Maple plugged in or powered on.
-Try unplugging and plugging your Maple or pressing the RESET button.
+This probably means the Maple isn't plugged in or powered on.  Try
+unplugging and plugging back in, or pressing the RESET button.
 
 This can also happen if you disable the USB peripheral, e.g. using
 :ref:`SerialUSB.end() <lang-serialusb-end>`.
 
-I have multiple Maples installed; how do I know which one will get flashed?
----------------------------------------------------------------------------
+I have multiple boards plugged in; how do I know which one will get programmed?
+-------------------------------------------------------------------------------
 
 Because the Maple IDE uses DFU to upload programs, you can't select a
-particular Maple from the Serial Port menu to upload to a particular
-board. There's no solution to this problem for now: you'll have to
-just plug in the Maples one at a time. If this is a real problem let
-us know and we'll see if we can come up with a better solution.
+particular board to upload to.  There's no solution to this problem
+for now: you'll have to just plug in your boards one at a time. If
+this is a real problem, let us know, and we'll see if we can come up
+with a better solution.
 
-My flash programs don't seem to stick; they behave like they are RAM!
+My Flash programs don't seem to stick; they behave like they are RAM!
 ---------------------------------------------------------------------
 
 If you have uploaded a program to RAM, this will take priority over
@@ -171,15 +171,15 @@ by unplugging your Maple to clear the contents of RAM, then plugging
 it back in.
 
 If you are using the :ref:`Unix toolchain <unix-toolchain>`, Make sure
-you :command:`make clean` when switching between FLASH and RAM
-targets; :command:`make` isn't smart enough to rebuild everything that
-needs to be for the new target.
+you :command:`make clean` when switching between Flash and RAM
+targets; our Makefile isn't smart enough to rebuild everything for the
+new target.
 
 .. _troubleshooting-shell:
 
-=====================
- Command-line issues
-=====================
+===================
+Command-Line Issues
+===================
 
 [Linux] ``cdc_acm 3-1:1.0: no more free acm devices``
 -----------------------------------------------------
@@ -188,26 +188,26 @@ This is a nasty one! It means that all 32 possible CDC_ACM serial
 devices (:file:`/dev/ttyACM25`, etc.) have been used up.
 
 The usual cause is using a serial port monitor and not closing it
-before restarting the Maple or uploading a new program.  The operating
-system doesn't like that, and locks up that device. After reset the
-Maple comes back up as a new device. If you develop heavily and don't
-restart you'll blow right through all 32 devices.
+before restarting the board or uploading a new program.  The operating
+system doesn't like that, and locks up that device. After reset, the
+board comes back up as a new device. If you develop heavily and don't
+restart, you'll blow right through all 32 devices.
 
 The lazy solution is to always close the monitor before restarting,
 and if you get this error in :file:`dmesg` after a dfu-util "Not
 Found" error, restart you machine.
 
 The hacker solution is to restart your cdc_acm kernel module. On
-Ubuntu 09.10, this goes a little something like::
+Ubuntu 9.10, this goes a little something like::
 
   $ sudo rmmod cdc-acm
   $ sudo insmod /lib/modules/2.6.31-20-generic/kernel/drivers/usb/class/cdc-acm.ko
 
 .. _troubleshooting-tips-tricks:
 
-=================
- Tips and Tricks
-=================
+===============
+Tips and Tricks
+===============
 
 .. _troubleshooting-perpetual-bootloader:
 

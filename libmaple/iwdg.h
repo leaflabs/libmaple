@@ -58,6 +58,7 @@ typedef struct iwdg_reg_map {
     __io uint32 SR;             /**< Status register */
 } iwdg_reg_map;
 
+/** Independent watchdog base pointer */
 #define IWDG_BASE                       ((struct iwdg_reg_map*)0x40003000)
 
 /*
@@ -88,15 +89,19 @@ typedef struct iwdg_reg_map {
 #define IWDG_SR_RVU                     BIT(IWDG_SR_RVU_BIT)
 #define IWDG_SR_PVU                     BIT(IWDG_SR_PVU_BIT)
 
-/** Independent watchdog prescalers */
-typedef enum {
-    IWDG_PRE_4 = IWDG_PR_DIV_4,
-    IWDG_PRE_8 = IWDG_PR_DIV_8,
-    IWDG_PRE_16 = IWDG_PR_DIV_16,
-    IWDG_PRE_32 = IWDG_PR_DIV_32,
-    IWDG_PRE_64 = IWDG_PR_DIV_64,
-    IWDG_PRE_128 = IWDG_PR_DIV_128,
-    IWDG_PRE_256 = IWDG_PR_DIV_256
+/**
+ * @brief Independent watchdog prescalers.
+ *
+ * These divide the 40 kHz IWDG clock.
+ */
+typedef enum iwdg_prescaler {
+    IWDG_PRE_4 = IWDG_PR_DIV_4,     /**< Divide by 4 */
+    IWDG_PRE_8 = IWDG_PR_DIV_8,     /**< Divide by 8 */
+    IWDG_PRE_16 = IWDG_PR_DIV_16,   /**< Divide by 16 */
+    IWDG_PRE_32 = IWDG_PR_DIV_32,   /**< Divide by 32 */
+    IWDG_PRE_64 = IWDG_PR_DIV_64,   /**< Divide by 64 */
+    IWDG_PRE_128 = IWDG_PR_DIV_128, /**< Divide by 128 */
+    IWDG_PRE_256 = IWDG_PR_DIV_256  /**< Divide by 256 */
 } iwdg_prescaler;
 
 void iwdg_init(iwdg_prescaler prescaler, uint16 reload);

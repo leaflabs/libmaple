@@ -1,10 +1,12 @@
 .. _lang-board-values:
 
-Board-Specific Constants
-========================
+Board-Specific Values
+=====================
 
 There are a number of board-specific values: constants or variables
-which are different depending on which LeafLabs board you have.
+which are different depending on which LeafLabs board you have.  The
+exact values for each board are given in your :ref:`board's hardware
+documentation <index-boards>`.
 
 This page lists and documents the board-specific values.  You should
 use these when appropriate in your own programs.  This will help make
@@ -21,14 +23,17 @@ Documentation <index-boards>`.
 Constants
 ---------
 
+- ``CYCLES_PER_MICROSECOND``: Number of CPU cycles per microsecond on
+  your board.
+
 - ``CLOCK_SPEED_MHZ``: Clock speed of your board, in megahertz
   (MHz). This is the same as ``CYCLES_PER_MICROSECOND``.
 
 - ``CLOCK_SPEED_HZ``: Clock speed of your board, in hertz (Hz).  This
-  is the same as ``CLOCK_SPEED_MHZ * 1000000``.
+  is the same as ``CLOCK_SPEED_MHZ`` × 1,000,000.
 
-- ``CYCLES_PER_MICROSECOND``: Number of CPU cycles per microsecond on
-  your board.
+- ``SYSTICK_RELOAD_VAL``: Value used when reloading the :ref:`systick`
+  timer's counter [#fmillis]_.
 
 .. _lang-board-values-but:
 
@@ -70,7 +75,7 @@ Constants
 
 .. _lang-board-values-usart:
 
-- USART (serial port) related constants:
+- :ref:`USART <usart>` (serial port) related constants:
 
     * ``BOARD_USART1_TX_PIN``, ``BOARD_USART2_TX_PIN``, ``BOARD_USART3_TX_PIN``:
       TX pins for the 3 USARTS.
@@ -86,6 +91,24 @@ Constants
 
     * ``BOARD_NR_USARTS``: Number of serial ports on the board.  This
       number includes UARTs 4 and 5 if they are available.
+
+- :ref:`SPI <spi>` related constants:
+
+    * ``BOARD_SPI1_NSS_PIN``, ``BOARD_SPI1_MOSI_PIN``,
+      ``BOARD_SPI1_MISO_PIN``, ``BOARD_SPI1_SCK_PIN``: SPI1
+      peripheral's NSS, MOSI, MISO, and SCK pins, respectively.
+
+    * ``BOARD_SPI2_NSS_PIN``, ``BOARD_SPI2_MOSI_PIN``,
+      ``BOARD_SPI2_MISO_PIN``, ``BOARD_SPI2_SCK_PIN``: SPI2
+      peripheral's NSS, MOSI, MISO, and SCK pins, respectively.
+
+    * ``BOARD_SPI3_NSS_PIN``, ``BOARD_SPI3_MOSI_PIN``,
+      ``BOARD_SPI3_MISO_PIN``, ``BOARD_SPI3_SCK_PIN``: SPI3
+      peripheral's NSS, MOSI, MISO, and SCK pins, respectively
+      (available on high-density devices like Maple Native and Maple
+      RET6 edition only).
+
+    * ``BOARD_NR_SPI``: Number of SPI peripherals on the board.
 
 .. _lang-board-values-debug:
 
@@ -178,3 +201,8 @@ See Also
 - :ref:`lang-pwmwrite`
 - :ref:`lang-enabledebugports`
 - :ref:`lang-disabledebugports`
+
+.. rubric:: Footnotes
+
+.. [#fmillis] In order for :ref:`lang-millis` to work properly, this
+   must be ``CYCLES_PER_MICROSECOND`` × 1,000 - 1.

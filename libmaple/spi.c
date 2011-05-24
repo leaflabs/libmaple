@@ -45,6 +45,7 @@ static spi_dev spi1 = {
     .clk_id   = RCC_SPI1,
     .irq_num  = NVIC_SPI1,
 };
+/** SPI device 1 */
 spi_dev *SPI1 = &spi1;
 
 static spi_dev spi2 = {
@@ -52,6 +53,7 @@ static spi_dev spi2 = {
     .clk_id   = RCC_SPI2,
     .irq_num  = NVIC_SPI2,
 };
+/** SPI device 2 */
 spi_dev *SPI2 = &spi2;
 
 #ifdef STM32_HIGH_DENSITY
@@ -60,6 +62,7 @@ static spi_dev spi3 = {
     .clk_id   = RCC_SPI3,
     .irq_num  = NVIC_SPI3,
 };
+/** SPI device 3 */
 spi_dev *SPI3 = &spi3;
 #endif
 

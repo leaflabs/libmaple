@@ -202,17 +202,14 @@ typedef struct spi_reg_map {
 
 /** SPI device type */
 typedef struct spi_dev {
-    spi_reg_map *regs;
-    rcc_clk_id clk_id;
-    nvic_irq_num irq_num;
+    spi_reg_map *regs;          /**< Register map */
+    rcc_clk_id clk_id;          /**< RCC clock information */
+    nvic_irq_num irq_num;       /**< NVIC interrupt number */
 } spi_dev;
 
-/** SPI device 1 */
 extern spi_dev *SPI1;
-/** SPI device 2 */
 extern spi_dev *SPI2;
 #ifdef STM32_HIGH_DENSITY
-/** SPI device 3 */
 extern spi_dev *SPI3;
 #endif
 
@@ -237,7 +234,7 @@ void spi_gpio_cfg(uint8 as_master,
  * idle state of the clock line, and clock phase (CPHA), which
  * determines which clock edge triggers data capture.
  */
-typedef enum {
+typedef enum spi_mode {
     SPI_MODE_0,  /**< Clock line idles low (0), data capture on first
                     clock transition. */
     SPI_MODE_1,  /**< Clock line idles low (0), data capture on second
@@ -252,7 +249,7 @@ typedef enum {
  * @brief SPI baud rate configuration, as a divisor of f_PCLK, the
  *        PCLK clock frequency.
  */
-typedef enum {
+typedef enum spi_baud_rate {
     SPI_BAUD_PCLK_DIV_2   = SPI_CR1_BR_PCLK_DIV_2,   /**< f_PCLK/2 */
     SPI_BAUD_PCLK_DIV_4   = SPI_CR1_BR_PCLK_DIV_4,   /**< f_PCLK/4 */
     SPI_BAUD_PCLK_DIV_8   = SPI_CR1_BR_PCLK_DIV_8,   /**< f_PCLK/8 */
@@ -268,7 +265,7 @@ typedef enum {
  * @see spi_master_enable()
  * @see spi_slave_enable()
  */
-typedef enum {
+typedef enum spi_cfg_flag {
     SPI_BIDIMODE   = SPI_CR1_BIDIMODE,   /**< Bidirectional mode enable */
     SPI_BIDIOE     = SPI_CR1_BIDIOE,     /**< Output enable in bidirectional
                                             mode */
@@ -328,7 +325,7 @@ static inline void spi_peripheral_disable_all(void) {
 }
 
 /** Available SPI interrupts */
-typedef enum {
+typedef enum spi_interrupt {
     SPI_TXE_INTERRUPT  = SPI_CR2_TXEIE,  /**< TX buffer empty interrupt */
     SPI_RXNE_INTERRUPT = SPI_CR2_RXNEIE, /**< RX buffer not empty interrupt */
     SPI_ERR_INTERRUPT  = SPI_CR2_ERRIE   /**<

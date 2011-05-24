@@ -427,7 +427,7 @@ typedef enum rcc_pll_multiplier {
  *
  * Also generally useful as a unique identifier for that device.
  */
-typedef enum {
+typedef enum rcc_clk_id {
     RCC_GPIOA,
     RCC_GPIOB,
     RCC_GPIOC,
@@ -509,42 +509,42 @@ typedef enum rcc_prescaler {
  * ADC prescaler dividers
  * @see rcc_set_prescaler()
  */
-typedef enum adc_prescaler_divider {
+typedef enum rcc_adc_divider {
     RCC_ADCPRE_PCLK_DIV_2 = 0x0 << 14,
     RCC_ADCPRE_PCLK_DIV_4 = 0x1 << 14,
     RCC_ADCPRE_PCLK_DIV_6 = 0x2 << 14,
     RCC_ADCPRE_PCLK_DIV_8 = 0x3 << 14,
-} adc_prescaler_divider;
+} rcc_adc_divider;
 
 /**
  * APB1 prescaler dividers
  * @see rcc_set_prescaler()
  */
-typedef enum apb1_prescaler_divider {
+typedef enum rcc_apb1_divider {
     RCC_APB1_HCLK_DIV_1 = 0x0 << 8,
     RCC_APB1_HCLK_DIV_2 = 0x4 << 8,
     RCC_APB1_HCLK_DIV_4 = 0x5 << 8,
     RCC_APB1_HCLK_DIV_8 = 0x6 << 8,
     RCC_APB1_HCLK_DIV_16 = 0x7 << 8,
-} apb1_prescaler_divider;
+} rcc_apb1_divider;
 
 /**
  * APB2 prescaler dividers
  * @see rcc_set_prescaler()
  */
-typedef enum apb2_prescaler_divider {
+typedef enum rcc_apb2_divider {
     RCC_APB2_HCLK_DIV_1 = 0x0 << 11,
     RCC_APB2_HCLK_DIV_2 = 0x4 << 11,
     RCC_APB2_HCLK_DIV_4 = 0x5 << 11,
     RCC_APB2_HCLK_DIV_8 = 0x6 << 11,
     RCC_APB2_HCLK_DIV_16 = 0x7 << 11,
-} apb2_prescaler_divider;
+} rcc_apb2_divider;
 
 /**
  * AHB prescaler dividers
  * @see rcc_set_prescaler()
  */
-typedef enum ahb_prescaler_divider {
+typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_1 = 0x0 << 4,
     RCC_AHB_SYSCLK_DIV_2 = 0x8 << 4,
     RCC_AHB_SYSCLK_DIV_4 = 0x9 << 4,
@@ -555,7 +555,7 @@ typedef enum ahb_prescaler_divider {
     RCC_AHB_SYSCLK_DIV_128 = 0xD << 4,
     RCC_AHB_SYSCLK_DIV_256 = 0xE << 4,
     RCC_AHB_SYSCLK_DIV_512 = 0xF << 4,
-} ahb_prescaler_divider;
+} rcc_ahb_divider;
 
 void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
 

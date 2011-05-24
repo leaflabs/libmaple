@@ -24,7 +24,7 @@ programmers familiar with the Arduino language.
 
    - If you're looking for pointers to low-level details, see the
      :ref:`Language Recommended Reading
-     <language-recommended-reading>`.
+     <language-recommended-reading>` and :ref:`libmaple` pages.
 
 .. _index-language-index-cpp:
 .. _index-language-index-api:

@@ -39,16 +39,18 @@
 #include "rcc.h"
 #include "adc.h"
 
-adc_dev adc1 = {
+static adc_dev adc1 = {
     .regs   = ADC1_BASE,
     .clk_id = RCC_ADC1
 };
+/** ADC1 device. */
 const adc_dev *ADC1 = &adc1;
 
-adc_dev adc2 = {
+static adc_dev adc2 = {
     .regs   = ADC2_BASE,
     .clk_id = RCC_ADC2
 };
+/** ADC2 device. */
 const adc_dev *ADC2 = &adc2;
 
 #ifdef STM32_HIGH_DENSITY
@@ -56,19 +58,19 @@ adc_dev adc3 = {
     .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3
 };
+/** ADC3 device. */
 const adc_dev *ADC3 = &adc3;
 #endif
 
 /**
  * @brief Initialize an ADC peripheral.
  *
- * Initializes the RCC clock line for the given peripheral, using ADC
- * prescaler RCC_ADCPRE_PCLK_DIV_6.  Resets ADC device registers.
+ * Initializes the RCC clock line for the given peripheral.  Resets
+ * ADC device registers.
  *
  * @param dev ADC peripheral to initialize
  */
 void adc_init(const adc_dev *dev) {
-    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
     rcc_clk_enable(dev->clk_id);
     rcc_reset_dev(dev->clk_id);
 }

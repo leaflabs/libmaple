@@ -26,8 +26,9 @@
 
 /**
  * @file i2c.c
- * @brief Inter-Integrated Circuit (I2C) support. Currently supports only master
- * mode.
+ * @brief Inter-Integrated Circuit (I2C) support.
+ *
+ * Currently, only master mode is supported.
  */
 
 #include "libmaple.h"
@@ -43,11 +44,12 @@ static i2c_dev i2c_dev1 = {
     .gpio_port    = &gpiob,
     .sda_pin      = 7,
     .scl_pin      = 6,
-    .clk_line     = RCC_I2C1,
+    .clk_id       = RCC_I2C1,
     .ev_nvic_line = NVIC_I2C1_EV,
     .er_nvic_line = NVIC_I2C1_ER,
     .state        = I2C_STATE_DISABLED
 };
+/** I2C1 device */
 i2c_dev* const I2C1 = &i2c_dev1;
 
 static i2c_dev i2c_dev2 = {
@@ -55,11 +57,12 @@ static i2c_dev i2c_dev2 = {
     .gpio_port    = &gpiob,
     .sda_pin      = 11,
     .scl_pin      = 10,
-    .clk_line     = RCC_I2C2,
+    .clk_id       = RCC_I2C2,
     .ev_nvic_line = NVIC_I2C2_EV,
     .er_nvic_line = NVIC_I2C2_ER,
     .state        = I2C_STATE_DISABLED
 };
+/** I2C2 device */
 i2c_dev* const I2C2 = &i2c_dev2;
 
 static inline int32 wait_for_state_change(i2c_dev *dev,
@@ -68,9 +71,9 @@ static inline int32 wait_for_state_change(i2c_dev *dev,
 
 /**
  * @brief Fill data register with slave address
- * @param dev i2c device
- * @param addr slave address
- * @param rw read/write bit
+ * @param dev I2C device
+ * @param addr Slave address
+ * @param rw Read/write bit
  */
 static inline void i2c_send_slave_addr(i2c_dev *dev, uint32 addr, uint32 rw) {
     dev->regs->DR = (addr << 1) | rw;
@@ -121,10 +124,9 @@ enum {
     ERROR_ENTRY         = 13,
 };
 
-
 /**
- * @brief IRQ handler for i2c master. Handles transmission/reception.
- * @param dev i2c device
+ * @brief IRQ handler for I2C master. Handles transmission/reception.
+ * @param dev I2C device
  */
 static void i2c_irq_handler(i2c_dev *dev) {
     i2c_msg *msg = dev->msg;
@@ -294,11 +296,10 @@ void __irq_i2c2_ev(void) {
    i2c_irq_handler(&i2c_dev2);
 }
 
-
 /**
- * @brief Interrupt handler for i2c error conditions
- * @param dev i2c device
- * @sideeffect Aborts any pending i2c transactions
+ * @brief Interrupt handler for I2C error conditions
+ * @param dev I2C device
+ * @sideeffect Aborts any pending I2C transactions
  */
 static void i2c_irq_error_handler(i2c_dev *dev) {
     I2C_CRUMB(ERROR_ENTRY, dev->regs->SR1, dev->regs->SR2);
@@ -324,12 +325,14 @@ void __irq_i2c2_er(void) {
     i2c_irq_error_handler(&i2c_dev2);
 }
 
-
 /**
- * @brief Reset an i2c bus by clocking out pulses until any hung
- * slaves release SDA and SCL, then generate a START condition, then
- * a STOP condition.
- * @param dev i2c device
+ * @brief Reset an I2C bus.
+ *
+ * Reset is accomplished by clocking out pulses until any hung slaves
+ * release SDA and SCL, then generating a START condition, then a STOP
+ * condition.
+ *
+ * @param dev I2C device
  */
 void i2c_bus_reset(const i2c_dev *dev) {
     /* Release both lines */
@@ -370,22 +373,24 @@ void i2c_bus_reset(const i2c_dev *dev) {
 /**
  * @brief Initialize an I2C device and reset its registers to their
  *        default values.
- * @param dev Device to enable.
+ * @param dev Device to initialize.
  */
 void i2c_init(i2c_dev *dev) {
-    rcc_reset_dev(dev->clk_line);
-    rcc_clk_enable(dev->clk_line);
+    rcc_reset_dev(dev->clk_id);
+    rcc_clk_enable(dev->clk_id);
 }
 
 /**
- * @brief Initialize an i2c device as bus master
+ * @brief Initialize an I2C device as bus master
  * @param dev Device to enable
  * @param flags Bitwise or of the following I2C options:
- *      I2C_FAST_MODE: 400 khz operation
- *      I2C_DUTY_16_9: 16/9 Tlow/Thigh duty cycle (only applicable for fast mode)
- *      I2C_BUS_RESET: Reset the bus and clock out any hung slaves on initialization
- *      I2C_10BIT_ADDRESSING: Enable 10-bit addressing
- *      I2C_REMAP: Remap I2C1 to SCL/PB8 SDA/PB9
+ *              I2C_FAST_MODE: 400 khz operation,
+ *              I2C_DUTY_16_9: 16/9 Tlow/Thigh duty cycle (only applicable for
+ *                             fast mode),
+ *              I2C_BUS_RESET: Reset the bus and clock out any hung slaves on
+ *                             initialization,
+ *              I2C_10BIT_ADDRESSING: Enable 10-bit addressing,
+ *              I2C_REMAP: Remap I2C1 to SCL/PB8 SDA/PB9.
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 #define I2C_CLK                (PCLK1/1000000)
@@ -484,17 +489,20 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 
 
 /**
- * @brief Process an i2c transaction. Transactions are composed of
- * one or more i2c_msg's and may be read or write tranfers. Multiple i2c_msg's
- * will generate a repeated start inbetween messages.
- * @param dev i2c device
- * @param msgs messages to send/receive
- * @param num number of messages to send/receive
- * @param timeout bus idle timeout in milliseconds before aborting the
- *      transfer. 0 denotes no timeout.
- * @return 0 on success
- *      I2C_ERROR_PROTOCOL if there was a protocol error.
- *      I2C_ERROR_TIMEOUT if the transfer timed out.
+ * @brief Process an i2c transaction.
+ *
+ * Transactions are composed of one or more i2c_msg's, and may be read
+ * or write tranfers.  Multiple i2c_msg's will generate a repeated
+ * start in between messages.
+ *
+ * @param dev I2C device
+ * @param msgs Messages to send/receive
+ * @param num Number of messages to send/receive
+ * @param timeout Bus idle timeout in milliseconds before aborting the
+ *                transfer.  0 denotes no timeout.
+ * @return 0 on success,
+ *         I2C_ERROR_PROTOCOL if there was a protocol error,
+ *         I2C_ERROR_TIMEOUT if the transfer timed out.
  */
 int32 i2c_master_xfer(i2c_dev *dev,
                       i2c_msg *msgs,
@@ -524,11 +532,11 @@ out:
 
 
 /**
- * @brief Wait for an i2c event, or timeout in case of error
- * @param dev i2c device
- * @param state i2c_state state to wait for
- * @param timeout timeout in milliseconds
- * @return 0 if target state is reached, <0 on error
+ * @brief Wait for an I2C event, or time out in case of error.
+ * @param dev I2C device
+ * @param state I2C_state state to wait for
+ * @param timeout Timeout, in milliseconds
+ * @return 0 if target state is reached, a negative value on error.
  */
 static inline int32 wait_for_state_change(i2c_dev *dev,
                                           i2c_state state,

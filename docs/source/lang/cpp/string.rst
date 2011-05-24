@@ -5,15 +5,8 @@
 Strings
 =======
 
-Text strings can be represented in two ways.  You can
-
-1. Use the :ref:`String <lang-stringclass>` data type, which is
-part of the core as of version 0.0.9, or
-
-2. You can make a string out of an array of type :ref:`char
-<lang-char>` and null-terminate it.
-
-This page describes the second method.
+Text strings on the Maple can be represented with null-terminated
+arrays of type :ref:`char <lang-char>`.
 
 Examples
 --------

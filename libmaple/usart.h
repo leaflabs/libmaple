@@ -232,24 +232,19 @@ typedef struct usart_reg_map {
 
 /** USART device type */
 typedef struct usart_dev {
-    usart_reg_map *regs;
-    ring_buffer *rb;
-    uint32 max_baud;
-    uint8 rx_buf[USART_RX_BUF_SIZE];
-    rcc_clk_id clk_id;
-    nvic_irq_num irq_num;
+    usart_reg_map *regs;             /**< Register map */
+    ring_buffer *rb;                 /**< RX ring buffer */
+    uint32 max_baud;                 /**< Maximum baud */
+    uint8 rx_buf[USART_RX_BUF_SIZE]; /**< Actual RX buffer used by rb */
+    rcc_clk_id clk_id;               /**< RCC clock information */
+    nvic_irq_num irq_num;            /**< USART NVIC interrupt */
 } usart_dev;
 
-/** USART1 device */
 extern usart_dev *USART1;
-/** USART2 device */
 extern usart_dev *USART2;
-/** USART3 device */
 extern usart_dev *USART3;
 #ifdef STM32_HIGH_DENSITY
-/** UART4 device */
 extern usart_dev *UART4;
-/** UART5 device */
 extern usart_dev *UART5;
 #endif
 

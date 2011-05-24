@@ -69,12 +69,9 @@ typedef struct adc_dev {
     rcc_clk_id clk_id; /**< RCC clock information */
 } adc_dev;
 
-/** ADC1 device. */
 extern const adc_dev *ADC1;
-/** ADC2 device. */
 extern const adc_dev *ADC2;
 #ifdef STM32_HIGH_DENSITY
-/** ADC3 device. */
 extern const adc_dev *ADC3;
 #endif
 
@@ -86,8 +83,10 @@ extern const adc_dev *ADC3;
 #define ADC1_BASE                       ((adc_reg_map*)0x40012400)
 /** ADC2 register map base pointer. */
 #define ADC2_BASE                       ((adc_reg_map*)0x40012800)
+#ifdef STM32_HIGH_DENSITY
 /** ADC3 register map base pointer. */
 #define ADC3_BASE                       ((adc_reg_map*)0x40013C00)
+#endif
 
 /*
  * Register bit definitions

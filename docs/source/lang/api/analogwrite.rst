@@ -61,7 +61,7 @@ analogWrite() into the right range::
     analogWrite(pin, map(duty, 0, 255, 0, 65535));
 
 This will convert values in the range 0-255 to values in the range
-0--65,635, which is the correct default range for all of the timers
+0--65,535, which is the correct default range for all of the timers
 which control PWM output.  See the :ref:`timers reference <timers>`
 for more information.
 

@@ -29,7 +29,7 @@
  * @brief Simple circular buffer
  *
  * This implementation is not thread-safe.  In particular, none of
- * these functions are guaranteed re-entrant.
+ * these functions is guaranteed re-entrant.
  */
 
 #ifndef _RING_BUFFER_H_

@@ -42,6 +42,7 @@ Note that the ``true`` and ``false`` constants are typed in lowercase;
 unlike e.g. ``HIGH``, ``LOW``, ``INPUT``, and ``OUTPUT`` (which are
 described below).
 
+.. _lang-pin-levels:
 
 Pin Levels: HIGH and LOW
 ------------------------

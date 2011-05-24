@@ -25,7 +25,7 @@ interrupt handlers) at the same time.
 Hardware/Circuit Design
 -----------------------
 
-.. FIXME [0.0.10 add links to board-specific values]
+.. FIXME [0.1.0] Link to board-specific values (BOARD_I2C1_SDA_PIN, etc.)
 
 Maple boards have two |i2c| ports.  Maples reliably communicate with
 up to a 400kHz clock speed; this doesn't translate into a 400kbps data

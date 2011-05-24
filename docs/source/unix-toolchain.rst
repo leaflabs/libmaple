@@ -52,7 +52,7 @@ contemporary Debian-based distribution.
 
 **1. Collect and Install Tools**
 
-First I'll give the commands to run, then explain::
+Firs, you'll need some tools::
 
   $ sudo aptitude install build-essential git-core wget screen dfu-util \
                           openocd python python-serial
@@ -98,7 +98,7 @@ in `Python <http://python.org>`_, and requires the `PySerial
   $ git clone git://github.com/leaflabs/libmaple.git libmaple
   $ cd libmaple
   $ wget http://static.leaflabs.com/pub/codesourcery/gcc-arm-none-eabi-latest-linux32.tar.gz
-  $ tar xvf gcc-arm-none-eabi-latest-linux32.tar.gz
+  $ tar xvzf gcc-arm-none-eabi-latest-linux32.tar.gz
   $ export PATH=$PATH:~/libmaple/arm/bin # or wherever these tools ended up
 
 This step is fairly straightforward: do a git clone of the `libmaple

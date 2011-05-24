@@ -32,10 +32,11 @@
 /**
  * @brief Initialise and start the watchdog
  *
- * The prescaler and reload set the timeout.  A prescaler of 3 divides
- * the 40 kHz clock by 32 and gives roughly 1 ms per reload.
+ * The prescaler and reload set the timeout.  For example, a prescaler
+ * of IWDG_PRE_32 divides the 40 kHz clock by 32 and gives roughly 1
+ * ms per reload.
  *
- * @param prescaler Prescaler for the 40 KHz IWDG clock.
+ * @param prescaler Prescaler for the 40 kHz IWDG clock.
  * @param reload Independent watchdog counter reload value.
  */
 void iwdg_init(iwdg_prescaler prescaler, uint16 reload) {

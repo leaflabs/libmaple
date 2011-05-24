@@ -5,12 +5,12 @@
 ``libmaple``
 ============
 
-LeafLabs' libmaple (`source code on Github
+LeafLabs' libmaple (`source code on GitHub
 <https://github.com/leaflabs/libmaple>`_) is the library we have
-developed for the `STM32 <http://www.st.com/stonline>`_ line of ARM Cortex M3
-microcontrollers.  Its high-level interfaces are :ref:`largely
-compatible <arduino-compatibility>` with the AVR libraries written for
-the `Arduino <http://arduino.cc>`_ and `Wiring
+developed for the `STM32 <http://www.st.com/stonline>`_ line of ARM
+Cortex M3 microcontrollers.  Its high-level interfaces are
+:ref:`largely compatible <arduino-compatibility>` with the AVR
+libraries written for the `Arduino <http://arduino.cc>`_ and `Wiring
 <http://wiring.org.co/>`_ development boards.
 
 libmaple is split into two pieces: a lower level layer written in pure

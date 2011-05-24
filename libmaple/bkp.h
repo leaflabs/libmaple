@@ -106,8 +106,52 @@ typedef struct bkp_dev {
     bkp_reg_map *regs; /**< Register map */
 } bkp_dev;
 
-/** Backup device. */
 extern const bkp_dev *BKP;
+
+/*
+ * Register bit definitions
+ */
+
+/* Data Registers */
+
+#define BKP_DR_D                        0xFFFF
+
+/* RTC Clock Calibration Register */
+
+#define BKP_RTCCR_ASOS_BIT              9
+#define BKP_RTCCR_ASOE_BIT              8
+#define BKP_RTCCR_CCO_BIT               7
+
+#define BKP_RTCCR_ASOS                  BIT(BKP_RTCCR_ASOS_BIT)
+#define BKP_RTCCR_ASOE                  BIT(BKP_RTCCR_ASOE_BIT)
+#define BKP_RTCCR_CCO                   BIT(BKP_RTCCR_CCO_BIT)
+#define BKP_RTCCR_CAL                   0x7F
+
+/* Backup control register */
+
+#define BKP_CR_TPAL_BIT                 1
+#define BKP_CR_TPE_BIT                  0
+
+#define BKP_CR_TPAL                     BIT(BKP_CR_TPAL_BIT)
+#define BKP_CR_TPE                      BIT(BKP_CR_TPE_BIT)
+
+/* Backup control/status register */
+
+#define BKP_CSR_TIF_BIT                 9
+#define BKP_CSR_TEF_BIT                 8
+#define BKP_CSR_TPIE_BIT                2
+#define BKP_CSR_CTI_BIT                 1
+#define BKP_CSR_CTE_BIT                 0
+
+#define BKP_CSR_TIF                     BIT(BKP_CSR_TIF_BIT)
+#define BKP_CSR_TEF                     BIT(BKP_CSR_TEF_BIT)
+#define BKP_CSR_TPIE                    BIT(BKP_CSR_TPIE_BIT)
+#define BKP_CSR_CTI                     BIT(BKP_CSR_CTI_BIT)
+#define BKP_CSR_CTE                     BIT(BKP_CSR_CTE_BIT)
+
+/*
+ * Convenience functions
+ */
 
 void bkp_init(void);
 void bkp_enable_writes(void);

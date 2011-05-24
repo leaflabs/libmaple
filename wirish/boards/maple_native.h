@@ -70,7 +70,7 @@
 #define BOARD_NR_GPIO_PINS      106
 #define BOARD_NR_PWM_PINS       18
 #define BOARD_NR_ADC_PINS       21
-/* FIXME [0.0.10] this isn't true at all; almost all of the triple
+/* FIXME [0.0.12] this isn't true at all; almost all of the triple
  * header pins are used by the FSMC by default.  Fix this (and the
  * corresponding boardUsedPins definition in maple_native.cpp) by QA
  * time. */

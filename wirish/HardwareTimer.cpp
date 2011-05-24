@@ -90,7 +90,6 @@ void HardwareTimer::setCount(uint16 val) {
     timer_set_count(this->dev, min(val, ovf));
 }
 
-// FIXME [0.0.10 beta] test!
 uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     // Not the best way to handle this edge case?
     if (!microseconds) {

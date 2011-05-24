@@ -76,6 +76,7 @@
 #define SERVO_DEFAULT_MIN_ANGLE         0
 #define SERVO_DEFAULT_MAX_ANGLE         180
 
+/** Class for interfacing with RC servomotors. */
 class Servo {
 public:
     /**

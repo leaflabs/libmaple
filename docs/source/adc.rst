@@ -20,7 +20,7 @@ number of techniques must be used to get good precision and accuracy.
 Noise and Bias
 --------------
 
-.. FIXME [0.0.10, Maple-specific]
+.. FIXME [0.0.11, Maple form factor-specific]
 
 The biggest issues with analog-digital conversion are noise and bias.
 With the Maple, we have tried to isolate the ADC pins and traces from
@@ -38,7 +38,7 @@ voltages that the sample is being compared against. In the case of the
 Maple, the high reference is |vcc| and the low reference is ground.
 This means that noise or fluctuations on either |vcc| or ground will
 affect the measurement. It also means that the voltage you are trying
-to sample must be between ground and 3.3V. 
+to sample must be between ground and 3.3V.
 
 .. _adc-range:
 

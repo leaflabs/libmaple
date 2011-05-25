@@ -5,36 +5,39 @@
 Maple
 =====
 
+This page is a general resource for information specific to the Maple.
+
 .. contents:: Contents
    :local:
+
+.. TODO [dma.rst] Ref to dma.rst in sequel instead of libmaple-dma
+.. TODO [nvic.rst] Ref to nvic.rst in sequel
 
 Technical Specifications
 ------------------------
 
-    * MCU: **STM32F103RBT6**, a 32-bit ARM Cortex M3 microprocessor
-    * Clock Speed: **72 MHz**
-    * **128KB Flash** and **20KB SRAM**
-    * 43 Digital I/O Pins (:ref:`GPIO <gpio>`)
-    * 16 Analog Input Pins, 12-bit **ADC** resolution (:ref:`ADC
-      <adc>`)
-    * 15 **PWM** pins at 16-bit resolution (:ref:`PWM <pwm>`)
-    * Dedicated **USB** port for programming and communications
-      (:ref:`USB <usb>`)
-    * External **JTAG** interface (:ref:`JTAG <jtag>`)
-    * 64 Channel nested vector interrupt handler (including
-      :ref:`external interrupt <lang-attachinterrupt>` on GPIOs)
-    * Integrated **SPI** (:ref:`SPI <spi>`)
-    * Integrated **I2C** (:ref:`I2C <i2c>`)
-    * 7 Channels of Direct Memory Access (**DMA**)
-      (:ref:`libmaple-dma`)
-    * 3 **USART** divices (:ref:`USART <usart>`)
-    * Four 4-channel **timers** (:ref:`Timers <timers>`)
-    * Supplies up to 500mA @ 3.3v (with separate 250 mA digital and
-      analog regulators)
-    * Support for low power, sleep, and standby modes (<500uA)
-    * Operating Voltage: 3.3V
-    * Input Voltage (recommended): 3V-12V
-    * Dimensions are 2.05″x2.1″
+* MCU: **STM32F103RBT6**, a 32-bit ARM Cortex M3 microprocessor
+* Clock Speed: **72 MHz**
+* **128 KB Flash** and **20 KB SRAM**
+* 43 Digital I/O Pins (:ref:`gpio`)
+* 15 **PWM** pins at 16 bit resolution (:ref:`pwm`)
+* 15 analog input pins, 12-bit **ADC** resolution (:ref:`adc`)
+* 2 **SPI** peripherals (:ref:`spi`)
+* 2 **I2C** peripherals (:ref:`i2c`)
+* 7 Channels of Direct Memory Access (**DMA**) (:ref:`libmaple-dma`)
+* 3 **USART** peripherals (:ref:`usart`)
+* One advanced and three general-purpose **timers** (:ref:`timers`)
+* Dedicated **USB** port for programming and communications (:ref:`usb`)
+* **JTAG** (:ref:`jtag`)
+* Nested Vectored Interrupt Controller (NVIC) (including
+  :ref:`external interrupt <external-interrupts>` on GPIOs)
+* Supplies up to 500 mA at 3.3 V, with separate 250 mA digital and
+  analog regulators for low-noise analog performance
+* :ref:`Four layer design <maple-hardware>`
+* Support for low power, sleep, and standby modes (<500 μA)
+* Operating Voltage: 3.3 V
+* Input Voltage (recommended): 4 V — 12 V
+* Dimensions: 2.05″ × 2.1″
 
 .. _maple-identify-rev:
 
@@ -49,7 +52,7 @@ Rev.
 Rev 5
 ^^^^^
 
-These boards went on sale in November 2010.  They have white buttons,
+These boards went on sale in November 2010.  They have white buttons
 and "r5" in small print near the "LeafLabs Maple" text next to the
 "infinity leaf" logo.  The Maple Rev 5 repositioned the double header
 on the right hand side to better fit 0.1 inch pitch breadboard.  This
@@ -96,8 +99,16 @@ it off of an alternative source, unplug the Maple, then move the
 jumper to the desired selector before reconnecting power.
 
 You can also power the Maple via the pin labeled "Vin" on the lower
-header.  However, don't do this while simultaneously powering the
-Maple from another source, or you could damage the board.
+header.  This pin feeds into both the digital and analog voltage
+regulators.  However, don't do this while simultaneously powering the
+board from another source, or you could damage it.
+
+.. warning:: Silkscreens on Maples up through Rev 5s manufactured in
+   Spring 2011 falsely indicated that the barrel jack could be
+   supplied by up to 18 V.  We recommend a barrel jack input voltage
+   **no greater than 12 V**.
+
+   See :ref:`this erratum <maple-barrel-jack>` for more information.
 
 Using the Built-in Battery Charger
 ----------------------------------
@@ -127,11 +138,12 @@ It is thus mainly useful as an :ref:`input <lang-pin-levels>`.  The
 pin will :ref:`read <lang-digitalread>` ``HIGH`` when the :ref:`button
 is pressed <lang-isbuttonpressed>`.
 
-More GPIOs (numbered ``D39``\ --``D42``) are available if you use the
-:ref:`lang-disabledebugports` function; see the :ref:`board-specific
-debug pin constants <lang-board-values-debug>` for more information.
-(See :ref:`this erratum <maple-nrst-pb4>` for information about the
-pin numbered ``43`` on the silkscreen).
+More GPIOs (numbered ``D39``\ --``D42`` on the back of the Maple's
+silkscreen) are available if you use the :ref:`lang-disabledebugports`
+function; see the :ref:`board-specific debug pin constants
+<lang-board-values-debug>` for more information.  (See :ref:`this
+erratum <maple-nrst-pb4>` for information about the pin numbered
+``43`` on the silkscreen).
 
 .. TODO [0.1.0] silkscreen pictures which expand abbreviations
 
@@ -140,57 +152,58 @@ pin numbered ``43`` on the silkscreen).
 Master Pin Map
 ^^^^^^^^^^^^^^
 
-This table shows the available functionality on every GPIO pin, by
-peripheral type. The "STM32" column refers to the port and number that
-the header is connected to on the microcontroller.  The "5V?" column
-documents whether or not the pin is 5 volt tolerant.
+This table shows a summary of the available functionality on every
+GPIO pin, by peripheral type.  The "5 V?" column documents whether or
+not the pin is 5 volt tolerant.
 
 .. csv-table::
-   :header: Pin, STM32, :ref:`ADC <adc>`, :ref:`Timer <timers>`, :ref:`I2C <i2c>`, :ref:`UART <usart>`, :ref:`SPI <spi>`, 5v?
+   :header: Pin, :ref:`GPIO <gpio>`, :ref:`ADC <adc>`, :ref:`Timer <timers>`, :ref:`I2C <i2c>`, :ref:`UART <usart>`, :ref:`SPI <spi>`, 5 V?
 
-   D0,  PA3,  ADC3,  TIM2_CH4,     -,          USART2_RX,  -,         -
-   D1,  PA2,  ADC2,  TIM2_CH3,     -,          USART2_TX,  -,         -
-   D2,  PA0,  ADC0,  TIM2_CH1_ETR, -,          USART2_CTS, -,         -
-   D3,  PA1,  ADC1,  TIM2_CH2,     -,          USART2_RTS, -,         -
-   D4,  PB5,  -,     -,            ISC1_SMBA,  -,          -,         -
-   D5,  PB6,  -,     TIM4_CH1,     I2C1_SCL,   -,          -,         Yes
-   D6,  PA8,  -,     TIM1_CH1,     -,          USART1_CK,  -,         Yes
-   D7,  PA9,  -,     TIM1_CH2,     -,          USART1_TX,  -,         Yes
-   D8,  PA10, -,     TIM1_CH3,     -,          USART1_RX,  -,         Yes
-   D9,  PB7,  -,     TIM4_CH2,     I2C1_SDA,   -,          -,         Yes
-   D10, PA4,  ADC4,  -,            -,          USART2_CK,  SPI1_NSS,  -
-   D11, PA7,  ADC7,  TIM3_CH2,     -,          -,          SPI1_MOSI, -
-   D12, PA6,  ADC6,  TIM3_CH1,     -,          -,          SPI1_MISO, -
-   D13, PA5,  ADC5,  -,            -,          -,          SPI1_SCK,  -
-   D14, PB8,  -,     TIM4_CH3,     -,          -,          -,         Yes
-   D15, PC0,  ADC10, -,            -,          -,          -,         -
-   D16, PC1,  ADC11, -,            -,          -,          -,         -
-   D17, PC2,  ADC12, -,            -,          -,          -,         -
-   D18, PC3,  ADC13, -,            -,          -,          -,         -
-   D19, PC4,  ADC14, -,            -,          -,          -,         -
-   D20, PC5,  ADC15, -,            -,          -,          -,         -
-   D21, PC13, -,     -,            -,          -,          -,         -
-   D22, PC14, -,     -,            -,          -,          -,         -
-   D23, PC15, -,     -,            -,          -,          -,         -
-   D24, PB9,  -,     TIM4_CH4,     -,          -,          -,         Yes
-   D25, PD2,  -,     TIM3_ETR,     -,          -,          -,         Yes
-   D26, PC10, -,     -,            -,          -,          -,         Yes
-   D27, PB0,  ADC8,  TIM3_CH3,     -,          -,          -,         -
-   D28, PB1,  ADC9,  TIM3_CH4,     -,          -,          -,         -
-   D29, PB10, -,     -,            I2C2_SCL,   USART3_TX,  -,         Yes
-   D30, PB11, -,     -,            I2C2_SDA,   USART3_RX,  -,         Yes
-   D31, PB12, -,     TIM1_BKIN,    I2C2_SMBA,  USART3_CK,  SPI2_NSS,  Yes
-   D32, PB13, -,     TIM1_CH1N,    -,          USART3_CTS, SPI2_SCK,  Yes
-   D33, PB14, -,     TIM1_CH2N,    -,          USART3_RTS, SPI2_MISO, Yes
-   D34, PB15, -,     TIM1_CH3N,    -,          -,          SPI2_MOSI, Yes
-   D35, PC6,  -,     -,            -,          -,          -,         Yes
-   D36, PC7,  -,     -,            -,          -,          -,         Yes
-   D37, PC8,  -,     -,            -,          -,          -,         Yes
-   D38, PC9,  -,     -,            -,          -,          -,         Yes
-   D39, PA13, -,     -,            -,          -,          -,         Yes
-   D40, PA14, -,     -,            -,          -,          -,         Yes
-   D41, PA15, -,     -,            -,          -,          -,         Yes
-   D42, PB3,  -,     -,            -,          -,          -,         Yes
+   D0,  PA3,  CH3,  2_CH4,     -,       2_RX,  -,      -
+   D1,  PA2,  CH2,  2_CH3,     -,       2_TX,  -,      -
+   D2,  PA0,  CH0,  2_CH1_ETR, -,       2_CTS, -,      -
+   D3,  PA1,  CH1,  2_CH2,     -,       2_RTS, -,      -
+   D4,  PB5,  -,    -,         1_SMBA,  -,     -,      -
+   D5,  PB6,  -,    4_CH1,     1_SCL,   -,     -,      Yes
+   D6,  PA8,  -,    1_CH1,     -,       1_CK,  -,      Yes
+   D7,  PA9,  -,    1_CH2,     -,       1_TX,  -,      Yes
+   D8,  PA10, -,    1_CH3,     -,       1_RX,  -,      Yes
+   D9,  PB7,  -,    4_CH2,     1_SDA,   -,     -,      Yes
+   D10, PA4,  CH4,  -,         -,       2_CK,  1_NSS,  -
+   D11, PA7,  CH7,  3_CH2,     -,       -,     1_MOSI, -
+   D12, PA6,  CH6,  3_CH1,     -,       -,     1_MISO, -
+   D13, PA5,  CH5,  -,         -,       -,     1_SCK,  -
+   D14, PB8,  -,    4_CH3,     -,       -,     -,      Yes
+   D15, PC0,  CH10, -,         -,       -,     -,      -
+   D16, PC1,  CH11, -,         -,       -,     -,      -
+   D17, PC2,  CH12, -,         -,       -,     -,      -
+   D18, PC3,  CH13, -,         -,       -,     -,      -
+   D19, PC4,  CH14, -,         -,       -,     -,      -
+   D20, PC5,  CH15, -,         -,       -,     -,      -
+   D21, PC13, -,    -,         -,       -,     -,      -
+   D22, PC14, -,    -,         -,       -,     -,      -
+   D23, PC15, -,    -,         -,       -,     -,      -
+   D24, PB9,  -,    4_CH4,     -,       -,     -,      Yes
+   D25, PD2,  -,    3_ETR,     -,       -,     -,      Yes
+   D26, PC10, -,    -,         -,       -,     -,      Yes
+   D27, PB0,  CH8,  3_CH3,     -,       -,     -,      -
+   D28, PB1,  CH9,  3_CH4,     -,       -,     -,      -
+   D29, PB10, -,    -,         2_SCL,   3_TX,  -,      Yes
+   D30, PB11, -,    -,         2_SDA,   3_RX,  -,      Yes
+   D31, PB12, -,    -,         2_SMBA,  3_CK,  2_NSS,  Yes
+   D32, PB13, -,    -,         -,       3_CTS, 2_SCK,  Yes
+   D33, PB14, -,    -,         -,       3_RTS, 2_MISO, Yes
+   D34, PB15, -,    -,         -,       -,     2_MOSI, Yes
+   D35, PC6,  -,    -,         -,       -,     -,      Yes
+   D36, PC7,  -,    -,         -,       -,     -,      Yes
+   D37, PC8,  -,    -,         -,       -,     -,      Yes
+   D38, PC9,  -,    -,         -,       -,     -,      Yes
+   D39, PA13, -,    -,         -,       -,     -,      Yes
+   D40, PA14, -,    -,         -,       -,     -,      Yes
+   D41, PA15, -,    -,         -,       -,     -,      Yes
+   D42, PB3,  -,    -,         -,       -,     -,      Yes
+
+.. _maple-timer-map:
 
 Timer Pin Map
 ^^^^^^^^^^^^^
@@ -228,7 +241,7 @@ The following table shows which pins connect to which :ref:`EXTI lines
    * - EXTI2
      - 1, 17, 25
    * - EXTI3
-     - 0, 18
+     - 0, 18, 42
    * - EXTI4
      - 10, 19
    * - EXTI5
@@ -248,20 +261,20 @@ The following table shows which pins connect to which :ref:`EXTI lines
    * - EXTI12
      - 31
    * - EXTI13
-     - 21, 32
+     - 21, 32, 39
    * - EXTI14
-     - 22, 33
+     - 22, 33, 40
    * - EXTI15
-     - 23, 34
+     - 23, 34, 41
 
 .. _maple-usart-map:
 
 USART Pin Map
 ^^^^^^^^^^^^^
 
-The Maple has three serial ports (also known as a UARTs or USARTs):
-``Serial1``, ``Serial2``, and ``Serial3``. They communicate using the
-pins summarized in the following table:
+The Maple has three serial ports (also known as USARTs): ``Serial1``,
+``Serial2``, and ``Serial3``. They communicate using the pins
+summarized in the following table:
 
 .. csv-table::
    :header: Serial Port, TX, RX, CK, CTS, RTS
@@ -270,6 +283,24 @@ pins summarized in the following table:
    ``Serial1`` | 7  | 8  | 6  | -  | -
    ``Serial2`` | 1  | 0  | 10 | 2  | 3
    ``Serial3`` | 29 | 30 | 31 | 32 | 33
+
+.. _maple-adc-bank:
+
+Low-Noise ADC Pins
+^^^^^^^^^^^^^^^^^^
+
+The six pins at the bottom right of the board (D15—D20) generally
+offer lower-noise ADC performance than other pins on the board. If
+you’re concerned about getting good ADC readings, we recommend using
+one of these pins to take your measurements.
+
+Maple has an electrically isolated analog power plane with its own
+regulator, and a geometrically isolated ground plane. Pins D15—D20 are
+laid out to correspond with these analog planes, and our measurements
+indicate that they generally have the lowest noise of all the analog
+lines.  However, analog performance may vary depending upon the
+activity of the other GPIOs.  Consult the :ref:`Maple hardware design
+files <maple-hardware>` for more details.
 
 Board-Specific Values
 ---------------------
@@ -280,11 +311,12 @@ This section lists the Maple's :ref:`board-specific values
 - ``CYCLES_PER_MICROSECOND``: 72
 - ``BOARD_BUTTON_PIN``: 38
 - ``BOARD_LED_PIN``: 13
-- ``BOARD_NR_GPIO_PINS``: 44
-- ``BOARD_NR_PWM_PINS``: 16
-- ``boardPWMPins``: 0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28
+- ``BOARD_NR_GPIO_PINS``: 44 (however, :ref:`pin D43 is not usable
+  <maple-nrst-pb4>`)
+- ``BOARD_NR_PWM_PINS``: 15
+- ``boardPWMPins``: 0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 27, 28
 - ``BOARD_NR_ADC_PINS``: 15
-- ``boardADCPins``: 0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28
+- ``boardADCPins``: 0, 1, 2, 3, 10, 11, 12, 15, 16, 17, 18, 19, 20, 27, 28
 - ``BOARD_NR_USED_PINS``: 7
 - ``boardUsedPins``: ``BOARD_LED_PIN``, ``BOARD_BUTTON_PIN``,
   ``BOARD_JTMS_SWDIO_PIN``, ``BOARD_JTCK_SWCLK_PIN``,
@@ -309,13 +341,15 @@ This section lists the Maple's :ref:`board-specific values
 - ``BOARD_JTCK_SWCLK_PIN``: 40
 - ``BOARD_JTDI_PIN``: 41
 - ``BOARD_JTDO_PIN``: 42
-- ``BOARD_NJTRST_PIN``: 43
+- ``BOARD_NJTRST_PIN``: :ref:`43 <maple-nrst-pb4>`
+
+.. _maple-hardware:
 
 Hardware Design Files
 ---------------------
 
 The hardware schematics and board layout files are available in the
-`Maple Github repository <https://github.com/leaflabs/maple>`_.  The
+`Maple GitHub repository <https://github.com/leaflabs/maple>`_.  The
 design files for Rev 1, Rev 3, and Rev 5 are respectively in the
 ``maple-r1``, ``maple-r3``, and ``maple-r5`` subdirectories.  A
 schematic for a JTAG adapter suitable for use with Maple is available
@@ -323,7 +357,7 @@ in the ``jtagadapter`` directory.
 
 From the GitHub repository main page, you can download the entire
 repository by clicking the "Download" button.  If you are familiar
-with `git <http://git-scm.com/>`_, you can also clone the repository
+with `Git <http://git-scm.com/>`_, you can also clone the repository
 at the command line with ::
 
     $ git clone git://github.com/leaflabs/maple.git
@@ -340,17 +374,65 @@ permanently.
 * **High voltage on non-tolerant pins**: not all header pins are 5V
   compatible; so e.g. connecting certain serial devices in the wrong
   way could over-voltage the pins.  The :ref:`pin-mapping master table
-  <maple-pin-map-master>` details which pins are 5V-tolerant.
+  <maple-pin-map-master>` details which pins are 5 V tolerant.
 
 Errata
 ------
 
+This section documents design flaws and other errors.
+
 General
 ^^^^^^^
 
-* **Power Supply Marketing Mistake**: We originally sold the Maple
+.. _maple-barrel-jack:
+
+* **Barrel jack power supply voltage mistake**: The acceptable voltage
+  range given next to the barrel jack on the Maple through Rev 5s
+  manufactured in Spring 2011 is **incorrect**.  The given range is 7
+  V — 18 V.  In fact, **18 V is too high** and should not be supplied
+  to your board.  The recommended maximum voltage you should apply is
+  **12 V**.
+
+  The original voltage regulators used on the Maple were rated up to
+  18 V.  However, the voltage regulators on current Maple Revs are
+  rated up to 16 V.  Our tests indicate that they operate correctly
+  through 12 V.  We do not recommend higher input voltages.
+
+.. _maple-nrst-pb4:
+
+* **Reset and PB4 tied together**: The Maple's reset line is also
+  connected to PB4, which is labeled on the silkscreen as pin 43.
+  Thus, attempting to use pin 43 as a GPIO can reset your board.  This
+  has other implications.  Since PB4 is also the JTAG NJTRST line,
+  this prevents the :ref:`JTAG <jtag>` "reset halt" command from
+  working properly.
+
+.. _maple-power-supply:
+
+* **Power supply marketing mistake**: We originally sold the Maple
   advertising that it was capable of supplying up to 800 mA; the
   correct value is 500 mA.
+
+.. _maple-pwm-marketing:
+
+* **PWM marketing mistake**: We originally advertised the Maple as
+  having 22 PWM-capable pins; the correct number is 15.
+
+.. _maple-adc-marketing:
+
+* **ADC marketing mistake**: We originally advertised the Maple as
+  having 16 analog input pins.  Due to :ref:`the following issue
+  <maple-adc-led>`, the correct number is 15.
+
+.. _maple-adc-led:
+
+* **ADC on BOARD_LED_PIN**: We originally sold the Maple RET6 Edition
+  advertising 16 analog input lines.  However, one of them (the one on
+  pin 13) is also connected to the built-in LED.  The voltage drop
+  across the LED means that the analog to digital converter on that
+  pin is not really useful.  While it is still usable, its readings
+  will be incorrect.
+
 
 By Rev
 ^^^^^^
@@ -365,15 +447,6 @@ Rev 5
   5s manufactured during Fall 2010, the corresponding "AIN" is missing
   from its silkscreen.  This mistake was fixed in later manufacturing
   runs.
-
-.. _maple-nrst-pb4:
-
-* **Reset and PB4 tied together**: The Maple's reset line is also
-  connected to PB4, which is labeled on the silkscreen as pin 43.
-  Thus, attempting to use pin 43 as a GPIO may reset your board.  This
-  has other implications.  Since PB4 is also the JTAG NJTRST line,
-  this prevents the :ref:`JTAG <jtag>` "reset halt" command from
-  working properly.
 
 Rev 3
 ~~~~~
@@ -417,16 +490,6 @@ Rev 3
   number 38 (actually 38 is connected to the BUT button). We manually
   sharpied over both of these mistakes.
 
-* **PWM Marketing Mistake**: We originally sold the Maple advertising
-  22 channels of 16-bit hardware PWM; actually the Maple only has 15.
-
-* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
-  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
-  43 as a GPIO will reset your board (and also prevents the JTAG
-  "reset halt") command from working properly.  It's possible to cut
-  the trace, but doing so will damage your board, so we *do not
-  recommend it* unless you're very sure about what you're doing.
-
 Rev 1
 ~~~~~
 
@@ -435,7 +498,7 @@ Rev 1
   connected to a computer).
 
   This issue was resolved in Rev 3 with a 4-layer design and a
-  geometrically isolated ADC V\ :sub:`ref` plane.
+  :ref:`geometrically isolated ADC Vref plane <maple-adc-bank>`.
 
 * **Resistors on pins 0 and 1**: these header pins, which are RX/TX on
   USART2 (:ref:`Serial2 <lang-serial>`), have resistors in-line
@@ -458,30 +521,22 @@ Rev 1
   appropriate MCU pin to Vcc; see `this forum posting
   <http://forums.leaflabs.com/topic.php?id=32#post-126>`_.
 
-* **PWM Marketing Mistake**: We originally sold the Maple advertising
-  22 channels of 16-bit hardware PWM; the correct number is 15.
-
-* **Reset and NJTRST tied together**: The MCU's reset pin is tied to
-  PB4, the NJTRST pin, which is pin 43.  Thus, attempting to use pin
-  43 as a GPIO will reset your board (and also prevents the JTAG
-  "reset halt") command from working properly.  It's possible to cut
-  the trace, but doing so will damage your board, so we *do not
-  recommend it* unless you're very sure about what you're doing.
-
 Recommended Reading
 -------------------
 
-* STMicro documentation for STM32F103RB microcontroller:
+STMicro documentation for STM32F103RB microcontroller:
 
-    * `Datasheet
-      <http://www.st.com/stonline/products/literature/ds/13587.pdf>`_
-      (PDF)
-    * `Reference Manual
-      <http://www.st.com/stonline/products/literature/rm/13902.pdf>`_
-      (PDF)
-    * `Programming Manual
-      <http://www.st.com/stonline/products/literature/pm/15491.pdf>`_
-      (PDF; assembly language and register reference)
+* `Datasheet
+  <http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/DATASHEET/CD00161566.pdf>`_
+  (PDF); covers STM32F103x8, STM32F103xB.
+* `Reference Manual RM0008
+  <http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/REFERENCE_MANUAL/CD00171190.pdf>`_
+  (PDF); general, definitive resource for STM32F1 line.
+* `Programming Manual PM0056
+  <http://www.st.com/internet/com/TECHNICAL_RESOURCES/TECHNICAL_LITERATURE/PROGRAMMING_MANUAL/CD00228163.pdf>`_
+  (PDF); assembly language and register reference.
+* `STM32F103RB <http://www.st.com/internet/mcu/product/164487.jsp>`_
+  overview page with links to further references.
 
 .. rubric:: Footnotes
 

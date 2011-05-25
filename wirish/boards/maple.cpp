@@ -100,11 +100,11 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 };
 
 extern const uint8 boardPWMPins[] __FLASH__ = {
-    0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 25, 27, 28
+    0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 27, 28
 };
 
 extern const uint8 boardADCPins[] __FLASH__ = {
-    0, 1, 2, 10, 11, 12, 13, 15, 16, 17, 18, 19, 20, 27, 28
+    0, 1, 2, 3, 10, 11, 12, 15, 16, 17, 18, 19, 20, 27, 28
 };
 
 extern const uint8 boardUsedPins[] __FLASH__ = {

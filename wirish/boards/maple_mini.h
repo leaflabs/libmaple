@@ -66,7 +66,7 @@
 
 #define BOARD_NR_GPIO_PINS        34
 #define BOARD_NR_PWM_PINS         12
-#define BOARD_NR_ADC_PINS         10
+#define BOARD_NR_ADC_PINS          9
 #define BOARD_NR_USED_PINS         4
 
 #define BOARD_JTMS_SWDIO_PIN      22

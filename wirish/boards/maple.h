@@ -70,7 +70,7 @@
 #define BOARD_NR_GPIO_PINS      44
 
 /* Number of pins capable of PWM output */
-#define BOARD_NR_PWM_PINS       16
+#define BOARD_NR_PWM_PINS       15
 
 /* Number of pins capable of ADC conversion */
 #define BOARD_NR_ADC_PINS       15

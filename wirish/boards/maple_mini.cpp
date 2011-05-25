@@ -90,7 +90,7 @@ extern const uint8 boardPWMPins[BOARD_NR_PWM_PINS] __FLASH__ = {
 };
 
 extern const uint8 boardADCPins[BOARD_NR_ADC_PINS] __FLASH__ = {
-    3, 4, 5, 6, 7, 8, 9, 10, 11, 33  // NB: 33 is BOARD_LED_PIN
+    3, 4, 5, 6, 7, 8, 9, 10, 11
 };
 
 #define USB_DP 23

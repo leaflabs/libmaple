@@ -40,6 +40,9 @@
 #ifndef _BOARDS_MAPLE_RET6_H_
 #define _BOARDS_MAPLE_RET6_H_
 
+/* A few of these values will seem strange given that it's a
+ * high-density board. */
+
 #define CYCLES_PER_MICROSECOND  72
 #define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */
 
@@ -55,7 +58,12 @@
 #define BOARD_USART3_TX_PIN     29
 #define BOARD_USART3_RX_PIN     30
 
-#define BOARD_NR_SPI            3
+/* Note:
+ *
+ * SPI3 is unusable due to pin 43 (PB4) and NRST tie-together :(, but
+ * leave the definitions so as not to clutter things up.  This is only
+ * OK since RET6 Ed. is specifically advertised as a beta board. */
+#define BOARD_NR_SPI            2
 #define BOARD_SPI1_NSS_PIN      10
 #define BOARD_SPI1_MOSI_PIN     11
 #define BOARD_SPI1_MISO_PIN     12
@@ -70,7 +78,9 @@
 #define BOARD_SPI3_SCK_PIN      42
 
 #define BOARD_NR_GPIO_PINS      44
-#define BOARD_NR_PWM_PINS       16
+/* Note: NOT 19. The missing one is D38 a.k.a. BOARD_BUTTON_PIN, which
+ * isn't broken out to a header and is thus unusable for PWM. */
+#define BOARD_NR_PWM_PINS       18
 #define BOARD_NR_ADC_PINS       15
 #define BOARD_NR_USED_PINS      7
 

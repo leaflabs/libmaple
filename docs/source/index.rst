@@ -67,11 +67,7 @@ Have fun!
 
    hardware/maple.rst
    hardware/maple-ret6.rst
+   hardware/maple-mini.rst
 
 .. TODO write/include these upon Mini and Native release
-
-.. .. toctree::
-..    :hidden:
-
-..    hardware/maple-mini.rst
 ..    hardware/maple-native.rst

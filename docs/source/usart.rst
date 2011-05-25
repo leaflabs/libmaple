@@ -9,8 +9,7 @@ USART
 Hardware/Circuit Design
 -----------------------
 
-.. FIXME [0.0.12/Maple Native] UART4 and UART5, Native links
-.. FIXME [0.0.11] Mini info and links
+.. TODO [0.0.12/Maple Native] UART4 and UART5, Native links
 
 Each LeafLabs board has at least 3 separate USART devices. In the most
 simple use case, the RX and TX pins are used to send data at a
@@ -24,6 +23,7 @@ available here:
 
 * :ref:`Maple <maple-usart-map>`
 * :ref:`Maple RET6 Edition <maple-ret6-usart-map>`
+* :ref:`Maple Mini <maple-mini-usart-map>`
 
 If you use a particular serial port, you cannot also use its
 communication pins for other purposes at the same time.

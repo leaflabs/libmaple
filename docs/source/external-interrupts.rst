@@ -37,17 +37,20 @@ means that every pin on the Maple connects to what is called an *EXTI
 line*, and within an EXTI line, only one of the pins that connects to
 it can be used to detect external interrupts at a time.
 
+.. TODO [0.0.12] Maple Native links
+
 The EXTI Line Pin Map for your board lists which pins connect to which
 EXTI lines:
 
 * :ref:`Maple <maple-exti-map>`
 * :ref:`Maple RET6 Edition <maple-ret6-exti-map>`
+* :ref:`Maple Mini <maple-mini-exti-map>`
 
 .. note::
 
-   You should set the :ref:`pin mode <lang-pinmode>` of your
-   desired pin to an input mode (e.g ``INPUT`` or ``INPUT_FLOATING``,
-   ``INPUT_PULLUP``, ``INPUT_PULLDOWN``).
+   You should set the :ref:`pin mode <lang-pinmode>` of your desired
+   pin to an input mode (e.g. ``INPUT``, ``INPUT_PULLUP``,
+   ``INPUT_PULLDOWN``).
 
 Function Reference
 ------------------

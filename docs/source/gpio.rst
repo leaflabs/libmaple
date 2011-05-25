@@ -20,19 +20,19 @@ Pin Maps
 The hardware documentation for your board lists each pin's
 capabilities, by pin number:
 
-.. TODO [0.1.0] Uncomment Mini and Native GPIO links
+.. TODO [0.0.12] Native link
 
 * :ref:`Maple <maple-gpios>`
 * :ref:`Maple RET6 Edition <maple-ret6-gpios>`
+* :ref:`Maple Mini <maple-mini-gpios>`
 
-.. * :ref:`Maple Mini <maple-mini-gpios>`
 .. * :ref:`Maple Native <maple-native-gpios>`
 
 The current and voltage limitations were determined using the STM32
 datasheets.  In particular, only some GPIO pins are **5V tolerant**,
 which means that applying 5 volts to a pin and reading it as input or
 allowing it to drain to ground will not damage that pin.  Connecting a
-voltage higher than 3.3V to a non-5V tolerant pin may damage your
+voltage higher than 3.3 V to a non-5 V tolerant pin may damage your
 board.
 
 .. _gpio-modes:

@@ -77,11 +77,17 @@ your program.
 PWM Conflicts
 ^^^^^^^^^^^^^
 
-Because PWM functionality on a given pin depends on
-the configuration of the timer and channel, you must chose your
-channels carefully if you want to use both timer interrupts and PWM in
-the same program.  Refer to your board's :ref:`Timer Pin Map
-<gpio-pin-maps>` to match up timer channels and pin numbers.
+Because PWM functionality on a given pin depends on the configuration
+of the timer and channel, you must chose your channels carefully if
+you want to use both timer interrupts and PWM in the same program.
+Refer to your board's timer pin map to match up timer channels and pin
+numbers:
+
+.. TODO [0.0.12] Native links
+
+* :ref:`Maple <maple-timer-map>`
+* :ref:`Maple RET6 Edition <maple-ret6-timer-map>`
+* :ref:`Maple Mini <maple-mini-timer-map>`
 
 Overhead
 ^^^^^^^^

@@ -20,31 +20,42 @@ number of techniques must be used to get good precision and accuracy.
 Noise and Bias
 --------------
 
-.. FIXME [0.0.11, Maple form factor-specific]
+.. FIXME [0.0.12, Maple Native]
 
-The biggest issues with analog-digital conversion are noise and bias.
-With the Maple, we have tried to isolate the ADC pins and traces from
-strong noise sources, but there are always trade--offs between noise,
-additional functionality, cost, and package size.
+The biggest issues with analog to digital conversion are noise and
+bias.  With the Maple line, we have tried to isolate the ADC pins and
+traces from strong noise sources, but there are always trade-offs
+between noise, additional functionality, cost, and package size.
+We've tried to enable good analog performance by isolating as many ADC
+pins as possible from digital noise on each board.
 
-The 6 ADC pins in a bank (D15--D20) generally have the least
-noise, and should be used for fine measurements.  If the input voltage
-changes relatively slowly, a number of samples can be taken in
-succession and averaged together, or the same voltage can even be
-sampled by multiple ADC pins at the same time.
+More information on these isolated pins is available in each board's
+hardware documentation:
 
-An important factor when taking a voltage reading is the reference
-voltages that the sample is being compared against. In the case of the
-Maple, the high reference is |vcc| and the low reference is ground.
-This means that noise or fluctuations on either |vcc| or ground will
-affect the measurement. It also means that the voltage you are trying
-to sample must be between ground and 3.3V.
+* :ref:`Maple <maple-adc-bank>`
+* :ref:`Maple RET6 Edition <maple-ret6-adc-bank>`
+* :ref:`Maple Mini <maple-mini-adc-bank>`
+
+.. :ref:`Maple Native <maple-native-adc-bank>`
+
+That said, there are a number of more general things you can do to try
+to get good readings.  If your input voltage changes relatively
+slowly, a number of samples can be taken in succession and averaged
+together, or the same voltage can even be sampled by multiple ADC pins
+at the same time.
+
+Another important factor when taking a voltage reading is the
+reference voltages that the sample is being compared against. In the
+case of the Maple, the high reference is |vcc| and the low reference
+is ground.  This means that noise or fluctuations on either |vcc| or
+ground will affect the measurement. It also means that the voltage you
+are trying to sample must be between ground and 3.3 V.
 
 .. _adc-range:
 
 In the case of a variable reading, it is best if the voltage varies
-over the entire range of 0--3.3V; otherwise, only a fraction of the
-sensitivity is being leveraged.  Some basic tools to accomplish this
+over the entire range of 0 through 3.3 V; otherwise, only a fraction
+of the sensitivity is being used.  Some basic tools to accomplish this
 are `resistor dividers
 <http://en.wikipedia.org/wiki/Voltage_divider>`_ and `Zener diodes
 <http://en.wikipedia.org/wiki/Voltage_source#Zener_voltage_source>`_\

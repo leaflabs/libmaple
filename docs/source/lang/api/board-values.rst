@@ -1,3 +1,5 @@
+.. highlight:: cpp
+
 .. _lang-board-values:
 
 Board-Specific Values
@@ -122,8 +124,9 @@ Constants
   default (i.e., they are in :ref:`boardUsedPins
   <lang-board-values-used-pins>`).  However, they can be used as
   ordinary GPIOs if you call the :ref:`lang-disabledebugports`
-  function.  (Be careful with this on the Maple, as writing to
-  ``BOARD_NJTRST_PIN`` may cause your board to reset!).
+  function.  (Be careful with this on the Maple and Maple RET6
+  Edition, as writing to ``BOARD_NJTRST_PIN`` :ref:`may cause your
+  board to reset <maple-nrst-pb4>`\ !).
 
 .. _lang-board-values-pwm-pins:
 
@@ -161,33 +164,14 @@ Examples
 :ref:`BOARD_LED_PIN <lang-board-values-led>` On the Maple, the
 built-in LED is connected to pin 13.  On the Maple Mini, however, it
 is connected to pin 33.  You can write a "blinky" program that works
-on all LeafLabs boards using ``BOARD_LED_PIN`` and :ref:`toggleLED()
-<lang-toggleled>`::
+on both boards using :ref:`this example <lang-toggleled-example>`.
 
-    void setup() {
-        pinMode(BOARD_LED_PIN, OUTPUT);
-    }
-
-    void loop() {
-        toggleLED();
-        delay(100);
-    }
-
-:ref:`BOARD_BUTTON_PIN <lang-board-values-but>`: Similarly, you can
-write a single program that prints a message whenever the button is
-pressed which will work on all LeafLabs boards using
-``BOARD_BUTTON_PIN`` and :ref:`isButtonPressed()
-<lang-isbuttonpressed>`::
-
-    void setup() {
-        pinMode(BOARD_BUTTON_PIN, INPUT);
-    }
-
-    void loop() {
-        if (isButtonPressed()) {
-            SerialUSB.println("You pressed the button!");
-        }
-    }
+:ref:`BOARD_BUTTON_PIN <lang-board-values-but>`: On the Maple, the
+built-in button is connected to pin 38.  On the Maple Mini, however,
+it is connected to pin 32.  :ref:`This example
+<lang-waitforbuttonpress-example>` shows how you can write a program
+that prints a message whenever the button is pressed which will work
+on all LeafLabs boards.
 
 See Also
 --------

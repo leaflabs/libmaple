@@ -16,9 +16,6 @@ it easier to share your code with other people who have different
 boards.  Some example usages are given :ref:`below
 <lang-board-values-examples>`.
 
-The actual values for each board are given in the :ref:`Board Hardware
-Documentation <index-boards>`.
-
 .. contents:: Contents
    :local:
 

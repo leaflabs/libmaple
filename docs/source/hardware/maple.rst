@@ -70,7 +70,6 @@ Rev 3
 This batch of boards went on sale beginning in May 2010. They have a
 darker red silkscreen and the "infinity leaf" logo.  The Maple Rev 3
 was the first version which includes the built-in button, labeled BUT.
-It also includes a built-in LiPo battery charger.
 
 .. figure:: /_static/img/maple_rev3.png
    :align: center

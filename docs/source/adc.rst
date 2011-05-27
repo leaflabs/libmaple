@@ -45,11 +45,11 @@ together, or the same voltage can even be sampled by multiple ADC pins
 at the same time.
 
 Another important factor when taking a voltage reading is the
-reference voltages that the sample is being compared against. In the
-case of the Maple, the high reference is |vcc| and the low reference
-is ground.  This means that noise or fluctuations on either |vcc| or
-ground will affect the measurement. It also means that the voltage you
-are trying to sample must be between ground and 3.3 V.
+reference voltages that the sample is being compared against.  For
+Maple, the high reference is |vdda| and the low reference is ground.
+This means that noise or fluctuations on either |vdda| or ground will
+affect the measurement. It also means that the voltage you are trying
+to sample must be between ground and 3.3 V.
 
 .. _adc-range:
 

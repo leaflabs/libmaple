@@ -29,7 +29,7 @@ once per second::
       SerialUSB.print("Time: ");
       time = millis();
       // prints time since program started
-      Serial.println(time);
+      SerialUSB.println(time);
 
       // wait a second so as not to send massive amounts of data
       delay(1000);

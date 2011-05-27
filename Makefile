@@ -109,7 +109,7 @@ UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-UPLOAD_jtag  := $(OPENOCD) -f support/openocd/flash.cfg
+UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 
 # conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
@@ -149,7 +149,7 @@ help:
 	@echo "  "
 
 debug:
-	$(OPENOCD) -f support/openocd/run.cfg
+	$(OPENOCD_WRAPPER) debug
 
 cscope:
 	rm -rf *.cscope

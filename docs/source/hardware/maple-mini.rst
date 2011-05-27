@@ -221,19 +221,14 @@ using the pins summarized in the following table:
 Low-Noise ADC Pins
 ^^^^^^^^^^^^^^^^^^
 
-Analog input pins D4 — D11 on the Maple Mini generally offer
-lower-noise ADC performance than D3.  If you’re concerned about
-getting good ADC readings, we recommend using one of these pins to
-take your measurements.
-
 Maple Mini has an electrically isolated analog power plane with its
 own regulator, and a geometrically isolated ground plane, connected to
-the digital plane by an inductor.  Pins D4 — D11 are laid out to
-correspond with these analog planes, and our measurements indicate
-that they generally have the lowest noise of all the analog lines.
-However, analog performance may vary depending upon the activity of
-the other GPIOs.  Consult the :ref:`Maple Mini hardware design files
-<maple-mini-hardware>` for more details.
+the digital plane by an inductor.  Its analog input pins, D3 — D11,
+are laid out to correspond with these analog planes, and our
+measurements indicate that they generally offer low noise ADC
+performance.  However, analog performance may vary depending upon the
+activity of the other GPIOs.  Consult the :ref:`Maple Mini hardware
+design files <maple-mini-hardware>` for more details.
 
 .. _maple-mini-board-values:
 

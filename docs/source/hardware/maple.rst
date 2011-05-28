@@ -153,7 +153,7 @@ Master Pin Map
 
 This table shows a summary of the available functionality on every
 GPIO pin, by peripheral type.  The "5 V?" column documents whether or
-not the pin is 5 volt tolerant.
+not the pin is :ref:`5 volt tolerant <gpio-5v-tolerant>`.
 
 .. csv-table::
    :header: Pin, :ref:`GPIO <gpio>`, :ref:`ADC <adc>`, :ref:`Timer <timers>`, :ref:`I2C <i2c>`, :ref:`UART <usart>`, :ref:`SPI <spi>`, 5 V?
@@ -373,7 +373,8 @@ permanently.
 * **High voltage on non-tolerant pins**: not all header pins are 5V
   compatible; so e.g. connecting certain serial devices in the wrong
   way could over-voltage the pins.  The :ref:`pin-mapping master table
-  <maple-pin-map-master>` details which pins are 5 V tolerant.
+  <maple-pin-map-master>` details which pins are :ref:`5 V tolerant
+  <gpio-5v-tolerant>`.
 
 Errata
 ------

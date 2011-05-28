@@ -26,12 +26,12 @@ EABI target (:command:`arm-non-eabi-gcc`).  A (preliminary) reference
 on :ref:`using arm-none-eabi-gcc <arm-gcc>` is available.
 
 The bitwidth of the processor means that the Maple can process 32-bit
-operations (like adding two 32-bit integers) in a single instruction,
-while an Arduino processor would have to split up large operations
-into several smaller ones. In a lot of cases 8-bit operations are
-plenty (integers 0-255, single characters of text, etc.), but if
-you're dealing with higher resolution data, the speed up could be
-significant.
+operations (like adding or multiplying two 32-bit integers) in a
+single instruction, while an Arduino processor would have to split up
+large operations into several smaller ones. In a lot of cases 8-bit
+operations are plenty (integers 0-255, single characters of text,
+etc.), but if you're dealing with higher resolution data, the speed up
+could be significant.
 
 A trade-off is that code could be larger as well; program instructions
 and memory locations can be up to 32 bits each.  However, removal of
@@ -45,8 +45,9 @@ Header Numbering and Incompatibilities
 
 The numbering of headers is different; on the Maple each GPIO has a
 unique number: 0, 1, 2, all the way up to 37 (actually, there are
-:ref:`a few more <jtag>`...). On the Arduino, the analog pins are
-numbered separately (A0-A5) from the digital pins (D0\ -D13).
+:ref:`a few more <lang-disabledebugports>`...). On the Arduino, the
+analog pins are numbered separately (A0-A5) from the digital pins (D0\
+-D13).
 
 The incompatible hardware differences are:
 

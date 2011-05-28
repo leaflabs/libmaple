@@ -8,21 +8,23 @@
 analogWrite()
 =============
 
+analogWrite() is used to create a :ref:`PWM <pwm>` wave on a pin.
+
 .. note::
 
    On the Maple, calling analogWrite() is the same as calling
-   :ref:`lang-pwmwrite`\ ; we recommend using that function directly
-   instead.
+   :ref:`lang-pwmwrite`.  We recommend writing pwmWrite() instead of
+   analogWrite().
 
-   This is because PWM is not true analog output (i.e., is not the
-   output of a `DAC
+   This is because PWM is not true analog output (it's not the output
+   of a `DAC
    <http://en.wikipedia.org/wiki/Digital-to-analog_converter>`_\ ), so
-   the function is badly named.  For instance, analogWrite() **has
-   absolutely nothing to do with** :ref:`lang-analogread`\ , which is
-   potentially confusing.
+   the function is very badly named.  For instance, **analogWrite()
+   has nothing to do with** :ref:`lang-analogread`\ , which can be
+   confusing.
 
-   The alias of analogWrite() to pwmWrite() is provided for the sake
-   of compatibility with Arduino only.
+   We provide analogWrite() for the sake of compatibility with Arduino
+   only.
 
 .. contents:: Contents
    :local:
@@ -67,7 +69,7 @@ for more information.
 
 Another fix is to consult your board's :ref:`pin maps <gpio-pin-maps>`
 to find the timer which controls PWM on the pin you're using, then set
-that Timer's overflow to 255.  Subsequent calls to analogWrite()
+that timer's overflow to 255.  Subsequent calls to analogWrite()
 should work as on the Arduino (with the same loss of precision).
 Note, however, that that affects the overflow for the **entire
 timer**, so other code relying on that timer (such as any
@@ -162,6 +164,9 @@ See Also
 --------
 
 - :ref:`pwm`
+- :ref:`lang-pwmwrite`
+- :ref:`BOARD_NR_PWM_PINS <lang-board-values-nr-pwm-pins>`
+- :ref:`boardPWMPins <lang-board-values-pwm-pins>`
 
 .. rubric:: Footnotes
 

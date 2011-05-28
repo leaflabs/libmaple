@@ -3,19 +3,25 @@
 USART
 =====
 
+A USART is more commonly known a *serial port*.  It's used to transmit
+information between Maple and another device (like your computer,
+another Maple, etc.).
+
 .. contents:: Contents
    :local:
 
 Hardware/Circuit Design
 -----------------------
 
+.. TODO [0.0.12] Add some more information here (like how you should
+.. connect TX_a to RX_b and RX_a to TX_b).
+
 .. TODO [0.0.12/Maple Native] UART4 and UART5, Native links
 
 Each LeafLabs board has at least 3 separate USART devices. In the most
 simple use case, the RX and TX pins are used to send data at a
-predetermined baud rate with the line voltage level relative to
-ground.  Their usage is documented in the :ref:`Serial Ports
-<lang-serial>` language reference page.
+predetermined speed (or *baud rate*).  Their usage is documented in
+the :ref:`Serial Ports <lang-serial>` language reference page.
 
 Which pins correspond to the USART TX and RX pins are given on your
 board's silkscreen, and also in the board-specific USART pin maps

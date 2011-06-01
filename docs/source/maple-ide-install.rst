@@ -17,7 +17,7 @@ us directly`_\ !
 Download
 --------
 
-.. FIXME [0.0.11] Update this for the release.
+.. FIXME [0.0.12] Update this for the release.
 
 This documentation was built from a development version of libmaple.
 See the formally released `LeafLabs documentation
@@ -27,21 +27,18 @@ Maple IDE release.
 .. Choose the correct version for your operating system:
 
 .. .. list-table::
-..    :widths: 15 30 50
+..    :widths: 15 30
 ..    :header-rows: 1
 
 ..    * - Platform
 ..      - Status
 ..      - IDE Package
-..    * - Windows
+..    * - `Windows XP <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-windowsxp32.zip>`_
 ..      - Tested on 32-bit Windows XP
-..      - `maple-ide-0.0.10-windowsxp32.zip <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-windowsxp32.zip>`_ (about 75 MB)
-..    * - Linux
+..    * - `Linux <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-linux32.tgz>`_
 ..      - Tested on Ubuntu 10.04 (32-bit)
-..      - `maple-ide-0.0.10-linux32.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-linux32.tgz>`_ (about 30MB)
-..    * - Mac OSX
+..    * - `Mac OS X <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-macosx-10_6.dmg>`_
 ..      - Tested on Snow Leopard (10.6)
-..      - `maple-ide-0.0.10-macosx-10_6.dmg <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.10-macosx-10_6.dmg>`_ (about 40 MB)
 
 The package bundles together a compiler, an upload utility, a software
 library, and a simple GUI text editor. All this software is `free and

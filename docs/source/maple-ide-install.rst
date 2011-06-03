@@ -137,10 +137,11 @@ Make sure you have a Java runtime (JRE) installed; if you can run
 :command:`java` from the shell, you should be fine.
 
 Next, run the script :file:`install-udev-rules.sh` in the extracted
-IDE directory.  It will ask for root permissions.  You now need to
-restart udev::
+IDE directory.  It will ask for root permissions (you will be prompted
+with something along the lines of ``[sudo] password for
+<username>:``).  You now need to restart udev::
 
-  sudo /etc/init.d/udev restart
+  $ sudo restart udev
 
 This will grant members of the group ``plugdev`` read/write access to
 Maple devices over USB.  Make sure that you are in that group.  (For

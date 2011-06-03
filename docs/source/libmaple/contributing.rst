@@ -12,7 +12,7 @@ function, etc.), feel free to just make a `forum post
 
 If your changes are larger (you wrote a new library, you added support
 for a new peripheral, etc.), we'd prefer you submit a pull request on
-Github or send us a nicely-formatted patch via email.
+GitHub or send us a nicely-formatted patch via email.
 
 .. contents:: Contents
    :local:
@@ -37,7 +37,7 @@ released under the `Lesser GPL
 <http://www.gnu.org/copyleft/lesser.html>`_ may be accepted for
 Wirish, but will almost certainly be rejected for libmaple proper.  We
 will not accept patches released under the `GPL
-<http://www.gnu.org/licenses/gpl.html>`_. 
+<http://www.gnu.org/licenses/gpl.html>`_.
 
 **We're not against the GPL**!  It just doesn't suit our purposes for
 libmaple.  If you're interested in a GPLed library for ST
@@ -48,11 +48,11 @@ fine, we just don't want any core libmaple or Wirish code to be GPLed.
 
 .. _libmaple-faq-patches-github:
 
-Submitting Via Github Pull Request (Preferred)
+Submitting Via GitHub Pull Request (Preferred)
 ----------------------------------------------
 
 The most convenient way for you to contribute patches is to submit a
-pull request on `Github <https://github.com>`_.  Github provides
+pull request on `GitHub <https://github.com>`_.  Github provides
 excellent code review interfaces, which will make it easy for us at
 LeafLabs to communicate with you (and each other) about your patch.
 It also makes it easy for us to merge your patch into the libmaple

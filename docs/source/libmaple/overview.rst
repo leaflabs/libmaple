@@ -327,7 +327,7 @@ What Next?
 After you've read this page, you can proceed to the :ref:`libmaple API
 listing <libmaple-apis>`.  From there, you can read documentation and
 follow links to the current source code for those files on `libmaple's
-Github page <https://github.com/leaflabs/libmaple>`_.
+GitHub page <https://github.com/leaflabs/libmaple>`_.
 
 .. rubric:: Footnotes
 

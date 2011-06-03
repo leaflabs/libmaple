@@ -418,7 +418,7 @@ IDE updates will have corresponding library updates.  Our `blog
 releases; an `RSS feed <http://leaflabs.com/blog/feed/>`_ is
 available.
 
-You can sign up for a free `Github <https://github.com/plans>`_
+You can sign up for a free `GitHub <https://github.com/plans>`_
 account and `watch libmaple
 <https://github.com/leaflabs/libmaple/watchers>`_ to receive
 notifications about bleeding-edge development.

@@ -65,7 +65,7 @@ your system down too much.
 
 `Git <http://git-scm.com/>`_ is a distributed code versioning system
 we use to track changes in our source code; ``git-core`` is the
-corresponding package. 
+corresponding package.
 
 ``wget`` is a simple tool to download files over http from the command
 line; installing it is optional (you could pull in the required
@@ -123,7 +123,7 @@ From the libmaple directory, ::
 
   $ groups # make sure it includes plugdev; if not add, yourself to it
   $ sudo cp support/scripts/45-maple.rules /etc/udev/rules.d/45-maple.rules
-  $ sudo /etc/init.d/udev restart
+  $ sudo restart udev
 
 As a security precaution on Linux, unknown USB devices can only be
 accessed by root. This udev script identifies the Maple based on its
@@ -356,7 +356,7 @@ To exit the screen session, type :kbd:`C-a C-\\` (control-a, followed
 by control-backslash) on Mac, or :kbd:`C-a k` (control-a k) on Linux,
 and type ``y`` when prompted if you're sure.
 
-.. note:: 
+.. note::
 
    Using ``screen`` sometimes messes up your terminal session on OS X.
    If your shell starts acting funny after you exit ``screen``, you
@@ -373,7 +373,7 @@ Starting your own projects
 --------------------------
 
 So everything worked, and you want to start your own project? Great!
-There are two ways to go about it.  
+There are two ways to go about it.
 
 If your project is small, all you have to do is replace
 :file:`~/libmaple/main.cpp` with your own code, and you're free to use
@@ -393,7 +393,7 @@ To create an archive, use the ``library`` Makefile target::
 This will produce a build-time library in the file
 :file:`~/libmaple/build/libmaple.a`.  To use it, make sure that you
 link against that library, and that the libmaple sources are in your
-include path.  
+include path.
 
 At a minimum, your include path should contain the directories
 :file:`~/libmaple/libmaple` and :file:`~/libmaple/wirish/`.  If you

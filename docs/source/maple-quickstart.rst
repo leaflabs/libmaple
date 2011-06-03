@@ -178,12 +178,12 @@ select Examples > Stubs > HelloWorld (similarly to when you selected
 the Blink program), and make sure the correct board and serial port
 targets are selected from the Tools menu.
 
-Open the Serial Monitor window (on the far right of the toolbar) and
-make sure the 9600 baud speed is selected. Then go back to the code
-editing window and upload your program (Upload will recompile your
-code automatically if there's been any change since the last
-Verify). You should get text spit at you over the serial monitor right
-after the program is uploaded.  Shout back!  We can hear you!
+Open the Serial Monitor window (on the far right of the toolbar). Then
+go back to the code editing window and upload your program (Upload
+will recompile your code automatically if there's been any change
+since the last Verify). You should get text spit at you over the
+serial monitor right after the program is uploaded.  Shout back!  We
+can hear you!
 
 Go forth exuberantly!
 ---------------------

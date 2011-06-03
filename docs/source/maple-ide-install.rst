@@ -20,21 +20,17 @@ Download
 Choose the correct version for your operating system:
 
 .. list-table::
-   :widths: 15 30 50
+   :widths: 15 30
    :header-rows: 1
 
    * - Platform
      - Status
-     - IDE Package
-   * - Windows
-     - Tested on 32-bit Windows XP
-     - `maple-ide-0.0.11-windowsxp32.zip <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-windowsxp32.zip>`_ (about 75 MB)
-   * - Linux
+   * - `Windows <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-windowsxp32.zip>`_
+     - Tested on Windows XP (32-bit)
+   * - `Linux <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-linux32.tgz>`_
      - Tested on Ubuntu 10.04 (32-bit)
-     - `maple-ide-0.0.11-linux32.tgz <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-linux32.tgz>`_ (about 30MB)
-   * - Mac OSX
-     - Tested on Snow Leopard (10.6)
-     - `maple-ide-0.0.11-macosx-10_6.dmg <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-macosx-10_6.dmg>`_ (about 40 MB)
+   * - `Mac OS X <http://static.leaflabs.com/pub/leaflabs/maple-ide/maple-ide-0.0.11-macosx-10_6.dmg>`_
+     - Snow Leopard (10.6) only
 
 The package bundles together a compiler, an upload utility, a software
 library, and a simple GUI text editor. All this software is `free and

@@ -144,9 +144,11 @@ with something along the lines of ``[sudo] password for
   $ sudo restart udev
 
 This will grant members of the group ``plugdev`` read/write access to
-Maple devices over USB.  Make sure that you are in that group.  (For
-more information on why this is part of the install process, see the
-:ref:`Unix toolchain quickstart <toolchain-udev>`).
+Maple devices over USB.  Make sure that you are in that group by
+running ``$ sudo adduser <your username> plugdev`` (which will ensure
+access to the Maple, but may report that you are already a member of
+that group).  (For more information on why this is part of the install
+process, see the :ref:`Unix toolchain quickstart <toolchain-udev>`).
 
 To run the Maple IDE, run :command:`maple-ide` from the shell, or
 double-click on it if your window system supports it.

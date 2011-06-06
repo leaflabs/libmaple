@@ -3,6 +3,8 @@
  * @brief Delay implementation
  */
 
+#include "libmaple_types.h"
+
 #ifndef _DELAY_H_
 #define _DELAY_H_
 

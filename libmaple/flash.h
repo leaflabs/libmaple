@@ -22,12 +22,13 @@
  * THE SOFTWARE.
  *****************************************************************************/
 
-
 /**
  * @file flash.h
  * @brief STM32 Medium and high density Flash register map and setup
  * routines
  */
+
+#include "libmaple_types.h"
 
 #ifndef _FLASH_H_
 #define _FLASH_H_

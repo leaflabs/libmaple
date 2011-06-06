@@ -29,6 +29,11 @@
  * @brief Inter-Integrated Circuit (I2C) peripheral support
  */
 
+#include "libmaple_types.h"
+#include "rcc.h"
+#include "nvic.h"
+#include "gpio.h"
+
 #ifndef _I2C_H_
 #define _I2C_H_
 

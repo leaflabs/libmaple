@@ -30,6 +30,8 @@
  * @brief Bit-banding utility functions
  */
 
+#include "libmaple_types.h"
+
 #ifndef _BITBAND_H_
 #define _BITBAND_H_
 

@@ -28,6 +28,8 @@
  * @brief System control block header
  */
 
+#include "libmaple_types.h"
+
 #ifndef _SCB_H_
 #define _SCB_H_
 

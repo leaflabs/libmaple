@@ -102,9 +102,10 @@ void LiquidCrystal::begin(uint8 cols, uint8 lines, uint8 dotsize) {
     _displayfunction |= LCD_5x10DOTS;
   }
 
-  // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!
-  // according to datasheet, we need at least 40ms after power rises above 2.7V
-  // before sending commands. Arduino can turn on way befer 4.5V so we'll wait 50
+  // SEE PAGE 45/46 FOR INITIALIZATION SPECIFICATION!  according to
+  // datasheet, we need at least 40ms after power rises above 2.7V
+  // before sending commands. Arduino can turn on way befer 4.5V so
+  // we'll wait 50
   delay(50);    // Maple mod
   //delayMicroseconds(50000);
   // Now we pull both RS and R/W low to begin commands

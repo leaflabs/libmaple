@@ -69,7 +69,8 @@ void setup() {
     SerialUSB.println("");
     SerialUSB.println("");
     SerialUSB.println("Maple interactive test program (type '?' for help)");
-    SerialUSB.println("----------------------------------------------------------");
+    SerialUSB.println("-------------------------------------------------------"
+                      "---");
     SerialUSB.print("> ");
 
 }

@@ -56,7 +56,7 @@ void loop() {
 void test_numbers(void) {
     SerialUSB.println("Numeric types:");
 
-    SerialUSB.println("unsigned char: ");
+    SerialUSB.print("unsigned char: ");
     // prevent Print from treating it as an (extended) ASCII character:
     SerialUSB.println((uint32)numeric_limits<unsigned char>::max());
 
@@ -83,28 +83,37 @@ void test_numbers(void) {
     SerialUSB.println(numeric_limits<unsigned long long>::max());
 }
 
+void base_test(int base) {
+    SerialUSB.print("\tuint8: ");
+    SerialUSB.println(numeric_limits<uint8>::max(), base);
+    SerialUSB.print("\tint: ");
+    SerialUSB.print(numeric_limits<int>::max(), base);
+    SerialUSB.print(", unsigned int: ");
+    SerialUSB.println(numeric_limits<unsigned int>::max(), base);
+    SerialUSB.print("\tlong: ");
+    SerialUSB.print(numeric_limits<long>::max(), base);
+    SerialUSB.print(", unsigned long: ");
+    SerialUSB.println(numeric_limits<unsigned long>::max(), base);
+    SerialUSB.print("\tlong long: ");
+    SerialUSB.print(numeric_limits<long long>::max(), base);
+    SerialUSB.print(", unsigned long long: ");
+    SerialUSB.println(numeric_limits<unsigned long long>::max(), base);
+}
+
 void test_base_arithmetic(void) {
     SerialUSB.println("Base arithmetic:");
 
-    SerialUSB.print("Binary: ");
-    SerialUSB.print(numeric_limits<unsigned long>::max(), BIN);
-    SerialUSB.print(", ");
-    SerialUSB.println(numeric_limits<unsigned long long>::max(), BIN);
+    SerialUSB.println("Binary:");
+    base_test(BIN);
 
-    SerialUSB.print("Octal: ");
-    SerialUSB.print(numeric_limits<unsigned long>::max(), OCT);
-    SerialUSB.print(", ");
-    SerialUSB.println(numeric_limits<unsigned long long>::max(), OCT);
+    SerialUSB.println("Octal:");
+    base_test(OCT);
 
-    SerialUSB.print("Decimal: ");
-    SerialUSB.print(numeric_limits<unsigned long>::max(), DEC);
-    SerialUSB.print(", ");
-    SerialUSB.println(numeric_limits<unsigned long long>::max(), DEC);
+    SerialUSB.println("Decimal:");
+    base_test(DEC);
 
-    SerialUSB.print("Hexadecimal: ");
-    SerialUSB.print(numeric_limits<unsigned long>::max(), HEX);
-    SerialUSB.print(", ");
-    SerialUSB.println(numeric_limits<unsigned long long>::max(), HEX);
+    SerialUSB.println("Hexadecimal:");
+    base_test(HEX);
 }
 
 void test_floating_point(void) {
@@ -112,30 +121,30 @@ void test_floating_point(void) {
 
     SerialUSB.println("Floating point:");
 
-    SerialUSB.print("sizeof double: ");
-    SerialUSB.println(sizeof(double));
     SerialUSB.print("println(-5.67): ");
-    SerialUSB.println(-5.67);
+    SerialUSB.print(-5.67);
+    SerialUSB.print(". println(5.67, 5): ");
+    SerialUSB.println(5.67, 5);
     SerialUSB.print("println((double)(LLONG_MAX - 10)):                 ");
-    SerialUSB.println((double)(numeric_limits<long long>::max() - 10));
-    SerialUSB.print("println((double)(LLONG_MAX - 10)) from snprintf(): ");
+    SerialUSB.print((double)(numeric_limits<long long>::max() - 10));
+    SerialUSB.print("; from snprintf(): ");
     snprintf(buf, BUF_SIZE, "%.2f",
              (double)(numeric_limits<long long>::max() - 10));
     SerialUSB.println(buf);
     SerialUSB.print("println((double)LLONG_MAX / 2):                 ");
-    SerialUSB.println((double)(numeric_limits<long long>::max()) / 2);
-    SerialUSB.print("println((double)LLONG_MAX / 2) from snprintf(): ");
+    SerialUSB.print((double)(numeric_limits<long long>::max()) / 2);
+    SerialUSB.print("; from snprintf(): ");
     snprintf(buf, BUF_SIZE, "%.2f",
              (double)(numeric_limits<long long>::max()) / 2);
     SerialUSB.println(buf);
     SerialUSB.print("DBL_MAX:                 ");
-    SerialUSB.println(dmax);
-    SerialUSB.print("DBL_MAX from snprintf(): ");
+    SerialUSB.print(dmax);
+    SerialUSB.print("; from snprintf(): ");
     snprintf(buf, BUF_SIZE, "%g", dmax);
     SerialUSB.println(buf);
     SerialUSB.print("-DBL_MAX / 2:                 ");
-    SerialUSB.println(-dmax / 2.0);
-    SerialUSB.print("-DBL_MAX / 2 from snprintf(): ");
+    SerialUSB.print(-dmax / 2.0);
+    SerialUSB.print("; from snprintf(): ");
     snprintf(buf, BUF_SIZE, "%g", -dmax / 2.0);
     SerialUSB.println(buf);
     SerialUSB.print("Double epsilon, round error: ");
@@ -147,16 +156,10 @@ void test_floating_point(void) {
 
     float fmax = numeric_limits<float>::max();
 
-    SerialUSB.print("sizeof float: ");
-    SerialUSB.println(sizeof(float));
     SerialUSB.print("println(-5.67f): ");
     SerialUSB.println(-5.67f);
     SerialUSB.print("Float max: ");
     SerialUSB.println(fmax);
-    SerialUSB.print("Float epsilon, round error: ");
-    SerialUSB.print(numeric_limits<float>::epsilon());
-    SerialUSB.print(", ");
-    SerialUSB.println(numeric_limits<float>::round_error());
 }
 
 void print_separator(void) {

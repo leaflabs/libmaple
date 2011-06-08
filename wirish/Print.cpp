@@ -59,58 +59,56 @@ void Print::write(const void *buffer, uint32 size) {
     }
 }
 
-void Print::print(uint8 b) {
-    this->write(b);
+void Print::print(uint8 b, int base) {
+    print((uint64)b, base);
 }
 
 void Print::print(char c) {
-    print((uint8)c);
+    write(c);
 }
 
 void Print::print(const char str[]) {
     write(str);
 }
 
-void Print::print(int n) {
-    print((long long)n);
+void Print::print(int n, int base) {
+    print((long long)n, base);
 }
 
-void Print::print(unsigned int n) {
-    print((unsigned long long)n);
+void Print::print(unsigned int n, int base) {
+    print((unsigned long long)n, base);
 }
 
-void Print::print(long n) {
-    print((long long)n);
+void Print::print(long n, int base) {
+    print((long long)n, base);
 }
 
-void Print::print(unsigned long n) {
-    print((unsigned long long)n);
+void Print::print(unsigned long n, int base) {
+    print((unsigned long long)n, base);
 }
 
-void Print::print(long long n) {
+void Print::print(long long n, int base) {
+    if (base == BYTE) {
+        write((uint8)n);
+        return;
+    }
     if (n < 0) {
         print('-');
         n = -n;
     }
-    printNumber(n, 10);
-}
-
-void Print::print(unsigned long long n) {
-    printNumber(n, 10);
+    printNumber(n, base);
 }
 
 void Print::print(unsigned long long n, int base) {
-    if (base == 0) {
-        print((char)n);
-    } else if (base == 10) {
-        print(n);
+    if (base == BYTE) {
+        write((uint8)n);
     } else {
         printNumber(n, base);
     }
 }
 
-void Print::print(double n) {
-    printFloat(n, 2);
+void Print::print(double n, int digits) {
+    printFloat(n, digits);
 }
 
 void Print::println(void) {
@@ -128,38 +126,33 @@ void Print::println(const char c[]) {
     println();
 }
 
-void Print::println(uint8 b) {
-    print(b);
+void Print::println(uint8 b, int base) {
+    print(b, base);
     println();
 }
 
-void Print::println(int n) {
-    print(n);
+void Print::println(int n, int base) {
+    print(n, base);
     println();
 }
 
-void Print::println(unsigned int n) {
-    print(n);
+void Print::println(unsigned int n, int base) {
+    print(n, base);
     println();
 }
 
-void Print::println(long n) {
-    print((long long)n);
+void Print::println(long n, int base) {
+    print((long long)n, base);
     println();
 }
 
-void Print::println(unsigned long n) {
-    print((unsigned long long)n);
+void Print::println(unsigned long n, int base) {
+    print((unsigned long long)n, base);
     println();
 }
 
-void Print::println(long long n) {
-    print(n);
-    println();
-}
-
-void Print::println(unsigned long long n) {
-    print(n);
+void Print::println(long long n, int base) {
+    print(n, base);
     println();
 }
 
@@ -168,8 +161,8 @@ void Print::println(unsigned long long n, int base) {
     println();
 }
 
-void Print::println(double n) {
-    print(n);
+void Print::println(double n, int digits) {
+    print(n, digits);
     println();
 }
 

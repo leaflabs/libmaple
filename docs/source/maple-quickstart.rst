@@ -73,14 +73,16 @@ window, and then a confirmation message will appear:
 Upload that program!
 --------------------
 
-.. FIXME [0.1.0 Maple-specific image; add one for Native]
+.. FIXME [Maple Native: add note about power select jumper]
 
-Now it's time to plug in your Maple.  Use a Mini-B cable, making sure
-that the :ref:`power source jumper <maple-powering>` is on the USB
-header first.  We ship Maples with the power source jumper configured
-that way, so you shouldn't have to do anything.  For reference, it
-should look like this (don't worry if a jumper is hanging half off of
-the CHRG header):
+Now it's time to plug in your Maple.  Use a USB Mini-B cable (mini,
+not micro).
+
+On the Maple, make sure that the :ref:`power source jumper
+<maple-powering>` is on the USB header first.  We ship Maples with the
+power source jumper configured that way, so you shouldn't have to do
+anything.  For reference, it should look like this (don't worry if a
+jumper is hanging half off of the CHRG header):
 
 .. image:: /_static/img/plugged-in-maple.png
    :align: center

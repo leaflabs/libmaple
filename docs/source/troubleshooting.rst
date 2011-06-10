@@ -28,11 +28,18 @@ reprogram by using :ref:`perpetual bootloader mode
 My board is bricked! I can't upload via the bootloader no matter what!
 ----------------------------------------------------------------------
 
-Use the hardcoded serial STM32 serial bootloader to :ref:`re-flash the
-bootloader <bootloader-reflashing>`.
+Don't panic.  First, make sure that the board is plugged in correctly
+for program upload, using the instructions given in the
+:ref:`quickstart <maple-quickstart-upload>`.  If that doesn't work,
+try using :ref:`perpetual bootloader mode
+<troubleshooting-perpetual-bootloader>`.
 
-If it really is bricked, and you think it's our fault, `contact us
-<http://leaflabs.com/contact>`_\ !
+If that doesn't work, then you've got a problem.  All is not lost,
+however!  You can always try to :ref:`re-flash the bootloader
+<bootloader-reflashing>` over serial (or :ref:`JTAG <jtag>`).
+
+If your board really is bricked, and you think it's our fault,
+`contact us <http://leaflabs.com/contact>`_\ !
 
 My 5v peripheral doesn't work! (I2C, SPI, USART, etc)
 -----------------------------------------------------

@@ -14,17 +14,15 @@ This page documents common problems and their solutions.
  Hardware problems
 ===================
 
-The status LED is throbbing and I can't upload my program!
-----------------------------------------------------------
+The LED is throbbing and my program is stopped!
+-----------------------------------------------
 
 The LED throbs when there has been a failed software :ref:`assertion
-<language-assert>`.
+<language-assert>` or some other error.
 
-You can still reprogram by resetting the board and uploading during
-the short window when the bootloader waits for a program.
-
-To make this window longer (it can be hard to get the timing right),
-use :ref:`perpetual bootloader mode
+There are a few issues with the bootloader which mean you might not be
+able to upload your program when this happens.  You can still
+reprogram by using :ref:`perpetual bootloader mode
 <troubleshooting-perpetual-bootloader>`.
 
 My board is bricked! I can't upload via the bootloader no matter what!

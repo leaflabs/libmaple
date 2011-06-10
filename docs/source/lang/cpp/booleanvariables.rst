@@ -21,25 +21,20 @@ Example
 
 ::
 
-    int ledPin = 13;      // LED on pin 13
-    int switchPin = 12;   // momentary switch on 12, other side connected to ground
-
     // running is a boolean variable:
     bool running = false;
 
     void setup() {
-      pinMode(ledPin, OUTPUT);
-      pinMode(switchPin, INPUT);
-      digitalWrite(switchPin, HIGH);      // turn on pullup resistor
+        pinMode(BOARD_LED_PIN, OUTPUT);
+        pinMode(BOARD_BUTTON_PIN, INPUT);
     }
 
     void loop() {
-      if (digitalRead(switchPin) == LOW) {
-        // switch is pressed - pullup keeps pin high normally
-        delay(100);                        // delay to debounce switch
-        running = !running;                // toggle running variable
-        digitalWrite(ledPin, running)      // indicate via LED
-      }
+        if (isButtonPressed()) {
+            // button is pressed
+            running = !running;                     // toggle running variable
+            digitalWrite(BOARD_LED_PIN, running)    // indicate via LED
+        }
     }
 
 See Also

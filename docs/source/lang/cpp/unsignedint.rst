@@ -36,9 +36,9 @@ that an ``unsigned int`` will "underflow" at 0, and "overflow" at
 The ``unsigned long`` type is a synonym for ``unsigned int``.
 
 Here is an example of declaring an ``unsigned int`` variable named
-``ledPin``, then giving it value 13::
+``pin``, then giving it value 13::
 
-        unsigned int ledPin = 13;
+        unsigned int pin = 13;
 
 The general syntax for declaring an ``unsigned int`` variable named
 ``var``, then giving it value ``val``, looks like::

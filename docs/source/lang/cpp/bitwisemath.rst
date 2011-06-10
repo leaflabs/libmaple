@@ -109,21 +109,21 @@ The ^ operator is often used to toggle (i.e. change from 0 to 1, or 1
 to 0) some of the bits in an integer expression. In a bitwise OR
 operation if there is a 1 in the mask bit, that bit is inverted; if
 there is a 0, the bit is not inverted and stays the same. Below is a
-program to blink digital pin 13 (the LED pin on Maple)::
+program to toggle the built-in LED pin (you can also accomplish this
+with :ref:`lang-toggleled`)::
 
-    // Blink Maple LED pin
+    // Toggle built-in LED pin
 
-    int led_pin = 13;
     int toggle = 0;
 
     // demo for Exclusive OR
     void setup(){
-        pinMode(led_pin, OUTPUT);
+        pinMode(BOARD_LED_PIN, OUTPUT);
     }
 
     void loop(){
         toggle = toggle ^ 1;
-        digitalWrite(led_pin, toggle);
+        digitalWrite(BOARD_LED_PIN, toggle);
         delay(100);
     }
 

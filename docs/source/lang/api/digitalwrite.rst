@@ -28,9 +28,10 @@ more slowly as an output than the other pins.
 Example
 -------
 
-The following example sets pin 13 to ``HIGH``, makes a one-second-long
-delay, sets the pin back to ``LOW``, and delays again, causing a
-blinking pattern (you could also use :ref:`lang-toggleled`)::
+The following example sets the built-in LED pin to ``HIGH``, makes a
+one-second-long delay, sets the pin back to ``LOW``, and delays again,
+causing a blinking pattern (you could also use
+:ref:`lang-toggleled`)::
 
     void setup() {
       pinMode(BOARD_LED_PIN, OUTPUT);      // sets the digital pin as output

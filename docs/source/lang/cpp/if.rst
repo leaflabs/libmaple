@@ -43,28 +43,28 @@ conditional. If this is done, the next line (which ends in a
 semicolon) becomes the only line in the body.  The following three
 ``if`` statements all do the same thing::
 
-    if (x > 120) digitalWrite(ledPin, HIGH);
+    if (x > 120) digitalWrite(pin, HIGH);
 
     if (x > 120)
-        digitalWrite(ledPin, HIGH);
+        digitalWrite(pin, HIGH);
 
     if (x > 120) {
-        digitalWrite(ledPin, HIGH);
+        digitalWrite(pin, HIGH);
     }
 
 However, the following two examples are different::
 
     // example 1: two lines of code in the if body
     if (x > 120) {
-      digitalWrite(ledPin1, HIGH);
-      digitalWrite(ledPin2, HIGH);
+      digitalWrite(pin1, HIGH);
+      digitalWrite(pin2, HIGH);
     }
 
     // example 2: one line of code in the if body, and
     // another line of code after the if statement
     if (x > 120)
-      digitalWrite(ledPin1, HIGH); // this is in the if body
-      digitalWrite(ledPin2, HIGH); // this is NOT in the if body
+      digitalWrite(pin1, HIGH); // this is in the if body
+      digitalWrite(pin2, HIGH); // this is NOT in the if body
 
 In the first example, since the body is enclosed in curly braces, both
 lines are included.  In the second example, since the curly braces are

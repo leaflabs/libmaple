@@ -43,9 +43,9 @@ Example
 
  ::
 
-    #define LED_PIN 13
-    // The compiler will replace any mention of LED_PIN with
-    // the value 3 at compile time.
+    #define MAPLE_LED_PIN 13
+    // The compiler will replace any mention of MAPLE_LED_PIN with
+    // the value 13 at compile time.
 
 See Also
 --------

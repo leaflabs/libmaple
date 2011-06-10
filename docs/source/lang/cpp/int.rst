@@ -28,10 +28,10 @@ dealing with the :ref:`bitshift right operator (>>)
 
 The ``long`` type is a synonym for ``int``.
 
-Here is an example of declaring an ``int`` variable named ``ledPin``,
+Here is an example of declaring an ``int`` variable named ``pin``,
 then giving it value 13::
 
-    int ledPin = 13;
+    int pin = 13;
 
 The general syntax for declaring an ``int`` variable named ``var``,
 then giving it value ``val``, looks like::

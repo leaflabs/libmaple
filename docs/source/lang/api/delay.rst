@@ -42,17 +42,16 @@ Example
 
 ::
 
-    int ledPin = 13;                 // LED connected to pin 13
-
     void setup() {
-      pinMode(ledPin, OUTPUT);      // sets the digital pin as output
+        // set up the built-in LED pin for output:
+        pinMode(BOARD_LED_PIN, OUTPUT);
     }
 
     void loop() {
-      digitalWrite(ledPin, HIGH);   // sets the LED on
-      delay(1000);                  // waits for a second
-      digitalWrite(ledPin, LOW);    // sets the LED off
-      delay(1000);                  // waits for a second
+        digitalWrite(BOARD_LED_PIN, HIGH);   // sets the LED on
+        delay(1000);                         // waits for a second
+        digitalWrite(BOARD_LED_PIN, LOW);    // sets the LED off
+        delay(1000);                         // waits for a second
     }
 
 .. _lang-delay-seealso:

@@ -66,11 +66,10 @@ Working with timers and interrupts can be tricky; they are a somewhat
 "advanced" topic.  The following subsections explain some common
 problems associated with using timers and timer interrupts.
 
-In general: start simple, test with :ref:`ASSERT() <language-assert>`,
-and don't try to do too much in your interrupt handlers!  Make sure
-that what you're trying to do in a handler isn't going to block other
-interrupts from firing, if those other interrupts are important for
-your program.
+In general: start simple, test with :ref:`lang-assert`, and don't try
+to do too much in your interrupt handlers!  Make sure that what you're
+trying to do in a handler isn't going to block other interrupts from
+firing, if those other interrupts are important for your program.
 
 .. _timers-pwm-conflicts:
 

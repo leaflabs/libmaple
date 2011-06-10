@@ -12,8 +12,7 @@ language used to program the `Arduino <http://arduino.cc/>`_ boards.
 
 .. TODO [0.2.0?] Wiring tutorial
 
-C or C++ programmers curious about the differences between the Wiring
-language and C++ may wish to skip to the
+C or C++ programmers may wish to skip to the
 :ref:`arduino_c_for_c_hackers`.
 
 .. contents:: Contents
@@ -21,8 +20,7 @@ language and C++ may wish to skip to the
 
 .. admonition:: **Looking for Something Else?**
 
-   - See the :ref:`libraries` for extra built-in libraries for dealing
-     with different kinds of hardware.
+   - See the :ref:`libraries` for extra built-in libraries.
 
    - If you're looking for something from the C standard library (like
      ``atoi()``, for instance): the :ref:`CodeSourcery GCC compiler
@@ -31,17 +29,17 @@ language and C++ may wish to skip to the
      use of any of its header files.  However, dynamic memory allocation
      (``malloc()``, etc.) is not available.
 
-   - If you're looking for pointers to low-level details, see this page's
-     :ref:`Recommended Reading <language-recommended-reading>`.
+   - If you're looking for pointers to low-level details, see
+     :ref:`libmaple` and this page's :ref:`Recommended Reading
+     <language-recommended-reading>`.
 
 .. _language-lang-docs:
 
 Maple Language Reference
 ------------------------
 
-The following table summarizes the most important core language
-features.  An exhaustive index is available at the
-:ref:`language-index`.
+This table is a summary of the most important language features.  See
+the :ref:`language-index` for a complete listing.
 
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
 | Structure                                  | Variables                                    | Functions                                         |
@@ -68,7 +66,7 @@ features.  An exhaustive index is available at the
 |                                            |                                              |                                                   |
 |* :ref:`continue <lang-continue>`           |**Data Types**                                |* :ref:`analogRead() <lang-analogread>`            |
 |                                            |                                              |                                                   |
-|* :ref:`return <lang-return>`               | The size of each datatype, in bytes, is      |* :ref:`pwmWrite() <lang-pwmwrite>`                |
+|* :ref:`return <lang-return>`               | The size of each data type, in bytes, is     |* :ref:`pwmWrite() <lang-pwmwrite>`                |
 |                                            | given in parentheses where appropriate.      |  (:ref:`analogWrite() <lang-analogwrite>` is      |
 |* :ref:`goto <lang-goto>`                   |                                              |  also available, though its use is discouraged)   |
 |                                            | *Note*: The ``word`` type is (deliberately)  |                                                   |
@@ -144,7 +142,7 @@ features.  An exhaustive index is available at the
 |                                            |                                              |                                                   |
 |* :ref:`& reference operator                |* :ref:`sizeof() <lang-sizeof>`               |* :ref:`bitClear() <lang-bitclear>`                |
 |  <lang-pointer>`                           |                                              |                                                   |
-|                                            |                                              |* :ref:`bit() <lang-bit>`                          |
+|                                            |* :ref:`ASSERT() <lang-assert>`               |* :ref:`bit() <lang-bit>`                          |
 |                                            |                                              |                                                   |
 |**Bitwise Operators**                       |                                              |                                                   |
 |                                            |                                              |**External Interrupts**                            |
@@ -204,35 +202,6 @@ features.  An exhaustive index is available at the
 |                                            |                                              |                                                   |
 |                                            |                                              |                                                   |
 +--------------------------------------------+----------------------------------------------+---------------------------------------------------+
-
-.. _language-assert:
-
-``ASSERT(...)``
----------------
-
-The ``ASSERT()`` function can be very useful for basic program
-debugging. It accepts a boolean; for example::
-
-  ASSERT(state == WAIT);
-
-Zero is false and any other number is true. If the boolean is true, the
-assertion passes and the program continues as usual. If it is false,
-the assertion fails: the program is halted, debug information is
-printed to USART2, and the status LED begins to throb in intensity
-(it's noticeably different from blinking). The debug information is
-printed at 9600 baud and consists of the filename and line number
-where the particular assertion failed.
-
-Including assertions in a program increases the program size. When
-using libmaple **from the command line only**, they can be disabled by
-making the definition ::
-
-  #define DEBUG_LEVEL DEBUG_NONE
-
-before including either wirish.h or libmaple.h. In this case, all
-assertions will pass without any lost clock cycles.  Note that this
-will **not work in the IDE**; even with this definition, assertions
-will still be enabled.
 
 .. _language-missing-features:
 
@@ -301,7 +270,7 @@ Note for C/C++ Hackers
 
 This is a note for programmers comfortable with C or C++ who want a
 better understanding of the differences between C++ and the Wiring
-language.  
+language.
 
 The good news is that the differences are relatively few; Wiring is
 just a thin wrapper around C++.  Some potentially better news is that
@@ -378,7 +347,7 @@ behaves roughly like::
 
     // Call user loop() forever.
     while (true) {
-        loop(); 
+        loop();
     }
   }
 

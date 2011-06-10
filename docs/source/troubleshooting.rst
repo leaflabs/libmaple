@@ -18,7 +18,7 @@ The LED is throbbing and my program is stopped!
 -----------------------------------------------
 
 The LED throbs when there has been a failed software :ref:`assertion
-<language-assert>` or some other error.
+<lang-assert>` or some other error.
 
 There are a few issues with the bootloader which mean you might not be
 able to upload your program when this happens.  You can still

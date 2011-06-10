@@ -2,9 +2,8 @@
 
 .. _jtag:
 
-======
- JTAG
-======
+JTAG
+====
 
 .. FIXME [0.1.0] Updated adapter schematic, better information
 
@@ -17,10 +16,9 @@ and hardware peripherals (we use it when working on :ref:`libmaple
 <libmaple>`) or to flash a new bootloader.
 
 Note that the STM32 on the Maple has a built-in low level serial
-debugger which could also be used to flash bootloaders, and that the
-:ref:`ASSERT <language-assert>` framework allows basic debugging over
-a USART serial channel.  We expect only fairly advanced users to use
-this feature.
+debugger which could also be used to flash bootloaders, and
+:ref:`lang-assert` allows basic debugging over a USART serial channel.
+We expect only fairly advanced users to use this feature.
 
 .. contents:: Contents
    :local:

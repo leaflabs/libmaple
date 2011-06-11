@@ -1,30 +1,33 @@
-Board portability is implemented in boards.h, libmaple.h, and stm32.h.
+libmaple was previously very restricted to LeafLabs boards.  However,
+the contents of libmaple proper are now fairly portable across medium-
+and high-density STM32F1xx chips (though there are some caveats).  The
+current design is expected to accomodate new chips straightforwardly
+and well into the future.
 
-At compile time, we currently expect one of STM32_MEDIUM_DENSITY or
-STM32_HIGH_DENSITY to be defined.  There's no support for low-density
-chips.  XL-density isn't in the near horizon; patches welcome.  You'll
-also need to define some BOARD_foo if you expect to use Wirish; this
-comes along with some additional assumptions about your board's layout.
+The library's configuration is based around the files wirish/boards.h
+(and .cpp), wirish/boards/*, and libmaple/stm32.h, as well as some
+#defines it expects the environment to handle during compilation.
 
-The code in usb/ is not very portable at all right now; expect this to
-change in the future, but for now, we're focusing on rolling out a
-more complete backend.
+If you want to use libmaple proper, you must define one of
+STM32_MEDIUM_DENSITY or STM32_HIGH_DENSITY during compilation.
+Defining one of these allows libmaple to decide what processor
+features to expose to you (e.g., definitions related to ADC3 aren't
+compiled in when STM32_MEDIUM_DENSITY is defined).  There's no support
+for low-density chips.  XL-density is planned but not done (we don't
+have one to test on); patches (and samples) are welcome!  See:
 
-A file should be added to ./notes describing the pin numbering of any
-new board you add.
+    http://leaflabs.com/docs/libmaple/contributing.html
 
-NVIC Notes:
-    Only CANBUS and USB OTG use interrupts above #63, but I updated the nvic code anyways
+There are some other useful #defines the environment can provide when
+compiling libmaple.  They aren't as crucial, though.  See the Makefile
+for more information.
 
-RCC Notes:
-    Added some clock stuff to all boards even though they aren't usable... blah.
+If you want to use Wirish, you'll need to define a BOARD_foo
+(e.g. BOARD_maple, BOARD_maple_mini, etc.).  This determines which
+board files get loaded from wirish/boards/.  See /wirish/boards.h and
+/wirish/boards.cpp for more details.  See /wirish/boards/maple.h and
+/wirish/boards/maple.cpp for well-commented examples on how to add a
+new board configuration.
 
-SPI Notes:
-    SPI3 is only in XL chips, so we don't handle that.
-
-TIMER Notes:
-    The wirish timer implementation should be refactored to use pin numbers.
-
-USART Notes:
-    The USART/UART nomeclature is a little mixed up.
-    TODO: portability of HardwareSerial, HardwareSPI
+The code in libmaple/usb/ is not very portable at all right now;
+expect this to change in the future.

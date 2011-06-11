@@ -135,6 +135,33 @@ the pin is :ref:`5 volt tolerant <gpio-5v-tolerant>`.
    D32, PB8,    -, 4_CH3,     -,      -,     -,      Yes
    D33, PB1,  CH9, 3_CH4,     -,      -,     -,      -
 
+.. _maple-mini-gpio-port-map:
+
+GPIO Port Pin Map
+^^^^^^^^^^^^^^^^^
+The following table shows what pins are associated with each
+:ref:`GPIO port <gpio-ports>`.
+
+.. csv-table::
+   :header: GPIOA, GPIOB, GPIOC
+
+   PA0: D11,  PB0:  D3,  PC0: -
+   PA1: D10,  PB1:  D33, PC1: -
+   PA2: D9,   PB2:  D2,  PC2: -
+   PA3: D8,   PB3:  D19, PC3: -
+   PA4: D7,   PB4:  D18, PC4: -
+   PA5: D6,   PB5:  D17, PC5: -
+   PA6: D5,   PB6:  D16, PC6: -
+   PA7: D4,   PB7:  D15, PC7: -
+   PA8: D27,  PB8:  D32, PC8: -
+   PA9: D26,  PB9:  -,   PC9: -
+   PA10: D25, PB10: D1,  PC10: -
+   PA11: D24, PB11: D0,  PC11: -
+   PA12: D23, PB12: D31, PC12: -
+   PA13: D22, PB13: D30, PC13: D14
+   PA14: D21, PB14: D29, PC14: D13
+   PA15: D20, PB15: D28, PC15: D12
+
 .. _maple-mini-timer-map:
 
 Timer Pin Map

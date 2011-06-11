@@ -40,15 +40,15 @@
 /*
  * IMPORTANT:
  *
- * This class documented "by hand" (i.e., not using Doxygen) in:
- *
- *   libmaple/docs/source/lang/api/serial.rst
+ * This class documented "by hand" (i.e., not using Doxygen) in the
+ * leaflabs-docs/ repository.
  *
  * If you alter the public HardwareSerial interface, you MUST update
  * the documentation accordingly.
  */
 
-/* TODO [0.1.0] Document this here and make serial.rst use Breathe */
+/* TODO [0.1.0] Document this here and make leaflabs-docs' page use
+ * Breathe */
 
 class HardwareSerial : public Print {
 public:

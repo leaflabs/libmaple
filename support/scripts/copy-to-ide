@@ -1,12 +1,11 @@
 #!/bin/sh
 
-# This hack copies libmaple's source, linker scripts, and built
-# documentation into the Maple IDE repository (which is expected as
-# its first argument).
+# This hack copies libmaple's source, linker scripts, and support
+# libraries into the Maple IDE repository (which is expected as its
+# first argument).
 
 DEST=$1
 
-DEST_REF=$DEST/build/shared/reference
 DEST_CORES=$DEST/hardware/leaflabs/cores/maple
 DEST_LIBS=$DEST/libraries
 
@@ -35,9 +34,6 @@ LMAPLE_SRC="LICENSE
     ./support/ld/maple_RET6
     ./support/ld/names.inc"
 
-LMAPLE_DOCS=./docs
-LMAPLE_DOCS_BUILD=$LMAPLE_DOCS/build/html
-
 echo "First make sure DEST exists: $DEST"
 if !(test -d $DEST)
 then
@@ -57,15 +53,5 @@ cp -R libraries/* $DEST_LIBS
 # libmaple version
 echo Creating libmaple-version.txt
 git show-ref HEAD | cut -c 1-10 > $DEST/libmaple-version.txt
-
-# docs
-echo Deleting old reference directory contents
-rm -rf $DEST_REF/*
-
-echo Rebuilding documentation
-( cd $LMAPLE_DOCS; doxygen >/dev/null 2>&1 && make clean >/dev/null 2>&1 && make html )
-
-echo Copying over documentation
-cp -R $LMAPLE_DOCS_BUILD/* $DEST_REF
 
 echo Done.

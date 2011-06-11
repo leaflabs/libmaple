@@ -1,11 +1,10 @@
 build/
-docs/build/
+doxygen/
 main.cpp
 libmaple.layout
 tags
 TAGS
 *~
 *.swp
-docs/doxygen/
 arm
 cscope*

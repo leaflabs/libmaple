@@ -171,3 +171,6 @@ flash:
 
 jtag:
 	@$(MAKE) MEMORY_TARGET=jtag --no-print-directory sketch
+
+doxygen:
+	doxygen $(SUPPORT_PATH)/doxygen/Doxyfile

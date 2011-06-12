@@ -29,32 +29,6 @@ AFIO clock must be on.
 RM0008, page 107: "PD0, PD1 cannot be used for external
 interrupt/event generation on 36, 48, 64-bin packages."
 
-----------------------------------------------------------------------------
-Pin to EXTI Line Mappings:
-EXTI0          EXTI1          EXTI2           EXTI3           EXTI4
---------------------------------------------------------------------------
-D2/PA0         D3/PA1         D1/PA2          D0/A6/PA3       D10/A10/PA4
-D26/EXT7/PB0   D27/EXT8/PB1   D16/A2/PC2      D17/A3/PC3      D18/A4/PC4
-D14/A0/PC0     D15/PC1        D25/EXT5/PD2
-
-EXTI5          EXTI6          EXTI7           EXTI8           EXTI9
-----------------------------------------------------------------------------
-D13/A13/PA5    D12/A12/PA6    D11/A11/PA7     D6/PA8          D7/PA9
-D4/PB5         D5/PB6         D9/PB7          D38/PB8         D23/EXT4/PB9
-D19/A5/PC5     D34/EXTI15/PC6 D35/EXT16/PC7   D36/PC8         D37/EXT18/PC9
-
-EXTI10         EXTI11         EXTI12          EXTI13          EXTI14
-----------------------------------------------------------------------------
-D8/PA10        D29/EXT10/PB11 D30/EXTI1/PB12  D31/EXTI12/PB13 D32/EXT13/PB14
-D28/PB10                                      D20/EXTI1/PC13  D21/EXT2/PC14
-D25/PC10
-
-EXTI15
-----------------------------------------------------------------------------
-D33/EXTI14/PB15
-D22/EXT3/PC15
-
-
 The 16 EXTI interrupts are mapped to 7 interrupt handlers.
 
 EXTI Lines to Interrupt Mapping:

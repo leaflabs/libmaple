@@ -1,15 +1,16 @@
-
-DAC notes (for maple native and other "high density" STM32 devices)
+DAC
 -------------------------------------------------------------------------------
-There is an ST application note for the DACs; it provides a lot of context but
-doesn't help setup the peripheral very much.
 
-For the first code iteration we'll just use 12-bit right-aligned single writes, 
-so use DAC_DHR12Rx
+There is an ST application note for the DACs; it provides a lot of
+context but doesn't help setup the peripheral very much.
 
-Once data is loaded into the digital registers, there are a number of possible
-triggers to start conversion to analog output: external interrupts, software
-control, and timer events. We'll just use software triggering for now.
+For the first code iteration we'll just use 12-bit right-aligned
+single writes, or DAC_DHR12Rx.
+
+Once data is loaded into the digital registers, there are a number of
+possible triggers to start conversion to analog output: external
+interrupts, software control, and timer events. We'll just use
+software triggering for now.
 
 There is (obviously) DMA support for DAC output.
 
@@ -33,14 +34,14 @@ time, as follows:
                    (10) Same triangle
                    (11) Different triangle
 
-Buffering will be enabled by default.
+Buffering is enabled by default.
 
-HOWTOs
+Triangle Wave HOWTO
 -------------------------------------------------------------------------------
 
 In order to generate a full-amplitude triangle wave:
 
-   - Make the following settings in dac->CR, for the DAC channel you
+   - Make the following settings in DAC_BASE->CR, for the DAC channel you
      want: set MAMP to 1011 (amplitude 4095), WAVE to 10 (triangle),
      TSEL to 111 (software trigger), TEN to 1 (trigger enabled), and
      EN to 1 (chanel enabled).
@@ -57,10 +58,10 @@ or external line 9, by making appropriate settings to TSEL.
 
 TODO
 -------------------------------------------------------------------------------
-- sine wave demo using Timer interrupts
-- wirish implementation
-- documentation
-- higher performance modes?
-- signal quality testing
-- DMA output
 
+- Sine wave demo (using timer interrupts?)
+- Wirish implementation
+- Official docs
+- Higher performance modes?
+- Signal quality testing
+- DMA output

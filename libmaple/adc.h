@@ -288,7 +288,11 @@ typedef enum adc_extsel_event {
 void adc_set_extsel(const adc_dev *dev, adc_extsel_event event);
 void adc_foreach(void (*fn)(const adc_dev*));
 
-/** ADC per-sample conversion times, in ADC clock cycles */
+/**
+ * @brief ADC sample times, in ADC clock cycles
+ *
+ * These control the amount of time spent sampling the input voltage.
+ */
 typedef enum {
     ADC_SMPR_1_5,               /**< 1.5 ADC cycles */
     ADC_SMPR_7_5,               /**< 7.5 ADC cycles */

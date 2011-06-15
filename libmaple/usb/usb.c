@@ -34,9 +34,9 @@
 #include "libmaple.h"
 #include "usb_lib.h"
 #include "gpio.h"
-#include "usb_hardware.h"
 #include "delay.h"
 #include "nvic.h"
+#include "rcc.h"
 
 #include "usb_config.h"
 #include "usb_callbacks.h"
@@ -104,7 +104,7 @@ void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
   gpio_set_mode(disc_dev, disc_bit, GPIO_OUTPUT_PP);
 
   /* setup the apb1 clock for USB */
-  pRCC->APB1ENR |= 0x00800000;
+  RCC_BASE->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
   gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host

@@ -25,42 +25,20 @@
  *****************************************************************************/
 
 #define VCOM_ID_VENDOR            0x1EAF
+#define VCOM_ID_PRODUCT           0x0004
 #define RESET_DELAY               (100000)
 #define USB_CONFIG_MAX_POWER      (100 >> 1)
 
-#if defined(BOARD_maple) || defined(BOARD_maple_RET6)
+#if !(defined(BOARD_maple) || defined(BOARD_maple_RET6) ||              \
+      defined(BOARD_maple_mini) || defined(BOARD_maple_native))
 
-    /* USB Identifier numbers */
-    #define VCOM_ID_PRODUCT      0x0004
-    #define USB_DISC_DEV         GPIOC
-    #define USB_DISC_PIN         12
-
-#elif defined(BOARD_maple_mini)
-
-    #define VCOM_ID_PRODUCT      0x0004
-    #define USB_DISC_DEV         GPIOB
-    #define USB_DISC_PIN         9
-
-#elif defined(BOARD_maple_native)
-
-    #define VCOM_ID_PRODUCT      0x0004
-    #define USB_DISC_DEV         GPIOB
-    #define USB_DISC_PIN         8
-
-#elif defined(BOARD_olimex_stm32_h103)
-
-    #define VCOM_ID_PRODUCT      0x0004
-    #define USB_DISC_DEV         GPIOC
-    #define USB_DISC_PIN         11
-
-#else
-
-#error ("Sorry! the USB stack relies on LeafLabs board-specific "       \
-        "configuration right now.  If you want, you can pretend you're one " \
-        "of our boards; i.e., #define BOARD_maple, BOARD_maple_mini, or " \
-        "BOARD_maple_native according to what matches your MCU best. "  \
-        "You should also take a look at libmaple/usb/descriptors.c; we make " \
-        "some assumptions there that you probably won't like.")
+#warning ("Warning! The USB stack relies on LeafLabs board-specific "   \
+          "configuration right now.  If you want, you can pretend "     \
+          "you're one of our boards; i.e., #define BOARD_maple, "       \
+          "BOARD_maple_mini, etc.  according to what matches your MCU " \
+          "best. You should also take a look at "                       \
+          "libmaple/usb/descriptors.c; "                                \
+          "we make some assumptions there that you probably won't like.")
 
 #endif
 

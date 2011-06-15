@@ -85,4 +85,8 @@
 #define BOARD_JTDO_PIN          44
 #define BOARD_NJTRST_PIN        45
 
+/* USB configuration */
+#define BOARD_USB_DISC_DEV      GPIOC
+#define BOARD_USB_DISC_BIT      11
+
 #endif

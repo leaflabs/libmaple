@@ -29,6 +29,7 @@
 
 #include "usb_lib.h"
 #include "libmaple.h"
+#include "gpio.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,8 +57,8 @@ typedef enum {
 
 extern volatile uint32 bDeviceState;
 
-void setupUSB(void);
-void disableUSB(void);
+void setupUSB(gpio_dev*, uint8);
+void disableUSB(gpio_dev*, uint8);
 void usbSuspend(void);
 void usbResumeInit(void);
 void usbResume(RESUME_STATE);

@@ -58,7 +58,7 @@ void init(void) {
     afio_init();
     setupADC();
     setupTimers();
-    setupUSB();
+    setupUSB(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
     boardInit();
 }
 

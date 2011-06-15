@@ -99,22 +99,22 @@ struct {
   volatile uint8 bESOFcnt;
 } ResumeS;
 
-void setupUSB (void) {
-  gpio_set_mode(USB_DISC_DEV, USB_DISC_PIN, GPIO_OUTPUT_PP);
+void setupUSB (gpio_dev *disc_dev, uint8 disc_bit) {
+  gpio_set_mode(disc_dev, disc_bit, GPIO_OUTPUT_PP);
 
   /* setup the apb1 clock for USB */
   pRCC->APB1ENR |= 0x00800000;
 
   /* initialize the usb application */
-  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 0); // presents us to the host
+  gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host
   USB_Init();  // low level init routine provided by the ST library
 }
 
-void disableUSB (void) {
+void disableUSB (gpio_dev *disc_dev, uint8 disc_bit) {
   // These are just guesses about how to do this
   // TODO: real disable function
   usbDsbISR();
-  gpio_write_bit(USB_DISC_DEV, USB_DISC_PIN, 1);
+  gpio_write_bit(disc_dev, disc_bit, 1);
 }
 
 void usbSuspend(void) {

@@ -126,6 +126,15 @@ void loop () {
             }
             break;
 
+        case 'd':
+            SerialUSB.println("Disabling USB.  Press BUT to re-enable.");
+            SerialUSB.end();
+            pinMode(BOARD_BUTTON_PIN, INPUT);
+            while (!isButtonPressed())
+                ;
+            SerialUSB.begin();
+            break;
+
         case 'n':
             cmd_adc_stats();
             break;
@@ -206,19 +215,6 @@ void loop () {
             cmd_servo_sweep();
             break;
 
-        case 'd':
-            SerialUSB.println("Pulling down D4, D22. Press any key.");
-            pinMode(22, INPUT_PULLDOWN);
-            pinMode(4, INPUT_PULLDOWN);
-            SerialUSB.read();
-            SerialUSB.println("Pulling up D4, D22. Press any key.");
-            pinMode(22, INPUT_PULLUP);
-            pinMode(4, INPUT_PULLUP);
-            SerialUSB.read();
-            pinMode(22, OUTPUT);
-            pinMode(4, OUTPUT);
-            break;
-
         // Be sure to update cmd_print_help() if you implement these:
 
         case 'i':               // TODO
@@ -261,6 +257,7 @@ void cmd_print_help(void) {
     SerialUSB.println("");
     SerialUSB.println("Command Listing");
     SerialUSB.println("\t?: print this menu");
+    SerialUSB.println("\td: Disable SerialUSB (press button to re-enable)");
     SerialUSB.println("\th: print this menu");
     SerialUSB.println("\tw: print Hello World on all 3 USARTS");
     SerialUSB.println("\tn: measure noise and do statistics");

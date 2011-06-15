@@ -57,8 +57,8 @@ typedef enum {
 
 extern volatile uint32 bDeviceState;
 
-void setupUSB(gpio_dev*, uint8);
-void disableUSB(gpio_dev*, uint8);
+void usb_cdcacm_enable(gpio_dev*, uint8);
+void usb_cdcacm_disable(gpio_dev*, uint8);
 void usbSuspend(void);
 void usbResumeInit(void);
 void usbResume(RESUME_STATE);
@@ -83,8 +83,6 @@ uint8 usbGetRTS(void);
 uint8 usbIsConnected(void);
 uint8 usbIsConfigured(void);
 uint16 usbGetPending(void);
-
-void usbSendHello(void);
 
 #ifdef __cplusplus
 } // extern "C"

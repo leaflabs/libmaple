@@ -39,11 +39,11 @@ USBSerial::USBSerial(void) {
 }
 
 void USBSerial::begin(void) {
-    setupUSB(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+    usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
 }
 
 void USBSerial::end(void) {
-    disableUSB(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+    usb_cdcacm_disable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
 }
 
 void USBSerial::write(uint8 ch) {

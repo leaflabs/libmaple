@@ -118,7 +118,6 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
     RCC_BASE->CFGR = pll_src | pll_mul;
 
     /* Turn on the HSE */
-    /* FIXME WTF why doesn't bit-banding work here? */
     cr = RCC_BASE->CR;
     cr |= RCC_CR_HSEON;
     RCC_BASE->CR = cr;

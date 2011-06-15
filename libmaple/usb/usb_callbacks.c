@@ -1,5 +1,7 @@
 /* insert license */
 
+#include "nvic.h"
+
 #include "usb_callbacks.h"
 #include "usb_lib.h"
 #include "descriptors.h"
@@ -140,7 +142,7 @@ void usbInit(void) {
     wInterrupt_Mask = ISR_MSK;
     _SetCNTR(wInterrupt_Mask);
 
-    usbEnbISR();
+    nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
     bDeviceState = UNCONNECTED;
 }
 

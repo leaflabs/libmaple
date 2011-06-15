@@ -36,9 +36,8 @@
 
 #define USB_PACKET_BUFFER ((u32)0x40006000)
 
-#define SCS_BASE   ((u32)0xE000E000)
-#define NVIC_BASE  (SCS_BASE + 0x0100)
-#define SCB_BASE   (SCS_BASE + 0x0D00)
+#define SCS_BASE_ADDR   ((u32)0xE000E000)
+#define SCB_BASE_ADDR   (SCS_BASE_ADDR + 0x0D00)
 
 #define SCS      0xE000E000
 #define NVIC     (SCS+0x100)
@@ -84,20 +83,6 @@ typedef struct
   vu32 CSR;
 } RCC_RegStruct;
 #define pRCC ((RCC_RegStruct *) RCC_BASE)
-
-typedef struct {
-  vu32 ISER[2];
-  u32  RESERVED0[30];
-  vu32 ICER[2];
-  u32  RSERVED1[30];
-  vu32 ISPR[2];
-  u32  RESERVED2[30];
-  vu32 ICPR[2];
-  u32  RESERVED3[30];
-  vu32 IABR[2];
-  u32  RESERVED4[62];
-  vu32 IPR[15];
-} NVIC_TypeDef;
 
 typedef struct {
   u8 NVIC_IRQChannel;

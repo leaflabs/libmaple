@@ -66,9 +66,6 @@ void usbResume(RESUME_STATE);
 RESULT usbPowerOn(void);
 RESULT usbPowerOff(void);
 
-void usbDsbISR(void);
-void usbEnbISR(void);
-
 /* overloaded ISR routine, this is the main usb ISR */
 void __irq_usb_lp_can_rx0(void);
 void usbWaitReset(void);

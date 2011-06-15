@@ -31,6 +31,7 @@
  *
  */
 
+#include "nvic.h"
 #include "usb_hardware.h"
 
 void nvicInit(NVIC_InitTypeDef* NVIC_InitStruct) {
@@ -40,9 +41,7 @@ void nvicInit(NVIC_InitTypeDef* NVIC_InitStruct) {
     u32 tmppre      = 0;
     u32 tmpsub      = 0x0F;
 
-    SCB_TypeDef* rSCB = (SCB_TypeDef *) SCB_BASE;
-    NVIC_TypeDef* rNVIC = (NVIC_TypeDef *) NVIC_BASE;
-
+    SCB_TypeDef* rSCB = (SCB_TypeDef *) SCB_BASE_ADDR;
 
     /* Compute the Corresponding IRQ Priority -------------------------------*/
     tmppriority = (0x700 - (rSCB->AIRCR & (u32)0x700))>> 0x08;
@@ -57,33 +56,31 @@ void nvicInit(NVIC_InitTypeDef* NVIC_InitStruct) {
     tmppriority = ((u32)tmppriority) <<
         ((NVIC_InitStruct->NVIC_IRQChannel & (u8)0x03) * 0x08);
 
-    tmpreg = rNVIC->IPR[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)];
+    tmpreg = NVIC_BASE->IP[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)];
     tmpmask = (u32)0xFF <<
         ((NVIC_InitStruct->NVIC_IRQChannel & (u8)0x03) * 0x08);
     tmpreg &= ~tmpmask;
     tmppriority &= tmpmask;
     tmpreg |= tmppriority;
 
-    rNVIC->IPR[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)] = tmpreg;
+    NVIC_BASE->IP[(NVIC_InitStruct->NVIC_IRQChannel >> 0x02)] = tmpreg;
 
     /* Enable the Selected IRQ Channels -------------------------------------*/
-    rNVIC->ISER[(NVIC_InitStruct->NVIC_IRQChannel >> 0x05)] =
+    NVIC_BASE->ISER[(NVIC_InitStruct->NVIC_IRQChannel >> 0x05)] =
         (u32)0x01 << (NVIC_InitStruct->NVIC_IRQChannel & (u8)0x1F);
 }
 
 void nvicDisableInterrupts() {
-    NVIC_TypeDef* rNVIC = (NVIC_TypeDef *) NVIC_BASE;
-    rNVIC->ICER[0] = 0xFFFFFFFF;
-    rNVIC->ICER[1] = 0xFFFFFFFF;
-    rNVIC->ICPR[0] = 0xFFFFFFFF;
-    rNVIC->ICPR[1] = 0xFFFFFFFF;
+    nvic_irq_disable_all();
+    NVIC_BASE->ICPR[0] = 0xFFFFFFFF;
+    NVIC_BASE->ICPR[1] = 0xFFFFFFFF;
 
     /* Disable the systick timer, which operates separately from NVIC */
     SET_REG(STK_CTRL,0x04);
 }
 
 void systemHardReset(void) {
-    SCB_TypeDef* rSCB = (SCB_TypeDef *) SCB_BASE;
+    SCB_TypeDef* rSCB = (SCB_TypeDef *) SCB_BASE_ADDR;
     typedef void (*funcPtr)(void);
 
     /* Reset */

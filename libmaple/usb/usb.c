@@ -36,6 +36,7 @@
 #include "gpio.h"
 #include "usb_hardware.h"
 #include "delay.h"
+#include "nvic.h"
 
 #include "usb_config.h"
 #include "usb_callbacks.h"
@@ -111,9 +112,9 @@ void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
 }
 
 void usb_cdcacm_disable(gpio_dev *disc_dev, uint8 disc_bit) {
-  // These are just guesses about how to do this
-  // TODO: real disable function
-  usbDsbISR();
+  // These are just guesses about how to do this, but it seems to work.
+  // TODO: verify this with USB spec
+  nvic_irq_disable(NVIC_USB_LP_CAN_RX0);
   gpio_write_bit(disc_dev, disc_bit, 1);
 }
 
@@ -218,27 +219,6 @@ RESULT usbPowerOff(void) {
   return USB_SUCCESS;
 }
 
-
-// These two functions (usbEnbISR/usbDsbISR) are implementented in ST style,
-// and at least the DsbISR doesn't seem to work?
-void usbEnbISR(void) {
-  NVIC_InitTypeDef NVIC_InitStructure;
-  NVIC_InitStructure.NVIC_IRQChannel = USB_LP_IRQ;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = TRUE;
-  nvicInit(&NVIC_InitStructure);
-}
-
-void usbDsbISR(void) {
-  NVIC_InitTypeDef NVIC_InitStructure;
-  NVIC_InitStructure.NVIC_IRQChannel = USB_LP_IRQ;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = FALSE;
-  nvicInit(&NVIC_InitStructure);
-}
-
 /* overloaded ISR routine, this is the main usb ISR */
 void __irq_usb_lp_can_rx0(void) {
 wIstr = _GetISTR();
@@ -321,7 +301,7 @@ if (wIstr & ISTR_CTR & wInterrupt_Mask) {
 
 void usbWaitReset(void) {
   delay_us(RESET_DELAY);
-  systemHardReset();
+  nvic_sys_reset();
 }
 
 /* This low-level send bytes function is NON-BLOCKING; blocking behavior, with

@@ -60,18 +60,17 @@ void loop(void) {
                                                     USART_RX_DMA_CHANNEL);
     if (irq_fired) {
         USART_HWSER.println("** IRQ **");
-        while (true)
-            ;
+        irq_fired = 0;
     }
     USART_HWSER.print("[");
     USART_HWSER.print(millis());
     USART_HWSER.print("]\tISR bits: 0x");
     uint8 isr_bits = dma_get_isr_bits(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
-    USART_HWSER.print((int32)isr_bits, HEX);
+    USART_HWSER.print(isr_bits, HEX);
     USART_HWSER.print("\tCCR: 0x");
-    USART_HWSER.print((int64)ch_regs->CCR, HEX);
+    USART_HWSER.print(ch_regs->CCR, HEX);
     USART_HWSER.print("\tCNDTR: 0x");
-    USART_HWSER.print((int64)ch_regs->CNDTR, HEX);
+    USART_HWSER.print(ch_regs->CNDTR, HEX);
     USART_HWSER.print("\tBuffer contents: ");
      for (int i = 0; i < BUF_SIZE; i++) {
         USART_HWSER.print('\'');
@@ -84,8 +83,6 @@ void loop(void) {
         USART_HWSER.println("** Clearing ISR bits.");
         dma_clear_isr_bits(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
     }
-
-    irq_fired = 0;
 }
 
 /* Configure USART receiver for use with DMA */
@@ -100,15 +97,14 @@ void init_dma_xfer(void) {
     dma_setup_transfer(USART_DMA_DEV, USART_RX_DMA_CHANNEL,
                        &USART->regs->DR, DMA_SIZE_8BITS,
                        rx_buf,           DMA_SIZE_8BITS,
-                       (DMA_MINC_MODE | DMA_CIRC_MODE | DMA_TRNS_CMPLT
-                        ));
+                       (DMA_MINC_MODE | DMA_CIRC_MODE | DMA_TRNS_CMPLT));
     dma_set_num_transfers(USART_DMA_DEV, USART_RX_DMA_CHANNEL, BUF_SIZE);
-    // Currently not working:
-    // dma_attach_interrupt(USART_DMA_DEV, USART_RX_DMA_CHANNEL, rx_dma_irq);
+    dma_attach_interrupt(USART_DMA_DEV, USART_RX_DMA_CHANNEL, rx_dma_irq);
     dma_enable(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
 }
 
 void rx_dma_irq(void) {
+    irq_fired = true;
 }
 
 // Force init to be called *first*, i.e. before static object allocation.

@@ -331,31 +331,31 @@ static inline void dispatch_handler(dma_dev *dev, dma_channel channel) {
     }
 }
 
-void __irq_dma_channel1(void) {
+void __irq_dma1_channel1(void) {
     dispatch_handler(DMA1, DMA_CH1);
 }
 
-void __irq_dma_channel2(void) {
+void __irq_dma1_channel2(void) {
     dispatch_handler(DMA1, DMA_CH2);
 }
 
-void __irq_dma_channel3(void) {
+void __irq_dma1_channel3(void) {
     dispatch_handler(DMA1, DMA_CH3);
 }
 
-void __irq_dma_channel4(void) {
+void __irq_dma1_channel4(void) {
     dispatch_handler(DMA1, DMA_CH4);
 }
 
-void __irq_dma_channel5(void) {
+void __irq_dma1_channel5(void) {
     dispatch_handler(DMA1, DMA_CH5);
 }
 
-void __irq_dma_channel6(void) {
+void __irq_dma1_channel6(void) {
     dispatch_handler(DMA1, DMA_CH6);
 }
 
-void __irq_dma_channel7(void) {
+void __irq_dma1_channel7(void) {
     dispatch_handler(DMA1, DMA_CH7);
 }
 

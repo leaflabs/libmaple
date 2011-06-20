@@ -27,11 +27,7 @@ Current Status:
     changes will likely have to be made to virtual com application
     code. Ideally, the new core library should mimic the form of MyUSB
     (LUFA), since this library (USB for AVR) is growing in popularity
-    and in example applications. Additionally, the USB lib here relies
-    on low level hardware functions that were just ripped out of the
-    bootloader code (for simplicity) but clearly this should be
-    replaced with direct accesses to functions provided elsewhere in
-    libmaple.
+    and in example applications.
 
     The virtual com port serves two important purposes.
 
@@ -77,24 +73,9 @@ Current Status:
     their own license, all other files were written by the LeafLabs
     team and fall under the MIT license.
 
-Integration with libmaple:
-
-    The current USB lib is ported from the Maple bootloader code,
-    adapted to be a virtual com rather than a DFU device. That means
-    several functions are redefined locally that could have been
-    pulled from elsewhere in libmaple.  Thus, ths USB module doesn't
-    have too many dependencies on libmaple.  It even ensures that
-    clocks are configured correctly for its operation.  However, over
-    time, some libmaple dependencies have crept in.
-
 Todo:
 
     - write custom low level USB stack to strip out any remaining
       dependence on ST code
-    - remove dependence on hardware.c, since any functions here really
-      should have their own analogs elsewhere inside libmaple
     - add a high level USB application library that would allow users
       to make their own HID/Mass Storage/Audio/Video devices.
-    - implement a SerialUSB.link(SerialX) that forces a passthrough
-      the host computer virtual com to SerialX, and utilizes the
-      line_config commands correctly (sets baud etc)

@@ -65,11 +65,6 @@
 // Pin number of unattached pins
 #define NOT_ATTACHED                    (-1)
 
-// Maximum angle in degrees you can write(), exclusive.  Value chosen
-// for Arduino compatibility.  This value is part of the public API;
-// DO NOT CHANGE IT.
-#define SERVO_MAX_WRITE_ANGLE           200
-
 // Default min/max pulse widths (in microseconds) and angles (in
 // degrees).  Values chosen for Arduino compatibility.  These values
 // are part of the public API; DO NOT CHANGE THEM.

@@ -177,6 +177,7 @@ void nvic_init(uint32 vector_table_address, uint32 offset);
 void nvic_set_vector_table(uint32 address, uint32 offset);
 
 void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority);
+void nvic_sys_reset();
 
 /**
  * Enables interrupts and configurable fault handlers (clear PRIMASK).
@@ -238,4 +239,3 @@ static inline void nvic_irq_disable_all(void) {
 #endif
 
 #endif
-

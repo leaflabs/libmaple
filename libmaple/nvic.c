@@ -83,3 +83,16 @@ void nvic_init(uint32 vector_table_address, uint32 offset) {
 void nvic_set_vector_table(uint32 addr, uint32 offset) {
     SCB_BASE->VTOR = addr | (offset & 0x1FFFFF80);
 }
+
+/**
+ * @brief Force a system reset.
+ *
+ * Resets all major system components, excluding debug.
+ */
+void nvic_sys_reset() {
+    uint32 prigroup = SCB_BASE->AIRCR & SCB_AIRCR_PRIGROUP;
+    SCB_BASE->AIRCR = SCB_AIRCR_VECTKEY | SCB_AIRCR_SYSRESETREQ | prigroup;
+    asm volatile("dsb");
+    while (1)
+        ;
+}

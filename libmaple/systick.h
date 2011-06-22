@@ -99,7 +99,7 @@ static inline uint32 systick_get_count(void) {
 /**
  * @brief Check for underflow.
  *
- * This function returns 1 if the SysTick timer has counter to 0 since
+ * This function returns 1 if the SysTick timer has counted to 0 since
  * the last time it was called.  However, any reads of any part of the
  * SysTick Control and Status Register SYSTICK_BASE->CSR will
  * interfere with this functionality.  See the ARM Cortex M3 Technical

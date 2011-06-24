@@ -31,6 +31,7 @@
 #include "systick.h"
 
 volatile uint32 systick_uptime_millis;
+static void (*systick_user_callback)(void);
 
 /**
  * @brief Initialize and enable SysTick.
@@ -64,10 +65,22 @@ void systick_enable() {
                          SYSTICK_CSR_TICKINT_PEND);
 }
 
+/**
+ * @brief Attach a callback to be called from the SysTick exception handler.
+ *
+ * To detach a callback, call this function again with a null argument.
+ */
+void systick_attach_callback(void (*callback)(void)) {
+    systick_user_callback = callback;
+}
+
 /*
  * SysTick ISR
  */
 
 void __exc_systick(void) {
+    if (systick_user_callback) {
+        systick_user_callback();
+    }
     systick_uptime_millis++;
 }

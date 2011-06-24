@@ -1,8 +1,8 @@
 #include "wirish.h"
 #include "libraries/FreeRTOS/MapleFreeRTOS.h"
 
-static void vLEDFlashTask( void *pvParameters ) {
-    for(;;) {
+static void vLEDFlashTask(void *pvParameters) {
+    for (;;) {
         vTaskDelay(1000);
         digitalWrite(BOARD_LED_PIN, HIGH);
         vTaskDelay(50);
@@ -14,7 +14,12 @@ void setup() {
     // initialize the digital pin as an output:
     pinMode(BOARD_LED_PIN, OUTPUT);
 
-	xTaskCreate( vLEDFlashTask, ( signed portCHAR * ) "Task1", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY + 2, NULL );
+    xTaskCreate(vLEDFlashTask,
+                (signed portCHAR *)"Task1",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                tskIDLE_PRIORITY + 2,
+                NULL);
     vTaskStartScheduler();
 }
 

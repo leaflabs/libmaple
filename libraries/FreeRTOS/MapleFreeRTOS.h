@@ -24,17 +24,17 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef __FREERTOS__
-#define __FREERTOS__
+#ifndef __MAPLE_FREERTOS_H__
+#define __MAPLE_FREERTOS_H__
 
 #include "wirish.h"
 
 extern "C" {
-	#define GCC_ARMCM3
-	#include "utility/FreeRTOS.h"
-	#include "utility/task.h"
-	#include "utility/queue.h"
-	#include "utility/semphr.h"
+#define GCC_ARMCM3
+#include "utility/FreeRTOS.h"
+#include "utility/task.h"
+#include "utility/queue.h"
+#include "utility/semphr.h"
 }
 
 #endif

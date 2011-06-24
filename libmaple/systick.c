@@ -79,8 +79,8 @@ void systick_attach_callback(void (*callback)(void)) {
  */
 
 void __exc_systick(void) {
+    systick_uptime_millis++;
     if (systick_user_callback) {
         systick_user_callback();
     }
-    systick_uptime_millis++;
 }

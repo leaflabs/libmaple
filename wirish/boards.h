@@ -134,6 +134,8 @@ bool boardUsesPin(uint8 pin);
  * (...RBT6) on it.  Maple Rev6 (as of March 2011) DOES NOT EXIST.
  */
 #include "maple_RET6.h"
+#elif defined(BOARD_discovery)
+#include "discovery.h"
 #else
 /*
  * TODO turn this into a warning so people can:

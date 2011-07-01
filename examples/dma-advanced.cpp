@@ -120,10 +120,7 @@ void loop(void) {
         delay(100);
     }
 
-    /*
-     * Do whatever you want here!!
-     *       PARTY TIME
-     */
+    // Do whatever you want here!
 
 }
 
@@ -213,13 +210,12 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
         dma_disable(ADC_DMA_DEV, ADC_DMA_CHANNEL);
 
         // We may want to stop the ADC for now.
-
     } else if (irq_cause == DMA_TRANSFER_HALF_COMPLETE) {
 
         half_buffer = 1;
     }
 
-    static char temp[USART_STRING_SIZE];
+    static char temp_buffer[USART_STRING_SIZE];
 
     /*
     * Not the best way of doing this but it is human readable...
@@ -236,9 +232,9 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
 
         // USART_STRING_SIZE represents size of below string.
         // Note that %5d will always expand to 5 characters.
-        sprintf(temp, "Value: %5d\n", dma_adc_buffer[i]);
+        sprintf(temp_buffer, "Value: %5d\n", dma_adc_buffer[i]);
         uint8 *dest = &dma_usart_tx_buffer[i * USART_STRING_SIZE];
-        memcpy(dest, temp, USART_STRING_SIZE);
+        memcpy(dest, temp_buffer, USART_STRING_SIZE);
     }
 
     // Dump the data to USART
@@ -259,7 +255,19 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
 /* Our interrupt handler for USART DMA interrupts */
 void usart_tx_dma_irq(dma_irq_cause irq_cause) {
 
-    if (irq_cause == DMA_TRANSFER_COMPLETE) {
+    if (irq_cause == DMA_TRANSFER_ERROR) {
+
+         /* We aren't expecting this event to occur, as we're
+          * not asking for it, but in case we do enable it,
+          * this is how we'll handle errors.
+          */
+
+         dma_error_occured = true;
+         doing_uart_transfer = false;
+         dma_disable(USART_DMA_DEV, USART_TX_DMA_CHANNEL); // Disable ourselves to prevent further errors
+
+         return; // Something went wrong, exit early.
+     } else if (irq_cause == DMA_TRANSFER_COMPLETE) {
 
         /* We're done with the USART transfer.
          * Turn off the LED blinking, disable our USART DMA

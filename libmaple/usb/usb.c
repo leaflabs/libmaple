@@ -376,21 +376,25 @@ uint32 usbBytesAvailable(void) {
    will only copy the minimum of len or the available
    bytes. returns the number of bytes copied */
 uint32 usbReceiveBytes(uint8* recvBuf, uint32 len) {
+  static int offset = 0;
+
   if (len > newBytes) {
       len = newBytes;
   }
 
   int i;
   for (i=0;i<len;i++) {
-    recvBuf[i] = (uint8)(vcomBufferRx[i]);
+      recvBuf[i] = (uint8)(vcomBufferRx[i+offset]);
   }
 
   newBytes -= len;
+  offset += len;
 
   /* re-enable the rx endpoint which we had set to receive 0 bytes */
   if (newBytes == 0) {
     SetEPRxCount(VCOM_RX_ENDP,VCOM_RX_EPSIZE);
     SetEPRxStatus(VCOM_RX_ENDP,EP_RX_VALID);
+    offset = 0;
   }
 
   return len;

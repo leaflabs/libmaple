@@ -27,7 +27,7 @@
  * 
  * This code is released into the public domain.
  */
- 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -71,7 +71,7 @@ void adc_dma_irq(dma_irq_cause irq_cause);
 void usart_tx_dma_irq(dma_irq_cause irq_cause);
 
 void setup(void) {
-    
+
     pinMode(BOARD_LED_PIN, OUTPUT);
 
     init_dma_adc();
@@ -82,24 +82,24 @@ void setup(void) {
 }
 
 void loop(void) {
-     
+
     if (dma_error_occured) {
-        
+
         /*
          * An error occured. Do whatever we want here like restart the DMA transfer.
          * For this demo, we'll stop our DMA controllers and 
          * the LED will blink extra fast.
          */
-         
+
         dma_disable(ADC_DMA_DEV, ADC_DMA_CHANNEL);
         dma_disable(USART_DMA_DEV, USART_TX_DMA_CHANNEL);
-         
+
         while (1) {
             toggleLED();
             delay(30);
-        }    
+        }
     }
-    
+
     if (doing_uart_transfer) {
 
         toggleLED();
@@ -116,12 +116,12 @@ void loop(void) {
 /* Configure ADC for sampling with DMA */
 void init_adc(void) {
 
-    adc_init(ADC1);
-    adc_set_exttrig(ADC1, 1); // Does something useful, I think?
-    adc_set_reg_seqlen(ADC1, 1); // 1 Channel per sequence?
-    ADC1->regs->SQR3 = 1; // Channel 1
-    // DMA, Enable, SW Start, Cont. Mode, SWSTART Ext. Sel
-    ADC1->regs->CR2 |= (ADC_CR2_DMA | ADC_CR2_ADON | ADC_CR2_SWSTART | ADC_CR2_CONT | ADC_CR2_EXTSEL);
+    adc_set_reg_seqlen(ADC1, 1); // One conversion per sample
+    ADC1->regs->SQR3 = 1; // Read from channel 1 (D3)
+
+    // Enable DMA support, start conversion, and continiously sample.
+    ADC1->regs->CR2 |= (ADC_CR2_DMA | ADC_CR2_SWSTART | ADC_CR2_CONT);
+
 }
 
 /* Configure USART receiver for use with DMA */
@@ -132,7 +132,7 @@ void init_usart(void) {
 
 /* Configure DMA for ADC sampling */
 void init_dma_adc(void) {
-    
+
     dma_init(ADC_DMA_DEV);
 
     dma_setup_transfer(ADC_DMA_DEV, ADC_DMA_CHANNEL,
@@ -150,24 +150,24 @@ void init_dma_adc(void) {
 
 /* Configure DMA transmission */
 void init_dma_usart(void) {
-    
+
     dma_init(USART_DMA_DEV);
 
     dma_setup_transfer(USART_DMA_DEV, USART_TX_DMA_CHANNEL,
                         &USART->regs->DR, DMA_SIZE_8BITS,
                         tx_buf,           DMA_SIZE_8BITS,
                         (DMA_MINC_MODE | DMA_FROM_MEM | DMA_TRNS_CMPLT));
-                   
+
     dma_set_num_transfers(USART_DMA_DEV, USART_TX_DMA_CHANNEL, USART_TX_BUF_SIZE);
 
     dma_attach_interrupt(USART_DMA_DEV, USART_TX_DMA_CHANNEL, usart_tx_dma_irq);
-  
+
     // We'll be enabling this one manually when we're ready.
 }
 
 /* Our interrupt handler for ADC DMA interrupts */
 void adc_dma_irq(dma_irq_cause irq_cause) {
-    
+
     /* Based on the official STM app note AN2548
      * we'll process the first half of data when it's available for us.
      * Then, once the second half is ready, we'll process the second
@@ -177,27 +177,32 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
      * since we're doing a lot of expensive sprintf/memcpys
      * but it's an example of how you can use the half complete interrupt.
      */
+
     uint8 half_buffer = 0;
-        
+
     if (irq_cause == DMA_TRANSFER_ERROR) {
-        
+
         /* We aren't expecting this event to occur, as we're
          * not asking for it, but in case we do enable it,
          * this is how we'll handle errors.
          */
-         
+
         dma_error_occured = true;
         dma_disable(ADC_DMA_DEV, ADC_DMA_CHANNEL); // Disable ourselves to prevent further errors
-                
+        // We may want to turn off the ADC here
+
         return; // Something went wrong, exit early.
     } else if (irq_cause == DMA_TRANSFER_COMPLETE) {
-        
+
         // Disable the controller since we finished sampling for now
         dma_disable(ADC_DMA_DEV, ADC_DMA_CHANNEL);
+
+        // We may want to stop the ADC for now.
+
     } else if (irq_cause == DMA_TRANSFER_HALF_COMPLETE) {
-        
+
         half_buffer = 1;
-    }    
+    }
 
     static char temp[TX_STR_SIZE];
 
@@ -213,14 +218,14 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
         // TX_STR_SIZE represents size of below string.
         sprintf(temp, "Value: %5d\n", adc_buf[i]);
         uint8 *dest = &tx_buf[i * TX_STR_SIZE];
-        memcpy(dest, temp, TX_STR_SIZE);		
+        memcpy(dest, temp, TX_STR_SIZE);
     }
-        
+
     // Dump the data to USART
     if (irq_cause == DMA_TRANSFER_COMPLETE) {
 
         doing_uart_transfer = true;
-        
+
         dma_set_num_transfers(USART_DMA_DEV, USART_TX_DMA_CHANNEL, USART_TX_BUF_SIZE);
         dma_enable(USART_DMA_DEV, USART_TX_DMA_CHANNEL);
     }
@@ -228,14 +233,14 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
 
 /* Our interrupt handler for USART DMA interrupts */
 void usart_tx_dma_irq(dma_irq_cause irq_cause) {
-        
+
     if (irq_cause == DMA_TRANSFER_COMPLETE) {
 
-        // Disable the controller since we finished sampling for now    
+        // Disable the controller since we finished sampling for now
         doing_uart_transfer = false;
         dma_disable(USART_DMA_DEV, USART_TX_DMA_CHANNEL);
         dma_set_num_transfers(ADC_DMA_DEV, ADC_DMA_CHANNEL, ADC_BUF_SIZE);
-        dma_enable(ADC_DMA_DEV, ADC_DMA_CHANNEL);        
+        dma_enable(ADC_DMA_DEV, ADC_DMA_CHANNEL);
     }
 }
 

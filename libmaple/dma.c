@@ -178,7 +178,7 @@ void dma_set_priority(dma_dev *dev,
  */
 void dma_attach_interrupt(dma_dev *dev,
                           dma_channel channel,
-                          void (*handler)(void)) {
+                          void (*handler)(dma_irq_cause irq_cause)) {
     dev->handlers[channel - 1].handler = handler;
     nvic_irq_enable(dev->handlers[channel - 1].irq_line);
 }
@@ -324,10 +324,10 @@ void dma_set_per_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
  */
 
 static inline void dispatch_handler(dma_dev *dev, dma_channel channel) {
-    void (*handler)(void) = dev->handlers[channel - 1].handler;
+    void (*handler)(dma_irq_cause irq_cause) = dev->handlers[channel - 1].handler;
     if (handler) {
-        handler();
-        dma_clear_isr_bits(dev, channel); /* in case handler doesn't */
+        dma_irq_cause irq_cause = dma_get_irq_cause(dev, channel);
+        handler(irq_cause);
     }
 }
 

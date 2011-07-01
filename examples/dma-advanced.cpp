@@ -38,35 +38,48 @@
 
 #include "wirish.h"
 
+// We'll use USART2 @ 38400 baud.
 #define BAUD 38400
-
 #define USART USART2
 #define USART_HWSER Serial2
 
+// USART2_TX is on DMA1, channel 7.
 #define USART_DMA_DEV DMA1
 #define USART_TX_DMA_CHANNEL DMA_CH7
 
+// ADC1 is on DMA1, channel 1.
 #define ADC_DMA_DEV DMA1
 #define ADC_DMA_CHANNEL DMA_CH1
 
-// ADC_BUF_SIZE must be an even number
-#define TX_STR_SIZE 13
+/* There will be ADC_BUF_SIZE samples taken by the ADC DMA controller.
+ * Each of these samples will be converted into a string of size
+ * USART_STRING_SIZE (based on the sprintf in adc_dma_irq).
+ * Knowing half of the buffer size (HALF_BUF_SIZE) is needed for
+ * the half transfer complete interrupt.
+ *
+ * Note: ADC_BUF_SIZE *MUST* be an even number.
+ */
+
+#define USART_STRING_SIZE 13
 #define ADC_BUF_SIZE 8
-#define USART_TX_BUF_SIZE ADC_BUF_SIZE * TX_STR_SIZE
+#define USART_TX_BUF_SIZE ADC_BUF_SIZE * USART_STRING_SIZE
 #define HALF_BUF_SIZE (ADC_BUF_SIZE)/2
 
-uint16 adc_buf[ADC_BUF_SIZE];
-uint8 tx_buf[USART_TX_BUF_SIZE];
+// Our buffers
+uint16 dma_adc_buffer[ADC_BUF_SIZE];
+uint8 dma_usart_tx_buffer[USART_TX_BUF_SIZE];
 
+// Some state variables
 __io bool doing_uart_transfer = false;
 __io bool dma_error_occured = false;
 
+// Our initilization prototypes
 void init_adc(void);
 void init_usart(void);
-
 void init_dma_adc(void);
 void init_dma_usart(void);
 
+// The DMA interrupt handlers
 void adc_dma_irq(dma_irq_cause irq_cause);
 void usart_tx_dma_irq(dma_irq_cause irq_cause);
 
@@ -95,6 +108,7 @@ void loop(void) {
         dma_disable(USART_DMA_DEV, USART_TX_DMA_CHANNEL);
 
         while (1) {
+            
             toggleLED();
             delay(30);
         }
@@ -126,6 +140,7 @@ void init_adc(void) {
 
 /* Configure USART receiver for use with DMA */
 void init_usart(void) {
+
     USART_HWSER.begin(BAUD);
     USART->regs->CR3 |= USART_CR3_DMAT; // USART DMA Enable Transmitter
 }
@@ -137,7 +152,7 @@ void init_dma_adc(void) {
 
     dma_setup_transfer(ADC_DMA_DEV, ADC_DMA_CHANNEL,
                         &ADC1->regs->DR, DMA_SIZE_16BITS,
-                        adc_buf,         DMA_SIZE_16BITS,
+                        dma_adc_buffer,  DMA_SIZE_16BITS,
                         (DMA_MINC_MODE | DMA_TRNS_CMPLT | DMA_HALF_TRNS)
                         );
 
@@ -154,8 +169,8 @@ void init_dma_usart(void) {
     dma_init(USART_DMA_DEV);
 
     dma_setup_transfer(USART_DMA_DEV, USART_TX_DMA_CHANNEL,
-                        &USART->regs->DR, DMA_SIZE_8BITS,
-                        tx_buf,           DMA_SIZE_8BITS,
+                        &USART->regs->DR,    DMA_SIZE_8BITS,
+                        dma_usart_tx_buffer, DMA_SIZE_8BITS,
                         (DMA_MINC_MODE | DMA_FROM_MEM | DMA_TRNS_CMPLT));
 
     dma_set_num_transfers(USART_DMA_DEV, USART_TX_DMA_CHANNEL, USART_TX_BUF_SIZE);
@@ -204,26 +219,36 @@ void adc_dma_irq(dma_irq_cause irq_cause) {
         half_buffer = 1;
     }
 
-    static char temp[TX_STR_SIZE];
+    static char temp[USART_STRING_SIZE];
 
     /*
     * Not the best way of doing this but it is human readable...
     * If you really wanted to do this, transfer raw bits and parse on
     * receiving end.
+    *
+    * If you really wanted to do this, you can be sneaky by
+    * only updating the part of the string that changes
+    * (the number parts).
     */
 
     // Fill our usart's dma buffer with new goodies.
-    for (uint16 i = (HALF_BUF_SIZE)*half_buffer; i < (HALF_BUF_SIZE*(1+half_buffer)); i++) {
+    for (uint16 i = (HALF_BUF_SIZE) * half_buffer; i < (HALF_BUF_SIZE * (1 + half_buffer)); i++) {
 
-        // TX_STR_SIZE represents size of below string.
-        sprintf(temp, "Value: %5d\n", adc_buf[i]);
-        uint8 *dest = &tx_buf[i * TX_STR_SIZE];
-        memcpy(dest, temp, TX_STR_SIZE);
+        // USART_STRING_SIZE represents size of below string.
+        // Note that %5d will always expand to 5 characters.
+        sprintf(temp, "Value: %5d\n", dma_adc_buffer[i]);
+        uint8 *dest = &dma_usart_tx_buffer[i * USART_STRING_SIZE];
+        memcpy(dest, temp, USART_STRING_SIZE);
     }
 
     // Dump the data to USART
     if (irq_cause == DMA_TRANSFER_COMPLETE) {
 
+        /* Starting our USART DMA transfer.
+         * Enable our blinking LED, and setup a new transfer
+         * then enable it.
+         */
+         
         doing_uart_transfer = true;
 
         dma_set_num_transfers(USART_DMA_DEV, USART_TX_DMA_CHANNEL, USART_TX_BUF_SIZE);
@@ -236,7 +261,11 @@ void usart_tx_dma_irq(dma_irq_cause irq_cause) {
 
     if (irq_cause == DMA_TRANSFER_COMPLETE) {
 
-        // Disable the controller since we finished sampling for now
+        /* We're done with the USART transfer.
+         * Turn off the LED blinking, disable our USART DMA
+         * controller, and restart the ADC DMA controller.
+         */
+         
         doing_uart_transfer = false;
         dma_disable(USART_DMA_DEV, USART_TX_DMA_CHANNEL);
         dma_set_num_transfers(ADC_DMA_DEV, ADC_DMA_CHANNEL, ADC_BUF_SIZE);

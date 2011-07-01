@@ -4,26 +4,26 @@
  *
  * Advanced DMA example using ADC sampling and USART transmission.
  * 
- * DMA1 Channel 1 and 6 are setup for ADC and USART_TX respectively.
- * AIN on D3 is used for this exmaple and USART 2.
- * The ADC DMA controller is set up to take ADC_BUF_SIZE samples.
- * During this sampling, a half and complete interrupt is triggered.
+ * DMA1 Channel 1 and 7 are setup for ADC and USART_TX respectively.
+ * AIN on D3 is used for this exmaple, as well as USART 2.
+ * The ADC DMA channel is set up to take ADC_BUF_SIZE samples.
+ * During so, a half and complete interrupt is triggered.
  * 
- * For the half complete event, the first half of the buffer is
+ * For the half complete interrupt, the first half of the buffer is
  * prepared for USART transmission. After the complete interrupt is
- * received, the latter half is prepared. The ADC DMA controller is
- * then disabled, and USART controller is enabled to dump the data.
+ * received, the latter half is prepared. The ADC DMA channel is
+ * then disabled, and USART channel is enabled to dump the data.
  * 
  * Once the data has been transferred via USART, the USART DMA
- * controller is disabled and ADC is enabled. The process starts all
- * over again. The LED blink during the transfer process.
+ * channel is disabled and ADC channel is enabled. The process
+ * starts all over again. The LED blink during the transfer process.
  * 
- * This is purely an example of using multiple DMA controllers
+ * This is purely an example of using multiple DMA channels
  * together. It is not production quality code. For instance,
  * the data is inflated by TX_STR_SIZE times. A lot of CPU time
- * is used in the interrupts to prepare the data. This is for human
- * readability, but a huge waste of RAM/CPU. Sending data in another
- * way is recommended (raw data va SPI/USART, for example).
+ * is also used in the interrupts to prepare the data. This is for
+ * human readability, but a huge waste of RAM/CPU. Sending data in
+ * another way is recommended (raw data va SPI/USART, for example).
  * 
  * This code is released into the public domain.
  */
@@ -51,7 +51,7 @@
 #define ADC_DMA_DEV DMA1
 #define ADC_DMA_CHANNEL DMA_CH1
 
-/* There will be ADC_BUF_SIZE samples taken by the ADC DMA controller.
+/* There will be ADC_BUF_SIZE samples taken by the ADC DMA channel.
  * Each of these samples will be converted into a string of size
  * USART_STRING_SIZE (based on the sprintf in adc_dma_irq).
  * Knowing half of the buffer size (HALF_BUF_SIZE) is needed for
@@ -100,7 +100,7 @@ void loop(void) {
 
         /*
          * An error occured. Do whatever we want here like restart the DMA transfer.
-         * For this demo, we'll stop our DMA controllers and 
+         * For this demo, we'll stop our DMA channels and 
          * the LED will blink extra fast.
          */
 
@@ -263,7 +263,7 @@ void usart_tx_dma_irq(dma_irq_cause irq_cause) {
 
         /* We're done with the USART transfer.
          * Turn off the LED blinking, disable our USART DMA
-         * controller, and restart the ADC DMA controller.
+         * channel, and restart the ADC DMA channel.
          */
          
         doing_uart_transfer = false;

@@ -6,10 +6,19 @@
 #define _STM32_H_
 
 #ifndef PCLK1
-#define PCLK1   36000000U
+    #ifdef MCU_STM32F100RB
+        #define PCLK1   12000000U
+    #else
+        #define PCLK1   36000000U
+    #endif
 #endif
+
 #ifndef PCLK2
-#define PCLK2   72000000U
+    #ifdef MCU_STM32F100RB
+        #define PCLK2   24000000U
+    #else
+        #define PCLK2   72000000U
+    #endif
 #endif
 
 #ifdef STM32_MEDIUM_DENSITY

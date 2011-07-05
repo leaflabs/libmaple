@@ -43,7 +43,7 @@ __io uint32 irq_fired = 0;
 
 void init_usart(void);
 void init_dma_xfer(void);
-void rx_dma_irq(void);
+void rx_dma_irq(dma_irq_cause irq_cause);
 
 void setup(void) {
     pinMode(BOARD_LED_PIN, OUTPUT);
@@ -103,7 +103,7 @@ void init_dma_xfer(void) {
     dma_enable(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
 }
 
-void rx_dma_irq(void) {
+void rx_dma_irq(dma_irq_cause irq_cause) {
     irq_fired = true;
 }
 

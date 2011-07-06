@@ -39,7 +39,7 @@ uint8 rx_buf[BUF_SIZE];
 
 dma_irq_cause irq_cause;
 
-__io uint32 irq_fired = 0;
+volatile uint32 irq_fired = 0;
 
 void init_usart(void);
 void init_dma_xfer(void);

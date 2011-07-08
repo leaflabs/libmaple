@@ -35,9 +35,6 @@
 #ifndef _BOARD_MAPLE_NATIVE_H_
 #define _BOARD_MAPLE_NATIVE_H_
 
-#define CYCLES_PER_MICROSECOND  72
-#define SYSTICK_RELOAD_VAL      71999
-
 #define BOARD_LED_PIN           22
 #define BOARD_BUTTON_PIN        6
 

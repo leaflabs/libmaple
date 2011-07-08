@@ -21,10 +21,10 @@ cppSRCS_$(d) := wirish_math.cpp		 \
                 boards/maple_mini.cpp	 \
                 boards/maple_native.cpp	 \
                 boards/maple_RET6.cpp	 \
+                boards/discovery.cpp	 \
                 comm/HardwareSerial.cpp	 \
                 comm/HardwareSPI.cpp	 \
 		HardwareTimer.cpp	 \
-                usb_serial.cpp		 \
                 cxxabi-compat.cpp	 \
 		wirish_shift.cpp	 \
 		wirish_analog.cpp	 \
@@ -32,6 +32,11 @@ cppSRCS_$(d) := wirish_math.cpp		 \
 		pwm.cpp 		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp
+
+ifneq ($(BOARD), discovery)
+cppSRCS_$(d) += usb_serial.cpp
+endif
+
 
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)

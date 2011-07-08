@@ -21,7 +21,7 @@ static inline void delay_us(uint32 us) {
     /* TODO this makes unwarranted assumptions about the RCC
      * config; add a hook so users can make their own decisions. */
     /* So (2^32)/12 micros max, or less than 6 minutes */
-    us *= 12;
+    us *= DELAY_US_MULTIPLIER;
 
     /* fudge for function call overhead  */
     us--;

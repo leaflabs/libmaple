@@ -37,15 +37,6 @@
 #include "util.h"
 #include "delay.h"
 
-/*
- * Where to put usercode, based on space reserved for bootloader.
- *
- * FIXME this has no business being here
- */
-#define USER_ADDR_ROM 0x08005000
-#define USER_ADDR_RAM 0x20000C00
-#define STACK_TOP     0x20000800
-
 /* MCU-specific configuration */
 #if defined(MCU_STM32F103RB)
     /* e.g., LeafLabs Maple */
@@ -78,6 +69,11 @@
     #define NR_GPIO_PORTS              4
     #define SRAM_SIZE            0x10000
 
+#elif defined(MCU_STM32F100RB)
+    /* e.g., STM32VLDISCOVERY -------------------*/
+
+    #define NR_GPIO_PORTS              4
+    #define SRAM_SIZE             0x2000
 #else
 
 #error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \

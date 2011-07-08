@@ -134,6 +134,8 @@ bool boardUsesPin(uint8 pin);
  * (...RBT6) on it.  Maple Rev6 (as of March 2011) DOES NOT EXIST.
  */
 #include "maple_RET6.h"
+#elif defined(BOARD_discovery)
+#include "discovery.h"
 #else
 /*
  * TODO turn this into a warning so people can:
@@ -149,7 +151,8 @@ bool boardUsesPin(uint8 pin);
 
 /* Set derived definitions */
 
-#define CLOCK_SPEED_MHZ                 CYCLES_PER_MICROSECOND
-#define CLOCK_SPEED_HZ                  (CLOCK_SPEED_MHZ * 1000000UL)
+#define CLOCK_SPEED_MHZ                 (CLOCK_SPEED_HZ / 1000000)
+#define CYCLES_PER_MICROSECOND          CLOCK_SPEED_MHZ
+#define SYSTICK_RELOAD_VAL              (CLOCK_SPEED_HZ / 1000 - 1) /* takes a cycle to reload */
 
 #endif

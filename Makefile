@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := sketch
 
-# Valid BOARDs: maple, maple_native, ...
+# Valid BOARDs: maple, maple_native, discovery, ...
 BOARD ?= maple
 MEMORY_TARGET ?= flash
 
@@ -37,6 +37,15 @@ ifeq ($(BOARD), maple_RET6)
    ERROR_LED_PORT := GPIOA
    ERROR_LED_PIN := 5
    DENSITY := STM32_HIGH_DENSITY
+endif
+ifeq ($(BOARD), discovery)
+   MCU := STM32F100RB
+   PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOC
+   ERROR_LED_PIN  := 9
+   DENSITY := STM32_MEDIUM_DENSITY
+   ST-LINK_CLI := "ST-LINK_CLI.exe"
+#   STLINK_DOWNLOAD := stlink-download
 endif
 
 # Some target specific things
@@ -109,9 +118,18 @@ include $(SRCROOT)/build-targets.mk
 UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+
+ifeq ($(BOARD), discovery)
+UPLOAD_flash := $(ST-LINK_CLI) -c SWD -P "$(BUILD_PATH)/$(BOARD).bin" 0x08000000 -Run
+# Linux util http://code.google.com/p/arm-utilities/
+# UPLOAD_flash := $(STLINK_DOWNLOAD) program=$(BUILD_PATH)/$(BOARD).bin
+else
+
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+endif
+
 UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 
 # conditionally upload to whatever the last build was

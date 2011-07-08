@@ -40,9 +40,6 @@
 #ifndef _BOARD_MAPLE_MINI_H_
 #define _BOARD_MAPLE_MINI_H_
 
-#define CYCLES_PER_MICROSECOND    72
-#define SYSTICK_RELOAD_VAL     71999 /* takes a cycle to reload */
-
 #define BOARD_BUTTON_PIN          32
 #define BOARD_LED_PIN             33
 

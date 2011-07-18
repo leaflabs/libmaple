@@ -1,5 +1,5 @@
 /**
- *  @brief General STM32 specific definitions
+ *  @brief General STM32 chip-specific definitions
  */
 
 #ifndef _STM32_H_

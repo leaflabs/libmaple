@@ -4,6 +4,7 @@
  */
 
 #include "libmaple_types.h"
+#include "stm32.h"
 
 #ifndef _DELAY_H_
 #define _DELAY_H_
@@ -11,17 +12,10 @@
 /**
  * @brief Delay the given number of microseconds.
  *
- * Note that this function currently assumes you are on a LeafLabs
- * board, and will only work properly if you follow the LeafLabs RCC
- * configuration.
- *
  * @param us Number of microseconds to delay.
  */
 static inline void delay_us(uint32 us) {
-    /* TODO this makes unwarranted assumptions about the RCC
-     * config; add a hook so users can make their own decisions. */
-    /* So (2^32)/12 micros max, or less than 6 minutes */
-    us *= 12;
+    us *= DELAY_US_MULT;
 
     /* fudge for function call overhead  */
     us--;

@@ -32,11 +32,16 @@
     /* SRAM size, in bytes */
     #define SRAM_SIZE             0x5000
 
+    /* Multiplier to convert microseconds into loop iterations in
+     * delay_us() (See delay.h) */
+    #define DELAY_US_MULT             12
+
 #elif defined(MCU_STM32F103ZE)
     /* e.g., LeafLabs Maple Native */
 
     #define NR_GPIO_PORTS              7
     #define SRAM_SIZE            0x10000
+    #define DELAY_US_MULT             12
 
 #elif defined(MCU_STM32F103CB)
     /* e.g., LeafLabs Maple Mini */
@@ -47,12 +52,14 @@
     #define NR_GPIO_PORTS              3
 
     #define SRAM_SIZE             0x5000
+    #define DELAY_US_MULT             12
 
 #elif defined(MCU_STM32F103RE)
     /* e.g., LeafLabs Maple RET6 edition */
 
     #define NR_GPIO_PORTS              4
     #define SRAM_SIZE            0x10000
+    #define DELAY_US_MULT             12
 
 #else
 

@@ -40,7 +40,7 @@
  * [7] = BRK. */
 #define NR_ADV_HANDLERS                 8
 /* Update, capture/compare 1,2,3,4; <junk>; trigger. */
-#define NR_GEN_HANDLERS                 6
+#define NR_GEN_HANDLERS                 7
 /* Update only. */
 #define NR_BAS_HANDLERS                 1
 

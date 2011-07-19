@@ -309,20 +309,22 @@ void __irq_tim8_cc(void) {
 }
 #endif
 
-static inline void dispatch_irq(timer_dev *dev, uint8 iid, uint8 sr_bit);
+static inline void dispatch_irq(timer_dev *dev,
+                                timer_interrupt_id iid,
+                                uint32 irq_mask);
 static inline void dispatch_cc_irqs(timer_dev *dev);
 
 static inline void dispatch_adv_brk(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_BREAK_INTERRUPT, TIMER_SR_BIF_BIT);
+    dispatch_irq(dev, TIMER_BREAK_INTERRUPT, TIMER_SR_BIF);
 }
 
 static inline void dispatch_adv_up(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF_BIT);
+    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
 }
 
 static inline void dispatch_adv_trg_com(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF_BIT);
-    dispatch_irq(dev, TIMER_COM_INTERRUPT, TIMER_SR_COMIF_BIT);
+    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF);
+    dispatch_irq(dev, TIMER_COM_INTERRUPT, TIMER_SR_COMIF);
 }
 
 static inline void dispatch_adv_cc(timer_dev *dev) {
@@ -330,42 +332,62 @@ static inline void dispatch_adv_cc(timer_dev *dev) {
 }
 
 static inline void dispatch_general(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF_BIT);
+    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF);
     dispatch_cc_irqs(dev);
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF_BIT);
+    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
 }
 
 static inline void dispatch_basic(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF_BIT);
+    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
 }
 
-static inline void dispatch_irq(timer_dev *dev, uint8 iid, uint8 sr_bit) {
-    __io uint32 *sr = &(dev->regs).bas->SR;
-    if (bb_peri_get_bit(sr, sr_bit)) {
-        if (dev->handlers[iid])
-            (dev->handlers[iid])();
-        bb_peri_set_bit(sr, sr_bit, 0);
+/* Note: The following dispatch routines play some tricks that depend
+ * on the positions of the relevant interrupt-related bits in TIMx_SR
+ * and TIMx_DIER. */
+
+/* TODO (optimization): since the callers all know the timer
+ * statically, it may be possible to speed these dispatch routines up
+ * by skipping the timer_dev and accessing timer_reg_map/handlers
+ * directly */
+
+static inline void dispatch_irq(timer_dev *dev,
+                                timer_interrupt_id iid,
+                                uint32 irq_mask) {
+    timer_bas_reg_map *regs = (dev->regs).bas;
+    void (*handler)(void) = dev->handlers[iid];
+    if ((regs->DIER & irq_mask) && (regs->SR & irq_mask) && handler) {
+        handler();
+        regs->SR &= ~irq_mask;
     }
 }
 
+#define DIER_CCS                        (TIMER_DIER_CC4IE |             \
+                                         TIMER_DIER_CC3IE |             \
+                                         TIMER_DIER_CC2IE |             \
+                                         TIMER_DIER_CC1IE)
+
 static inline void dispatch_cc_irqs(timer_dev *dev) {
-    uint32 sr = (dev->regs).gen->SR;
-    uint32 sr_clear = 0;
+    timer_gen_reg_map *regs = (dev->regs).gen;
+    uint32 dier = regs->DIER;
+    uint32 sr;
+    uint32 sr_clear; /* cuts down on writes to a volatile register */
     uint32 b;
 
-    ASSERT_FAULT(sr & (TIMER_SR_CC1IF | TIMER_SR_CC2IF |
-                       TIMER_SR_CC3IF | TIMER_SR_CC4IF));
+    if (!(dier & DIER_CCS)) {
+        return;
+    }
 
+    sr = regs->SR;
+    sr_clear = 0;
     for (b = TIMER_SR_CC1IF_BIT; b <= TIMER_SR_CC4IF_BIT; b++) {
         uint32 mask = BIT(b);
-        if (sr & mask) {
-            if (dev->handlers[b])
-                (dev->handlers[b])();
+        if ((dier & mask) && (sr & mask) && dev->handlers[b]) {
+            (dev->handlers[b])();
             sr_clear |= mask;
         }
     }
 
-    (dev->regs).gen->SR &= ~sr_clear;
+    regs->SR &= ~sr_clear;
 }
 
 /*

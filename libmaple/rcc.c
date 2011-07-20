@@ -72,6 +72,7 @@ static const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_CRC]    = { .clk_domain = AHB,  .line_num = 6},
     [RCC_FLITF]  = { .clk_domain = AHB,  .line_num = 4},
     [RCC_SRAM]   = { .clk_domain = AHB,  .line_num = 2},
+    [RCC_USB]    = { .clk_domain = APB1, .line_num = 23},
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
     [RCC_GPIOE]  = { .clk_domain = APB2, .line_num = 6 },
     [RCC_GPIOF]  = { .clk_domain = APB2, .line_num = 7 },

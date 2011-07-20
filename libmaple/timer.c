@@ -309,85 +309,92 @@ void __irq_tim8_cc(void) {
 }
 #endif
 
-static inline void dispatch_irq(timer_dev *dev,
-                                timer_interrupt_id iid,
-                                uint32 irq_mask);
-static inline void dispatch_cc_irqs(timer_dev *dev);
+/* Note: the following dispatch routines make use of the fact that
+ * DIER interrupt enable bits and SR interrupt flags have common bit
+ * positions.  Thus, ANDing DIER and SR lets us check if an interrupt
+ * is enabled and if it has occurred simultaneously.
+ */
 
-static inline void dispatch_adv_brk(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_BREAK_INTERRUPT, TIMER_SR_BIF);
-}
-
-static inline void dispatch_adv_up(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
-}
-
-static inline void dispatch_adv_trg_com(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF);
-    dispatch_irq(dev, TIMER_COM_INTERRUPT, TIMER_SR_COMIF);
-}
-
-static inline void dispatch_adv_cc(timer_dev *dev) {
-    dispatch_cc_irqs(dev);
-}
-
-static inline void dispatch_general(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_TRG_INTERRUPT, TIMER_SR_TIF);
-    dispatch_cc_irqs(dev);
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
-}
-
-static inline void dispatch_basic(timer_dev *dev) {
-    dispatch_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
-}
-
-/* Note: The following dispatch routines play some tricks that depend
- * on the positions of the relevant interrupt-related bits in TIMx_SR
- * and TIMx_DIER. */
-
-/* TODO (optimization): since the callers all know the timer
- * statically, it may be possible to speed these dispatch routines up
- * by skipping the timer_dev and accessing timer_reg_map/handlers
- * directly */
-
-static inline void dispatch_irq(timer_dev *dev,
-                                timer_interrupt_id iid,
-                                uint32 irq_mask) {
+/* A special-case dispatch routine for single-interrupt NVIC lines.
+ * This function assumes that the interrupt corresponding to `iid' has
+ * in fact occurred (i.e., it doesn't check DIER & SR). */
+static inline void dispatch_single_irq(timer_dev *dev,
+                                       timer_interrupt_id iid,
+                                       uint32 irq_mask) {
     timer_bas_reg_map *regs = (dev->regs).bas;
     void (*handler)(void) = dev->handlers[iid];
-    if ((regs->DIER & irq_mask) && (regs->SR & irq_mask) && handler) {
+    if (handler) {
         handler();
         regs->SR &= ~irq_mask;
     }
 }
 
-#define DIER_CCS                        (TIMER_DIER_CC4IE |             \
-                                         TIMER_DIER_CC3IE |             \
-                                         TIMER_DIER_CC2IE |             \
-                                         TIMER_DIER_CC1IE)
+/* For dispatch routines which service multiple interrupts. */
+#define handle_irq(dier_sr, irq_mask, handlers, iid, handled_irq) do {  \
+        if ((dier_sr) & (irq_mask)) {                                   \
+            void (*__handler)(void) = (handlers)[iid];                  \
+            if (__handler) {                                            \
+                __handler();                                            \
+                handled_irq |= (irq_mask);                              \
+            }                                                           \
+        }                                                               \
+    } while (0)
 
-static inline void dispatch_cc_irqs(timer_dev *dev) {
+static inline void dispatch_adv_brk(timer_dev *dev) {
+    dispatch_single_irq(dev, TIMER_BREAK_INTERRUPT, TIMER_SR_BIF);
+}
+
+static inline void dispatch_adv_up(timer_dev *dev) {
+    dispatch_single_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
+}
+
+static inline void dispatch_adv_trg_com(timer_dev *dev) {
+    timer_adv_reg_map *regs = (dev->regs).adv;
+    void (**hs)(void) = dev->handlers;
+    uint32 dsr = regs->DIER & regs->SR;
+    uint32 handled = 0; /* Logical OR of SR interrupt flags we end up
+                         * handling.  We clear these.  User handlers
+                         * must clear overcapture flags, to avoid
+                         * wasting time in output mode. */
+
+    handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT, handled);
+    handle_irq(dsr, TIMER_SR_COMIF, hs, TIMER_COM_INTERRUPT, handled);
+
+    regs->SR &= ~handled;
+}
+
+static inline void dispatch_adv_cc(timer_dev *dev) {
+    timer_adv_reg_map *regs = (dev->regs).adv;
+    void (**hs)(void) = dev->handlers;
+    uint32 dsr = regs->DIER & regs->SR;
+    uint32 handled = 0;
+
+    handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT, handled);
+    handle_irq(dsr, TIMER_SR_CC3IF, hs, TIMER_CC3_INTERRUPT, handled);
+    handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT, handled);
+    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT, handled);
+
+    regs->SR &= ~handled;
+}
+
+static inline void dispatch_general(timer_dev *dev) {
     timer_gen_reg_map *regs = (dev->regs).gen;
-    uint32 dier = regs->DIER;
-    uint32 sr;
-    uint32 sr_clear; /* cuts down on writes to a volatile register */
-    uint32 b;
+    void (**hs)(void) = dev->handlers;
+    uint32 dsr = regs->DIER & regs->SR;
+    uint32 handled = 0;
 
-    if (!(dier & DIER_CCS)) {
-        return;
-    }
+    handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC3IF, hs, TIMER_CC3_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_UIF,   hs, TIMER_UPDATE_INTERRUPT, handled);
 
-    sr = regs->SR;
-    sr_clear = 0;
-    for (b = TIMER_SR_CC1IF_BIT; b <= TIMER_SR_CC4IF_BIT; b++) {
-        uint32 mask = BIT(b);
-        if ((dier & mask) && (sr & mask) && dev->handlers[b]) {
-            (dev->handlers[b])();
-            sr_clear |= mask;
-        }
-    }
+    regs->SR &= ~handled;
+}
 
-    regs->SR &= ~sr_clear;
+static inline void dispatch_basic(timer_dev *dev) {
+    dispatch_single_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
 }
 
 /*

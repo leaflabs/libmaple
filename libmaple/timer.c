@@ -350,8 +350,8 @@ static inline void dispatch_adv_up(timer_dev *dev) {
 
 static inline void dispatch_adv_trg_com(timer_dev *dev) {
     timer_adv_reg_map *regs = (dev->regs).adv;
-    void (**hs)(void) = dev->handlers;
     uint32 dsr = regs->DIER & regs->SR;
+    void (**hs)(void) = dev->handlers;
     uint32 handled = 0; /* Logical OR of SR interrupt flags we end up
                          * handling.  We clear these.  User handlers
                          * must clear overcapture flags, to avoid
@@ -365,8 +365,8 @@ static inline void dispatch_adv_trg_com(timer_dev *dev) {
 
 static inline void dispatch_adv_cc(timer_dev *dev) {
     timer_adv_reg_map *regs = (dev->regs).adv;
-    void (**hs)(void) = dev->handlers;
     uint32 dsr = regs->DIER & regs->SR;
+    void (**hs)(void) = dev->handlers;
     uint32 handled = 0;
 
     handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT, handled);
@@ -379,8 +379,8 @@ static inline void dispatch_adv_cc(timer_dev *dev) {
 
 static inline void dispatch_general(timer_dev *dev) {
     timer_gen_reg_map *regs = (dev->regs).gen;
-    void (**hs)(void) = dev->handlers;
     uint32 dsr = regs->DIER & regs->SR;
+    void (**hs)(void) = dev->handlers;
     uint32 handled = 0;
 
     handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT,    handled);

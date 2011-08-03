@@ -29,14 +29,13 @@
  * @brief External interrupt control routines
  */
 
-#include "libmaple.h"
 #include "exti.h"
+#include "libmaple.h"
 #include "nvic.h"
 #include "bitband.h"
 
-static inline void handle_exti(uint32 exti_num);
-static inline void clear_pending(uint32 exti_num);
-static inline void dispatch_handler(uint32 exti_num);
+static inline void dispatch_single_exti(uint32 exti_num);
+static inline void dispatch_extis(uint32 start, uint32 stop);
 
 /*
  * Internal state
@@ -140,74 +139,80 @@ void exti_detach_interrupt(afio_exti_num num) {
  */
 
 void __irq_exti0(void) {
-    handle_exti(AFIO_EXTI_0);
+    dispatch_single_exti(AFIO_EXTI_0);
 }
 
 void __irq_exti1(void) {
-    handle_exti(AFIO_EXTI_1);
+    dispatch_single_exti(AFIO_EXTI_1);
 }
 
 void __irq_exti2(void) {
-    handle_exti(AFIO_EXTI_2);
+    dispatch_single_exti(AFIO_EXTI_2);
 }
 
 void __irq_exti3(void) {
-    handle_exti(AFIO_EXTI_3);
+    dispatch_single_exti(AFIO_EXTI_3);
 }
 
 void __irq_exti4(void) {
-    handle_exti(AFIO_EXTI_4);
+    dispatch_single_exti(AFIO_EXTI_4);
 }
 
 void __irq_exti9_5(void) {
-    /* Figure out which channel it came from  */
-    uint32 pending = GET_BITS(EXTI_BASE->PR, 5, 9);
-    uint32 i;
-
-    /* Dispatch every handler if the pending bit is set */
-    for (i = 0; i < 5; i++) {
-        if (pending & 0x1) {
-            handle_exti(AFIO_EXTI_5 + i);
-        }
-        pending >>= 1;
-    }
+    dispatch_extis(5, 9);
 }
 
 void __irq_exti15_10(void) {
-    /* Figure out which channel it came from  */
-    uint32 pending = GET_BITS(EXTI_BASE->PR, 10, 15);
-    uint32 i;
-
-    /* Dispatch every handler if the pending bit is set */
-    for (i = 0; i < 6; i++) {
-        if (pending & 0x1) {
-            handle_exti(AFIO_EXTI_10 + i);
-        }
-        pending >>= 1;
-    }
+    dispatch_extis(10, 15);
 }
 
 /*
  * Auxiliary functions
  */
 
-static inline void handle_exti(uint32 exti) {
-    dispatch_handler(exti);
-    clear_pending(exti);
-    /* If the pending bit is cleared as the last instruction in an ISR,
-     * it won't actually be cleared in time and the ISR will fire again.
-     * Insert a 2-cycle buffer to allow it to take effect. */
+/* Clear the pending bits for EXTIs whose bits are set in exti_msk.
+ *
+ * If a pending bit is cleared as the last instruction in an ISR, it
+ * won't actually be cleared in time and the ISR will fire again.  To
+ * compensate, this function NOPs for 2 cycles after clearing the
+ * pending bits to ensure it takes effect. */
+static inline void clear_pending_msk(uint32 exti_msk) {
+    EXTI_BASE->PR = exti_msk;
     asm volatile("nop");
     asm volatile("nop");
 }
 
-static inline void dispatch_handler(uint32 exti_num) {
-    ASSERT(exti_channels[exti_num].handler);
-    if (exti_channels[exti_num].handler) {
-        (exti_channels[exti_num].handler)();
+/* This dispatch routine is for non-multiplexed EXTI lines only; i.e.,
+ * it doesn't check EXTI_PR. */
+static inline void dispatch_single_exti(uint32 exti) {
+    voidFuncPtr handler = exti_channels[exti].handler;
+
+    if (!handler) {
+        return;
     }
+
+    handler();
+    clear_pending_msk(BIT(exti));
 }
 
-static inline void clear_pending(uint32 exti_num) {
-    EXTI_BASE->PR = 1 << exti_num;
+/* Dispatch routine for EXTIs which share an IRQ. */
+static inline void dispatch_extis(uint32 start, uint32 stop) {
+    uint32 pr = EXTI_BASE->PR;
+    uint32 handled_msk = 0;
+    uint32 exti;
+
+    /* Dispatch user handlers for pending EXTIs. */
+    for (exti = start; exti <= stop; exti++) {
+        uint32 eb = BIT(exti);
+        if (pr & eb) {
+            voidFuncPtr handler = exti_channels[exti].handler;
+            if (handler) {
+                handler();
+                handled_msk |= eb;
+            }
+        }
+    }
+
+    /* Clear the pending bits for handled EXTIs. */
+    clear_pending_msk(handled_msk);
 }

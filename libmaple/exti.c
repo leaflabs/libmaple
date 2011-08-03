@@ -146,35 +146,26 @@ void exti_detach_interrupt(afio_exti_num num) {
  * Interrupt handlers
  */
 
-static inline void clear_pending(uint32 exti_num);
-static inline void dispatch_handler(uint32 exti_num);
+static inline void handle_exti(uint32 exti_num);
 
-/* For AFIO_EXTI_0 through AFIO_EXTI_4, only one handler is associated
- * with each channel, so we don't have to keep track of which channel
- * we came from */
 void __irq_exti0(void) {
-    dispatch_handler(AFIO_EXTI_0);
-    clear_pending(AFIO_EXTI_0);
+    handle_exti(AFIO_EXTI_0);
 }
 
 void __irq_exti1(void) {
-    dispatch_handler(AFIO_EXTI_1);
-    clear_pending(AFIO_EXTI_1);
+    handle_exti(AFIO_EXTI_1);
 }
 
 void __irq_exti2(void) {
-    dispatch_handler(AFIO_EXTI_2);
-    clear_pending(AFIO_EXTI_2);
+    handle_exti(AFIO_EXTI_2);
 }
 
 void __irq_exti3(void) {
-    dispatch_handler(AFIO_EXTI_3);
-    clear_pending(AFIO_EXTI_3);
+    handle_exti(AFIO_EXTI_3);
 }
 
 void __irq_exti4(void) {
-    dispatch_handler(AFIO_EXTI_4);
-    clear_pending(AFIO_EXTI_4);
+    handle_exti(AFIO_EXTI_4);
 }
 
 void __irq_exti9_5(void) {
@@ -185,8 +176,7 @@ void __irq_exti9_5(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 5; i++) {
         if (pending & 0x1) {
-            dispatch_handler(AFIO_EXTI_5 + i);
-            clear_pending(AFIO_EXTI_5 + i);
+            handle_exti(AFIO_EXTI_5 + i);
         }
         pending >>= 1;
     }
@@ -200,8 +190,7 @@ void __irq_exti15_10(void) {
     /* Dispatch every handler if the pending bit is set */
     for (i = 0; i < 6; i++) {
         if (pending & 0x1) {
-            dispatch_handler(AFIO_EXTI_10 + i);
-            clear_pending(AFIO_EXTI_10 + i);
+            handle_exti(AFIO_EXTI_10 + i);
         }
         pending >>= 1;
     }
@@ -211,8 +200,12 @@ void __irq_exti15_10(void) {
  * Auxiliary functions
  */
 
-static inline void clear_pending(uint32 exti_num) {
-    *bb_perip(&EXTI_BASE->PR, exti_num) = 1;
+static inline void clear_pending(uint32 exti_num);
+static inline void dispatch_handler(uint32 exti_num);
+
+static inline void handle_exti(uint32 exti) {
+    dispatch_handler(exti);
+    clear_pending(exti);
     /* If the pending bit is cleared as the last instruction in an ISR,
      * it won't actually be cleared in time and the ISR will fire again.
      * Insert a 2-cycle buffer to allow it to take effect. */
@@ -225,6 +218,10 @@ static inline void dispatch_handler(uint32 exti_num) {
     if (exti_channels[exti_num].handler) {
         (exti_channels[exti_num].handler)();
     }
+}
+
+static inline void clear_pending(uint32 exti_num) {
+    *bb_perip(&EXTI_BASE->PR, exti_num) = 1;
 }
 
 static inline void enable_irq(afio_exti_num exti) {

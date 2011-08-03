@@ -38,10 +38,6 @@
  * Internal state
  */
 
-/* Status bitmaps, for external interrupts with multiplexed IRQs */
-static uint16 exti_9_5_en = 0;
-static uint16 exti_15_10_en = 0;
-
 typedef struct exti_channel {
     void (*handler)(void);
     uint32 irq_line;
@@ -69,9 +65,6 @@ static exti_channel exti_channels[] = {
 /*
  * Convenience routines
  */
-
-static inline void enable_irq(afio_exti_num exti_num);
-static inline void maybe_disable_irq(afio_exti_num exti_num);
 
 /**
  * @brief Register a handler to run upon external interrupt.
@@ -118,7 +111,7 @@ void exti_attach_interrupt(afio_exti_num num,
     bb_peri_set_bit(&EXTI_BASE->IMR, num, 1);
 
     /* Enable the interrupt line */
-    enable_irq(num);
+    nvic_irq_enable(exti_channels[num].irq_line);
 }
 
 /**
@@ -133,10 +126,6 @@ void exti_detach_interrupt(afio_exti_num num) {
     /* Then, clear the trigger selection registers */
     bb_peri_set_bit(&EXTI_BASE->FTSR, num, 0);
     bb_peri_set_bit(&EXTI_BASE->RTSR, num, 0);
-
-    /* Next, disable the IRQ, unless it's multiplexed and there are
-     * other active external interrupts on the same IRQ line */
-    maybe_disable_irq(num);
 
     /* Finally, unregister the user's handler */
     exti_channels[num].handler = NULL;
@@ -222,28 +211,4 @@ static inline void dispatch_handler(uint32 exti_num) {
 
 static inline void clear_pending(uint32 exti_num) {
     EXTI_BASE->PR = 1 << exti_num;
-}
-
-static inline void enable_irq(afio_exti_num exti) {
-    /* Maybe twiddle the IRQ bitmap for extis with multiplexed IRQs */
-    if (exti > 4) {
-        uint16 *bitmap = exti < 10 ? &exti_9_5_en : &exti_15_10_en;
-        *bb_sramp(bitmap, exti) = 1;
-    }
-
-    nvic_irq_enable(exti_channels[exti].irq_line);
-}
-
-static inline void maybe_disable_irq(afio_exti_num exti) {
-    if (exti > 4) {
-        uint16 *bitmap = exti < 10 ? &exti_9_5_en : &exti_15_10_en;
-        *bb_sramp(bitmap, exti) = 0;
-        if (*bitmap == 0) {
-            /* All of the external interrupts which share this IRQ
-             * line are disabled. */
-            nvic_irq_disable(exti_channels[exti].irq_line);
-        }
-    } else {
-        nvic_irq_disable(exti_channels[exti].irq_line);
-    }
 }

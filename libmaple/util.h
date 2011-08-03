@@ -46,7 +46,7 @@ extern "C"{
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 /** Bits m to n of x */
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
-#define IS_POWER_OF_TWO(v)  (v && !(v & (v - 1)))
+#define IS_POWER_OF_TWO(v)  ((v) && !((v) & ((v) - 1)))
 
 /*
  * Failure routines

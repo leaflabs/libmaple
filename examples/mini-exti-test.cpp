@@ -1,10 +1,10 @@
 /*
  * EXTI test (Maple Mini only).
  *
- * Setup: For i from 1 to N_EXTI (see below), connect exti_i_pin to
- * src_i_pin.  Connect via SerialUSB and press a key to perform a test
- * run.  In the printed results For each EXTI within a test run, the
- * number triggered should match the number handled.
+ * Setup: For i from 0 to N_EXTI-1 (see below), connect exti_pins[i]
+ * to src_pins[i].  Connect via SerialUSB and press a key to perform a
+ * test run.  In the printed results For each EXTI within a test run,
+ * the number triggered should match the number handled.
  */
 
 #include <stdio.h>

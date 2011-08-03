@@ -34,6 +34,10 @@
 #include "nvic.h"
 #include "bitband.h"
 
+static inline void handle_exti(uint32 exti_num);
+static inline void clear_pending(uint32 exti_num);
+static inline void dispatch_handler(uint32 exti_num);
+
 /*
  * Internal state
  */
@@ -135,8 +139,6 @@ void exti_detach_interrupt(afio_exti_num num) {
  * Interrupt handlers
  */
 
-static inline void handle_exti(uint32 exti_num);
-
 void __irq_exti0(void) {
     handle_exti(AFIO_EXTI_0);
 }
@@ -188,9 +190,6 @@ void __irq_exti15_10(void) {
 /*
  * Auxiliary functions
  */
-
-static inline void clear_pending(uint32 exti_num);
-static inline void dispatch_handler(uint32 exti_num);
 
 static inline void handle_exti(uint32 exti) {
     dispatch_handler(exti);

@@ -64,7 +64,7 @@ typedef struct dac_reg_map {
                               holding register */
     __io uint32 DHR12LD; /**< Dual DAC 12-bit left-aligned data
                               holding register */
-    __io uint32 DHR8RD;  /**< Dual DAC 8-bit left-aligned data holding
+    __io uint32 DHR8RD;  /**< Dual DAC 8-bit right-aligned data holding
                               register */
     __io uint32 DOR1;    /**< Channel 1 data output register */
     __io uint32 DOR2;    /**< Channel 2 data output register */

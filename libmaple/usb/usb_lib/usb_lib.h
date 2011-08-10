@@ -24,7 +24,6 @@
 #include "usb_core.h"
 #include "usb_init.h"
 #include "usb_mem.h"
-#include "usb_int.h"
 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/

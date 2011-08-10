@@ -36,7 +36,6 @@ cSRCS_$(d) := adc.c                    \
               usb/usb_cdcacm.c         \
               usb/usb_lib/usb_core.c   \
               usb/usb_lib/usb_init.c   \
-              usb/usb_lib/usb_int.c    \
               usb/usb_lib/usb_mem.c    \
               usb/usb_lib/usb_regs.c
 

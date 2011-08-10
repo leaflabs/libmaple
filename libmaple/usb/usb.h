@@ -39,6 +39,25 @@ extern "C" {
 #define USB_ISR_MSK 0xBF00
 #endif
 
+typedef enum usb_dev_state {
+    USB_UNCONNECTED,
+    USB_ATTACHED,
+    USB_POWERED,
+    USB_SUSPENDED,
+    USB_ADDRESSED,
+    USB_CONFIGURED
+} usb_dev_state;
+
+/* Encapsulates global state formerly handled by usb_lib/
+ * functionality */
+typedef struct usblib_dev {
+    uint32 irq_mask;
+    void (**ep_int_in)(void);
+    void (**ep_int_out)(void);
+    usb_dev_state state;
+} usblib_dev;
+
+extern usblib_dev *USBLIB;
 
 /*
  * Convenience routines, etc.
@@ -55,21 +74,7 @@ typedef enum {
     RESUME_ESOF
 } RESUME_STATE;
 
-typedef enum {
-    UNCONNECTED,
-    ATTACHED,
-    POWERED,
-    SUSPENDED,
-    ADDRESSED,
-    CONFIGURED
-} DEVICE_STATE;
-
-extern volatile uint32 bDeviceState;
-
-struct _DEVICE_PROP;
-struct _USER_STANDARD_REQUESTS;
-void usb_init_usblib(struct _DEVICE_PROP*,
-                     struct _USER_STANDARD_REQUESTS*);
+void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void));
 
 void usbSuspend(void);
 void usbResumeInit(void);

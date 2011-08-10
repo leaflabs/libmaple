@@ -118,6 +118,11 @@ typedef enum {
   DTR_LOW
 } RESET_STATE;
 
+/* Some forward-declared callbacks */
+void vcomDataTxCb(void);
+void vcomDataRxCb(void);
+void vcomManagementCb(void);
+
 const USB_Descriptor_Device usbVcomDescriptor_Device = {
     .bLength            = sizeof(USB_Descriptor_Device),
     .bDescriptorType    = USB_DESCRIPTOR_TYPE_DEVICE,
@@ -302,6 +307,24 @@ volatile uint32 newBytes = 0;
 RESET_STATE reset_state = DTR_UNSET;
 uint8       line_dtr_rts = 0;
 
+static void (*ep_int_in[7])(void) =
+    {vcomDataTxCb,
+     vcomManagementCb,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process};
+
+static void (*ep_int_out[7])(void) =
+    {NOP_Process,
+     NOP_Process,
+     vcomDataRxCb,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process,
+     NOP_Process};
+
 /*
  * VCOM callbacks
  */
@@ -388,11 +411,11 @@ void vcomSetLineState(void) {
 RESULT usbPowerOn(void) {
     USB_BASE->CNTR = USB_CNTR_FRES;
 
-    wInterrupt_Mask = 0;
-    USB_BASE->CNTR = wInterrupt_Mask;
+    USBLIB->irq_mask = 0;
+    USB_BASE->CNTR = USBLIB->irq_mask;
     USB_BASE->ISTR = 0;
-    wInterrupt_Mask = USB_CNTR_RESETM | USB_CNTR_SUSPM | USB_CNTR_WKUPM;
-    USB_BASE->CNTR = wInterrupt_Mask;
+    USBLIB->irq_mask = USB_CNTR_RESETM | USB_CNTR_SUSPM | USB_CNTR_WKUPM;
+    USB_BASE->CNTR = USBLIB->irq_mask;
 
     return USB_SUCCESS;
 }
@@ -402,11 +425,11 @@ void usbInit(void) {
     usbPowerOn();
 
     USB_BASE->ISTR = 0;
-    wInterrupt_Mask = USB_ISR_MSK;
-    USB_BASE->CNTR = wInterrupt_Mask;
+    USBLIB->irq_mask = USB_ISR_MSK;
+    USB_BASE->CNTR = USBLIB->irq_mask;
 
     nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
-    bDeviceState = UNCONNECTED;
+    USBLIB->state = USB_UNCONNECTED;
 }
 
 /* choose addresses to give endpoints the max 64 byte buffers */
@@ -450,7 +473,7 @@ void usbReset(void) {
     usb_set_ep_tx_stat(VCOM_TX_ENDP, USB_EP_STAT_TX_NAK);
     usb_set_ep_rx_stat(VCOM_TX_ENDP, USB_EP_STAT_RX_DISABLED);
 
-    bDeviceState = ATTACHED;
+    USBLIB->state = USB_ATTACHED;
     SetDeviceAddress(0);
 
     /* reset the rx fifo */
@@ -585,12 +608,12 @@ u8* usbGetStringDescriptor(u16 length) {
 /* internal callbacks to respond to standard requests */
 void usbSetConfiguration(void) {
     if (pInformation->Current_Configuration != 0) {
-        bDeviceState = CONFIGURED;
+        USBLIB->state = USB_CONFIGURED;
     }
 }
 
 void usbSetDeviceAddress(void) {
-    bDeviceState = ADDRESSED;
+    USBLIB->state = USB_ADDRESSED;
 }
 
 /*
@@ -628,24 +651,6 @@ USER_STANDARD_REQUESTS User_Standard_Requests =
      NOP_Process,
      usbSetDeviceAddress};
 
-void (*pEpInt_IN[7])(void) =
-    {vcomDataTxCb,
-     vcomManagementCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
-
-void (*pEpInt_OUT[7])(void) =
-    {NOP_Process,
-     NOP_Process,
-     vcomDataRxCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
-
 /*
  * CDC ACM routines
  */
@@ -656,7 +661,7 @@ void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
     gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host
 
     /* initialize USB peripheral */
-    usb_init_usblib(&Device_Property, &User_Standard_Requests);
+    usb_init_usblib(ep_int_in, ep_int_out);
 }
 
 void usb_cdcacm_disable(gpio_dev *disc_dev, uint8 disc_bit) {

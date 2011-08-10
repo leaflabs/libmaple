@@ -34,19 +34,18 @@
 extern "C" {
 #endif
 
-extern void (*pEpInt_IN[7])(void);
-extern void (*pEpInt_OUT[7])(void);
-extern DEVICE_PROP Device_Property;
-extern USER_STANDARD_REQUESTS User_Standard_Requests;
-extern DEVICE  Device_Table;
-extern DEVICE_INFO Device_Info;
+extern USER_STANDARD_REQUESTS  User_Standard_Requests;
+extern USER_STANDARD_REQUESTS *pUser_Standard_Requests;
+
+extern DEVICE_PROP  Device_Property;
+extern DEVICE_PROP *pProperty;
+
+extern DEVICE_INFO  Device_Info;
+extern DEVICE_INFO *pInformation;
+
+extern DEVICE Device_Table;
 extern u16 SaveRState;
 extern u16 SaveTState;
-extern DEVICE_INFO* pInformation;
-extern DEVICE_PROP* pProperty;
-extern USER_STANDARD_REQUESTS *pUser_Standard_Requests;
-extern u16 SaveState ;
-extern u16 wInterrupt_Mask;
 
 #ifdef __cplusplus
 }

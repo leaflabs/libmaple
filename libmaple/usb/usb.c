@@ -49,21 +49,14 @@ static void dispatch_ctr_lp(void);
  * usb_lib/ globals
  */
 
-volatile uint16 wIstr = 0;
-uint8 EPindex;                  /* current endpoint */
-DEVICE_INFO *pInformation;
-DEVICE_PROP *pProperty;
+volatile uint16 wIstr = 0;      /* most recently read value of wIstr */
 uint16 SaveTState;              /* caches TX status for later use */
 uint16 SaveRState;              /* caches RX status for later use */
-uint16 wInterrupt_Mask;
-DEVICE_INFO Device_Info;
-USER_STANDARD_REQUESTS *pUser_Standard_Requests;
 
 /*
  * Other state
  */
 
-volatile uint32 bDeviceState = UNCONNECTED;
 volatile uint32 bIntPackSOF = 0;
 
 struct {
@@ -71,18 +64,31 @@ struct {
   volatile uint8 bESOFcnt;
 } ResumeS;
 
+static usblib_dev usblib = {
+    .irq_mask = USB_ISR_MSK,
+    .state = USB_UNCONNECTED,
+};
+usblib_dev *USBLIB = &usblib;
+
 /*
  * Routines
  */
 
-void usb_init_usblib(DEVICE_PROP *device, USER_STANDARD_REQUESTS *user) {
+void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void)) {
     rcc_clk_enable(RCC_USB);
 
+    USBLIB->ep_int_in = ep_int_in;
+    USBLIB->ep_int_out = ep_int_out;
+
+    /* usb_lib/ declares both and then assumes that pFoo points to Foo
+     * (even though the names don't always match), which is stupid for
+     * all of the obvious reasons, but whatever.  Here we are. */
     pInformation = &Device_Info;
+    pProperty = &Device_Property;
+    pUser_Standard_Requests = &User_Standard_Requests;
+
     pInformation->ControlState = 2; /* FIXME [0.0.12] use
                                        CONTROL_STATE enumerator */
-    pProperty = device;
-    pUser_Standard_Requests = user;
     pProperty->Init();
 }
 
@@ -97,7 +103,7 @@ void usbSuspend(void) {
   cntr |= USB_CNTR_LP_MODE;
   USB_BASE->CNTR = cntr;
 
-  bDeviceState = SUSPENDED;
+  USBLIB->state = USB_SUSPENDED;
 }
 
 void usbResumeInit(void) {
@@ -167,33 +173,33 @@ void __irq_usb_lp_can_rx0(void) {
   /* Use USB_ISR_MSK to only include code for bits we care about. */
 
 #if (USB_ISR_MSK & USB_ISTR_RESET)
-  if (wIstr & USB_ISTR_RESET & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_RESET & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_RESET;
     pProperty->Reset();
   }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_PMAOVR)
-  if (wIstr & ISTR_PMAOVR & wInterrupt_Mask) {
+  if (wIstr & ISTR_PMAOVR & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_PMAOVR;
   }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_ERR)
-  if (wIstr & USB_ISTR_ERR & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_ERR & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_ERR;
   }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_WKUP)
-  if (wIstr & USB_ISTR_WKUP & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_WKUP & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_WKUP;
     usbResume(RESUME_EXTERNAL);
   }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_SUSP)
-  if (wIstr & USB_ISTR_SUSP & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_SUSP & USBLIB->irq_mask) {
     /* check if SUSPEND is possible */
     if (SUSPEND_ENABLED) {
         usbSuspend();
@@ -207,14 +213,14 @@ void __irq_usb_lp_can_rx0(void) {
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_SOF)
-  if (wIstr & USB_ISTR_SOF & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_SOF & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_SOF;
     bIntPackSOF++;
   }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_ESOF)
-  if (wIstr & USB_ISTR_ESOF & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_ESOF & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_ESOF;
     /* resume handling timing is made with ESOFs */
     usbResume(RESUME_ESOF); /* request without change of the machine state */
@@ -226,7 +232,7 @@ void __irq_usb_lp_can_rx0(void) {
    */
 
 #if (USB_ISR_MSK & USB_ISTR_CTR)
-  if (wIstr & USB_ISTR_CTR & wInterrupt_Mask) {
+  if (wIstr & USB_ISTR_CTR & USBLIB->irq_mask) {
     dispatch_ctr_lp();
   }
 #endif
@@ -239,11 +245,11 @@ void usbWaitReset(void) {
 }
 
 uint8 usbIsConfigured() {
-  return (bDeviceState == CONFIGURED);
+  return USBLIB->state == USB_CONFIGURED;
 }
 
 uint8 usbIsConnected() {
-  return (bDeviceState != UNCONNECTED);
+  return USBLIB->state != USB_UNCONNECTED;
 }
 
 /*
@@ -349,11 +355,11 @@ static inline void dispatch_endpt(uint8 ep) {
      * TODO try to find out if neither being set is possible. */
     if (epr & USB_EP_CTR_RX) {
         usb_clear_ctr_rx(ep);
-        (pEpInt_OUT[ep - 1])();
+        (USBLIB->ep_int_out[ep - 1])();
     }
     if (epr & USB_EP_CTR_TX) {
         usb_clear_ctr_tx(ep);
-        (pEpInt_IN[ep - 1])();
+        (USBLIB->ep_int_in[ep - 1])();
     }
 }
 

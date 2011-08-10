@@ -36,7 +36,6 @@
 #include "nvic.h"
 
 #include "usb.h"
-#include "usb_config.h"
 #include "descriptors.h"
 #include "usb_lib_globals.h"
 #include "usb_reg_map.h"
@@ -136,6 +135,7 @@ const USB_Descriptor_Device usbVcomDescriptor_Device = {
     .bNumConfigurations = 0x01,
 };
 
+#define MAX_POWER (100 >> 1)
 const USB_Descriptor_Config usbVcomDescriptor_Config = {
     .Config_Header = {
         .bLength              = sizeof(USB_Descriptor_Config_Header),
@@ -146,7 +146,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
         .iConfiguration       = 0x00,
         .bmAttributes         = (USB_CONFIG_ATTR_BUSPOWERED |
                                  USB_CONFIG_ATTR_SELF_POWERED),
-        .bMaxPower            = USB_CONFIG_MAX_POWER,
+        .bMaxPower            = MAX_POWER,
     },
 
     .CCI_Interface = {
@@ -402,13 +402,15 @@ void usbInit(void) {
     usbPowerOn();
 
     USB_BASE->ISTR = 0;
-    wInterrupt_Mask = ISR_MSK;
+    wInterrupt_Mask = USB_ISR_MSK;
     USB_BASE->CNTR = wInterrupt_Mask;
 
     nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
     bDeviceState = UNCONNECTED;
 }
 
+/* choose addresses to give endpoints the max 64 byte buffers */
+#define BTABLE_ADDRESS        0x00
 void usbReset(void) {
     pInformation->Current_Configuration = 0;
 
@@ -416,7 +418,7 @@ void usbReset(void) {
     pInformation->Current_Feature = (USB_CONFIG_ATTR_BUSPOWERED |
                                      USB_CONFIG_ATTR_SELF_POWERED);
 
-    USB_BASE->BTABLE = USB_BTABLE_ADDRESS;
+    USB_BASE->BTABLE = BTABLE_ADDRESS;
 
     /* setup control endpoint 0 */
     usb_set_ep_type(USB_EP0, USB_EP_EP_TYPE_CONTROL);
@@ -595,10 +597,12 @@ void usbSetDeviceAddress(void) {
  * Globals required by usb_lib/
  */
 
+#define NUM_ENDPTS                0x04
 DEVICE Device_Table =
     {NUM_ENDPTS,
      1};
 
+#define MAX_PACKET_SIZE            0x40  /* 64B, maximum for USB FS Devices */
 DEVICE_PROP Device_Property =
     {usbInit,
      usbReset,
@@ -611,7 +615,7 @@ DEVICE_PROP Device_Property =
      usbGetConfigDescriptor,
      usbGetStringDescriptor,
      0,
-     bMaxPacketSize};
+     MAX_PACKET_SIZE};
 
 USER_STANDARD_REQUESTS User_Standard_Requests =
     {NOP_Process,

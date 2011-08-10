@@ -38,7 +38,6 @@
 #include "rcc.h"
 
 #include "usb_reg_map.h"
-#include "usb_config.h"
 #include "usb_lib_globals.h"
 
 #include "usb_type.h"
@@ -109,7 +108,7 @@ void usbResumeInit(void) {
   USB_BASE->CNTR = cntr;
 
   /* Enable interrupt lines */
-  USB_BASE->CNTR = ISR_MSK;
+  USB_BASE->CNTR = USB_ISR_MSK;
 }
 
 void usbResume(RESUME_STATE eResumeSetVal) {
@@ -161,41 +160,42 @@ void usbResume(RESUME_STATE eResumeSetVal) {
     }
 }
 
+#define SUSPEND_ENABLED 1
 void __irq_usb_lp_can_rx0(void) {
   wIstr = USB_BASE->ISTR;
 
-  /* Use ISR_MSK to only include code for bits we care about. */
+  /* Use USB_ISR_MSK to only include code for bits we care about. */
 
-#if (ISR_MSK & USB_ISTR_RESET)
+#if (USB_ISR_MSK & USB_ISTR_RESET)
   if (wIstr & USB_ISTR_RESET & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_RESET;
     pProperty->Reset();
   }
 #endif
 
-#if (ISR_MSK & USB_ISTR_PMAOVR)
+#if (USB_ISR_MSK & USB_ISTR_PMAOVR)
   if (wIstr & ISTR_PMAOVR & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_PMAOVR;
   }
 #endif
 
-#if (ISR_MSK & USB_ISTR_ERR)
+#if (USB_ISR_MSK & USB_ISTR_ERR)
   if (wIstr & USB_ISTR_ERR & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_ERR;
   }
 #endif
 
-#if (ISR_MSK & USB_ISTR_WKUP)
+#if (USB_ISR_MSK & USB_ISTR_WKUP)
   if (wIstr & USB_ISTR_WKUP & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_WKUP;
     usbResume(RESUME_EXTERNAL);
   }
 #endif
 
-#if (ISR_MSK & USB_ISTR_SUSP)
+#if (USB_ISR_MSK & USB_ISTR_SUSP)
   if (wIstr & USB_ISTR_SUSP & wInterrupt_Mask) {
     /* check if SUSPEND is possible */
-    if (F_SUSPEND_ENABLED) {
+    if (SUSPEND_ENABLED) {
         usbSuspend();
     } else {
         /* if not possible then resume after xx ms */
@@ -206,14 +206,14 @@ void __irq_usb_lp_can_rx0(void) {
 }
 #endif
 
-#if (ISR_MSK & USB_ISTR_SOF)
+#if (USB_ISR_MSK & USB_ISTR_SOF)
   if (wIstr & USB_ISTR_SOF & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_SOF;
     bIntPackSOF++;
   }
 #endif
 
-#if (ISR_MSK & USB_ISTR_ESOF)
+#if (USB_ISR_MSK & USB_ISTR_ESOF)
   if (wIstr & USB_ISTR_ESOF & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_ESOF;
     /* resume handling timing is made with ESOFs */
@@ -225,13 +225,14 @@ void __irq_usb_lp_can_rx0(void) {
    * Service the correct transfer interrupt.
    */
 
-#if (ISR_MSK & USB_ISTR_CTR)
+#if (USB_ISR_MSK & USB_ISTR_CTR)
   if (wIstr & USB_ISTR_CTR & wInterrupt_Mask) {
     dispatch_ctr_lp();
   }
 #endif
 }
 
+#define RESET_DELAY                     100000
 void usbWaitReset(void) {
   delay_us(RESET_DELAY);
   nvic_sys_reset();

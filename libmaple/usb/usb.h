@@ -34,6 +34,12 @@
 extern "C" {
 #endif
 
+#ifndef USB_ISR_MSK
+/* Handle CTRM, WKUPM, SUSPM, ERRM, SOFM, ESOFM, RESETM */
+#define USB_ISR_MSK 0xBF00
+#endif
+
+
 /*
  * Convenience routines, etc.
  */

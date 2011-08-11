@@ -27,8 +27,7 @@
 #ifndef _USB_H_
 #define _USB_H_
 
-#include "libmaple.h"
-#include "gpio.h"
+#include "libmaple_types.h"
 
 #ifdef __cplusplus
 extern "C" {

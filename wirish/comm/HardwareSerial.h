@@ -47,9 +47,6 @@
  * the documentation accordingly.
  */
 
-/* TODO [0.1.0] Document this here and make leaflabs-docs' page use
- * Breathe */
-
 class HardwareSerial : public Print {
 public:
     HardwareSerial(usart_dev *usart_device,

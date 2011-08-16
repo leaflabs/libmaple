@@ -67,17 +67,9 @@ HardwareSerial::HardwareSerial(usart_dev *usart_device,
     this->rx_pin = rx_pin;
 }
 
-uint8 HardwareSerial::read(void) {
-    return usart_getc(usart_device);
-}
-
-uint32 HardwareSerial::available(void) {
-    return usart_data_available(usart_device);
-}
-
-void HardwareSerial::write(unsigned char ch) {
-    usart_putc(usart_device, ch);
-}
+/*
+ * Set up/tear down
+ */
 
 void HardwareSerial::begin(uint32 baud) {
     ASSERT(baud <= usart_device->max_baud);
@@ -104,6 +96,22 @@ void HardwareSerial::begin(uint32 baud) {
 
 void HardwareSerial::end(void) {
     usart_disable(usart_device);
+}
+
+/*
+ * I/O
+ */
+
+uint8 HardwareSerial::read(void) {
+    return usart_getc(usart_device);
+}
+
+uint32 HardwareSerial::available(void) {
+    return usart_data_available(usart_device);
+}
+
+void HardwareSerial::write(unsigned char ch) {
+    usart_putc(usart_device, ch);
 }
 
 void HardwareSerial::flush(void) {

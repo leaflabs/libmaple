@@ -29,6 +29,7 @@
  * @brief Wirish serial port implementation.
  */
 
+#include "libmaple.h"
 #include "gpio.h"
 #include "timer.h"
 
@@ -48,13 +49,12 @@
 #define RX5 BOARD_UART5_RX_PIN
 #endif
 
-// TODO Put these magic numbers into boards.h #defines
-HardwareSerial Serial1(USART1, TX1, RX1, 72000000UL);
-HardwareSerial Serial2(USART2, TX2, RX2, 36000000UL);
-HardwareSerial Serial3(USART3, TX3, RX3, 36000000UL);
+HardwareSerial Serial1(USART1, TX1, RX1, PCLK2);
+HardwareSerial Serial2(USART2, TX2, RX2, PCLK1);
+HardwareSerial Serial3(USART3, TX3, RX3, PCLK1);
 #if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
-HardwareSerial Serial4(UART4,  TX4, RX4, 36000000UL);
-HardwareSerial Serial5(UART5,  TX5, RX5, 36000000UL);
+HardwareSerial Serial4(UART4,  TX4, RX4, PCLK1);
+HardwareSerial Serial5(UART5,  TX5, RX5, PCLK1);
 #endif
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device,

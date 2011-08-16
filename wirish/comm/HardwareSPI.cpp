@@ -33,9 +33,19 @@
 
 #include "timer.h"
 #include "util.h"
+#include "rcc.h"
 
 #include "wirish.h"
 #include "boards.h"
+
+struct spi_pins {
+    uint8 nss;
+    uint8 sck;
+    uint8 miso;
+    uint8 mosi;
+};
+
+static const spi_pins* dev_to_spi_pins(spi_dev *dev);
 
 static void enable_device(spi_dev *dev,
                           bool as_master,
@@ -43,8 +53,26 @@ static void enable_device(spi_dev *dev,
                           spi_cfg_flag endianness,
                           spi_mode mode);
 
+static const spi_pins board_spi_pins[] __FLASH__ = {
+    {BOARD_SPI1_NSS_PIN,
+     BOARD_SPI1_SCK_PIN,
+     BOARD_SPI1_MISO_PIN,
+     BOARD_SPI1_MOSI_PIN},
+    {BOARD_SPI2_NSS_PIN,
+     BOARD_SPI2_SCK_PIN,
+     BOARD_SPI2_MISO_PIN,
+     BOARD_SPI2_MOSI_PIN},
+#ifdef STM32_HIGH_DENSITY
+    {BOARD_SPI3_NSS_PIN,
+     BOARD_SPI3_SCK_PIN,
+     BOARD_SPI3_MISO_PIN,
+     BOARD_SPI3_MOSI_PIN},
+#endif
+};
+
+
 /*
- * Constructor, public methods
+ * Constructor
  */
 
 HardwareSPI::HardwareSPI(uint32 spi_num) {
@@ -64,6 +92,10 @@ HardwareSPI::HardwareSPI(uint32 spi_num) {
         ASSERT(0);
     }
 }
+
+/*
+ * Set up/tear down
+ */
 
 void HardwareSPI::begin(SPIFrequency frequency, uint32 bitOrder, uint32 mode) {
     if (mode >= 4) {
@@ -111,6 +143,10 @@ void HardwareSPI::end(void) {
     spi_peripheral_disable(this->spi_d);
 }
 
+/*
+ * I/O
+ */
+
 uint8 HardwareSPI::read(void) {
     uint8 buf[1];
     this->read(buf, 1);
@@ -140,6 +176,26 @@ void HardwareSPI::write(const uint8 *data, uint32 length) {
 uint8 HardwareSPI::transfer(uint8 byte) {
     this->write(byte);
     return this->read();
+}
+
+/*
+ * Pin accessors
+ */
+
+uint8 HardwareSPI::misoPin(void) {
+    return dev_to_spi_pins(this->spi_d)->miso;
+}
+
+uint8 HardwareSPI::mosiPin(void) {
+    return dev_to_spi_pins(this->spi_d)->mosi;
+}
+
+uint8 HardwareSPI::sckPin(void) {
+    return dev_to_spi_pins(this->spi_d)->sck;
+}
+
+uint8 HardwareSPI::nssPin(void) {
+    return dev_to_spi_pins(this->spi_d)->nss;
 }
 
 /*
@@ -175,6 +231,17 @@ uint8 HardwareSPI::recv(void) {
 static void configure_gpios(spi_dev *dev, bool as_master);
 static spi_baud_rate determine_baud_rate(spi_dev *dev, SPIFrequency freq);
 
+static const spi_pins* dev_to_spi_pins(spi_dev *dev) {
+    switch (dev->clk_id) {
+    case RCC_SPI1: return board_spi_pins;
+    case RCC_SPI2: return board_spi_pins + 1;
+#ifdef STM32_HIGH_DENSITY
+    case RCC_SPI3: return board_spi_pins + 2;
+#endif
+    default:       return NULL;
+    }
+}
+
 /* Enables the device in master or slave full duplex mode.  If you
  * change this code, you must ensure that appropriate changes are made
  * to HardwareSPI::end(). */
@@ -202,47 +269,10 @@ static void disable_pwm(const stm32_pin_info *i) {
     }
 }
 
-typedef struct spi_pins {
-    uint8 nss;
-    uint8 sck;
-    uint8 miso;
-    uint8 mosi;
-} spi_pins;
-
 static void configure_gpios(spi_dev *dev, bool as_master) {
-    const spi_pins spi_pin_config[] = {
-        {BOARD_SPI1_NSS_PIN,
-         BOARD_SPI1_SCK_PIN,
-         BOARD_SPI1_MISO_PIN,
-         BOARD_SPI1_MOSI_PIN},
-        {BOARD_SPI2_NSS_PIN,
-         BOARD_SPI2_SCK_PIN,
-         BOARD_SPI2_MISO_PIN,
-         BOARD_SPI2_MOSI_PIN},
-#ifdef STM32_HIGH_DENSITY
-        {BOARD_SPI3_NSS_PIN,
-         BOARD_SPI3_SCK_PIN,
-         BOARD_SPI3_MISO_PIN,
-         BOARD_SPI3_MOSI_PIN},
-#endif
-    };
+    const spi_pins *pins = dev_to_spi_pins(dev);
 
-    const spi_pins *pins;
-
-    switch (dev->clk_id) {
-    case RCC_SPI1:
-        pins = &spi_pin_config[0];
-        break;
-    case RCC_SPI2:
-        pins = &spi_pin_config[1];
-        break;
-#ifdef STM32_HIGH_DENSITY
-    case RCC_SPI3:
-        pins = &spi_pin_config[2];
-        break;
-#endif
-    default:
-        ASSERT(0);
+    if (!pins) {
         return;
     }
 

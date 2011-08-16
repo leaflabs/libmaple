@@ -75,6 +75,10 @@ public:
      */
     HardwareSPI(uint32 spiPortNumber);
 
+    /*
+     * Set up/tear down
+     */
+
     /**
      * @brief Turn on a SPI port and set its GPIO pin modes for use as master.
      *
@@ -111,6 +115,10 @@ public:
      * @brief Disables the SPI port, but leaves its GPIO pin modes unchanged.
      */
     void end(void);
+
+    /*
+     * I/O
+     */
 
     /**
      * @brief Return the next unread byte.
@@ -151,6 +159,30 @@ public:
      * @return Next unread byte.
      */
     uint8 transfer(uint8 data);
+
+    /*
+     * Pin accessors
+     */
+
+    /**
+     * @brief Return the number of the MISO (master in, slave out) pin
+     */
+    uint8 misoPin(void);
+
+    /**
+     * @brief Return the number of the MOSI (master out, slave in) pin
+     */
+    uint8 mosiPin(void);
+
+    /**
+     * @brief Return the number of the SCK (serial clock) pin
+     */
+    uint8 sckPin(void);
+
+    /**
+     * @brief Return the number of the NSS (slave select) pin
+     */
+    uint8 nssPin(void);
 
     /* -- The following methods are deprecated --------------------------- */
 

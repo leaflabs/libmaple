@@ -208,11 +208,8 @@ uint8 HardwareSPI::send(uint8 data) {
 }
 
 uint8 HardwareSPI::send(uint8 *buf, uint32 len) {
-    if (len == 0) {
-        return 0;
-    }
     uint32 txed = 0;
-    uint8 ret = 0;              // shut up, GCC
+    uint8 ret = 0;
     while (txed < len) {
         this->write(buf[txed++]);
         ret = this->read();

@@ -67,6 +67,10 @@ public:
     void flush(void);
     virtual void write(unsigned char);
     using Print::write;
+
+    /* Pin accessors */
+    int txPin(void) { return this->tx_pin; }
+    int rxPin(void) { return this->rx_pin; }
 private:
     usart_dev *usart_device;
     uint8 tx_pin;

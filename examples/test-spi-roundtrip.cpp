@@ -76,7 +76,7 @@ void loop() {
     SerialUSB.println();
 
     SerialUSB.println("** Alice will now wax eloquent in various styles. "
-                    "Press any key for the next configuration.");
+                      "Press any key for the next configuration.");
     soliloquies(MSBFIRST);
     soliloquies(LSBFIRST);
 

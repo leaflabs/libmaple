@@ -280,7 +280,12 @@ typedef struct dma_handler_config {
 typedef struct dma_dev {
     dma_reg_map *regs;             /**< Register map */
     rcc_clk_id clk_id;             /**< Clock ID */
-    dma_handler_config handlers[]; /**< IRQ handlers and NVIC numbers. */
+    dma_handler_config handlers[]; /**<
+                                    * @brief IRQ handlers and NVIC numbers.
+                                    *
+                                    * @see dma_attach_interrupt()
+                                    * @see dma_detach_interrupt()
+                                    */
 } dma_dev;
 
 extern dma_dev *DMA1;

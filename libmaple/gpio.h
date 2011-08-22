@@ -62,15 +62,15 @@ typedef struct gpio_reg_map {
  * Used to determine which GPIO port to map an external interrupt line
  * onto. */
 /* (See AFIO sections, below) */
-typedef enum {
-    AFIO_EXTI_PA,               /**< Use PAx pin. */
-    AFIO_EXTI_PB,               /**< Use PBx pin. */
-    AFIO_EXTI_PC,               /**< Use PCx pin. */
-    AFIO_EXTI_PD,               /**< Use PDx pin. */
+typedef enum afio_exti_port {
+    AFIO_EXTI_PA,               /**< Use port A (PAx) pin. */
+    AFIO_EXTI_PB,               /**< Use port B (PBx) pin. */
+    AFIO_EXTI_PC,               /**< Use port C (PCx) pin. */
+    AFIO_EXTI_PD,               /**< Use port D (PDx) pin. */
 #ifdef STM32_HIGH_DENSITY
-    AFIO_EXTI_PE,               /**< Use PEx pin. */
-    AFIO_EXTI_PF,               /**< Use PFx pin. */
-    AFIO_EXTI_PG,               /**< Use PGx pin. */
+    AFIO_EXTI_PE,               /**< Use port E (PEx) pin. */
+    AFIO_EXTI_PF,               /**< Use port F (PFx) pin. */
+    AFIO_EXTI_PG,               /**< Use port G (PGx) pin. */
 #endif
 } afio_exti_port;
 
@@ -135,8 +135,12 @@ extern gpio_dev* const GPIOG;
 #define GPIO_CR_MODE_OUTPUT_2MHZ        0x2
 #define GPIO_CR_MODE_OUTPUT_50MHZ       0x3
 
-/** GPIO Pin modes.  These only allow for 50MHZ max output speeds; if
- * you want slower, use direct register access. */
+/**
+ * @brief GPIO Pin modes.
+ *
+ * These only allow for 50MHZ max output speeds; if you want slower,
+ * use direct register access.
+ */
 typedef enum gpio_pin_mode {
     GPIO_OUTPUT_PP = (GPIO_CR_CNF_OUTPUT_PP |
                       GPIO_CR_MODE_OUTPUT_50MHZ), /**< Output push-pull. */
@@ -419,7 +423,10 @@ void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port);
  * not used in either MAPR or MAPR2 */
 #define AFIO_REMAP_USE_MAPR2            (1 << 31)
 
-/** Available peripheral remaps. */
+/**
+ * @brief Available peripheral remaps.
+ * @see afio_remap()
+ */
 typedef enum afio_remap_peripheral {
     AFIO_REMAP_ADC2_ETRGREG  = AFIO_MAPR_ADC2_ETRGREG_REMAP, /**<
         ADC 2 external trigger regular conversion remapping */
@@ -486,6 +493,8 @@ void afio_remap(afio_remap_peripheral p);
  *
  * Used to configure the behavior of JTAG and Serial Wire (SW) debug
  * ports and their associated GPIO pins.
+ *
+ * @see afio_cfg_debug_ports()
  */
 typedef enum afio_debug_cfg {
     AFIO_DEBUG_FULL_SWJ = AFIO_MAPR_SWJ_CFG_FULL_SWJ, /**<

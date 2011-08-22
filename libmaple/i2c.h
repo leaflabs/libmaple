@@ -47,7 +47,7 @@ typedef struct i2c_reg_map {
     __io uint32 SR1;            /**< Status register 1 */
     __io uint32 SR2;            /**< Status register 2 */
     __io uint32 CCR;            /**< Clock control register */
-    __io uint32 TRISE;          /**< TRISE register */
+    __io uint32 TRISE;          /**< TRISE (rise time) register */
 } i2c_reg_map;
 
 /** I2C device states */

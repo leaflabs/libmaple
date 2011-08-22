@@ -124,13 +124,13 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
     while (!(RCC_BASE->CR & RCC_CR_HSERDY))
         ;
 
-    /* Now the PLL  */
+    /* Now the PLL */
     cr |= RCC_CR_PLLON;
     RCC_BASE->CR = cr;
     while (!(RCC_BASE->CR & RCC_CR_PLLRDY))
         ;
 
-    /* Finally, let's switch over to the PLL  */
+    /* Finally, let's switch over to the PLL */
     cfgr &= ~RCC_CFGR_SW;
     cfgr |= RCC_CFGR_SW_PLL;
     RCC_BASE->CFGR = cfgr;
@@ -139,52 +139,52 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
 }
 
 /**
- * @brief Turn on the clock line on a device
- * @param device Clock ID of the device to turn on.
+ * @brief Turn on the clock line on a peripheral
+ * @param id Clock ID of the peripheral to turn on.
  */
-void rcc_clk_enable(rcc_clk_id device) {
+void rcc_clk_enable(rcc_clk_id id) {
     static const __io uint32* enable_regs[] = {
         [APB1] = &RCC_BASE->APB1ENR,
         [APB2] = &RCC_BASE->APB2ENR,
         [AHB] = &RCC_BASE->AHBENR,
     };
 
-    rcc_clk_domain clk_domain = rcc_dev_clk(device);
+    rcc_clk_domain clk_domain = rcc_dev_clk(id);
     __io uint32* enr = (__io uint32*)enable_regs[clk_domain];
-    uint8 lnum = rcc_dev_table[device].line_num;
+    uint8 lnum = rcc_dev_table[id].line_num;
 
     bb_peri_set_bit(enr, lnum, 1);
 }
 
 /**
- * @brief reset a device
- * @param device Clock ID of the device to reset.
+ * @brief Reset a peripheral.
+ * @param id Clock ID of the peripheral to reset.
  */
-void rcc_reset_dev(rcc_clk_id device) {
+void rcc_reset_dev(rcc_clk_id id) {
     static const __io uint32* reset_regs[] = {
         [APB1] = &RCC_BASE->APB1RSTR,
         [APB2] = &RCC_BASE->APB2RSTR,
     };
 
-    rcc_clk_domain clk_domain = rcc_dev_clk(device);
+    rcc_clk_domain clk_domain = rcc_dev_clk(id);
     __io void* addr = (__io void*)reset_regs[clk_domain];
-    uint8 lnum = rcc_dev_table[device].line_num;
+    uint8 lnum = rcc_dev_table[id].line_num;
 
     bb_peri_set_bit(addr, lnum, 1);
     bb_peri_set_bit(addr, lnum, 0);
 }
 
 /**
- * @brief Get a device's clock domain
- * @param device Device whose clock domain to return
- * @return Device's clock source
+ * @brief Get a peripheral's clock domain
+ * @param id Clock ID of the peripheral whose clock domain to return
+ * @return Clock source for the given clock ID
  */
-rcc_clk_domain rcc_dev_clk(rcc_clk_id device) {
-    return rcc_dev_table[device].clk_domain;
+rcc_clk_domain rcc_dev_clk(rcc_clk_id id) {
+    return rcc_dev_table[id].clk_domain;
 }
 
 /**
- * @brief Set the divider on a device prescaler
+ * @brief Set the divider on a peripheral prescaler
  * @param prescaler prescaler to set
  * @param divider prescaler divider
  */

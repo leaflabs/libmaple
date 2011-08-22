@@ -60,8 +60,15 @@ typedef struct nvic_reg_map {
 #define NVIC_BASE                       ((struct nvic_reg_map*)0xE000E100)
 
 /**
- * Interrupt vector table interrupt numbers.  Each enumerator is the
- * position of the corresponding interrupt in the vector table. */
+ * @brief Interrupt vector table interrupt numbers.
+ *
+ * Each positive-valued enumerator is the position of the
+ * corresponding interrupt in the vector table.  Negative-valued
+ * enumerators correspond to interrupts controlled by the system
+ * handler block.
+ *
+ * @see scb.h
+ */
 typedef enum nvic_irq_num {
     NVIC_NMI            = -14,  /**< Non-maskable interrupt */
     NVIC_HARDFAULT      = -13,  /**< Hard fault (all class of fault) */

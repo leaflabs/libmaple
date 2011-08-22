@@ -25,7 +25,8 @@
  *****************************************************************************/
 
 /**
- * @brief flash peripheral management functions
+ * @file flash.c
+ * @brief Flash management functions
  */
 
 #include "libmaple.h"

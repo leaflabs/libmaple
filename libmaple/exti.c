@@ -80,8 +80,9 @@ static exti_channel exti_channels[] = {
  * @param handler Function handler to execute when interrupt is triggered.
  * @param mode    Type of transition to trigger on, one of:
  *                EXTI_RISING, EXTI_FALLING, EXTI_RISING_FALLING.
- * @see exti_num
- * @see exti_port
+ * @see afio_exti_num
+ * @see afio_exti_port
+ * @see voidFuncPtr
  * @see exti_trigger_mode
  */
 void exti_attach_interrupt(afio_exti_num num,
@@ -120,7 +121,7 @@ void exti_attach_interrupt(afio_exti_num num,
 /**
  * @brief Unregister an external interrupt handler
  * @param num Number of the external interrupt line to disable.
- * @see exti_num
+ * @see afio_exti_num
  */
 void exti_detach_interrupt(afio_exti_num num) {
     /* First, mask the interrupt request */

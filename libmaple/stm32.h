@@ -25,11 +25,22 @@
  *****************************************************************************/
 
 /**
- *  @brief General STM32 chip-specific definitions
+ * @file stm32.h
+ * @brief STM32 chip-specific definitions
  */
 
 #ifndef _STM32_H_
 #define _STM32_H_
+
+/**
+ * \def PCLK1
+ * Clock speed of APB1 peripherals, in Hz.
+ */
+
+/**
+ * \def PCLK2
+ * Clock speed of APB2 peripherals, in Hz.
+ */
 
 #ifndef PCLK1
 #define PCLK1   36000000U
@@ -37,6 +48,11 @@
 #ifndef PCLK2
 #define PCLK2   72000000U
 #endif
+
+/**
+ * \def NR_INTERRUPTS
+ * Number of interrupts in the NVIC.
+ */
 
 #ifdef STM32_MEDIUM_DENSITY
     #define NR_INTERRUPTS 43
@@ -47,6 +63,20 @@
 #error "No STM32 board type defined!"
 #endif
 #endif
+
+/**
+ * \def NR_GPIO_PORTS
+ * Number of GPIO ports
+ */
+
+/* SRAM_SIZE intentionally not part of Doxygen interface */
+
+/**
+ * \def DELAY_US_MULT
+ * Multiplier to convert microseconds into loop iterations in delay_us().
+ *
+ * @see delay_us()
+ */
 
 /* MCU-specific configuration */
 #if defined(MCU_STM32F103RB)

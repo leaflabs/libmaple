@@ -64,6 +64,19 @@ void throb(void);
 #define DEBUG_FAULT     1
 #define DEBUG_ALL       2
 
+/**
+ * \def DEBUG_LEVEL
+ *
+ * Controls the level of assertion checking.
+ *
+ * The higher the debug level, the more assertions will be compiled
+ * in.  This increases the amount of debugging information, but slows
+ * down (and increases the size of) the binary.
+ *
+ * The debug levels, from lowest to highest, are DEBUG_NONE,
+ * DEBUG_FAULT, and DEBUG_ALL.  The default level is DEBUG_ALL.
+ */
+
 #ifndef DEBUG_LEVEL
 #define DEBUG_LEVEL DEBUG_ALL
 #endif

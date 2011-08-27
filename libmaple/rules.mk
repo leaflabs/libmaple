@@ -3,8 +3,10 @@ sp              := $(sp).x
 dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
-BUILDDIRS       += $(BUILD_PATH)/$(d)/usb
-BUILDDIRS       += $(BUILD_PATH)/$(d)/usb/usb_lib
+ifneq ($(BOARD), discovery)
+	BUILDDIRS       += $(BUILD_PATH)/$(d)/usb
+	BUILDDIRS       += $(BUILD_PATH)/$(d)/usb/usb_lib
+endif
 
 LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH) -I$(LIBMAPLE_PATH)/usb -I$(LIBMAPLE_PATH)/usb/usb_lib
 
@@ -30,8 +32,10 @@ cSRCS_$(d) := adc.c                    \
               systick.c                \
               timer.c                  \
               usart.c                  \
-              util.c                   \
-              usb/descriptors.c        \
+              util.c
+
+ifneq ($(BOARD), discovery)
+cSRCS_$(d) += usb/descriptors.c        \
               usb/usb.c                \
               usb/usb_callbacks.c      \
               usb/usb_hardware.c       \
@@ -40,6 +44,7 @@ cSRCS_$(d) := adc.c                    \
               usb/usb_lib/usb_int.c    \
               usb/usb_lib/usb_mem.c    \
               usb/usb_lib/usb_regs.c
+endif
 
 sSRCS_$(d) := exc.S
 

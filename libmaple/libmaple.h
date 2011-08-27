@@ -42,7 +42,11 @@
  *
  * FIXME this has no business being here
  */
+#ifdef BOARD_discovery
+#define USER_ADDR_ROM 0x08000000
+#else
 #define USER_ADDR_ROM 0x08005000
+#endif
 #define USER_ADDR_RAM 0x20000C00
 #define STACK_TOP     0x20000800
 

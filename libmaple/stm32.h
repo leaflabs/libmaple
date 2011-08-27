@@ -33,31 +33,6 @@
 #define _STM32_H_
 
 /*
- * User-specific configuration.
- *
- * The #defines here depend upon how libmaple is used.  Because of the
- * potential for a mismatch between them and the actual libmaple
- * usage, you should try to keep their number to an absolute minimum.
- */
-
-/**
- * \def PCLK1
- * Clock speed of APB1 peripherals, in Hz.
- */
-
-/**
- * \def PCLK2
- * Clock speed of APB2 peripherals, in Hz.
- */
-
-#ifndef PCLK1
-#define PCLK1   36000000U
-#endif
-#ifndef PCLK2
-#define PCLK2   72000000U
-#endif
-
-/*
  * Density-specific configuration.
  */
 
@@ -119,11 +94,50 @@
     #define SRAM_SIZE            0x10000
     #define DELAY_US_MULT             12
 
+#elif defined(MCU_STM32F100RB)
+    /* e.g., STM32VLDiscovery */
+
+    #define NR_GPIO_PORTS              4
+    #define SRAM_SIZE             0x5000
+    #define DELAY_US_MULT              8
+    #define RCC_PLLMUL RCC_PLLMUL_3
+    #define PCLK1   12000000U
+    #define PCLK2   24000000U
+
 #else
 
 #error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \
        "to your compiler arguments (probably in a Makefile)."
 
+#endif
+
+#ifndef RCC_PLLMUL
+#define RCC_PLLMUL RCC_PLLMUL_9
+#endif
+
+/*
+ * User-specific configuration.
+ *
+ * The #defines here depend upon how libmaple is used.  Because of the
+ * potential for a mismatch between them and the actual libmaple
+ * usage, you should try to keep their number to an absolute minimum.
+ */
+
+/**
+ * \def PCLK1
+ * Clock speed of APB1 peripherals, in Hz.
+ */
+
+/**
+ * \def PCLK2
+ * Clock speed of APB2 peripherals, in Hz.
+ */
+
+#ifndef PCLK1
+#define PCLK1   36000000U
+#endif
+#ifndef PCLK2
+#define PCLK2   72000000U
 #endif
 
 /* MCU-specific config documentation.

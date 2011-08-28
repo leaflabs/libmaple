@@ -1,19 +1,23 @@
 # Top level Makefile for libmaple
 
+CROSS_COMPILE = arm-none-eabi-
+CC = $(CROSS_COMPILE)gcc
+CXX = $(CROSS_COMPILE)g++
+LD = $(CROSS_COMPILE)ld
+
 # The main library
 lib_LIBRARIES = \
 	libmaple.a \
-	libmapleusb.a \
-	libwirish.a
+	libmapleusb.a
 
-noinst_PROGRAMS = \
-	main
+#	libwirish.a
 
-main_SOURCES = \
-	startup2.c \
-	main.cpp
+# noinst_PROGRAMS = \
+# 	main
 
-X = $(srcdir)/support/ld/maple_native
+# main_SOURCES = \
+# 	startup2.c \
+# 	main.cpp
 
 main_LDFLAGS = \
 	--gc-sections \
@@ -24,35 +28,49 @@ main_LDADD = libmaple.a
 # Main library
 libmaple_a_SOURCES = \
 	libmaple/adc.c \
+	libmaple/bkp.c \
 	libmaple/dac.c \
-	libmaple/exc.c \
+	libmaple/dma.c \
 	libmaple/exti.c \
 	libmaple/flash.c \
 	libmaple/fsmc.c \
 	libmaple/gpio.c \
+	libmaple/iwdg.c \
 	libmaple/nvic.c \
+	libmaple/pwr.c \
+	libmaple/i2c.c \
 	libmaple/rcc.c \
 	libmaple/spi.c \
+	libmaple/syscalls.c \
 	libmaple/systick.c \
-	libmaple/timers.c \
+	libmaple/timer.c \
 	libmaple/usart.c \
 	libmaple/util.c
 
 nobase_include_HEADERS = \
 	libmaple/adc.h \
+	libmaple/bitband.h \
+	libmaple/bkp.h \
 	libmaple/dac.h \
+	libmaple/delay.h \
+	libmaple/dma.h \
 	libmaple/exti.h \
 	libmaple/flash.h \
 	libmaple/fsmc.h \
 	libmaple/gpio.h \
+	libmaple/i2c.h \
+	libmaple/iwdg.h \
 	libmaple/libmaple.h \
 	libmaple/libmaple_types.h \
 	libmaple/nvic.h \
+	libmaple/pwr.h \
 	libmaple/rcc.h \
 	libmaple/ring_buffer.h \
+	libmaple/scb.h \
 	libmaple/spi.h \
+	libmaple/stm32.h \
 	libmaple/systick.h \
-	libmaple/timers.h \
+	libmaple/timer.h \
 	libmaple/usart.h \
 	libmaple/util.h \
 	libmaple/usb/descriptors.h \
@@ -81,29 +99,34 @@ libmapleusb_a_SOURCES = \
 	libmaple/usb/usb_lib/usb_regs.c
 
 libwirish_a_SOURCES = \
-	wirish/HardwareTimer.cpp \
-	wirish/Print.cpp \
-	wirish/comm/HardwareSPI.cpp \
-	wirish/comm/HardwareSerial.cpp \
-	wirish/cxxabi-compat.cpp \
-	wirish/ext_interrupts.c \
-	wirish/pwm.c \
-	wirish/time.c \
-	wirish/usb_serial.cpp \
-	wirish/wirish.c \
-	wirish/wirish_analog.c \
-	wirish/wirish_digital.c \
 	wirish/wirish_math.cpp \
-	wirish/wirish_shift.c
+	wirish/Print.cpp \
+	wirish/boards.cpp \
+	wirish/boards/maple.cpp \
+	wirish/boards/maple_mini.cpp \
+	wirish/boards/maple_native.cpp \
+	wirish/boards/maple_RET6.cpp \
+	wirish/comm/HardwareSerial.cpp \
+	wirish/comm/HardwareSPI.cpp \
+	wirish/HardwareTimer.cpp \
+	wirish/usb_serial.cpp \
+	wirish/cxxabi-compat.cpp \
+	wirish/wirish_shift.cpp \
+	wirish/wirish_analog.cpp \
+	wirish/wirish_time.cpp \
+	wirish/pwm.cpp \
+	wirish/ext_interrupts.cpp \
+	wirish/wirish_digital.cpp
 
 MCU := STM32F103RB
-BOARD ?= maple_native
+BOARD ?= maple
+DENSITY = STM32_MEDIUM_DENSITY
 
 FLAGS = \
-	-Os -g -nostdlib -Wall \
+	-Os -ggdb -nostdlib -Wall \
 	-ffunction-sections -fdata-sections -Wl,--gc-sections \
 	-mcpu=cortex-m3 -mthumb -fshort-enums -mfloat-abi=soft \
-	-DBOARD_$(BOARD) -DMCU_$(MCU) -DVECT_TAB_BASE \
+	-DBOARD_$(BOARD) -DMCU_$(MCU) -D$(DENSITY) -DVECT_TAB_BASE \
 	-I$(srcdir)/libmaple \
 	-I$(srcdir)/libmaple/usb \
 	-I$(srcdir)/libmaple/usb/usb_lib
@@ -111,5 +134,5 @@ FLAGS = \
 AM_CFLAGS = $(FLAGS) -std=gnu99
 
 AM_CXXFLAGS = $(FLAGS) \
-	-I$(srcdir)/wirish -I$(srcdir)/wirish/comm \
+	-I$(srcdir)/wirish -I$(srcdir)/wirish/comm -I$(srcdir)/wirish/boards \
 	-fno-rtti -fno-exceptions

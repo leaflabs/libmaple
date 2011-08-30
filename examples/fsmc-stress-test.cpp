@@ -108,8 +108,7 @@ void loop() {
 
     last = millis();
     while (true) {
-        bool result = test();
-        if (!result) {
+        if (!test()) {
             SerialUSB.println("Halting due to error.");
             throb();
         } else {

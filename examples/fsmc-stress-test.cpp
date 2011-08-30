@@ -113,11 +113,17 @@ void loop() {
         count++;
         bool result = test();
         ok = ok && result;
-        if (ok && (millis() - last > 300)) {
-            snprintf(snprintf_buf, sizeof snprintf_buf,
-                     "everything ok so far, timestamp %d ms", millis());
-            SerialUSB.println(snprintf_buf);
-            last = millis();
+        if (!ok) {
+            SerialUSB.println("Halting due to error.");
+            throb();
+        } else {
+            uint32 now = millis();
+            if (now - last > 500) {
+                snprintf(snprintf_buf, sizeof snprintf_buf,
+                         "everything ok so far, timestamp %d ms", now);
+                SerialUSB.println(snprintf_buf);
+                last = now;
+            }
         }
     }
 }

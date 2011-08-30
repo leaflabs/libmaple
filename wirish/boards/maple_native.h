@@ -42,16 +42,16 @@
 #define BOARD_BUTTON_PIN        6
 
 #define BOARD_NR_USARTS         5
-#define BOARD_USART1_TX_PIN     26
-#define BOARD_USART1_RX_PIN     27
-#define BOARD_USART2_TX_PIN     52
-#define BOARD_USART2_RX_PIN     53
+#define BOARD_USART1_TX_PIN     24
+#define BOARD_USART1_RX_PIN     25
+#define BOARD_USART2_TX_PIN     50
+#define BOARD_USART2_RX_PIN     51
 #define BOARD_USART3_TX_PIN     0
 #define BOARD_USART3_RX_PIN     1
-#define BOARD_UART4_TX_PIN      19
-#define BOARD_UART4_RX_PIN      20
-#define BOARD_UART5_TX_PIN      21
-#define BOARD_UART5_RX_PIN      29
+#define BOARD_UART4_TX_PIN      17
+#define BOARD_UART4_RX_PIN      18
+#define BOARD_UART5_TX_PIN      19
+#define BOARD_UART5_RX_PIN      27
 
 #define BOARD_NR_SPI            3
 #define BOARD_SPI1_NSS_PIN      52

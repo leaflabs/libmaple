@@ -40,15 +40,21 @@
  * usage, you should try to keep their number to an absolute minimum.
  */
 
-/**
- * \def PCLK1
- * Clock speed of APB1 peripherals, in Hz.
- */
+#ifdef __DOXYGEN_PREDEFINED_HACK
 
-/**
- * \def PCLK2
- * Clock speed of APB2 peripherals, in Hz.
- */
+    /**
+     * \def PCLK1
+     * Clock speed of APB1 peripherals, in Hz.
+     */
+    #define PCLK1
+
+    /**
+     * \def PCLK2
+     * Clock speed of APB2 peripherals, in Hz.
+     */
+    #define PCLK2
+
+#endif
 
 #ifndef PCLK1
 #define PCLK1   36000000U
@@ -61,14 +67,19 @@
  * Density-specific configuration.
  */
 
-/**
- * \def NR_INTERRUPTS
- *
- * Number of interrupts in the NVIC.  This define is automatically
- * generated whenever the proper density is defined (currently, this
- * is restricted to defining one of STM32_MEDIUM_DENSITY and
- * STM32_HIGH_DENSITY).
- */
+#ifdef __DOXYGEN_PREDEFINED_HACK
+
+    /**
+     * \def NR_INTERRUPTS
+     *
+     * Number of interrupts in the NVIC.  This define is automatically
+     * generated whenever the proper density is defined (currently, this
+     * is restricted to defining one of STM32_MEDIUM_DENSITY and
+     * STM32_HIGH_DENSITY).
+     */
+    #define NR_INTERRUPTS
+
+#endif
 
 #ifdef STM32_MEDIUM_DENSITY
     #define NR_INTERRUPTS 43
@@ -82,57 +93,7 @@
 
 /*
  * MCU-specific configuration.
- *
- * If you add something here, make sure to include documentation for
- * it in the __DOXYGEN_PREDEFINED_HACK section, below.
  */
-
-#if defined(MCU_STM32F103RB)
-    /* e.g., LeafLabs Maple */
-
-    #define NR_GPIO_PORTS              4
-    #define SRAM_SIZE             0x5000
-    #define DELAY_US_MULT             12
-
-#elif defined(MCU_STM32F103ZE)
-    /* e.g., LeafLabs Maple Native */
-
-    #define NR_GPIO_PORTS              7
-    #define SRAM_SIZE            0x10000
-    #define DELAY_US_MULT             12
-
-#elif defined(MCU_STM32F103CB)
-    /* e.g., LeafLabs Maple Mini */
-
-    /* Note that this is not, strictly speaking, true.  But only pins
-       0 and 1 exist, and they're used for OSC on the Mini, so we'll
-       live with this for now. */
-    #define NR_GPIO_PORTS              3
-
-    #define SRAM_SIZE             0x5000
-    #define DELAY_US_MULT             12
-
-#elif defined(MCU_STM32F103RE)
-    /* e.g., LeafLabs Maple RET6 edition */
-
-    #define NR_GPIO_PORTS              4
-    #define SRAM_SIZE            0x10000
-    #define DELAY_US_MULT             12
-
-#else
-
-#error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \
-       "to your compiler arguments (probably in a Makefile)."
-
-#endif
-
-/* MCU-specific config documentation.
- *
- * Doxygen refuses to trust us when we \def something that it doesn't
- * notice as a #define.  To work around this, we put
- * __DOXYGEN_PREDEFINED_HACK into our Doxyfile's PREDEFINED, so that
- * this section is considered part of the code by doxygen, but not by
- * an actual compile. */
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
@@ -152,6 +113,45 @@
      */
     #define DELAY_US_MULT
 
-#endif  /* __DOXYGEN_PREDEFINED_HACK */
+#endif
+
+#if defined(MCU_STM32F103RB)
+    /* e.g., LeafLabs Maple */
+
+    #define NR_GPIO_PORTS              4
+    #define SRAM_SIZE             0x5000
+    #define DELAY_US_MULT             12
+
+#elif defined(MCU_STM32F103ZE)
+    /* e.g., LeafLabs Maple Native */
+
+    #define NR_GPIO_PORTS              7
+    #define SRAM_SIZE            0x10000
+    #define DELAY_US_MULT             12
+
+#elif defined(MCU_STM32F103CB)
+    /* e.g., LeafLabs Maple Mini */
+
+    /* Note that this is not, strictly speaking, true.  But only pins
+     * 0 and 1 exist, and they're used for OSC on the Mini, so we'll
+     * live with this for now. */
+    #define NR_GPIO_PORTS              3
+
+    #define SRAM_SIZE             0x5000
+    #define DELAY_US_MULT             12
+
+#elif defined(MCU_STM32F103RE)
+    /* e.g., LeafLabs Maple RET6 edition */
+
+    #define NR_GPIO_PORTS              4
+    #define SRAM_SIZE            0x10000
+    #define DELAY_US_MULT             12
+
+#else
+
+#error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \
+       "to your compiler arguments (probably in a Makefile)."
+
+#endif
 
 #endif  /* _STM32_H_ */

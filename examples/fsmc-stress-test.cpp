@@ -104,11 +104,10 @@ bool simple_roundtrip(void);
 
 void loop() {
     uint32 last;
-    bool (*test)(void) = stress_test;
 
     last = millis();
     while (true) {
-        if (!test()) {
+        if (!stress_test()) {
             SerialUSB.println("Halting due to error.");
             throb();
         } else {

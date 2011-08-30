@@ -103,14 +103,12 @@ bool stress_test(void);
 bool simple_roundtrip(void);
 
 void loop() {
-    uint32 count = 0;
     uint32 last;
     bool ok = true;
     bool (*test)(void) = stress_test;
 
     last = millis();
     while (true) {
-        count++;
         bool result = test();
         ok = ok && result;
         if (!ok) {

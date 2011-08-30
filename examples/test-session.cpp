@@ -81,7 +81,7 @@ void loop () {
 
     while (SerialUSB.available()) {
         uint8 input = SerialUSB.read();
-        SerialUSB.println(input);
+        SerialUSB.println((char)input);
 
         switch(input) {
         case '\r':

@@ -210,8 +210,8 @@ void dma_detach_interrupt(dma_dev *dev, dma_channel channel) {
  * the cause of the interrupt; consequently, it can only be called
  * once per interrupt handler invocation.
  *
- * @brief dev DMA device
- * @brief channel Channel whose interrupt is being handled.
+ * @param dev DMA device
+ * @param channel Channel whose interrupt is being handled.
  * @return Reason why the interrupt fired.
  * @sideeffect Clears channel status flags in dev->regs->ISR.
  * @see dma_attach_interrupt()

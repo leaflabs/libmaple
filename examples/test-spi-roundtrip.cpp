@@ -59,8 +59,6 @@ void soliloquies(uint32 bitOrder);
 
 void setup() {
     pinMode(BOARD_LED_PIN, OUTPUT);
-    while (!SerialUSB.available())
-        ;
     SerialUSB.read();
 }
 

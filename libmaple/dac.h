@@ -26,7 +26,7 @@
 
 /**
  * @file dac.h
- * @brief Digital to analog converter header file
+ * @brief Digital to analog converter support.
  */
 
 /* See notes/dac.txt for more info */

@@ -659,7 +659,8 @@ static inline uint16 timer_get_prescaler(timer_dev *dev) {
 /**
  * @brief Set a timer's prescale value.
  *
- * The new value will not take effect until the next update event.
+ * Divides the input clock by (PSC+1).  The new value will not take
+ * effect until the next update event.
  *
  * @param dev Timer whose prescaler to set
  * @param psc New prescaler value

@@ -113,7 +113,7 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
     {GPIOA, TIMER3, ADC1,  6, 1,    6}, /* D54/PA6 */
     {GPIOA, TIMER3, ADC1,  7, 2,    7}, /* D55/PA7 */
 
-    /* Right (triple) header */
+    /* FSMC (triple) header */
 
     {GPIOF,   NULL, NULL,  0, 0, ADCx}, /* D56/PF0 */
     {GPIOD,   NULL, NULL, 11, 0, ADCx}, /* D57/PD11 */

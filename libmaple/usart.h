@@ -275,8 +275,7 @@ static inline void usart_disable_all(void) {
  * @param byte Byte to transmit.
  */
 static inline void usart_putc(usart_dev* dev, uint8 byte) {
-    uint8 buf[] = {byte};
-    while (!usart_tx(dev, buf, 1))
+    while (!usart_tx(dev, &byte, 1))
         ;
 }
 

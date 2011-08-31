@@ -72,8 +72,11 @@ char snprintf_buf[200];
         snprintf(snprintf_buf, sizeof snprintf_buf,                   \
                  "ERROR: " fmt " (seed %d, ncalls %d, line %d)",      \
                  __VA_ARGS__, seed, num_rand_calls, __LINE__);        \
-        Serial1.println(snprintf_buf);                                \
+        SerialUSB.println(snprintf_buf);                              \
     } while (0)
+
+// Set to 1 for more output
+#define VERBOSE 0
 
 // -- setup()/loop() ----------------------------------------------------------
 
@@ -89,8 +92,10 @@ void setup() {
         *btrs[i] = (DATAST << 8) | ADDSET;
     }
 
-    Serial1.begin(115200);
     randomSeed(seed);
+
+    SerialUSB.read();
+    SerialUSB.println("Starting test");
 }
 
 // stress_test() and simple_roundtrip() are the available test routines
@@ -98,18 +103,23 @@ bool stress_test(void);
 bool simple_roundtrip(void);
 
 void loop() {
-    uint32 count = 0;
-    bool ok = true;
+    uint32 last;
     bool (*test)(void) = stress_test;
 
+    last = millis();
     while (true) {
-        count++;
         bool result = test();
-        ok = ok && result;
-        if (ok) {
-            snprintf(snprintf_buf, sizeof snprintf_buf,
-                     "everything ok so far, timestamp %d ms", millis());
-            Serial1.println(snprintf_buf);
+        if (!result) {
+            SerialUSB.println("Halting due to error.");
+            throb();
+        } else {
+            uint32 now = millis();
+            if (now - last > 500) {
+                snprintf(snprintf_buf, sizeof snprintf_buf,
+                         "everything ok so far, timestamp %d ms", now);
+                SerialUSB.println(snprintf_buf);
+                last = now;
+            }
         }
     }
 }
@@ -138,7 +148,7 @@ bool simple_roundtrip(void) {
         __io uint16 *addr = starts[i] + 4;
         snprintf(snprintf_buf, sizeof snprintf_buf, "round-trip 0x%x at %p",
                  wval, addr);
-        Serial1.println(snprintf_buf);
+        SerialUSB.println(snprintf_buf);
 
         *addr = wval;
         uint16 rval = *addr;
@@ -148,7 +158,7 @@ bool simple_roundtrip(void) {
             return false;
         } else {
             snprintf(snprintf_buf, sizeof snprintf_buf, "got back 0x%x", rval);
-            Serial1.println(snprintf_buf);
+            SerialUSB.println(snprintf_buf);
         }
     }
 
@@ -156,6 +166,9 @@ bool simple_roundtrip(void) {
 }
 
 bool random_trips(void) {
+#if VERBOSE
+    SerialUSB.println("[random]");
+#endif
     for (int n = 0; n < N; n++) {
         __io uint16 *const start = starts[n];
 
@@ -177,7 +190,9 @@ bool random_trips(void) {
 
 bool sequential_trips(void) {
     static const uint32 seq_length = 300;
-
+#if VERBOSE
+    SerialUSB.println("[seq]");
+#endif
     for (int n = 0; n < N; n++) {
         __io uint16 *const start = starts[n];
 

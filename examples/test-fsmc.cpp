@@ -26,6 +26,7 @@ void setup() {
     test_all_addresses();
 
     Serial1.println("Tests pass, finished.");
+    Serial1.println("***\n");
 }
 
 void loop() {

@@ -103,7 +103,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 # Main target
 include $(SRCROOT)/build-targets.mk
 
-.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag
+.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen
 
 # Target upload commands
 UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
@@ -130,7 +130,7 @@ endif
 sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
 
 clean:
-	rm -rf build
+	rm -rf build doxygen
 
 help:
 	@echo ""

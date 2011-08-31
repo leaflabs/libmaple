@@ -41,7 +41,7 @@
 
 #ifdef BOARD_maple_native
 
-void initSRAMChip(void);
+static void initSRAMChip(void);
 
 void boardInit(void) {
     initSRAMChip();
@@ -185,7 +185,7 @@ extern const uint8 boardUsedPins[BOARD_NR_USED_PINS] __FLASH__ = {
     BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN
 };
 
-void initSRAMChip(void) {
+static void initSRAMChip(void) {
     fsmc_nor_psram_reg_map *regs = FSMC_NOR_PSRAM1_BASE;
 
     fsmc_sram_init_gpios();

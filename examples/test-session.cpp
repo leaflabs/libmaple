@@ -308,11 +308,11 @@ void cmd_adc_stats(void) {
     while (i < BOARD_NR_ADC_PINS) {
         measure_adc_noise(boardADCPins[i]);
 
+        SerialUSB.println("----------");
         uint8 c = SerialUSB.read();
         if (c == ESC) {
             break;
         } else if (c != 'r' && c != 'R') {
-            SerialUSB.println("----------");
             i++;
         }
     }
@@ -343,11 +343,11 @@ void cmd_stressful_adc_stats(void) {
             }
         }
 
+        SerialUSB.println("----------");
         uint8 c = SerialUSB.read();
         if (c == ESC) {
             break;
         } else if (c != 'r' && c != 'R') {
-            SerialUSB.println("----------");
             i++;
         }
     }
@@ -476,7 +476,7 @@ void cmd_sequential_adc_reads(void) {
                     SerialUSB.print("0");
                 }
             }
-            SerialUSB.println("");
+            SerialUSB.println();
         }
         pinMode(boardADCPins[i], OUTPUT);
         digitalWrite(boardADCPins[i], 0);

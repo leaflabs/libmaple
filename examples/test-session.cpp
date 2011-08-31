@@ -301,18 +301,31 @@ void cmd_print_help(void) {
 }
 
 void cmd_adc_stats(void) {
-    SerialUSB.println("Taking ADC noise stats.");
-    digitalWrite(BOARD_LED_PIN, 0);
-    for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
-        delay(5);
+    SerialUSB.println("Taking ADC noise stats.  Press ESC to stop, "
+                      "'R' to repeat same pin, anything else for next pin.");
+
+    uint32 i = 0;
+    while (i < BOARD_NR_ADC_PINS) {
         measure_adc_noise(boardADCPins[i]);
+
+        uint8 c = SerialUSB.read();
+        if (c == ESC) {
+            break;
+        } else if (c != 'r' && c != 'R') {
+            SerialUSB.println("----------");
+            i++;
+        }
     }
 }
 
 void cmd_stressful_adc_stats(void) {
-    SerialUSB.println("Taking ADC noise stats under duress.");
+    SerialUSB.println("Taking ADC noise stats under duress.  Press ESC to "
+                      "stop, 'R' to repeat same pin, anything else for next "
+                      "pin.");
 
-    for (uint32 i = 0; i < BOARD_NR_ADC_PINS; i++) {
+    uint32 i = 0;
+    while (i < BOARD_NR_ADC_PINS) {
+        // use PWM to create digital noise
         for (uint32 j = 0; j < BOARD_NR_PWM_PINS; j++) {
             if (boardADCPins[i] != boardPWMPins[j]) {
                 pinMode(boardPWMPins[j], PWM);
@@ -320,15 +333,22 @@ void cmd_stressful_adc_stats(void) {
             }
         }
 
-        Serial1.print(dummy_data);
-
         measure_adc_noise(boardADCPins[i]);
 
+        // turn off the noise
         for (uint32 j = 0; j < BOARD_NR_PWM_PINS; j++) {
             if (boardADCPins[i] != boardPWMPins[j]) {
                 pinMode(boardPWMPins[j], OUTPUT);
                 digitalWrite(boardPWMPins[j], LOW);
             }
+        }
+
+        uint8 c = SerialUSB.read();
+        if (c == ESC) {
+            break;
+        } else if (c != 'r' && c != 'R') {
+            SerialUSB.println("----------");
+            i++;
         }
     }
 }

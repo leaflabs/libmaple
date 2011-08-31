@@ -759,7 +759,8 @@ void cmd_board_info(void) {     // TODO print more information
 // -- Helper functions --------------------------------------------------------
 
 void measure_adc_noise(uint8 pin) {
-    uint16 data[100];
+    const int N = 1000;
+    uint16 x;
     float mean = 0;
     float delta = 0;
     float M2 = 0;
@@ -767,21 +768,21 @@ void measure_adc_noise(uint8 pin) {
 
     // Variance algorithm from Welford, via Knuth, by way of Wikipedia:
     // http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#On-line_algorithm
-    for (int i = 0; i < 100; i++) {
-        data[i] = analogRead(pin);
-        delta = data[i] - mean;
-        mean = mean + delta / (i + 1);
-        M2 = M2 + delta * (data[i] - mean);
+    for (int i = 1; i <= N; i++) {
+        x = analogRead(pin);
+        delta = x - mean;
+        mean += delta / i;
+        M2 = M2 + delta * (x - mean);
     }
 
     SerialUSB.print("header: D");
     SerialUSB.print(pin, DEC);
     SerialUSB.print("\tn: ");
-    SerialUSB.print(100, DEC);
+    SerialUSB.print(N, DEC);
     SerialUSB.print("\tmean: ");
     SerialUSB.print(mean);
     SerialUSB.print("\tvariance: ");
-    SerialUSB.println(M2 / 99.0);
+    SerialUSB.println(M2 / (float)(N-1));
     pinMode(pin, OUTPUT);
 }
 

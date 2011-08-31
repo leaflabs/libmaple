@@ -12,6 +12,9 @@
 // Default USART baud rate
 #define BAUD     9600
 
+// Number of times to sample a pin per ADC noise measurement
+#define N_ADC_NOISE_MEASUREMENTS 40
+
 uint8 gpio_state[BOARD_NR_GPIO_PINS];
 
 const char* dummy_data = ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="
@@ -768,21 +771,23 @@ void measure_adc_noise(uint8 pin) {
 
     // Variance algorithm from Welford, via Knuth, by way of Wikipedia:
     // http://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#On-line_algorithm
-    for (int i = 1; i <= N; i++) {
-        x = analogRead(pin);
-        delta = x - mean;
-        mean += delta / i;
-        M2 = M2 + delta * (x - mean);
+    for (int sample = 0; sample < N_ADC_NOISE_MEASUREMENTS; sample++) {
+        for (int i = 1; i <= N; i++) {
+            x = analogRead(pin);
+            delta = x - mean;
+            mean += delta / i;
+            M2 = M2 + delta * (x - mean);
+        }
+        SerialUSB.print("header: D");
+        SerialUSB.print(pin, DEC);
+        SerialUSB.print("\tn: ");
+        SerialUSB.print(N, DEC);
+        SerialUSB.print("\tmean: ");
+        SerialUSB.print(mean);
+        SerialUSB.print("\tvariance: ");
+        SerialUSB.println(M2 / (float)(N-1));
     }
 
-    SerialUSB.print("header: D");
-    SerialUSB.print(pin, DEC);
-    SerialUSB.print("\tn: ");
-    SerialUSB.print(N, DEC);
-    SerialUSB.print("\tmean: ");
-    SerialUSB.print(mean);
-    SerialUSB.print("\tvariance: ");
-    SerialUSB.println(M2 / (float)(N-1));
     pinMode(pin, OUTPUT);
 }
 

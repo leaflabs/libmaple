@@ -25,7 +25,8 @@
  *****************************************************************************/
 
 /**
- * @brief Nested interrupt controller routines
+ * @file nvic.c
+ * @brief Nested vector interrupt controller support.
  */
 
 #include "nvic.h"

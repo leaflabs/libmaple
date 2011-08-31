@@ -25,6 +25,7 @@
  *****************************************************************************/
 
 /**
+ * @file rcc.c
  * @brief Implements pretty much only the basic clock setup on the
  *        stm32, clock enable/disable and peripheral reset commands.
  */

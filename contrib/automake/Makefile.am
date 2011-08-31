@@ -136,3 +136,8 @@ AM_CFLAGS = $(FLAGS) -std=gnu99
 AM_CXXFLAGS = $(FLAGS) \
 	-I$(srcdir)/wirish -I$(srcdir)/wirish/comm -I$(srcdir)/wirish/boards \
 	-fno-rtti -fno-exceptions
+
+doxygen:
+	doxygen $(srcdir)/support/doxygen/Doxyfile
+
+.PHONY: doxygen

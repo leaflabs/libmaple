@@ -30,12 +30,13 @@
  * @brief  Maple PIN_MAP and boardInit().
  */
 
-#include "gpio.h"
-#include "timer.h"
+#ifdef BOARD_maple
 
 #include "maple.h"
 
-#ifdef BOARD_maple
+#include "gpio.h"
+#include "timer.h"
+#include "wirish_types.h"
 
 void boardInit(void) {
 }

@@ -30,8 +30,6 @@
  * @brief  Private include file for Maple in boards.h
  */
 
-#include "wirish_types.h"
-
 #ifndef _BOARD_MAPLE_H_
 #define _BOARD_MAPLE_H_
 
@@ -79,9 +77,7 @@
  * these are just BOARD_LED_PIN and BOARD_BUTTON_PIN. */
 #define BOARD_NR_USED_PINS       7
 
-/*
- * Debug port pins
- */
+/* Debug port pins */
 #define BOARD_JTMS_SWDIO_PIN    39
 #define BOARD_JTCK_SWCLK_PIN    40
 #define BOARD_JTDI_PIN          41

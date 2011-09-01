@@ -27,12 +27,16 @@
 /**
  * @file   maple_RET6.cpp
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Maple RET6 Edition PIN_MAP and boardInit()
+ * @brief  Maple RET6 Edition board file
  */
+
+#ifdef BOARD_maple_RET6
 
 #include "maple_RET6.h"
 
-#ifdef BOARD_maple_RET6
+#include "gpio.h"
+#include "timer.h"
+#include "wirish_types.h"
 
 void boardInit(void) {
 }

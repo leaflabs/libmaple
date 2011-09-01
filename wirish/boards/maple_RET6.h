@@ -32,11 +32,6 @@
  * See maple.h for more information on these definitions.
  */
 
-#include "gpio.h"
-#include "timer.h"
-
-#include "wirish_types.h"
-
 #ifndef _BOARDS_MAPLE_RET6_H_
 #define _BOARDS_MAPLE_RET6_H_
 

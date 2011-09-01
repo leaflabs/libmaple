@@ -27,8 +27,10 @@
 /**
  * @file   maple_native.cpp
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Maple Native PIN_MAP and boardInit().
+ * @brief  Maple Native board file.
  */
+
+#ifdef BOARD_maple_native
 
 #include "maple_native.h"
 
@@ -38,8 +40,6 @@
 #include "timer.h"
 
 #include "wirish_types.h"
-
-#ifdef BOARD_maple_native
 
 static void initSRAMChip(void);
 

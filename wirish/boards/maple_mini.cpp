@@ -27,14 +27,17 @@
 /**
  * @file   maple_mini.cpp
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Maple Mini PIN_MAP and boardInit().
+ * @brief  Maple Mini board file.
  */
 
-#include "maple_mini.h"
-#include "gpio.h"
-#include "wirish_debug.h"
-
 #ifdef BOARD_maple_mini
+
+#include "maple_mini.h"
+
+#include "gpio.h"
+#include "timer.h"
+#include "wirish_debug.h"
+#include "wirish_types.h"
 
 /* Since we want the Serial Wire/JTAG pins as GPIOs, disable both SW
  * and JTAG debug support */

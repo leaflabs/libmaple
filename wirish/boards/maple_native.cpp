@@ -191,6 +191,7 @@ static void initSRAMChip(void) {
     fsmc_sram_init_gpios();
     rcc_clk_enable(RCC_FSMC);
 
+    // FIXME [0.0.12] doesn't this need FSMC_BCR_MTYP_SRAM?
     regs->BCR = FSMC_BCR_WREN | FSMC_BCR_MWID_16BITS | FSMC_BCR_MBKEN;
     fsmc_nor_psram_set_addset(regs, 0);
     fsmc_nor_psram_set_datast(regs, 3);

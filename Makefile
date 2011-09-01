@@ -103,7 +103,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 # Main target
 include $(SRCROOT)/build-targets.mk
 
-.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen
+.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
 
 # Target upload commands
 UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
@@ -130,12 +130,19 @@ endif
 sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
 
 clean:
-	rm -rf build doxygen
+	rm -rf build
+
+mrproper: clean
+	rm -rf doxygen
 
 help:
 	@echo ""
 	@echo "  libmaple Makefile help"
 	@echo "  ----------------------"
+	@echo "  "
+	@echo "  Be sure to set BOARD if not compiling for Maple (e.g."
+	@echo "  use BOARD=maple_mini for mini, etc.)"
+	@echo "  "
 	@echo "  Compile targets (default MEMORY_TARGET=flash):"
 	@echo "      ram:    Compile sketch code to ram"
 	@echo "      flash:  Compile sketch code to flash"
@@ -149,6 +156,8 @@ help:
 	@echo "      debug:  Start an openocd gdb server, port 3333"
 	@echo "      clean: Remove all build and object files"
 	@echo "      help: Show this message"
+	@echo "      doxygen: Build Doxygen HTML and XML documentation"
+	@echo "      mrproper: Remove all generated files"
 	@echo "  "
 
 debug:

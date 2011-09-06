@@ -1,42 +1,10 @@
-/* Linker script for STM32 (by Lanchon with Mods by LeafLabs) */
-
-OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
-SEARCH_DIR(.)
 /*
- * Link against libgcc, libc, and libm
+ * Linker script for RAM builds.
+ *
+ * Original author "lanchon" from ST forums, with modifications by LeafLabs.
  */
-GROUP(libgcc.a libc.a libm.a)
 
-/* These force the linker to search for particular symbols from
- * the start of the link process and thus ensure the user's
- * overrides are picked up
- */
-INCLUDE names.inc
-
-/* STM32 vector table. See stm32_vector_table.S  */
-EXTERN(__cs3_stm32_vector_table)
-
-/* libcs3 C start function. See cs3.h */
-EXTERN(__cs3_start_c)
-
-/* main entry point */
-EXTERN(main)
-
-/* Initial stack pointer value. */
-EXTERN(__cs3_stack)
-PROVIDE(__cs3_stack = __cs3_region_start_ram + __cs3_region_size_ram);
-
-/* Reset vector and chip reset entry point. See start.S */
-EXTERN(_start)
-ENTRY(_start)
-PROVIDE(__cs3_reset = _start);
-
-/* Beginning of the heap */
-PROVIDE(__cs3_heap_start = _end);
-
-/* End of the heap */
-PROVIDE(__cs3_heap_end = __cs3_region_start_ram + LENGTH(ram));
-
+INCLUDE common_header.inc
 
 SECTIONS
 {

@@ -210,16 +210,12 @@ void loop () {
             SerialUSB.println("Pulling down D4, D22. Press any key.");
             pinMode(22, INPUT_PULLDOWN);
             pinMode(4, INPUT_PULLDOWN);
-            while (!SerialUSB.available()) {
-                continue;
-            }
+            SerialUSB.read();
             SerialUSB.println("Pulling up D4, D22. Press any key.");
             pinMode(22, INPUT_PULLUP);
             pinMode(4, INPUT_PULLUP);
-            while (!SerialUSB.available()) {
-                continue;
-            }
             SerialUSB.read();
+            pinMode(22, OUTPUT);
             pinMode(4, OUTPUT);
             break;
 

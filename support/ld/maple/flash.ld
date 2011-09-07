@@ -1,7 +1,5 @@
 /*
- * Linker script for STM32.
- * STM32F103RBT6 medium density chip linker script for use with
- * maple bootloader. Loads to flash.
+ * Maple (STM32F103RBT6, medium density) linker script for Flash builds.
  */
 
 /*

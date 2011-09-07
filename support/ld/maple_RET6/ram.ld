@@ -1,6 +1,6 @@
 /*
- * STM32F103RET6 high density chip linker script for use with Maple
- * bootloader.  Loads to RAM. 
+ * Maple RET6 Edition (STM32F103RET6, high density) linker script for
+ * RAM builds.
  */
 
 MEMORY

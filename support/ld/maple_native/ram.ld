@@ -1,6 +1,5 @@
 /*
- * Linker script for STM32.
- * STM32 high density chip linker script. Loads to RAM with Maple bootloader
+ * Maple Native (STM32F103ZET6, high density) linker script for RAM builds.
  */
 
 MEMORY

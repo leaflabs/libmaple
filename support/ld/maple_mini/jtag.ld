@@ -1,6 +1,6 @@
 /*
- * Linker script for STM32.
- * Maple mini linker script bare metal target linker script.
+ * Maple Mini (STM32F103CBT6, medium density) linker script for JTAG
+ * (bare metal, no bootloader) builds.
  */
 
 /*
@@ -25,4 +25,3 @@ REGION_ALIAS("REGION_BSS", ram);
  * Define the rest of the sections
  */
 INCLUDE common_rom.inc
-

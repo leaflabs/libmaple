@@ -1,7 +1,8 @@
 /*
- * Linker script for STM32.
- * STM32 high density chip linker script. Bare metal linker script.
+ * Maple Native (STM32F103ZET6, high density) linker script for JTAG
+ * (bare metal, no bootloader) builds.
  */
+
 MEMORY
 {
   ram (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
@@ -18,4 +19,3 @@ REGION_ALIAS("REGION_DATA", ram);
 REGION_ALIAS("REGION_BSS", ram);
 
 INCLUDE common_rom.inc
-

@@ -1,6 +1,6 @@
 /*
- * Linker script for STM32.
- * STM32F103RBT6 medium density chip linker script.
+ * Maple (STM32F103RBT6, medium density) linker script for JTAG (bare
+ * metal, no bootloader) builds.
  */
 
 /*
@@ -25,4 +25,3 @@ REGION_ALIAS("REGION_BSS", ram);
  * Define the rest of the sections
  */
 INCLUDE common_rom.inc
-

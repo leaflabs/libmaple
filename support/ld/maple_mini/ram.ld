@@ -1,6 +1,5 @@
 /*
- * Linker script for STM32.
- * Maple mini ram target linker script.
+ * Maple Mini (STM32F103CBT6, medium density) linker script for RAM builds.
  */
 
 /*

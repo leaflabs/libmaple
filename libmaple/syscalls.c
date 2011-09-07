@@ -25,32 +25,47 @@
  *****************************************************************************/
 
 #include "libmaple.h"
+
 #include <sys/stat.h>
+#include <errno.h>
 
-/* _end is set in the linker command file */
-extern caddr_t _end;
+/* Set by the linker script */
+extern int _end;
 
+/* FIXME these should be determined by the linker script.
+ *
+ * Doing so will allow the heap to be configured on a per-board basis.
+ * Current values are just stopgaps for a heap in built-in SRAM.
+ *
+ * STACK_RESERVED_BYTES is just a hack to ensure a minimum stack size.
+ * It should probably go away as well. */
+#define STACK_RESERVED_BYTES 1024
+#define HEAP_START           ((caddr_t)&_end)
+#define HEAP_END             ((caddr_t)((uint32)STM32_SRAM_END -        \
+                                        STACK_RESERVED_BYTES))
 
 /*
- * sbrk -- changes heap size size. Get nbytes more
- *         RAM. We just increment a pointer in what's
- *         left of memory on the board.
+ * _sbrk -- Increment the program break.
+ *
+ * Get incr bytes more RAM (for use by the heap).  malloc() and
+ * friends call this function behind the scenes.
  */
-caddr_t _sbrk(int nbytes) {
-    static caddr_t heap_ptr = NULL;
-    caddr_t        base;
+caddr_t _sbrk(int incr) {
+    static caddr_t pbreak = NULL; /* current program break */
+    caddr_t ret;
 
-    if (heap_ptr == NULL) {
-        heap_ptr = (caddr_t)&_end;
+    if (pbreak == NULL) {
+        pbreak = HEAP_START;
     }
 
-    if ((STACK_TOP - (unsigned int)heap_ptr) >= 0) {
-        base = heap_ptr;
-        heap_ptr += nbytes;
-        return (base);
-    } else {
-        return ((caddr_t)-1);
+    if ((HEAP_END - pbreak < incr) || (pbreak - HEAP_START < -incr)) {
+        errno = ENOMEM;
+        return (caddr_t)-1;
     }
+
+    ret = pbreak;
+    pbreak += incr;
+    return ret;
 }
 
 int _open(const char *path, int flags, ...) {

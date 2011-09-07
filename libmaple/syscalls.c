@@ -30,7 +30,6 @@
 /* _end is set in the linker command file */
 extern caddr_t _end;
 
-void uart_send(const char*str);
 
 /*
  * sbrk -- changes heap size size. Get nbytes more
@@ -50,7 +49,6 @@ caddr_t _sbrk(int nbytes) {
         heap_ptr += nbytes;
         return (base);
     } else {
-        uart_send("heap full!\r\n");
         return ((caddr_t)-1);
     }
 }
@@ -81,8 +79,6 @@ int _lseek(int fd, off_t pos, int whence) {
 }
 
 unsigned char getch(void) {
-//    while (!(USART2->SR & USART_FLAG_RXNE));
-//    return USART2->DR;
     return 0;
 }
 
@@ -94,10 +90,6 @@ int _read(int fd, char *buf, size_t cnt) {
 }
 
 void putch(unsigned char c) {
-//    if (c == '\n') putch('\r');
-
-//    while (!(USART2->SR & USART_FLAG_TXE));
-//    USART2->DR = c;
 }
 
 void cgets(char *s, int bufsize) {
@@ -142,7 +134,6 @@ void cgets(char *s, int bufsize) {
 
 int _write(int fd, const char *buf, size_t cnt) {
     int i;
-//    uart_send("_write\r\n");
 
     for (i = 0; i < cnt; i++)
         putch(buf[i]);
@@ -152,7 +143,6 @@ int _write(int fd, const char *buf, size_t cnt) {
 
 /* Override fgets() in newlib with a version that does line editing */
 char *fgets(char *s, int bufsize, void *f) {
-//    uart_send("fgets\r\n");
     cgets(s, bufsize);
     return s;
 }

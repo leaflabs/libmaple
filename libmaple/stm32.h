@@ -42,25 +42,36 @@
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
-    /**
-     * \def PCLK1
-     * Clock speed of APB1 peripherals, in Hz.
-     */
-    #define PCLK1
+    /** @brief APB1 clock speed, in Hz. */
+    #define STM32_PCLK1
+    /** @brief APB2 clock speed, in Hz. */
+    #define STM32_PCLK2
 
-    /**
-     * \def PCLK2
-     * Clock speed of APB2 peripherals, in Hz.
-     */
+    /** Deprecated.  Use STM32_PCLK1 instead. */
+    #define PCLK1
+    /** Deprecated. Use STM32_PCLK2 instead. */
     #define PCLK2
 
 #endif
 
+#ifndef STM32_PCLK1
+#define STM32_PCLK1   36000000U
+#endif
 #ifndef PCLK1
-#define PCLK1   36000000U
+#define PCLK1 STM32_PCLK1
+#endif
+#if PCLK1 != STM32_PCLK1
+#error "(Deprecated) PCLK1 differs from STM32_PCLK1"
+#endif
+
+#ifndef STM32_PCLK2
+#define STM32_PCLK2   72000000U
 #endif
 #ifndef PCLK2
-#define PCLK2   72000000U
+#define PCLK2 STM32_PCLK2
+#endif
+#if PCLK2 != STM32_PCLK2
+#error "(Deprecated) PCLK2 differs from STM32_PCLK2"
 #endif
 
 /*
@@ -70,26 +81,28 @@
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
     /**
-     * \def NR_INTERRUPTS
+     * @brief Number of interrupts in the NVIC.
      *
-     * Number of interrupts in the NVIC.  This define is automatically
-     * generated whenever the proper density is defined (currently, this
-     * is restricted to defining one of STM32_MEDIUM_DENSITY and
-     * STM32_HIGH_DENSITY).
+     * This define is automatically generated whenever the proper
+     * density is defined (currently, this is restricted to defining
+     * one of STM32_MEDIUM_DENSITY and STM32_HIGH_DENSITY).
      */
+    #define STM32_NR_INTERRUPTS
+
+    /** Deprecated.  Use STM32_NR_INTERRUPTS instead. */
     #define NR_INTERRUPTS
 
 #endif
 
 #ifdef STM32_MEDIUM_DENSITY
-    #define NR_INTERRUPTS 43
-#else
-#ifdef STM32_HIGH_DENSITY
-    #define NR_INTERRUPTS 60
+    #define STM32_NR_INTERRUPTS 43
+#elif defined(STM32_HIGH_DENSITY)
+    #define STM32_NR_INTERRUPTS 60
 #else
 #error "No STM32 board type defined!"
 #endif
-#endif
+
+#define NR_INTERRUPTS STM32_NR_INTERRUPTS
 
 /*
  * MCU-specific configuration.
@@ -98,12 +111,9 @@
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
     /**
-     * Number of GPIO ports
+     * Number of GPIO ports.
      */
-    #define NR_GPIO_PORTS
-
-    /* SRAM_SIZE intentionally not documented as I'm not convinced
-     * it's a good idea [mbolivar]. */
+    #define STM32_NR_GPIO_PORTS
 
     /**
      * @brief Multiplier to convert microseconds into loop iterations
@@ -111,6 +121,11 @@
      *
      * @see delay_us()
      */
+    #define STM32_DELAY_US_MULT
+
+    /** Deprecated.  Use STM32_NR_GPIO_PORTS instead. */
+    #define NR_GPIO_PORTS
+    /** Deprecated.  Use STM32_DELAY_US_MULT instead. */
     #define DELAY_US_MULT
 
 #endif
@@ -118,34 +133,41 @@
 #if defined(MCU_STM32F103RB)
     /* e.g., LeafLabs Maple */
 
-    #define NR_GPIO_PORTS              4
-    #define SRAM_SIZE             0x5000
-    #define DELAY_US_MULT             12
+    #define STM32_NR_GPIO_PORTS          4
+    #define STM32_DELAY_US_MULT         12
+
+    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
+    #define DELAY_US_MULT               STM32_DELAY_US_MULT
 
 #elif defined(MCU_STM32F103ZE)
     /* e.g., LeafLabs Maple Native */
 
-    #define NR_GPIO_PORTS              7
-    #define SRAM_SIZE            0x10000
-    #define DELAY_US_MULT             12
+    #define STM32_NR_GPIO_PORTS          7
+    #define STM32_DELAY_US_MULT         12
+
+    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
+    #define DELAY_US_MULT               STM32_DELAY_US_MULT
 
 #elif defined(MCU_STM32F103CB)
     /* e.g., LeafLabs Maple Mini */
 
-    /* Note that this is not, strictly speaking, true.  But only pins
-     * 0 and 1 exist, and they're used for OSC on the Mini, so we'll
-     * live with this for now. */
-    #define NR_GPIO_PORTS              3
+    /* This STM32_NR_GPIO_PORTS value is not, strictly speaking, true.
+     * But only pins 0 and 1 exist, and they're used for OSC on the
+     * Mini, so we'll live with this for now. */
+    #define STM32_NR_GPIO_PORTS          3
+    #define STM32_DELAY_US_MULT         12
 
-    #define SRAM_SIZE             0x5000
-    #define DELAY_US_MULT             12
+    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
+    #define DELAY_US_MULT               STM32_DELAY_US_MULT
 
 #elif defined(MCU_STM32F103RE)
     /* e.g., LeafLabs Maple RET6 edition */
 
-    #define NR_GPIO_PORTS              4
-    #define SRAM_SIZE            0x10000
-    #define DELAY_US_MULT             12
+    #define STM32_NR_GPIO_PORTS          4
+    #define STM32_DELAY_US_MULT         12
+
+    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
+    #define DELAY_US_MULT               STM32_DELAY_US_MULT
 
 #else
 

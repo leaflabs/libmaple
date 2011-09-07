@@ -49,12 +49,12 @@
 #define RX5 BOARD_UART5_RX_PIN
 #endif
 
-HardwareSerial Serial1(USART1, TX1, RX1, PCLK2);
-HardwareSerial Serial2(USART2, TX2, RX2, PCLK1);
-HardwareSerial Serial3(USART3, TX3, RX3, PCLK1);
+HardwareSerial Serial1(USART1, TX1, RX1, STM32_PCLK2);
+HardwareSerial Serial2(USART2, TX2, RX2, STM32_PCLK1);
+HardwareSerial Serial3(USART3, TX3, RX3, STM32_PCLK1);
 #if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
-HardwareSerial Serial4(UART4,  TX4, RX4, PCLK1);
-HardwareSerial Serial5(UART5,  TX5, RX5, PCLK1);
+HardwareSerial Serial4(UART4,  TX4, RX4, STM32_PCLK1);
+HardwareSerial Serial5(UART5,  TX5, RX5, STM32_PCLK1);
 #endif
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device,

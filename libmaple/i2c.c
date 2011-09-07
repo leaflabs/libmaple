@@ -393,7 +393,7 @@ void i2c_init(i2c_dev *dev) {
  *              I2C_REMAP: Remap I2C1 to SCL/PB8 SDA/PB9.
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
-#define I2C_CLK                (PCLK1/1000000)
+#define I2C_CLK                (STM32_PCLK1/1000000)
     uint32 ccr   = 0;
     uint32 trise = 0;
 
@@ -425,16 +425,16 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
         if (flags & I2C_DUTY_16_9) {
             /* Tlow/Thigh = 16/9 */
             ccr |= I2C_CCR_DUTY;
-            ccr |= PCLK1/(400000 * 25);
+            ccr |= STM32_PCLK1/(400000 * 25);
         } else {
             /* Tlow/Thigh = 2 */
-            ccr |= PCLK1/(400000 * 3);
+            ccr |= STM32_PCLK1/(400000 * 3);
         }
 
         trise = (300 * (I2C_CLK)/1000) + 1;
     } else {
         /* Tlow/Thigh = 1 */
-        ccr = PCLK1/(100000 * 2);
+        ccr = STM32_PCLK1/(100000 * 2);
         trise = I2C_CLK + 1;
     }
 

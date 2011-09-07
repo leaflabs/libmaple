@@ -15,7 +15,7 @@
  * @param us Number of microseconds to delay.
  */
 static inline void delay_us(uint32 us) {
-    us *= DELAY_US_MULT;
+    us *= STM32_DELAY_US_MULT;
 
     /* fudge for function call overhead  */
     us--;

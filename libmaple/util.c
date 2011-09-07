@@ -39,7 +39,7 @@
 /* Failed ASSERT()s send out a message using this USART config. */
 #ifndef ERROR_USART
 #define ERROR_USART            USART2
-#define ERROR_USART_CLK_SPEED  72000000UL
+#define ERROR_USART_CLK_SPEED  PCLK1
 #define ERROR_USART_BAUD       9600
 #define ERROR_TX_PORT          GPIOA
 #define ERROR_TX_PIN           2

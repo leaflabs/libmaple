@@ -123,6 +123,14 @@
      */
     #define STM32_DELAY_US_MULT
 
+    /**
+     * @brief Pointer to end of built-in SRAM.
+     *
+     * Points to the address which is 1 byte past the last valid
+     * SRAM address.
+     */
+    #define STM32_SRAM_END
+
     /** Deprecated.  Use STM32_NR_GPIO_PORTS instead. */
     #define NR_GPIO_PORTS
     /** Deprecated.  Use STM32_DELAY_US_MULT instead. */
@@ -135,6 +143,7 @@
 
     #define STM32_NR_GPIO_PORTS          4
     #define STM32_DELAY_US_MULT         12
+    #define STM32_SRAM_END              ((void*)0x20005000)
 
     #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
     #define DELAY_US_MULT               STM32_DELAY_US_MULT
@@ -144,6 +153,7 @@
 
     #define STM32_NR_GPIO_PORTS          7
     #define STM32_DELAY_US_MULT         12
+    #define STM32_SRAM_END              ((void*)0x20010000)
 
     #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
     #define DELAY_US_MULT               STM32_DELAY_US_MULT
@@ -156,6 +166,7 @@
      * Mini, so we'll live with this for now. */
     #define STM32_NR_GPIO_PORTS          3
     #define STM32_DELAY_US_MULT         12
+    #define STM32_SRAM_END              ((void*)0x20005000)
 
     #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
     #define DELAY_US_MULT               STM32_DELAY_US_MULT
@@ -165,6 +176,7 @@
 
     #define STM32_NR_GPIO_PORTS          4
     #define STM32_DELAY_US_MULT         12
+    #define STM32_SRAM_END              ((void*)0x20010000)
 
     #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
     #define DELAY_US_MULT               STM32_DELAY_US_MULT

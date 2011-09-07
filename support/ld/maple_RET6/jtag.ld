@@ -1,5 +1,6 @@
 /*
- * STM32F103RET6 high density bare metal linker script.
+ * Maple RET6 Edition (STM32F103RET6, high density) linker script for
+ * JTAG (bare metal, no bootloader) builds.
  */
 
 MEMORY

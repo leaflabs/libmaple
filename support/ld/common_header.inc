@@ -26,7 +26,7 @@ EXTERN(main)
 
 /* Initial stack pointer value. */
 EXTERN(__cs3_stack)
-PROVIDE(__cs3_stack = __cs3_region_start_ram + __cs3_region_size_ram);
+PROVIDE(__cs3_stack = __cs3_region_start_ram + LENGTH(ram));
 
 /* Reset vector and chip reset entry point. See start.S */
 EXTERN(_start)
@@ -34,6 +34,3 @@ PROVIDE(__cs3_reset = _start);
 
 /* Beginning of the heap */
 PROVIDE(__cs3_heap_start = _end);
-
-/* End of the heap */
-PROVIDE(__cs3_heap_end = __cs3_region_start_ram + __cs3_region_size_ram);

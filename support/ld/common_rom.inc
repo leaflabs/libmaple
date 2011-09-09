@@ -10,9 +10,6 @@ SECTIONS
 {
     .text :
       {
-        CREATE_OBJECT_SYMBOLS
-        __cs3_region_start_rom = .;
-
         /*
          * STM32 vector table
          */
@@ -107,11 +104,6 @@ SECTIONS
         *(.USER_FLASH)
       } > rom
 
-    /* __cs3_region_end_rom is deprecated */
-    __cs3_region_end_rom = __cs3_region_start_rom + LENGTH(rom);
-    __cs3_region_size_rom = LENGTH(rom);
-    __cs3_region_num = 1;
-
     /*
      * Start of data
      */
@@ -136,12 +128,8 @@ SECTIONS
         *(.ram.b)
         . = ALIGN (8);
         _end = .;
-        __end = .;
       } > REGION_BSS AT> REGION_TEXT
 
-    /* __cs3_region_end_ram is deprecated */
-    __cs3_region_end_ram = __cs3_region_start_ram + LENGTH(ram);
-    __cs3_region_size_ram = LENGTH(ram);
     __cs3_region_init_ram = LOADADDR (.data);
     __cs3_region_init_size_ram = _edata - ADDR (.data);
     __cs3_region_zero_size_ram = _end - _edata;

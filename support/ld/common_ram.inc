@@ -12,7 +12,6 @@ SECTIONS
       {
         CREATE_OBJECT_SYMBOLS
         __cs3_region_start_ram = .;
-        *(.cs3.region-head.ram)
 
         /*
          * STM32 vector table
@@ -78,7 +77,7 @@ SECTIONS
         LONG (__cs3_region_start_ram)
         LONG (__cs3_region_init_size_ram)
         LONG (__cs3_region_zero_size_ram)
-      } > ram
+      } > REGION_TEXT
 
     /*
      * .ARM.exidx exception unwinding
@@ -87,7 +86,7 @@ SECTIONS
     .ARM.exidx :
       {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-      } > ram
+      } > REGION_TEXT
     __exidx_end = .;
 
     /*
@@ -97,12 +96,11 @@ SECTIONS
       {
         . = ALIGN(8);
         _etext = .;
-      } > ram
+      } > REGION_TEXT
 
     .cs3.rom :
       {
         __cs3_region_start_rom = .;
-        *(.cs3.region-head.rom)
         *(.rom)
         . = ALIGN (8);
       } > ram
@@ -132,7 +130,7 @@ SECTIONS
         *(.ram)
         . = ALIGN (8);
         _edata = .;
-      } > ram
+      } > REGION_DATA
 
     .bss :
       {
@@ -143,7 +141,7 @@ SECTIONS
         . = ALIGN (8);
         _end = .;
         __end = .;
-      } > ram
+      } > REGION_BSS
 
     /* __cs3_region_end_ram is deprecated */
     __cs3_region_end_ram = __cs3_region_start_ram + LENGTH(ram);

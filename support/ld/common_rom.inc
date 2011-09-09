@@ -13,10 +13,7 @@ SECTIONS
         /*
          * STM32 vector table
          */
-        __cs3_interrupt_vector = __cs3_stm32_vector_table;
-        *(.cs3.interrupt_vector)
-        /* Make sure we pulled in an interrupt vector.  */
-        ASSERT (. != __cs3_stm32_vector_table, "No interrupt vector");
+        *(.stm32.interrupt_vector)
 
         *(.rom)
         *(.rom.b)

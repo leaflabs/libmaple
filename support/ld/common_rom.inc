@@ -15,9 +15,6 @@ SECTIONS
          */
         *(.stm32.interrupt_vector)
 
-        *(.rom)
-        *(.rom.b)
-
         /*
          * Program code and vague linking
          */
@@ -108,21 +105,16 @@ SECTIONS
       {
         __cs3_region_start_ram = .;
 
-        KEEP(*(.jcr))
         *(.got.plt) *(.got)
-        *(.shdata)
         *(.data .data.* .gnu.linkonce.d.*)
-        *(.ram)
         . = ALIGN (8);
         _edata = .;
       } > REGION_DATA AT> REGION_TEXT
 
     .bss :
       {
-        *(.shbss)
         *(.bss .bss.* .gnu.linkonce.b.*)
         *(COMMON)
-        *(.ram.b)
         . = ALIGN (8);
         _end = .;
       } > REGION_BSS AT> REGION_TEXT

@@ -12,7 +12,6 @@ SECTIONS
       {
         CREATE_OBJECT_SYMBOLS
         __cs3_region_start_rom = .;
-        *(.cs3.region-head.rom)
 
         /*
          * STM32 vector table
@@ -28,8 +27,6 @@ SECTIONS
         /*
          * Program code and vague linking
          */
-        *(.rom)
-        *(.rom.b)
         *(.text .text.* .gnu.linkonce.t.*)
         *(.plt)
         *(.gnu.warning)
@@ -120,11 +117,7 @@ SECTIONS
      */
     .data :
       {
-        ram_begin = DEFINED(RAM_BUILD) ? . : . ;
-        *(.cs3.region-head.ram_begin)
-
         __cs3_region_start_ram = .;
-        *(.cs3.region-head.ram)
 
         KEEP(*(.jcr))
         *(.got.plt) *(.got)

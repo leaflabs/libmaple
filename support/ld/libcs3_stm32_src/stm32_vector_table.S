@@ -1,6 +1,6 @@
 /* STM32 vector table */
 
-	.section	".cs3.interrupt_vector"
+	.section	".stm32.interrupt_vector"
 
 	.globl	__cs3_stm32_vector_table
 	.type	__cs3_stm32_vector_table, %object

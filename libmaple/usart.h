@@ -228,29 +228,27 @@ typedef struct usart_reg_map {
  * Devices
  */
 
-#ifndef USART_RX_BUF_SIZE
-#define USART_RX_BUF_SIZE               64
-#endif
-
 /** USART device type */
-typedef struct usart_dev {
+struct usart_dev {
     usart_reg_map *regs;             /**< Register map */
     ring_buffer *rb;                 /**< RX ring buffer */
     uint32 max_baud;                 /**< Maximum baud */
-    uint8 rx_buf[USART_RX_BUF_SIZE]; /**< Actual RX buffer used by rb */
     rcc_clk_id clk_id;               /**< RCC clock information */
     nvic_irq_num irq_num;            /**< USART NVIC interrupt */
-} usart_dev;
+};
 
-extern usart_dev *USART1;
-extern usart_dev *USART2;
-extern usart_dev *USART3;
+typedef const struct usart_dev usart_dev;
+
+extern usart_dev * const USART1;
+extern usart_dev * const USART2;
+extern usart_dev * const USART3;
 #ifdef STM32_HIGH_DENSITY
-extern usart_dev *UART4;
-extern usart_dev *UART5;
+extern usart_dev * const UART4;
+extern usart_dev * const UART5;
 #endif
 
 void usart_init(usart_dev *dev);
+void usart_init_ex(usart_dev *dev, uint32 rx_size);
 void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud);
 void usart_enable(usart_dev *dev);
 void usart_disable(usart_dev *dev);

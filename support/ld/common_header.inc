@@ -32,5 +32,6 @@ PROVIDE(__cs3_stack = __cs3_region_start_ram + LENGTH(ram));
 EXTERN(_start)
 PROVIDE(__cs3_reset = _start);
 
-/* Beginning of the heap */
-PROVIDE(__cs3_heap_start = _end);
+/* Heap boundaries, for libmaple */
+EXTERN(_lm_heap_start);
+EXTERN(_lm_heap_end);

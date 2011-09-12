@@ -29,20 +29,12 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-/* Set by the linker script */
-extern int _end;
+/* Set by the linker */
+extern char _lm_heap_start;
+extern char _lm_heap_end;
 
-/* FIXME these should be determined by the linker script.
- *
- * Doing so will allow the heap to be configured on a per-board basis.
- * Current values are just stopgaps for a heap in built-in SRAM.
- *
- * STACK_RESERVED_BYTES is just a hack to ensure a minimum stack size.
- * It should probably go away as well. */
-#define STACK_RESERVED_BYTES 1024
-#define HEAP_START           ((caddr_t)&_end)
-#define HEAP_END             ((caddr_t)((uint32)STM32_SRAM_END -        \
-                                        STACK_RESERVED_BYTES))
+#define HEAP_START           ((caddr_t)&_lm_heap_start)
+#define HEAP_END             ((caddr_t)&_lm_heap_end)
 
 /*
  * _sbrk -- Increment the program break.

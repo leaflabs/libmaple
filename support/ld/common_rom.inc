@@ -112,6 +112,19 @@ SECTIONS
 
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
+
+
+        /*
+         * Heap: Linker scripts may choose a custom heap by overriding
+         * _lm_heap_start and _lm_heap_end. Otherwise, the heap is in
+         * internal SRAM, beginning after .bss, and growing towards
+         * the stack.
+         *
+         * I'm shoving these here naively; there's probably a cleaner way
+         * to go about this. [mbolivar]
+         */
+        _lm_heap_start = DEFINED(_lm_heap_start) ? _lm_heap_start : _end;
+        _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __cs3_stack;
         . = ALIGN (8);
         _edata = .;
       } > REGION_DATA AT> REGION_TEXT

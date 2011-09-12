@@ -64,17 +64,20 @@ SECTIONS
         KEEP (*(SORT(.dtors.*)))
         KEEP (*crtend.o(.dtors))
 
+        /*
+         * struct __cs3_region used during __cs3_start_c
+         */
         . = ALIGN(4);
         __cs3_regions = .;
-        LONG (0)
-        LONG (__cs3_region_init_ram)
-        LONG (__cs3_region_start_ram)
-        LONG (__cs3_region_init_size_ram)
-        LONG (__cs3_region_zero_size_ram)
+        LONG (0)                          /* flags */
+        LONG (__cs3_region_init_ram)      /* initial contents */
+        LONG (__cs3_region_start_ram)     /* start address */
+        LONG (__cs3_region_init_size_ram) /* size of initial data */
+        LONG (__cs3_region_zero_size_ram) /* additional size to be zeroed */
       } > REGION_TEXT
 
     /*
-     * .ARM.exidx exception unwinding
+     * .ARM.exidx exception unwinding; mandated by ARM's C++ ABI
      */
     __exidx_start = .;
     .ARM.exidx :
@@ -92,14 +95,16 @@ SECTIONS
         _etext = .;
       } > REGION_TEXT
 
-    /* We allow users to allocate into flash with this section */
+    /*
+     * .USER_FLASH: We allow users to allocate into Flash here
+     */
     .USER_FLASH :
       {
         *(.USER_FLASH)
       } > rom
 
     /*
-     * Start of data
+     * .data
      */
     .data :
       {
@@ -111,6 +116,9 @@ SECTIONS
         _edata = .;
       } > REGION_DATA AT> REGION_TEXT
 
+    /*
+     * .bss
+     */
     .bss :
       {
         *(.bss .bss.* .gnu.linkonce.b.*)
@@ -119,6 +127,10 @@ SECTIONS
         _end = .;
       } > REGION_BSS AT> REGION_TEXT
 
+    /*
+     * Constants needed for the pieces of CS3 we use during
+     * board startup; see libcs3_stm32_src/.
+     */
     __cs3_region_init_ram = LOADADDR (.data);
     __cs3_region_init_size_ram = _edata - ADDR (.data);
     __cs3_region_zero_size_ram = _end - _edata;

@@ -10,7 +10,7 @@
 // Start of FSMC SRAM bank 1
 static uint16 *const sram_start = (uint16*)0x60000000;
 // End of Maple Native SRAM chip address space (512K 16-bit words)
-static uint16 *const sram_end = (uint16*)0x60080000;
+static uint16 *const sram_end = (uint16*)0x60100000;
 
 void test_single_write(void);
 void test_all_addresses(void);

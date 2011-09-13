@@ -14,5 +14,6 @@ GROUP(libcs3_stm32_high_density.a)
 REGION_ALIAS("REGION_TEXT", ram);
 REGION_ALIAS("REGION_DATA", ram);
 REGION_ALIAS("REGION_BSS", ram);
+REGION_ALIAS("REGION_RODATA", ram);
 
-INCLUDE common_ram.inc
+INCLUDE common.inc

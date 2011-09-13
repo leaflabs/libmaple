@@ -1,17 +1,53 @@
 /*
- * Linker script for Flash (ROM) builds.
+ * Linker script for libmaple.
  *
  * Original author "lanchon" from ST forums, with modifications by LeafLabs.
  */
 
-INCLUDE common_header.inc
+OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
+ENTRY(_start)
+SEARCH_DIR(.)
+
+/*
+ * Link against libgcc, libc, and libm
+ */
+GROUP(libgcc.a libc.a libm.a)
+
+/* These force the linker to search for particular symbols from
+ * the start of the link process and thus ensure the user's
+ * overrides are picked up
+ */
+INCLUDE names.inc
+
+/* STM32 vector table. See stm32_vector_table.S  */
+EXTERN(__cs3_stm32_vector_table)
+
+/* libcs3 C start function. See cs3.h */
+EXTERN(__cs3_start_c)
+
+/* main entry point */
+EXTERN(main)
+
+/* Initial stack pointer value. */
+EXTERN(__cs3_stack)
+PROVIDE(__cs3_stack = __cs3_region_start_ram + LENGTH(ram));
+
+/* Reset vector and chip reset entry point. See start.S */
+EXTERN(_start)
+PROVIDE(__cs3_reset = _start);
+
+/* Heap boundaries, for libmaple */
+EXTERN(_lm_heap_start);
+EXTERN(_lm_heap_end);
 
 SECTIONS
 {
+    /* TODO pull out rodata and stick into separate sections  */
     .text :
       {
+        __text_start = .;
         /*
-         * STM32 vector table
+         * STM32 vector table.  Leave this here.  Yes, really.
          */
         *(.stm32.interrupt_vector)
 
@@ -22,8 +58,6 @@ SECTIONS
         *(.plt)
         *(.gnu.warning)
         *(.glue_7t) *(.glue_7) *(.vfp11_veneer)
-
-        *(.rodata .rodata.* .gnu.linkonce.r.*)
 
         *(.ARM.extab* .gnu.linkonce.armextab.*)
         *(.gcc_except_table)
@@ -77,13 +111,21 @@ SECTIONS
       } > REGION_TEXT
 
     /*
+     * Read-only data
+     */
+    .rodata :
+      {
+        *(.rodata .rodata.* .gnu.linkonce.r.*)
+      } > REGION_RODATA
+
+    /*
      * .ARM.exidx exception unwinding; mandated by ARM's C++ ABI
      */
     __exidx_start = .;
     .ARM.exidx :
       {
         *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-      } > REGION_TEXT
+      } > REGION_RODATA
     __exidx_end = .;
 
     /*
@@ -101,18 +143,17 @@ SECTIONS
     .USER_FLASH :
       {
         *(.USER_FLASH)
-      } > rom
+      } > REGION_RODATA
 
     /*
      * .data
      */
     .data :
       {
-        __cs3_region_start_ram = .;
+        __cs3_region_start_ram = DEFINED(_FLASH_BUILD) ? . : __text_start;
 
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
-
 
         /*
          * Heap: Linker scripts may choose a custom heap by overriding
@@ -144,8 +185,12 @@ SECTIONS
      * Constants needed for the pieces of CS3 we use during
      * board startup; see libcs3_stm32_src/.
      */
-    __cs3_region_init_ram = LOADADDR (.data);
-    __cs3_region_init_size_ram = _edata - ADDR (.data);
+    __cs3_region_init_ram = (DEFINED(_FLASH_BUILD) ?
+                             LOADADDR(.data) :
+                             LOADADDR(.text));
+    __cs3_region_init_size_ram = (DEFINED(_FLASH_BUILD) ?
+                                  _edata - ADDR(.data) :
+                                  _edata - ADDR(.text));
     __cs3_region_zero_size_ram = _end - _edata;
     __cs3_region_num = 1;
 

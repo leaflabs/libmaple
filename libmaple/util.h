@@ -42,10 +42,13 @@ extern "C"{
  * Bit manipulation
  */
 
+/** 1 << the bit number */
 #define BIT(shift)                     (1UL << (shift))
+/** Mask shifted left by 'shift' */
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))
 /** Bits m to n of x */
 #define GET_BITS(x, m, n) ((((uint32)x) << (31 - (n))) >> ((31 - (n)) + (m)))
+/** True if v is a power of two (1, 2, 4, 8, ...) */
 #define IS_POWER_OF_TWO(v)  ((v) && !((v) & ((v) - 1)))
 
 /*

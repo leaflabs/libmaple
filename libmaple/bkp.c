@@ -24,6 +24,11 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @file bkp.c
+ * @brief Backup register support.
+ */
+
 #include "bkp.h"
 #include "pwr.h"
 #include "rcc.h"

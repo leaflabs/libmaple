@@ -24,8 +24,7 @@ LMAPLE_SRC="LICENSE
     ./wirish/comm/*.h
     ./wirish/boards/*.h
     ./wirish/boards/*.cpp
-    ./support/ld/common_ram.inc
-    ./support/ld/common_rom.inc
+    ./support/ld/common.inc
     ./support/ld/libcs3_stm32_high_density.a
     ./support/ld/libcs3_stm32_med_density.a
     ./support/ld/maple

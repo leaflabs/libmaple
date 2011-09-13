@@ -1,59 +1,11 @@
+# Try "make help" first
+
 .DEFAULT_GOAL := sketch
 
-# Valid BOARDs: maple, maple_native, ...
-BOARD ?= maple
-MEMORY_TARGET ?= flash
+##
+## Useful paths, constants, etc.
+##
 
-# USB ID for DFU upload
-VENDOR_ID  := 1EAF
-PRODUCT_ID := 0003
-
-# Guess the MCU based on the BOARD (can be overridden )
-# FIXME the error LED config needs to be in wirish/ instead
-ifeq ($(BOARD), maple)
-   MCU := STM32F103RB
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOA
-   ERROR_LED_PIN  := 5
-   DENSITY := STM32_MEDIUM_DENSITY
-endif
-ifeq ($(BOARD), maple_native)
-   MCU := STM32F103ZE
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOC
-   ERROR_LED_PIN  := 15
-   DENSITY := STM32_HIGH_DENSITY
-endif
-ifeq ($(BOARD), maple_mini)
-   MCU := STM32F103CB
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOB
-   ERROR_LED_PIN  := 1
-   DENSITY := STM32_MEDIUM_DENSITY
-endif
-ifeq ($(BOARD), maple_RET6)
-   MCU := STM32F103RE
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOA
-   ERROR_LED_PIN := 5
-   DENSITY := STM32_HIGH_DENSITY
-endif
-
-# Some target specific things
-ifeq ($(MEMORY_TARGET), ram)
-   LDSCRIPT := $(BOARD)/ram.ld
-   VECT_BASE_ADDR := VECT_TAB_RAM
-endif
-ifeq ($(MEMORY_TARGET), flash)
-   LDSCRIPT := $(BOARD)/flash.ld
-   VECT_BASE_ADDR := VECT_TAB_FLASH
-endif
-ifeq ($(MEMORY_TARGET), jtag)
-   LDSCRIPT := $(BOARD)/jtag.ld
-   VECT_BASE_ADDR := VECT_TAB_BASE
-endif
-
-# Useful paths
 ifeq ($(LIB_MAPLE_HOME),)
 SRCROOT := .
 else
@@ -62,31 +14,58 @@ endif
 BUILD_PATH = build
 LIBMAPLE_PATH := $(SRCROOT)/libmaple
 SUPPORT_PATH := $(SRCROOT)/support
+# Support files for linker
+LDDIR := $(SUPPORT_PATH)/ld
+# Support files for this Makefile
+MAKEDIR := $(SUPPORT_PATH)/make
 
-# Compilation flags.
-# FIXME remove the ERROR_LED config
+# USB ID for DFU upload
+VENDOR_ID  := 1EAF
+PRODUCT_ID := 0003
+
+##
+## Target-specific configuration.  This determines some compiler and
+## linker options/flags.
+##
+
+# Try "make help" for more information on BOARD and MEMORY_TARGET;
+# these default to a Maple Flash build.
+BOARD ?= maple
+MEMORY_TARGET ?= flash
+
+# $(BOARD)- and $(MEMORY_TARGET)-specific configuration
+include $(MAKEDIR)/target-config.mk
+
+##
+## Compilation flags
+##
+
 GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
 		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
-		   -D$(DENSITY) 
+		   -D$(DENSITY)
 GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 		   -nostdlib -ffunction-sections -fdata-sections	     \
 		   -Wl,--gc-sections $(GLOBAL_FLAGS)
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
 GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(GLOBAL_FLAGS)
-
-LDDIR    := $(SUPPORT_PATH)/ld
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
             -mcpu=cortex-m3 -mthumb -Xlinker     \
             --gc-sections --print-gc-sections --march=armv7-m -Wall
 
-# Set up build rules and some useful templates
+##
+## Build rules and useful templates
+##
+
 include $(SUPPORT_PATH)/make/build-rules.mk
 include $(SUPPORT_PATH)/make/build-templates.mk
 
-# Set all submodules here
+##
+## Set all submodules here
+##
+
 LIBMAPLE_MODULES := $(SRCROOT)/libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
 # Official libraries:
@@ -97,10 +76,14 @@ LIBMAPLE_MODULES += $(SRCROOT)/libraries/Wire
 # Experimental libraries:
 LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
 
-# call each module rules.mk
+# Call each module's rules.mk:
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 
-# Main target
+##
+## Targets
+##
+
+# main target
 include $(SRCROOT)/build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
@@ -114,13 +97,13 @@ UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
 UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 
-# conditionally upload to whatever the last build was
+# Conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 install: $(BUILD_PATH)/$(BOARD).bin
 	@echo Install target: $(INSTALL_TARGET)
 	$(UPLOAD_$(INSTALL_TARGET))
 
-# Force a rebuild if the maple target changed
+# Force a rebuild if the target changed
 PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 build-check:
 ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))

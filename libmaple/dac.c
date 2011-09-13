@@ -24,6 +24,11 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @file dac.c
+ * @brief Digital to analog converter support.
+ */
+
 #include "libmaple.h"
 #include "gpio.h"
 #include "dac.h"

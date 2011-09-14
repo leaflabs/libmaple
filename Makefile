@@ -13,6 +13,7 @@ SRCROOT := $(LIB_MAPLE_HOME)
 endif
 BUILD_PATH = build
 LIBMAPLE_PATH := $(SRCROOT)/libmaple
+WIRISH_PATH := $(SRCROOT)/wirish
 SUPPORT_PATH := $(SRCROOT)/support
 # Support files for linker
 LDDIR := $(SUPPORT_PATH)/ld
@@ -66,7 +67,12 @@ include $(SUPPORT_PATH)/make/build-templates.mk
 ## Set all submodules here
 ##
 
-LIBMAPLE_MODULES := $(SRCROOT)/libmaple
+# Try to keep LIBMAPLE_MODULES a simply-expanded variable
+ifeq ($(LIBMAPLE_MODULES),)
+	LIBMAPLE_MODULES := $(SRCROOT)/libmaple
+else
+	LIBMAPLE_MODULES += $(SRCROOT)/libmaple
+endif
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
 # Official libraries:
 LIBMAPLE_MODULES += $(SRCROOT)/libraries/Servo

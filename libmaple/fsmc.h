@@ -24,6 +24,11 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @file fsmc.h
+ * @brief Flexible static memory controller support.
+ */
+
 /*
  * See ../notes/fsmc.txt for more info
  */

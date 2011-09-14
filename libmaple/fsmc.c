@@ -25,7 +25,8 @@
  *****************************************************************************/
 
 /**
- * @brief
+ * @file fsmc.c
+ * @brief Flexible static memory controller support.
  */
 
 #include "fsmc.h"

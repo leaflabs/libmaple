@@ -24,6 +24,11 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @file pwr.c
+ * @brief Power control (PWR) support.
+ */
+
 #include "pwr.h"
 #include "rcc.h"
 

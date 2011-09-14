@@ -109,6 +109,15 @@ void _fail(const char* file, int line, const char* exp) {
 }
 
 /**
+ * @brief Provide an __assert_func handler to libc so that calls to assert() get
+ * redirected to _fail.
+ */
+void __assert_func(const char* file, int line, const char* method,
+                   const char* expression) {
+    _fail(file, line, expression);
+}
+
+/**
  * @brief Fades the error LED on and off
  * @sideeffect Sets output push-pull on ERROR_LED_PIN.
  */

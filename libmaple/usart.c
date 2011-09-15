@@ -192,6 +192,22 @@ uint32 usart_tx(usart_dev *dev, const uint8 *buf, uint32 len) {
 }
 
 /**
+ * @brief Nonblocking USART receive.
+ * @param dev Serial port to receive bytes from
+ * @param buf Buffer to store received bytes into
+ * @param len Maximum number of bytes to store
+ * @return Number of bytes received
+ */
+uint32 usart_rx(usart_dev *dev, uint8 *buf, uint32 len) {
+    uint32 rxed = 0;
+    while (usart_data_available(dev) && rxed < len) {
+        *buf++ = usart_getc(dev);
+        rxed++;
+    }
+    return rxed;
+}
+
+/**
  * @brief Transmit an unsigned integer to the specified serial port in
  *        decimal format.
  *

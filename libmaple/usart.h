@@ -259,6 +259,7 @@ void usart_enable(usart_dev *dev);
 void usart_disable(usart_dev *dev);
 void usart_foreach(void (*fn)(usart_dev *dev));
 uint32 usart_tx(usart_dev *dev, const uint8 *buf, uint32 len);
+uint32 usart_rx(usart_dev *dev, uint8 *buf, uint32 len);
 void usart_putudec(usart_dev *dev, uint32 val);
 
 /**

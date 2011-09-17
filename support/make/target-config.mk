@@ -40,6 +40,16 @@ ifeq ($(BOARD), maple_RET6)
    SRAM_SIZE := 65536
 endif
 
+ifeq ($(BOARD), olimex_stm32_h103)
+   MCU := STM32F103RB
+   PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOC
+   ERROR_LED_PIN := 12
+   DENSITY := STM32_MEDIUM_DENSITY
+   FLASH_SIZE := 131072
+   SRAM_SIZE := 20480
+endif
+
 # Memory target-specific configuration values
 
 ifeq ($(MEMORY_TARGET), ram)

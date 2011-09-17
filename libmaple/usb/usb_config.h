@@ -47,6 +47,12 @@
     #define USB_DISC_DEV         GPIOB
     #define USB_DISC_PIN         8
 
+#elif defined(BOARD_olimex_stm32_h103)
+
+    #define VCOM_ID_PRODUCT      0x0004
+    #define USB_DISC_DEV         GPIOC
+    #define USB_DISC_PIN         11
+
 #else
 
 #error ("Sorry! the USB stack relies on LeafLabs board-specific "       \

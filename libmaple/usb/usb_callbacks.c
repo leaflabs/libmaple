@@ -14,7 +14,7 @@ ONE_DESCRIPTOR Device_Descriptor = {
 
 ONE_DESCRIPTOR Config_Descriptor = {
     (uint8*)&usbVcomDescriptor_Config,
-    0x43//sizeof(USB_Descriptor_Config)
+    sizeof(USB_Descriptor_Config)
 };
 
 ONE_DESCRIPTOR String_Descriptor[3] = {

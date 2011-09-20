@@ -46,32 +46,34 @@ const USB_Descriptor_Device usbVcomDescriptor_Device = {
 };
 
 const USB_Descriptor_Config usbVcomDescriptor_Config = {
- bLength:                   0x09,//sizeof(USB_Descriptor_Config_Header),
- bDescriptorType:           USB_DESCRIPTOR_TYPE_CONFIGURATION,
- wTotalLength:              0x43,//sizeof(USB_Descriptor_Config),
- bNumInterfaces:            0x02,
- bConfigurationValue:       0x01,
- iConfiguration:            0x00,
- bmAttributes:              (USB_CONFIG_ATTR_BUSPOWERED |
-                             USB_CONFIG_ATTR_SELF_POWERED),
- bMaxPower:                 USB_CONFIG_MAX_POWER,
+ Config_Header: {
+   bLength:                   sizeof(USB_Descriptor_Config_Header),
+   bDescriptorType:           USB_DESCRIPTOR_TYPE_CONFIGURATION,
+   wTotalLength:              sizeof(USB_Descriptor_Config),
+   bNumInterfaces:            0x02,
+   bConfigurationValue:       0x01,
+   iConfiguration:            0x00,
+   bmAttributes:              (USB_CONFIG_ATTR_BUSPOWERED |
+                               USB_CONFIG_ATTR_SELF_POWERED),
+   bMaxPower:                 USB_CONFIG_MAX_POWER,
+ },
 
  CCI_Interface:
    {
-   bLength:                  0x09,//sizeof(USB_Descriptor_Interface),
+   bLength:                  sizeof(USB_Descriptor_Interface),
    bDescriptorType:          USB_DESCRIPTOR_TYPE_INTERFACE,
    bInterfaceNumber:         0x00,
    bAlternateSetting:        0x00,
    bNumEndpoints:            0x01,
-   bInterfaceClass:          0x02,
-   bInterfaceSubClass:       0x02,
-   bInterfaceProtocol:       0x01,
+   bInterfaceClass:          USB_INTERFACE_CLASS_CDC,
+   bInterfaceSubClass:       USB_INTERFACE_SUBCLASS_CDC_ACM,
+   bInterfaceProtocol:       0x01, /* Common AT Commands */
    iInterface:               0x00
    },
 
  CDC_Functional_IntHeader:
    {
-   bLength:                  0x05,//sizeof(CDC_FUNCTIONAL_DESCRIPTOR(2)),
+   bLength:                  CDC_FUNCTIONAL_DESCRIPTOR_SIZE(2),
    bDescriptorType:          0x24,
    SubType:                  0x00,
    Data:                     {0x01, 0x10}
@@ -79,7 +81,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
 
  CDC_Functional_CallManagement:
    {
-   bLength:                  0x05,//sizeof(CDC_FUNCTIONAL_DESCRIPTOR(2)),
+   bLength:                  CDC_FUNCTIONAL_DESCRIPTOR_SIZE(2),
    bDescriptorType:          0x24,
    SubType:                  0x01,
    Data:                     {0x03, 0x01}
@@ -87,7 +89,7 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
 
  CDC_Functional_ACM:
    {
-   bLength:                  0x04,//sizeof(CDC_FUNCTIONAL_DESCRIPTOR(1)),
+   bLength:                  CDC_FUNCTIONAL_DESCRIPTOR_SIZE(1),
    bDescriptorType:          0x24,
    SubType:                  0x02,
    Data:                     {0x06}
@@ -95,59 +97,54 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
 
  CDC_Functional_Union:
    {
-   bLength:                  0x05,//sizeof(CDC_FUNCTIONAL_DESCRIPTOR(2)),
+   bLength:                  CDC_FUNCTIONAL_DESCRIPTOR_SIZE(2),
    bDescriptorType:          0x24,
    SubType:                  0x06,
    Data:                     {0x00, 0x01}
    },
 
- // ManagementEndpoint:
- //  {
- EP1_bLength:                 0x07,//sizeof(USB_Descriptor_Endpoint),
- EP1_bDescriptorType:         USB_DESCRIPTOR_TYPE_ENDPOINT,
- EP1_bEndpointAddress:        (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_NOTIFICATION_EPNUM),
- EP1_bmAttributes:            EP_TYPE_INTERRUPT,
- EP1_wMaxPacketSize0:         VCOM_NOTIFICATION_EPSIZE,
- EP1_wMaxPacketSize1:         0x00,
- EP1_bInterval:               0xFF,
- //  },
+ ManagementEndpoint:
+   {
+   bLength:                 sizeof(USB_Descriptor_Endpoint),
+   bDescriptorType:         USB_DESCRIPTOR_TYPE_ENDPOINT,
+   bEndpointAddress:        (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_NOTIFICATION_EPNUM),
+   bmAttributes:            EP_TYPE_INTERRUPT,
+   wMaxPacketSize:          VCOM_NOTIFICATION_EPSIZE,
+   bInterval:               0xFF,
+   },
 
- // DCI_Interface:
- //   {
-   DCI_bLength:                0x09,//sizeof(USB_Descriptor_Interface),
-   DCI_bDescriptorType:        USB_DESCRIPTOR_TYPE_INTERFACE,
-   DCI_bInterfaceNumber:       0x01,
-   DCI_bAlternateSetting:      0x00,
-   DCI_bNumEndpoints:          0x02,
-   DCI_bInterfaceClass:        0x0A,
-   DCI_bInterfaceSubClass:     0x00,
-   DCI_bInterfaceProtocol:     0x00,
-   DCI_iInterface:             0x00,
-   //   },
+ DCI_Interface:
+   {
+   bLength:                sizeof(USB_Descriptor_Interface),
+   bDescriptorType:        USB_DESCRIPTOR_TYPE_INTERFACE,
+   bInterfaceNumber:       0x01,
+   bAlternateSetting:      0x00,
+   bNumEndpoints:          0x02,
+   bInterfaceClass:        USB_INTERFACE_CLASS_DIC,
+   bInterfaceSubClass:     0x00, /* None */
+   bInterfaceProtocol:     0x00, /* None */
+   iInterface:             0x00,
+   },
 
- //DataOutEndpoint:
- // {
- //  },
- EP2_bLength:               0x07,//sizeof(USB_Descriptor_Endpoint),
- EP2_bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
- EP2_bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_OUT | VCOM_RX_EPNUM),
- EP2_bmAttributes:          EP_TYPE_BULK,
- EP2_wMaxPacketSize0:       VCOM_RX_EPSIZE,
- EP2_wMaxPacketSize1:       0x00,
- EP2_bInterval:             0x00,
+ DataOutEndpoint:
+   {
+   bLength:               sizeof(USB_Descriptor_Endpoint),
+   bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
+   bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_OUT | VCOM_RX_EPNUM),
+   bmAttributes:          EP_TYPE_BULK,
+   wMaxPacketSize:        VCOM_RX_EPSIZE,
+   bInterval:             0x00,
+   },
 
-
- // DataInEndpoint:
- // {
- EP3_bLength:               0x07,//sizeof(USB_Descriptor_Endpoint),
- EP3_bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
- EP3_bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_TX_EPNUM),
- EP3_bmAttributes:          EP_TYPE_BULK,
- EP3_wMaxPacketSize0:       VCOM_TX_EPSIZE,
- EP3_wMaxPacketSize1:       0x00,
- EP3_bInterval:             0x00
-
- //  }
+ DataInEndpoint:
+   {
+   bLength:               sizeof(USB_Descriptor_Endpoint),
+   bDescriptorType:       USB_DESCRIPTOR_TYPE_ENDPOINT,
+   bEndpointAddress:      (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_TX_EPNUM),
+   bmAttributes:          EP_TYPE_BULK,
+   wMaxPacketSize:        VCOM_TX_EPSIZE,
+   bInterval:             0x00
+   }
 };
 
 /*****************************************************************************

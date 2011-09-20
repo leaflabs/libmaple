@@ -47,6 +47,7 @@ typedef void (*voidFuncPtr)(void);
 
 #define __io volatile
 #define __attr_flash __attribute__((section (".USER_FLASH")))
+#define __packed __attribute__((__packed__))
 
 #ifndef NULL
 #define NULL 0

@@ -37,6 +37,10 @@
 
 #define USB_DEVICE_CLASS_CDC              0x02
 #define USB_DEVICE_SUBCLASS_CDC           0x00
+#define USB_INTERFACE_CLASS_CDC           0x02
+/* CDC Abstract Control Model */
+#define USB_INTERFACE_SUBCLASS_CDC_ACM    0x02
+#define USB_INTERFACE_CLASS_DIC           0x0A
 
 #define USB_CONFIG_ATTR_BUSPOWERED        0b10000000
 #define USB_CONFIG_ATTR_SELF_POWERED      0b11000000
@@ -59,8 +63,9 @@ extern "C" {
     uint8 bLength;				\
     uint8 bDescriptorType;			\
     uint16 bString[len];			\
-  }
+  } __packed
 
+#define CDC_FUNCTIONAL_DESCRIPTOR_SIZE(DataSize) (3 + DataSize)
 #define CDC_FUNCTIONAL_DESCRIPTOR(DataSize)	\
   struct					\
   {						\
@@ -68,8 +73,9 @@ extern "C" {
     uint8 bDescriptorType;			\
     uint8 SubType;				\
     uint8 Data[DataSize];			\
-  }
+  } __packed
 
+/* See http://www.beyondlogic.org/usbnutshell/usb5.shtml#DeviceDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -85,8 +91,9 @@ typedef struct {
   uint8                 iProduct;
   uint8                 iSerialNumber;
   uint8                 bNumConfigurations;
-} USB_Descriptor_Device;
+} __packed USB_Descriptor_Device;
 
+/* http://www.beyondlogic.org/usbnutshell/usb5.shtml#ConfigurationDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -96,8 +103,9 @@ typedef struct {
   uint8                 iConfiguration;
   uint8                 bmAttributes;
   uint8                 bMaxPower;
-} USB_Descriptor_Config_Header;
+} __packed USB_Descriptor_Config_Header;
 
+/* See http://www.beyondlogic.org/usbnutshell/usb5.shtml#InterfaceDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -108,7 +116,8 @@ typedef struct {
   uint8                 bInterfaceSubClass;
   uint8                 bInterfaceProtocol;
   uint8                 iInterface;
-} USB_Descriptor_Interface;
+} __packed USB_Descriptor_Interface;
+
 
 typedef struct {
   uint8                 bLength;
@@ -117,99 +126,26 @@ typedef struct {
   uint8                 bmAttributes;
   uint16                wMaxPacketSize;
   uint8                 bInterval;
-} USB_Descriptor_Endpoint;
+} __packed USB_Descriptor_Endpoint;
 
 typedef struct {
-  /* config header */
-  uint8                 bLength;
-  uint8                 bDescriptorType;
-  uint16                wTotalLength;
-  uint8                 bNumInterfaces;
-  uint8                 bConfigurationValue;
-  uint8                 iConfiguration;
-  uint8                 bmAttributes;
-  uint8                 bMaxPower;
-
+  USB_Descriptor_Config_Header        Config_Header;
   USB_Descriptor_Interface            CCI_Interface;
-  struct {						
-    uint8 bLength;				
-    uint8 bDescriptorType;			
-    uint8 SubType;				
-    uint8 Data[2];			
-  }                                   CDC_Functional_IntHeader;
-  struct {						
-    uint8 bLength;				
-    uint8 bDescriptorType;			
-    uint8 SubType;				
-    uint8 Data[2];			
-  }                                   CDC_Functional_CallManagement;
-  struct {						
-    uint8 bLength;				
-    uint8 bDescriptorType;			
-    uint8 SubType;				
-    uint8 Data[1];			
-  }                                   CDC_Functional_ACM;
-  struct {						
-    uint8 bLength;				
-    uint8 bDescriptorType;			
-    uint8 SubType;				
-    uint8 Data[2];			
-  }                                   CDC_Functional_Union;
-
-  /*
+  CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_IntHeader;
+  CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_CallManagement;
+  CDC_FUNCTIONAL_DESCRIPTOR(1) CDC_Functional_ACM;
+  CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_Union;
   USB_Descriptor_Endpoint             ManagementEndpoint;
-  */
-  uint8                 EP1_bLength;
-  uint8                 EP1_bDescriptorType;
-  uint8                 EP1_bEndpointAddress;
-  uint8                 EP1_bmAttributes;
-  uint8                 EP1_wMaxPacketSize0;
-  uint8                 EP1_wMaxPacketSize1;
-  uint8                 EP1_bInterval;
-
-  /*
   USB_Descriptor_Interface            DCI_Interface;
-  */
-
-  uint8                 DCI_bLength;
-  uint8                 DCI_bDescriptorType;
-  uint8                 DCI_bInterfaceNumber;
-  uint8                 DCI_bAlternateSetting;
-  uint8                 DCI_bNumEndpoints;
-  uint8                 DCI_bInterfaceClass;
-  uint8                 DCI_bInterfaceSubClass;
-  uint8                 DCI_bInterfaceProtocol;
-  uint8                 DCI_iInterface;
-
-  /*
   USB_Descriptor_Endpoint             DataOutEndpoint;
   USB_Descriptor_Endpoint             DataInEndpoint;
-  */
+} __packed USB_Descriptor_Config;
 
-  uint8                 EP2_bLength;
-  uint8                 EP2_bDescriptorType;
-  uint8                 EP2_bEndpointAddress;
-  uint8                 EP2_bmAttributes;
-  uint8                 EP2_wMaxPacketSize0;
-  uint8                 EP2_wMaxPacketSize1;
-  uint8                 EP2_bInterval;
-
-  uint8                 EP3_bLength;
-  uint8                 EP3_bDescriptorType;
-  uint8                 EP3_bEndpointAddress;
-  uint8                 EP3_bmAttributes;
-  uint8                 EP3_wMaxPacketSize0;
-  uint8                 EP3_wMaxPacketSize1;
-  uint8                 EP3_bInterval;
-
-  
-}USB_Descriptor_Config;
- 
-  typedef struct {
-    uint8          bLength;
-    uint8          bDescriptorType;
-    uint16         bString[];
-  } USB_Descriptor_String;
+typedef struct {
+  uint8          bLength;
+  uint8          bDescriptorType;
+  uint16         bString[];
+} USB_Descriptor_String;
 
 extern const USB_Descriptor_Device usbVcomDescriptor_Device;
 extern const USB_Descriptor_Config usbVcomDescriptor_Config;

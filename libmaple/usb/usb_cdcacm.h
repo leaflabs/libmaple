@@ -24,22 +24,36 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef __USB_CONFIG_H
-#define __USB_CONFIG_H
+/**
+ * @file usb_cdcacm.h
+ * @brief USB CDC ACM (virtual serial terminal) support
+ */
 
-#define RESET_DELAY               (100000)
-#define USB_CONFIG_MAX_POWER      (100 >> 1)
+#ifndef _USB_CDCACM_H_
+#define _USB_CDCACM_H_
 
-/* choose addresses to give endpoints the max 64 byte buffers */
-#define USB_BTABLE_ADDRESS        0x00
+#include "libmaple_types.h"
+#include "gpio.h"
 
-#define bMaxPacketSize            0x40  /* 64B, maximum for USB FS Devices */
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define NUM_ENDPTS                0x04
+void usb_cdcacm_enable(gpio_dev*, uint8);
+void usb_cdcacm_disable(gpio_dev*, uint8);
 
-/* handle CTRM, WKUPM, SUSPM, ERRM, SOFM, ESOFM, RESETM */
-#define ISR_MSK                   0xBF00
+void   usb_cdcacm_putc(char ch);
+uint32 usb_cdcacm_tx(const uint8* buf, uint32 len);
+uint32 usb_cdcacm_rx(uint8* buf, uint32 len);
 
-#define F_SUSPEND_ENABLED 1
+uint32 usb_cdcacm_data_available(void); /* in RX buffer */
+uint16 usb_cdcacm_get_pending(void);
+
+uint8 usb_cdcacm_get_dtr(void);
+uint8 usb_cdcacm_get_rts(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

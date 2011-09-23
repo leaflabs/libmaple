@@ -24,22 +24,32 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef __USB_CONFIG_H
-#define __USB_CONFIG_H
+#ifndef _USB_LIB_GLOBALS_H_
+#define _USB_LIB_GLOBALS_H_
 
-#define RESET_DELAY               (100000)
-#define USB_CONFIG_MAX_POWER      (100 >> 1)
+#include "usb_type.h"
+#include "usb_core.h"
 
-/* choose addresses to give endpoints the max 64 byte buffers */
-#define USB_BTABLE_ADDRESS        0x00
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define bMaxPacketSize            0x40  /* 64B, maximum for USB FS Devices */
+extern void (*pEpInt_IN[7])(void);
+extern void (*pEpInt_OUT[7])(void);
+extern DEVICE_PROP Device_Property;
+extern USER_STANDARD_REQUESTS User_Standard_Requests;
+extern DEVICE  Device_Table;
+extern DEVICE_INFO Device_Info;
+extern u16 SaveRState;
+extern u16 SaveTState;
+extern DEVICE_INFO* pInformation;
+extern DEVICE_PROP* pProperty;
+extern USER_STANDARD_REQUESTS *pUser_Standard_Requests;
+extern u16 SaveState ;
+extern u16 wInterrupt_Mask;
 
-#define NUM_ENDPTS                0x04
-
-/* handle CTRM, WKUPM, SUSPM, ERRM, SOFM, ESOFM, RESETM */
-#define ISR_MSK                   0xBF00
-
-#define F_SUSPEND_ENABLED 1
+#ifdef __cplusplus
+}
+#endif
 
 #endif

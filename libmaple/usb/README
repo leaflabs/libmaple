@@ -2,28 +2,22 @@ The USB submodule of libmaple is responsible for:
 
     Initializing the USB peripheral, scaling the peripheral clocks
     appropriately, enabling the interrupt channels to USB, defining
-    the USB isr, resetting the USB disc pin (used to tell the host
+    the USB IRQ, resetting the USB DISC pin (used to tell the host
     were alive). Additionally, the USB submodule defines the virtual
-    com port USB applications that is available to all user sketches
-    via SerialUSB.print() and others.
+    COM port interface that is exposed to user sketches via SerialUSB.
 
 To use it:
 
-   [This section is out of date.  Does SerialUSB.begin() do the same
-   thing as the old Usb.init()?]
-
    SerialUSB.print/ln, available(), read(), write() implement the same
-     interface as Serial1/2/3
-
+   interface as Serial1/2/3.
 
 Current Status:
 
     Currently, the USB submodule relies on the low level core library
-    provided by ST to access the USB peripheral registers and
-    implement the USB transfer protocol for control endpoint
-    transfers.  The high level virtual com port application is
-    unfortunately hard to untangle from this low level dependence, and
-    when a new USB core library is written (to nix ST dependence)
+    provided by ST to implement the USB transfer protocol for control
+    endpoint transfers.  The high level virtual com port application
+    is unfortunately hard to untangle from this low level dependence,
+    and when a new USB core library is written (to nix ST dependence)
     changes will likely have to be made to virtual com application
     code. Ideally, the new core library should mimic the form of MyUSB
     (LUFA), since this library (USB for AVR) is growing in popularity
@@ -65,9 +59,6 @@ Current Status:
     order to disconnect the device from the host, the USB_DISC pin can
     be asserted (on Maple this is GPIO C12). Alternatively, the NVIC
     can be directly configured to disable the USB LP/HP IRQ's.
-
-    This library should exposed through usb.h; do not include any
-    other files direcly in your application.
 
     The files inside of usb_lib were provided by ST and are subject to
     their own license, all other files were written by the LeafLabs

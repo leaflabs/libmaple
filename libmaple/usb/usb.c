@@ -39,64 +39,16 @@
 
 #include "usb_reg_map.h"
 #include "usb_config.h"
-#include "usb_callbacks.h"
+#include "usb_lib_globals.h"
 
 #include "usb_type.h"
 #include "usb_core.h"
 
-static void usb_init(void);
 static void dispatch_ctr_lp(void);
 
 /*
- * Globals required by usb_lib/
+ * usb_lib/ globals
  */
-
-DEVICE Device_Table =
-    {NUM_ENDPTS,
-     1};
-
-DEVICE_PROP Device_Property =
-    {usbInit,
-     usbReset,
-     usbStatusIn,
-     usbStatusOut,
-     usbDataSetup,
-     usbNoDataSetup,
-     usbGetInterfaceSetting,
-     usbGetDeviceDescriptor,
-     usbGetConfigDescriptor,
-     usbGetStringDescriptor,
-     0,
-     bMaxPacketSize};
-
-USER_STANDARD_REQUESTS User_Standard_Requests =
-    {NOP_Process,
-     usbSetConfiguration,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     usbSetDeviceAddress};
-
-void (*pEpInt_IN[7])(void) =
-    {vcomDataTxCb,
-     vcomManagementCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
-
-void (*pEpInt_OUT[7])(void) =
-    {NOP_Process,
-     NOP_Process,
-     vcomDataRxCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
 
 volatile uint16 wIstr = 0;
 uint8 EPindex;                  /* current endpoint */
@@ -124,20 +76,15 @@ struct {
  * Routines
  */
 
-void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
-  /* Present ourselves to the host */
-  gpio_set_mode(disc_dev, disc_bit, GPIO_OUTPUT_PP);
-  gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host
+void usb_init_usblib(DEVICE_PROP *device, USER_STANDARD_REQUESTS *user) {
+    rcc_clk_enable(RCC_USB);
 
-  /* initialize USB peripheral */
-  usb_init();
-}
-
-void usb_cdcacm_disable(gpio_dev *disc_dev, uint8 disc_bit) {
-  // These are just guesses about how to do this, but it seems to work.
-  // TODO: verify this with USB spec
-  nvic_irq_disable(NVIC_USB_LP_CAN_RX0);
-  gpio_write_bit(disc_dev, disc_bit, 1);
+    pInformation = &Device_Info;
+    pInformation->ControlState = 2; /* FIXME [0.0.12] use
+                                       CONTROL_STATE enumerator */
+    pProperty = device;
+    pUser_Standard_Requests = user;
+    pProperty->Init();
 }
 
 void usbSuspend(void) {
@@ -222,7 +169,7 @@ void __irq_usb_lp_can_rx0(void) {
 #if (ISR_MSK & USB_ISTR_RESET)
   if (wIstr & USB_ISTR_RESET & wInterrupt_Mask) {
     USB_BASE->ISTR = ~USB_ISTR_RESET;
-    Device_Property.Reset();
+    pProperty->Reset();
   }
 #endif
 
@@ -290,91 +237,6 @@ void usbWaitReset(void) {
   nvic_sys_reset();
 }
 
-/* This low-level send bytes function is NON-BLOCKING; blocking behavior, with
- * a timeout, is implemented in usercode (or in the Wirish C++ high level
- * implementation).
- *
- * This function will quickly copy up to 64 bytes of data (out of an
- * arbitrarily large buffer) into the USB peripheral TX buffer and return the
- * number placed in that buffer. It is up to usercode to divide larger packets
- * into 64-byte chunks to guarantee delivery.
- *
- *
- */
-void usbBlockingSendByte(char ch) {
-    while (countTx);
-    UserToPMABufferCopy((uint8*)&ch,VCOM_TX_ADDR,1);
-    _SetEPTxCount(VCOM_TX_ENDP,1);
-    _SetEPTxValid(VCOM_TX_ENDP);
-    countTx = 1;
-    while (countTx);
-}
-
-uint32 usbSendBytes(const uint8* sendBuf, uint32 len) {
-  /* Last transmission hasn't finished, abort */
-  if (countTx) {
-    return 0;
-  }
-
-  // We can only put VCOM_TX_EPSIZE bytes in the buffer
-  /* FIXME XXX then why are we only copying half as many? */
-  if (len > VCOM_TX_EPSIZE / 2) {
-    len = VCOM_TX_EPSIZE / 2;
-  }
-
-  // Try to load some bytes if we can
-  if (len) {
-    usb_copy_to_pma(sendBuf, len, VCOM_TX_ADDR);
-    usb_set_ep_tx_count(VCOM_TX_ENDP, len);
-    countTx += len;
-    usb_set_ep_tx_stat(VCOM_TX_ENDP, USB_EP_STAT_TX_VALID);
-  }
-
-  return len;
-}
-
-/* returns the number of available bytes are in the recv FIFO */
-uint32 usbBytesAvailable(void) {
-  return newBytes;
-}
-
-/* Nonblocking byte receive.
- *
- * Copies up to len bytes from the local recieve FIFO (*NOT* the PMA)
- * into recvBuf and deq's the FIFO. */
-uint32 usbReceiveBytes(uint8* recvBuf, uint32 len) {
-  static int offset = 0;
-
-  if (len > newBytes) {
-      len = newBytes;
-  }
-
-  int i;
-  for (i=0;i<len;i++) {
-      recvBuf[i] = (uint8)(vcomBufferRx[i+offset]);
-  }
-
-  newBytes -= len;
-  offset += len;
-
-  /* Re-enable the RX endpoint, which we had set to receive 0 bytes */
-  if (newBytes == 0) {
-    usb_set_ep_rx_count(VCOM_RX_ENDP,VCOM_RX_EPSIZE);
-    usb_set_ep_rx_stat(VCOM_RX_ENDP, USB_EP_STAT_RX_VALID);
-    offset = 0;
-  }
-
-  return len;
-}
-
-uint8 usbGetDTR() {
-  return ((line_dtr_rts & CONTROL_LINE_DTR) != 0);
-}
-
-uint8 usbGetRTS() {
-  return ((line_dtr_rts & CONTROL_LINE_RTS) != 0);
-}
-
 uint8 usbIsConfigured() {
   return (bDeviceState == CONFIGURED);
 }
@@ -383,23 +245,9 @@ uint8 usbIsConnected() {
   return (bDeviceState != UNCONNECTED);
 }
 
-uint16 usbGetPending() {
-  return countTx;
-}
-
 /*
  * Auxiliary routines
  */
-
-static void usb_init(void) {    /* TODO make a public, improved version */
-    rcc_clk_enable(RCC_USB);
-
-    pInformation = &Device_Info;
-    pInformation->ControlState = 2;
-    pProperty = &Device_Property;
-    pUser_Standard_Requests = &User_Standard_Requests;
-    pProperty->Init();
-}
 
 static inline uint8 dispatch_endpt_zero(void);
 static inline void dispatch_endpt(uint8 ep);

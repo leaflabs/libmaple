@@ -27,7 +27,6 @@
 
 
 #include "libmaple.h"
-#include "usb_lib.h"
 
 #define USB_DESCRIPTOR_TYPE_DEVICE        0x01
 #define USB_DESCRIPTOR_TYPE_CONFIGURATION 0x02

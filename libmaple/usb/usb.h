@@ -27,13 +27,16 @@
 #ifndef _USB_H_
 #define _USB_H_
 
-#include "usb_lib.h"
 #include "libmaple.h"
 #include "gpio.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Convenience routines, etc.
+ */
 
 typedef enum {
     RESUME_EXTERNAL,

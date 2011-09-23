@@ -4,8 +4,10 @@
 #define __USB_CALLBACKS
 
 #include "libmaple.h"
-#include "usb_lib.h"
 #include "usb_config.h"
+
+#include "usb_type.h"
+#include "usb_core.h"
 
 #define SET_LINE_CODING        0x20
 #define GET_LINE_CODING        0x21
@@ -29,11 +31,11 @@ typedef enum {
   DTR_UNSET,
   DTR_HIGH,
   DTR_NEGEDGE,
-  DTR_LOW  
+  DTR_LOW
 } RESET_STATE;
 
 extern RESET_STATE reset_state;  /* tracks DTR/RTS */
-extern uint8       line_dtr_rts;  
+extern uint8       line_dtr_rts;
 extern volatile uint32 countTx;
 extern uint8 vcomBufferRx[VCOM_RX_BUFLEN];  /* no reason this has to be VCOM_RX_EPSIZE, could be bigger */
 extern volatile uint32 recvBufIn;   /* the FIFO in index to the recvbuffer */

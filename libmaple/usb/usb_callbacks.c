@@ -137,6 +137,21 @@ u8* vcomGetSetLineCoding(uint16 length) {
 void vcomSetLineState(void) {
 }
 
+static RESULT usbPowerOn(void) {
+  u16 wRegVal;
+
+  wRegVal = CNTR_FRES;
+  _SetCNTR(wRegVal);
+
+  wInterrupt_Mask = 0;
+  _SetCNTR(wInterrupt_Mask);
+  _SetISTR(0);
+  wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM; // the bare minimum
+  _SetCNTR(wInterrupt_Mask);
+
+  return USB_SUCCESS;
+}
+
 void usbInit(void) {
     pInformation->Current_Configuration = 0;
     usbPowerOn();

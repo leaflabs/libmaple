@@ -191,34 +191,6 @@ void usbResume(RESUME_STATE eResumeSetVal) {
     }
 }
 
-RESULT usbPowerOn(void) {
-  u16 wRegVal;
-
-  wRegVal = CNTR_FRES;
-  _SetCNTR(wRegVal);
-
-  wInterrupt_Mask = 0;
-  _SetCNTR(wInterrupt_Mask);
-  _SetISTR(0);
-  wInterrupt_Mask = CNTR_RESETM | CNTR_SUSPM | CNTR_WKUPM; // the bare minimum
-  _SetCNTR(wInterrupt_Mask);
-
-  return USB_SUCCESS;
-}
-
-RESULT usbPowerOff(void) {
-  _SetCNTR(CNTR_FRES);
-  _SetISTR(0);
-  _SetCNTR(CNTR_FRES + CNTR_PDWN);
-
-  /* note that all weve done here is powerdown the
-     usb peripheral. we have no disabled the clocks,
-     pulled the usb_disc pin back up, or reset the
-     application state machines */
-
-  return USB_SUCCESS;
-}
-
 /* overloaded ISR routine, this is the main usb ISR */
 void __irq_usb_lp_can_rx0(void) {
 wIstr = _GetISTR();

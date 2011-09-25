@@ -101,7 +101,9 @@ UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
+UPLOAD_jtag  := rm $(BUILD_PATH)/jtag.bin ; \
+                ln -s $(BOARD).bin $(BUILD_PATH)/jtag.bin && \
+                $(OPENOCD_WRAPPER) flash
 
 # Conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)

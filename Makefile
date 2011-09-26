@@ -106,7 +106,7 @@ UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 # Conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 install: $(BUILD_PATH)/$(BOARD).bin
-	@echo Install target: $(INSTALL_TARGET)
+	@echo "Install target:" $(INSTALL_TARGET)
 	$(UPLOAD_$(INSTALL_TARGET))
 
 # Force a rebuild if the target changed

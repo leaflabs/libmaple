@@ -19,6 +19,7 @@ void setup() {
     pinMode(BOARD_LED_PIN, OUTPUT);
     digitalWrite(BOARD_LED_PIN, HIGH);
 
+    SerialUSB.read();
     SerialUSB.println("*** Beginning RAM chip test");
 
     test_single_write();

@@ -34,6 +34,10 @@ PRODUCT_ID := 0003
 BOARD ?= maple
 MEMORY_TARGET ?= flash
 
+OOCD            ?= openocd
+OOCD_INTERFACE  ?= olimex-arm-usb-ocd
+OOCD_BOARD      ?= olimex_stm32_h103
+
 # $(BOARD)- and $(MEMORY_TARGET)-specific configuration
 include $(MAKEDIR)/target-config.mk
 
@@ -90,7 +94,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 ##
 
 # main target
-include $(SRCROOT)/build-targets.mk
+include build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
 
@@ -101,7 +105,13 @@ UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
+UPLOAD_jtag  := $(OOCD) -f interface/$(OOCD_INTERFACE).cfg \
+                        -f board/$(OOCD_BOARD).cfg \
+                        -c "init" -c "reset init" \
+                        -c "flash write_image erase unlock $(BUILD_PATH)/$(BOARD).elf 0" \
+                        -c "verify_image $(BUILD_PATH)/$(BOARD).elf" \
+                        -c "reset run" \
+                        -c "shutdown"
 
 # Conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
@@ -154,7 +164,10 @@ help:
 	@echo "  "
 
 debug:
-	$(OPENOCD_WRAPPER) debug
+	$(OOCD) -f interface/$(OOCD_INTERFACE).cfg \
+                -f board/$(OOCD_BOARD).cfg \
+                -c "init" -c "reset init" \
+                -c "reset halt"
 
 cscope:
 	rm -rf *.cscope

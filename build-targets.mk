@@ -39,5 +39,4 @@ MSG_INFO:
 	@echo "  See 'make help' for all possible targets"
 	@echo ""
 	@echo "================================================================================"
-	@echo
-
+	@echo ""

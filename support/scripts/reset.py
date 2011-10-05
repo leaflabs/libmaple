@@ -119,7 +119,6 @@ try:
         ser.close()
 
 except Exception as e:
-    print 'Failed to open serial port %s for reset: %s' % (maple_path,
-                                                           e.message)
+    print 'Failed to open serial port %s for reset' % maple_path
     sys.exit()
 

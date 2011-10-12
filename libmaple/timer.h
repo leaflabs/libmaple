@@ -994,12 +994,10 @@ static inline void timer_oc_set_mode(timer_dev *dev,
                                      uint8 channel,
                                      timer_oc_mode mode,
                                      uint8 flags) {
-    uint8 bit0 = channel & 1;
-    uint8 bit1 = (channel >> 1) & 1;
     /* channel == 1,2 -> CCMR1; channel == 3,4 -> CCMR2 */
-    __io uint32 *ccmr = &(dev->regs).gen->CCMR1 + bit1;
+    __io uint32 *ccmr = &(dev->regs).gen->CCMR1 + (((channel - 1) >> 1) & 1);
     /* channel == 1,3 -> shift = 0, channel == 2,4 -> shift = 8 */
-    uint8 shift = 8 * (1 - bit0);
+    uint8 shift = 8 * (1 - (channel & 1));
 
     uint32 tmp = *ccmr;
     tmp &= ~(0xFF << shift);

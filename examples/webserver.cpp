@@ -25,11 +25,10 @@ Content-Type: text/html\r\n\
 <body>\r\n\
 <br/>\r\n\
 <p align=\"center\"> \r\n\
-<FONT COlOR=\"blue\">G</FONT>\r\n\
-<FONT COLOR=\"red\">o</FONT>\r\n\
-<FONT COLOR=\"yellow\">o</FONT>\r\n\
-<FONT COLOR=\"blue\">g</FONT>\r\n\
-<FONT COLOR=\"green\">l</FONT>\r\n\
+<FONT COlOR=\"green\">M</FONT>\r\n\
+<FONT COLOR=\"orange\">a</FONT>\r\n\
+<FONT COLOR=\"green\">p</FONT>\r\n\
+<FONT COLOR=\"yellow\">l</FONT>\r\n\
 <FONT COLOR=\"red\">e</FONT>\r\n\
 </p><br />\r\n\
 <form name=\"input\" action=\"main\" method=\"get\">\r\n\

@@ -28,11 +28,12 @@
  *  @brief Arduino-style PWM implementation.
  */
 
+#include "pwm.h"
+
 #include "libmaple_types.h"
 #include "timer.h"
 
 #include "boards.h"
-#include "pwm.h"
 
 void pwmWrite(uint8 pin, uint16 duty_cycle) {
     timer_dev *dev = PIN_MAP[pin].timer_device;

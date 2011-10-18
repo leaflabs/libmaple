@@ -33,10 +33,9 @@
 #ifndef _IO_H_
 #define _IO_H_
 
-#include "gpio.h"
-#include "adc.h"
+#include "libmaple_types.h"
 
-#include "wirish_time.h"
+#include "boards.h"
 
 /**
  * Specifies a GPIO pin behavior.
@@ -111,6 +110,9 @@ typedef enum WiringPinMode {
  * @see WiringPinMode
  */
 void pinMode(uint8 pin, WiringPinMode mode);
+
+#define HIGH 0x1
+#define LOW  0x0
 
 /**
  * Writes a (digital) value to a pin.  The pin must have its
@@ -219,4 +221,3 @@ uint8 waitForButtonPress(uint32 timeout_millis=0);
 void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 value);
 
 #endif
-

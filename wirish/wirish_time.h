@@ -32,9 +32,9 @@
 #ifndef _TIME_H_
 #define _TIME_H_
 
-#include "libmaple.h"
-#include "nvic.h"
+#include "libmaple_types.h"
 #include "systick.h"
+
 #include "boards.h"
 
 #define US_PER_MS               1000
@@ -64,7 +64,7 @@ static inline uint32 micros(void) {
     } while (ms != millis());
 
     /* SYSTICK_RELOAD_VAL is 1 less than the number of cycles it
-       actually takes to complete a SysTick reload */
+     * actually takes to complete a SysTick reload */
     res = (ms * US_PER_MS) +
         (SYSTICK_RELOAD_VAL + 1 - cycle_cnt) / CYCLES_PER_MICROSECOND;
 

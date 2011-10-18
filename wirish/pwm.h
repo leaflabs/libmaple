@@ -33,6 +33,8 @@
 #ifndef _PWM_H_
 #define _PWM_H_
 
+#include "libmaple_types.h"
+
 /**
  * As a convenience, analogWrite is an alias of pwmWrite to ease
  * porting Arduino code.  However, period and duty will have to be

@@ -32,6 +32,7 @@
 #define _USB_H_
 
 #include "libmaple_types.h"
+#include "rcc.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,28 +52,31 @@ typedef enum usb_dev_state {
     USB_CONFIGURED
 } usb_dev_state;
 
-/* Encapsulates global state formerly handled by usb_lib/
- * functionality */
+/* Encapsulates global state formerly handled by usb_lib/ */
 typedef struct usblib_dev {
     uint32 irq_mask;
     void (**ep_int_in)(void);
     void (**ep_int_out)(void);
     usb_dev_state state;
+    rcc_clk_id clk_id;
 } usblib_dev;
 
 extern usblib_dev *USBLIB;
 
-/*
- * Convenience routines, etc.
- */
+void usb_init_usblib(usblib_dev *dev,
+                     void (**ep_int_in)(void),
+                     void (**ep_int_out)(void));
 
-void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void));
+static inline uint8 usb_is_connected(usblib_dev *dev) {
+    return dev->state != USB_UNCONNECTED;
+}
 
-uint8 usbIsConnected(void);
-uint8 usbIsConfigured(void);
+static inline uint8 usb_is_configured(usblib_dev *dev) {
+    return dev->state == USB_CONFIGURED;
+}
 
 #ifdef __cplusplus
-} // extern "C"
+}
 #endif
 
-#endif // _USB_H_
+#endif

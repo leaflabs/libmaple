@@ -398,7 +398,7 @@ void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
     gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host
 
     /* initialize USB peripheral */
-    usb_init_usblib(ep_int_in, ep_int_out);
+    usb_init_usblib(USBLIB, ep_int_in, ep_int_out);
 }
 
 void usb_cdcacm_disable(gpio_dev *disc_dev, uint8 disc_bit) {

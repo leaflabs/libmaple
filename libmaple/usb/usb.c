@@ -72,6 +72,7 @@ struct {
 static usblib_dev usblib = {
     .irq_mask = USB_ISR_MSK,
     .state = USB_UNCONNECTED,
+    .clk_id = RCC_USB,
 };
 usblib_dev *USBLIB = &usblib;
 
@@ -79,11 +80,13 @@ usblib_dev *USBLIB = &usblib;
  * Routines
  */
 
-void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void)) {
-    rcc_clk_enable(RCC_USB);
+void usb_init_usblib(usblib_dev *dev,
+                     void (**ep_int_in)(void),
+                     void (**ep_int_out)(void)) {
+    rcc_clk_enable(dev->clk_id);
 
-    USBLIB->ep_int_in = ep_int_in;
-    USBLIB->ep_int_out = ep_int_out;
+    dev->ep_int_in = ep_int_in;
+    dev->ep_int_out = ep_int_out;
 
     /* usb_lib/ declares both and then assumes that pFoo points to Foo
      * (even though the names don't always match), which is stupid for
@@ -240,14 +243,6 @@ void __irq_usb_lp_can_rx0(void) {
     dispatch_ctr_lp();
   }
 #endif
-}
-
-uint8 usbIsConfigured() {
-  return USBLIB->state == USB_CONFIGURED;
-}
-
-uint8 usbIsConnected() {
-  return USBLIB->state != USB_UNCONNECTED;
 }
 
 /*

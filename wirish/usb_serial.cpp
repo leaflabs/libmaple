@@ -57,7 +57,7 @@ void USBSerial::write(const char *str) {
 }
 
 void USBSerial::write(const void *buf, uint32 len) {
-    if (!(usbIsConnected() && usbIsConfigured()) || !buf) {
+    if (!this->isConnected() || !buf) {
         return;
     }
 
@@ -103,7 +103,7 @@ uint8 USBSerial::pending(void) {
 }
 
 uint8 USBSerial::isConnected(void) {
-    return usbIsConnected() && usbIsConfigured();
+    return usb_is_connected(USBLIB) && usb_is_configured(USBLIB);
 }
 
 uint8 USBSerial::getDTR(void) {

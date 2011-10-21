@@ -66,26 +66,7 @@ extern usblib_dev *USBLIB;
  * Convenience routines, etc.
  */
 
-typedef enum {
-    RESUME_EXTERNAL,
-    RESUME_INTERNAL,
-    RESUME_LATER,
-    RESUME_WAIT,
-    RESUME_START,
-    RESUME_ON,
-    RESUME_OFF,
-    RESUME_ESOF
-} RESUME_STATE;
-
 void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void));
-
-void usbSuspend(void);
-void usbResumeInit(void);
-void usbResume(RESUME_STATE);
-
-/* overloaded ISR routine, this is the main usb ISR */
-void __irq_usb_lp_can_rx0(void);
-void usbWaitReset(void);
 
 uint8 usbIsConnected(void);
 uint8 usbIsConfigured(void);

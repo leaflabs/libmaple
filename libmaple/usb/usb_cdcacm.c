@@ -34,6 +34,7 @@
 #include "usb_cdcacm.h"
 
 #include "nvic.h"
+#include "delay.h"
 
 #include "usb.h"
 #include "descriptors.h"
@@ -80,6 +81,8 @@ static uint8* usbGetConfigDescriptor(uint16 length);
 static uint8* usbGetStringDescriptor(uint16 length);
 static void usbSetConfiguration(void);
 static void usbSetDeviceAddress(void);
+
+static void wait_reset(void);
 
 /*
  * VCOM config
@@ -510,7 +513,7 @@ static void vcomDataRxCb(void) {
         reset_state = DTR_LOW;
 
         if  (newBytes >= 4) {
-            unsigned int target = (unsigned int)usbWaitReset | 0x1;
+            unsigned int target = (unsigned int)wait_reset | 0x1;
 
             usb_copy_from_pma(chkBuf, 4, VCOM_RX_ADDR);
 
@@ -750,4 +753,10 @@ static void usbSetConfiguration(void) {
 
 static void usbSetDeviceAddress(void) {
     USBLIB->state = USB_ADDRESSED;
+}
+
+#define RESET_DELAY                     100000
+static void wait_reset(void) {
+  delay_us(RESET_DELAY);
+  nvic_sys_reset();
 }

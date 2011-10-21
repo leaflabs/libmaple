@@ -22,8 +22,8 @@
  * THE SOFTWARE.
  * ****************************************************************************/
 
-#ifndef __DESCRIPTORS_H
-#define __DESCRIPTORS_H
+#ifndef _USB_DESCRIPTORS_H_
+#define _USB_DESCRIPTORS_H_
 
 #include "libmaple.h"
 

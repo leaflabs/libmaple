@@ -37,7 +37,7 @@
 #include "delay.h"
 
 #include "usb.h"
-#include "descriptors.h"
+#include "usb_descriptors.h"
 #include "usb_lib_globals.h"
 #include "usb_reg_map.h"
 

@@ -24,6 +24,10 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/*
+ * NOTE: This API is _unstable_ and will change drastically over time.
+ */
+
 #ifndef _USB_H_
 #define _USB_H_
 

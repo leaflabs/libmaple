@@ -59,8 +59,8 @@ static inline uint32 micros(void) {
     uint32 res;
 
     do {
-        cycle_cnt = systick_get_count();
         ms = millis();
+        cycle_cnt = systick_get_count();
     } while (ms != millis());
 
     /* SYSTICK_RELOAD_VAL is 1 less than the number of cycles it

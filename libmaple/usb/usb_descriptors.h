@@ -141,13 +141,6 @@ typedef struct {
     uint16 bString[];
 } USB_Descriptor_String;
 
-extern const USB_Descriptor_Device usbVcomDescriptor_Device;
-extern const USB_Descriptor_Config usbVcomDescriptor_Config;
-
-extern const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)];
-extern const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)];
-extern const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)];
-
 #if defined(__cplusplus)
 }
 #endif

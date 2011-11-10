@@ -98,9 +98,16 @@ include $(SRCROOT)/build-targets.mk
 UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a0 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+ifeq ($(BOARD), discovery)
+# STM Windows util
+UPLOAD_flash := $(ST-LINK_CLI) -c SWD -P "$(BUILD_PATH)/$(BOARD).bin" 0x08000000 -Run
+# Linux util http://code.google.com/p/arm-utilities/
+# UPLOAD_flash := $(STLINK_DOWNLOD) program=$(BUILD_PATH)/$(BOARD).bin
+else
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(VENDOR_ID):$(PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
+endif
 UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 
 # Conditionally upload to whatever the last build was
@@ -138,7 +145,7 @@ help:
 	@echo "  if not compiling to Flash."
 	@echo "  "
 	@echo "  Valid BOARDs:"
-	@echo "      maple, maple_mini, maple_RET6, maple_native"
+	@echo "      maple, maple_mini, maple_RET6, maple_native, olimex_stm32_h103, discovery"
 	@echo "  "
 	@echo "  Valid MEMORY_TARGETs (default=flash):"
 	@echo "      ram:    Compile sketch code to ram"

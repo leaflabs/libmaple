@@ -30,6 +30,7 @@
  * By default, we bring up all Maple boards to 72MHz, clocked off the
  * PLL, driven by the 8MHz external crystal. AHB and APB2 are clocked
  * at 72MHz.  APB1 is clocked at 36MHz.
+ * STM32VLDiscovery clocked at 24 MHz, APB1 at 12 MHz.
  */
 
 #include "boards.h"
@@ -58,7 +59,9 @@ void init(void) {
     afio_init();
     setupADC();
     setupTimers();
+#ifndef BOARD_discovery
     usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+#endif
     boardInit();
 }
 
@@ -87,7 +90,11 @@ static void setupFlash(void) {
  * comment above.
  */
 static void setupClocks() {
+#ifndef BOARD_discovery
     rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
+#else
+    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_3);
+#endif
     rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
     rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
     rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);

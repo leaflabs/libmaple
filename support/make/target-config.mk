@@ -50,6 +50,18 @@ ifeq ($(BOARD), olimex_stm32_h103)
    SRAM_SIZE := 20480
 endif
 
+ifeq ($(BOARD), discovery)
+   MCU := STM32F100RB
+   PRODUCT_ID := 0003
+   ERROR_LED_PORT := GPIOC
+   ERROR_LED_PIN  := 9
+   FLASH_SIZE := 131072
+   SRAM_SIZE := 8096
+   DENSITY := STM32_MEDIUM_DENSITY
+   ST-LINK_CLI := "ST-LINK_CLI.exe"
+   STLINK_DOWNLOD := stlink-download
+endif
+
 # Memory target-specific configuration values
 
 ifeq ($(MEMORY_TARGET), ram)

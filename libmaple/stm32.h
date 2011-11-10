@@ -55,7 +55,11 @@
 #endif
 
 #ifndef STM32_PCLK1
-#define STM32_PCLK1   36000000U
+    #ifdef MCU_STM32F100RB
+        #define STM32_PCLK1   12000000U
+    #else
+        #define STM32_PCLK1   36000000U
+    #endif
 #endif
 #ifndef PCLK1
 #define PCLK1 STM32_PCLK1
@@ -65,7 +69,11 @@
 #endif
 
 #ifndef STM32_PCLK2
-#define STM32_PCLK2   72000000U
+    #ifdef MCU_STM32F100RB
+        #define STM32_PCLK2   24000000U
+    #else
+        #define STM32_PCLK2   72000000U
+    #endif
 #endif
 #ifndef PCLK2
 #define PCLK2 STM32_PCLK2
@@ -177,6 +185,16 @@
     #define STM32_NR_GPIO_PORTS          4
     #define STM32_DELAY_US_MULT         12
     #define STM32_SRAM_END              ((void*)0x20010000)
+
+    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
+    #define DELAY_US_MULT               STM32_DELAY_US_MULT
+
+#elif defined(MCU_STM32F100RB)
+    /* e.g., STM32VLDISCOVERY -------------------*/
+
+    #define STM32_NR_GPIO_PORTS          4
+    #define STM32_DELAY_US_MULT          8
+    #define STM32_SRAM_END              ((void*)0x20005000)
 
     #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
     #define DELAY_US_MULT               STM32_DELAY_US_MULT

@@ -12,9 +12,9 @@
  * This file is released into the public domain.
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
-#include "ring_buffer.h"
+#include <libmaple/ring_buffer.h>
 
 #define BUF_SIZE 64
 ring_buffer ring_buf;

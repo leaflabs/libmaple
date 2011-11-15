@@ -21,8 +21,9 @@
  * Modified 12 April 2011 by Marti Bolivar <mbolivar@leaflabs.com>
  */
 
-#include "Print.h"
+#include <wirish/Print.h>
 
+#include <wirish/wirish_math.h>
 #include <limits.h>
 
 #ifndef LLONG_MAX
@@ -39,8 +40,6 @@
  */
 #define LLONG_MAX 9223372036854775807LL
 #endif
-
-#include "wirish_math.h"
 
 /*
  * Public methods

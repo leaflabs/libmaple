@@ -31,13 +31,14 @@
  * Currently, only master mode is supported.
  */
 
-#include "libmaple.h"
-#include "rcc.h"
-#include "gpio.h"
-#include "nvic.h"
-#include "i2c.h"
-#include "string.h"
-#include "systick.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/rcc.h>
+#include <libmaple/gpio.h>
+#include <libmaple/nvic.h>
+#include <libmaple/i2c.h>
+#include <libmaple/systick.h>
+
+#include <string.h>
 
 static i2c_dev i2c_dev1 = {
     .regs         = I2C1_BASE,

@@ -19,11 +19,11 @@
  * This code is released into the public domain.
  */
 
-#include "dma.h"
-#include "usart.h"
-#include "gpio.h"
+#include <libmaple/dma.h>
+#include <libmaple/usart.h>
+#include <libmaple/gpio.h>
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 #define BAUD 9600
 

@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#include "wirish.h"
-#include "rcc.h"
-#include "fsmc.h"
+#include <wirish/wirish.h>
+#include <libmaple/rcc.h>
+#include <libmaple/fsmc.h>
 
 // -- SRAM config -------------------------------------------------------------
 

@@ -30,7 +30,7 @@
  * @brief  New-style timer interface
  */
 
-#include "timer.h"
+#include <libmaple/timer.h>
 
 /* Just like the corresponding DIER bits:
  * [0] = Update handler;

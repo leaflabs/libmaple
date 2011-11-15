@@ -17,7 +17,7 @@
  * Author: Marti Bolivar <mbolivar@leaflabs.com>
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 HardwareSPI alice(2);
 

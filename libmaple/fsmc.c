@@ -29,8 +29,8 @@
  * @brief Flexible static memory controller support.
  */
 
-#include "fsmc.h"
-#include "gpio.h"
+#include <libmaple/fsmc.h>
+#include <libmaple/gpio.h>
 
 #ifdef STM32_HIGH_DENSITY
 

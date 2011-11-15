@@ -22,7 +22,7 @@
  * $Id: wiring.c 248 2007-02-03 15:36:30Z mellis $
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 void shiftOut(uint8 dataPin, uint8 clockPin, uint8 bitOrder, uint8 val) {
     int i;

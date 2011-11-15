@@ -1,7 +1,7 @@
 // Tests the SysTick enable/disable functions
 
-#include "wirish.h"
-#include "systick.h"
+#include <wirish/wirish.h>
+#include <libmaple/systick.h>
 
 void setup() {
     pinMode(BOARD_LED_PIN, OUTPUT);

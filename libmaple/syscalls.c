@@ -30,7 +30,7 @@
  * memory allocation.
  */
 
-#include "libmaple.h"
+#include <libmaple/libmaple.h>
 
 #include <sys/stat.h>
 #include <errno.h>

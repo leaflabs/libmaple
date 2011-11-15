@@ -29,10 +29,10 @@
  *  interface to I2C (two-wire) communication.
  */
 
-#include "wirish.h"
-
 #ifndef _WIRE_H_
 #define _WIRE_H_
+
+#include <wirish/wirish.h>
 
 typedef struct {
   uint8 scl;

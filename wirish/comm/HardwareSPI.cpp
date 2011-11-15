@@ -29,14 +29,14 @@
  * @brief Wirish SPI implementation.
  */
 
-#include "HardwareSPI.h"
+#include <wirish/HardwareSPI.h>
 
-#include "timer.h"
-#include "util.h"
-#include "rcc.h"
+#include <libmaple/timer.h>
+#include <libmaple/util.h>
+#include <libmaple/rcc.h>
 
-#include "wirish.h"
-#include "boards.h"
+#include <wirish/wirish.h>
+#include <wirish/boards.h>
 
 struct spi_pins {
     uint8 nss;

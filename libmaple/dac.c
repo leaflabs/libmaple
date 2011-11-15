@@ -29,9 +29,9 @@
  * @brief Digital to analog converter support.
  */
 
-#include "libmaple.h"
-#include "gpio.h"
-#include "dac.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/gpio.h>
+#include <libmaple/dac.h>
 
 #ifdef STM32_HIGH_DENSITY
 

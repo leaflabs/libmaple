@@ -24,9 +24,9 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#include "HardwareTimer.h"
-#include "boards.h"             // for CYCLES_PER_MICROSECOND
-#include "wirish_math.h"
+#include <wirish/HardwareTimer.h>
+#include <wirish/boards.h>             // for CYCLES_PER_MICROSECOND
+#include <wirish/wirish_math.h>
 
 // TODO [0.1.0] Remove deprecated pieces
 

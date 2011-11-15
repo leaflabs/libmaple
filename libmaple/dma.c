@@ -31,9 +31,9 @@
  * @brief Direct Memory Access peripheral support
  */
 
-#include "dma.h"
-#include "bitband.h"
-#include "util.h"
+#include <libmaple/dma.h>
+#include <libmaple/bitband.h>
+#include <libmaple/util.h>
 
 /*
  * Devices

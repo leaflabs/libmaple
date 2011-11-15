@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 // test routines
 void run_exti_test(void);

@@ -30,7 +30,6 @@
  */
 
 #include "Wire.h"
-#include "wirish.h"
 
 /* low level conventions:
  * - SDA/SCL idle high (expected high)

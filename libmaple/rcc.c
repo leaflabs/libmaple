@@ -30,10 +30,10 @@
  *        stm32, clock enable/disable and peripheral reset commands.
  */
 
-#include "libmaple.h"
-#include "flash.h"
-#include "rcc.h"
-#include "bitband.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/flash.h>
+#include <libmaple/rcc.h>
+#include <libmaple/bitband.h>
 
 #define APB1                            RCC_APB1
 #define APB2                            RCC_APB2

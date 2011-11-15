@@ -1,7 +1,7 @@
 #include <stddef.h>             // for ptrdiff_t
 
-#include "wirish.h"
-#include "fsmc.h"
+#include <wirish/wirish.h>
+#include <libmaple/fsmc.h>
 
 #ifndef BOARD_maple_native
 #error "Sorry, this example only works on Maple Native."

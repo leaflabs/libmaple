@@ -37,9 +37,9 @@
  * See STM32 manual RM0008 for how to calculate this.
  */
 
-#include "libmaple.h"
-#include "rcc.h"
-#include "adc.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/rcc.h>
+#include <libmaple/adc.h>
 
 static adc_dev adc1 = {
     .regs   = ADC1_BASE,

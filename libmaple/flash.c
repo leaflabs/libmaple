@@ -29,9 +29,9 @@
  * @brief Flash management functions
  */
 
-#include "libmaple.h"
-#include "flash.h"
-#include "bitband.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/flash.h>
+#include <libmaple/bitband.h>
 
 /**
  * @brief Turn on the hardware prefetcher.

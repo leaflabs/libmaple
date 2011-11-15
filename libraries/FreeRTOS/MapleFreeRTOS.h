@@ -27,7 +27,7 @@
 #ifndef __MAPLE_FREERTOS_H__
 #define __MAPLE_FREERTOS_H__
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 extern "C" {
 #define GCC_ARMCM3

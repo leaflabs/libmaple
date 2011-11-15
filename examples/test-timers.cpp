@@ -1,7 +1,7 @@
 // Program to test the timer.h implementation's essential functionality.
 
-#include "wirish.h"
-#include "timer.h"
+#include <wirish/wirish.h>
+#include <libmaple/timer.h>
 
 void handler1(void);
 void handler2(void);

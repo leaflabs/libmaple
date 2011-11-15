@@ -29,8 +29,8 @@
  * @brief GPIO initialization routine
  */
 
-#include "gpio.h"
-#include "rcc.h"
+#include <libmaple/gpio.h>
+#include <libmaple/rcc.h>
 
 /*
  * GPIO devices

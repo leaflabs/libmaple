@@ -1,6 +1,6 @@
 // Blinks the built-in LED
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 void setup() {
     pinMode(BOARD_LED_PIN, OUTPUT);

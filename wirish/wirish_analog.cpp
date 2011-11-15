@@ -28,11 +28,11 @@
  *  @brief Arduino-compatible ADC implementation.
  */
 
-#include "io.h"
+#include <wirish/io.h>
 
-#include "adc.h"
+#include <libmaple/adc.h>
 
-#include "boards.h"
+#include <wirish/boards.h>
 
 /* Assumes that the ADC has been initialized and that the pin is set
  * to INPUT_ANALOG */

@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "WProgram.h"
+#include <wirish/WProgram.h>
 
 // When the display powers up, it is configured as follows:
 //

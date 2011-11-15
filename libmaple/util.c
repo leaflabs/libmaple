@@ -30,12 +30,12 @@
  * and messages dumped over a UART for failed asserts.
  */
 
-#include "libmaple.h"
-#include "usart.h"
-#include "gpio.h"
-#include "nvic.h"
-#include "adc.h"
-#include "timer.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/usart.h>
+#include <libmaple/gpio.h>
+#include <libmaple/nvic.h>
+#include <libmaple/adc.h>
+#include <libmaple/timer.h>
 
 /* Failed ASSERT()s send out a message using this USART config. */
 #ifndef ERROR_USART

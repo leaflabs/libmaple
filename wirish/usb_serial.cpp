@@ -28,11 +28,14 @@
  * @brief USB virtual serial terminal
  */
 
+#include <wirish/usb_serial.h>
+
 #include <string.h>
 
-#include "wirish.h"
 #include "usb_cdcacm.h"
-#include "usb.h"
+#include <libmaple/usb.h>
+
+#include <wirish/wirish.h>
 
 #define USB_TIMEOUT 50
 

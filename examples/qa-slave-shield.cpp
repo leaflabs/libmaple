@@ -1,6 +1,6 @@
 // Slave mode for Quality Assurance test
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 #define INTER_TOGGLE_DELAY_NORMAL 5
 #define INTER_TOGGLE_DELAY_SLOW   80

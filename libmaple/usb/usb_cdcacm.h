@@ -32,8 +32,8 @@
 #ifndef _USB_CDCACM_H_
 #define _USB_CDCACM_H_
 
-#include "libmaple_types.h"
-#include "gpio.h"
+#include <libmaple/libmaple_types.h>
+#include <libmaple/gpio.h>
 
 #ifdef __cplusplus
 extern "C" {

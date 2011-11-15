@@ -29,12 +29,13 @@
  * @brief Wirish serial port implementation.
  */
 
-#include "libmaple.h"
-#include "gpio.h"
-#include "timer.h"
+#include <wirish/HardwareSerial.h>
 
-#include "HardwareSerial.h"
-#include "boards.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/gpio.h>
+#include <libmaple/timer.h>
+
+#include <wirish/boards.h>
 
 #define TX1 BOARD_USART1_TX_PIN
 #define RX1 BOARD_USART1_RX_PIN

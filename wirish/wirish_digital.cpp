@@ -28,13 +28,13 @@
  * Arduino-compatible digital I/O implementation.
  */
 
-#include "io.h"
+#include <wirish/io.h>
 
-#include "gpio.h"
-#include "timer.h"
+#include <libmaple/gpio.h>
+#include <libmaple/timer.h>
 
-#include "wirish_time.h"
-#include "boards.h"
+#include <wirish/wirish_time.h>
+#include <wirish/boards.h>
 
 void pinMode(uint8 pin, WiringPinMode mode) {
     gpio_pin_mode outputMode;

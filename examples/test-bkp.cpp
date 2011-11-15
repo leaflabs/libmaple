@@ -1,8 +1,8 @@
 #include <stdio.h>              // for snprintf()
 
-#include "wirish.h"
-#include "bkp.h"
-#include "iwdg.h"
+#include <wirish/wirish.h>
+#include <libmaple/bkp.h>
+#include <libmaple/iwdg.h>
 
 void print_bkp_contents();
 void write_to_bkp(uint16 val);

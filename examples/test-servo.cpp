@@ -29,7 +29,7 @@
 
 #include <stdio.h>
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 #include "libraries/Servo/Servo.h"
 

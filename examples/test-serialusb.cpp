@@ -1,7 +1,7 @@
 // Tests SerialUSB functionality.
 
-#include "wirish.h"
-#include "usb.h"
+#include <wirish/wirish.h>
+#include "usb_cdcacm.h"
 
 #define QUICKPRINT  0
 #define BIGSTUFF    1
@@ -37,7 +37,7 @@ void loop() {
     switch (state) {
         case QUICKPRINT:
             for (int i = 0; i < 30; i++) {
-                usbSendBytes(&c1, 1);
+                usb_cdcacm_putc((char)c1, 1);
                 SerialUSB.print('.');
                 SerialUSB.print('|');
             }

@@ -35,8 +35,8 @@
   Marti Bolivar <mbolivar@leaflabs.com>
  */
 
-#include "wirish.h"
-#include "systick.h"
+#include <wirish/wirish.h>
+#include <libmaple/systick.h>
 
 // FIXME: generalize for Native and Mini
 

@@ -31,7 +31,7 @@
  * @brief USART control routines
  */
 
-#include "usart.h"
+#include <libmaple/usart.h>
 
 /*
  * Devices

@@ -29,10 +29,10 @@
  * @brief Backup register support.
  */
 
-#include "bkp.h"
-#include "pwr.h"
-#include "rcc.h"
-#include "bitband.h"
+#include <libmaple/bkp.h>
+#include <libmaple/pwr.h>
+#include <libmaple/rcc.h>
+#include <libmaple/bitband.h>
 
 static inline __io uint32* data_register(uint8 reg);
 

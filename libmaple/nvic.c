@@ -29,9 +29,9 @@
  * @brief Nested vector interrupt controller support.
  */
 
-#include "nvic.h"
-#include "scb.h"
-#include "stm32.h"
+#include <libmaple/nvic.h>
+#include <libmaple/scb.h>
+#include <libmaple/stm32.h>
 
 /**
  * @brief Set interrupt priority for an interrupt line

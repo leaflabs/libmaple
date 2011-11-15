@@ -4,7 +4,7 @@
 // Useful for testing Maple features and troubleshooting.
 // Communicates over SerialUSB.
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 // ASCII escape character
 #define ESC       ((uint8)27)

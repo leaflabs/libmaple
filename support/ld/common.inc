@@ -22,21 +22,21 @@ GROUP(libgcc.a libc.a libm.a)
 INCLUDE vector_symbols.inc
 
 /* STM32 vector table. */
-EXTERN(__cs3_stm32_vector_table)
+EXTERN(__stm32_vector_table)
 
-/* libcs3 C start function. */
-EXTERN(__cs3_start_c)
+/* C runtime initialization function. */
+EXTERN(start_c)
 
 /* main entry point */
 EXTERN(main)
 
 /* Initial stack pointer value. */
-EXTERN(__cs3_stack)
-PROVIDE(__cs3_stack = ORIGIN(ram) + LENGTH(ram));
+EXTERN(__msp_init)
+PROVIDE(__msp_init = ORIGIN(ram) + LENGTH(ram));
 
 /* Reset vector and chip reset entry point */
 EXTERN(_start)
-PROVIDE(__cs3_reset = _start);
+PROVIDE(__exc_reset = _start);
 
 /* Heap boundaries, for libmaple */
 EXTERN(_lm_heap_start);
@@ -162,7 +162,7 @@ SECTIONS
          * to go about this. [mbolivar]
          */
         _lm_heap_start = DEFINED(_lm_heap_start) ? _lm_heap_start : _end;
-        _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __cs3_stack;
+        _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __msp_init;
         . = ALIGN (8);
         _edata = .;
       } > REGION_DATA AT> REGION_TEXT

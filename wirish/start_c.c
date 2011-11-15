@@ -13,7 +13,7 @@
  * they apply.
  */
 
-#include "cs3.h"
+#include <stddef.h>
 
 extern void __libc_init_array (void);
 
@@ -21,30 +21,37 @@ extern int main (int, char **, char **);
 
 extern void exit (int) __attribute__ ((noreturn, weak));
 
-void  __attribute ((noreturn))
+extern char _data, _edata;
+extern char _bss, _ebss;
+
+struct rom_img_cfg {
+  long long *img_start;
+};
+
+extern char _lm_rom_img_cfgp;
+
+void  __attribute__ ((noreturn))
 __cs3_start_c (void)
 {
-  unsigned regions = __cs3_region_num;
-  const struct __cs3_region *rptr = __cs3_regions;
+  struct rom_img_cfg *img_cfg = (struct rom_img_cfg*)&_lm_rom_img_cfgp;
+  long long *src;
+  long long *dst;
   int exit_code;
 
-  /* Initialize memory */
-  for (regions = __cs3_region_num, rptr = __cs3_regions; regions--; rptr++)
-    {
-      long long *src = (long long *)rptr->init;
-      long long *dst = (long long *)rptr->data;
-      unsigned limit = rptr->init_size;
-      unsigned count;
-
-      if (src != dst)
-	for (count = 0; count != limit; count += sizeof (long long))
-	  *dst++ = *src++;
-      else
-	dst = (long long *)((char *)dst + limit);
-      limit = rptr->zero_size;
-      for (count = 0; count != limit; count += sizeof (long long))
-	*dst++ = 0;
+  /* Initialize .data, if necessary. */
+  src = img_cfg->img_start;
+  dst = (long long*)&_data;
+  if (src != dst) {
+    while (dst < (long long*)&_edata) {
+      *dst++ = *src++;
     }
+  }
+
+  /* Zero .bss. */
+  dst = (long long*)&_bss;
+  while (dst < (long long*)&_ebss) {
+    *dst++ = 0;
+  }
 
   /* Run initializers.  */
   __libc_init_array ();

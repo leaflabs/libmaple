@@ -12,8 +12,9 @@ WIRISH_INCLUDES := -I$(d) -I$(d)/comm -I$(d)/boards
 CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
 
 # Local rules and targets
-cSRCS_$(d) :=  
 
+sSRCS_$(d) := start.S
+cSRCS_$(d) := start_c.c
 cppSRCS_$(d) := wirish_math.cpp		 \
                 Print.cpp		 \
 		boards.cpp               \
@@ -34,10 +35,12 @@ cppSRCS_$(d) := wirish_math.cpp		 \
 		ext_interrupts.cpp	 \
 		wirish_digital.cpp
 
+sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)
 cppFILES_$(d) := $(cppSRCS_$(d):%=$(d)/%)
 
-OBJS_$(d)     := $(cFILES_$(d):%.c=$(BUILD_PATH)/%.o) \
+OBJS_$(d)     := $(sFILES_$(d):%.S=$(BUILD_PATH)/%.o) \
+                 $(cFILES_$(d):%.c=$(BUILD_PATH)/%.o) \
                  $(cppFILES_$(d):%.cpp=$(BUILD_PATH)/%.o)
 DEPS_$(d)     := $(OBJS_$(d):%.o=%.d)
 

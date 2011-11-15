@@ -6,7 +6,6 @@
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(_start)
-SEARCH_DIR(.)
 
 /*
  * Link against libgcc, libc, and libm
@@ -22,10 +21,10 @@ GROUP(libgcc.a libc.a libm.a)
  */
 INCLUDE vector_symbols.inc
 
-/* STM32 vector table. See stm32_vector_table.S  */
+/* STM32 vector table. */
 EXTERN(__cs3_stm32_vector_table)
 
-/* libcs3 C start function. See cs3.h */
+/* libcs3 C start function. */
 EXTERN(__cs3_start_c)
 
 /* main entry point */
@@ -33,9 +32,9 @@ EXTERN(main)
 
 /* Initial stack pointer value. */
 EXTERN(__cs3_stack)
-PROVIDE(__cs3_stack = __cs3_region_start_ram + LENGTH(ram));
+PROVIDE(__cs3_stack = ORIGIN(ram) + LENGTH(ram));
 
-/* Reset vector and chip reset entry point. See start.S */
+/* Reset vector and chip reset entry point */
 EXTERN(_start)
 PROVIDE(__cs3_reset = _start);
 
@@ -48,7 +47,7 @@ SECTIONS
     /* TODO pull out rodata and stick into separate sections  */
     .text :
       {
-        __text_start = .;
+        _text = .;
         /*
          * STM32 vector table.  Leave this here.  Yes, really.
          */
@@ -100,17 +99,6 @@ SECTIONS
         KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
         KEEP (*(SORT(.dtors.*)))
         KEEP (*crtend.o(.dtors))
-
-        /*
-         * struct __cs3_region used during __cs3_start_c
-         */
-        . = ALIGN(4);
-        __cs3_regions = .;
-        LONG (0)                          /* flags */
-        LONG (__cs3_region_init_ram)      /* initial contents */
-        LONG (__cs3_region_start_ram)     /* start address */
-        LONG (__cs3_region_init_size_ram) /* size of initial data */
-        LONG (__cs3_region_zero_size_ram) /* additional size to be zeroed */
       } > REGION_TEXT
 
     /*
@@ -119,6 +107,11 @@ SECTIONS
     .rodata :
       {
         *(.rodata .rodata.* .gnu.linkonce.r.*)
+
+        /* ROM image configuration; for C startup */
+        . = ALIGN(4);
+        _lm_rom_img_cfgp = .;
+        LONG(LOADADDR(.data));
       } > REGION_RODATA
 
     /*
@@ -153,7 +146,8 @@ SECTIONS
      */
     .data :
       {
-        __cs3_region_start_ram = DEFINED(_FLASH_BUILD) ? . : __text_start;
+        . = ALIGN(8);
+        _data = .;
 
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
@@ -178,24 +172,14 @@ SECTIONS
      */
     .bss :
       {
+        . = ALIGN(8);
+        _bss = .;
         *(.bss .bss.* .gnu.linkonce.b.*)
         *(COMMON)
         . = ALIGN (8);
-        _end = .;
+        _ebss = .;
+        _end = _ebss;
       } > REGION_BSS AT> REGION_TEXT
-
-    /*
-     * Constants needed for the pieces of CS3 we use during
-     * board startup; see libcs3_stm32_src/.
-     */
-    __cs3_region_init_ram = (DEFINED(_FLASH_BUILD) ?
-                             LOADADDR(.data) :
-                             LOADADDR(.text));
-    __cs3_region_init_size_ram = (DEFINED(_FLASH_BUILD) ?
-                                  _edata - ADDR(.data) :
-                                  _edata - ADDR(.text));
-    __cs3_region_zero_size_ram = _end - _edata;
-    __cs3_region_num = 1;
 
     /*
      * Debugging sections

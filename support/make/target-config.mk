@@ -52,11 +52,12 @@ endif
 
 # STM32 family-specific configuration values.
 
-# NB: this only works for STM32F1 performance line chips, but those
+# NB: these only work for STM32F1 performance line chips, but those
 # are the only ones we support at this time.  If you add support for
 # STM32F1 connectivity line MCUs or other STM32 families, this section
 # will need to change.
 LD_FAMILY_PATH := $(LDDIR)/stm32/f1/performance
+LIBMAPLE_MODULE_FAMILY := $(LIBMAPLE_PATH)/stm32f1
 
 # Memory target-specific configuration values
 

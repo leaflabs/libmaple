@@ -53,7 +53,7 @@ GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
 GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(GLOBAL_FLAGS)
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
-            -mcpu=cortex-m3 -mthumb -Xlinker     \
+            -mcpu=cortex-m3 -mthumb -Xlinker -L $(LD_FAMILY_PATH)    \
             --gc-sections --print-gc-sections --march=armv7-m -Wall
 
 ##

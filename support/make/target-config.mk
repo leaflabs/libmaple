@@ -50,6 +50,14 @@ ifeq ($(BOARD), olimex_stm32_h103)
    SRAM_SIZE := 20480
 endif
 
+# STM32 family-specific configuration values.
+
+# NB: this only works for STM32F1 performance line chips, but those
+# are the only ones we support at this time.  If you add support for
+# STM32F1 connectivity line MCUs or other STM32 families, this section
+# will need to change.
+LD_FAMILY_PATH := $(LDDIR)/stm32/f1/performance
+
 # Memory target-specific configuration values
 
 ifeq ($(MEMORY_TARGET), ram)

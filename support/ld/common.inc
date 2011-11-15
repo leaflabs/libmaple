@@ -13,11 +13,14 @@ SEARCH_DIR(.)
  */
 GROUP(libgcc.a libc.a libm.a)
 
-/* These force the linker to search for particular symbols from
- * the start of the link process and thus ensure the user's
- * overrides are picked up
+/*
+ * These force the linker to search for vector table symbols.
+ *
+ * These symbols vary by STM32 family (and also within families).
+ * It's up to the build system to configure the link's search path
+ * properly for the target MCU.
  */
-INCLUDE names.inc
+INCLUDE vector_symbols.inc
 
 /* STM32 vector table. See stm32_vector_table.S  */
 EXTERN(__cs3_stm32_vector_table)

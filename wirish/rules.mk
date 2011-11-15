@@ -3,7 +3,6 @@ sp              := $(sp).x
 dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
-BUILDDIRS       += $(BUILD_PATH)/$(d)/comm
 
 # Board config -- TODO allow user override
 WIRISH_BOARD_PATH := boards/$(BOARD)
@@ -21,8 +20,8 @@ cSRCS_$(d) := start_c.c
 cppSRCS_$(d) := wirish_math.cpp		 \
                 Print.cpp		 \
 		boards.cpp               \
-                comm/HardwareSerial.cpp	 \
-                comm/HardwareSPI.cpp	 \
+                HardwareSerial.cpp	 \
+                HardwareSPI.cpp		 \
 		HardwareTimer.cpp	 \
                 usb_serial.cpp		 \
                 cxxabi-compat.cpp	 \

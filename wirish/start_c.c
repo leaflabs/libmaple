@@ -44,49 +44,50 @@
 
 #include <stddef.h>
 
-extern void __libc_init_array (void);
+extern void __libc_init_array(void);
 
-extern int main (int, char **, char **);
+extern int main(int, char**, char**);
 
-extern void exit (int) __attribute__ ((noreturn, weak));
+extern void exit(int) __attribute__((noreturn, weak));
 
 extern char _data, _edata;
 extern char _bss, _ebss;
 
 struct rom_img_cfg {
-  long long *img_start;
+    long long *img_start;
 };
 
 extern char _lm_rom_img_cfgp;
 
 void __attribute__((noreturn)) start_c(void) {
-  struct rom_img_cfg *img_cfg = (struct rom_img_cfg*)&_lm_rom_img_cfgp;
-  long long *src;
-  long long *dst;
-  int exit_code;
+    struct rom_img_cfg *img_cfg = (struct rom_img_cfg*)&_lm_rom_img_cfgp;
+    long long *src;
+    long long *dst;
+    int exit_code;
 
-  /* Initialize .data, if necessary. */
-  src = img_cfg->img_start;
-  dst = (long long*)&_data;
-  if (src != dst) {
-    while (dst < (long long*)&_edata) {
-      *dst++ = *src++;
+    /* Initialize .data, if necessary. */
+    src = img_cfg->img_start;
+    dst = (long long*)&_data;
+    if (src != dst) {
+        while (dst < (long long*)&_edata) {
+            *dst++ = *src++;
+        }
     }
-  }
 
-  /* Zero .bss. */
-  dst = (long long*)&_bss;
-  while (dst < (long long*)&_ebss) {
-    *dst++ = 0;
-  }
+    /* Zero .bss. */
+    dst = (long long*)&_bss;
+    while (dst < (long long*)&_ebss) {
+        *dst++ = 0;
+    }
 
-  /* Run initializers.  */
-  __libc_init_array ();
+    /* Run initializers. */
+    __libc_init_array();
 
-  exit_code = main (0, NULL, NULL);
-  if (exit)
-    exit (exit_code);
-  /* If exit is NULL, make sure we don't return. */
-  for (;;)
-    continue;
+    exit_code = main(0, NULL, NULL);
+    if (exit) {
+        exit(exit_code);
+    }
+    /* If exit is NULL, make sure we don't return. */
+    for (;;)
+        continue;
 }

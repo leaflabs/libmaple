@@ -40,18 +40,18 @@
  * they apply.
  */
 
-	.text
-	.code 16
-	.thumb_func
+        .text
+        .code 16
+        .thumb_func
 
-	.globl _start
-	.type _start, %function
+        .globl _start
+        .type _start, %function
 _start:
-	.fnstart
-	ldr	r1,=__msp_init
-	mov	sp,r1
-	ldr	r1,=start_c
-	bx	r1
-	.pool
-	.cantunwind
-	.fnend
+        .fnstart
+        ldr r1,=__msp_init
+        mov sp,r1
+        ldr r1,=start_c
+        bx r1
+        .pool
+        .cantunwind
+        .fnend

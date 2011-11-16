@@ -29,8 +29,8 @@
  * @brief USB CDC ACM (virtual serial terminal) support
  */
 
-#ifndef _USB_CDCACM_H_
-#define _USB_CDCACM_H_
+#ifndef _LIBMAPLE_USB_CDCACM_H_
+#define _LIBMAPLE_USB_CDCACM_H_
 
 #include <libmaple/libmaple_types.h>
 #include <libmaple/gpio.h>

@@ -24,8 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#include "libmaple_types.h"
-#include "util.h"
+#include <libmaple/libmaple_types.h>
+#include <libmaple/util.h>
 
 #ifndef _USB_REG_MAP_H_
 #define _USB_REG_MAP_H_

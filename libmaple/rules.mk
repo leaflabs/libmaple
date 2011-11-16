@@ -3,13 +3,8 @@ sp              := $(sp).x
 dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
-BUILDDIRS       += $(BUILD_PATH)/$(d)/usb
-BUILDDIRS       += $(BUILD_PATH)/$(d)/usb/usb_lib
 
 LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH)/include
-# FIXME: move public USB headers to include/libmaple/usb/ or something.
-LIBMAPLE_INCLUDES += -I$(LIBMAPLE_PATH)/usb         \
-                     -I$(LIBMAPLE_PATH)/usb/usb_lib
 
 # Local flags
 CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall # -Werror
@@ -33,14 +28,7 @@ cSRCS_$(d) := adc.c                    \
               systick.c                \
               timer.c                  \
               usart.c                  \
-              util.c                   \
-              usb/usb.c                \
-              usb/usb_reg_map.c        \
-              usb/usb_cdcacm.c         \
-              usb/usb_lib/usb_core.c   \
-              usb/usb_lib/usb_init.c   \
-              usb/usb_lib/usb_mem.c    \
-              usb/usb_lib/usb_regs.c
+              util.c
 
 sSRCS_$(d) := exc.S
 

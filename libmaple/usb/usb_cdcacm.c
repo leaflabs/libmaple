@@ -31,16 +31,18 @@
  *        routines.
  */
 
-#include "usb_cdcacm.h"
+#include <libmaple/usb_cdcacm.h>
 
-#include "nvic.h"
-#include "delay.h"
+#include <libmaple/usb.h>
+#include <libmaple/nvic.h>
+#include <libmaple/delay.h>
 
-#include "usb.h"
+/* Private headers */
 #include "usb_descriptors.h"
 #include "usb_lib_globals.h"
 #include "usb_reg_map.h"
 
+/* usb_lib headers */
 #include "usb_type.h"
 #include "usb_core.h"
 #include "usb_def.h"

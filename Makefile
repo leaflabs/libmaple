@@ -80,6 +80,7 @@ ifeq ($(LIBMAPLE_MODULES),)
 else
 	LIBMAPLE_MODULES += $(SRCROOT)/libmaple
 endif
+LIBMAPLE_MODULES += $(SRCROOT)/libmaple/usb   # USB FS device
 LIBMAPLE_MODULES += $(LIBMAPLE_MODULE_FAMILY) # family submodule in libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
 # Official libraries:

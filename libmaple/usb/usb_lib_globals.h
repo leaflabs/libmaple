@@ -27,6 +27,7 @@
 #ifndef _USB_LIB_GLOBALS_H_
 #define _USB_LIB_GLOBALS_H_
 
+/* usb_lib headers */
 #include "usb_type.h"
 #include "usb_core.h"
 

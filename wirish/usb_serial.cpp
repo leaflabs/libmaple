@@ -32,7 +32,7 @@
 
 #include <string.h>
 
-#include "usb_cdcacm.h"
+#include <libmaple/usb_cdcacm.h>
 #include <libmaple/usb.h>
 
 #include <wirish/wirish.h>

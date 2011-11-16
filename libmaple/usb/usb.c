@@ -29,14 +29,16 @@
  * @brief USB support.
  */
 
-#include "usb.h"
+#include <libmaple/usb.h>
 
-#include "libmaple.h"
-#include "rcc.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/rcc.h>
 
+/* Private headers */
 #include "usb_reg_map.h"
 #include "usb_lib_globals.h"
 
+/* usb_lib headers */
 #include "usb_type.h"
 #include "usb_core.h"
 

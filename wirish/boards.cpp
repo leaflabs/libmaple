@@ -41,7 +41,7 @@
 #include <libmaple/gpio.h>
 #include <libmaple/adc.h>
 #include <libmaple/timer.h>
-#include "usb_cdcacm.h"
+#include <libmaple/usb_cdcacm.h>
 
 static void setupFlash(void);
 static void setupClocks(void);

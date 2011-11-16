@@ -4,7 +4,7 @@ dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
 
-LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH)/include
+LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH)/include -I$(LIBMAPLE_MODULE_FAMILY)/include
 
 # Local flags
 CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall -Werror
@@ -22,7 +22,6 @@ cSRCS_$(d) := adc.c                    \
               nvic.c                   \
               pwr.c		       \
               i2c.c                    \
-              rcc.c                    \
               spi.c                    \
               syscalls.c               \
               systick.c                \

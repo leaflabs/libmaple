@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,24 +26,22 @@
  *****************************************************************************/
 
 /**
- * @file rcc.c
- * @brief Implements pretty much only the basic clock setup on the
- *        stm32, clock enable/disable and peripheral reset commands.
+ * @file libmaple/stm32f1/rcc.c
+ * @brief STM32F1 RCC routines.
  */
 
-#include <libmaple/libmaple.h>
-#include <libmaple/flash.h>
 #include <libmaple/rcc.h>
+#include <libmaple/libmaple.h>
 #include <libmaple/bitband.h>
-
-#define APB1                            RCC_APB1
-#define APB2                            RCC_APB2
-#define AHB                             RCC_AHB
 
 struct rcc_dev_info {
     const rcc_clk_domain clk_domain;
     const uint8 line_num;
 };
+
+#define APB1                            RCC_APB1
+#define APB2                            RCC_APB2
+#define AHB                             RCC_AHB
 
 /* Device descriptor table, maps rcc_clk_id onto bus and enable/reset
  * register bit numbers. */

@@ -59,12 +59,8 @@
 
 #if !(defined(BOARD_maple) || defined(BOARD_maple_RET6) ||      \
       defined(BOARD_maple_mini) || defined(BOARD_maple_native))
-
-#warning ("Warning! USB VCOM relies on LeafLabs board-specific "        \
-          "configuration right now.  If you want, you can pretend "     \
-          "you're one of our boards; i.e., #define BOARD_maple, "       \
-          "BOARD_maple_mini, etc.  according to what matches your MCU " \
-          "best."
+#warning USB CDC ACM relies on LeafLabs board-specific configuration.\
+    You may have problems on non-LeafLabs boards.
 #endif
 
 static void vcomDataTxCb(void);

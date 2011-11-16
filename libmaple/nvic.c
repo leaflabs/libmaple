@@ -46,7 +46,7 @@
  */
 void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority) {
     if (irqn < 0) {
-        /* This interrupt is in the system handler block  */
+        /* This interrupt is in the system handler block */
         SCB_BASE->SHP[((uint32)irqn & 0xF) - 4] = (priority & 0xF) << 4;
     } else {
         NVIC_BASE->IP[irqn] = (priority & 0xF) << 4;
@@ -54,16 +54,12 @@ void nvic_irq_set_priority(nvic_irq_num irqn, uint8 priority) {
 }
 
 /**
- * @brief Initialize the NVIC
- * @param vector_table_address Vector table base address.
- * @param offset Offset from vector_table_address.  Some restrictions
- *               apply to the use of nonzero offsets; see ST RM0008
- *               and the ARM Cortex M3 Technical Reference Manual.
+ * @brief Initialize the NVIC, setting interrupts to a default priority.
  */
-void nvic_init(uint32 vector_table_address, uint32 offset) {
+void nvic_init(uint32 address, uint32 offset) {
     uint32 i;
 
-    nvic_set_vector_table(vector_table_address, offset);
+    nvic_set_vector_table(address, offset);
 
     /*
      * Lower priority level for all peripheral interrupts to lowest
@@ -78,10 +74,18 @@ void nvic_init(uint32 vector_table_address, uint32 offset) {
 }
 
 /**
- * Reset the vector table address.
+ * @brief Set the vector table base address.
+ *
+ * For stand-alone products, the vector table base address is normally
+ * the start of Flash (0x08000000).
+ *
+ * @param address Vector table base address.
+ * @param offset Offset from address.  Some restrictions apply to the
+ *               use of nonzero offsets; see the ARM Cortex M3
+ *               Technical Reference Manual.
  */
-void nvic_set_vector_table(uint32 addr, uint32 offset) {
-    SCB_BASE->VTOR = addr | (offset & 0x1FFFFF80);
+void nvic_set_vector_table(uint32 address, uint32 offset) {
+    SCB_BASE->VTOR = address | (offset & 0x1FFFFF80);
 }
 
 /**

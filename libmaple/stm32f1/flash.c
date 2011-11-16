@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,28 +26,16 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/flash.c
+ * @file libmaple/stm32f1/flash.c
  * @brief Flash management functions
  */
 
-#include <libmaple/libmaple_types.h>
 #include <libmaple/flash.h>
+#include <libmaple/bitband.h>
 
 /**
- * @brief Set flash wait states
- *
- * See ST PM0042, section 3.1 for restrictions on the acceptable value
- * of wait_states for a given SYSCLK configuration.
- *
- * @param wait_states number of wait states (one of
- *                    FLASH_WAIT_STATE_0, FLASH_WAIT_STATE_1,
- *                    FLASH_WAIT_STATE_2).
+ * @brief Turn on the hardware prefetcher.
  */
-void flash_set_latency(uint32 wait_states) {
-    uint32 val = FLASH_BASE->ACR;
-
-    val &= ~FLASH_ACR_LATENCY;
-    val |= wait_states;
-
-    FLASH_BASE->ACR = val;
+void flash_enable_prefetch(void) {
+    *bb_perip(&FLASH_BASE->ACR, FLASH_ACR_PRFTBE_BIT) = 1;
 }

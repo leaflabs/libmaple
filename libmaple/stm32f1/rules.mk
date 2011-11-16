@@ -10,7 +10,9 @@ CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall -Werror
 # Local rules and targets
 sSRCS_$(d) := isrs_performance.S            \
               vector_table_performance.S
+
 cSRCS_$(d) := rcc.c
+cSRCS_$(d) += flash.c
 
 sFILES_$(d) := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)

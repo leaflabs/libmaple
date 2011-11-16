@@ -6,8 +6,6 @@ ifeq ($(BOARD), maple)
    ERROR_LED_PORT := GPIOA
    ERROR_LED_PIN  := 5
    DENSITY := STM32_MEDIUM_DENSITY
-   FLASH_SIZE := 131072
-   SRAM_SIZE := 20480
 endif
 
 ifeq ($(BOARD), maple_native)
@@ -16,8 +14,6 @@ ifeq ($(BOARD), maple_native)
    ERROR_LED_PORT := GPIOC
    ERROR_LED_PIN  := 15
    DENSITY := STM32_HIGH_DENSITY
-   FLASH_SIZE := 524288
-   SRAM_SIZE := 65536
 endif
 
 ifeq ($(BOARD), maple_mini)
@@ -26,8 +22,6 @@ ifeq ($(BOARD), maple_mini)
    ERROR_LED_PORT := GPIOB
    ERROR_LED_PIN  := 1
    DENSITY := STM32_MEDIUM_DENSITY
-   FLASH_SIZE := 131072
-   SRAM_SIZE := 20480
 endif
 
 ifeq ($(BOARD), maple_RET6)
@@ -36,8 +30,6 @@ ifeq ($(BOARD), maple_RET6)
    ERROR_LED_PORT := GPIOA
    ERROR_LED_PIN := 5
    DENSITY := STM32_HIGH_DENSITY
-   FLASH_SIZE := 524288
-   SRAM_SIZE := 65536
 endif
 
 ifeq ($(BOARD), olimex_stm32_h103)
@@ -46,8 +38,6 @@ ifeq ($(BOARD), olimex_stm32_h103)
    ERROR_LED_PORT := GPIOC
    ERROR_LED_PIN := 12
    DENSITY := STM32_MEDIUM_DENSITY
-   FLASH_SIZE := 131072
-   SRAM_SIZE := 20480
 endif
 
 # STM32 family-specific configuration values.

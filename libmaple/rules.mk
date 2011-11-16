@@ -7,7 +7,7 @@ BUILDDIRS       += $(BUILD_PATH)/$(d)
 LIBMAPLE_INCLUDES := -I$(LIBMAPLE_PATH)/include
 
 # Local flags
-CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall # -Werror
+CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
 cSRCS_$(d) := adc.c                    \

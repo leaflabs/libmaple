@@ -6,7 +6,7 @@ BUILDDIRS       += $(BUILD_PATH)/$(d)
 BUILDDIRS       += $(BUILD_PATH)/$(d)/usb_lib
 
 # Local flags
-CFLAGS_$(d) = -I$(d) -I$(d)/usb_lib $(LIBMAPLE_INCLUDES) -Wall
+CFLAGS_$(d) = -I$(d) -I$(d)/usb_lib $(LIBMAPLE_INCLUDES) $(LIBMAPLE_PRIVATE_INCLUDES) -Wall
 
 # Local rules and targets
 sSRCS_$(d) :=

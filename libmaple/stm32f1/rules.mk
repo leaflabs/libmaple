@@ -5,7 +5,7 @@ d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
 
 # Local flags
-CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) -Wall -Werror
+CFLAGS_$(d) = -I$(d) $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
 sSRCS_$(d) := isrs_performance.S            \

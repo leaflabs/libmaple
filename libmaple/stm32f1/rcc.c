@@ -34,10 +34,7 @@
 #include <libmaple/libmaple.h>
 #include <libmaple/bitband.h>
 
-struct rcc_dev_info {
-    const rcc_clk_domain clk_domain;
-    const uint8 line_num;
-};
+#include "rcc_private.h"
 
 #define APB1                            RCC_APB1
 #define APB2                            RCC_APB2
@@ -45,7 +42,7 @@ struct rcc_dev_info {
 
 /* Device descriptor table, maps rcc_clk_id onto bus and enable/reset
  * register bit numbers. */
-static const struct rcc_dev_info rcc_dev_table[] = {
+const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_GPIOA]  = { .clk_domain = APB2, .line_num = 2 },
     [RCC_GPIOB]  = { .clk_domain = APB2, .line_num = 3 },
     [RCC_GPIOC]  = { .clk_domain = APB2, .line_num = 4 },
@@ -144,17 +141,12 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
  * @param id Clock ID of the peripheral to turn on.
  */
 void rcc_clk_enable(rcc_clk_id id) {
-    static const __io uint32* enable_regs[] = {
+    static __io uint32* enable_regs[] = {
         [APB1] = &RCC_BASE->APB1ENR,
         [APB2] = &RCC_BASE->APB2ENR,
         [AHB] = &RCC_BASE->AHBENR,
     };
-
-    rcc_clk_domain clk_domain = rcc_dev_clk(id);
-    __io uint32* enr = (__io uint32*)enable_regs[clk_domain];
-    uint8 lnum = rcc_dev_table[id].line_num;
-
-    bb_peri_set_bit(enr, lnum, 1);
+    rcc_do_clk_enable(enable_regs, id);
 }
 
 /**
@@ -162,26 +154,11 @@ void rcc_clk_enable(rcc_clk_id id) {
  * @param id Clock ID of the peripheral to reset.
  */
 void rcc_reset_dev(rcc_clk_id id) {
-    static const __io uint32* reset_regs[] = {
+    static __io uint32* reset_regs[] = {
         [APB1] = &RCC_BASE->APB1RSTR,
         [APB2] = &RCC_BASE->APB2RSTR,
     };
-
-    rcc_clk_domain clk_domain = rcc_dev_clk(id);
-    __io void* addr = (__io void*)reset_regs[clk_domain];
-    uint8 lnum = rcc_dev_table[id].line_num;
-
-    bb_peri_set_bit(addr, lnum, 1);
-    bb_peri_set_bit(addr, lnum, 0);
-}
-
-/**
- * @brief Get a peripheral's clock domain
- * @param id Clock ID of the peripheral whose clock domain to return
- * @return Clock source for the given clock ID
- */
-rcc_clk_domain rcc_dev_clk(rcc_clk_id id) {
-    return rcc_dev_table[id].clk_domain;
+    rcc_do_reset_dev(reset_regs, id);
 }
 
 /**
@@ -197,9 +174,5 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
         [RCC_PRESCALER_USB] = RCC_CFGR_USBPRE,
         [RCC_PRESCALER_ADC] = RCC_CFGR_ADCPRE,
     };
-
-    uint32 cfgr = RCC_BASE->CFGR;
-    cfgr &= ~masks[prescaler];
-    cfgr |= divider;
-    RCC_BASE->CFGR = cfgr;
+    rcc_do_set_prescaler(masks, prescaler, divider);
 }

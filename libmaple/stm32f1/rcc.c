@@ -151,6 +151,10 @@ void rcc_clk_enable(rcc_clk_id id) {
 
 /**
  * @brief Reset a peripheral.
+ *
+ * Caution: not all rcc_clk_id values refer to a peripheral which can
+ * be reset.
+ *
  * @param id Clock ID of the peripheral to reset.
  */
 void rcc_reset_dev(rcc_clk_id id) {

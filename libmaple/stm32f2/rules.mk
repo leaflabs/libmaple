@@ -8,7 +8,7 @@ BUILDDIRS       += $(BUILD_PATH)/$(d)
 CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) $(LIBMAPLE_PRIVATE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
-sSRCS_$(d) :=
+sSRCS_$(d) := isrs.S vector_table.S
 cSRCS_$(d) :=
 
 sFILES_$(d) := $(sSRCS_$(d):%=$(d)/%)

@@ -81,7 +81,9 @@ typedef struct nvic_reg_map {
  * vector table.
  *
  * It also must define a static inline nvic_irq_disable_all(), which
- * writes 0xFFFFFFFF to all ICE registers available in the family.
+ * writes 0xFFFFFFFF to all ICE registers available in the family. (We
+ * place the include here to give the family header access to
+ * NVIC_BASE, in order to let it do so).
  */
 #include <family/nvic.h>
 

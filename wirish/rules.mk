@@ -5,33 +5,33 @@ d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
 
 # Board config -- TODO allow user override
-WIRISH_BOARD_PATH := boards/$(BOARD)
-BUILDDIRS += $(BUILD_PATH)/$(d)/$(WIRISH_BOARD_PATH)
+# WIRISH_BOARD_PATH := boards/$(BOARD)
+# BUILDDIRS += $(BUILD_PATH)/$(d)/$(WIRISH_BOARD_PATH)
 
-WIRISH_INCLUDES := -I$(d)/include -I$(d)/$(WIRISH_BOARD_PATH)/include
+# WIRISH_INCLUDES := -I$(d)/include -I$(d)/$(WIRISH_BOARD_PATH)/include
 
 # Local flags
-CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
+CFLAGS_$(d) := $(LIBMAPLE_INCLUDES)
 
 # Local rules and targets
 
 sSRCS_$(d) := start.S
 cSRCS_$(d) := start_c.c
-cppSRCS_$(d) := wirish_math.cpp		 \
-                Print.cpp		 \
-		boards.cpp               \
-                HardwareSerial.cpp	 \
-                HardwareSPI.cpp		 \
-		HardwareTimer.cpp	 \
-                usb_serial.cpp		 \
-                cxxabi-compat.cpp	 \
-		wirish_shift.cpp	 \
-		wirish_analog.cpp	 \
-		wirish_time.cpp		 \
-		pwm.cpp 		 \
-		ext_interrupts.cpp	 \
-		wirish_digital.cpp
-cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
+# cppSRCS_$(d) := wirish_math.cpp		 \
+#                 Print.cpp		 \
+# 		boards.cpp               \
+#                 HardwareSerial.cpp	 \
+#                 HardwareSPI.cpp		 \
+# 		HardwareTimer.cpp	 \
+#                 usb_serial.cpp		 \
+#                 cxxabi-compat.cpp	 \
+# 		wirish_shift.cpp	 \
+# 		wirish_analog.cpp	 \
+# 		wirish_time.cpp		 \
+# 		pwm.cpp 		 \
+# 		ext_interrupts.cpp	 \
+# 		wirish_digital.cpp
+# cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 
 sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)

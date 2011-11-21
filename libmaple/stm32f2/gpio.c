@@ -1,0 +1,157 @@
+/******************************************************************************
+ * The MIT License
+ *
+ * Copyright (c) 2011 LeafLabs, LLC.
+ *
+ * Permission is hereby granted, free of charge, to any person
+ * obtaining a copy of this software and associated documentation
+ * files (the "Software"), to deal in the Software without
+ * restriction, including without limitation the rights to use, copy,
+ * modify, merge, publish, distribute, sublicense, and/or sell copies
+ * of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be
+ * included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+ * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *****************************************************************************/
+
+/**
+ * @file libmaple/stm32f2/gpio.c
+ * @brief GPIO support for STM32F2 line.
+ */
+
+#include <libmaple/gpio.h>
+#include <libmaple/rcc.h>
+#include <libmaple/bitband.h>
+
+/*
+ * GPIO devices
+ */
+
+gpio_dev gpioa = {
+    .regs      = GPIOA_BASE,
+    .clk_id    = RCC_GPIOA,
+};
+/** GPIO port A device. */
+gpio_dev* const GPIOA = &gpioa;
+
+gpio_dev gpiob = {
+    .regs      = GPIOB_BASE,
+    .clk_id    = RCC_GPIOB,
+};
+/** GPIO port B device. */
+gpio_dev* const GPIOB = &gpiob;
+
+gpio_dev gpioc = {
+    .regs      = GPIOC_BASE,
+    .clk_id    = RCC_GPIOC,
+};
+/** GPIO port C device. */
+gpio_dev* const GPIOC = &gpioc;
+
+gpio_dev gpiod = {
+    .regs      = GPIOD_BASE,
+    .clk_id    = RCC_GPIOD,
+};
+/** GPIO port D device. */
+gpio_dev* const GPIOD = &gpiod;
+
+gpio_dev gpioe = {
+    .regs      = GPIOE_BASE,
+    .clk_id    = RCC_GPIOE,
+};
+/** GPIO port E device. */
+gpio_dev* const GPIOE = &gpioe;
+
+gpio_dev gpiof = {
+    .regs      = GPIOF_BASE,
+    .clk_id    = RCC_GPIOF,
+};
+/** GPIO port F device. */
+gpio_dev* const GPIOF = &gpiof;
+
+gpio_dev gpiog = {
+    .regs      = GPIOG_BASE,
+    .clk_id    = RCC_GPIOG,
+};
+/** GPIO port G device. */
+gpio_dev* const GPIOG = &gpiog;
+
+gpio_dev gpioh = {
+    .regs      = GPIOG_BASE,
+    .clk_id    = RCC_GPIOH,
+};
+/** GPIO port G device. */
+gpio_dev* const GPIOH = &gpioh;
+
+gpio_dev gpioi = {
+    .regs      = GPIOI_BASE,
+    .clk_id    = RCC_GPIOI,
+};
+/** GPIO port G device. */
+gpio_dev* const GPIOI = &gpioi;
+
+/*
+ * GPIO routines
+ */
+
+/**
+ * Initialize and reset all available GPIO devices.
+ */
+void gpio_init_all(void) {
+    gpio_init(GPIOA);
+    gpio_init(GPIOB);
+    gpio_init(GPIOC);
+    gpio_init(GPIOD);
+    gpio_init(GPIOE);
+    gpio_init(GPIOF);
+    gpio_init(GPIOG);
+    gpio_init(GPIOH);
+    gpio_init(GPIOI);
+}
+
+/**
+ * @brief Set the mode of a GPIO pin.
+ * @param dev GPIO device.
+ * @param pin Pin on the device whose mode to set, 0--15.
+ * @param mode Mode to set the pin to.
+ * @param flags Flags to modify basic mode configuration
+ */
+void gpio_set_modef(gpio_dev *dev,
+                    uint8 pin,
+                    gpio_pin_mode mode,
+                    unsigned flags) {
+    gpio_reg_map *regs = dev->regs;
+    unsigned shift = pin * 2;
+    uint32 tmp;
+
+    /* Mode */
+    tmp = regs->MODER;
+    tmp &= ~(0x3 << shift);
+    tmp |= mode << shift;
+    regs->MODER = tmp;
+
+    /* Output type */
+    bb_peri_set_bit(&regs->OTYPER, pin, flags & 0x1);
+
+    /* Speed */
+    tmp = regs->OSPEEDR;
+    tmp &= ~(0x3 << shift);
+    tmp |= (flags >> 1) << shift;
+    regs->OSPEEDR = tmp;
+
+    /* Pull-up/pull-down */
+    tmp = regs->PUPDR;
+    tmp &= ~(0x3 << shift);
+    tmp |= (flags >> 2) << shift;
+    regs->PUPDR = tmp;
+}

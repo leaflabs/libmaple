@@ -27,9 +27,15 @@
 /**
  * @brief Generic board initialization routines.
  *
- * By default, we bring up all Maple boards to 72MHz, clocked off the
- * PLL, driven by the 8MHz external crystal. AHB and APB2 are clocked
- * at 72MHz.  APB1 is clocked at 36MHz.
+ * This file is mostly interesting for the init() function, which
+ * configures Flash, the core sytem clocks, and a variety of other
+ * available peripherals on the board so the rest of Wirish doesn't
+ * have to turn things on before using them.
+ *
+ * Prior to returning, init() calls boardInit(), which allows boards
+ * to perform any initialization they need to.
+ *
+ * Specifically how init() works varies across boards and MCUs.
  */
 
 #include <wirish/boards.h>
@@ -82,9 +88,6 @@ static void setupFlash(void) {
  * Clock setup.  Note that some of this only takes effect if we're
  * running bare metal and the bootloader hasn't done it for us
  * already.
- *
- * If you change this function, you MUST change the file-level Doxygen
- * comment above.
  */
 static void setupClocks() {
     rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);

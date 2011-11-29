@@ -36,16 +36,25 @@
 extern "C"{
 #endif
 
-#include <family/flash.h>
 #include <libmaple/libmaple_types.h>
-
-/*
- * Setup routines
- */
 
 #define FLASH_WAIT_STATE_0              0x0
 #define FLASH_WAIT_STATE_1              0x1
 #define FLASH_WAIT_STATE_2              0x2
+#define FLASH_WAIT_STATE_3              0x3
+#define FLASH_WAIT_STATE_4              0x4
+#define FLASH_WAIT_STATE_5              0x5
+#define FLASH_WAIT_STATE_6              0x6
+#define FLASH_WAIT_STATE_7              0x7
+
+/* The family header must define FLASH_SAFE_WAIT_STATES, the smallest
+ * number of wait states that it is safe to use when the MCU clock is
+ * at its fastest rate (not considering overclocking). */
+#include <family/flash.h>
+
+/*
+ * Setup routines
+ */
 
 void flash_enable_prefetch(void);
 void flash_set_latency(uint32 wait_states);

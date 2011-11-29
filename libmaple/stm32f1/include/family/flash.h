@@ -29,7 +29,8 @@
  * @brief STM32F1 Flash header.
  *
  * Provides register map, base pointer, and register bit definitions
- * for the Flash controller on the STM32F1 line.
+ * for the Flash controller on the STM32F1 line, along with
+ * family-specific configuration values.
  */
 
 #ifndef _LIBMAPLE_STM32F1_FLASH_H_
@@ -127,6 +128,12 @@ typedef struct flash_reg_map {
 #define FLASH_OBR_WDG_SW                BIT(FLASH_OBR_WDG_SW_BIT)
 #define FLASH_OBR_RDPRT                 BIT(FLASH_OBR_RDPRT_BIT)
 #define FLASH_OBR_OPTERR                BIT(FLASH_OBR_OPTERR_BIT)
+
+/*
+ * Family-specific configuration values.
+ */
+
+#define FLASH_SAFE_WAIT_STATES          FLASH_WAIT_STATE_2
 
 #ifdef __cplusplus
 }

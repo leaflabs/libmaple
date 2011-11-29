@@ -26,7 +26,7 @@
 
 /**
  * @file bkp.h
- * @brief Backup register support.
+ * @brief Backup register support (STM32F1 only).
  */
 
 #ifndef _LIBMAPLE_BKP_H_

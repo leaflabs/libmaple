@@ -14,6 +14,7 @@ sSRCS_$(d) := isrs_performance.S            \
 cSRCS_$(d) := rcc.c
 cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c
+cSRCS_$(d) += bkp.c
 
 sFILES_$(d) := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)

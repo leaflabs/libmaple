@@ -62,8 +62,8 @@ LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
 ## Build rules and useful templates
 ##
 
-include $(SUPPORT_PATH)/make/build-rules.mk
-include $(SUPPORT_PATH)/make/build-templates.mk
+include $(MAKEDIR)/build-rules.mk
+include $(MAKEDIR)/build-templates.mk
 
 ##
 ## Set all submodules here

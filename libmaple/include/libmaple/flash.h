@@ -25,9 +25,8 @@
  *****************************************************************************/
 
 /**
- * @file flash.h
- * @brief STM32 Medium and high density Flash register map and setup
- * routines
+ * @file libmaple/flash.h
+ * @brief Flash support.
  */
 
 #ifndef _LIBMAPLE_FLASH_H_

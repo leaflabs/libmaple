@@ -11,23 +11,12 @@ LIBMAPLE_PRIVATE_INCLUDES := -I$(LIBMAPLE_PATH)
 CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
-cSRCS_$(d) := adc.c                    \
-              dac.c                    \
-              dma.c                    \
-              exti.c                   \
-              flash.c                  \
-              fsmc.c                   \
+cSRCS_$(d) := flash.c                  \
               gpio.c                   \
-              iwdg.c                   \
               nvic.c                   \
-              pwr.c		       \
-              i2c.c                    \
               rcc.c                    \
-              spi.c                    \
               syscalls.c               \
               systick.c                \
-              timer.c                  \
-              usart.c                  \
               util.c
 
 sSRCS_$(d) := exc.S

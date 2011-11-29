@@ -62,18 +62,18 @@ void __error(void) {
     /* Turn off peripheral interrupts */
     nvic_irq_disable_all();
 
-    /* Turn off timers */
-    timer_disable_all();
+    /* /\* Turn off timers *\/ */
+    /* timer_disable_all(); */
 
-    /* Turn off ADC */
-    adc_disable_all();
+    /* /\* Turn off ADC *\/ */
+    /* adc_disable_all(); */
 
-    /* Turn off all USARTs */
-    usart_disable_all();
+    /* /\* Turn off all USARTs *\/ */
+    /* usart_disable_all(); */
 
-    /* Turn the USB interrupt back on so the bootloader keeps on functioning */
-    nvic_irq_enable(NVIC_USB_HP_CAN_TX);
-    nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
+    /* /\* Turn the USB interrupt back on so the bootloader keeps on functioning *\/ */
+    /* nvic_irq_enable(NVIC_USB_HP_CAN_TX); */
+    /* nvic_irq_enable(NVIC_USB_LP_CAN_RX0); */
 
     /* Reenable global interrupts */
     nvic_globalirq_enable();
@@ -85,9 +85,9 @@ void __error(void) {
  * @sideeffect Configures ERROR_USART appropriately for writing.
  */
 void _enable_error_usart() {
-    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_AF_OUTPUT_PP);
-    usart_init(ERROR_USART);
-    usart_set_baud_rate(ERROR_USART, ERROR_USART_CLK_SPEED, ERROR_USART_BAUD);
+    /* gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_AF_OUTPUT_PP); */
+    /* usart_init(ERROR_USART); */
+    /* usart_set_baud_rate(ERROR_USART, ERROR_USART_CLK_SPEED, ERROR_USART_BAUD); */
 }
 
 /**
@@ -100,17 +100,17 @@ void _enable_error_usart() {
  */
 void _fail(const char* file, int line, const char* exp) {
     /* Initialize the error USART */
-    _enable_error_usart();
+    /* _enable_error_usart(); */
 
-    /* Print failed assert message */
-    usart_putstr(ERROR_USART, "ERROR: FAILED ASSERT(");
-    usart_putstr(ERROR_USART, exp);
-    usart_putstr(ERROR_USART, "): ");
-    usart_putstr(ERROR_USART, file);
-    usart_putstr(ERROR_USART, ": ");
-    usart_putudec(ERROR_USART, line);
-    usart_putc(ERROR_USART, '\n');
-    usart_putc(ERROR_USART, '\r');
+    /* /\* Print failed assert message *\/ */
+    /* usart_putstr(ERROR_USART, "ERROR: FAILED ASSERT("); */
+    /* usart_putstr(ERROR_USART, exp); */
+    /* usart_putstr(ERROR_USART, "): "); */
+    /* usart_putstr(ERROR_USART, file); */
+    /* usart_putstr(ERROR_USART, ": "); */
+    /* usart_putudec(ERROR_USART, line); */
+    /* usart_putc(ERROR_USART, '\n'); */
+    /* usart_putc(ERROR_USART, '\r'); */
 
     /* Shutdown and error fade */
     __error();
@@ -130,14 +130,16 @@ void __assert_func(const char* file, int line, const char* method,
  *        error state with the throbbing LED indicator.
  */
 void abort() {
-    /* Initialize the error USART */
-    _enable_error_usart();
+    /* /\* Initialize the error USART *\/ */
+    /* _enable_error_usart(); */
 
-    /* Print abort message. */
-    usart_putstr(ERROR_USART, "ERROR: PROGRAM ABORTED VIA abort()\n\r");
+    /* /\* Print abort message. *\/ */
+    /* usart_putstr(ERROR_USART, "ERROR: PROGRAM ABORTED VIA abort()\n\r"); */
 
-    /* Shutdown and error fade */
-    __error();
+    /* /\* Shutdown and error fade *\/ */
+    /* __error(); */
+    while (1)
+        ;
 }
 
 /**
@@ -145,7 +147,7 @@ void abort() {
  * @sideeffect Sets output push-pull on ERROR_LED_PIN.
  */
 void throb(void) {
-#ifdef HAVE_ERROR_LED
+#if 0
     int32  slope   = 1;
     uint32 CC      = 0x0000;
     uint32 TOP_CNT = 0x0200;

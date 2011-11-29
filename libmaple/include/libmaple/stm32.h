@@ -36,161 +36,94 @@
 extern "C" {
 #endif
 
-/*
- * User-specific configuration.
- *
- * The #defines here depend upon how libmaple is used.  Because of the
- * potential for a mismatch between them and the actual libmaple
- * usage, you should try to keep their number to an absolute minimum.
- */
+/* Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
+ * conditional block must be defined in the family header. */
+#include <family/stm32.h>
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
-    /** @brief APB1 clock speed, in Hz. */
-    #define STM32_PCLK1
-    /** @brief APB2 clock speed, in Hz. */
-    #define STM32_PCLK2
+/*
+ * Clock configuration.
+ *
+ * These defines depend upon how the MCU is configured.  Because of
+ * the potential for a mismatch between them and the actual clock
+ * configuration, keep their number to a minimum.
+ */
 
-    /** Deprecated.  Use STM32_PCLK1 instead. */
-    #define PCLK1
-    /** Deprecated. Use STM32_PCLK2 instead. */
-    #define PCLK2
+/**
+ * @brief APB1 clock speed, in Hz.
+ */
+#define STM32_PCLK1
 
-#endif
+/**
+ *  @brief APB2 clock speed, in Hz.
+ */
+#define STM32_PCLK2
 
-#ifndef STM32_PCLK1
-#define STM32_PCLK1   36000000U
-#endif
+/** @brief Deprecated. Use STM32_PCLK1 instead. */
+#define PCLK1
+/** @brief Deprecated. Use STM32_PCLK2 instead. */
+#define PCLK2
+
+/*
+ * Family- and MCU-specific values.
+ */
+
+/**
+ * @brief Number of interrupts in the vector table.
+ *
+ * This does not include Cortex-M interrupts (NMI, HardFault, etc.).
+ */
+#define STM32_NR_INTERRUPTS
+
+/**
+ * Number of GPIO ports.
+ */
+#define STM32_NR_GPIO_PORTS
+
+/**
+ * @brief Multiplier to convert microseconds into loop iterations
+ *        in delay_us().
+ *
+ * @see delay_us()
+ */
+#define STM32_DELAY_US_MULT
+
+/**
+ * @brief Pointer to end of built-in SRAM.
+ *
+ * Points to the address which is 1 byte past the last valid
+ * SRAM address.
+ */
+#define STM32_SRAM_END
+
+#endif  /* __DOXYGEN_PREDEFINED_HACK */
+
+/*
+ * The following are for backwards compatibility only.
+ */
+
+/* PCLK1 and PCLK2 are for backwards compatibility only; don't use in
+ * new code. */
 #ifndef PCLK1
 #define PCLK1 STM32_PCLK1
 #endif
 #if PCLK1 != STM32_PCLK1
-#error "(Deprecated) PCLK1 differs from STM32_PCLK1"
-#endif
-
-#ifndef STM32_PCLK2
-#define STM32_PCLK2   72000000U
+#error "PCLK1 (which is deprecated) differs from STM32_PCLK1."
 #endif
 #ifndef PCLK2
 #define PCLK2 STM32_PCLK2
 #endif
 #if PCLK2 != STM32_PCLK2
-#error "(Deprecated) PCLK2 differs from STM32_PCLK2"
+#error "PCLK2 (which is deprecated) differs from STM32_PCLK2."
 #endif
 
-/*
- * Density-specific configuration.
- */
-
-#ifdef __DOXYGEN_PREDEFINED_HACK
-
-    /**
-     * @brief Number of interrupts in the NVIC.
-     *
-     * This define is automatically generated whenever the proper
-     * density is defined (currently, this is restricted to defining
-     * one of STM32_MEDIUM_DENSITY and STM32_HIGH_DENSITY).
-     */
-    #define STM32_NR_INTERRUPTS
-
-    /** Deprecated.  Use STM32_NR_INTERRUPTS instead. */
-    #define NR_INTERRUPTS
-
-#endif
-
-#ifdef STM32_MEDIUM_DENSITY
-    #define STM32_NR_INTERRUPTS 43
-#elif defined(STM32_HIGH_DENSITY)
-    #define STM32_NR_INTERRUPTS 60
-#else
-#error "No STM32 board type defined!"
-#endif
-
-#define NR_INTERRUPTS STM32_NR_INTERRUPTS
-
-/*
- * MCU-specific configuration.
- */
-
-#ifdef __DOXYGEN_PREDEFINED_HACK
-
-    /**
-     * Number of GPIO ports.
-     */
-    #define STM32_NR_GPIO_PORTS
-
-    /**
-     * @brief Multiplier to convert microseconds into loop iterations
-     *        in delay_us().
-     *
-     * @see delay_us()
-     */
-    #define STM32_DELAY_US_MULT
-
-    /**
-     * @brief Pointer to end of built-in SRAM.
-     *
-     * Points to the address which is 1 byte past the last valid
-     * SRAM address.
-     */
-    #define STM32_SRAM_END
-
-    /** Deprecated.  Use STM32_NR_GPIO_PORTS instead. */
-    #define NR_GPIO_PORTS
-    /** Deprecated.  Use STM32_DELAY_US_MULT instead. */
-    #define DELAY_US_MULT
-
-#endif
-
-#if defined(MCU_STM32F103RB)
-    /* e.g., LeafLabs Maple */
-
-    #define STM32_NR_GPIO_PORTS          4
-    #define STM32_DELAY_US_MULT         12
-    #define STM32_SRAM_END              ((void*)0x20005000)
-
-    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
-    #define DELAY_US_MULT               STM32_DELAY_US_MULT
-
-#elif defined(MCU_STM32F103ZE)
-    /* e.g., LeafLabs Maple Native */
-
-    #define STM32_NR_GPIO_PORTS          7
-    #define STM32_DELAY_US_MULT         12
-    #define STM32_SRAM_END              ((void*)0x20010000)
-
-    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
-    #define DELAY_US_MULT               STM32_DELAY_US_MULT
-
-#elif defined(MCU_STM32F103CB)
-    /* e.g., LeafLabs Maple Mini */
-
-    /* This STM32_NR_GPIO_PORTS value is not, strictly speaking, true.
-     * But only pins 0 and 1 exist, and they're used for OSC on the
-     * Mini, so we'll live with this for now. */
-    #define STM32_NR_GPIO_PORTS          3
-    #define STM32_DELAY_US_MULT         12
-    #define STM32_SRAM_END              ((void*)0x20005000)
-
-    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
-    #define DELAY_US_MULT               STM32_DELAY_US_MULT
-
-#elif defined(MCU_STM32F103RE)
-    /* e.g., LeafLabs Maple RET6 edition */
-
-    #define STM32_NR_GPIO_PORTS          4
-    #define STM32_DELAY_US_MULT         12
-    #define STM32_SRAM_END              ((void*)0x20010000)
-
-    #define NR_GPIO_PORTS               STM32_NR_GPIO_PORTS
-    #define DELAY_US_MULT               STM32_DELAY_US_MULT
-
-#else
-
-#error "No MCU type specified. Add something like -DMCU_STM32F103RB "   \
-       "to your compiler arguments (probably in a Makefile)."
-
-#endif
+/** @brief Deprecated. Use STM32_NR_INTERRUPTS instead. */
+#define NR_INTERRUPTS                   STM32_NR_INTERRUPTS
+/** @brief Deprecated. Use STM32_NR_GPIO_PORTS instead. */
+#define NR_GPIO_PORTS                   STM32_NR_GPIO_PORTS
+/** @brief Deprecated. Use STM32_DELAY_US_MULT instead. */
+#define DELAY_US_MULT                   STM32_DELAY_US_MULT
 
 #ifdef __cplusplus
 }

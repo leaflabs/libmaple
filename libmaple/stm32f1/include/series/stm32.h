@@ -66,8 +66,10 @@ extern "C" {
 #endif
 
 /*
- * MCU-specific values.
+ * Series- and MCU-specific values.
  */
+
+#define STM32_MCU_SERIES                STM32_SERIES_F1
 
 #if defined(MCU_STM32F103RB)
 #   define STM32_NR_GPIO_PORTS          4

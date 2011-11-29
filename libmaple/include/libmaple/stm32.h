@@ -36,8 +36,21 @@
 extern "C" {
 #endif
 
-/* Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
- * conditional block must be defined in the series header. */
+/**
+ * @brief STM32 series identifiers.
+ */
+typedef enum stm32_series {
+    STM32_SERIES_F1, /**< F1 series */
+    STM32_SERIES_F2, /**< F2 series */
+    STM32_SERIES_L1, /**< L1 series */
+    STM32_SERIES_F4, /**< F4 series */
+} stm32_series;
+
+/* The series header is responsible for defining:
+ *
+ * - Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
+ *   conditional block.
+ */
 #include <series/stm32.h>
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
@@ -68,6 +81,11 @@ extern "C" {
 /*
  * Series- and MCU-specific values.
  */
+
+/**
+ * @brief enum stm32_series value for the MCU being targeted.
+ */
+#define STM32_MCU_SERIES
 
 /**
  * @brief Number of interrupts in the vector table.

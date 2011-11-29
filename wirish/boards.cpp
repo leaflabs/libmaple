@@ -75,7 +75,7 @@ bool boardUsesPin(uint8 pin) {
 
 static void setupFlash(void) {
     flash_enable_prefetch();
-    flash_set_latency(FLASH_WAIT_STATE_2);
+    flash_set_latency(FLASH_SAFE_WAIT_STATES);
 }
 
 /*

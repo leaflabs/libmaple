@@ -2,52 +2,10 @@
 
 TARGET_FLAGS :=
 
-# Board-specific configuration values.  Flash and SRAM sizes in bytes.
+# Board-specific configuration values. Punt these to board-specific
+# include files.
 
-ifeq ($(BOARD), maple)
-   MCU := STM32F103RB
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOA
-   ERROR_LED_PIN  := 5
-   DENSITY := STM32_MEDIUM_DENSITY
-   TARGET_FLAGS += -D$(DENSITY)
-endif
-
-ifeq ($(BOARD), maple_native)
-   MCU := STM32F103ZE
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOC
-   ERROR_LED_PIN  := 15
-   DENSITY := STM32_HIGH_DENSITY
-   TARGET_FLAGS += -D$(DENSITY)
-endif
-
-ifeq ($(BOARD), maple_mini)
-   MCU := STM32F103CB
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOB
-   ERROR_LED_PIN  := 1
-   DENSITY := STM32_MEDIUM_DENSITY
-   TARGET_FLAGS += -D$(DENSITY)
-endif
-
-ifeq ($(BOARD), maple_RET6)
-   MCU := STM32F103RE
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOA
-   ERROR_LED_PIN := 5
-   DENSITY := STM32_HIGH_DENSITY
-   TARGET_FLAGS += -D$(DENSITY)
-endif
-
-ifeq ($(BOARD), olimex_stm32_h103)
-   MCU := STM32F103RB
-   PRODUCT_ID := 0003
-   ERROR_LED_PORT := GPIOC
-   ERROR_LED_PIN := 12
-   DENSITY := STM32_MEDIUM_DENSITY
-   TARGET_FLAGS += -D$(DENSITY)
-endif
+include $(MAKEDIR)/board-includes/$(BOARD).mk
 
 TARGET_FLAGS += -DBOARD_$(BOARD) -DMCU_$(MCU) \
                 -DERROR_LED_PORT=$(ERROR_LED_PORT) \

@@ -47,10 +47,10 @@ extern "C"{
 #define FLASH_WAIT_STATE_6              0x6
 #define FLASH_WAIT_STATE_7              0x7
 
-/* The family header must define FLASH_SAFE_WAIT_STATES, the smallest
+/* The series header must define FLASH_SAFE_WAIT_STATES, the smallest
  * number of wait states that it is safe to use when the MCU clock is
  * at its fastest rate (not considering overclocking). */
-#include <family/flash.h>
+#include <series/flash.h>
 
 /*
  * Setup routines

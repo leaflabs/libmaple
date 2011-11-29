@@ -37,8 +37,8 @@ extern "C" {
 #endif
 
 /* Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
- * conditional block must be defined in the family header. */
-#include <family/stm32.h>
+ * conditional block must be defined in the series header. */
+#include <series/stm32.h>
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
 
@@ -66,7 +66,7 @@ extern "C" {
 #define PCLK2
 
 /*
- * Family- and MCU-specific values.
+ * Series- and MCU-specific values.
  */
 
 /**

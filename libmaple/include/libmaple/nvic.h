@@ -74,18 +74,18 @@ typedef struct nvic_reg_map {
 #define NVIC_BASE                       ((struct nvic_reg_map*)0xE000E100)
 
 /*
- * Note: The family header must define enum nvic_irq_num, which gives
+ * Note: The series header must define enum nvic_irq_num, which gives
  * descriptive names to the interrupts and exceptions from NMI (-14)
- * to the largest interrupt available in the family, where the value
+ * to the largest interrupt available in the series, where the value
  * for nonnegative enumerators corresponds to its position in the
  * vector table.
  *
  * It also must define a static inline nvic_irq_disable_all(), which
- * writes 0xFFFFFFFF to all ICE registers available in the family. (We
- * place the include here to give the family header access to
+ * writes 0xFFFFFFFF to all ICE registers available in the series. (We
+ * place the include here to give the series header access to
  * NVIC_BASE, in order to let it do so).
  */
-#include <family/nvic.h>
+#include <series/nvic.h>
 
 void nvic_init(uint32 address, uint32 offset);
 void nvic_set_vector_table(uint32 address, uint32 offset);

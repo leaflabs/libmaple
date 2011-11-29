@@ -37,11 +37,11 @@ extern "C"{
 #endif
 
 /*
- * Note: Family header must define:
- * - struct gpio_dev (and declare extern pointers to family-provided ones)
+ * Note: Series header must define:
+ * - struct gpio_dev (and declare extern pointers to series-provided ones)
  * - enum gpio_pin_mode (TODO think hard on this)
  */
-#include <family/gpio.h>
+#include <series/gpio.h>
 #include <libmaple/libmaple.h>
 
 /*

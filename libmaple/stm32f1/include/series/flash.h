@@ -30,7 +30,7 @@
  *
  * Provides register map, base pointer, and register bit definitions
  * for the Flash controller on the STM32F1 line, along with
- * family-specific configuration values.
+ * series-specific configuration values.
  */
 
 #ifndef _LIBMAPLE_STM32F1_FLASH_H_
@@ -130,7 +130,7 @@ typedef struct flash_reg_map {
 #define FLASH_OBR_OPTERR                BIT(FLASH_OBR_OPTERR_BIT)
 
 /*
- * Family-specific configuration values.
+ * Series-specific configuration values.
  */
 
 #define FLASH_SAFE_WAIT_STATES          FLASH_WAIT_STATE_2

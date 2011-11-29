@@ -26,7 +26,7 @@
 
 /**
  * @file libmaple/stm32f1/stm32.h
- * @brief STM32F1 chip- and family-specific definitions.
+ * @brief STM32F1 chip- and series-specific definitions.
  */
 
 #ifndef _LIBMAPLE_STM32F1_H_

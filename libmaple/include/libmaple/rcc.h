@@ -37,9 +37,9 @@ extern "C"{
 #endif
 
 #include <libmaple/libmaple_types.h>
-#include <family/rcc.h>
+#include <series/rcc.h>
 
-/* Note: Beyond the usual (registers, etc.), it's up to the family
+/* Note: Beyond the usual (registers, etc.), it's up to the series
  * header to define the following types:
  *
  * - rcc_pllsrc: For each PLL source (passed to rcc_clk_init()).
@@ -49,7 +49,7 @@ extern "C"{
  * - rcc_clk_id: For each available peripheral. These are widely used
  *   as unique IDs (TODO extricate from RCC?). Peripherals which are
  *   common across families should use the same token for their
- *   rcc_clk_id in each family header.
+ *   rcc_clk_id in each series header.
  *
  * - rcc_clk_domain: For each clock domain (returned by rcc_dev_clk()).
  *

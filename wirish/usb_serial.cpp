@@ -31,6 +31,7 @@
 #include <string.h>
 
 #include "wirish.h"
+#include "usb_cdcacm.h"
 #include "usb.h"
 
 #define USB_TIMEOUT 50
@@ -39,11 +40,11 @@ USBSerial::USBSerial(void) {
 }
 
 void USBSerial::begin(void) {
-    setupUSB();
+    usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
 }
 
 void USBSerial::end(void) {
-    disableUSB();
+    usb_cdcacm_disable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
 }
 
 void USBSerial::write(uint8 ch) {
@@ -65,7 +66,7 @@ void USBSerial::write(const void *buf, uint32 len) {
     uint32 start = millis();
 
     while (txed < len && (millis() - start < USB_TIMEOUT)) {
-        txed += usbSendBytes((const uint8*)buf + txed, len - txed);
+        txed += usb_cdcacm_tx((const uint8*)buf + txed, len - txed);
         if (old_txed != txed) {
             start = millis();
         }
@@ -74,7 +75,7 @@ void USBSerial::write(const void *buf, uint32 len) {
 }
 
 uint32 USBSerial::available(void) {
-    return usbBytesAvailable();
+    return usb_cdcacm_data_available();
 }
 
 uint32 USBSerial::read(void *buf, uint32 len) {
@@ -84,7 +85,7 @@ uint32 USBSerial::read(void *buf, uint32 len) {
 
     uint32 rxed = 0;
     while (rxed < len) {
-        rxed += usbReceiveBytes((uint8*)buf + rxed, len - rxed);
+        rxed += usb_cdcacm_rx((uint8*)buf + rxed, len - rxed);
     }
 
     return rxed;
@@ -92,13 +93,13 @@ uint32 USBSerial::read(void *buf, uint32 len) {
 
 /* Blocks forever until 1 byte is received */
 uint8 USBSerial::read(void) {
-    uint8 buf[1];
-    this->read(buf, 1);
-    return buf[0];
+    uint8 b;
+    this->read(&b, 1);
+    return b;
 }
 
 uint8 USBSerial::pending(void) {
-    return usbGetPending();
+    return usb_cdcacm_get_pending();
 }
 
 uint8 USBSerial::isConnected(void) {
@@ -106,11 +107,11 @@ uint8 USBSerial::isConnected(void) {
 }
 
 uint8 USBSerial::getDTR(void) {
-    return usbGetDTR();
+    return usb_cdcacm_get_dtr();
 }
 
 uint8 USBSerial::getRTS(void) {
-    return usbGetRTS();
+    return usb_cdcacm_get_rts();
 }
 
 USBSerial SerialUSB;

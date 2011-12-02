@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs LLC.
+ * Copyright (c) 2011 LeafLabs LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,70 +24,31 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef _USB_H_
-#define _USB_H_
+#ifndef _USB_LIB_GLOBALS_H_
+#define _USB_LIB_GLOBALS_H_
 
-#include "libmaple_types.h"
+#include "usb_type.h"
+#include "usb_core.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef USB_ISR_MSK
-/* Handle CTRM, WKUPM, SUSPM, ERRM, SOFM, ESOFM, RESETM */
-#define USB_ISR_MSK 0xBF00
-#endif
+extern USER_STANDARD_REQUESTS  User_Standard_Requests;
+extern USER_STANDARD_REQUESTS *pUser_Standard_Requests;
 
-typedef enum usb_dev_state {
-    USB_UNCONNECTED,
-    USB_ATTACHED,
-    USB_POWERED,
-    USB_SUSPENDED,
-    USB_ADDRESSED,
-    USB_CONFIGURED
-} usb_dev_state;
+extern DEVICE_PROP  Device_Property;
+extern DEVICE_PROP *pProperty;
 
-/* Encapsulates global state formerly handled by usb_lib/
- * functionality */
-typedef struct usblib_dev {
-    uint32 irq_mask;
-    void (**ep_int_in)(void);
-    void (**ep_int_out)(void);
-    usb_dev_state state;
-} usblib_dev;
+extern DEVICE_INFO  Device_Info;
+extern DEVICE_INFO *pInformation;
 
-extern usblib_dev *USBLIB;
-
-/*
- * Convenience routines, etc.
- */
-
-typedef enum {
-    RESUME_EXTERNAL,
-    RESUME_INTERNAL,
-    RESUME_LATER,
-    RESUME_WAIT,
-    RESUME_START,
-    RESUME_ON,
-    RESUME_OFF,
-    RESUME_ESOF
-} RESUME_STATE;
-
-void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void));
-
-void usbSuspend(void);
-void usbResumeInit(void);
-void usbResume(RESUME_STATE);
-
-/* overloaded ISR routine, this is the main usb ISR */
-void __irq_usb_lp_can_rx0(void);
-void usbWaitReset(void);
-
-uint8 usbIsConnected(void);
-uint8 usbIsConfigured(void);
+extern DEVICE Device_Table;
+extern u16 SaveRState;
+extern u16 SaveTState;
 
 #ifdef __cplusplus
-} // extern "C"
+}
 #endif
 
-#endif // _USB_H_
+#endif

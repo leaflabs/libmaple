@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs LLC.
+ * Copyright (c) 2011 LeafLabs LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,70 +24,36 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef _USB_H_
-#define _USB_H_
+/**
+ * @file usb_cdcacm.h
+ * @brief USB CDC ACM (virtual serial terminal) support
+ */
+
+#ifndef _USB_CDCACM_H_
+#define _USB_CDCACM_H_
 
 #include "libmaple_types.h"
+#include "gpio.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#ifndef USB_ISR_MSK
-/* Handle CTRM, WKUPM, SUSPM, ERRM, SOFM, ESOFM, RESETM */
-#define USB_ISR_MSK 0xBF00
-#endif
+void usb_cdcacm_enable(gpio_dev*, uint8);
+void usb_cdcacm_disable(gpio_dev*, uint8);
 
-typedef enum usb_dev_state {
-    USB_UNCONNECTED,
-    USB_ATTACHED,
-    USB_POWERED,
-    USB_SUSPENDED,
-    USB_ADDRESSED,
-    USB_CONFIGURED
-} usb_dev_state;
+void   usb_cdcacm_putc(char ch);
+uint32 usb_cdcacm_tx(const uint8* buf, uint32 len);
+uint32 usb_cdcacm_rx(uint8* buf, uint32 len);
 
-/* Encapsulates global state formerly handled by usb_lib/
- * functionality */
-typedef struct usblib_dev {
-    uint32 irq_mask;
-    void (**ep_int_in)(void);
-    void (**ep_int_out)(void);
-    usb_dev_state state;
-} usblib_dev;
+uint32 usb_cdcacm_data_available(void); /* in RX buffer */
+uint16 usb_cdcacm_get_pending(void);
 
-extern usblib_dev *USBLIB;
-
-/*
- * Convenience routines, etc.
- */
-
-typedef enum {
-    RESUME_EXTERNAL,
-    RESUME_INTERNAL,
-    RESUME_LATER,
-    RESUME_WAIT,
-    RESUME_START,
-    RESUME_ON,
-    RESUME_OFF,
-    RESUME_ESOF
-} RESUME_STATE;
-
-void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void));
-
-void usbSuspend(void);
-void usbResumeInit(void);
-void usbResume(RESUME_STATE);
-
-/* overloaded ISR routine, this is the main usb ISR */
-void __irq_usb_lp_can_rx0(void);
-void usbWaitReset(void);
-
-uint8 usbIsConnected(void);
-uint8 usbIsConfigured(void);
+uint8 usb_cdcacm_get_dtr(void);
+uint8 usb_cdcacm_get_rts(void);
 
 #ifdef __cplusplus
-} // extern "C"
+}
 #endif
 
-#endif // _USB_H_
+#endif

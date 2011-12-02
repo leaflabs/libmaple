@@ -85,4 +85,7 @@
 #define BOARD_JTDO_PIN          42
 #define BOARD_NJTRST_PIN        43
 
+#define BOARD_USB_DISC_DEV      GPIOC
+#define BOARD_USB_DISC_BIT      12
+
 #endif

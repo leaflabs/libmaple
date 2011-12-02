@@ -27,18 +27,16 @@
 /**
  * @brief Main include file for the Wirish core.
  *
- * Includes various Arduino wiring macros and bit defines
+ * Includes most of Wirish, and (transitively or otherwise)
+ * substantial pieces of libmaple proper.
  */
 
 #ifndef _WIRISH_H_
 #define _WIRISH_H_
 
-#include "libmaple.h"
-
-#include "wirish_types.h"
 #include "boards.h"
 #include "io.h"
-#include "bits.h"
+#include "bit_constants.h"
 #include "pwm.h"
 #include "ext_interrupts.h"
 #include "wirish_debug.h"
@@ -49,9 +47,10 @@
 #include "HardwareTimer.h"
 #include "usb_serial.h"
 
+#include "libmaple.h"
+#include "wirish_types.h"
+
 /* Arduino wiring macros and bit defines  */
-#define HIGH 0x1
-#define LOW  0x0
 
 #define true 0x1
 #define false 0x0
@@ -67,9 +66,6 @@
 #define bitWrite(value, bit, bitvalue) (bitvalue ? bitSet(value, bit) : \
                                                    bitClear(value, bit))
 #define bit(b)                         (1UL << (b))
-
-typedef uint8 boolean;
-typedef uint8 byte;
 
 #endif
 

@@ -25,9 +25,7 @@
 #ifndef __DESCRIPTORS_H
 #define __DESCRIPTORS_H
 
-
 #include "libmaple.h"
-#include "usb_lib.h"
 
 #define USB_DESCRIPTOR_TYPE_DEVICE        0x01
 #define USB_DESCRIPTOR_TYPE_CONFIGURATION 0x02
@@ -53,7 +51,6 @@
 
 #define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
 
-
 #if defined(__cplusplus)
 extern "C" {
 #endif
@@ -75,7 +72,6 @@ extern "C" {
     uint8 Data[DataSize];			\
   } __packed
 
-/* See http://www.beyondlogic.org/usbnutshell/usb5.shtml#DeviceDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -93,7 +89,6 @@ typedef struct {
   uint8                 bNumConfigurations;
 } __packed USB_Descriptor_Device;
 
-/* http://www.beyondlogic.org/usbnutshell/usb5.shtml#ConfigurationDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -105,7 +100,6 @@ typedef struct {
   uint8                 bMaxPower;
 } __packed USB_Descriptor_Config_Header;
 
-/* See http://www.beyondlogic.org/usbnutshell/usb5.shtml#InterfaceDescriptors */
 typedef struct {
   uint8                 bLength;
   uint8                 bDescriptorType;
@@ -155,7 +149,7 @@ extern const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)]
 extern const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)];
 
 #if defined(__cplusplus)
-  }
+}
 #endif
 
 #endif  // __DESCRIPTORS_H

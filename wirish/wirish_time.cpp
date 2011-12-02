@@ -28,9 +28,9 @@
  *  @brief Delay implementation.
  */
 
-#include "libmaple.h"
-#include "systick.h"
 #include "wirish_time.h"
+
+#include "libmaple_types.h"
 #include "delay.h"
 
 void delay(unsigned long ms) {

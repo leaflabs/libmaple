@@ -29,6 +29,11 @@
  * @brief High level debug port configuration
  */
 
+#ifndef _WIRISH_DEBUG_H_
+#define _WIRISH_DEBUG_H_
+
+#include "gpio.h"
+
 /**
  * @brief Disable the JTAG and Serial Wire (SW) debug ports.
  *
@@ -52,3 +57,5 @@ static inline void disableDebugPorts(void) {
 static inline void enableDebugPorts(void) {
     afio_cfg_debug_ports(AFIO_DEBUG_FULL_SWJ);
 }
+
+#endif

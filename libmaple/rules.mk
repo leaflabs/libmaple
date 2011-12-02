@@ -31,13 +31,11 @@ cSRCS_$(d) := adc.c                    \
               timer.c                  \
               usart.c                  \
               util.c                   \
-              usb/descriptors.c        \
               usb/usb.c                \
-              usb/usb_callbacks.c      \
-              usb/usb_hardware.c       \
+              usb/usb_reg_map.c        \
+              usb/usb_cdcacm.c         \
               usb/usb_lib/usb_core.c   \
               usb/usb_lib/usb_init.c   \
-              usb/usb_lib/usb_int.c    \
               usb/usb_lib/usb_mem.c    \
               usb/usb_lib/usb_regs.c
 

@@ -53,6 +53,16 @@ you typed in: %s\r\n\
 </html>\r\n\
 \r\n";
 
+
+
+const char html_not_found[] = \
+"HTTP/1.1 404 Not Found\r\n\
+<HTML><BODY><H1>404 Not Found</H1>\r\n\
+The requested URL was not found on this server.\r\n\
+</BODY></HTML>\r\n\
+\r\n";
+
+
 // Force init to be called *first*, i.e. before static object allocation.
 // Otherwise, statically allocated objects that need libmaple may fail.
 __attribute__((constructor)) void premain() {
@@ -148,7 +158,13 @@ int main(void){
 					}
 
 
-					Serial3.print((const char*)&read_buffer[0]);
+					//Serial3.print((const char*)&read_buffer[0]);
+					// treat favicon.ico
+					if (strstr((const char*)&read_buffer[0], "GET /favicon") != NULL) {
+							Serial3.println("Favicon");
+							sock->send((const uint8 *)&html_not_found[0], sizeof(html_not_found), false);
+					}
+					//
 					user_data = strstr((const char*)&read_buffer[0], "GET /main");
 					if (user_data != NULL){
 						Serial3.println();
@@ -163,16 +179,9 @@ int main(void){
 				}
 
 				Serial3.println();
-
 				delay(10);
-				//sock->send((const uint8 *)&write_buffer[0], sizeof(html_hello_world), false);	
 				if (send_response){
 					Serial3.println("Got some data from the webpage!");
-					/*
-					memset(&user_buffer[0], 0, sizeof(user_buffer));
-					sscanf(user_data, "GET /main?user_name=%s HTTP", &user_buffer[0]);
-					snprintf (&write_buffer[0], sizeof(write_buffer), &html_response[0], &user_buffer[0]); 
-					*/
 					snprintf (&write_buffer[0], sizeof(write_buffer), &html_response[0], &user_buffer[0]);
 
 					sock->send((const uint8*)&write_buffer[0], (uint16)strlen(&write_buffer[0]), false);
@@ -187,6 +196,11 @@ int main(void){
 				sock->disconnect();
 				sock_opened = false;
 				sock->listen();
+
+                //added by jbkim
+                Serial3.println("\r\nListen...");
+
+
 			}
 		}
 	}

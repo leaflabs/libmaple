@@ -221,8 +221,9 @@ void Telnet::input(){
 			ser->print((char) c);
 			if (user_state != PASSWORD){
 
-				snprintf (prbuf, BUF_SIZE, "%c", c);
-				socket.send((uint8 const *)prbuf, strlen(prbuf), false);
+//removed these lines so that the double characters wont be sent back to the user 
+//				snprintf (prbuf, BUF_SIZE, "%c", c);
+//				socket.send((uint8 const *)prbuf, strlen(prbuf), false);
 			}
 
 

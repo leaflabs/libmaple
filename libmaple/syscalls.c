@@ -101,7 +101,7 @@ unsigned char getch(void) {
     return 0;
 }
 
-
+__attribute__ ((weak))
 int _read(int fd, char *buf, size_t cnt) {
     *buf = getch();
 
@@ -151,6 +151,7 @@ void cgets(char *s, int bufsize) {
     return;
 }
 
+__attribute__ ((weak))
 int _write(int fd, const char *buf, size_t cnt) {
     int i;
 

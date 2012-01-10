@@ -68,7 +68,7 @@ extern "C" {
 
 #define STM32_MCU_SERIES                STM32_SERIES_F2
 
-#if defined(MCU_STM32F207IC)
+#if defined(MCU_STM32F207IC) || defined(MCU_STM32F207IG)
 #   define STM32_NR_GPIO_PORTS          9
 #   define STM32_SRAM_END               ((void*)0x20020000)
 

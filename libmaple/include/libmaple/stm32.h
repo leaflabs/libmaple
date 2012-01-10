@@ -36,15 +36,20 @@
 extern "C" {
 #endif
 
-/**
- * @brief STM32 series identifiers.
+/*
+ * STM32 series identifiers.
+ *
+ * Don't make these into an enum; the preprocessor needs them.
  */
-typedef enum stm32_series {
-    STM32_SERIES_F1, /**< F1 series */
-    STM32_SERIES_F2, /**< F2 series */
-    STM32_SERIES_L1, /**< L1 series */
-    STM32_SERIES_F4, /**< F4 series */
-} stm32_series;
+
+/** STM32F1 series. */
+#define STM32_SERIES_F1 0
+/** STM32F2 series. */
+#define STM32_SERIES_F2 1
+/** STM32L1 series. */
+#define STM32_SERIES_L1 2
+/** STM32F4 series. */
+#define STM32_SERIES_F4 3
 
 /* The series header is responsible for defining:
  *
@@ -83,7 +88,11 @@ typedef enum stm32_series {
  */
 
 /**
- * @brief enum stm32_series value for the MCU being targeted.
+ * @brief STM32 series value for the MCU being targeted.
+ *
+ * At time of writing, allowed values are: STM32_SERIES_F1,
+ * STM32_SERIES_F2. This set of values will expand as libmaple adds
+ * support for more STM32 series MCUs.
  */
 #define STM32_MCU_SERIES
 

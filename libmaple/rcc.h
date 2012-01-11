@@ -586,7 +586,7 @@ static inline void rcc_stop_lsi(void) {
  */
 static inline void rcc_start_lse(void) {
 	*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_LSEON) = 1;
-	while (*bb_perip(&RCC_BASE->BDCR, RCC_CSR_LSIRDY_BIT) == 0);
+	while (*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_LSERDY_BIT) == 0);
 }
 
 /**
@@ -601,7 +601,7 @@ static inline void rcc_stop_lse(void) {
  */
 static inline void rcc_start_hse(void) {
 	*bb_perip(&RCC_BASE->CR, RCC_CR_HSEON_BIT) = 1;
-	while (*bb_perip(&RCC_BASE->BDCR, RCC_CR_HSERDY_BIT) == 0);
+	while (*bb_perip(&RCC_BASE->CR, RCC_CR_HSERDY_BIT) == 0);
 }
 
 /**

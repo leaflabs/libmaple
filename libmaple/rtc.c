@@ -53,32 +53,30 @@ void rtc_init(rtc_clk_src src) {
 	
 	bkp_enable_writes();	// enable writes to the backup registers and the RTC registers via the DBP bit in the PWR control register
 			
-	RCC_BASE->BDCR &= ~RCC_BDCR_RTCSEL;
+	RCC_BASE->BDCR &= ~RCC_BDCR_RTCSEL;  // Clear the RTC clock source select field
 	switch (src) {
 		case RTCSEL_NONE:
-			RCC_BASE->BDCR = RCC_BDCR_RTCSEL_NONE;
+			RCC_BASE->BDCR |= RCC_BDCR_RTCSEL_NONE;
 			break;
 			
 		case RTCSEL_LSE:
 			rcc_start_lse();
-			RCC_BASE->BDCR = RCC_BDCR_RTCSEL_LSE;
+			RCC_BASE->BDCR |= RCC_BDCR_RTCSEL_LSE;
 			break;
 			
 		case RTCSEL_LSI:
 		case RTCSEL_DEFAULT:
 			rcc_start_lsi();
-			RCC_BASE->BDCR = RCC_BDCR_RTCSEL_LSI;
+			RCC_BASE->BDCR |= RCC_BDCR_RTCSEL_LSI;
 			break;
 			
 		case RTCSEL_HSE:			// This selection uses HSE/128 as the RTC source (i.e. 64 kHz with an 8 mHz xtal)
-			rcc_start_hse();
-			RCC_BASE->BDCR = RCC_BDCR_RTCSEL_HSE;
+			// assume the HSE clock is running (see rcc_clk_init())
+			RCC_BASE->BDCR |= RCC_BDCR_RTCSEL_HSE;
 			break;
 	}
 	*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_RTCEN_BIT) = 1; // Enable the RTC
-
-	rtc_clear_sync();
-	rtc_wait_sync();
+	
 	rtc_wait_finished();
 }
 
@@ -163,8 +161,6 @@ void __irq_rtcalarm(void) {
  */
 uint32 rtc_get_count() {
 	uint32 h, l;
-	rtc_clear_sync();
-	rtc_wait_sync();
 	rtc_wait_finished();
 	h = RTC->regs->CNTH & 0xffff;
 	l = RTC->regs->CNTL & 0xffff;
@@ -176,14 +172,11 @@ uint32 rtc_get_count() {
  * @param value New counter value
  */
 void rtc_set_count(uint32 value) {
-	rtc_clear_sync();
-	rtc_wait_sync();
 	rtc_wait_finished();
 	rtc_enter_config_mode();
 	RTC->regs->CNTH = (value >> 16) & 0xffff;
 	RTC->regs->CNTL = value & 0xffff;
 	rtc_exit_config_mode();
-	rtc_wait_finished();
 }
 
 /**
@@ -191,14 +184,11 @@ void rtc_set_count(uint32 value) {
  * @param value New prescaler load value (use 0x7fff to get 1 second period with 32.768 Hz clock).
  */
 void rtc_set_prescaler_load(uint32 value) {
-	rtc_clear_sync();
-	rtc_wait_sync();
 	rtc_wait_finished();
 	rtc_enter_config_mode();
 	RTC->regs->PRLH = (value >> 16) & 0xffff;
 	RTC->regs->PRLL = value & 0xffff;
 	rtc_exit_config_mode();
-	rtc_wait_finished();
 }
 
 /**
@@ -206,8 +196,6 @@ void rtc_set_prescaler_load(uint32 value) {
  */
 uint32 rtc_get_divider() {
 	uint32 h, l;
-	rtc_clear_sync();
-	rtc_wait_sync();
 	rtc_wait_finished();
 	h = RTC->regs->DIVH & 0x000f;
 	l = RTC->regs->DIVL & 0xffff;
@@ -219,8 +207,6 @@ uint32 rtc_get_divider() {
  * @param value New alarm value
  */
 void rtc_set_alarm(uint32 value) {
-	rtc_clear_sync();
-	rtc_wait_sync();
 	rtc_wait_finished();
 	rtc_enter_config_mode();
 	RTC->regs->ALRH = (value >> 16) & 0xffff;

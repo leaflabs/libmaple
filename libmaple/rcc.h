@@ -570,45 +570,31 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
  * @brief Start the low speed internal oscillatior
  */
 static inline void rcc_start_lsi(void) {
-	*bb_perip(&RCC_BASE->CSR, RCC_CSR_LSION_BIT) = 1;
-	while (*bb_perip(&RCC_BASE->CSR, RCC_CSR_LSIRDY_BIT) == 0);
+	bb_peri_set_bit(&RCC_BASE->CSR, RCC_CSR_LSION_BIT, 1);
+	while (bb_peri_get_bit(&RCC_BASE->CSR, RCC_CSR_LSIRDY_BIT ) == 0);
 }
 
 /**
  * @brief Stop the low speed internal oscillatior
  */
 static inline void rcc_stop_lsi(void) {
-	*bb_perip(&RCC_BASE->CSR, RCC_CSR_LSION_BIT) = 0;
+	bb_peri_set_bit(&RCC_BASE->CSR, RCC_CSR_LSION_BIT, 0);
 }
 
 /**
  * @brief Start the low speed external oscillatior
  */
 static inline void rcc_start_lse(void) {
-	*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_LSEON) = 1;
-	while (*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_LSERDY_BIT) == 0);
+	bb_peri_set_bit(&RCC_BASE->BDCR, RCC_BDCR_LSEBYP_BIT, 0);
+	bb_peri_set_bit(&RCC_BASE->BDCR, RCC_BDCR_LSEON_BIT, 1);
+	while (bb_peri_get_bit(&RCC_BASE->BDCR, RCC_BDCR_LSERDY_BIT ) == 0);
 }
 
 /**
  * @brief Stop the low speed external oscillatior
  */
 static inline void rcc_stop_lse(void) {
-	*bb_perip(&RCC_BASE->BDCR, RCC_BDCR_LSEON) = 0;
-}
-
-/**
- * @brief Start the high speed external oscillatior
- */
-static inline void rcc_start_hse(void) {
-	*bb_perip(&RCC_BASE->CR, RCC_CR_HSEON_BIT) = 1;
-	while (*bb_perip(&RCC_BASE->CR, RCC_CR_HSERDY_BIT) == 0);
-}
-
-/**
- * @brief Stop the high speed external oscillatior
- */
-static inline void rcc_stop_hse(void) {
-	*bb_perip(&RCC_BASE->CR, RCC_CR_HSEON_BIT) = 0;
+	bb_peri_set_bit(&RCC_BASE->BDCR, RCC_BDCR_LSEON, 0);
 }
 
 #ifdef __cplusplus

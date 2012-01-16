@@ -64,6 +64,7 @@ void rtc_init(rtc_clk_src src) {
 			RCC_BASE->BDCR |= RCC_BDCR_RTCSEL_LSE;
 			break;
 			
+		default:
 		case RTCSEL_LSI:
 		case RTCSEL_DEFAULT:
 			rcc_start_lsi();

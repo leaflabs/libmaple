@@ -91,7 +91,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 ##
 
 # main target
-include $(SRCROOT)/build-targets.mk
+include $(MAKEDIR)/build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
 

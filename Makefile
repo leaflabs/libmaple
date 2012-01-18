@@ -1,7 +1,8 @@
 # Try "make help" first
 
-SOURCES = main.cpp \
-          another.cpp
+SOURCES = buoy.cpp \
+          ads1282.cpp \
+          main.cpp
 
 .DEFAULT_GOAL := sketch
 

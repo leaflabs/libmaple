@@ -1,5 +1,8 @@
 # Try "make help" first
 
+SOURCES = main.cpp \
+          another.cpp
+
 .DEFAULT_GOAL := sketch
 
 ##

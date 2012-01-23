@@ -1,6 +1,9 @@
 # main project target
 CFLAGS += $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
 OBJ_main := $(SOURCES:%.cpp=$(BUILD_PATH)/%.o)
+DEPS := $(SOURCES:%.cpp=$(BUILD_PATH)/%.d)
+
+-include $(DEPS)
 
 $(BUILD_PATH)/libmaple.a: $(BUILDDIRS) $(TGT_BIN)
 	- rm -f $@

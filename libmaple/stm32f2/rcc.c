@@ -110,12 +110,6 @@ const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_TIM1]   = DEV_ENTRY(APB2, TIM1),
 };
 
-void rcc_clk_init(rcc_sysclk_src sysclk_src,
-                  rcc_pllsrc pll_src,
-                  rcc_pll_multiplier pll_mul) {
-    ASSERT(0);                    /* FIXME */
-}
-
 /**
  * @brief Turn on the clock line on a peripheral
  * @param id Clock ID of the peripheral to turn on.

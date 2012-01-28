@@ -37,6 +37,8 @@
 extern "C"{
 #endif
 
+#include <libmaple/libmaple.h>
+
 /*
  * Register map
  */
@@ -383,7 +385,7 @@ typedef struct rcc_reg_map {
 #define RCC_CSR_LSION                   BIT(RCC_CSR_LSION_BIT)
 
 /*
- * Other types
+ * libmaple-mandated enumeration types.
  */
 
 /**
@@ -545,6 +547,33 @@ typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_256 = 0xE << 4,
     RCC_AHB_SYSCLK_DIV_512 = 0xF << 4,
 } rcc_ahb_divider;
+
+/**
+ * @brief Available clock sources.
+ */
+typedef enum rcc_clk {
+    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
+                                                    HSI or HSE. */
+    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSEON_BIT), /**< High speed external. */
+    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSION_BIT), /**< High speed internal. */
+    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
+                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
+                                                    * (32.768 KHz). */
+    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
+                              RCC_CSR_LSION_BIT), /**< Low-speed internal
+                                                   * (approximately 32 KHz). */
+} rcc_clk;
+
+/*
+ * Series-specific functionality.
+ */
+
+void rcc_clk_init(rcc_sysclk_src sysclk_src,
+                  rcc_pllsrc pll_src,
+                  rcc_pll_multiplier pll_mul);
 
 #ifdef __cplusplus
 }

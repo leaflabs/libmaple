@@ -722,7 +722,6 @@ typedef struct rcc_reg_map {
 
 /* Spread spectrum clock generation register */
 
-
 #define RCC_SSCGR_SSCGEN_BIT            31
 #define RCC_SSCGR_SPREADSEL_BIT         30
 
@@ -740,6 +739,10 @@ typedef struct rcc_reg_map {
 
 /*
  * Other types
+ */
+
+/*
+ * Clock sources, domains, and peripheral clock IDs.
  */
 
 /**
@@ -819,10 +822,6 @@ typedef enum rcc_pllsrc {
     RCC_PLLSRC_HSE = RCC_PLLCFGR_PLLSRC,
 } rcc_pllsrc;
 
-typedef enum rcc_pll_multiplier { /* TODO -- does this make sense anymore? */
-    RCC_PLLMUL_XXX,
-} rcc_pll_multiplier;
-
 /**
  * @brief Peripheral clock domains.
  */
@@ -833,6 +832,10 @@ typedef enum rcc_clk_domain {
     RCC_AHB2,
     RCC_AHB3,
 } rcc_clk_domain;
+
+/*
+ * Prescalers and dividers.
+ */
 
 /**
  * @brief Prescaler identifiers.
@@ -911,6 +914,28 @@ typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_256 = RCC_CFGR_HPRE_SYSCLK_DIV_256,
     RCC_AHB_SYSCLK_DIV_512 = RCC_CFGR_HPRE_SYSCLK_DIV_512,
 } rcc_ahb_divider;
+
+/**
+ * @brief Available clock sources.
+ */
+typedef enum rcc_clk {
+    RCC_CLK_PLLI2S = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLI2SON_BIT), /**< Dedicated PLL
+                                                       for I2S. */
+    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
+                                                    HSI or HSE. */
+    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSEON_BIT), /**< High speed external. */
+    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSION_BIT), /**< High speed internal. */
+    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
+                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
+                                                    * (32.768 KHz). */
+    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
+                              RCC_CSR_LSION_BIT), /**< Low-speed internal
+                                                   * (approximately 32 KHz). */
+} rcc_clk;
 
 #ifdef __cplusplus
 }

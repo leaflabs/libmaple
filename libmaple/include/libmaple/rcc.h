@@ -37,27 +37,11 @@ extern "C"{
 #endif
 
 #include <libmaple/libmaple_types.h>
-#include <series/rcc.h>
 
-/* Note: Beyond the usual (registers, etc.), it's up to the series
- * header to define the following types:
- *
- * - rcc_pllsrc: For each PLL source (passed to rcc_clk_init()).
- *
- * - rcc_pll_multiplier: If appropriate (TODO verify this makes sense).
- *
- * - rcc_clk_id: For each available peripheral. These are widely used
- *   as unique IDs (TODO extricate from RCC?). Peripherals which are
- *   common across families should use the same token for their
- *   rcc_clk_id in each series header.
- *
- * - rcc_clk_domain: For each clock domain (returned by rcc_dev_clk()).
- *
- * - rcc_prescaler (and a suitable set of dividers): for rcc_set_prescaler().
- */
-
+/* Put the SYSCLK sources before the series header is included, as it
+ * might need them. */
 /**
- * SYSCLK sources
+ * @brief SYSCLK sources
  * @see rcc_clk_init()
  */
 typedef enum rcc_sysclk_src {
@@ -66,13 +50,50 @@ typedef enum rcc_sysclk_src {
     RCC_CLKSRC_PLL = 0x2,
 } rcc_sysclk_src;
 
-void rcc_clk_init(rcc_sysclk_src sysclk_src,
-                  rcc_pllsrc pll_src,
-                  rcc_pll_multiplier pll_mul);
+#include <series/rcc.h>
+
+/* Note: Beyond the usual (registers, etc.), it's up to the series
+ * header to define the following types:
+ *
+ * - enum rcc_clk: Available system and secondary clock sources,
+ *   e.g. RCC_CLK_HSE, RCC_CLK_PLL, RCC_CLK_LSE.
+ *
+ *   Note that the inclusion of secondary clock sources (like LSI and
+ *   LSE) makes enum rcc_clk different from the SYSCLK sources, which
+ *   are defined in this header as enum rcc_sysclk_src.
+ *
+ *   IMPORTANT NOTE TO IMPLEMENTORS: If you are adding support for a
+ *   new STM32 series, see the comment near rcc_clk_reg() in
+ *   libmaple/rcc.c for information on how to choose these values so
+ *   that rcc_turn_on_clk() etc. will work on your series.
+ *
+ * - enum rcc_clk_id: For each available peripheral. These are widely used
+ *   as unique IDs (TODO extricate from RCC?). Peripherals which are
+ *   common across STM32 series should use the same token for their
+ *   rcc_clk_id in each series header.
+ *
+ * - enum rcc_clk_domain: For each clock domain. This is returned by
+ *   rcc_dev_clk(). For instance, each AHB and APB is a clock domain.
+ *
+ * - enum rcc_prescaler: And a suitable set of dividers for
+ *   rcc_set_prescaler().
+ */
+
+/* Clock prescaler management. */
+void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
+
+/* SYSCLK. */
+void rcc_switch_sysclk(rcc_sysclk_src sysclk_src);
+
+/* System and secondary clock sources. */
+void rcc_turn_on_clk(rcc_clk clock);
+void rcc_turn_off_clk(rcc_clk clock);
+int rcc_is_clk_ready(rcc_clk clock);
+
+/* Peripheral clock lines and clock domains. */
 void rcc_clk_enable(rcc_clk_id device);
 void rcc_reset_dev(rcc_clk_id device);
 rcc_clk_domain rcc_dev_clk(rcc_clk_id device);
-void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
 
 #ifdef __cplusplus
 } // extern "C"

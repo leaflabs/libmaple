@@ -105,9 +105,6 @@ const struct rcc_dev_info rcc_dev_table[] = {
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul) {
-    uint32 cfgr = 0;
-    uint32 cr;
-
     /* Assume that we're going to clock the chip off the PLL, fed by
      * the HSE */
     ASSERT(sysclk_src == RCC_CLKSRC_PLL &&
@@ -115,25 +112,18 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
 
     RCC_BASE->CFGR = pll_src | pll_mul;
 
-    /* Turn on the HSE */
-    cr = RCC_BASE->CR;
-    cr |= RCC_CR_HSEON;
-    RCC_BASE->CR = cr;
-    while (!(RCC_BASE->CR & RCC_CR_HSERDY))
+    /* Turn on, and wait for, HSE. */
+    rcc_turn_on_clk(RCC_CLK_HSE);
+    while (!rcc_is_clk_ready(RCC_CLK_HSE))
         ;
 
-    /* Now the PLL */
-    cr |= RCC_CR_PLLON;
-    RCC_BASE->CR = cr;
-    while (!(RCC_BASE->CR & RCC_CR_PLLRDY))
+    /* Do the same for the main PLL. */
+    rcc_turn_on_clk(RCC_CLK_PLL);
+    while(!rcc_is_clk_ready(RCC_CLK_PLL))
         ;
 
-    /* Finally, let's switch over to the PLL */
-    cfgr &= ~RCC_CFGR_SW;
-    cfgr |= RCC_CFGR_SW_PLL;
-    RCC_BASE->CFGR = cfgr;
-    while ((RCC_BASE->CFGR & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL)
-        ;
+    /* Finally, switch over to the PLL. */
+    rcc_switch_sysclk(RCC_CLKSRC_PLL);
 }
 
 /**

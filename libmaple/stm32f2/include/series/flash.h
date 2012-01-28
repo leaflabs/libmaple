@@ -189,6 +189,13 @@ typedef struct flash_reg_map {
 /* Note that this value depends on a 2.7V--3.6V supply voltage */
 #define FLASH_SAFE_WAIT_STATES          FLASH_WAIT_STATE_3
 
+/* Flash memory features available via ACR. */
+enum {
+    FLASH_PREFETCH = 0x100,
+    FLASH_ICACHE   = 0x200,
+    FLASH_DCACHE   = 0x400,
+};
+
 #ifdef __cplusplus
 }
 #endif

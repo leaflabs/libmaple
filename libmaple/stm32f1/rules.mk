@@ -12,7 +12,6 @@ sSRCS_$(d) := isrs_performance.S            \
               vector_table_performance.S
 
 cSRCS_$(d) := rcc.c
-cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += bkp.c
 

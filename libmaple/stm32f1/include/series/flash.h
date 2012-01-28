@@ -135,6 +135,14 @@ typedef struct flash_reg_map {
 
 #define FLASH_SAFE_WAIT_STATES          FLASH_WAIT_STATE_2
 
+/* Flash memory features available via ACR */
+enum {
+    FLASH_PREFETCH   = 0x10,
+    FLASH_HALF_CYCLE = 0x8,
+    FLASH_ICACHE     = 0x0,     /* Not available on STM32F1 */
+    FLASH_DCACHE     = 0x0,     /* Not available on STM32F1 */
+};
+
 #ifdef __cplusplus
 }
 #endif

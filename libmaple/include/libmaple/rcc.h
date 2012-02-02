@@ -91,9 +91,26 @@ void rcc_turn_off_clk(rcc_clk clock);
 int rcc_is_clk_ready(rcc_clk clock);
 
 /* Peripheral clock lines and clock domains. */
+
 void rcc_clk_enable(rcc_clk_id device);
 void rcc_reset_dev(rcc_clk_id device);
 rcc_clk_domain rcc_dev_clk(rcc_clk_id device);
+
+/* Clock security system */
+
+/**
+ * @brief Enable the clock security system (CSS).
+ */
+static inline void rcc_enable_css() {
+    RCC_BASE->CR |= RCC_CR_CSSON;
+}
+
+/**
+ * @brief Disable the clock security system (CSS).
+ */
+static inline void rcc_disable_css() {
+    RCC_BASE->CR &= ~RCC_CR_CSSON;
+}
 
 #ifdef __cplusplus
 } // extern "C"

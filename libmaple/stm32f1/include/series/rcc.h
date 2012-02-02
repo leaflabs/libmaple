@@ -576,6 +576,17 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul);
 
+/**
+ * @brief STM32F1-specific PLL configuration values.
+ *
+ * Use this as the "data" field in a struct rcc_pll_cfg.
+ *
+ * @see struct rcc_pll_cfg.
+ */
+typedef struct stm32f1_rcc_pll_data {
+     rcc_pll_multiplier pll_mul; /**< PLL multiplication factor. */
+} stm32f1_rcc_pll_data;
+
 #ifdef __cplusplus
 }
 #endif

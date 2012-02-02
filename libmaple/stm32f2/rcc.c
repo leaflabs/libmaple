@@ -160,3 +160,37 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     };
     rcc_do_set_prescaler(masks, prescaler, divider);
 }
+
+/**
+ * @brief Configure the main PLL.
+ *
+ * You may only call this function while the PLL is disabled.
+ *
+ * @param pll_cfg Desired PLL configuration. The data field must point
+ *                to a valid struct stm32f2_rcc_pll_data.
+ */
+void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
+    stm32f2_rcc_pll_data *data = pll_cfg->data;
+    uint32 pllcfgr;
+
+    /* Sanity-check all the parameters */
+    ASSERT_FAULT((data->pllq >= 4) && (data->pllq <= 15));
+    ASSERT_FAULT((data->pllp >= 2) && (data->pllp <= 8));
+    ASSERT_FAULT(!(data->pllp & 1));
+    ASSERT_FAULT((data->plln >= 192) && (data->plln <= 432));
+    ASSERT_FAULT((data->pllm >= 2) && (data->pllm <= 63));
+
+    /* Update RCC_PLLCFGR to reflect new values. */
+    pllcfgr = RCC_BASE->PLLCFGR;
+    pllcfgr &= ~(RCC_PLLCFGR_PLLQ |
+                 RCC_PLLCFGR_PLLP |
+                 RCC_PLLCFGR_PLLN |
+                 RCC_PLLCFGR_PLLM |
+                 RCC_PLLCFGR_PLLSRC);
+    pllcfgr |= (pll_cfg->pllsrc |
+                (data->pllq << 24) |
+                (((data->pllp >> 1) - 1) << 16) |
+                (data->plln << 6) |
+                data->pllm);
+    RCC_BASE->PLLCFGR = pllcfgr;
+}

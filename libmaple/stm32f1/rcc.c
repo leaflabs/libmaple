@@ -127,6 +127,25 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
 }
 
 /**
+ * @brief Configure the main PLL.
+ *
+ * You may only call this function while the PLL is disabled.
+ *
+ * @param pll_cfg Desired PLL configuration. The data field must point
+ *                to a valid struct stm32f1_rcc_pll_data.
+ */
+void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
+    stm32f1_rcc_pll_data *data = pll_cfg->data;
+    rcc_pll_multiplier pll_mul = data->pll_mul;
+    uint32 cfgr;
+
+    cfgr = RCC_BASE->CFGR;
+    cfgr &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLMUL);
+    cfgr |= pll_cfg->pllsrc | pll_mul;
+    RCC_BASE->CFGR = cfgr;
+}
+
+/**
  * @brief Turn on the clock line on a peripheral
  * @param id Clock ID of the peripheral to turn on.
  */

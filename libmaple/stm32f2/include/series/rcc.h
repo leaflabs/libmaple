@@ -738,12 +738,30 @@ typedef struct rcc_reg_map {
 #define RCC_PLLI2SCFGR_PLLI2SN          (0x1FF << 6)
 
 /*
- * Other types
- */
-
-/*
  * Clock sources, domains, and peripheral clock IDs.
  */
+
+/**
+ * @brief Available clock sources.
+ */
+typedef enum rcc_clk {
+    RCC_CLK_PLLI2S = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLI2SON_BIT), /**< Dedicated PLL
+                                                       for I2S. */
+    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
+                                                    HSI or HSE. */
+    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSEON_BIT), /**< High speed external. */
+    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSION_BIT), /**< High speed internal. */
+    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
+                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
+                                                    * (32.768 KHz). */
+    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
+                              RCC_CSR_LSION_BIT), /**< Low-speed internal
+                                                   * (approximately 32 KHz). */
+} rcc_clk;
 
 /**
  * @brief Identifies bus and clock line for a peripheral or peripheral
@@ -915,27 +933,31 @@ typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_512 = RCC_CFGR_HPRE_SYSCLK_DIV_512,
 } rcc_ahb_divider;
 
-/**
- * @brief Available clock sources.
+/*
+ * Series-specific PLL configuration.
  */
-typedef enum rcc_clk {
-    RCC_CLK_PLLI2S = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_PLLI2SON_BIT), /**< Dedicated PLL
-                                                       for I2S. */
-    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
-                                                    HSI or HSE. */
-    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_HSEON_BIT), /**< High speed external. */
-    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_HSION_BIT), /**< High speed internal. */
-    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
-                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
-                                                    * (32.768 KHz). */
-    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
-                              RCC_CSR_LSION_BIT), /**< Low-speed internal
-                                                   * (approximately 32 KHz). */
-} rcc_clk;
+
+/**
+ * @brief STM32F2-specific PLL configuration values.
+ *
+ * Use this as the "data" field in a struct rcc_pll_cfg.
+ *
+ * @see struct rcc_pll_cfg.
+ */
+typedef struct stm32f2_rcc_pll_data {
+    uint8 pllq;      /**<
+                      * @brief PLLQ value.
+                      * Allowed values: 4, 5, ..., 15. */
+    uint8 pllp;      /**<
+                      * @brief PLLP value.
+                      * Allowed values: 2, 4, 6, 8. */
+    uint16 plln;     /**<
+                      * @brief PLLN value.
+                      * Allowed values: 192, 193, ..., 432. */
+    uint8 pllm;      /**<
+                      * @brief PLLM value.
+                      * Allowed values: 2, 3, ..., 63. */
+} stm32f2_rcc_pll_data;
 
 #ifdef __cplusplus
 }

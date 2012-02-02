@@ -80,12 +80,30 @@ typedef enum rcc_sysclk_src {
  */
 
 /* Clock prescaler management. */
+
 void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
 
 /* SYSCLK. */
+
 void rcc_switch_sysclk(rcc_sysclk_src sysclk_src);
 
+/* PLL configuration */
+
+/**
+ * @brief Specifies a configuration for the main PLL.
+ */
+typedef struct rcc_pll_cfg {
+    rcc_pllsrc  pllsrc;     /**< PLL source */
+    void       *data;       /**< Series-specific configuration
+                             * data. See the <series/rcc.h> for your
+                             * MCU for more information on what to put
+                             * here. */
+} rcc_pll_cfg;
+
+void rcc_configure_pll(rcc_pll_cfg *pll_cfg);
+
 /* System and secondary clock sources. */
+
 void rcc_turn_on_clk(rcc_clk clock);
 void rcc_turn_off_clk(rcc_clk clock);
 int rcc_is_clk_ready(rcc_clk clock);

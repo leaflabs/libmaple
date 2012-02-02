@@ -27,7 +27,7 @@
 /**
  *  @file libmaple_types.h
  *
- *  @brief libmaple types
+ *  @brief libmaple's types, and operations on types.
  */
 
 #ifndef _LIBMAPLE_LIBMAPLE_TYPES_H_
@@ -55,6 +55,10 @@ typedef void (*voidFuncPtr)(void);
 
 #ifndef NULL
 #define NULL 0
+#endif
+
+#ifndef offsetof
+#define offsetof(type, member) __builtin_offsetof(type, member)
 #endif
 
 #ifdef __cplusplus

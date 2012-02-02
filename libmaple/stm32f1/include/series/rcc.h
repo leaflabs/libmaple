@@ -571,6 +571,7 @@ typedef enum rcc_clk {
  * Series-specific functionality.
  */
 
+__deprecated
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul);

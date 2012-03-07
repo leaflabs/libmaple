@@ -42,7 +42,7 @@ MEMORY_TARGET ?= flash
 include $(MAKEDIR)/target-config.mk
 
 # Define git desc to use as version
-GIT_DESC = \"$(shell git describe --tags)\"
+GIT_DESC = \"$(shell git describe --tags --always)\"
 
 ##
 ## Compilation flags

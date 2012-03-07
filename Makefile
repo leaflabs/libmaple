@@ -41,6 +41,9 @@ MEMORY_TARGET ?= flash
 # $(BOARD)- and $(MEMORY_TARGET)-specific configuration
 include $(MAKEDIR)/target-config.mk
 
+# Define git desc to use as version
+GIT_DESC = \"$(shell git describe --tags)\"
+
 ##
 ## Compilation flags
 ##
@@ -49,7 +52,8 @@ GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
 		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
-		   -D$(DENSITY)
+		   -D$(DENSITY)															 \
+			 -DGIT_DESC=$(GIT_DESC)
 GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 		   -nostdlib -ffunction-sections -fdata-sections	     \
 		   -Wl,--gc-sections $(GLOBAL_FLAGS)

@@ -45,6 +45,7 @@
  */
 
 #include <wirish/boards.h>
+#include <libmaple/libmaple_types.h>
 #include <libmaple/flash.h>
 #include <libmaple/nvic.h>
 #include <libmaple/systick.h>
@@ -71,7 +72,7 @@ void init(void) {
 }
 
 /* Provide a default boardInit(). */
-__attribute__((weak)) void boardInit(void) {
+__weak void boardInit(void) {
 }
 
 /* You could farm this out to the files in boards/ if e.g. it takes

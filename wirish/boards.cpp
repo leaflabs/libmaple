@@ -25,47 +25,53 @@
  *****************************************************************************/
 
 /**
- * @brief Generic board initialization routines.
+ * @file boards.cpp
+ * @brief Generic board routines.
  *
  * This file is mostly interesting for the init() function, which
  * configures Flash, the core sytem clocks, and a variety of other
  * available peripherals on the board so the rest of Wirish doesn't
  * have to turn things on before using them.
  *
- * Prior to returning, init() calls boardInit(), which allows boards
- * to perform any initialization they need to.
+ * How init() does this is chip-specific. See the chip-specific pieces
+ * of Wirish (under e.g. wirish/stm32f1/, wirish/stmf32f2) for
+ * details.
  *
- * Specifically how init() works varies across boards and MCUs.
+ * Finally, prior to returning, init() calls boardInit(), which allows
+ * boards to perform any initialization they need to. This file
+ * includes a weak no-op definition of boardInit(), so boards that
+ * don't need any special initialization don't have to define their
+ * own.
  */
 
 #include <wirish/boards.h>
-
 #include <libmaple/flash.h>
-#include <libmaple/rcc.h>
 #include <libmaple/nvic.h>
 #include <libmaple/systick.h>
-#include <libmaple/gpio.h>
-#include <libmaple/adc.h>
-#include <libmaple/timer.h>
-#include <libmaple/usb_cdcacm.h>
+#include "boards_private.h"
 
-static void setupFlash(void);
-static void setupClocks(void);
-static void setupNVIC(void);
-static void setupADC(void);
-static void setupTimers(void);
+static void setup_flash(void);
+static void setup_clocks(void);
+static void setup_nvic(void);
+
+/*
+ * Exported functions
+ */
 
 void init(void) {
-    setupFlash();
-    setupClocks();
-    setupNVIC();
+    setup_flash();
+    setup_clocks();
+    setup_nvic();
     systick_init(SYSTICK_RELOAD_VAL);
-    gpio_init_all();
-    afio_init();
-    setupADC();
-    setupTimers();
-    usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+    wirish::priv::board_setup_gpio();
+    wirish::priv::board_setup_adc();
+    wirish::priv::board_setup_timers();
+    wirish::priv::board_setup_usb();
     boardInit();
+}
+
+/* Provide a default boardInit(). */
+__attribute__((weak)) void boardInit(void) {
 }
 
 /* You could farm this out to the files in boards/ if e.g. it takes
@@ -79,24 +85,56 @@ bool boardUsesPin(uint8 pin) {
     return false;
 }
 
-static void setupFlash(void) {
-    flash_enable_prefetch();
+/*
+ * Auxiliary routines
+ */
+
+static void setup_flash(void) {
+    // Turn on as many Flash "go faster" features as
+    // possible. flash_enable_features() just ignores any flags it
+    // can't support.
+    flash_enable_features(FLASH_PREFETCH | FLASH_ICACHE | FLASH_DCACHE);
+    // Configure the wait states, assuming we're operating at "close
+    // enough" to 3.3V.
     flash_set_latency(FLASH_SAFE_WAIT_STATES);
 }
 
-/*
- * Clock setup.  Note that some of this only takes effect if we're
- * running bare metal and the bootloader hasn't done it for us
- * already.
- */
-static void setupClocks() {
-    rcc_clk_init(RCC_CLKSRC_PLL, RCC_PLLSRC_HSE, RCC_PLLMUL_9);
-    rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
-    rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
-    rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
+static void setup_clocks(void) {
+    // Turn on HSI. We'll switch to and run off of this while we're
+    // setting up the main PLL.
+    rcc_turn_on_clk(RCC_CLK_HSI);
+
+    // Turn off and reset the clock subsystems we'll be using, as well
+    // as the clock security subsystem (CSS). Note that resetting CFGR
+    // to its default value of 0 implies a switch to HSI for SYSCLK.
+    RCC_BASE->CFGR = 0x00000000;
+    rcc_disable_css();
+    rcc_turn_off_clk(RCC_CLK_PLL);
+    rcc_turn_off_clk(RCC_CLK_HSE);
+    wirish::priv::board_reset_pll();
+    // Clear clock readiness interrupt flags and turn off clock
+    // readiness interrupts.
+    RCC_BASE->CIR = 0x00000000;
+
+    // Enable HSE, and wait until it's ready.
+    rcc_turn_on_clk(RCC_CLK_HSE);
+    while (!rcc_is_clk_ready(RCC_CLK_HSE))
+        ;
+
+    // Configure AHBx, APBx, etc. prescalers and the main PLL.
+    wirish::priv::board_setup_clock_prescalers();
+    rcc_configure_pll(&wirish::priv::board_pll_cfg);
+
+    // Enable the PLL, and wait until it's ready.
+    rcc_turn_on_clk(RCC_CLK_PLL);
+    while(!rcc_is_clk_ready(RCC_CLK_PLL))
+        ;
+
+    // Finally, switch to the now-ready PLL as the main clock source.
+    rcc_switch_sysclk(RCC_CLKSRC_PLL);
 }
 
-static void setupNVIC() {
+static void setup_nvic(void) {
 #ifdef VECT_TAB_FLASH
     nvic_init(USER_ADDR_ROM, 0);
 #elif defined VECT_TAB_RAM
@@ -106,61 +144,4 @@ static void setupNVIC() {
 #else
 #error "You must select a base address for the vector table."
 #endif
-}
-
-static void adcDefaultConfig(const adc_dev* dev);
-
-static void setupADC() {
-    rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
-    adc_foreach(adcDefaultConfig);
-}
-
-static void timerDefaultConfig(timer_dev*);
-
-static void setupTimers() {
-    timer_foreach(timerDefaultConfig);
-}
-
-static void adcDefaultConfig(const adc_dev *dev) {
-    adc_init(dev);
-
-    adc_set_extsel(dev, ADC_SWSTART);
-    adc_set_exttrig(dev, true);
-
-    adc_enable(dev);
-    adc_calibrate(dev);
-    adc_set_sample_rate(dev, ADC_SMPR_55_5);
-}
-
-static void timerDefaultConfig(timer_dev *dev) {
-    timer_adv_reg_map *regs = (dev->regs).adv;
-    const uint16 full_overflow = 0xFFFF;
-    const uint16 half_duty = 0x8FFF;
-
-    timer_init(dev);
-    timer_pause(dev);
-
-    regs->CR1 = TIMER_CR1_ARPE;
-    regs->PSC = 1;
-    regs->SR = 0;
-    regs->DIER = 0;
-    regs->EGR = TIMER_EGR_UG;
-
-    switch (dev->type) {
-    case TIMER_ADVANCED:
-        regs->BDTR = TIMER_BDTR_MOE | TIMER_BDTR_LOCK_OFF;
-        // fall-through
-    case TIMER_GENERAL:
-        timer_set_reload(dev, full_overflow);
-
-        for (int channel = 1; channel <= 4; channel++) {
-            timer_set_compare(dev, channel, half_duty);
-            timer_oc_set_mode(dev, channel, TIMER_OC_MODE_PWM_1, TIMER_OC_PE);
-        }
-        // fall-through
-    case TIMER_BASIC:
-        break;
-    }
-
-    timer_resume(dev);
 }

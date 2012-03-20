@@ -29,11 +29,6 @@
  * @author Bryan Newbold <bnewbold@leaflabs.com>,
  *         Marti Bolivar <mbolivar@leaflabs.com>
  * @brief Board-specific pin information.
- *
- * To add a new board type, add a new pair of files to
- * /wirish/boards/, update the section below with a new "BOARD" type,
- * and update /wirish/rules.mk to include your boards/your_board.cpp
- * file in the top-level Makefile build.
  */
 
 #ifndef _WIRISH_BOARDS_H_

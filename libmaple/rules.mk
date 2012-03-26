@@ -17,9 +17,9 @@ cSRCS_$(d) += nvic.c
 cSRCS_$(d) += rcc.c
 cSRCS_$(d) += syscalls.c
 cSRCS_$(d) += systick.c
-cSRCS_$(d) += util.c
 cSRCS_$(d) += usart.c
 cSRCS_$(d) += usart_private.c
+cSRCS_$(d) += util.c
 
 sSRCS_$(d) := exc.S
 

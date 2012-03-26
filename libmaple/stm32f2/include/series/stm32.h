@@ -53,21 +53,16 @@ extern "C" {
 #endif
 
 /*
- * Interrupts
- */
-
-#define STM32_NR_INTERRUPTS             81
-
-/*
  * Series- and MCU-specific values
  */
 
 #define STM32_MCU_SERIES                STM32_SERIES_F2
+#define STM32_NR_INTERRUPTS             81
+#define STM32_HAVE_FSMC                 1
 
 #if defined(MCU_STM32F207IC) || defined(MCU_STM32F207IG)
 #   define STM32_NR_GPIO_PORTS          9
 #   define STM32_SRAM_END               ((void*)0x20020000)
-
 #else
 #error "Unrecognized STM32F2 MCU, or no MCU specified."
 #endif

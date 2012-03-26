@@ -55,6 +55,9 @@ extern "C" {
  *
  * - Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
  *   conditional block.
+ *
+ * - STM32_HAVE_FSMC: 1 if the MCU has the FSMC peripheral, and 0
+ *   otherwise.
  */
 #include <series/stm32.h>
 

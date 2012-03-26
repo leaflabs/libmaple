@@ -58,8 +58,10 @@ extern "C" {
 
 #ifdef STM32_MEDIUM_DENSITY
 #   define STM32_NR_INTERRUPTS          43
+#   define STM32_HAVE_FSMC              0
 #elif defined(STM32_HIGH_DENSITY)
 #   define STM32_NR_INTERRUPTS          60
+#   define STM32_HAVE_FSMC              1
 #else
 #error "Unsupported STM32F1 density, or no density specified. Add something " \
        "like -DSTM32_MEDIUM_DENSITY to your compiler arguments."

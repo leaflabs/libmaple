@@ -41,8 +41,11 @@ extern "C"{
 #endif
 
 #include <libmaple/libmaple_types.h>
+#include <libmaple/stm32.h>
 
-#ifdef STM32_HIGH_DENSITY
+#if !STM32_HAVE_FSMC
+#error "FSMC is unavailable on your MCU"
+#endif
 
 /*
  * Register maps and devices
@@ -306,8 +309,6 @@ static inline void fsmc_nor_psram_set_addset(fsmc_nor_psram_reg_map *regs,
     regs->BTR &= ~FSMC_BTR_ADDSET;
     regs->BTR |= addset & 0xF;
 }
-
-#endif /* STM32_HIGH_DENSITY */
 
 #ifdef __cplusplus
 } /* extern "C" */

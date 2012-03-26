@@ -22,6 +22,14 @@ cSRCS_$(d) += systick.c
 cSRCS_$(d) += usart.c
 cSRCS_$(d) += usart_private.c
 cSRCS_$(d) += util.c
+# These still need to be ported to F2:
+# cSRCS_$(d) += adc.c
+# cSRCS_$(d) += dac.c
+# cSRCS_$(d) += dma.c
+# cSRCS_$(d) += exti.c
+# cSRCS_$(d) += i2c.c
+# cSRCS_$(d) += spi.c
+# cSRCS_$(d) += timer.c
 
 sSRCS_$(d) := exc.S
 

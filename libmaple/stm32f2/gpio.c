@@ -122,16 +122,16 @@ void gpio_init_all(void) {
 /**
  * @brief Set the mode of a GPIO pin.
  * @param dev GPIO device.
- * @param pin Pin on the device whose mode to set, 0--15.
+ * @param bit Bit on dev whose mode to set, 0--15.
  * @param mode Mode to set the pin to.
  * @param flags Flags to modify basic mode configuration
  */
 void gpio_set_modef(gpio_dev *dev,
-                    uint8 pin,
+                    uint8 bit,
                     gpio_pin_mode mode,
                     unsigned flags) {
     gpio_reg_map *regs = dev->regs;
-    unsigned shift = pin * 2;
+    unsigned shift = bit * 2;
     uint32 tmp;
 
     /* Mode */
@@ -141,7 +141,7 @@ void gpio_set_modef(gpio_dev *dev,
     regs->MODER = tmp;
 
     /* Output type */
-    bb_peri_set_bit(&regs->OTYPER, pin, flags & 0x1);
+    bb_peri_set_bit(&regs->OTYPER, bit, flags & 0x1);
 
     /* Speed */
     tmp = regs->OSPEEDR;
@@ -154,4 +154,32 @@ void gpio_set_modef(gpio_dev *dev,
     tmp &= ~(0x3 << shift);
     tmp |= (flags >> 2) << shift;
     regs->PUPDR = tmp;
+}
+
+/**
+ * @brief Set a pin's alternate function.
+ *
+ * The pin must have its mode set to GPIO_MODE_AF for this to take
+ * effect.
+ *
+ * @param dev Device whose pin to configure.
+ * @param bit Pin whose alternate function to set.
+ * @param af  Alternate function to use for pin.
+ * @see gpio_set_modef()
+ */
+void gpio_set_af(gpio_dev *dev, uint8 bit, gpio_af af) {
+    __io uint32 *afr;
+    unsigned shift;
+    uint32 tmp;
+    if (bit >= 8) {
+        afr = &dev->regs->AFRH;
+        shift = 4 * (bit - 8);
+    } else{
+        afr = &dev->regs->AFRL;
+        shift = 4 * bit;
+    }
+    tmp = *afr;
+    tmp &= ~(0xF << shift);
+    tmp |= (af << shift);
+    *afr = tmp;
 }

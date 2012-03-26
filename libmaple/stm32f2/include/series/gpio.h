@@ -104,8 +104,8 @@ extern gpio_dev gpioi;
 /*
  * Register bit definitions
  *
- * Currently, we only provide masks to be used for shifting, rather
- * than repeating the same values 16 times.
+ * Currently, we only provide masks to be used for shifting for some
+ * registers, rather than repeating the same values 16 times.
  */
 
 /* Mode register */
@@ -132,6 +132,28 @@ extern gpio_dev gpioi;
 #define GPIO_PUPDR_NOPUPD               0x0
 #define GPIO_PUPDR_PU                   0x1
 #define GPIO_PUPDR_PD                   0x2
+
+/* Alternate function register low */
+
+#define GPIO_AFRL_AF0                   (0xFU << 0)
+#define GPIO_AFRL_AF1                   (0xFU << 4)
+#define GPIO_AFRL_AF2                   (0xFU << 8)
+#define GPIO_AFRL_AF3                   (0xFU << 12)
+#define GPIO_AFRL_AF4                   (0xFU << 16)
+#define GPIO_AFRL_AF5                   (0xFU << 20)
+#define GPIO_AFRL_AF6                   (0xFU << 24)
+#define GPIO_AFRL_AF7                   (0xFU << 28)
+
+/* Alternate function register high */
+
+#define GPIO_AFRH_AF8                   (0xFU << 0)
+#define GPIO_AFRH_AF9                   (0xFU << 4)
+#define GPIO_AFRH_AF10                  (0xFU << 8)
+#define GPIO_AFRH_AF11                  (0xFU << 12)
+#define GPIO_AFRH_AF12                  (0xFU << 16)
+#define GPIO_AFRH_AF13                  (0xFU << 20)
+#define GPIO_AFRH_AF14                  (0xFU << 24)
+#define GPIO_AFRH_AF15                  (0xFU << 28)
 
 /*
  * GPIO routines
@@ -194,7 +216,7 @@ typedef enum gpio_mode_flags {
 } gpio_mode_flags;
 
 void gpio_set_modef(gpio_dev *dev,
-                    uint8 pin,
+                    uint8 bit,
                     gpio_pin_mode mode,
                     unsigned flags);
 
@@ -210,10 +232,36 @@ void gpio_set_modef(gpio_dev *dev,
  * @param mode Mode to set the pin to.
  */
 static inline void gpio_set_mode(gpio_dev *dev,
-                                 uint8 pin,
+                                 uint8 bit,
                                  gpio_pin_mode mode) {
-    gpio_set_modef(dev, pin, mode, GPIO_MODEF_SPEED_HIGH);
+    gpio_set_modef(dev, bit, mode, GPIO_MODEF_SPEED_HIGH);
 }
+
+/**
+ * @brief GPIO alternate functions.
+ * Use these to select an alternate function for a pin.
+ * @see gpio_set_af()
+ */
+typedef enum gpio_af {
+    GPIO_AF_SYS                  = 0, /**< System. */
+    GPIO_AF_TIM_1_2              = 1, /**< Timers 1 and 2. */
+    GPIO_AF_TIM_3_4_5            = 2, /**< Timers 3, 4, and 5. */
+    GPIO_AF_TIM_8_9_10_11        = 3, /**< Timers 8 through 11. */
+    GPIO_AF_I2C                  = 4, /**< I2C 1, 2, and 3. */
+    GPIO_AF_SPI_1_2              = 5, /**< SPI1, SPI2/I2S2. */
+    GPIO_AF_SPI3                 = 6, /**< SPI3/I2S3. */
+    GPIO_AF_USART_1_2_3          = 7, /**< USART 1, 2, and 3. */
+    GPIO_AF_USART_4_5_6          = 8, /**< UART 4 and 5, USART 6. */
+    GPIO_AF_CAN_1_2_TIM_12_13_14 = 9, /**<
+                                       * CAN 1 and 2, timers 12, 13, and 14. */
+    GPIO_AF_USB_OTG_FS_HS        = 10, /**< USB OTG HS and FS. */
+    GPIO_AF_ETH                  = 11, /**< Ethernet MII and RMII. */
+    GPIO_AF_FSMC_SDIO_OTG_FS     = 12, /**< FSMC, SDIO, and USB OTG FS. */
+    GPIO_AF_DCMI                 = 13, /**< DCMI. */
+    GPIO_AF_EVENTOUT             = 15, /**< EVENTOUT. */
+} gpio_af;
+
+void gpio_set_af(gpio_dev *dev, uint8 bit, gpio_af af);
 
 #ifdef __cplusplus
 }

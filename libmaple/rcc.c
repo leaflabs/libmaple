@@ -143,6 +143,15 @@ void rcc_turn_off_clk(rcc_clk clock) {
 }
 
 /**
+ * @brief Check if a clock is on.
+ * @param clock Clock to check.
+ * @return 1 if the clock is on, 0 if the clock is off.
+ */
+int rcc_is_clk_on(rcc_clk clock) {
+    return !!(*rcc_clk_reg(clock) & rcc_clk_on_mask(clock));
+}
+
+/**
  * @brief Check if a clock source is ready.
  *
  * In general, it is not safe to rely on a clock source unless this

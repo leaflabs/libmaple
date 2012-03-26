@@ -106,6 +106,7 @@ void rcc_configure_pll(rcc_pll_cfg *pll_cfg);
 
 void rcc_turn_on_clk(rcc_clk clock);
 void rcc_turn_off_clk(rcc_clk clock);
+int rcc_is_clk_on(rcc_clk clock);
 int rcc_is_clk_ready(rcc_clk clock);
 
 /* Peripheral clock lines and clock domains. */

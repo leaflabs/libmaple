@@ -29,8 +29,8 @@
  * @brief STM32F2 chip- and series-specific definitions.
  */
 
-#ifndef _LIBMAPLE_STM32F2_H_
-#define _LIBMAPLE_STM32F2_H_
+#ifndef _LIBMAPLE_STM32F2_STM32_H_
+#define _LIBMAPLE_STM32F2_STM32_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,10 +50,6 @@ extern "C" {
 
 #ifndef STM32_DELAY_US_MULT
 #define STM32_DELAY_US_MULT             20 /* FIXME: dummy value. */
-#endif
-
-#ifndef STM32_FLASH_WAIT_STATES
-#define STM32_FLASH_WAIT_STATES         3 /* TODO: stop using magic number */
 #endif
 
 /*

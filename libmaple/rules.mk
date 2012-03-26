@@ -14,6 +14,7 @@ CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 cSRCS_$(d) := flash.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += nvic.c
+cSRCS_$(d) += pwr.c
 cSRCS_$(d) += rcc.c
 cSRCS_$(d) += syscalls.c
 cSRCS_$(d) += systick.c

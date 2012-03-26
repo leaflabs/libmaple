@@ -139,6 +139,9 @@ void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
     rcc_pll_multiplier pll_mul = data->pll_mul;
     uint32 cfgr;
 
+    /* Check that the PLL is disabled. */
+    ASSERT_FAULT(!rcc_is_clk_on(RCC_CLK_PLL));
+
     cfgr = RCC_BASE->CFGR;
     cfgr &= ~(RCC_CFGR_PLLSRC | RCC_CFGR_PLLMUL);
     cfgr |= pll_cfg->pllsrc | pll_mul;

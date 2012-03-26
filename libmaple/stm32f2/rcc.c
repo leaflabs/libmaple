@@ -173,6 +173,9 @@ void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
     stm32f2_rcc_pll_data *data = pll_cfg->data;
     uint32 pllcfgr;
 
+    /* Check that the PLL is disabled. */
+    ASSERT_FAULT(!rcc_is_clk_on(RCC_CLK_PLL));
+
     /* Sanity-check all the parameters */
     ASSERT_FAULT((data->pllq >= 4) && (data->pllq <= 15));
     ASSERT_FAULT((data->pllp >= 2) && (data->pllp <= 8));

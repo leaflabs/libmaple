@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file iwdg.h
+ * @file libmaple/iwdg.h
  * @author Michael Hope, Marti Bolivar <mbolivar@leaflabs.com>
  * @brief Independent watchdog support.
  *

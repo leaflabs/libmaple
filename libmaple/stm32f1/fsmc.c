@@ -1,6 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
+ * Copyright (c) 2012 LeafLabs, LLC.
  * Copyright (c) 2010 Bryan Newbold.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -25,18 +26,19 @@
  *****************************************************************************/
 
 /**
- * @file fsmc.c
- * @brief Flexible static memory controller support.
+ * @file stm32f1/fsmc.c
+ * @author Marti Bolivar <mbolivar@leaflabs.com>,
+ *         Bryan Newbold <bnewbold@robocracy.org>
+ * @brief STM32F1 FSMC support.
  */
+
+#include <libmaple/stm32.h>
+
+#if STM32_HAVE_FSMC /* Don't try building the rest for MCUs without FSMC */
 
 #include <libmaple/fsmc.h>
 #include <libmaple/gpio.h>
 
-#ifdef STM32_HIGH_DENSITY
-
-/**
- * Configure FSMC GPIOs for use with SRAM.
- */
 void fsmc_sram_init_gpios(void) {
     /* Data lines... */
     gpio_set_mode(GPIOD,  0, GPIO_AF_OUTPUT_PP);
@@ -90,4 +92,4 @@ void fsmc_sram_init_gpios(void) {
     gpio_set_mode(GPIOE,  1, GPIO_AF_OUTPUT_PP);   // NBL1
 }
 
-#endif  /* STM32_HIGH_DENSITY */
+#endif  /* STM32_HAVE_FSMC */

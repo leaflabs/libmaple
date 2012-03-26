@@ -280,6 +280,9 @@ typedef struct fsmc_nor_psram_reg_map {
  * SRAM/NOR Flash routines
  */
 
+/**
+ * @brief Configure FSMC GPIOs for use with SRAM.
+ */
 void fsmc_sram_init_gpios(void);
 
 /**

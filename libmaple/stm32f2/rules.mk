@@ -11,6 +11,7 @@ CFLAGS_$(d) = -I$(d) $(LIBMAPLE_INCLUDES) $(LIBMAPLE_PRIVATE_INCLUDES) -Wall -We
 sSRCS_$(d) := isrs.S vector_table.S
 cSRCS_$(d) := rcc.c
 cSRCS_$(d) += gpio.c
+cSRCS_$(d) += usart.c
 
 sFILES_$(d) := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)

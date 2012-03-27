@@ -1,6 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
+ * Copyright (c) 2012 LeafLabs, LLC.
  * Copyright (c) 2010 Perry Hung.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -25,9 +26,10 @@
  *****************************************************************************/
 
 /**
- *  @file adc.h
- *
- *  @brief Analog-to-Digital Conversion (ADC) header.
+ * @file libmaple/adc.h
+ * @author Marti Bolivar <mbolivar@leaflabs.com>,
+ *         Perry Hung <perry@leaflabs.com>
+ * @brief Analog-to-Digital Conversion (ADC) header.
  */
 
 #ifndef _LIBMAPLE_ADC_H_
@@ -40,6 +42,12 @@ extern "C"{
 #include <libmaple/libmaple.h>
 #include <libmaple/bitband.h>
 #include <libmaple/rcc.h>
+/* We include the series header below, after defining the register map
+ * and device structs. */
+
+/*
+ * Register map
+ */
 
 /** ADC register map type. */
 typedef struct adc_reg_map {
@@ -71,24 +79,30 @@ typedef struct adc_dev {
     rcc_clk_id clk_id; /**< RCC clock information */
 } adc_dev;
 
-extern const adc_dev *ADC1;
-extern const adc_dev *ADC2;
-#ifdef STM32_HIGH_DENSITY
-extern const adc_dev *ADC3;
-#endif
-
-/*
- * Register map base pointers
+/* Pull in the series header (which may need the above struct
+ * definitions).
+ *
+ * IMPORTANT: The series header must define the following:
+ *
+ * - enum adc_extsel_event (and typedef to adc_extsel_event): One per
+ *   external event used to trigger start of conversion of a regular
+ *   group. If two different series support the same event as a
+ *   trigger, they must use the same token for the enumerator for that
+ *   event. (The value of the enumerator is of course allowed to be
+ *   different).
+ *
+ * - enum adc_smp_rate (and typedef to adc_smp_rate): One per
+ *   available sampling time.  These must be in the form ADC_SMPR_X_Y
+ *   for X.Y cycles (e.g. ADC_SMPR_1_5 means 1.5 cycles), or
+ *   ADC_SMPR_X for X cycles (e.g. ADC_SMPR_3 means 3 cycles).
+ *
+ * - enum adc_prescaler (and typedef): One per available prescaler,
+ *   suitable for adc_set_prescaler. Series which have the same
+ *   prescaler dividers (e.g. STM32F1 and STM32F2 both divide PCLK2 by
+ *   2, 4, 6, or 8) must provide the same tokens as enumerators, for
+ *   portability.
  */
-
-/** ADC1 register map base pointer. */
-#define ADC1_BASE                       ((struct adc_reg_map*)0x40012400)
-/** ADC2 register map base pointer. */
-#define ADC2_BASE                       ((struct adc_reg_map*)0x40012800)
-#ifdef STM32_HIGH_DENSITY
-/** ADC3 register map base pointer. */
-#define ADC3_BASE                       ((struct adc_reg_map*)0x40013C00)
-#endif
+#include <series/adc.h>
 
 /*
  * Register bit definitions
@@ -136,31 +150,9 @@ extern const adc_dev *ADC3;
 
 /* Control register 2 */
 
-#define ADC_CR2_ADON_BIT                0
-#define ADC_CR2_CONT_BIT                1
-#define ADC_CR2_CAL_BIT                 2
-#define ADC_CR2_RSTCAL_BIT              3
-#define ADC_CR2_DMA_BIT                 8
-#define ADC_CR2_ALIGN_BIT               11
-#define ADC_CR2_JEXTTRIG_BIT            15
-#define ADC_CR2_EXTTRIG_BIT             20
-#define ADC_CR2_JSWSTART_BIT            21
-#define ADC_CR2_SWSTART_BIT             22
-#define ADC_CR2_TSEREFE_BIT             23
-
-#define ADC_CR2_ADON                    BIT(ADC_CR2_ADON_BIT)
-#define ADC_CR2_CONT                    BIT(ADC_CR2_CONT_BIT)
-#define ADC_CR2_CAL                     BIT(ADC_CR2_CAL_BIT)
-#define ADC_CR2_RSTCAL                  BIT(ADC_CR2_RSTCAL_BIT)
-#define ADC_CR2_DMA                     BIT(ADC_CR2_DMA_BIT)
-#define ADC_CR2_ALIGN                   BIT(ADC_CR2_ALIGN_BIT)
-#define ADC_CR2_JEXTSEL                 (0x7000)
-#define ADC_CR2_JEXTTRIG                BIT(ADC_CR2_JEXTTRIG_BIT)
-#define ADC_CR2_EXTSEL                  (0xE0000)
-#define ADC_CR2_EXTTRIG                 BIT(ADC_CR2_EXTTRIG_BIT)
-#define ADC_CR2_JSWSTART                BIT(ADC_CR2_JSWSTART_BIT)
-#define ADC_CR2_SWSTART                 BIT(ADC_CR2_SWSTART_BIT)
-#define ADC_CR2_TSEREFE                 BIT(ADC_CR2_TSEREFE_BIT)
+/* Because this register varies significantly by series (e.g. some
+ * bits moved and others disappeared in the F1->F2 transition), its
+ * definitions are in the series headers. */
 
 /* Sample time register 1 */
 
@@ -245,68 +237,47 @@ extern const adc_dev *ADC3;
 #define ADC_DR_ADC2DATA                 (0xFFFF << 16)
 #define ADC_DR_DATA                     0xFFFF
 
-void adc_init(const adc_dev *dev);
+/*
+ * Routines
+ */
 
 /**
- * @brief External event selector for regular group conversion.
- * @see adc_set_extsel
+ * @brief Set the ADC prescaler.
+ *
+ * This determines the ADC clock for all devices.
  */
-typedef enum adc_extsel_event {
-    ADC_ADC12_TIM1_CC1  = (0 << 17), /**< ADC1 and ADC2: Timer 1 CC1 event */
-    ADC_ADC12_TIM1_CC2  = (1 << 17), /**< ADC1 and ADC2: Timer 1 CC2 event */
-    ADC_ADC12_TIM1_CC3  = (2 << 17), /**< ADC1 and ADC2: Timer 1 CC3 event */
-    ADC_ADC12_TIM2_CC2  = (3 << 17), /**< ADC1 and ADC2: Timer 2 CC2 event */
-    ADC_ADC12_TIM3_TRGO = (4 << 17), /**< ADC1 and ADC2: Timer 3 TRGO event */
-    ADC_ADC12_TIM4_CC4  = (5 << 17), /**< ADC1 and ADC2: Timer 4 CC4 event */
-    ADC_ADC12_EXTI11    = (6 << 17), /**< ADC1 and ADC2: EXTI11 event */
-#ifdef STM32_HIGH_DENSITY
-    ADC_ADC12_TIM8_TRGO = (6 << 17), /**< ADC1 and ADC2: Timer 8 TRGO
-                                        event (high density only) */
-#endif
-    ADC_ADC12_SWSTART   = (7 << 17), /**< ADC1 and ADC2: Software start */
-#ifdef STM32_HIGH_DENSITY
-    ADC_ADC3_TIM3_CC1   = (0 << 17), /**< ADC3: Timer 3 CC1 event
-                                        (high density only) */
-    ADC_ADC3_TIM2_CC3   = (1 << 17), /**< ADC3: Timer 2 CC3 event
-                                        (high density only) */
-    ADC_ADC3_TIM1_CC3   = (2 << 17), /**< ADC3: Timer 1 CC3 event
-                                        (high density only) */
-    ADC_ADC3_TIM8_CC1   = (3 << 17), /**< ADC3: Timer 8 CC1 event
-                                        (high density only) */
-    ADC_ADC3_TIM8_TRGO  = (4 << 17), /**< ADC3: Timer 8 TRGO event
-                                        (high density only) */
-    ADC_ADC3_TIM5_CC1   = (5 << 17), /**< ADC3: Timer 5 CC1 event
-                                        (high density only) */
-    ADC_ADC3_TIM5_CC3   = (6 << 17), /**< ADC3: Timer 5 CC3 event
-                                        (high density only) */
-    ADC_ADC3_SWSTART    = (7 << 17), /**< ADC3: Software start (high
-                                        density only) */
-#endif
-    ADC_SWSTART         = (7 << 17) /**< ADC1, ADC2, ADC3: Software start */
-} adc_extsel_event;
+void adc_set_prescaler(adc_prescaler pre);
 
+void adc_init(const adc_dev *dev);
 void adc_set_extsel(const adc_dev *dev, adc_extsel_event event);
+void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
+uint16 adc_read(const adc_dev *dev, uint8 channel);
+
+/**
+ * @brief Call a function on all ADC devices.
+ * @param fn Function to call on each ADC device.
+ */
 void adc_foreach(void (*fn)(const adc_dev*));
 
 /**
- * @brief ADC sample times, in ADC clock cycles
- *
- * These control the amount of time spent sampling the input voltage.
+ * @brief Configure a GPIO pin for ADC conversion.
+ * @param gdev GPIO device to configure.
+ * @param bit Bit on gdev to configure for ADC conversion.
  */
-typedef enum {
-    ADC_SMPR_1_5,               /**< 1.5 ADC cycles */
-    ADC_SMPR_7_5,               /**< 7.5 ADC cycles */
-    ADC_SMPR_13_5,              /**< 13.5 ADC cycles */
-    ADC_SMPR_28_5,              /**< 28.5 ADC cycles */
-    ADC_SMPR_41_5,              /**< 41.5 ADC cycles */
-    ADC_SMPR_55_5,              /**< 55.5 ADC cycles */
-    ADC_SMPR_71_5,              /**< 71.5 ADC cycles */
-    ADC_SMPR_239_5              /**< 239.5 ADC cycles */
-} adc_smp_rate;
+struct gpio_dev;
+void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
 
-void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
-void adc_calibrate(const adc_dev *dev);
-uint16 adc_read(const adc_dev *dev, uint8 channel);
+/**
+ * @brief Enable an ADC and configure it for single conversion mode.
+ *
+ * This function performs any initialization necessary to allow the
+ * ADC device to perform a single synchronous regular software
+ * triggered conversion, using adc_read().
+ *
+ * @param dev Device to enable.
+ * @see adc_read()
+ */
+void adc_enable_single_swstart(const adc_dev* dev);
 
 /**
  * @brief Set the regular channel sequence length.
@@ -322,16 +293,6 @@ static inline void adc_set_reg_seqlen(const adc_dev *dev, uint8 length) {
     tmp &= ~ADC_SQR1_L;
     tmp |= (length - 1) << 20;
     dev->regs->SQR1 = tmp;
-}
-
-/**
- * @brief Set external trigger conversion mode event for regular channels
- * @param dev    ADC device
- * @param enable If 1, conversion on external events is enabled; if 0,
- *               disabled.
- */
-static inline void adc_set_exttrig(const adc_dev *dev, uint8 enable) {
-    *bb_perip(&dev->regs->CR2, ADC_CR2_EXTTRIG_BIT) = !!enable;
 }
 
 /**

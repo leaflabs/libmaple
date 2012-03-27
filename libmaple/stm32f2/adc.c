@@ -25,43 +25,60 @@
  *****************************************************************************/
 
 /**
- * @file wirish/boards_private.h
- * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief Private board support header.
- *
- * This file declares chip-specific variables and functions which
- * determine how init() behaves. It is not part of the public Wirish
- * API, and can change without notice.
+ * @file libmaple/stm32f2/include/series/adc.c
+ * @brief STM32F2 ADC header.
  */
 
-#ifndef _WIRISH_BOARDS_PRIVATE_H_
-#define _WIRISH_BOARDS_PRIVATE_H_
-
-#include <libmaple/rcc.h>
 #include <libmaple/adc.h>
+#include <libmaple/gpio.h>
 
-namespace wirish {
-    namespace priv {
+/*
+ * Devices
+ */
 
-        /*
-         * Chip-specific initialization data
-         */
+static adc_dev adc1 = {
+    .regs   = ADC1_BASE,
+    .clk_id = RCC_ADC1,
+};
+/** ADC1 device. */
+const adc_dev *ADC1 = &adc1;
 
-        extern rcc_pll_cfg w_board_pll_cfg;
-        extern adc_prescaler w_adc_pre;
-        extern adc_smp_rate w_adc_smp;
+static adc_dev adc2 = {
+    .regs   = ADC2_BASE,
+    .clk_id = RCC_ADC2,
+};
+/** ADC2 device. */
+const adc_dev *ADC2 = &adc2;
 
-        /*
-         * Chip-specific initialization routines and helper functions.
-         */
+adc_dev adc3 = {
+    .regs   = ADC3_BASE,
+    .clk_id = RCC_ADC3,
+};
+/** ADC3 device. */
+const adc_dev *ADC3 = &adc3;
 
-        void board_reset_pll(void);
-        void board_setup_clock_prescalers(void);
-        void board_setup_gpio(void);
-        void board_setup_timers(void);
-        void board_setup_usb(void);
+/*
+ * Common routines
+ */
 
-    }
+void adc_set_prescaler(adc_prescaler pre) {
+    uint32 ccr = ADC_COMMON_BASE->CCR;
+    ccr &= ~ADC_CCR_ADCPRE;
+    ccr |= (uint32)pre;
+    ADC_COMMON_BASE->CCR = ccr;
 }
 
-#endif
+void adc_foreach(void (*fn)(const adc_dev*)) {
+    fn(ADC1);
+    fn(ADC2);
+    fn(ADC3);
+}
+
+void adc_gpio_cfg(gpio_dev *gdev, uint8 bit) {
+    gpio_set_modef(gdev, bit, GPIO_MODE_ANALOG, GPIO_MODEF_PUPD_NONE);
+}
+
+void adc_enable_single_swstart(const adc_dev *dev) {
+    adc_init(dev);
+    adc_enable(dev);
+}

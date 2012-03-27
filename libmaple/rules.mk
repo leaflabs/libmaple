@@ -11,7 +11,8 @@ LIBMAPLE_PRIVATE_INCLUDES := -I$(LIBMAPLE_PATH)
 CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
-cSRCS_$(d) := flash.c
+cSRCS_$(d) := adc.c
+cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += iwdg.c
 cSRCS_$(d) += nvic.c
@@ -23,7 +24,6 @@ cSRCS_$(d) += usart.c
 cSRCS_$(d) += usart_private.c
 cSRCS_$(d) += util.c
 # These still need to be ported to F2:
-# cSRCS_$(d) += adc.c
 # cSRCS_$(d) += dac.c
 # cSRCS_$(d) += dma.c
 # cSRCS_$(d) += exti.c

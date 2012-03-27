@@ -11,7 +11,8 @@ CFLAGS_$(d) = -I$(d) $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -We
 sSRCS_$(d) := isrs_performance.S
 sSRCS_$(d) += vector_table_performance.S
 
-cSRCS_$(d) := bkp.c
+cSRCS_$(d) := adc.c
+cSRCS_$(d) += bkp.c
 cSRCS_$(d) += fsmc.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += rcc.c

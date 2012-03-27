@@ -54,6 +54,7 @@
 static void setup_flash(void);
 static void setup_clocks(void);
 static void setup_nvic(void);
+static void setup_adcs(void);
 
 /*
  * Exported functions
@@ -65,7 +66,7 @@ void init(void) {
     setup_nvic();
     systick_init(SYSTICK_RELOAD_VAL);
     wirish::priv::board_setup_gpio();
-    wirish::priv::board_setup_adc();
+    setup_adcs();
     wirish::priv::board_setup_timers();
     wirish::priv::board_setup_usb();
     boardInit();
@@ -124,7 +125,7 @@ static void setup_clocks(void) {
 
     // Configure AHBx, APBx, etc. prescalers and the main PLL.
     wirish::priv::board_setup_clock_prescalers();
-    rcc_configure_pll(&wirish::priv::board_pll_cfg);
+    rcc_configure_pll(&wirish::priv::w_board_pll_cfg);
 
     // Enable the PLL, and wait until it's ready.
     rcc_turn_on_clk(RCC_CLK_PLL);
@@ -145,4 +146,14 @@ static void setup_nvic(void) {
 #else
 #error "You must select a base address for the vector table."
 #endif
+}
+
+static void adc_default_config(const adc_dev *dev) {
+    adc_enable_single_swstart(dev);
+    adc_set_sample_rate(dev, wirish::priv::w_adc_smp);
+}
+
+static void setup_adcs(void) {
+    adc_set_prescaler(wirish::priv::w_adc_pre);
+    adc_foreach(adc_default_config);
 }

@@ -28,11 +28,15 @@
  * @file wirish/stm32f1/boards_setup.cpp
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief STM32F1 chip setup.
+ *
+ * This file controls how init() behaves on the STM32F1. Be very
+ * careful when changing anything here. Many of these values depend
+ * upon each other.
  */
 
-#include <libmaple/rcc.h>
+#include "boards_private.h"
+
 #include <libmaple/gpio.h>
-#include <libmaple/adc.h>
 #include <libmaple/timer.h>
 #include <libmaple/usb_cdcacm.h>
 
@@ -45,12 +49,11 @@ namespace wirish {
     namespace priv {
 
         static stm32f1_rcc_pll_data pll_data = {RCC_PLLMUL_9};
-        rcc_pll_cfg board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
+        rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
+        adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_6;
+        adc_smp_rate w_adc_smp = ADC_SMPR_55_5;
 
-#if 0
-        static void config_adc(const adc_dev* dev);
         static void config_timer(timer_dev*);
-#endif
 
         void board_reset_pll(void) {
             // TODO
@@ -69,17 +72,8 @@ namespace wirish {
             afio_init();
         }
 
-        void board_setup_adc(void) {
-#if 0
-            rcc_set_prescaler(RCC_PRESCALER_ADC, RCC_ADCPRE_PCLK_DIV_6);
-            adc_foreach(config_adc);
-#endif
-        }
-
         void board_setup_timers(void) {
-#if 0
             timer_foreach(config_timer);
-#endif
         }
 
         void board_setup_usb(void) {
@@ -92,19 +86,8 @@ namespace wirish {
          * Auxiliary routines
          */
 
-#if 0
-        static void config_adc(const adc_dev *dev) {
-            adc_init(dev);
-
-            adc_set_extsel(dev, ADC_SWSTART);
-            adc_set_exttrig(dev, true);
-
-            adc_enable(dev);
-            adc_calibrate(dev);
-            adc_set_sample_rate(dev, ADC_SMPR_55_5);
-        }
-
         static void config_timer(timer_dev *dev) {
+#if 0
             timer_adv_reg_map *regs = (dev->regs).adv;
             const uint16 full_overflow = 0xFFFF;
             const uint16 half_duty = 0x8FFF;
@@ -135,7 +118,7 @@ namespace wirish {
             }
 
             timer_resume(dev);
-        }
 #endif
+        }
     }
 }

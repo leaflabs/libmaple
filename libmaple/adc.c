@@ -25,44 +25,15 @@
  *****************************************************************************/
 
 /**
- * @file adc.c
- *
+ * @file libmaple/adc.c
+ * @author Marti Bolivar <mbolivar@leaflabs.com>,
+ *         Perry Hung <perry@leaflabs.com>
  * @brief Analog to digital converter routines
- *
- * IMPORTANT: maximum external impedance must be below 0.4kOhms for 1.5
- * sample conversion time.
- *
- * At 55.5 cycles/sample, the external input impedance < 50kOhms.
- *
- * See STM32 manual RM0008 for how to calculate this.
  */
 
+#include <libmaple/adc.h>
 #include <libmaple/libmaple.h>
 #include <libmaple/rcc.h>
-#include <libmaple/adc.h>
-
-static adc_dev adc1 = {
-    .regs   = ADC1_BASE,
-    .clk_id = RCC_ADC1
-};
-/** ADC1 device. */
-const adc_dev *ADC1 = &adc1;
-
-static adc_dev adc2 = {
-    .regs   = ADC2_BASE,
-    .clk_id = RCC_ADC2
-};
-/** ADC2 device. */
-const adc_dev *ADC2 = &adc2;
-
-#ifdef STM32_HIGH_DENSITY
-adc_dev adc3 = {
-    .regs   = ADC3_BASE,
-    .clk_id = RCC_ADC3
-};
-/** ADC3 device. */
-const adc_dev *ADC3 = &adc3;
-#endif
 
 /**
  * @brief Initialize an ADC peripheral.
@@ -91,20 +62,10 @@ void adc_set_extsel(const adc_dev *dev, adc_extsel_event event) {
 }
 
 /**
- * @brief Call a function on all ADC devices.
- * @param fn Function to call on each ADC device.
- */
-void adc_foreach(void (*fn)(const adc_dev*)) {
-    fn(ADC1);
-    fn(ADC2);
-#ifdef STM32_HIGH_DENSITY
-    fn(ADC3);
-#endif
-}
-
-/**
- * @brief Turn the given sample rate into values for ADC_SMPRx. Don't
- * call this during conversion.
+ * @brief Set the sample rate for all channels on an ADC device.
+ *
+ * Don't call this during conversion.
+ *
  * @param dev adc device
  * @param smp_rate sample rate to set
  * @see adc_smp_rate
@@ -127,25 +88,8 @@ void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate) {
 }
 
 /**
- * @brief Calibrate an ADC peripheral
- * @param dev adc device
- */
-void adc_calibrate(const adc_dev *dev) {
-    __io uint32 *rstcal_bit = bb_perip(&(dev->regs->CR2), 3);
-    __io uint32 *cal_bit = bb_perip(&(dev->regs->CR2), 2);
-
-    *rstcal_bit = 1;
-    while (*rstcal_bit)
-        ;
-
-    *cal_bit = 1;
-    while (*cal_bit)
-        ;
-}
-
-/**
  * @brief Perform a single synchronous software triggered conversion on a
- * channel.
+ *        channel.
  * @param dev ADC device to use for reading.
  * @param channel channel to convert
  * @return conversion result

@@ -1,0 +1,63 @@
+STM32 platform notes.
+
+Most of this information comes from ST AN3427 (Migrating a
+microcontroller application from STM32F1 to STM32F2 series) and ST
+AN3364 (How to migrate across STM32 series).
+
+The STM32 series of MCUs is divided into series. At time of writing,
+the available series are:
+
+- F1 series (STM32F1)
+- L1 series (STM32L1)
+- F2 series (STM32F2)
+- F4 series (STM32F4)
+
+Some notes on the characteristics of, and differences between, the
+series follow.
+
+F1 Series
+---------
+
+The STM32F1 series is further subdivided into a variety of somewhat
+compatible "lines". Performance, value, and connectivity line MCUs are
+available. (There's also an access line, which is ignored in these
+notes).
+
+At time of writing, libmaple supports medium- and high-density
+performance line MCUs. work to port it to other series is ongoing.
+
+Performance line MCU part numbers begin with STM32F101 or
+STM32F103. The performance line is further subdivided into
+"densities": low, medium, high, and XL.
+
+Value line MCU part numbers begin with STM32F100. Similarly to the
+performance line, the value line is subdivided into medium and high
+densities.
+
+Connectivity line MCU part numbers begin with STM32F105 or
+STM32F107. Mercifully, these are not further subdivided by density.
+
+F2 Series
+---------
+
+A revamp of the F1 series, The F2 series address a number of the
+STM32F1's deficiencies (both silicon bugs and unfortunate design
+decisions), while maintaining a fair amount of software and pin
+compatibility.
+
+The F2 series is most similar to the F1 connectivity line. Like the
+connectivity line, STM32F2s come with a USB on-the-go full speed
+peripheral (like the connectivity line), instead of USB full speed
+device (like the performance line).
+
+F4 Series
+---------
+
+The F4 series MCUs are essentially equivalent to those in the F2
+series, except they have an ARM Cortex M4 core, an FPU, and support a
+higher clock frequencies (168 MHz instead of 120 MHz).
+
+L1 Series
+---------
+
+This series is intended for low-power applications.

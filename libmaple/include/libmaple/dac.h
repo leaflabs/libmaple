@@ -1,6 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
+ * Copyright (c) 2011 LeafLabs, LLC.
  * Copyright (c) 2010 Bryan Newbold.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -25,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file dac.h
+ * @file libmaple/dac.h
  * @brief Digital to analog converter support.
  */
 
@@ -38,6 +39,7 @@
 extern "C"{
 #endif
 
+#include <libmaple/libmaple_types.h>
 #include <libmaple/rcc.h>
 
 /*

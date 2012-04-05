@@ -421,7 +421,6 @@ typedef enum rcc_clk_id {
     RCC_FLITF,
     RCC_SRAM,
     RCC_USB,
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
     RCC_GPIOE,
     RCC_GPIOF,
     RCC_GPIOG,
@@ -436,15 +435,12 @@ typedef enum rcc_clk_id {
     RCC_DMA2,
     RCC_SDIO,
     RCC_SPI3,
-#endif
-#ifdef STM32_XL_DENSITY
     RCC_TIMER9,
     RCC_TIMER10,
     RCC_TIMER11,
     RCC_TIMER12,
     RCC_TIMER13,
     RCC_TIMER14,
-#endif
 } rcc_clk_id;
 
 /**

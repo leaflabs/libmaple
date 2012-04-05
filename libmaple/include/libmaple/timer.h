@@ -42,8 +42,15 @@ extern "C"{
 #include <libmaple/nvic.h>
 #include <libmaple/bitband.h>
 
+struct timer_adv_reg_map;
+struct timer_gen_reg_map;
+struct timer_bas_reg_map;
+struct timer_dev;
+/* Include the series header here, as it may need the above */
+#include <series/timer.h>
+
 /*
- * Register maps and devices
+ * Register maps
  */
 
 /** Advanced control timer register map type */
@@ -70,29 +77,10 @@ typedef struct timer_adv_reg_map {
     __io uint32 DMAR;           /**< DMA address for full transfer */
 } timer_adv_reg_map;
 
-/** General purpose timer register map type */
-typedef struct timer_gen_reg_map {
-    __io uint32 CR1;            /**< Control register 1 */
-    __io uint32 CR2;            /**< Control register 2 */
-    __io uint32 SMCR;           /**< Slave mode control register */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
-    __io uint32 SR;             /**< Status register */
-    __io uint32 EGR;            /**< Event generation register  */
-    __io uint32 CCMR1;          /**< Capture/compare mode register 1 */
-    __io uint32 CCMR2;          /**< Capture/compare mode register 2 */
-    __io uint32 CCER;           /**< Capture/compare enable register */
-    __io uint32 CNT;            /**< Counter */
-    __io uint32 PSC;            /**< Prescaler */
-    __io uint32 ARR;            /**< Auto-reload register */
-    const uint32 RESERVED1;     /**< Reserved */
-    __io uint32 CCR1;           /**< Capture/compare register 1 */
-    __io uint32 CCR2;           /**< Capture/compare register 2 */
-    __io uint32 CCR3;           /**< Capture/compare register 3 */
-    __io uint32 CCR4;           /**< Capture/compare register 4 */
-    const uint32 RESERVED2;     /**< Reserved */
-    __io uint32 DCR;            /**< DMA control register */
-    __io uint32 DMAR;           /**< DMA address for full transfer */
-} timer_gen_reg_map;
+/* timer_gen_reg_map: intentionally omitted.
+ *
+ * General purpose timers differ slightly across series, so leave it
+ * up to the series header to define struct timer_gen_reg_map. */
 
 /** Basic timer register map type */
 typedef struct timer_bas_reg_map {
@@ -109,25 +97,6 @@ typedef struct timer_bas_reg_map {
     __io uint32 PSC;            /**< Prescaler */
     __io uint32 ARR;            /**< Auto-reload register */
 } timer_bas_reg_map;
-
-/** Timer 1 register map base pointer */
-#define TIMER1_BASE        ((struct timer_adv_reg_map*)0x40012C00)
-/** Timer 2 register map base pointer */
-#define TIMER2_BASE        ((struct timer_gen_reg_map*)0x40000000)
-/** Timer 3 register map base pointer */
-#define TIMER3_BASE        ((struct timer_gen_reg_map*)0x40000400)
-/** Timer 4 register map base pointer */
-#define TIMER4_BASE        ((struct timer_gen_reg_map*)0x40000800)
-#ifdef STM32_HIGH_DENSITY
-/** Timer 5 register map base pointer */
-#define TIMER5_BASE        ((struct timer_gen_reg_map*)0x40000C00)
-/** Timer 6 register map base pointer */
-#define TIMER6_BASE        ((struct timer_bas_reg_map*)0x40001000)
-/** Timer 7 register map base pointer */
-#define TIMER7_BASE        ((struct timer_bas_reg_map*)0x40001400)
-/** Timer 8 register map base pointer */
-#define TIMER8_BASE        ((struct timer_adv_reg_map*)0x40013400)
-#endif
 
 /*
  * Timer devices
@@ -163,19 +132,14 @@ typedef struct timer_dev {
     timer_reg_map regs;         /**< Register map */
     rcc_clk_id clk_id;          /**< RCC clock information */
     timer_type type;            /**< Timer's type */
-    voidFuncPtr handlers[];     /**< User IRQ handlers */
+    voidFuncPtr handlers[];     /**<
+                                 * @brief User IRQ handlers
+                                 * It's not a good idea to touch these
+                                 * directly.
+                                 * @see timer_attach_interrupt()
+                                 * @see timer_detach_interrupt() */
 } timer_dev;
 
-extern timer_dev *TIMER1;
-extern timer_dev *TIMER2;
-extern timer_dev *TIMER3;
-extern timer_dev *TIMER4;
-#ifdef STM32_HIGH_DENSITY
-extern timer_dev *TIMER5;
-extern timer_dev *TIMER6;
-extern timer_dev *TIMER7;
-extern timer_dev *TIMER8;
-#endif
 
 /*
  * Register bit definitions
@@ -278,12 +242,15 @@ extern timer_dev *TIMER8;
 /* DMA/Interrupt enable register (DIER) */
 
 #define TIMER_DIER_TDE_BIT              14
+#define TIMER_DIER_COMDE_BIT            13
 #define TIMER_DIER_CC4DE_BIT            12
 #define TIMER_DIER_CC3DE_BIT            11
 #define TIMER_DIER_CC2DE_BIT            10
 #define TIMER_DIER_CC1DE_BIT            9
 #define TIMER_DIER_UDE_BIT              8
+#define TIMER_DIER_BIE_BIT              7
 #define TIMER_DIER_TIE_BIT              6
+#define TIMER_DIER_COMIE_BIT            5
 #define TIMER_DIER_CC4IE_BIT            4
 #define TIMER_DIER_CC3IE_BIT            3
 #define TIMER_DIER_CC2IE_BIT            2
@@ -291,12 +258,15 @@ extern timer_dev *TIMER8;
 #define TIMER_DIER_UIE_BIT              0
 
 #define TIMER_DIER_TDE                  BIT(TIMER_DIER_TDE_BIT)
+#define TIMER_DIER_COMDE                BIT(TIMER_DIER_COMDE_BIT)
 #define TIMER_DIER_CC4DE                BIT(TIMER_DIER_CC4DE_BIT)
 #define TIMER_DIER_CC3DE                BIT(TIMER_DIER_CC3DE_BIT)
 #define TIMER_DIER_CC2DE                BIT(TIMER_DIER_CC2DE_BIT)
 #define TIMER_DIER_CC1DE                BIT(TIMER_DIER_CC1DE_BIT)
 #define TIMER_DIER_UDE                  BIT(TIMER_DIER_UDE_BIT)
+#define TIMER_DIER_BIE                  BIT(TIMER_DIER_BIE_BIT)
 #define TIMER_DIER_TIE                  BIT(TIMER_DIER_TIE_BIT)
+#define TIMER_DIER_COMIE                BIT(TIMER_DIER_COMIE_BIT)
 #define TIMER_DIER_CC4IE                BIT(TIMER_DIER_CC4IE_BIT)
 #define TIMER_DIER_CC3IE                BIT(TIMER_DIER_CC3IE_BIT)
 #define TIMER_DIER_CC2IE                BIT(TIMER_DIER_CC2IE_BIT)
@@ -333,14 +303,18 @@ extern timer_dev *TIMER8;
 
 /* Event generation register (EGR) */
 
+#define TIMER_EGR_BG_BIT                7
 #define TIMER_EGR_TG_BIT                6
+#define TIMER_EGR_COMG_BIT              5
 #define TIMER_EGR_CC4G_BIT              4
 #define TIMER_EGR_CC3G_BIT              3
 #define TIMER_EGR_CC2G_BIT              2
 #define TIMER_EGR_CC1G_BIT              1
 #define TIMER_EGR_UG_BIT                0
 
+#define TIMER_EGR_BG                    BIT(TIMER_EGR_BG_BIT)
 #define TIMER_EGR_TG                    BIT(TIMER_EGR_TG_BIT)
+#define TIMER_EGR_COMG                  BIT(TIMER_EGR_COMG_BIT)
 #define TIMER_EGR_CC4G                  BIT(TIMER_EGR_CC4G_BIT)
 #define TIMER_EGR_CC3G                  BIT(TIMER_EGR_CC3G_BIT)
 #define TIMER_EGR_CC2G                  BIT(TIMER_EGR_CC2G_BIT)
@@ -397,44 +371,83 @@ extern timer_dev *TIMER8;
 
 #define TIMER_CCMR2_OC4CE               BIT(TIMER_CCMR2_OC4CE_BIT)
 #define TIMER_CCMR2_OC4M                (0x3 << 12)
-#define TIMER_CCMR2_IC2F                (0xF << 12)
+#define TIMER_CCMR2_IC4F                (0xF << 12)
 #define TIMER_CCMR2_OC4PE               BIT(TIMER_CCMR2_OC4PE_BIT)
 #define TIMER_CCMR2_OC4FE               BIT(TIMER_CCMR2_OC4FE_BIT)
-#define TIMER_CCMR2_IC2PSC              (0x3 << 10)
+#define TIMER_CCMR2_IC4PSC              (0x3 << 10)
 #define TIMER_CCMR2_CC4S                (0x3 << 8)
-#define TIMER_CCMR1_CC4S_OUTPUT         (TIMER_CCMR_CCS_OUTPUT << 8)
-#define TIMER_CCMR1_CC4S_INPUT_TI1      (TIMER_CCMR_CCS_INPUT_TI1 << 8)
-#define TIMER_CCMR1_CC4S_INPUT_TI2      (TIMER_CCMR_CCS_INPUT_TI2 << 8)
-#define TIMER_CCMR1_CC4S_INPUT_TRC      (TIMER_CCMR_CCS_INPUT_TRC << 8)
+#define TIMER_CCMR2_CC4S_OUTPUT         (TIMER_CCMR_CCS_OUTPUT << 8)
+#define TIMER_CCMR2_CC4S_INPUT_TI1      (TIMER_CCMR_CCS_INPUT_TI1 << 8)
+#define TIMER_CCMR2_CC4S_INPUT_TI2      (TIMER_CCMR_CCS_INPUT_TI2 << 8)
+#define TIMER_CCMR2_CC4S_INPUT_TRC      (TIMER_CCMR_CCS_INPUT_TRC << 8)
 #define TIMER_CCMR2_OC3CE               BIT(TIMER_CCMR2_OC3CE_BIT)
 #define TIMER_CCMR2_OC3M                (0x3 << 4)
-#define TIMER_CCMR2_IC1F                (0xF << 4)
+#define TIMER_CCMR2_IC3F                (0xF << 4)
 #define TIMER_CCMR2_OC3PE               BIT(TIMER_CCMR2_OC3PE_BIT)
 #define TIMER_CCMR2_OC3FE               BIT(TIMER_CCMR2_OC3FE_BIT)
-#define TIMER_CCMR2_IC1PSC              (0x3 << 2)
+#define TIMER_CCMR2_IC3PSC              (0x3 << 2)
 #define TIMER_CCMR2_CC3S                0x3
-#define TIMER_CCMR1_CC3S_OUTPUT         TIMER_CCMR_CCS_OUTPUT
-#define TIMER_CCMR1_CC3S_INPUT_TI1      TIMER_CCMR_CCS_INPUT_TI1
-#define TIMER_CCMR1_CC3S_INPUT_TI2      TIMER_CCMR_CCS_INPUT_TI2
-#define TIMER_CCMR1_CC3S_INPUT_TRC      TIMER_CCMR_CCS_INPUT_TRC
+#define TIMER_CCMR2_CC3S_OUTPUT         TIMER_CCMR_CCS_OUTPUT
+#define TIMER_CCMR2_CC3S_INPUT_TI1      TIMER_CCMR_CCS_INPUT_TI1
+#define TIMER_CCMR2_CC3S_INPUT_TI2      TIMER_CCMR_CCS_INPUT_TI2
+#define TIMER_CCMR2_CC3S_INPUT_TRC      TIMER_CCMR_CCS_INPUT_TRC
+
+/* Old, copy-paste error CCMR2 bit definitions from previous releases,
+ * kept for backwards compatibility: */
+/** Deprecated. Use TIMER_CCMR1_CC4S_OUTPUT instead. */
+#define TIMER_CCMR1_CC4S_OUTPUT    TIMER_CCMR2_CC4S_OUTPUT
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI1 instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TI1 TIMER_CCMR2_CC4S_INPUT_TI1
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI2 instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TI2 TIMER_CCMR2_CC4S_INPUT_TI2
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TRC instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TRC TIMER_CCMR2_CC4S_INPUT_TRC
+/** Deprecated. Use TIMER_CCMR2_IC4F instead. */
+#define TIMER_CCMR2_IC2F           TIMER_CCMR2_IC4F
+/** Deprecated. Use TIMER_CCMR2_IC4PSC instead. */
+#define TIMER_CCMR2_IC2PSC         TIMER_CCMR2_IC4PSC
+/** Deprecated. Use TIMER_CCMR2_IC3F instead. */
+#define TIMER_CCMR2_IC1F           TIMER_CCMR2_IC3F
+/** Deprecated. Use TIMER_CCMR2_IC3PSC instead. */
+#define TIMER_CCMR2_IC1PSC         TIMER_CCMR2_IC3PSC
+/** Deprecated. Use TIMER_CCMR1_CC3S_OUTPUT instead. */
+#define TIMER_CCMR1_CC3S_OUTPUT    TIMER_CCMR2_CC3S_OUTPUT
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI1 instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TI1 TIMER_CCMR2_CC3S_INPUT_TI1
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI2 instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TI2 TIMER_CCMR2_CC3S_INPUT_TI2
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TRC instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TRC TIMER_CCMR2_CC3S_INPUT_TRC
 
 /* Capture/compare enable register (CCER) */
 
 #define TIMER_CCER_CC4P_BIT             13
 #define TIMER_CCER_CC4E_BIT             12
+#define TIMER_CCER_CC3NP_BIT            11
+#define TIMER_CCER_CC3NE_BIT            10
 #define TIMER_CCER_CC3P_BIT             9
 #define TIMER_CCER_CC3E_BIT             8
+#define TIMER_CCER_CC2NP_BIT            7
+#define TIMER_CCER_CC2NE_BIT            6
 #define TIMER_CCER_CC2P_BIT             5
 #define TIMER_CCER_CC2E_BIT             4
+#define TIMER_CCER_CC1NP_BIT            3
+#define TIMER_CCER_CC1NE_BIT            2
 #define TIMER_CCER_CC1P_BIT             1
 #define TIMER_CCER_CC1E_BIT             0
 
 #define TIMER_CCER_CC4P                 BIT(TIMER_CCER_CC4P_BIT)
 #define TIMER_CCER_CC4E                 BIT(TIMER_CCER_CC4E_BIT)
+#define TIMER_CCER_CC3NP                BIT(TIMER_CCER_CC3NP_BIT)
+#define TIMER_CCER_CC3NE                BIT(TIMER_CCER_CC3NE_BIT)
 #define TIMER_CCER_CC3P                 BIT(TIMER_CCER_CC3P_BIT)
 #define TIMER_CCER_CC3E                 BIT(TIMER_CCER_CC3E_BIT)
+#define TIMER_CCER_CC2NP                BIT(TIMER_CCER_CC2NP_BIT)
+#define TIMER_CCER_CC2NE                BIT(TIMER_CCER_CC2NE_BIT)
 #define TIMER_CCER_CC2P                 BIT(TIMER_CCER_CC2P_BIT)
 #define TIMER_CCER_CC2E                 BIT(TIMER_CCER_CC2E_BIT)
+#define TIMER_CCER_CC1NP                BIT(TIMER_CCER_CC1NP_BIT)
+#define TIMER_CCER_CC1NE                BIT(TIMER_CCER_CC1NE_BIT)
 #define TIMER_CCER_CC1P                 BIT(TIMER_CCER_CC1P_BIT)
 #define TIMER_CCER_CC1E                 BIT(TIMER_CCER_CC1E_BIT)
 
@@ -463,24 +476,24 @@ extern timer_dev *TIMER8;
 /* DMA control register (DCR) */
 
 #define TIMER_DCR_DBL                   (0x1F << 8)
-#define TIMER_DCR_DBL_1BYTE             (0x0 << 8)
-#define TIMER_DCR_DBL_2BYTE             (0x1 << 8)
-#define TIMER_DCR_DBL_3BYTE             (0x2 << 8)
-#define TIMER_DCR_DBL_4BYTE             (0x3 << 8)
-#define TIMER_DCR_DBL_5BYTE             (0x4 << 8)
-#define TIMER_DCR_DBL_6BYTE             (0x5 << 8)
-#define TIMER_DCR_DBL_7BYTE             (0x6 << 8)
-#define TIMER_DCR_DBL_8BYTE             (0x7 << 8)
-#define TIMER_DCR_DBL_9BYTE             (0x8 << 8)
-#define TIMER_DCR_DBL_10BYTE            (0x9 << 8)
-#define TIMER_DCR_DBL_11BYTE            (0xA << 8)
-#define TIMER_DCR_DBL_12BYTE            (0xB << 8)
-#define TIMER_DCR_DBL_13BYTE            (0xC << 8)
-#define TIMER_DCR_DBL_14BYTE            (0xD << 8)
-#define TIMER_DCR_DBL_15BYTE            (0xE << 8)
-#define TIMER_DCR_DBL_16BYTE            (0xF << 8)
-#define TIMER_DCR_DBL_17BYTE            (0x10 << 8)
-#define TIMER_DCR_DBL_18BYTE            (0x11 << 8)
+#define TIMER_DCR_DBL_1_XFER            (0x0 << 8)
+#define TIMER_DCR_DBL_2_XFER            (0x1 << 8)
+#define TIMER_DCR_DBL_3_XFER            (0x2 << 8)
+#define TIMER_DCR_DBL_4_XFER            (0x3 << 8)
+#define TIMER_DCR_DBL_5_XFER            (0x4 << 8)
+#define TIMER_DCR_DBL_6_XFER            (0x5 << 8)
+#define TIMER_DCR_DBL_7_XFER            (0x6 << 8)
+#define TIMER_DCR_DBL_8_XFER            (0x7 << 8)
+#define TIMER_DCR_DBL_9_XFER            (0x8 << 8)
+#define TIMER_DCR_DBL_10_XFER           (0x9 << 8)
+#define TIMER_DCR_DBL_11_XFER           (0xA << 8)
+#define TIMER_DCR_DBL_12_XFER           (0xB << 8)
+#define TIMER_DCR_DBL_13_XFER           (0xC << 8)
+#define TIMER_DCR_DBL_14_XFER           (0xD << 8)
+#define TIMER_DCR_DBL_15_XFER           (0xE << 8)
+#define TIMER_DCR_DBL_16_XFER           (0xF << 8)
+#define TIMER_DCR_DBL_17_XFER           (0x10 << 8)
+#define TIMER_DCR_DBL_18_XFER           (0x11 << 8)
 #define TIMER_DCR_DBA                   0x1F
 #define TIMER_DCR_DBA_CR1               0x0
 #define TIMER_DCR_DBA_CR2               0x1
@@ -502,6 +515,45 @@ extern timer_dev *TIMER8;
 #define TIMER_DCR_DBA_BDTR              0x11
 #define TIMER_DCR_DBA_DCR               0x12
 #define TIMER_DCR_DBA_DMAR              0x13
+
+/* Old, erroneous bit definitions from previous releases, kept for
+ * backwards compatibility: */
+/** Deprecated. Use TIMER_DCR_DBL_1_XFER instead. */
+#define TIMER_DCR_DBL_1BYTE  TIMER_DCR_DBL_1_XFER
+/** Deprecated. Use TIMER_DCR_DBL_2_XFER instead. */
+#define TIMER_DCR_DBL_2BYTE  TIMER_DCR_DBL_2_XFER
+/** Deprecated. Use TIMER_DCR_DBL_3_XFER instead. */
+#define TIMER_DCR_DBL_3BYTE  TIMER_DCR_DBL_3_XFER
+/** Deprecated. Use TIMER_DCR_DBL_4_XFER instead. */
+#define TIMER_DCR_DBL_4BYTE  TIMER_DCR_DBL_4_XFER
+/** Deprecated. Use TIMER_DCR_DBL_5_XFER instead. */
+#define TIMER_DCR_DBL_5BYTE  TIMER_DCR_DBL_5_XFER
+/** Deprecated. Use TIMER_DCR_DBL_6_XFER instead. */
+#define TIMER_DCR_DBL_6BYTE  TIMER_DCR_DBL_6_XFER
+/** Deprecated. Use TIMER_DCR_DBL_7_XFER instead. */
+#define TIMER_DCR_DBL_7BYTE  TIMER_DCR_DBL_7_XFER
+/** Deprecated. Use TIMER_DCR_DBL_8_XFER instead. */
+#define TIMER_DCR_DBL_8BYTE  TIMER_DCR_DBL_8_XFER
+/** Deprecated. Use TIMER_DCR_DBL_9_XFER instead. */
+#define TIMER_DCR_DBL_9BYTE  TIMER_DCR_DBL_9_XFER
+/** Deprecated. Use TIMER_DCR_DBL_10_XFER instead. */
+#define TIMER_DCR_DBL_10BYTE TIMER_DCR_DBL_10_XFER
+/** Deprecated. Use TIMER_DCR_DBL_11_XFER instead. */
+#define TIMER_DCR_DBL_11BYTE TIMER_DCR_DBL_11_XFER
+/** Deprecated. Use TIMER_DCR_DBL_12_XFER instead. */
+#define TIMER_DCR_DBL_12BYTE TIMER_DCR_DBL_12_XFER
+/** Deprecated. Use TIMER_DCR_DBL_13_XFER instead. */
+#define TIMER_DCR_DBL_13BYTE TIMER_DCR_DBL_13_XFER
+/** Deprecated. Use TIMER_DCR_DBL_14_XFER instead. */
+#define TIMER_DCR_DBL_14BYTE TIMER_DCR_DBL_14_XFER
+/** Deprecated. Use TIMER_DCR_DBL_15_XFER instead. */
+#define TIMER_DCR_DBL_15BYTE TIMER_DCR_DBL_15_XFER
+/** Deprecated. Use TIMER_DCR_DBL_16_XFER instead. */
+#define TIMER_DCR_DBL_16BYTE TIMER_DCR_DBL_16_XFER
+/** Deprecated. Use TIMER_DCR_DBL_17_XFER instead. */
+#define TIMER_DCR_DBL_17BYTE TIMER_DCR_DBL_17_XFER
+/** Deprecated. Use TIMER_DCR_DBL_18_XFER instead. */
+#define TIMER_DCR_DBL_18BYTE TIMER_DCR_DBL_18_XFER
 
 /*
  * Convenience routines
@@ -841,18 +893,19 @@ static inline void timer_cc_set_pol(timer_dev *dev, uint8 channel, uint8 pol) {
 /**
  * @brief Get a timer's DMA burst length.
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
- * @return Number of bytes to be transferred per DMA request, from 1 to 18.
+ * @return Number of transfers per read or write to timer DMA register,
+ *         from 1 to 18.
  */
 static inline uint8 timer_dma_get_burst_len(timer_dev *dev) {
     uint32 dbl = ((dev->regs).gen->DCR & TIMER_DCR_DBL) >> 8;
-    return dbl + 1;             /* 0 means 1 byte, etc. */
+    return dbl + 1;             /* 0 means 1 transfer, etc. */
 }
 
 /**
  * @brief Set a timer's DMA burst length.
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
- * @param length DMA burst length; i.e., number of bytes to transfer
- *               per DMA request, from 1 to 18.
+ * @param length DMA burst length; i.e., number of DMA transfers per
+ *               read/write to timer DMA register, from 1 to 18.
  */
 static inline void timer_dma_set_burst_len(timer_dev *dev, uint8 length) {
     uint32 tmp = (dev->regs).gen->DCR;
@@ -907,7 +960,7 @@ typedef enum timer_dma_base_addr {
 /**
  * @brief Get the timer's DMA base address.
  *
- * Some restrictions apply; see ST RM0008.
+ * Some restrictions apply; see the reference manual for your chip.
  *
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @return DMA base address
@@ -920,7 +973,7 @@ static inline timer_dma_base_addr timer_dma_get_base_addr(timer_dev *dev) {
 /**
  * @brief Set the timer's DMA base address.
  *
- * Some restrictions apply; see ST RM0008.
+ * Some restrictions apply; see the reference manual for your chip.
  *
  * @param dev Timer device, must have type TIMER_ADVANCED or TIMER_GENERAL.
  * @param dma_base DMA base address.

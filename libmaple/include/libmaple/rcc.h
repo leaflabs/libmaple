@@ -42,7 +42,7 @@ extern "C"{
  * might need them. */
 /**
  * @brief SYSCLK sources
- * @see rcc_clk_init()
+ * @see rcc_switch_sysclk()
  */
 typedef enum rcc_sysclk_src {
     RCC_CLKSRC_HSI = 0x0,

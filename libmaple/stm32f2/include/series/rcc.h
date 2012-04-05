@@ -833,7 +833,7 @@ typedef enum rcc_clk_id {
 
 /**
  * @brief PLL entry clock source
- * @see rcc_clk_init()
+ * @see rcc_configure_pll()
  */
 typedef enum rcc_pllsrc {
     RCC_PLLSRC_HSI = 0,

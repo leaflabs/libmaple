@@ -96,8 +96,23 @@ const struct rcc_dev_info rcc_dev_table[] = {
 };
 
 /**
- * @brief Initialize the clock control system. Initializes the system
- *        clock source to use the PLL driven by an external oscillator
+ * @brief Deprecated.
+ *
+ * Initialize the clock control system. Initializes the system
+ * clock source to use the PLL driven by an external oscillator.
+ *
+ * This function is limited and nonportable. Instead of using it,
+ * follow this (portable) procedure:
+ *
+ * 1. Switch to HSI by calling rcc_switch_sysclk(RCC_CLKSRC_HSI).
+ * 2. Turn off HSE by calling rcc_turn_off_clk(RCC_CLK_HSE).
+ * 3. Turn off the PLL by calling rcc_turn_off_clk(RCC_CLK_HSE).
+ * 4. Reconfigure the PLL using rcc_configure_pll().
+ * 5. Turn on RCC_CLK_HSE using rcc_turn_on_clk() and wait for it to
+ *    become ready by busy-waiting on rcc_is_clk_ready().
+ * 6. Turn on RCC_CLK_PLL using the same methods.
+ * 7. Switch to the PLL with rcc_switch_sysclk(RCC_CLKSRC_PLL).
+ *
  * @param sysclk_src system clock source, must be PLL
  * @param pll_src pll clock source, must be HSE
  * @param pll_mul pll multiplier

@@ -448,8 +448,7 @@ typedef enum rcc_clk_id {
 } rcc_clk_id;
 
 /**
- * PLL multipliers
- * @see rcc_clk_init()
+ * @brief Deprecated PLL multipliers, for rcc_clk_init().
  */
 typedef enum rcc_pll_multiplier {
     RCC_PLLMUL_2 = (0x0 << 18),
@@ -470,8 +469,8 @@ typedef enum rcc_pll_multiplier {
 } rcc_pll_multiplier;
 
 /**
- * PLL entry clock source
- * @see rcc_clk_init()
+ * @brief PLL clock sources.
+ * @see rcc_configure_pll()
  */
 typedef enum rcc_pllsrc {
     RCC_PLLSRC_HSE = (0x1 << 16),

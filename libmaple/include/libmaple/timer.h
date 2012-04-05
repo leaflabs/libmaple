@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,13 +25,13 @@
  *****************************************************************************/
 
 /**
- * @file   timer.h
+ * @file   libmaple/timer.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief  Timer interface.
  */
 
-#ifndef _LIBMAPLE_TIMERS_H_
-#define _LIBMAPLE_TIMERS_H_
+#ifndef _LIBMAPLE_TIMER_H_
+#define _LIBMAPLE_TIMER_H_
 
 #ifdef __cplusplus
 extern "C"{

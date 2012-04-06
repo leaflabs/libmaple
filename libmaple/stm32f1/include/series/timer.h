@@ -65,22 +65,22 @@ typedef struct timer_gen_reg_map {
 } timer_gen_reg_map;
 
 /** Timer 1 register map base pointer */
-#define TIMER1_BASE        ((struct timer_adv_reg_map*)0x40012C00)
+#define TIMER1_BASE                     ((struct timer_adv_reg_map*)0x40012C00)
 /** Timer 2 register map base pointer */
-#define TIMER2_BASE        ((struct timer_gen_reg_map*)0x40000000)
+#define TIMER2_BASE                     ((struct timer_gen_reg_map*)0x40000000)
 /** Timer 3 register map base pointer */
-#define TIMER3_BASE        ((struct timer_gen_reg_map*)0x40000400)
+#define TIMER3_BASE                     ((struct timer_gen_reg_map*)0x40000400)
 /** Timer 4 register map base pointer */
-#define TIMER4_BASE        ((struct timer_gen_reg_map*)0x40000800)
+#define TIMER4_BASE                     ((struct timer_gen_reg_map*)0x40000800)
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 /** Timer 5 register map base pointer */
-#define TIMER5_BASE        ((struct timer_gen_reg_map*)0x40000C00)
+#define TIMER5_BASE                     ((struct timer_gen_reg_map*)0x40000C00)
 /** Timer 6 register map base pointer */
-#define TIMER6_BASE        ((struct timer_bas_reg_map*)0x40001000)
+#define TIMER6_BASE                     ((struct timer_bas_reg_map*)0x40001000)
 /** Timer 7 register map base pointer */
-#define TIMER7_BASE        ((struct timer_bas_reg_map*)0x40001400)
+#define TIMER7_BASE                     ((struct timer_bas_reg_map*)0x40001400)
 /** Timer 8 register map base pointer */
-#define TIMER8_BASE        ((struct timer_adv_reg_map*)0x40013400)
+#define TIMER8_BASE                     ((struct timer_adv_reg_map*)0x40013400)
 #endif
 
 extern struct timer_dev *TIMER1;

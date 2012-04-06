@@ -77,7 +77,7 @@ typedef struct timer_adv_reg_map {
     __io uint32 DMAR;           /**< DMA address for full transfer */
 } timer_adv_reg_map;
 
-/* timer_gen_reg_map: intentionally omitted.
+/* General purpose timer register map type: intentionally omitted.
  *
  * General purpose timers differ slightly across series, so leave it
  * up to the series header to define struct timer_gen_reg_map. */
@@ -124,7 +124,7 @@ typedef union timer_reg_map {
 typedef enum timer_type {
     TIMER_ADVANCED,             /**< Advanced type */
     TIMER_GENERAL,              /**< General purpose type */
-    TIMER_BASIC                 /**< Basic type */
+    TIMER_BASIC,                /**< Basic type */
 } timer_type;
 
 /** Timer device type */
@@ -609,8 +609,8 @@ void timer_foreach(void (*fn)(timer_dev*));
 /**
  * @brief Timer interrupt number.
  *
- * Not all timers support all of these values; see the descriptions
- * for each value.
+ * Not all timers support all of these values. General purpose timers
+ * can be a special nuisance in this regard.
  */
 typedef enum timer_interrupt_id {
     TIMER_UPDATE_INTERRUPT, /**< Update interrupt, available on all timers. */

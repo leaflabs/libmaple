@@ -34,21 +34,30 @@
 #define _LIBMAPLE_TIMER_PRIVATE_H_
 
 /*
- * Devices
+ * Helper macros for declaring timer_devs of various timer_types
  */
 
-/* Just like the corresponding DIER bits:
+/* The indexes of user handlers in a timer_dev.handlers are just like
+ * the corresponding DIER bits, as follows: */
+
+/* Advanced timers:
  * [0] = Update handler;
  * [1,2,3,4] = capture/compare 1,2,3,4 handlers, respectively;
  * [5] = COM;
  * [6] = TRG;
  * [7] = BRK. */
 #define NR_ADV_HANDLERS                 8
-/* Update, capture/compare 1,2,3,4; <junk>; trigger. */
+/* General purpose timers:
+ * [0] = update;
+ * [1,2,3,4] = capture/compare 1,2,3,4;
+ * [5] = <junk>;
+ * [6] = trigger. */
 #define NR_GEN_HANDLERS                 7
-/* Update only. */
+/* Basic timers:
+ * [0] = update. */
 #define NR_BAS_HANDLERS                 1
 
+/* For declaring advanced timers. */
 #define DECLARE_ADVANCED_TIMER(name, num)                               \
     timer_dev name = {                                                  \
         .regs = { .adv = TIMER##num##_BASE },                           \
@@ -57,6 +66,7 @@
         .handlers = { [NR_ADV_HANDLERS - 1] = 0 },                      \
     }
 
+/* For declaring full-featured general purpose timers. */
 #define DECLARE_GENERAL_TIMER(name, num)                                \
     timer_dev name = {                                                  \
         .regs = { .gen = TIMER##num##_BASE },                           \
@@ -65,6 +75,7 @@
         .handlers = { [NR_GEN_HANDLERS - 1] = 0 },                      \
     }
 
+/* For declaring basic timers (e.g. TIM6 and TIM7). */
 #define DECLARE_BASIC_TIMER(name, num)                                  \
     timer_dev name = {                                                  \
         .regs = { .bas = TIMER##num##_BASE },                           \
@@ -75,13 +86,21 @@
 
 /*
  * IRQ handlers
- */
-
-/* Note: the following dispatch routines make use of the fact that
- * DIER interrupt enable bits and SR interrupt flags have common bit
- * positions.  Thus, ANDing DIER and SR lets us check if an interrupt
- * is enabled and if it has occurred simultaneously.
- */
+ *
+ * These decode TIMx_DIER and TIMx_SR, then dispatch to the user-level
+ * IRQ handlers. They also clean up TIMx_SR afterwards, so the user
+ * doesn't have to deal with register details.
+ *
+ * Notes:
+ *
+ * - These dispatch routines make use of the fact that DIER interrupt
+ *   enable bits and SR interrupt flags have common bit positions.
+ *   Thus, ANDing DIER and SR lets us check if an interrupt is enabled
+ *   and if it has occurred simultaneously.
+ *
+ * - We force these routines to inline to avoid call overhead, but
+ *   there aren't any measurements to prove that this is actually a
+ *   good idea.  Profile-directed optimizations are definitely wanted. */
 
 /* A special-case dispatch routine for single-interrupt NVIC lines.
  * This function assumes that the interrupt corresponding to `iid' has
@@ -97,7 +116,7 @@ static __always_inline void dispatch_single_irq(timer_dev *dev,
     }
 }
 
-/* For dispatch routines which service multiple interrupts. */
+/* Helper macro for dispatch routines which service multiple interrupts. */
 #define handle_irq(dier_sr, irq_mask, handlers, iid, handled_irq) do {  \
         if ((dier_sr) & (irq_mask)) {                                   \
             void (*__handler)(void) = (handlers)[iid];                  \

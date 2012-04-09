@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f2/nvic.h
+ * @file libmaple/stm32f2/include/series/nvic.h
  * @brief STM32F2 nested vectored interrupt controller (NVIC) header.
  */
 

@@ -75,6 +75,17 @@
         .handlers = { [NR_GEN_HANDLERS - 1] = 0 },                      \
     }
 
+/* For declaring general purpose timers with limited interrupt
+ * capability (e.g. timers 9 through 14 on STM32F2 and XL-density
+ * STM32F1). */
+#define DECLARE_RESTRICTED_GENERAL_TIMER(name, num, max_dier_bit)       \
+    timer_dev name = {                                                  \
+        .regs = { .gen = TIMER##num##_BASE },                           \
+        .clk_id = RCC_TIMER##num,                                       \
+        .type = TIMER_GENERAL,                                          \
+        .handlers = { [max_dier_bit] = 0 },                             \
+    }
+
 /* For declaring basic timers (e.g. TIM6 and TIM7). */
 #define DECLARE_BASIC_TIMER(name, num)                                  \
     timer_dev name = {                                                  \
@@ -102,17 +113,24 @@
  *   there aren't any measurements to prove that this is actually a
  *   good idea.  Profile-directed optimizations are definitely wanted. */
 
-/* A special-case dispatch routine for single-interrupt NVIC lines.
- * This function assumes that the interrupt corresponding to `iid' has
- * in fact occurred (i.e., it doesn't check DIER & SR). */
+/* A special-case dispatch routine for timers which only serve a
+ * single interrupt on a given IRQ line.
+ *
+ * This function still checks DIER & SR, as in some cases, a timer may
+ * only serve a single interrupt on a particular NVIC line, but that
+ * line may be shared with another timer. For example, the timer 1
+ * update interrupt shares an IRQ line with the timer 10 interrupt on
+ * STM32F1 (XL-density), STM32F2, and STM32F4. */
 static __always_inline void dispatch_single_irq(timer_dev *dev,
                                                 timer_interrupt_id iid,
                                                 uint32 irq_mask) {
     timer_bas_reg_map *regs = (dev->regs).bas;
-    void (*handler)(void) = dev->handlers[iid];
-    if (handler) {
-        handler();
-        regs->SR &= ~irq_mask;
+    if (regs->DIER & regs->SR & irq_mask) {
+        void (*handler)(void) = dev->handlers[iid];
+        if (handler) {
+            handler();
+            regs->SR &= ~irq_mask;
+        }
     }
 }
 
@@ -174,6 +192,36 @@ static __always_inline void dispatch_general(timer_dev *dev) {
     handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT,    handled);
     handle_irq(dsr, TIMER_SR_CC3IF, hs, TIMER_CC3_INTERRUPT,    handled);
     handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_UIF,   hs, TIMER_UPDATE_INTERRUPT, handled);
+
+    regs->SR &= ~handled;
+}
+
+/* On F1 (XL-density), F2, and F4, TIM9 and TIM12 are restricted
+ * general-purpose timers with update, CC1, CC2, and TRG interrupts. */
+static __always_inline void dispatch_tim_9_12(timer_dev *dev) {
+    timer_gen_reg_map *regs = (dev->regs).gen;
+    uint32 dsr = regs->DIER & regs->SR;
+    void (**hs)(void) = dev->handlers;
+    uint32 handled = 0;
+
+    handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT,    handled);
+    handle_irq(dsr, TIMER_SR_UIF,   hs, TIMER_UPDATE_INTERRUPT, handled);
+
+    regs->SR &= ~handled;
+}
+
+/* On F1 (XL-density), F2, and F4, timers 10, 11, 13, and 14 are
+ * restricted general-purpose timers with update and CC1 interrupts. */
+static __always_inline void dispatch_tim_10_11_13_14(timer_dev *dev) {
+    timer_gen_reg_map *regs = (dev->regs).gen;
+    uint32 dsr = regs->DIER & regs->SR;
+    void (**hs)(void) = dev->handlers;
+    uint32 handled = 0;
+
     handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT,    handled);
     handle_irq(dsr, TIMER_SR_UIF,   hs, TIMER_UPDATE_INTERRUPT, handled);
 

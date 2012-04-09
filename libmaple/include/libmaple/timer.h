@@ -37,17 +37,11 @@
 extern "C"{
 #endif
 
+#include <series/timer.h>
 #include <libmaple/libmaple.h>
 #include <libmaple/rcc.h>
 #include <libmaple/nvic.h>
 #include <libmaple/bitband.h>
-
-struct timer_adv_reg_map;
-struct timer_gen_reg_map;
-struct timer_bas_reg_map;
-struct timer_dev;
-/* Include the series header here, as it may need the above */
-#include <series/timer.h>
 
 /*
  * Register maps

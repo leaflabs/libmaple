@@ -33,11 +33,10 @@
 #ifndef _LIBMAPLE_STM32F1_TIMER_H_
 #define _LIBMAPLE_STM32F1_TIMER_H_
 
-#include <libmaple/libmaple.h>
-#include <series/timer.h>
+#include <libmaple/libmaple_types.h>
 
 /*
- * Register maps and devices
+ * Register maps and base pointers
  */
 
 /** STM32F1 general purpose timer register map type */
@@ -64,6 +63,10 @@ typedef struct timer_gen_reg_map {
     __io uint32 DMAR;           /**< DMA address for full transfer */
 } timer_gen_reg_map;
 
+struct timer_adv_reg_map;
+struct timer_gen_reg_map;
+struct timer_bas_reg_map;
+
 /** Timer 1 register map base pointer */
 #define TIMER1_BASE                     ((struct timer_adv_reg_map*)0x40012C00)
 /** Timer 2 register map base pointer */
@@ -72,7 +75,6 @@ typedef struct timer_gen_reg_map {
 #define TIMER3_BASE                     ((struct timer_gen_reg_map*)0x40000400)
 /** Timer 4 register map base pointer */
 #define TIMER4_BASE                     ((struct timer_gen_reg_map*)0x40000800)
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 /** Timer 5 register map base pointer */
 #define TIMER5_BASE                     ((struct timer_gen_reg_map*)0x40000C00)
 /** Timer 6 register map base pointer */
@@ -81,7 +83,29 @@ typedef struct timer_gen_reg_map {
 #define TIMER7_BASE                     ((struct timer_bas_reg_map*)0x40001400)
 /** Timer 8 register map base pointer */
 #define TIMER8_BASE                     ((struct timer_adv_reg_map*)0x40013400)
-#endif
+/** Timer 9 register map base pointer */
+#define TIMER9_BASE                     ((struct timer_gen_reg_map*)0x40014C00)
+/** Timer 10 register map base pointer */
+#define TIMER10_BASE                    ((struct timer_gen_reg_map*)0x40015000)
+/** Timer 11 register map base pointer */
+#define TIMER11_BASE                    ((struct timer_gen_reg_map*)0x40015400)
+/** Timer 12 register map base pointer */
+#define TIMER12_BASE                    ((struct timer_gen_reg_map*)0x40001800)
+/** Timer 13 register map base pointer */
+#define TIMER13_BASE                    ((struct timer_gen_reg_map*)0x40001C00)
+/** Timer 14 register map base pointer */
+#define TIMER14_BASE                    ((struct timer_gen_reg_map*)0x40002000)
+
+/*
+ * Device pointers
+ *
+ * We only declare device pointers to timers which actually exist on
+ * the target MCU. This helps when porting programs to STM32F1 (or
+ * within F1 to a lower density MCU), as attempts to use nonexistent
+ * timers cause build errors instead of undefined behavior.
+ */
+
+struct timer_dev;
 
 extern struct timer_dev *TIMER1;
 extern struct timer_dev *TIMER2;
@@ -92,6 +116,14 @@ extern struct timer_dev *TIMER5;
 extern struct timer_dev *TIMER6;
 extern struct timer_dev *TIMER7;
 extern struct timer_dev *TIMER8;
+#endif
+#ifdef STM32_XL_DENSITY
+extern struct timer_dev *TIMER9;
+extern struct timer_dev *TIMER10;
+extern struct timer_dev *TIMER11;
+extern struct timer_dev *TIMER12;
+extern struct timer_dev *TIMER13;
+extern struct timer_dev *TIMER14;
 #endif
 
 #endif

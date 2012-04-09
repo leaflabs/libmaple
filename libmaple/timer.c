@@ -152,66 +152,101 @@ static void output_compare_mode(timer_dev *dev, uint8 channel) {
     timer_cc_enable(dev, channel);
 }
 
-/* FIXME: These IRQ enable routines fail for timers 9 through 14.
- * We don't support those timers yet, so it's OK for now, but this
- * really needs to get fixed. */
-
-static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id);
-static void enable_nonmuxed_irq(timer_dev *dev);
+static void enable_adv_irq(timer_dev *dev, timer_interrupt_id id);
+static void enable_bas_gen_irq(timer_dev *dev);
 
 static inline void enable_irq(timer_dev *dev, timer_interrupt_id iid) {
     if (dev->type == TIMER_ADVANCED) {
-        enable_advanced_irq(dev, iid);
+        enable_adv_irq(dev, iid);
     } else {
-        enable_nonmuxed_irq(dev);
+        enable_bas_gen_irq(dev);
     }
 }
 
-static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id) {
-    uint8 is_timer1 = dev->clk_id == RCC_TIMER1;
-
+/* Advanced control timers have several IRQ lines corresponding to
+ * different timer interrupts.
+ *
+ * Note: This function assumes that the only advanced timers are TIM1
+ * and TIM8, and needs the obvious changes if that assumption is
+ * violated by a later STM32 series. */
+static void enable_adv_irq(timer_dev *dev, timer_interrupt_id id) {
+    uint8 is_tim1 = dev->clk_id == RCC_TIMER1;
+    nvic_irq_num irq_num;
     switch (id) {
     case TIMER_UPDATE_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_UP : NVIC_TIMER8_UP);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_UP_TIMER10 :
+                   NVIC_TIMER8_UP_TIMER13);
         break;
-    case TIMER_CC1_INTERRUPT:
-    case TIMER_CC2_INTERRUPT:
-    case TIMER_CC3_INTERRUPT:
+    case TIMER_CC1_INTERRUPT:   /* Fall through */
+    case TIMER_CC2_INTERRUPT:   /* ... */
+    case TIMER_CC3_INTERRUPT:   /* ... */
     case TIMER_CC4_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_CC : NVIC_TIMER8_CC);
+        irq_num = is_tim1 ? NVIC_TIMER1_CC : NVIC_TIMER8_CC;
         break;
-    case TIMER_COM_INTERRUPT:
+    case TIMER_COM_INTERRUPT:   /* Fall through */
     case TIMER_TRG_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_TRG_COM : NVIC_TIMER8_TRG_COM);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_TRG_COM_TIMER11 :
+                   NVIC_TIMER8_TRG_COM_TIMER14);
         break;
     case TIMER_BREAK_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_BRK : NVIC_TIMER8_BRK);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_BRK_TIMER9 :
+                   NVIC_TIMER8_BRK_TIMER12);
         break;
+    default:
+        /* Can't happen, but placate the compiler */
+        ASSERT(0);
+        return;
     }
+    nvic_irq_enable(irq_num);
 }
 
-static void enable_nonmuxed_irq(timer_dev *dev) {
+/* Basic and general purpose timers have a single IRQ line, which is
+ * shared by all interrupts supported by a particular timer. */
+static void enable_bas_gen_irq(timer_dev *dev) {
+    nvic_irq_num irq_num;
     switch (dev->clk_id) {
     case RCC_TIMER2:
-        nvic_irq_enable(NVIC_TIMER2);
+        irq_num = NVIC_TIMER2;
         break;
     case RCC_TIMER3:
-        nvic_irq_enable(NVIC_TIMER3);
+        irq_num = NVIC_TIMER3;
         break;
     case RCC_TIMER4:
-        nvic_irq_enable(NVIC_TIMER4);
+        irq_num = NVIC_TIMER4;
         break;
     case RCC_TIMER5:
-        nvic_irq_enable(NVIC_TIMER5);
+        irq_num = NVIC_TIMER5;
         break;
     case RCC_TIMER6:
-        nvic_irq_enable(NVIC_TIMER6);
+        irq_num = NVIC_TIMER6;
         break;
     case RCC_TIMER7:
-        nvic_irq_enable(NVIC_TIMER7);
+        irq_num = NVIC_TIMER7;
+        break;
+    case RCC_TIMER9:
+        irq_num = NVIC_TIMER1_BRK_TIMER9;
+        break;
+    case RCC_TIMER10:
+        irq_num = NVIC_TIMER1_UP_TIMER10;
+        break;
+    case RCC_TIMER11:
+        irq_num = NVIC_TIMER1_TRG_COM_TIMER11;
+        break;
+    case RCC_TIMER12:
+        irq_num = NVIC_TIMER8_BRK_TIMER12;
+        break;
+    case RCC_TIMER13:
+        irq_num = NVIC_TIMER8_UP_TIMER13;
+        break;
+    case RCC_TIMER14:
+        irq_num = NVIC_TIMER8_TRG_COM_TIMER14;
         break;
     default:
         ASSERT_FAULT(0);
-        break;
+        return;
     }
+    nvic_irq_enable(irq_num);
 }

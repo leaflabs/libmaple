@@ -1,6 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  * Copyright (c) 2010 Perry Hung.
  *
  * Permission is hereby granted, free of charge, to any person
@@ -25,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file spi.h
+ * @file libmaple/spi.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief Serial Peripheral Interface (SPI) and Integrated
  *        Interchip Sound (I2S) peripheral support.

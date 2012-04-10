@@ -39,27 +39,28 @@
  */
 
 static spi_dev spi1 = {
-    .regs     = SPI1_BASE,
-    .clk_id   = RCC_SPI1,
-    .irq_num  = NVIC_SPI1,
+    .regs    = SPI1_BASE,
+    .clk_id  = RCC_SPI1,
+    .irq_num = NVIC_SPI1,
 };
-/** SPI device 1 */
-spi_dev *SPI1 = &spi1;
-
 static spi_dev spi2 = {
-    .regs     = SPI2_BASE,
-    .clk_id   = RCC_SPI2,
-    .irq_num  = NVIC_SPI2,
+    .regs    = SPI2_BASE,
+    .clk_id  = RCC_SPI2,
+    .irq_num = NVIC_SPI2,
 };
-/** SPI device 2 */
-spi_dev *SPI2 = &spi2;
-
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 static spi_dev spi3 = {
-    .regs     = SPI3_BASE,
-    .clk_id   = RCC_SPI3,
-    .irq_num  = NVIC_SPI3,
+    .regs    = SPI3_BASE,
+    .clk_id  = RCC_SPI3,
+    .irq_num = NVIC_SPI3,
 };
+#endif
+
+/** SPI device 1 */
+spi_dev *SPI1 = &spi1;
+/** SPI device 2 */
+spi_dev *SPI2 = &spi2;
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 /** SPI device 3 */
 spi_dev *SPI3 = &spi3;
 #endif

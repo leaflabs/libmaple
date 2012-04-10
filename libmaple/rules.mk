@@ -18,6 +18,7 @@ cSRCS_$(d) += iwdg.c
 cSRCS_$(d) += nvic.c
 cSRCS_$(d) += pwr.c
 cSRCS_$(d) += rcc.c
+cSRCS_$(d) += spi.c
 cSRCS_$(d) += syscalls.c
 cSRCS_$(d) += systick.c
 cSRCS_$(d) += timer.c
@@ -29,7 +30,6 @@ cSRCS_$(d) += util.c
 # cSRCS_$(d) += dma.c
 # cSRCS_$(d) += exti.c
 # cSRCS_$(d) += i2c.c
-# cSRCS_$(d) += spi.c
 
 sSRCS_$(d) := exc.S
 

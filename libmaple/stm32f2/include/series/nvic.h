@@ -141,6 +141,10 @@ typedef enum nvic_irq_num {
     NVIC_CRYP                   = 79,  /**< Cryptographic processor */
     NVIC_HASH_RNG               = 80,  /**< Hash and random number
                                           generation */
+
+    /* Fake enumerator values, for compatiblity with F1.
+     * TODO decide if this is actually a good idea. */
+    NVIC_TIMER6 = NVIC_TIMER6_DAC, /**< For compatibility with STM32F1. */
 } nvic_irq_num;
 
 static inline void nvic_irq_disable_all(void) {

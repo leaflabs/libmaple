@@ -163,9 +163,9 @@ extern gpio_dev gpioi;
  * @brief GPIO pin modes
  */
 typedef enum gpio_pin_mode {
-    GPIO_MODE_INPUT = GPIO_MODER_INPUT, /**< Input mode */
+    GPIO_MODE_INPUT  = GPIO_MODER_INPUT,  /**< Input mode */
     GPIO_MODE_OUTPUT = GPIO_MODER_OUTPUT, /**< Output mode */
-    GPIO_MODE_AF = GPIO_MODER_AF, /**< Alternate function mode */
+    GPIO_MODE_AF     = GPIO_MODER_AF,     /**< Alternate function mode */
     GPIO_MODE_ANALOG = GPIO_MODER_ANALOG, /**< Analog mode */
 } gpio_pin_mode;
 

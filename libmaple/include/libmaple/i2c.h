@@ -82,17 +82,17 @@ typedef struct i2c_msg {
  */
 typedef struct i2c_dev {
     i2c_reg_map *regs;          /**< Register map */
-    gpio_dev *gpio_port;        /**< SDA, SCL pins' GPIO port */
+    i2c_msg *msg;               /**< Messages */
+    uint32 error_flags;         /**< Error flags, set on I2C error condition */
+    volatile uint32 timestamp;  /**< For internal use */
+    struct gpio_dev *gpio_port; /**< SDA, SCL pins' GPIO port */
+    uint16 msgs_left;           /**< Messages left */
     uint8 sda_pin;              /**< SDA bit on gpio_port */
     uint8 scl_pin;              /**< SCL bit on gpio_port */
     rcc_clk_id clk_id;          /**< RCC clock information */
     nvic_irq_num ev_nvic_line;  /**< Event IRQ number */
     nvic_irq_num er_nvic_line;  /**< Error IRQ number */
     volatile i2c_state state;   /**< Device state */
-    uint16 msgs_left;           /**< Messages left */
-    i2c_msg *msg;               /**< Messages */
-    volatile uint32 timestamp;  /**< For internal use */
-    uint32 error_flags;         /**< Error flags, set on I2C error condition */
 } i2c_dev;
 
 /*

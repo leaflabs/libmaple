@@ -102,17 +102,13 @@ SECTIONS
       } > REGION_TEXT
 
     /*
-     * Read-only data
+     * End of text
      */
-    .rodata :
+    .text.align :
       {
-        *(.rodata .rodata.* .gnu.linkonce.r.*)
-
-        /* ROM image configuration; for C startup */
-        . = ALIGN(4);
-        _lm_rom_img_cfgp = .;
-        LONG(LOADADDR(.data));
-      } > REGION_RODATA
+        . = ALIGN(8);
+        _etext = .;
+      } > REGION_TEXT
 
     /*
      * .ARM.exidx exception unwinding; mandated by ARM's C++ ABI
@@ -125,23 +121,6 @@ SECTIONS
     __exidx_end = .;
 
     /*
-     * End of text
-     */
-    .text.align :
-      {
-        . = ALIGN(8);
-        _etext = .;
-      } > REGION_TEXT
-
-    /*
-     * .USER_FLASH: We allow users to allocate into Flash here
-     */
-    .USER_FLASH :
-      {
-        *(.USER_FLASH)
-      } > REGION_RODATA
-
-    /*
      * .data
      */
     .data :
@@ -152,6 +131,22 @@ SECTIONS
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
 
+        . = ALIGN(8);
+        _edata = .;
+      } > REGION_DATA AT> REGION_RODATA
+
+    /*
+     * Read-only data
+     */
+    .rodata :
+      {
+        *(.rodata .rodata.* .gnu.linkonce.r.*)
+        /* .USER_FLASH: We allow users to allocate into Flash here */
+        *(.USER_FLASH)
+        /* ROM image configuration; for C startup */
+        . = ALIGN(4);
+        _lm_rom_img_cfgp = .;
+        LONG(LOADADDR(.data));
         /*
          * Heap: Linker scripts may choose a custom heap by overriding
          * _lm_heap_start and _lm_heap_end. Otherwise, the heap is in
@@ -163,9 +158,7 @@ SECTIONS
          */
         _lm_heap_start = DEFINED(_lm_heap_start) ? _lm_heap_start : _end;
         _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __msp_init;
-        . = ALIGN (8);
-        _edata = .;
-      } > REGION_DATA AT> REGION_TEXT
+      } > REGION_RODATA
 
     /*
      * .bss
@@ -179,7 +172,7 @@ SECTIONS
         . = ALIGN (8);
         _ebss = .;
         _end = _ebss;
-      } > REGION_BSS AT> REGION_TEXT
+      } > REGION_BSS
 
     /*
      * Debugging sections

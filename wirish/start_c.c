@@ -54,39 +54,40 @@ extern char _data, _edata;
 extern char _bss, _ebss;
 
 struct rom_img_cfg {
-    long long *img_start;
+    int *img_start;
 };
 
 extern char _lm_rom_img_cfgp;
 
 void __attribute__((noreturn)) start_c(void) {
     struct rom_img_cfg *img_cfg = (struct rom_img_cfg*)&_lm_rom_img_cfgp;
-    long long *src;
-    long long *dst;
+    int *src = img_cfg->img_start;
+    int *dst = (int*)&_data;
     int exit_code;
 
     /* Initialize .data, if necessary. */
-    src = img_cfg->img_start;
-    dst = (long long*)&_data;
     if (src != dst) {
-        while (dst < (long long*)&_edata) {
+        int *end = (int*)&_edata;
+        while (dst < end) {
             *dst++ = *src++;
         }
     }
 
     /* Zero .bss. */
-    dst = (long long*)&_bss;
-    while (dst < (long long*)&_ebss) {
+    dst = (int*)&_bss;
+    while (dst < (int*)&_ebss) {
         *dst++ = 0;
     }
 
     /* Run initializers. */
     __libc_init_array();
 
-    exit_code = main(0, NULL, NULL);
+    /* Jump to main. */
+    exit_code = main(0, 0, 0);
     if (exit) {
         exit(exit_code);
     }
+
     /* If exit is NULL, make sure we don't return. */
     for (;;)
         continue;

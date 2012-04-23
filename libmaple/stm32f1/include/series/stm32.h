@@ -36,42 +36,16 @@
 extern "C" {
 #endif
 
-/*
- * Clock configuration.
- */
-
-#ifndef STM32_PCLK1
-#define STM32_PCLK1                     36000000U
-#endif
-
-#ifndef STM32_PCLK2
-#define STM32_PCLK2                     72000000U
-#endif
-
-#ifndef STM32_DELAY_US_MULT
-#define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
-#endif
-
-/*
- * Density-specific values.
- */
-
-#ifdef STM32_MEDIUM_DENSITY
-#   define STM32_NR_INTERRUPTS          43
-#   define STM32_HAVE_FSMC              0
-#elif defined(STM32_HIGH_DENSITY)
-#   define STM32_NR_INTERRUPTS          60
-#   define STM32_HAVE_FSMC              1
-#else
-#error "Unsupported STM32F1 density, or no density specified. Add something " \
-       "like -DSTM32_MEDIUM_DENSITY to your compiler arguments."
-#endif
-
-/*
- * Series- and MCU-specific values.
- */
-
 #define STM32_MCU_SERIES                STM32_SERIES_F1
+
+/*
+ * MCU-specific values.
+ *
+ * You can use this section to override any of the below settings on a
+ * per-MCU basis. For example, if your MCU has different STM32_PCLK1
+ * or STM32_PCLK2 values, you can set them here and the values for
+ * STM32F103 microcontrollers set below won't take effect.
+ */
 
 #if defined(MCU_STM32F103RB)
 #   define STM32_NR_GPIO_PORTS          4
@@ -95,6 +69,49 @@ extern "C" {
 #else
 #error "Unrecognized STM32F1 MCU, or no MCU specified. Add something like " \
        "-DMCU_STM32F103RB to your compiler arguments."
+#endif
+
+/*
+ * Clock configuration.
+ */
+
+#ifndef STM32_PCLK1
+#define STM32_PCLK1                     36000000U
+#endif
+
+#ifndef STM32_PCLK2
+#define STM32_PCLK2                     72000000U
+#endif
+
+#ifndef STM32_DELAY_US_MULT
+#define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
+#endif
+
+/*
+ * Density-specific values.
+ */
+
+#ifdef STM32_MEDIUM_DENSITY
+#   ifndef STM32_NR_INTERRUPTS
+#   define STM32_NR_INTERRUPTS          43
+#   endif
+
+#   ifndef STM32_HAVE_FSMC
+#   define STM32_HAVE_FSMC              0
+#   endif
+
+#elif defined(STM32_HIGH_DENSITY)
+#   ifndef STM32_NR_INTERRUPTS
+#   define STM32_NR_INTERRUPTS          60
+#   endif
+
+#   ifndef STM32_HAVE_FSMC
+#   define STM32_HAVE_FSMC              1
+#   endif
+
+#else
+#error "Unsupported STM32F1 density, or no density specified. Add something " \
+       "like -DSTM32_MEDIUM_DENSITY to your compiler arguments."
 #endif
 
 #ifdef __cplusplus

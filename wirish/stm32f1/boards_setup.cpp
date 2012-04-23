@@ -42,13 +42,22 @@
 
 #include <board/board.h>
 
+// Allow boards to provide a PLL multiplier. This is useful for
+// e.g. STM32F100 value line MCUs, which use slower multipliers.
+// (We're leaving the default to RCC_PLLMUL_9 for now, since that
+// works for F103 performance line MCUs, which is all that LeafLabs
+// currently officially supports).
+#ifndef BOARD_RCC_PLLMUL
+#define BOARD_RCC_PLLMUL RCC_PLLMUL_9
+#endif
+
 /* FIXME: Reintroduce all "#if 0"'ed blocks once libmaple provides
  * these definitions again. */
 
 namespace wirish {
     namespace priv {
 
-        static stm32f1_rcc_pll_data pll_data = {RCC_PLLMUL_9};
+        static stm32f1_rcc_pll_data pll_data = {BOARD_RCC_PLLMUL};
         rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
         adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_6;
         adc_smp_rate w_adc_smp = ADC_SMPR_55_5;

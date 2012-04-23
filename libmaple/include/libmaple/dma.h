@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file dma.h
+ * @file libmaple/include/libmaple/dma.h
  *
  * @author Marti Bolivar <mbolivar@leaflabs.com>;
  *         Original implementation by Michael Hope

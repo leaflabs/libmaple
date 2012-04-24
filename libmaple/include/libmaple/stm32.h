@@ -58,8 +58,20 @@ extern "C" {
  *
  * - STM32_HAVE_FSMC: 1 if the MCU has the FSMC peripheral, and 0
  *   otherwise.
+ *
+ * - STM32_HAVE_USB: 1 if the MCU has a USB peripheral, and 0
+ *   otherwise.
  */
 #include <series/stm32.h>
+
+/* Ensure the series header isn't broken. */
+#if (!defined(STM32_PCLK1)         || !defined(STM32_PCLK2)         || \
+     !defined(STM32_MCU_SERIES)    || !defined(STM32_NR_INTERRUPTS) || \
+     !defined(STM32_NR_GPIO_PORTS) || !defined(STM32_DELAY_US_MULT) || \
+     !defined(STM32_SRAM_END)      || !defined(STM32_HAVE_FSMC)     || \
+     !defined(STM32_HAVE_USB))
+#error "Bad STM32F1 configuration. Check <series/stm32.h> header for your MCU."
+#endif
 
 #ifdef __DOXYGEN_PREDEFINED_HACK
 

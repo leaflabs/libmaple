@@ -38,6 +38,17 @@ extern "C" {
 
 #define STM32_MCU_SERIES                STM32_SERIES_F1
 
+/* The STM32F1 series is subdivided into "lines". libmaple currently
+ * officially supports STM32F103 performance line MCUs (see the
+ * MCU-specific value section below).
+ *
+ * You can use these F1 line defines if porting libmaple to support
+ * MCUs on other lines. */
+#define STM32_F1_LINE_PERFORMANCE       0
+#define STM32_F1_LINE_VALUE             1
+#define STM32_F1_LINE_ACCESS            2
+#define STM32_F1_LINE_CONNECTIVITY      3
+
 /*
  * MCU-specific values.
  *
@@ -48,23 +59,31 @@ extern "C" {
  */
 
 #if defined(MCU_STM32F103RB)
+#   define STM32_F1_LINE                STM32_F1_LINE_PERFORMANCE
 #   define STM32_NR_GPIO_PORTS          4
 #   define STM32_SRAM_END               ((void*)0x20005000)
+#   define STM32_MEDIUM_DENSITY
 
 #elif defined(MCU_STM32F103ZE)
+#   define STM32_F1_LINE                STM32_F1_LINE_PERFORMANCE
 #   define STM32_NR_GPIO_PORTS          7
 #   define STM32_SRAM_END               ((void*)0x20010000)
+#   define STM32_HIGH_DENSITY
 
 #elif defined(MCU_STM32F103CB)
+#   define STM32_F1_LINE                STM32_F1_LINE_PERFORMANCE
     /* This STM32_NR_GPIO_PORTS is not strictly true, but only pins 0
      * and exist, and they're used for OSC (e.g. on e.g. LeafLabs
      * Maple Mini), so we'll live with this for now. */
 #   define STM32_NR_GPIO_PORTS          3
 #   define STM32_SRAM_END               ((void*)0x20005000)
+#   define STM32_MEDIUM_DENSITY
 
 #elif defined(MCU_STM32F103RE)
+#   define STM32_F1_LINE                STM32_F1_LINE_PERFORMANCE
 #   define STM32_NR_GPIO_PORTS          4
 #   define STM32_SRAM_END               ((void*)0x20010000)
+#   define STM32_HIGH_DENSITY
 
 #else
 #error "Unrecognized STM32F1 MCU, or no MCU specified. Add something like " \
@@ -72,46 +91,65 @@ extern "C" {
 #endif
 
 /*
- * Clock configuration.
+ * Derived values.
  */
 
-#ifndef STM32_PCLK1
-#define STM32_PCLK1                     36000000U
-#endif
+#if STM32_F1_LINE == STM32_F1_LINE_PERFORMANCE
+     /* All supported performance line MCUs have a USB peripheral */
+#    define STM32_HAVE_USB              1
 
-#ifndef STM32_PCLK2
-#define STM32_PCLK2                     72000000U
-#endif
+#    ifdef STM32_MEDIUM_DENSITY
+#       define STM32_NR_INTERRUPTS      43
+#       define STM32_HAVE_FSMC          0
+#    elif defined(STM32_HIGH_DENSITY)
+#       define STM32_NR_INTERRUPTS      60
+#       define STM32_HAVE_FSMC          1
+#    endif
 
-#ifndef STM32_DELAY_US_MULT
-#define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
+#elif STM32_F1_LINE == STM32_F1_LINE_VALUE
+     /* Value line MCUs don't have USB peripherals. */
+#    define STM32_HAVE_USB              0
+
+#    ifdef STM32_MEDIUM_DENSITY
+#        define STM32_NR_INTERRUPTS     56
+#        define STM32_HAVE_FSMC         0
+#    elif defined(STM32_HIGH_DENSITY)
+         /* 61 interrupts here counts the possibility for a remapped
+          * DMA2 channel 5 IRQ occurring at NVIC index 60.  */
+#        define STM32_NR_INTERRUPTS     61
+#        define STM32_HAVE_FSMC         1
+#    endif
+
 #endif
 
 /*
- * Density-specific values.
+ * Clock configuration.
+ *
+ * We've currently got values for F103 MCUs operating at the fastest
+ * possible speeds.
+ *
+ * You can patch these for your line, MCU, clock configuration,
+ * etc. here or by setting cflags when compiling libmaple.
  */
 
-#ifdef STM32_MEDIUM_DENSITY
-#   ifndef STM32_NR_INTERRUPTS
-#   define STM32_NR_INTERRUPTS          43
-#   endif
+#if STM32_F1_LINE == STM32_F1_LINE_PERFORMANCE
+#    ifndef STM32_PCLK1
+#    define STM32_PCLK1                     36000000U
+#    endif
+#    ifndef STM32_PCLK2
+#    define STM32_PCLK2                     72000000U
+#    endif
+#    ifndef STM32_DELAY_US_MULT
+#    define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
+#    endif
+#elif STM32_F1_LINE == STM32_F1_LINE_VALUE        /* TODO */
+#elif STM32_F1_LINE == STM32_F1_LINE_ACCESS       /* TODO */
+#elif STM32_F1_LINE == STM32_F1_LINE_CONNECTIVITY /* TODO */
+#endif
 
-#   ifndef STM32_HAVE_FSMC
-#   define STM32_HAVE_FSMC              0
-#   endif
-
-#elif defined(STM32_HIGH_DENSITY)
-#   ifndef STM32_NR_INTERRUPTS
-#   define STM32_NR_INTERRUPTS          60
-#   endif
-
-#   ifndef STM32_HAVE_FSMC
-#   define STM32_HAVE_FSMC              1
-#   endif
-
-#else
-#error "Unsupported STM32F1 density, or no density specified. Add something " \
-       "like -DSTM32_MEDIUM_DENSITY to your compiler arguments."
+/* Make sure we have the F1-specific defines we need. */
+#if !defined(STM32_F1_LINE)
+#error "Bad STM32F1 configuration. Check STM32F1 <series/stm32.h> header."
 #endif
 
 #ifdef __cplusplus

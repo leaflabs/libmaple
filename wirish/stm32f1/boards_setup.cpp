@@ -87,7 +87,9 @@ namespace wirish {
 
         void board_setup_usb(void) {
 #if 0
+#    if STM32_HAVE_USB
             usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+#    endif
 #endif
         }
 

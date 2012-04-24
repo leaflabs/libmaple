@@ -56,7 +56,7 @@ extern "C" {
 #   define STM32_SRAM_END               ((void*)0x20010000)
 
 #elif defined(MCU_STM32F103CB)
-    /* This STM32_NR_GPIO_PORTS is not stricly true, but only pins 0
+    /* This STM32_NR_GPIO_PORTS is not strictly true, but only pins 0
      * and exist, and they're used for OSC (e.g. on e.g. LeafLabs
      * Maple Mini), so we'll live with this for now. */
 #   define STM32_NR_GPIO_PORTS          3

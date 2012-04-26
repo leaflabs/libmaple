@@ -85,6 +85,12 @@ extern "C" {
 #   define STM32_SRAM_END               ((void*)0x20010000)
 #   define STM32_HIGH_DENSITY
 
+#elif defined(MCU_STM32F100RB)
+#   define STM32_F1_LINE                STM32_F1_LINE_VALUE
+#   define STM32_NR_GPIO_PORTS          4
+#   define STM32_SRAM_END               ((void*)0x20002000)
+#   define STM32_MEDIUM_DENSITY
+
 #else
 #error "Unrecognized STM32F1 MCU, or no MCU specified. Add something like " \
        "-DMCU_STM32F103RB to your compiler arguments."
@@ -143,6 +149,15 @@ extern "C" {
 #    define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
 #    endif
 #elif STM32_F1_LINE == STM32_F1_LINE_VALUE        /* TODO */
+#    ifndef STM32_PCLK1
+#    define STM32_PCLK1                     12000000U
+#    endif
+#    ifndef STM32_PCLK2
+#    define STM32_PCLK2                     24000000U
+#    endif
+#    ifndef STM32_DELAY_US_MULT
+#    define STM32_DELAY_US_MULT             8 /* FIXME: value is incorrect. */
+#    endif
 #elif STM32_F1_LINE == STM32_F1_LINE_ACCESS       /* TODO */
 #elif STM32_F1_LINE == STM32_F1_LINE_CONNECTIVITY /* TODO */
 #endif

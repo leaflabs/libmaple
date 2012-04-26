@@ -13,6 +13,7 @@ sSRCS_$(d) += vector_table_performance.S
 
 cSRCS_$(d) := adc.c
 cSRCS_$(d) += bkp.c
+cSRCS_$(d) += dma.c
 cSRCS_$(d) += fsmc.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += rcc.c

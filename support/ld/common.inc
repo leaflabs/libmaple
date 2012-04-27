@@ -6,35 +6,37 @@
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
 ENTRY(_start)
-SEARCH_DIR(.)
 
 /*
  * Link against libgcc, libc, and libm
  */
 GROUP(libgcc.a libc.a libm.a)
 
-/* These force the linker to search for particular symbols from
- * the start of the link process and thus ensure the user's
- * overrides are picked up
+/*
+ * These force the linker to search for vector table symbols.
+ *
+ * These symbols vary by STM32 family (and also within families).
+ * It's up to the build system to configure the link's search path
+ * properly for the target MCU.
  */
-INCLUDE names.inc
+INCLUDE vector_symbols.inc
 
-/* STM32 vector table. See stm32_vector_table.S  */
-EXTERN(__cs3_stm32_vector_table)
+/* STM32 vector table. */
+EXTERN(__stm32_vector_table)
 
-/* libcs3 C start function. See cs3.h */
-EXTERN(__cs3_start_c)
+/* C runtime initialization function. */
+EXTERN(start_c)
 
 /* main entry point */
 EXTERN(main)
 
 /* Initial stack pointer value. */
-EXTERN(__cs3_stack)
-PROVIDE(__cs3_stack = __cs3_region_start_ram + LENGTH(ram));
+EXTERN(__msp_init)
+PROVIDE(__msp_init = ORIGIN(ram) + LENGTH(ram));
 
-/* Reset vector and chip reset entry point. See start.S */
+/* Reset vector and chip reset entry point */
 EXTERN(_start)
-PROVIDE(__cs3_reset = _start);
+PROVIDE(__exc_reset = _start);
 
 /* Heap boundaries, for libmaple */
 EXTERN(_lm_heap_start);
@@ -45,7 +47,7 @@ SECTIONS
     /* TODO pull out rodata and stick into separate sections  */
     .text :
       {
-        __text_start = .;
+        _text = .;
         /*
          * STM32 vector table.  Leave this here.  Yes, really.
          */
@@ -97,26 +99,16 @@ SECTIONS
         KEEP (*(EXCLUDE_FILE (*crtend.o) .dtors))
         KEEP (*(SORT(.dtors.*)))
         KEEP (*crtend.o(.dtors))
-
-        /*
-         * struct __cs3_region used during __cs3_start_c
-         */
-        . = ALIGN(4);
-        __cs3_regions = .;
-        LONG (0)                          /* flags */
-        LONG (__cs3_region_init_ram)      /* initial contents */
-        LONG (__cs3_region_start_ram)     /* start address */
-        LONG (__cs3_region_init_size_ram) /* size of initial data */
-        LONG (__cs3_region_zero_size_ram) /* additional size to be zeroed */
       } > REGION_TEXT
 
     /*
-     * Read-only data
+     * End of text
      */
-    .rodata :
+    .text.align :
       {
-        *(.rodata .rodata.* .gnu.linkonce.r.*)
-      } > REGION_RODATA
+        . = ALIGN(8);
+        _etext = .;
+      } > REGION_TEXT
 
     /*
      * .ARM.exidx exception unwinding; mandated by ARM's C++ ABI
@@ -129,32 +121,32 @@ SECTIONS
     __exidx_end = .;
 
     /*
-     * End of text
-     */
-    .text.align :
-      {
-        . = ALIGN(8);
-        _etext = .;
-      } > REGION_TEXT
-
-    /*
-     * .USER_FLASH: We allow users to allocate into Flash here
-     */
-    .USER_FLASH :
-      {
-        *(.USER_FLASH)
-      } > REGION_RODATA
-
-    /*
      * .data
      */
     .data :
       {
-        __cs3_region_start_ram = DEFINED(_FLASH_BUILD) ? . : __text_start;
+        . = ALIGN(8);
+        _data = .;
 
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
 
+        . = ALIGN(8);
+        _edata = .;
+      } > REGION_DATA AT> REGION_RODATA
+
+    /*
+     * Read-only data
+     */
+    .rodata :
+      {
+        *(.rodata .rodata.* .gnu.linkonce.r.*)
+        /* .USER_FLASH: We allow users to allocate into Flash here */
+        *(.USER_FLASH)
+        /* ROM image configuration; for C startup */
+        . = ALIGN(4);
+        _lm_rom_img_cfgp = .;
+        LONG(LOADADDR(.data));
         /*
          * Heap: Linker scripts may choose a custom heap by overriding
          * _lm_heap_start and _lm_heap_end. Otherwise, the heap is in
@@ -165,34 +157,22 @@ SECTIONS
          * to go about this. [mbolivar]
          */
         _lm_heap_start = DEFINED(_lm_heap_start) ? _lm_heap_start : _end;
-        _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __cs3_stack;
-        . = ALIGN (8);
-        _edata = .;
-      } > REGION_DATA AT> REGION_TEXT
+        _lm_heap_end   = DEFINED(_lm_heap_end) ? _lm_heap_end : __msp_init;
+      } > REGION_RODATA
 
     /*
      * .bss
      */
     .bss :
       {
+        . = ALIGN(8);
+        _bss = .;
         *(.bss .bss.* .gnu.linkonce.b.*)
         *(COMMON)
         . = ALIGN (8);
-        _end = .;
-      } > REGION_BSS AT> REGION_TEXT
-
-    /*
-     * Constants needed for the pieces of CS3 we use during
-     * board startup; see libcs3_stm32_src/.
-     */
-    __cs3_region_init_ram = (DEFINED(_FLASH_BUILD) ?
-                             LOADADDR(.data) :
-                             LOADADDR(.text));
-    __cs3_region_init_size_ram = (DEFINED(_FLASH_BUILD) ?
-                                  _edata - ADDR(.data) :
-                                  _edata - ADDR(.text));
-    __cs3_region_zero_size_ram = _end - _edata;
-    __cs3_region_num = 1;
+        _ebss = .;
+        _end = _ebss;
+      } > REGION_BSS
 
     /*
      * Debugging sections

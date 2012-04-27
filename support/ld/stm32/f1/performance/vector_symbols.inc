@@ -1,5 +1,5 @@
-EXTERN(__cs3_stack)
-EXTERN(__cs3_reset)
+EXTERN(__msp_init)
+EXTERN(__exc_reset)
 EXTERN(__exc_nmi)
 EXTERN(__exc_hardfault)
 EXTERN(__exc_memmanage)

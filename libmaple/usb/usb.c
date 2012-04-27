@@ -32,9 +32,6 @@
 #include "usb.h"
 
 #include "libmaple.h"
-#include "gpio.h"
-#include "delay.h"
-#include "nvic.h"
 #include "rcc.h"
 
 #include "usb_reg_map.h"
@@ -56,6 +53,17 @@ uint16 SaveRState;              /* caches RX status for later use */
  * Other state
  */
 
+typedef enum {
+    RESUME_EXTERNAL,
+    RESUME_INTERNAL,
+    RESUME_LATER,
+    RESUME_WAIT,
+    RESUME_START,
+    RESUME_ON,
+    RESUME_OFF,
+    RESUME_ESOF
+} RESUME_STATE;
+
 struct {
   volatile RESUME_STATE eState;
   volatile uint8 bESOFcnt;
@@ -64,6 +72,7 @@ struct {
 static usblib_dev usblib = {
     .irq_mask = USB_ISR_MSK,
     .state = USB_UNCONNECTED,
+    .clk_id = RCC_USB,
 };
 usblib_dev *USBLIB = &usblib;
 
@@ -71,11 +80,13 @@ usblib_dev *USBLIB = &usblib;
  * Routines
  */
 
-void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void)) {
-    rcc_clk_enable(RCC_USB);
+void usb_init_usblib(usblib_dev *dev,
+                     void (**ep_int_in)(void),
+                     void (**ep_int_out)(void)) {
+    rcc_clk_enable(dev->clk_id);
 
-    USBLIB->ep_int_in = ep_int_in;
-    USBLIB->ep_int_out = ep_int_out;
+    dev->ep_int_in = ep_int_in;
+    dev->ep_int_out = ep_int_out;
 
     /* usb_lib/ declares both and then assumes that pFoo points to Foo
      * (even though the names don't always match), which is stupid for
@@ -89,11 +100,11 @@ void usb_init_usblib(void (**ep_int_in)(void), void (**ep_int_out)(void)) {
     pProperty->Init();
 }
 
-void usbSuspend(void) {
+static void usb_suspend(void) {
   uint16 cntr;
 
   /* TODO decide if read/modify/write is really what we want
-   * (e.g. usbResumeInit() reconfigures CNTR). */
+   * (e.g. usb_resume_init() reconfigures CNTR). */
   cntr = USB_BASE->CNTR;
   cntr |= USB_CNTR_FSUSP;
   USB_BASE->CNTR = cntr;
@@ -103,7 +114,7 @@ void usbSuspend(void) {
   USBLIB->state = USB_SUSPENDED;
 }
 
-void usbResumeInit(void) {
+static void usb_resume_init(void) {
   uint16 cntr;
 
   cntr = USB_BASE->CNTR;
@@ -114,7 +125,7 @@ void usbResumeInit(void) {
   USB_BASE->CNTR = USB_ISR_MSK;
 }
 
-void usbResume(RESUME_STATE eResumeSetVal) {
+static void usb_resume(RESUME_STATE eResumeSetVal) {
   uint16 cntr;
 
   if (eResumeSetVal != RESUME_ESOF)
@@ -123,11 +134,11 @@ void usbResume(RESUME_STATE eResumeSetVal) {
   switch (ResumeS.eState)
     {
     case RESUME_EXTERNAL:
-      usbResumeInit();
+      usb_resume_init();
       ResumeS.eState = RESUME_OFF;
       break;
     case RESUME_INTERNAL:
-      usbResumeInit();
+      usb_resume_init();
       ResumeS.eState = RESUME_START;
       break;
     case RESUME_LATER:
@@ -191,7 +202,7 @@ void __irq_usb_lp_can_rx0(void) {
 #if (USB_ISR_MSK & USB_ISTR_WKUP)
   if (istr & USB_ISTR_WKUP & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_WKUP;
-    usbResume(RESUME_EXTERNAL);
+    usb_resume(RESUME_EXTERNAL);
   }
 #endif
 
@@ -199,10 +210,10 @@ void __irq_usb_lp_can_rx0(void) {
   if (istr & USB_ISTR_SUSP & USBLIB->irq_mask) {
     /* check if SUSPEND is possible */
     if (SUSPEND_ENABLED) {
-        usbSuspend();
+        usb_suspend();
     } else {
         /* if not possible then resume after xx ms */
-        usbResume(RESUME_LATER);
+        usb_resume(RESUME_LATER);
     }
     /* clear of the ISTR bit must be done after setting of CNTR_FSUSP */
     USB_BASE->ISTR = ~USB_ISTR_SUSP;
@@ -219,7 +230,7 @@ void __irq_usb_lp_can_rx0(void) {
   if (istr & USB_ISTR_ESOF & USBLIB->irq_mask) {
     USB_BASE->ISTR = ~USB_ISTR_ESOF;
     /* resume handling timing is made with ESOFs */
-    usbResume(RESUME_ESOF); /* request without change of the machine state */
+    usb_resume(RESUME_ESOF); /* request without change of the machine state */
   }
 #endif
 
@@ -232,20 +243,6 @@ void __irq_usb_lp_can_rx0(void) {
     dispatch_ctr_lp();
   }
 #endif
-}
-
-#define RESET_DELAY                     100000
-void usbWaitReset(void) {
-  delay_us(RESET_DELAY);
-  nvic_sys_reset();
-}
-
-uint8 usbIsConfigured() {
-  return USBLIB->state == USB_CONFIGURED;
-}
-
-uint8 usbIsConnected() {
-  return USBLIB->state != USB_UNCONNECTED;
 }
 
 /*

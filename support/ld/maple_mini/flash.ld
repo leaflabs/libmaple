@@ -11,11 +11,6 @@ MEMORY
   rom (rx)  : ORIGIN = 0x08005000, LENGTH = 108K
 }
 
-/*
- * Use medium density device vector table
- */
-GROUP(libcs3_stm32_med_density.a)
-
 REGION_ALIAS("REGION_TEXT", rom);
 REGION_ALIAS("REGION_DATA", ram);
 REGION_ALIAS("REGION_BSS", ram);

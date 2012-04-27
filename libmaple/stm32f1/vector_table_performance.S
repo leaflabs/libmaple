@@ -2,13 +2,13 @@
 
 	.section	".stm32.interrupt_vector"
 
-	.globl	__cs3_stm32_vector_table
-	.type	__cs3_stm32_vector_table, %object
+	.globl	__stm32_vector_table
+	.type	__stm32_vector_table, %object
 
-__cs3_stm32_vector_table:
+__stm32_vector_table:
 /* CM3 core interrupts */
-	.long	__cs3_stack
-	.long	__cs3_reset
+	.long	__msp_init
+	.long	__exc_reset
 	.long	__exc_nmi
 	.long	__exc_hardfault
 	.long	__exc_memmanage
@@ -87,4 +87,4 @@ __cs3_stm32_vector_table:
 	.long	__irq_dma2_channel4_5
 #endif /* STM32_HIGH_DENSITY */
 
-	.size	__cs3_stm32_vector_table, . - __cs3_stm32_vector_table
+	.size	__stm32_vector_table, . - __stm32_vector_table

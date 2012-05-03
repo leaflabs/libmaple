@@ -51,7 +51,7 @@ static adc_dev adc2 = {
 /** ADC2 device. */
 const adc_dev *ADC2 = &adc2;
 
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 adc_dev adc3 = {
     .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3
@@ -92,7 +92,7 @@ void adc_set_prescaler(adc_prescaler pre) {
 void adc_foreach(void (*fn)(const adc_dev*)) {
     fn(ADC1);
     fn(ADC2);
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
     fn(ADC3);
 #endif
 }

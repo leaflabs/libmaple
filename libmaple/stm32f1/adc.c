@@ -27,7 +27,9 @@
 
 /**
  * @file libmaple/stm32f1/include/series/adc.c
- * @brief STM32F1 ADC header.
+ * @author Marti Bolivar <mbolivar@leaflabs.com>,
+ *         Perry Hung <perry@leaflabs.com>
+ * @brief STM32F1-specific ADC support.
  */
 
 #include <libmaple/adc.h>
@@ -39,14 +41,14 @@
 
 static adc_dev adc1 = {
     .regs   = ADC1_BASE,
-    .clk_id = RCC_ADC1
+    .clk_id = RCC_ADC1,
 };
 /** ADC1 device. */
 const adc_dev *ADC1 = &adc1;
 
 static adc_dev adc2 = {
     .regs   = ADC2_BASE,
-    .clk_id = RCC_ADC2
+    .clk_id = RCC_ADC2,
 };
 /** ADC2 device. */
 const adc_dev *ADC2 = &adc2;
@@ -54,7 +56,7 @@ const adc_dev *ADC2 = &adc2;
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 adc_dev adc3 = {
     .regs   = ADC3_BASE,
-    .clk_id = RCC_ADC3
+    .clk_id = RCC_ADC3,
 };
 /** ADC3 device. */
 const adc_dev *ADC3 = &adc3;

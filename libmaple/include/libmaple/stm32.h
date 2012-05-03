@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 LeafLabs, LLC.
+ * Copyright (c) 2010, 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,8 +25,14 @@
  *****************************************************************************/
 
 /**
- * @file stm32.h
- * @brief STM32 chip-specific definitions
+ * @file libmaple/include/libmaple/stm32.h
+ * @brief STM32 chip header
+ *
+ * This header supplies various chip-specific values for the current
+ * build target. It's useful both to abstract away hardware details
+ * (e.g. through use of STM32_NR_INTERRUPTS) and to decide what to do
+ * when you want something nonportable (e.g. by checking
+ * STM32_MCU_SERIES).
  */
 
 #ifndef _LIBMAPLE_STM32_H_

@@ -241,23 +241,23 @@ typedef struct adc_dev {
  * Routines
  */
 
-/**
- * @brief Set the ADC prescaler.
- *
- * This determines the ADC clock for all devices.
- */
-void adc_set_prescaler(adc_prescaler pre);
-
 void adc_init(const adc_dev *dev);
 void adc_set_extsel(const adc_dev *dev, adc_extsel_event event);
 void adc_set_sample_rate(const adc_dev *dev, adc_smp_rate smp_rate);
 uint16 adc_read(const adc_dev *dev, uint8 channel);
 
 /**
+ * @brief Set the ADC prescaler.
+ *
+ * This determines the ADC clock for all devices.
+ */
+extern void adc_set_prescaler(adc_prescaler pre);
+
+/**
  * @brief Call a function on all ADC devices.
  * @param fn Function to call on each ADC device.
  */
-void adc_foreach(void (*fn)(const adc_dev*));
+extern void adc_foreach(void (*fn)(const adc_dev*));
 
 /**
  * @brief Configure a GPIO pin for ADC conversion.
@@ -265,7 +265,7 @@ void adc_foreach(void (*fn)(const adc_dev*));
  * @param bit Bit on gdev to configure for ADC conversion.
  */
 struct gpio_dev;
-void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
+extern void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
 
 /**
  * @brief Enable an ADC and configure it for single conversion mode.
@@ -277,7 +277,7 @@ void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
  * @param dev Device to enable.
  * @see adc_read()
  */
-void adc_enable_single_swstart(const adc_dev* dev);
+extern void adc_enable_single_swstart(const adc_dev* dev);
 
 /**
  * @brief Set the regular channel sequence length.

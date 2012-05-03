@@ -35,6 +35,8 @@
 #ifndef _LIBMAPLE_STM32F1_ADC_H_
 #define _LIBMAPLE_STM32F1_ADC_H_
 
+#include <libmaple/bitband.h>
+#include <libmaple/libmaple_types.h>
 #include <libmaple/rcc.h>       /* For the prescalers */
 
 /*

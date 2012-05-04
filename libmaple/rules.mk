@@ -26,7 +26,7 @@ cSRCS_$(d) += timer.c
 cSRCS_$(d) += usart.c
 cSRCS_$(d) += usart_private.c
 cSRCS_$(d) += util.c
-# These still need to be ported to F2:
+# These still need to be brought back for F1:
 # cSRCS_$(d) += dac.c
 # cSRCS_$(d) += exti.c
 # cSRCS_$(d) += i2c.c

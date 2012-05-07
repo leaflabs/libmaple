@@ -60,7 +60,7 @@ typedef struct bkp_reg_map {
     __io uint32 RTCCR;          ///< RTC control register
     __io uint32 CR;             ///< Control register
     __io uint32 CSR;            ///< Control and status register
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
     const uint32 RESERVED2;     ///< Reserved
     const uint32 RESERVED3;     ///< Reserved
     __io uint32 DR11;           ///< Data register 11

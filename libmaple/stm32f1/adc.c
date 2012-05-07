@@ -54,7 +54,7 @@ static adc_dev adc2 = {
 const adc_dev *ADC2 = &adc2;
 
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
-adc_dev adc3 = {
+static adc_dev adc3 = {
     .regs   = ADC3_BASE,
     .clk_id = RCC_ADC3,
 };

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file ring_buffer.h
+ * @file libmaple/include/libmaple/ring_buffer.h
  * @brief Simple circular buffer
  *
  * This implementation is not thread-safe.  In particular, none of

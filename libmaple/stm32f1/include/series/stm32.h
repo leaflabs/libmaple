@@ -131,9 +131,6 @@ extern "C" {
 /*
  * Clock configuration.
  *
- * We've currently got values for F103 MCUs operating at the fastest
- * possible speeds.
- *
  * You can patch these for your line, MCU, clock configuration,
  * etc. here or by setting cflags when compiling libmaple.
  */

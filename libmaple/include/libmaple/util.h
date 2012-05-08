@@ -42,7 +42,7 @@ extern "C"{
  * Bit manipulation
  */
 
-/** 1UL << (shift) */
+/** 1UL shifted left by 'shift' */
 #define BIT(shift)                     (1UL << (shift))
 /** 'Mask' shifted left by 'shift' */
 #define BIT_MASK_SHIFT(mask, shift)    ((mask) << (shift))

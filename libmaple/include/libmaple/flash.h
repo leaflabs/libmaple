@@ -77,6 +77,9 @@ static inline void flash_enable_features(uint32 feature_flags) {
     FLASH_BASE->ACR |= feature_flags;
 }
 
+/**
+ * @brief Deprecated. Use flash_enable_features(FLASH_PREFETCH) instead.
+ */
 static inline void flash_enable_prefetch(void) {
     flash_enable_features(FLASH_PREFETCH);
 }

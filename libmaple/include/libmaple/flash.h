@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/flash.h
+ * @file libmaple/include/libmaple/flash.h
  * @brief Flash support.
  */
 

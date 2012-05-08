@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file bkp.h
+ * @file libmaple/include/libmaple/bkp.h
  * @brief Backup register support (STM32F1 only).
  */
 

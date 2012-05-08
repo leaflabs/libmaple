@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file stm32f2/pwr.h
+ * @file libmaple/stm32f2/include/series/pwr.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief STM32F2 Power control (PWR) support.
  */

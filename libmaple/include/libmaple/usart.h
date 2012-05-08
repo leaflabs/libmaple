@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file usart.h
+ * @file libmaple/include/libmaple/usart.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
  * @brief USART definitions and prototypes

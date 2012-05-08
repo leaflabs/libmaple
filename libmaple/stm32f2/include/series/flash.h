@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f2/flash.h
+ * @file libmaple/stm32f2/include/series/flash.h
  * @brief STM32F2 Flash header.
  *
  * Provides register map, base pointer, and register bit definitions

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file pwr.c
+ * @file libmaple/pwr.c
  * @brief Power control (PWR) support.
  */
 

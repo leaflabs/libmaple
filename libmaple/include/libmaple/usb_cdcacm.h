@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file usb_cdcacm.h
+ * @file libmaple/include/libmaple/usb_cdcacm.h
  * @brief USB CDC ACM (virtual serial terminal) support
  */
 

@@ -25,9 +25,8 @@
  *****************************************************************************/
 
 /**
- *  @file pwm.h
- *
- *  @brief Arduino-compatible PWM interface.
+ * @file wirish/include/wirish/pwm.h
+ * @brief Wiring-style PWM interface.
  */
 
 #ifndef _WIRISH_PWM_H_

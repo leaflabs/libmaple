@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file i2c.c
+ * @file libmaple/i2c.c
  * @brief Inter-Integrated Circuit (I2C) support.
  *
  * Currently, only master mode is supported.

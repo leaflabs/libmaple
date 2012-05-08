@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file stm32f1/include/series/adc.h
+ * @file libmaple/stm32f1/include/series/adc.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
  * @brief STM32F1 ADC header.

@@ -26,10 +26,10 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f1/include/series/adc.c
+ * @file libmaple/stm32f1/adc.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
- * @brief STM32F1-specific ADC support.
+ * @brief STM32F1 ADC support.
  */
 
 #include <libmaple/adc.h>

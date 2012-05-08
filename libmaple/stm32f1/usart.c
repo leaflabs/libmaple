@@ -29,7 +29,7 @@
  * @file libmaple/stm32f1/usart.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
- * @brief STM32F1 USART support.
+ * @brief STM32F1 USART.
  */
 
 #include <libmaple/usart.h>

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/rcc.h
+ * @file libmaple/include/libmaple/rcc.h
  * @brief Reset and Clock Control (RCC) interface.
  */
 

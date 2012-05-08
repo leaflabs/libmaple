@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file nvic.h
+ * @file libmaple/include/libmaple/nvic.h
  * @brief Nested vectored interrupt controller support.
  *
  * Basic usage:

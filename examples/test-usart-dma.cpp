@@ -1,5 +1,5 @@
 /**
- * @file test-usart-dma.cpp
+ * @file examples/test-usart-dma.cpp
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  *
  * Simple test of DMA used with a USART receiver.

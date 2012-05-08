@@ -25,10 +25,12 @@
  *****************************************************************************/
 
 /**
- * @file usb_cdcacm.c
+ * @file libmaple/usb/usb_cdcacm.c
+ * @brief USB CDC ACM (a.k.a. virtual serial terminal, VCOM).
  *
- * @brief USB CDC ACM (a.k.a. virtual serial terminal, VCOM) state and
- *        routines.
+ * FIXME: this works on the STM32F1 USB peripherals, and probably no
+ * place else. Nonportable bits really need to be factored out, and
+ * the result made cleaner.
  */
 
 #include <libmaple/usb_cdcacm.h>

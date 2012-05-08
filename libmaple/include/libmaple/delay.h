@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file delay.h
+ * @file libmaple/include/libmaple/delay.h
  * @brief Delay implementation
  */
 

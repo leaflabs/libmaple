@@ -25,9 +25,8 @@
  *****************************************************************************/
 
 /**
- *  @file ext_interrupts.c
- *
- *  @brief Wiring-like interface for external interrupts
+ * @file wirish/ext_interrupts.c
+ * @brief Wiring-like interface for external interrupts
  */
 
 #include <wirish/ext_interrupts.h>

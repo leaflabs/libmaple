@@ -26,7 +26,7 @@
 
 /**
  * @file libmaple/stm32f1/gpio.c
- * @brief GPIO support for STM32F1 line.
+ * @brief STM32F1 GPIO support.
  */
 
 #include <libmaple/gpio.h>

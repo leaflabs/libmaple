@@ -25,9 +25,9 @@
  *****************************************************************************/
 
 /**
- * @file   stm32f2/include/series/timer.h
+ * @file   libmaple/stm32f2/include/series/timer.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  STM32F2 timer sub-header.
+ * @brief  STM32F2 timer support.
  */
 
 #ifndef _LIBMAPLE_STM32F2_TIMER_H_

@@ -25,8 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file systick.h
- *
+ * @file libmaple/include/libmaple/systick.h
  * @brief System timer definitions
  */
 

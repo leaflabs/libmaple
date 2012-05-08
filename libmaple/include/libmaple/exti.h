@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file exti.h
+ * @file libmaple/include/libmaple/exti.h
  * @brief External interrupt control prototypes and defines
  */
 

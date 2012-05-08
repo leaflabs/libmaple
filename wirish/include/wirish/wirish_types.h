@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file   wirish_types.h
+ * @file   wirish/include/wirish/wirish_types.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief  Wirish library type definitions.
  */

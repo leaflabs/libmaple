@@ -27,7 +27,7 @@
 /**
  * @file   libmaple/stm32f2/timer.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  STM32F2 timer support.
+ * @brief  STM32F2 timers.
  */
 
 #include <libmaple/timer.h>

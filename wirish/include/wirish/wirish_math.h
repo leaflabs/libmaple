@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 /**
- * @file wirish_math.h
- * @brief Includes <math.h>; provides Arduino-compatible math routines.
+ * @file wirish/include/wirish/wirish_math.h
+ * @brief Includes <math.h>; provides Wiring-compatible math routines.
  */
 
 #ifndef _WIRISH_WIRISH_MATH_H_

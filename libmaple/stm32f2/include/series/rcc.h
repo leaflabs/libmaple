@@ -26,7 +26,7 @@
 
 /**
  * @file libmaple/stm32f2/include/series/rcc.h
- * @brief STM32F2 reset and clock control (RCC) header.
+ * @brief STM32F2 reset and clock control (RCC) support.
  */
 
 /*

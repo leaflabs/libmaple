@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file wirish_time.h
+ * @file wirish/include/wirish/wirish_time.h
  * @brief Timing and delay functions.
  */
 

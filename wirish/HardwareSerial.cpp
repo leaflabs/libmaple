@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file HardwareSerial.cpp
+ * @file wirish/HardwareSerial.cpp
  * @brief Wirish serial port implementation.
  */
 

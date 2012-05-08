@@ -25,7 +25,7 @@
 *****************************************************************************/
 
 /**
- * @file gpio.h
+ * @file libmaple/include/libmaple/gpio.h
  * @brief General Purpose I/O (GPIO) interace.
  */
 

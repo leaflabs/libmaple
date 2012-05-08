@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file HardwareSPI.h
+ * @file wirish/include/wirish/HardwareSPI.h
  * @brief High-level SPI interface
  *
  * This is a "bare essentials" polling driver for now.

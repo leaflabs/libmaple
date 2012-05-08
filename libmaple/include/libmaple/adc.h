@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/adc.h
+ * @file libmaple/include/libmaple/adc.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
  * @brief Analog-to-Digital Conversion (ADC) header.

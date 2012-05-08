@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file gpio.c
+ * @file libmaple/gpio.c
  * @brief Generic STM32 GPIO support.
  */
 

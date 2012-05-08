@@ -25,9 +25,8 @@
  *****************************************************************************/
 
 /**
- *  @file io.h
- *
- *  @brief Arduino-compatible digital pin I/O interface.
+ * @file wirish/include/wirish/io.h
+ * @brief Wiring-style pin I/O interface.
  */
 
 #ifndef _WIRISH_IO_H_

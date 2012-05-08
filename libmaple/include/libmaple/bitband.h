@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file bitband.h
+ * @file libmaple/include/libmaple/bitband.h
  *
  * @brief Bit-banding utility functions
  */

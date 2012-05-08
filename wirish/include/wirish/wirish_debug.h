@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file wirish_debug.h
+ * @file wirish/include/wirish/wirish_debug.h
  * @brief High level debug port configuration
  */
 

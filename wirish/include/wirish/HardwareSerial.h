@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file HardwareSerial.h
+ * @file wirish/include/wirish/HardwareSerial.h
  * @brief Wirish serial port interface.
  */
 

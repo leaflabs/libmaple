@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file iwdg.c
+ * @file libmaple/iwdg.c
  * @brief Independent watchdog (IWDG) support
  */
 

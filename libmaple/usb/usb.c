@@ -25,8 +25,10 @@
  *****************************************************************************/
 
 /**
- * @file usb.c
+ * @file libmaple/usb/usb.c
  * @brief USB support.
+ *
+ * This is a mess. What we need almost amounts to a ground-up rewrite.
  */
 
 #include <libmaple/usb.h>

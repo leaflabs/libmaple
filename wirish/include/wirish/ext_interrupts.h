@@ -25,9 +25,8 @@
  *****************************************************************************/
 
 /**
- *  @file ext_interrupts.h
- *
- *  @brief Wiring-like external interrupt prototypes and types.
+ * @file wirish/include/wirish/ext_interrupts.h
+ * @brief Wiring-like external interrupt prototypes and types.
  */
 
 #ifndef _WIRISH_EXT_INTERRUPTS_H_

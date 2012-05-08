@@ -26,9 +26,11 @@
 *****************************************************************************/
 
 /**
- *  @file libmaple/stm32f1/gpio.h
- *  @brief General purpose I/O (GPIO) and Alternate Function I/O
- *         (AFIO) prototypes, defines, and inlined access functions.
+ * @file libmaple/stm32f1/include/series/gpio.h
+ * @brief STM32F1 GPIO support.
+ *
+ * General purpose I/O (GPIO) and Alternate Function I/O (AFIO)
+ * prototypes, defines, and support functions.
  */
 
 #ifndef _LIBMAPLE_STM32F1_GPIO_H_

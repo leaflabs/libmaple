@@ -25,10 +25,10 @@
  *****************************************************************************/
 
 /**
- * @file boards.h
+ * @file wirish/include/wirish/boards.h
  * @author Bryan Newbold <bnewbold@leaflabs.com>,
  *         Marti Bolivar <mbolivar@leaflabs.com>
- * @brief Board-specific pin information.
+ * @brief init() and board-specific pin information.
  */
 
 #ifndef _WIRISH_BOARDS_H_

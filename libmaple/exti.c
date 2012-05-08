@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file exti.c
+ * @file libmaple/exti.c
  * @brief External interrupt control routines
  */
 

@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file stm32f1/fsmc.c
+ * @file libmaple/stm32f1/fsmc.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Bryan Newbold <bnewbold@robocracy.org>
  * @brief STM32F1 FSMC support.

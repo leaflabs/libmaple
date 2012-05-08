@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file i2c.h
+ * @file libmaple/include/libmaple/i2c.h
  * @brief Inter-Integrated Circuit (I2C) peripheral support
  */
 

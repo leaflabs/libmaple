@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 /**
- * @file systick.c
- * @brief System timer interrupt handler and initialization routines
+ * @file libmaple/systick.c
+ * @brief System timer (SysTick).
  */
 
 #include <libmaple/systick.h>

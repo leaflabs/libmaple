@@ -27,7 +27,7 @@
 /**
  * @file libmaple/stm32f2/usart.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief STM32F2 USART support.
+ * @brief STM32F2 USART.
  */
 
 #include <libmaple/usart.h>

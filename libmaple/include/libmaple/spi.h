@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/spi.h
+ * @file libmaple/include/libmaple/spi.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief Serial Peripheral Interface (SPI) and Integrated
  *        Interchip Sound (I2S) peripheral support.

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file boards.cpp
+ * @file wirish/boards.cpp
  * @brief Generic board routines.
  *
  * This file is mostly interesting for the init() function, which

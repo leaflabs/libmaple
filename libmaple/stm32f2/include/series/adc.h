@@ -25,9 +25,9 @@
  *****************************************************************************/
 
 /**
- * @file stm32f2/include/series/adc.h
+ * @file libmaple/stm32f2/include/series/adc.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
- * @brief STM32F2 ADC header.
+ * @brief STM32F2 ADC support.
  */
 
 #ifndef _LIBMAPLE_STM32F2_ADC_H_

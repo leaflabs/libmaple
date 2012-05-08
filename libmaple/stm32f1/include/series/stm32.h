@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f1/stm32.h
+ * @file libmaple/stm32f1/include/series/stm32.h
  * @brief STM32F1 chip- and series-specific definitions.
  */
 

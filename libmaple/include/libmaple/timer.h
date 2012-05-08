@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file   libmaple/timer.h
+ * @file   libmaple/include/libmaple/timer.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief  Timer interface.
  */

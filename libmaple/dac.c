@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file dac.c
+ * @file libmaple/dac.c
  * @brief Digital to analog converter support.
  */
 

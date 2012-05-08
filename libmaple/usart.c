@@ -25,10 +25,10 @@
  *****************************************************************************/
 
 /**
- * @file usart.c
+ * @file libmaple/usart.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>,
  *         Perry Hung <perry@leaflabs.com>
- * @brief USART control routines
+ * @brief Portable USART routines
  */
 
 #include <libmaple/usart.h>

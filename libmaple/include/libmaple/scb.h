@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file scb.h
+ * @file libmaple/include/libmaple/scb.h
  * @brief System control block header
  */
 

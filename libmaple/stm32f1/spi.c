@@ -28,7 +28,7 @@
 /**
  * @file libmaple/stm32f1/spi.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief STM32F1 SPI/I2S support.
+ * @brief STM32F1 SPI/I2S.
  */
 
 #include <libmaple/spi.h>

@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- *  @file libmaple.h
+ *  @file libmaple/include/libmaple/libmaple.h
  *  @brief General include file for libmaple
  */
 

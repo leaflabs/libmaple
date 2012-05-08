@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- *  @file libmaple_types.h
+ *  @file libmaple/include/libmaple/libmaple_types.h
  *
  *  @brief libmaple's types, and operations on types.
  */

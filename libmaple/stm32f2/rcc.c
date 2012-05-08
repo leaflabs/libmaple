@@ -26,7 +26,7 @@
 
 /**
  * @file libmaple/stm32f2/rcc.c
- * @brief STM32F2 RCC routines.
+ * @brief STM32F2 RCC.
  */
 
 #include <libmaple/rcc.h>

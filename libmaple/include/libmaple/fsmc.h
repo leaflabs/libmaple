@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file fsmc.h
+ * @file libmaple/include/libmaple/fsmc.h
  * @brief Flexible static memory controller support.
  */
 

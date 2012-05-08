@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f2/include/series/adc.c
- * @brief STM32F2 ADC header.
+ * @file libmaple/stm32f2/adc.c
+ * @brief STM32F2 ADC.
  */
 
 #include <libmaple/adc.h>

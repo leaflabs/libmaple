@@ -25,9 +25,9 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f1/usart.h
+ * @file libmaple/stm32f1/include/series/usart.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief STM32F1 USART header.
+ * @brief STM32F1 USART support.
  */
 
 #ifndef _LIBMAPLE_STM32F1_USART_H_

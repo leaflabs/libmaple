@@ -25,8 +25,8 @@
  *****************************************************************************/
 
 /**
- * @file pwr.h
- * @brief Power control (PWR) defines.
+ * @file libmaple/include/libmaple/pwr.h
+ * @brief Power control (PWR).
  */
 
 #ifndef _LIBMAPLE_PWR_H_

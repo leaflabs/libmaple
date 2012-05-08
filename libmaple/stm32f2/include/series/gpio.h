@@ -25,8 +25,8 @@
 *****************************************************************************/
 
 /**
- * @file libmaple/stm32f2/gpio.h
- * @brief STM32F2 General Purpose I/O (GPIO) header.
+ * @file libmaple/stm32f2/include/series/gpio.h
+ * @brief STM32F2 GPIO support.
  */
 
 #ifndef _LIBMAPLE_STM32F2_GPIO_H_

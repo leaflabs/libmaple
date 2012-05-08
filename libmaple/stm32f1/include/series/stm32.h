@@ -47,7 +47,8 @@ extern "C" {
 #define STM32_F1_LINE_PERFORMANCE       0
 #define STM32_F1_LINE_VALUE             1
 #define STM32_F1_LINE_ACCESS            2
-#define STM32_F1_LINE_CONNECTIVITY      3
+#define STM32_F1_LINE_USB_ACCESS        3
+#define STM32_F1_LINE_CONNECTIVITY      4
 
 /*
  * MCU-specific values.
@@ -156,6 +157,7 @@ extern "C" {
 #    define STM32_DELAY_US_MULT             8 /* FIXME: value is incorrect. */
 #    endif
 #elif STM32_F1_LINE == STM32_F1_LINE_ACCESS       /* TODO */
+#elif STM32_F1_LINE == STM32_F1_LINE_USB_ACCESS   /* TODO */
 #elif STM32_F1_LINE == STM32_F1_LINE_CONNECTIVITY /* TODO */
 #endif
 

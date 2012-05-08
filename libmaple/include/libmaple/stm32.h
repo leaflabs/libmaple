@@ -145,6 +145,23 @@ extern "C" {
  */
 #define STM32_SRAM_END
 
+/**
+ * @brief 1 if the target MCU has the FSMC peripheral, and 0 otherwise.
+ *
+ * Note that the feature set of the FSMC peripheral is restricted on
+ * some MCUs.
+ */
+#define STM32_HAVE_FSMC
+
+/**
+ * @brief 1 if the target MCU has a USB peripheral, and 0 otherwise.
+ *
+ * Note that a variety of USB peripherals are available across the
+ * different series, with widely varying feature sets and programming
+ * interfaces. This macro will be 1 if any such peripheral is present.
+ */
+#define STM32_HAVE_USB
+
 #endif  /* __DOXYGEN_PREDEFINED_HACK */
 
 /*

@@ -46,7 +46,7 @@ extern "C"{
  * Register map
  */
 
-/** Flash register map type */
+/** @brief STM32F2 Flash register map type */
 typedef struct flash_reg_map {
     __io uint32 ACR;            /**< Access control register */
     __io uint32 KEYR;           /**< Key register */

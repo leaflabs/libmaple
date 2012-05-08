@@ -44,15 +44,15 @@ extern "C" {
  *
  * You can use these F1 line defines if porting libmaple to support
  * MCUs on other lines. */
-/** STM32F1 performance line. */
+/** STM32F1 performance line (STM32F103 MCUs). */
 #define STM32_F1_LINE_PERFORMANCE       0
-/** STM32F1 value line. */
+/** STM32F1 value line (STM32F100 MCUs). */
 #define STM32_F1_LINE_VALUE             1
-/** STM32F1 access line. */
+/** STM32F1 access line (STM32F101 MCUs). */
 #define STM32_F1_LINE_ACCESS            2
-/** STM32F1 USB access line. */
+/** STM32F1 USB access line (STM32F102 MCUs). */
 #define STM32_F1_LINE_USB_ACCESS        3
-/** STM32F1 connectivity line. */
+/** STM32F1 connectivity line (STM32F105/F107 MCUs). */
 #define STM32_F1_LINE_CONNECTIVITY      4
 
 /*

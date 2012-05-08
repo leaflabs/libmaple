@@ -44,10 +44,15 @@ extern "C" {
  *
  * You can use these F1 line defines if porting libmaple to support
  * MCUs on other lines. */
+/** STM32F1 performance line. */
 #define STM32_F1_LINE_PERFORMANCE       0
+/** STM32F1 value line. */
 #define STM32_F1_LINE_VALUE             1
+/** STM32F1 access line. */
 #define STM32_F1_LINE_ACCESS            2
+/** STM32F1 USB access line. */
 #define STM32_F1_LINE_USB_ACCESS        3
+/** STM32F1 connectivity line. */
 #define STM32_F1_LINE_CONNECTIVITY      4
 
 /*
@@ -165,6 +170,23 @@ extern "C" {
 #if !defined(STM32_F1_LINE)
 #error "Bad STM32F1 configuration. Check STM32F1 <series/stm32.h> header."
 #endif
+
+/*
+ * Doxygen
+ */
+
+#ifdef __DOXYGEN_PREDEFINED_HACK
+
+/**
+ * @brief STM32 line value for the STM32F1 MCU being targeted.
+ *
+ * At time of writing, allowed values are: STM32_F1_LINE_PERFORMANCE,
+ * STM32_F1_LINE_VALUE. This set of values may expand as libmaple adds
+ * support for more STM32F1 lines.
+ */
+#define STM32_F1_LINE
+
+#endif /* __DOXYGEN_PREDEFINED_HACK */
 
 #ifdef __cplusplus
 }

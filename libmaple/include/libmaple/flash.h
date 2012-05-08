@@ -60,10 +60,7 @@ extern "C"{
  *       -- FLASH_ICACHE: instruction cache
  *       -- FLASH_DCACHE: data cache
  *
- *   If the target doesn't provide a feature (e.g. instruction and
- *   data caches on the STM32F1), the flag should be set to some no-op
- *   value. This allows using these flags unconditionally, with the
- *   desired effect taking place on series that support them.
+ *   See that function's Doxygen for more restrictions.
  */
 #include <series/flash.h>
 
@@ -73,6 +70,19 @@ extern "C"{
 
 void flash_set_latency(uint32 wait_states);
 
+/**
+ * @brief Enable Flash memory features
+ *
+ * If the target MCU doesn't provide a feature (e.g. instruction and
+ * data caches on the STM32F1), the flag will be ignored. This allows
+ * using these flags unconditionally, with the desired effect taking
+ * place on targets that support them.
+ *
+ * @param feature_flags Bitwise OR of the following:
+ *                      FLASH_PREFETCH (turns on prefetcher),
+ *                      FLASH_ICACHE (turns on instruction cache),
+ *                      FLASH_DCACHE (turns on data cache).
+ */
 static inline void flash_enable_features(uint32 feature_flags) {
     FLASH_BASE->ACR |= feature_flags;
 }

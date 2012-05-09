@@ -40,7 +40,7 @@
 extern "C"{
 #endif
 
-#include <libmaple/libmaple.h>
+#include <libmaple/libmaple_types.h>
 
 /*
  * Register map
@@ -70,9 +70,9 @@ typedef struct flash_reg_map {
 #define FLASH_ACR_PRFTBE_BIT            4
 #define FLASH_ACR_HLFCYA_BIT            3
 
-#define FLASH_ACR_PRFTBS                BIT(FLASH_ACR_PRFTBS_BIT)
-#define FLASH_ACR_PRFTBE                BIT(FLASH_ACR_PRFTBE_BIT)
-#define FLASH_ACR_HLFCYA                BIT(FLASH_ACR_HLFCYA_BIT)
+#define FLASH_ACR_PRFTBS                (1U << FLASH_ACR_PRFTBS_BIT)
+#define FLASH_ACR_PRFTBE                (1U << FLASH_ACR_PRFTBE_BIT)
+#define FLASH_ACR_HLFCYA                (1U << FLASH_ACR_HLFCYA_BIT)
 #define FLASH_ACR_LATENCY               0x7
 
 /* Status register */
@@ -82,10 +82,10 @@ typedef struct flash_reg_map {
 #define FLASH_SR_PGERR_BIT              2
 #define FLASH_SR_BSY_BIT                0
 
-#define FLASH_SR_EOP                    BIT(FLASH_SR_EOP_BIT)
-#define FLASH_SR_WRPRTERR               BIT(FLASH_SR_WRPRTERR_BIT)
-#define FLASH_SR_PGERR                  BIT(FLASH_SR_PGERR_BIT)
-#define FLASH_SR_BSY                    BIT(FLASH_SR_BSY_BIT)
+#define FLASH_SR_EOP                    (1U << FLASH_SR_EOP_BIT)
+#define FLASH_SR_WRPRTERR               (1U << FLASH_SR_WRPRTERR_BIT)
+#define FLASH_SR_PGERR                  (1U << FLASH_SR_PGERR_BIT)
+#define FLASH_SR_BSY                    (1U << FLASH_SR_BSY_BIT)
 
 /* Control register */
 
@@ -100,16 +100,16 @@ typedef struct flash_reg_map {
 #define FLASH_CR_PER_BIT                1
 #define FLASH_CR_PG_BIT                 0
 
-#define FLASH_CR_EOPIE                  BIT(FLASH_CR_EOPIE_BIT)
-#define FLASH_CR_ERRIE                  BIT(FLASH_CR_ERRIE_BIT)
-#define FLASH_CR_OPTWRE                 BIT(FLASH_CR_OPTWRE_BIT)
-#define FLASH_CR_LOCK                   BIT(FLASH_CR_LOCK_BIT)
-#define FLASH_CR_STRT                   BIT(FLASH_CR_STRT_BIT)
-#define FLASH_CR_OPTER                  BIT(FLASH_CR_OPTER_BIT)
-#define FLASH_CR_OPTPG                  BIT(FLASH_CR_OPTPG_BIT)
-#define FLASH_CR_MER                    BIT(FLASH_CR_MER_BIT)
-#define FLASH_CR_PER                    BIT(FLASH_CR_PER_BIT)
-#define FLASH_CR_PG                     BIT(FLASH_CR_PG_BIT)
+#define FLASH_CR_EOPIE                  (1U << FLASH_CR_EOPIE_BIT)
+#define FLASH_CR_ERRIE                  (1U << FLASH_CR_ERRIE_BIT)
+#define FLASH_CR_OPTWRE                 (1U << FLASH_CR_OPTWRE_BIT)
+#define FLASH_CR_LOCK                   (1U << FLASH_CR_LOCK_BIT)
+#define FLASH_CR_STRT                   (1U << FLASH_CR_STRT_BIT)
+#define FLASH_CR_OPTER                  (1U << FLASH_CR_OPTER_BIT)
+#define FLASH_CR_OPTPG                  (1U << FLASH_CR_OPTPG_BIT)
+#define FLASH_CR_MER                    (1U << FLASH_CR_MER_BIT)
+#define FLASH_CR_PER                    (1U << FLASH_CR_PER_BIT)
+#define FLASH_CR_PG                     (1U << FLASH_CR_PG_BIT)
 
 /* Option byte register */
 
@@ -122,11 +122,11 @@ typedef struct flash_reg_map {
 #define FLASH_OBR_DATA1                 (0xFF << 18)
 #define FLASH_OBR_DATA0                 (0xFF << 10)
 #define FLASH_OBR_USER                  0x3FF
-#define FLASH_OBR_nRST_STDBY            BIT(FLASH_OBR_nRST_STDBY_BIT)
-#define FLASH_OBR_nRST_STOP             BIT(FLASH_OBR_nRST_STOP_BIT)
-#define FLASH_OBR_WDG_SW                BIT(FLASH_OBR_WDG_SW_BIT)
-#define FLASH_OBR_RDPRT                 BIT(FLASH_OBR_RDPRT_BIT)
-#define FLASH_OBR_OPTERR                BIT(FLASH_OBR_OPTERR_BIT)
+#define FLASH_OBR_nRST_STDBY            (1U << FLASH_OBR_nRST_STDBY_BIT)
+#define FLASH_OBR_nRST_STOP             (1U << FLASH_OBR_nRST_STOP_BIT)
+#define FLASH_OBR_WDG_SW                (1U << FLASH_OBR_WDG_SW_BIT)
+#define FLASH_OBR_RDPRT                 (1U << FLASH_OBR_RDPRT_BIT)
+#define FLASH_OBR_OPTERR                (1U << FLASH_OBR_OPTERR_BIT)
 
 /*
  * Series-specific configuration values.

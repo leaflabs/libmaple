@@ -58,7 +58,6 @@ typedef struct flash_reg_map {
     __io uint32 WRPR;           /**< Write protection register */
 } flash_reg_map;
 
-/** Flash register map base pointer */
 #define FLASH_BASE                      ((struct flash_reg_map*)0x40022000)
 
 /*

@@ -64,6 +64,11 @@ extern "C"{
  */
 #include <series/flash.h>
 
+#ifdef __DOXYGEN__
+/** Flash register map base pointer. */
+#define FLASH_BASE
+#endif
+
 /*
  * Flash routines
  */

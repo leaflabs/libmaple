@@ -1377,7 +1377,7 @@ PREDEFINED             = __attribute__()= \
                        STM32_MEDIUM_DENSITY \
                        STM32_HIGH_DENSITY \
                        STM32_XL_DENSITY \
-                       __DOXYGEN_PREDEFINED_HACK
+                       __DOXYGEN__
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 
 # this tag can be used to specify a list of macro names that should be expanded. 

@@ -59,8 +59,7 @@ extern "C" {
 
 /* The series header is responsible for defining:
  *
- * - Everything enclosed in the following __DOXYGEN_PREDEFINED_HACK
- *   conditional block.
+ * - Everything in the following __DOXYGEN__ conditional block.
  *
  * - STM32_HAVE_FSMC: 1 if the MCU has the FSMC peripheral, and 0
  *   otherwise.
@@ -79,7 +78,7 @@ extern "C" {
 #error "Bad STM32F1 configuration. Check <series/stm32.h> header for your MCU."
 #endif
 
-#ifdef __DOXYGEN_PREDEFINED_HACK
+#ifdef __DOXYGEN__
 
 /*
  * Clock configuration.
@@ -162,7 +161,7 @@ extern "C" {
  */
 #define STM32_HAVE_USB
 
-#endif  /* __DOXYGEN_PREDEFINED_HACK */
+#endif  /* __DOXYGEN__ */
 
 /*
  * The following are for backwards compatibility only.

@@ -181,7 +181,7 @@ extern "C" {
  * Doxygen
  */
 
-#ifdef __DOXYGEN_PREDEFINED_HACK
+#ifdef __DOXYGEN__
 
 /**
  * @brief STM32 line value for the STM32F1 MCU being targeted.
@@ -192,7 +192,7 @@ extern "C" {
  */
 #define STM32_F1_LINE
 
-#endif /* __DOXYGEN_PREDEFINED_HACK */
+#endif /* __DOXYGEN__ */
 
 #ifdef __cplusplus
 }

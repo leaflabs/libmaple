@@ -251,29 +251,49 @@ typedef struct fsmc_nor_psram_reg_map {
  * Memory bank boundary addresses
  */
 
-/** Pointer to base address of FSMC memory bank 1 (split into 4
- * regions, each supporting 1 NOR Flash, SRAM, or PSRAM chip)  */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 1 (NOR/PSRAM).
+ *
+ * This bank is split into 4 regions. Each region supports interfacing
+ * with 1 NOR Flash, SRAM, or PSRAM chip. The base addresses of these
+ * regions are FSMC_NOR_PSRAM_REGIONx, for x = 1, 2, 3, 4.
+ */
 #define FSMC_BANK1                      ((void*)0x60000000)
 
-/** Pointer to base address of FSMC memory bank 1, region 1 (for NOR/PSRAM) */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 1, region 1
+ *        (NOR/PSRAM).
+ */
 #define FSMC_NOR_PSRAM_REGION1          FSMC_BANK1
 
-/** Pointer to base address of FSMC memory bank 1, region 2 (for NOR/PSRAM) */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 1, region 2
+ *        (NOR/PSRAM).
+ */
 #define FSMC_NOR_PSRAM_REGION2          ((void*)0x64000000)
 
-/** Pointer to base address of FSMC memory bank 1, region 3 (for NOR/PSRAM) */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 1, region 3
+ *        (NOR/PSRAM).
+ */
 #define FSMC_NOR_PSRAM_REGION3          ((void*)0x68000000)
 
-/** Pointer to base address of FSMC memory bank 1, region 4 (for NOR/PSRAM) */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 1, region 4
+ *        (NOR/PSRAM).
+ */
 #define FSMC_NOR_PSRAM_REGION4          ((void*)0x6C000000)
 
-/** Pointer to base address of FSMC memory bank 2 (for NAND Flash) */
+/** Void pointer to base address of FSMC memory bank 2 (NAND Flash). */
 #define FSMC_BANK2                      ((void*)0x70000000)
 
-/** Pointer to base address of FSMC memory bank 3 (for NAND Flash) */
+/** Void pointer to base address of FSMC memory bank 3 (NAND Flash). */
 #define FSMC_BANK3                      ((void*)0x80000000)
 
-/** Pointer to base address of FSMC memory bank 4 (for PC card devices */
+/**
+ * @brief Void pointer to base address of FSMC memory bank 4 (PC card
+ *        devices).
+ */
 #define FSMC_BANK4                      ((void*)0x90000000)
 
 /*

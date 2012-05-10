@@ -135,16 +135,16 @@ typedef struct fsmc_nor_psram_reg_map {
 #define FSMC_BCR_MUXEN_BIT              1
 #define FSMC_BCR_MBKEN_BIT              0
 
-#define FSMC_BCR_CBURSTRW               BIT(FSMC_BCR_CBURSTRW_BIT)
-#define FSMC_BCR_ASYNCWAIT              BIT(FSMC_BCR_ASYNCWAIT_BIT)
-#define FSMC_BCR_EXTMOD                 BIT(FSMC_BCR_EXTMOD_BIT)
-#define FSMC_BCR_WAITEN                 BIT(FSMC_BCR_WAITEN_BIT)
-#define FSMC_BCR_WREN                   BIT(FSMC_BCR_WREN_BIT)
-#define FSMC_BCR_WAITCFG                BIT(FSMC_BCR_WAITCFG_BIT)
-#define FSMC_BCR_WRAPMOD                BIT(FSMC_BCR_WRAPMOD_BIT)
-#define FSMC_BCR_WAITPOL                BIT(FSMC_BCR_WAITPOL_BIT)
-#define FSMC_BCR_BURSTEN                BIT(FSMC_BCR_BURSTEN_BIT)
-#define FSMC_BCR_FACCEN                 BIT(FSMC_BCR_FACCEN_BIT)
+#define FSMC_BCR_CBURSTRW               (1U << FSMC_BCR_CBURSTRW_BIT)
+#define FSMC_BCR_ASYNCWAIT              (1U << FSMC_BCR_ASYNCWAIT_BIT)
+#define FSMC_BCR_EXTMOD                 (1U << FSMC_BCR_EXTMOD_BIT)
+#define FSMC_BCR_WAITEN                 (1U << FSMC_BCR_WAITEN_BIT)
+#define FSMC_BCR_WREN                   (1U << FSMC_BCR_WREN_BIT)
+#define FSMC_BCR_WAITCFG                (1U << FSMC_BCR_WAITCFG_BIT)
+#define FSMC_BCR_WRAPMOD                (1U << FSMC_BCR_WRAPMOD_BIT)
+#define FSMC_BCR_WAITPOL                (1U << FSMC_BCR_WAITPOL_BIT)
+#define FSMC_BCR_BURSTEN                (1U << FSMC_BCR_BURSTEN_BIT)
+#define FSMC_BCR_FACCEN                 (1U << FSMC_BCR_FACCEN_BIT)
 #define FSMC_BCR_MWID                   (0x3 << 4)
 #define FSMC_BCR_MWID_8BITS             (0x0 << 4)
 #define FSMC_BCR_MWID_16BITS            (0x1 << 4)
@@ -152,8 +152,8 @@ typedef struct fsmc_nor_psram_reg_map {
 #define FSMC_BCR_MTYP_SRAM              (0x0 << 2)
 #define FSMC_BCR_MTYP_PSRAM             (0x1 << 2)
 #define FSMC_BCR_MTYP_NOR_FLASH         (0x2 << 2)
-#define FSMC_BCR_MUXEN                  BIT(FSMC_BCR_MUXEN_BIT)
-#define FSMC_BCR_MBKEN                  BIT(FSMC_BCR_MBKEN_BIT)
+#define FSMC_BCR_MUXEN                  (1U << FSMC_BCR_MUXEN_BIT)
+#define FSMC_BCR_MBKEN                  (1U << FSMC_BCR_MBKEN_BIT)
 
 /* SRAM/NOR-Flash chip-select timing registers */
 
@@ -198,15 +198,15 @@ typedef struct fsmc_nor_psram_reg_map {
 #define FSMC_PCR_ECCPS_8192B             (0x5 << 17)
 #define FSMC_PCR_TAR                     (0xF << 13)
 #define FSMC_PCR_TCLR                    (0xF << 9)
-#define FSMC_PCR_ECCEN                   BIT(FSMC_PCR_ECCEN_BIT)
+#define FSMC_PCR_ECCEN                   (1U << FSMC_PCR_ECCEN_BIT)
 #define FSMC_PCR_PWID                    (0x3 << 4)
 #define FSMC_PCR_PWID_8BITS              (0x0 << 4)
 #define FSMC_PCR_PWID_16BITS             (0x1 << 4)
-#define FSMC_PCR_PTYP                    BIT(FSMC_PCR_PTYP_BIT)
+#define FSMC_PCR_PTYP                    (1U << FSMC_PCR_PTYP_BIT)
 #define FSMC_PCR_PTYP_PC_CF_PCMCIA       (0x0 << FSMC_PCR_PTYP_BIT)
 #define FSMC_PCR_PTYP_NAND               (0x1 << FSMC_PCR_PTYP_BIT)
-#define FSMC_PCR_PBKEN                   BIT(FSMC_PCR_PBKEN_BIT)
-#define FSMC_PCR_PWAITEN                 BIT(FSMC_PCR_PWAITEN_BIT)
+#define FSMC_PCR_PBKEN                   (1U << FSMC_PCR_PBKEN_BIT)
+#define FSMC_PCR_PWAITEN                 (1U << FSMC_PCR_PWAITEN_BIT)
 
 /* FIFO status and interrupt registers */
 
@@ -218,13 +218,13 @@ typedef struct fsmc_nor_psram_reg_map {
 #define FSMC_SR_ILS_BIT                  1
 #define FSMC_SR_IRS_BIT                  0
 
-#define FSMC_SR_FEMPT                    BIT(FSMC_SR_FEMPT_BIT)
-#define FSMC_SR_IFEN                     BIT(FSMC_SR_IFEN_BIT)
-#define FSMC_SR_ILEN                     BIT(FSMC_SR_ILEN_BIT)
-#define FSMC_SR_IREN                     BIT(FSMC_SR_IREN_BIT)
-#define FSMC_SR_IFS                      BIT(FSMC_SR_IFS_BIT)
-#define FSMC_SR_ILS                      BIT(FSMC_SR_ILS_BIT)
-#define FSMC_SR_IRS                      BIT(FSMC_SR_IRS_BIT)
+#define FSMC_SR_FEMPT                    (1U << FSMC_SR_FEMPT_BIT)
+#define FSMC_SR_IFEN                     (1U << FSMC_SR_IFEN_BIT)
+#define FSMC_SR_ILEN                     (1U << FSMC_SR_ILEN_BIT)
+#define FSMC_SR_IREN                     (1U << FSMC_SR_IREN_BIT)
+#define FSMC_SR_IFS                      (1U << FSMC_SR_IFS_BIT)
+#define FSMC_SR_ILS                      (1U << FSMC_SR_ILS_BIT)
+#define FSMC_SR_IRS                      (1U << FSMC_SR_IRS_BIT)
 
 /* Common memory space timing registers */
 

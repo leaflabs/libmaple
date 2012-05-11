@@ -29,13 +29,6 @@
  * @brief STM32F2 reset and clock control (RCC) support.
  */
 
-/*
- * TODO:
- *
- * - Can prescaler enums be merged with F1's into <libmaple/rcc.h>
- *   (perhaps by adding more register bit definitions to F1 header)?
- */
-
 #ifndef _LIBMAPLE_STM32F2_RCC_H_
 #define _LIBMAPLE_STM32F2_RCC_H_
 

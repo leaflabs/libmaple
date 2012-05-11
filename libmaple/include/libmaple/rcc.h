@@ -85,7 +85,7 @@ typedef enum rcc_sysclk_src {
  */
 
 #ifdef __DOXYGEN__
-/* RCC register map base pointer */
+/** RCC register map base pointer */
 #define RCC_BASE
 #endif
 

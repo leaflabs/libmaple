@@ -562,6 +562,8 @@ typedef enum rcc_pll_multiplier {
     RCC_PLLMUL_16 = (0xE << 18),
 } rcc_pll_multiplier;
 
+/* FIXME [0.0.13] Just have data point to an rcc_pll_multiplier! */
+
 /**
  * @brief STM32F1 PLL configuration values.
  * Point to one of these with the "data" field in a struct rcc_pll_cfg.

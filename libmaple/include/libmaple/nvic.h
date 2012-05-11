@@ -58,7 +58,7 @@ typedef struct nvic_reg_map {
     __io uint32 ISER[8];      /**< Interrupt Set Enable Registers */
     uint32 RESERVED0[24];     /**< Reserved */
     __io uint32 ICER[8];      /**< Interrupt Clear Enable Registers */
-    uint32 RSERVED1[24];      /**< Reserved */
+    uint32 RESERVED1[24];     /**< Reserved */
     __io uint32 ISPR[8];      /**< Interrupt Set Pending Registers */
     uint32 RESERVED2[24];     /**< Reserved */
     __io uint32 ICPR[8];      /**< Interrupt Clear Pending Registers */

@@ -49,7 +49,7 @@ extern "C"{
  * Register map
  */
 
-/** STM32F1 RCC register map type */
+/** STM32F2 RCC register map type */
 typedef struct rcc_reg_map {
     __io uint32 CR;             /**< Clock control register */
     __io uint32 PLLCFGR;        /**< PLL configuration register */

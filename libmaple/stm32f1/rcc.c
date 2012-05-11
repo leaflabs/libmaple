@@ -95,16 +95,7 @@ const struct rcc_dev_info rcc_dev_table[] = {
 #endif
 };
 
-/**
- * @brief Deprecated; STM32F1 only.
- *
- * Initialize the clock control system. Initializes the system
- * clock source to use the PLL driven by an external oscillator.
- *
- * @param sysclk_src system clock source, must be PLL
- * @param pll_src pll clock source, must be HSE
- * @param pll_mul pll multiplier
- */
+__deprecated
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul) {

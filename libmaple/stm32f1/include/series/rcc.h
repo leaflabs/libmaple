@@ -37,7 +37,7 @@
 extern "C"{
 #endif
 
-#include <libmaple/libmaple.h>
+#include <libmaple/libmaple_types.h>
 
 /*
  * Register map
@@ -74,16 +74,16 @@ typedef struct rcc_reg_map {
 #define RCC_CR_HSIRDY_BIT               1
 #define RCC_CR_HSION_BIT                0
 
-#define RCC_CR_PLLRDY                   BIT(RCC_CR_PLLRDY_BIT)
-#define RCC_CR_PLLON                    BIT(RCC_CR_PLLON_BIT)
-#define RCC_CR_CSSON                    BIT(RCC_CR_CSSON_BIT)
-#define RCC_CR_HSEBYP                   BIT(RCC_CR_HSEBYP_BIT)
-#define RCC_CR_HSERDY                   BIT(RCC_CR_HSERDY_BIT)
-#define RCC_CR_HSEON                    BIT(RCC_CR_HSEON_BIT)
+#define RCC_CR_PLLRDY                   (1U << RCC_CR_PLLRDY_BIT)
+#define RCC_CR_PLLON                    (1U << RCC_CR_PLLON_BIT)
+#define RCC_CR_CSSON                    (1U << RCC_CR_CSSON_BIT)
+#define RCC_CR_HSEBYP                   (1U << RCC_CR_HSEBYP_BIT)
+#define RCC_CR_HSERDY                   (1U << RCC_CR_HSERDY_BIT)
+#define RCC_CR_HSEON                    (1U << RCC_CR_HSEON_BIT)
 #define RCC_CR_HSICAL                   (0xFF << 8)
 #define RCC_CR_HSITRIM                  (0x1F << 3)
-#define RCC_CR_HSIRDY                   BIT(RCC_CR_HSIRDY_BIT)
-#define RCC_CR_HSION                    BIT(RCC_CR_HSION_BIT)
+#define RCC_CR_HSIRDY                   (1U << RCC_CR_HSIRDY_BIT)
+#define RCC_CR_HSION                    (1U << RCC_CR_HSION_BIT)
 
 /* Clock configuration register */
 
@@ -92,10 +92,10 @@ typedef struct rcc_reg_map {
 #define RCC_CFGR_PLLSRC_BIT             16
 
 #define RCC_CFGR_MCO                    (0x3 << 24)
-#define RCC_CFGR_USBPRE                 BIT(RCC_CFGR_USBPRE_BIT)
+#define RCC_CFGR_USBPRE                 (1U << RCC_CFGR_USBPRE_BIT)
 #define RCC_CFGR_PLLMUL                 (0xF << 18)
-#define RCC_CFGR_PLLXTPRE               BIT(RCC_CFGR_PLLXTPRE_BIT)
-#define RCC_CFGR_PLLSRC                 BIT(RCC_CFGR_PLLSRC_BIT)
+#define RCC_CFGR_PLLXTPRE               (1U << RCC_CFGR_PLLXTPRE_BIT)
+#define RCC_CFGR_PLLSRC                 (1U << RCC_CFGR_PLLSRC_BIT)
 #define RCC_CFGR_ADCPRE                 (0x3 << 14)
 #define RCC_CFGR_PPRE2                  (0x7 << 11)
 #define RCC_CFGR_PPRE1                  (0x7 << 8)
@@ -127,23 +127,23 @@ typedef struct rcc_reg_map {
 #define RCC_CIR_LSERDYF_BIT             1
 #define RCC_CIR_LSIRDYF_BIT             0
 
-#define RCC_CIR_CSSC                    BIT(RCC_CIR_CSSC_BIT)
-#define RCC_CIR_PLLRDYC                 BIT(RCC_CIR_PLLRDYC_BIT)
-#define RCC_CIR_HSERDYC                 BIT(RCC_CIR_HSERDYC_BIT)
-#define RCC_CIR_HSIRDYC                 BIT(RCC_CIR_HSIRDYC_BIT)
-#define RCC_CIR_LSERDYC                 BIT(RCC_CIR_LSERDYC_BIT)
-#define RCC_CIR_LSIRDYC                 BIT(RCC_CIR_LSIRDYC_BIT)
-#define RCC_CIR_PLLRDYIE                BIT(RCC_CIR_PLLRDYIE_BIT)
-#define RCC_CIR_HSERDYIE                BIT(RCC_CIR_HSERDYIE_BIT)
-#define RCC_CIR_HSIRDYIE                BIT(RCC_CIR_HSIRDYIE_BIT)
-#define RCC_CIR_LSERDYIE                BIT(RCC_CIR_LSERDYIE_BIT)
-#define RCC_CIR_LSIRDYIE                BIT(RCC_CIR_LSIRDYIE_BIT)
-#define RCC_CIR_CSSF                    BIT(RCC_CIR_CSSF_BIT)
-#define RCC_CIR_PLLRDYF                 BIT(RCC_CIR_PLLRDYF_BIT)
-#define RCC_CIR_HSERDYF                 BIT(RCC_CIR_HSERDYF_BIT)
-#define RCC_CIR_HSIRDYF                 BIT(RCC_CIR_HSIRDYF_BIT)
-#define RCC_CIR_LSERDYF                 BIT(RCC_CIR_LSERDYF_BIT)
-#define RCC_CIR_LSIRDYF                 BIT(RCC_CIR_LSIRDYF_BIT)
+#define RCC_CIR_CSSC                    (1U << RCC_CIR_CSSC_BIT)
+#define RCC_CIR_PLLRDYC                 (1U << RCC_CIR_PLLRDYC_BIT)
+#define RCC_CIR_HSERDYC                 (1U << RCC_CIR_HSERDYC_BIT)
+#define RCC_CIR_HSIRDYC                 (1U << RCC_CIR_HSIRDYC_BIT)
+#define RCC_CIR_LSERDYC                 (1U << RCC_CIR_LSERDYC_BIT)
+#define RCC_CIR_LSIRDYC                 (1U << RCC_CIR_LSIRDYC_BIT)
+#define RCC_CIR_PLLRDYIE                (1U << RCC_CIR_PLLRDYIE_BIT)
+#define RCC_CIR_HSERDYIE                (1U << RCC_CIR_HSERDYIE_BIT)
+#define RCC_CIR_HSIRDYIE                (1U << RCC_CIR_HSIRDYIE_BIT)
+#define RCC_CIR_LSERDYIE                (1U << RCC_CIR_LSERDYIE_BIT)
+#define RCC_CIR_LSIRDYIE                (1U << RCC_CIR_LSIRDYIE_BIT)
+#define RCC_CIR_CSSF                    (1U << RCC_CIR_CSSF_BIT)
+#define RCC_CIR_PLLRDYF                 (1U << RCC_CIR_PLLRDYF_BIT)
+#define RCC_CIR_HSERDYF                 (1U << RCC_CIR_HSERDYF_BIT)
+#define RCC_CIR_HSIRDYF                 (1U << RCC_CIR_HSIRDYF_BIT)
+#define RCC_CIR_LSERDYF                 (1U << RCC_CIR_LSERDYF_BIT)
+#define RCC_CIR_LSIRDYF                 (1U << RCC_CIR_LSIRDYF_BIT)
 
 /* APB2 peripheral reset register */
 
@@ -166,24 +166,24 @@ typedef struct rcc_reg_map {
 #define RCC_APB2RSTR_IOPARST_BIT        2
 #define RCC_APB2RSTR_AFIORST_BIT        0
 
-#define RCC_APB2RSTR_TIM11RST           BIT(RCC_APB2RSTR_TIM11RST_BIT)
-#define RCC_APB2RSTR_TIM10RST           BIT(RCC_APB2RSTR_TIM10RST_BIT)
-#define RCC_APB2RSTR_TIM9RST            BIT(RCC_APB2RSTR_TIM9RST_BIT)
-#define RCC_APB2RSTR_ADC3RST            BIT(RCC_APB2RSTR_ADC3RST_BIT)
-#define RCC_APB2RSTR_USART1RST          BIT(RCC_APB2RSTR_USART1RST_BIT)
-#define RCC_APB2RSTR_TIM8RST            BIT(RCC_APB2RSTR_TIM8RST_BIT)
-#define RCC_APB2RSTR_SPI1RST            BIT(RCC_APB2RSTR_SPI1RST_BIT)
-#define RCC_APB2RSTR_TIM1RST            BIT(RCC_APB2RSTR_TIM1RST_BIT)
-#define RCC_APB2RSTR_ADC2RST            BIT(RCC_APB2RSTR_ADC2RST_BIT)
-#define RCC_APB2RSTR_ADC1RST            BIT(RCC_APB2RSTR_ADC1RST_BIT)
-#define RCC_APB2RSTR_IOPGRST            BIT(RCC_APB2RSTR_IOPGRST_BIT)
-#define RCC_APB2RSTR_IOPFRST            BIT(RCC_APB2RSTR_IOPFRST_BIT)
-#define RCC_APB2RSTR_IOPERST            BIT(RCC_APB2RSTR_IOPERST_BIT)
-#define RCC_APB2RSTR_IOPDRST            BIT(RCC_APB2RSTR_IOPDRST_BIT)
-#define RCC_APB2RSTR_IOPCRST            BIT(RCC_APB2RSTR_IOPCRST_BIT)
-#define RCC_APB2RSTR_IOPBRST            BIT(RCC_APB2RSTR_IOPBRST_BIT)
-#define RCC_APB2RSTR_IOPARST            BIT(RCC_APB2RSTR_IOPARST_BIT)
-#define RCC_APB2RSTR_AFIORST            BIT(RCC_APB2RSTR_AFIORST_BIT)
+#define RCC_APB2RSTR_TIM11RST           (1U << RCC_APB2RSTR_TIM11RST_BIT)
+#define RCC_APB2RSTR_TIM10RST           (1U << RCC_APB2RSTR_TIM10RST_BIT)
+#define RCC_APB2RSTR_TIM9RST            (1U << RCC_APB2RSTR_TIM9RST_BIT)
+#define RCC_APB2RSTR_ADC3RST            (1U << RCC_APB2RSTR_ADC3RST_BIT)
+#define RCC_APB2RSTR_USART1RST          (1U << RCC_APB2RSTR_USART1RST_BIT)
+#define RCC_APB2RSTR_TIM8RST            (1U << RCC_APB2RSTR_TIM8RST_BIT)
+#define RCC_APB2RSTR_SPI1RST            (1U << RCC_APB2RSTR_SPI1RST_BIT)
+#define RCC_APB2RSTR_TIM1RST            (1U << RCC_APB2RSTR_TIM1RST_BIT)
+#define RCC_APB2RSTR_ADC2RST            (1U << RCC_APB2RSTR_ADC2RST_BIT)
+#define RCC_APB2RSTR_ADC1RST            (1U << RCC_APB2RSTR_ADC1RST_BIT)
+#define RCC_APB2RSTR_IOPGRST            (1U << RCC_APB2RSTR_IOPGRST_BIT)
+#define RCC_APB2RSTR_IOPFRST            (1U << RCC_APB2RSTR_IOPFRST_BIT)
+#define RCC_APB2RSTR_IOPERST            (1U << RCC_APB2RSTR_IOPERST_BIT)
+#define RCC_APB2RSTR_IOPDRST            (1U << RCC_APB2RSTR_IOPDRST_BIT)
+#define RCC_APB2RSTR_IOPCRST            (1U << RCC_APB2RSTR_IOPCRST_BIT)
+#define RCC_APB2RSTR_IOPBRST            (1U << RCC_APB2RSTR_IOPBRST_BIT)
+#define RCC_APB2RSTR_IOPARST            (1U << RCC_APB2RSTR_IOPARST_BIT)
+#define RCC_APB2RSTR_AFIORST            (1U << RCC_APB2RSTR_AFIORST_BIT)
 
 /* APB1 peripheral reset register */
 
@@ -211,29 +211,29 @@ typedef struct rcc_reg_map {
 #define RCC_APB1RSTR_TIM3RST_BIT        1
 #define RCC_APB1RSTR_TIM2RST_BIT        0
 
-#define RCC_APB1RSTR_DACRST             BIT(RCC_APB1RSTR_DACRST_BIT)
-#define RCC_APB1RSTR_PWRRST             BIT(RCC_APB1RSTR_PWRRST_BIT)
-#define RCC_APB1RSTR_BKPRST             BIT(RCC_APB1RSTR_BKPRST_BIT)
-#define RCC_APB1RSTR_CANRST             BIT(RCC_APB1RSTR_CANRST_BIT)
-#define RCC_APB1RSTR_USBRST             BIT(RCC_APB1RSTR_USBRST_BIT)
-#define RCC_APB1RSTR_I2C2RST            BIT(RCC_APB1RSTR_I2C2RST_BIT)
-#define RCC_APB1RSTR_I2C1RST            BIT(RCC_APB1RSTR_I2C1RST_BIT)
-#define RCC_APB1RSTR_UART5RST           BIT(RCC_APB1RSTR_UART5RST_BIT)
-#define RCC_APB1RSTR_UART4RST           BIT(RCC_APB1RSTR_UART4RST_BIT)
-#define RCC_APB1RSTR_USART3RST          BIT(RCC_APB1RSTR_USART3RST_BIT)
-#define RCC_APB1RSTR_USART2RST          BIT(RCC_APB1RSTR_USART2RST_BIT)
-#define RCC_APB1RSTR_SPI3RST            BIT(RCC_APB1RSTR_SPI3RST_BIT)
-#define RCC_APB1RSTR_SPI2RST            BIT(RCC_APB1RSTR_SPI2RST_BIT)
-#define RCC_APB1RSTR_WWDRST             BIT(RCC_APB1RSTR_WWDRST_BIT)
-#define RCC_APB1RSTR_TIM14RST           BIT(RCC_APB1RSTR_TIM14RST_BIT)
-#define RCC_APB1RSTR_TIM13RST           BIT(RCC_APB1RSTR_TIM13RST_BIT)
-#define RCC_APB1RSTR_TIM12RST           BIT(RCC_APB1RSTR_TIM12RST_BIT)
-#define RCC_APB1RSTR_TIM7RST            BIT(RCC_APB1RSTR_TIM7RST_BIT)
-#define RCC_APB1RSTR_TIM6RST            BIT(RCC_APB1RSTR_TIM6RST_BIT)
-#define RCC_APB1RSTR_TIM5RST            BIT(RCC_APB1RSTR_TIM5RST_BIT)
-#define RCC_APB1RSTR_TIM4RST            BIT(RCC_APB1RSTR_TIM4RST_BIT)
-#define RCC_APB1RSTR_TIM3RST            BIT(RCC_APB1RSTR_TIM3RST_BIT)
-#define RCC_APB1RSTR_TIM2RST            BIT(RCC_APB1RSTR_TIM2RST_BIT)
+#define RCC_APB1RSTR_DACRST             (1U << RCC_APB1RSTR_DACRST_BIT)
+#define RCC_APB1RSTR_PWRRST             (1U << RCC_APB1RSTR_PWRRST_BIT)
+#define RCC_APB1RSTR_BKPRST             (1U << RCC_APB1RSTR_BKPRST_BIT)
+#define RCC_APB1RSTR_CANRST             (1U << RCC_APB1RSTR_CANRST_BIT)
+#define RCC_APB1RSTR_USBRST             (1U << RCC_APB1RSTR_USBRST_BIT)
+#define RCC_APB1RSTR_I2C2RST            (1U << RCC_APB1RSTR_I2C2RST_BIT)
+#define RCC_APB1RSTR_I2C1RST            (1U << RCC_APB1RSTR_I2C1RST_BIT)
+#define RCC_APB1RSTR_UART5RST           (1U << RCC_APB1RSTR_UART5RST_BIT)
+#define RCC_APB1RSTR_UART4RST           (1U << RCC_APB1RSTR_UART4RST_BIT)
+#define RCC_APB1RSTR_USART3RST          (1U << RCC_APB1RSTR_USART3RST_BIT)
+#define RCC_APB1RSTR_USART2RST          (1U << RCC_APB1RSTR_USART2RST_BIT)
+#define RCC_APB1RSTR_SPI3RST            (1U << RCC_APB1RSTR_SPI3RST_BIT)
+#define RCC_APB1RSTR_SPI2RST            (1U << RCC_APB1RSTR_SPI2RST_BIT)
+#define RCC_APB1RSTR_WWDRST             (1U << RCC_APB1RSTR_WWDRST_BIT)
+#define RCC_APB1RSTR_TIM14RST           (1U << RCC_APB1RSTR_TIM14RST_BIT)
+#define RCC_APB1RSTR_TIM13RST           (1U << RCC_APB1RSTR_TIM13RST_BIT)
+#define RCC_APB1RSTR_TIM12RST           (1U << RCC_APB1RSTR_TIM12RST_BIT)
+#define RCC_APB1RSTR_TIM7RST            (1U << RCC_APB1RSTR_TIM7RST_BIT)
+#define RCC_APB1RSTR_TIM6RST            (1U << RCC_APB1RSTR_TIM6RST_BIT)
+#define RCC_APB1RSTR_TIM5RST            (1U << RCC_APB1RSTR_TIM5RST_BIT)
+#define RCC_APB1RSTR_TIM4RST            (1U << RCC_APB1RSTR_TIM4RST_BIT)
+#define RCC_APB1RSTR_TIM3RST            (1U << RCC_APB1RSTR_TIM3RST_BIT)
+#define RCC_APB1RSTR_TIM2RST            (1U << RCC_APB1RSTR_TIM2RST_BIT)
 
 /* AHB peripheral clock enable register */
 
@@ -245,13 +245,13 @@ typedef struct rcc_reg_map {
 #define RCC_AHBENR_DMA2EN_BIT           1
 #define RCC_AHBENR_DMA1EN_BIT           0
 
-#define RCC_AHBENR_SDIOEN               BIT(RCC_AHBENR_SDIOEN_BIT)
-#define RCC_AHBENR_FSMCEN               BIT(RCC_AHBENR_FSMCEN_BIT)
-#define RCC_AHBENR_CRCEN                BIT(RCC_AHBENR_CRCEN_BIT)
-#define RCC_AHBENR_FLITFEN              BIT(RCC_AHBENR_FLITFEN_BIT)
-#define RCC_AHBENR_SRAMEN               BIT(RCC_AHBENR_SRAMEN_BIT)
-#define RCC_AHBENR_DMA2EN               BIT(RCC_AHBENR_DMA2EN_BIT)
-#define RCC_AHBENR_DMA1EN               BIT(RCC_AHBENR_DMA1EN_BIT)
+#define RCC_AHBENR_SDIOEN               (1U << RCC_AHBENR_SDIOEN_BIT)
+#define RCC_AHBENR_FSMCEN               (1U << RCC_AHBENR_FSMCEN_BIT)
+#define RCC_AHBENR_CRCEN                (1U << RCC_AHBENR_CRCEN_BIT)
+#define RCC_AHBENR_FLITFEN              (1U << RCC_AHBENR_FLITFEN_BIT)
+#define RCC_AHBENR_SRAMEN               (1U << RCC_AHBENR_SRAMEN_BIT)
+#define RCC_AHBENR_DMA2EN               (1U << RCC_AHBENR_DMA2EN_BIT)
+#define RCC_AHBENR_DMA1EN               (1U << RCC_AHBENR_DMA1EN_BIT)
 
 /* APB2 peripheral clock enable register */
 
@@ -274,24 +274,24 @@ typedef struct rcc_reg_map {
 #define RCC_APB2ENR_IOPAEN_BIT          2
 #define RCC_APB2ENR_AFIOEN_BIT          0
 
-#define RCC_APB2ENR_TIM11EN             BIT(RCC_APB2ENR_TIM11EN_BIT)
-#define RCC_APB2ENR_TIM10EN             BIT(RCC_APB2ENR_TIM10EN_BIT)
-#define RCC_APB2ENR_TIM9EN              BIT(RCC_APB2ENR_TIM9EN_BIT)
-#define RCC_APB2ENR_ADC3EN              BIT(RCC_APB2ENR_ADC3EN_BIT)
-#define RCC_APB2ENR_USART1EN            BIT(RCC_APB2ENR_USART1EN_BIT)
-#define RCC_APB2ENR_TIM8EN              BIT(RCC_APB2ENR_TIM8EN_BIT)
-#define RCC_APB2ENR_SPI1EN              BIT(RCC_APB2ENR_SPI1EN_BIT)
-#define RCC_APB2ENR_TIM1EN              BIT(RCC_APB2ENR_TIM1EN_BIT)
-#define RCC_APB2ENR_ADC2EN              BIT(RCC_APB2ENR_ADC2EN_BIT)
-#define RCC_APB2ENR_ADC1EN              BIT(RCC_APB2ENR_ADC1EN_BIT)
-#define RCC_APB2ENR_IOPGEN              BIT(RCC_APB2ENR_IOPGEN_BIT)
-#define RCC_APB2ENR_IOPFEN              BIT(RCC_APB2ENR_IOPFEN_BIT)
-#define RCC_APB2ENR_IOPEEN              BIT(RCC_APB2ENR_IOPEEN_BIT)
-#define RCC_APB2ENR_IOPDEN              BIT(RCC_APB2ENR_IOPDEN_BIT)
-#define RCC_APB2ENR_IOPCEN              BIT(RCC_APB2ENR_IOPCEN_BIT)
-#define RCC_APB2ENR_IOPBEN              BIT(RCC_APB2ENR_IOPBEN_BIT)
-#define RCC_APB2ENR_IOPAEN              BIT(RCC_APB2ENR_IOPAEN_BIT)
-#define RCC_APB2ENR_AFIOEN              BIT(RCC_APB2ENR_AFIOEN_BIT)
+#define RCC_APB2ENR_TIM11EN             (1U << RCC_APB2ENR_TIM11EN_BIT)
+#define RCC_APB2ENR_TIM10EN             (1U << RCC_APB2ENR_TIM10EN_BIT)
+#define RCC_APB2ENR_TIM9EN              (1U << RCC_APB2ENR_TIM9EN_BIT)
+#define RCC_APB2ENR_ADC3EN              (1U << RCC_APB2ENR_ADC3EN_BIT)
+#define RCC_APB2ENR_USART1EN            (1U << RCC_APB2ENR_USART1EN_BIT)
+#define RCC_APB2ENR_TIM8EN              (1U << RCC_APB2ENR_TIM8EN_BIT)
+#define RCC_APB2ENR_SPI1EN              (1U << RCC_APB2ENR_SPI1EN_BIT)
+#define RCC_APB2ENR_TIM1EN              (1U << RCC_APB2ENR_TIM1EN_BIT)
+#define RCC_APB2ENR_ADC2EN              (1U << RCC_APB2ENR_ADC2EN_BIT)
+#define RCC_APB2ENR_ADC1EN              (1U << RCC_APB2ENR_ADC1EN_BIT)
+#define RCC_APB2ENR_IOPGEN              (1U << RCC_APB2ENR_IOPGEN_BIT)
+#define RCC_APB2ENR_IOPFEN              (1U << RCC_APB2ENR_IOPFEN_BIT)
+#define RCC_APB2ENR_IOPEEN              (1U << RCC_APB2ENR_IOPEEN_BIT)
+#define RCC_APB2ENR_IOPDEN              (1U << RCC_APB2ENR_IOPDEN_BIT)
+#define RCC_APB2ENR_IOPCEN              (1U << RCC_APB2ENR_IOPCEN_BIT)
+#define RCC_APB2ENR_IOPBEN              (1U << RCC_APB2ENR_IOPBEN_BIT)
+#define RCC_APB2ENR_IOPAEN              (1U << RCC_APB2ENR_IOPAEN_BIT)
+#define RCC_APB2ENR_AFIOEN              (1U << RCC_APB2ENR_AFIOEN_BIT)
 
 /* APB1 peripheral clock enable register */
 
@@ -319,29 +319,29 @@ typedef struct rcc_reg_map {
 #define RCC_APB1ENR_TIM3EN_BIT          1
 #define RCC_APB1ENR_TIM2EN_BIT          0
 
-#define RCC_APB1ENR_DACEN               BIT(RCC_APB1ENR_DACEN_BIT)
-#define RCC_APB1ENR_PWREN               BIT(RCC_APB1ENR_PWREN_BIT)
-#define RCC_APB1ENR_BKPEN               BIT(RCC_APB1ENR_BKPEN_BIT)
-#define RCC_APB1ENR_CANEN               BIT(RCC_APB1ENR_CANEN_BIT)
-#define RCC_APB1ENR_USBEN               BIT(RCC_APB1ENR_USBEN_BIT)
-#define RCC_APB1ENR_I2C2EN              BIT(RCC_APB1ENR_I2C2EN_BIT)
-#define RCC_APB1ENR_I2C1EN              BIT(RCC_APB1ENR_I2C1EN_BIT)
-#define RCC_APB1ENR_UART5EN             BIT(RCC_APB1ENR_UART5EN_BIT)
-#define RCC_APB1ENR_UART4EN             BIT(RCC_APB1ENR_UART4EN_BIT)
-#define RCC_APB1ENR_USART3EN            BIT(RCC_APB1ENR_USART3EN_BIT)
-#define RCC_APB1ENR_USART2EN            BIT(RCC_APB1ENR_USART2EN_BIT)
-#define RCC_APB1ENR_SPI3EN              BIT(RCC_APB1ENR_SPI3EN_BIT)
-#define RCC_APB1ENR_SPI2EN              BIT(RCC_APB1ENR_SPI2EN_BIT)
-#define RCC_APB1ENR_WWDEN               BIT(RCC_APB1ENR_WWDEN_BIT)
-#define RCC_APB1ENR_TIM14EN             BIT(RCC_APB1ENR_TIM14EN_BIT)
-#define RCC_APB1ENR_TIM13EN             BIT(RCC_APB1ENR_TIM13EN_BIT)
-#define RCC_APB1ENR_TIM12EN             BIT(RCC_APB1ENR_TIM12EN_BIT)
-#define RCC_APB1ENR_TIM7EN              BIT(RCC_APB1ENR_TIM7EN_BIT)
-#define RCC_APB1ENR_TIM6EN              BIT(RCC_APB1ENR_TIM6EN_BIT)
-#define RCC_APB1ENR_TIM5EN              BIT(RCC_APB1ENR_TIM5EN_BIT)
-#define RCC_APB1ENR_TIM4EN              BIT(RCC_APB1ENR_TIM4EN_BIT)
-#define RCC_APB1ENR_TIM3EN              BIT(RCC_APB1ENR_TIM3EN_BIT)
-#define RCC_APB1ENR_TIM2EN              BIT(RCC_APB1ENR_TIM2EN_BIT)
+#define RCC_APB1ENR_DACEN               (1U << RCC_APB1ENR_DACEN_BIT)
+#define RCC_APB1ENR_PWREN               (1U << RCC_APB1ENR_PWREN_BIT)
+#define RCC_APB1ENR_BKPEN               (1U << RCC_APB1ENR_BKPEN_BIT)
+#define RCC_APB1ENR_CANEN               (1U << RCC_APB1ENR_CANEN_BIT)
+#define RCC_APB1ENR_USBEN               (1U << RCC_APB1ENR_USBEN_BIT)
+#define RCC_APB1ENR_I2C2EN              (1U << RCC_APB1ENR_I2C2EN_BIT)
+#define RCC_APB1ENR_I2C1EN              (1U << RCC_APB1ENR_I2C1EN_BIT)
+#define RCC_APB1ENR_UART5EN             (1U << RCC_APB1ENR_UART5EN_BIT)
+#define RCC_APB1ENR_UART4EN             (1U << RCC_APB1ENR_UART4EN_BIT)
+#define RCC_APB1ENR_USART3EN            (1U << RCC_APB1ENR_USART3EN_BIT)
+#define RCC_APB1ENR_USART2EN            (1U << RCC_APB1ENR_USART2EN_BIT)
+#define RCC_APB1ENR_SPI3EN              (1U << RCC_APB1ENR_SPI3EN_BIT)
+#define RCC_APB1ENR_SPI2EN              (1U << RCC_APB1ENR_SPI2EN_BIT)
+#define RCC_APB1ENR_WWDEN               (1U << RCC_APB1ENR_WWDEN_BIT)
+#define RCC_APB1ENR_TIM14EN             (1U << RCC_APB1ENR_TIM14EN_BIT)
+#define RCC_APB1ENR_TIM13EN             (1U << RCC_APB1ENR_TIM13EN_BIT)
+#define RCC_APB1ENR_TIM12EN             (1U << RCC_APB1ENR_TIM12EN_BIT)
+#define RCC_APB1ENR_TIM7EN              (1U << RCC_APB1ENR_TIM7EN_BIT)
+#define RCC_APB1ENR_TIM6EN              (1U << RCC_APB1ENR_TIM6EN_BIT)
+#define RCC_APB1ENR_TIM5EN              (1U << RCC_APB1ENR_TIM5EN_BIT)
+#define RCC_APB1ENR_TIM4EN              (1U << RCC_APB1ENR_TIM4EN_BIT)
+#define RCC_APB1ENR_TIM3EN              (1U << RCC_APB1ENR_TIM3EN_BIT)
+#define RCC_APB1ENR_TIM2EN              (1U << RCC_APB1ENR_TIM2EN_BIT)
 
 /* Backup domain control register */
 
@@ -351,15 +351,15 @@ typedef struct rcc_reg_map {
 #define RCC_BDCR_LSERDY_BIT             1
 #define RCC_BDCR_LSEON_BIT              0
 
-#define RCC_BDCR_BDRST                  BIT(RCC_BDCR_BDRST_BIT)
-#define RCC_BDCR_RTCEN                  BIT(RCC_BDCR_RTC_BIT)
+#define RCC_BDCR_BDRST                  (1U << RCC_BDCR_BDRST_BIT)
+#define RCC_BDCR_RTCEN                  (1U << RCC_BDCR_RTC_BIT)
 #define RCC_BDCR_RTCSEL                 (0x3 << 8)
 #define RCC_BDCR_RTCSEL_NONE            (0x0 << 8)
 #define RCC_BDCR_RTCSEL_LSE             (0x1 << 8)
 #define RCC_BDCR_RTCSEL_HSE             (0x3 << 8)
-#define RCC_BDCR_LSEBYP                 BIT(RCC_BDCR_LSEBYP_BIT)
-#define RCC_BDCR_LSERDY                 BIT(RCC_BDCR_LSERDY_BIT)
-#define RCC_BDCR_LSEON                  BIT(RCC_BDCR_LSEON_BIT)
+#define RCC_BDCR_LSEBYP                 (1U << RCC_BDCR_LSEBYP_BIT)
+#define RCC_BDCR_LSERDY                 (1U << RCC_BDCR_LSERDY_BIT)
+#define RCC_BDCR_LSEON                  (1U << RCC_BDCR_LSEON_BIT)
 
 /* Control/status register */
 
@@ -373,15 +373,15 @@ typedef struct rcc_reg_map {
 #define RCC_CSR_LSIRDY_BIT              1
 #define RCC_CSR_LSION_BIT               0
 
-#define RCC_CSR_LPWRRSTF                BIT(RCC_CSR_LPWRRSTF_BIT)
-#define RCC_CSR_WWDGRSTF                BIT(RCC_CSR_WWDGRSTF_BIT)
-#define RCC_CSR_IWDGRSTF                BIT(RCC_CSR_IWDGRSTF_BIT)
-#define RCC_CSR_SFTRSTF                 BIT(RCC_CSR_SFTRSTF_BIT)
-#define RCC_CSR_PORRSTF                 BIT(RCC_CSR_PORRSTF_BIT)
-#define RCC_CSR_PINRSTF                 BIT(RCC_CSR_PINRSTF_BIT)
-#define RCC_CSR_RMVF                    BIT(RCC_CSR_RMVF_BIT)
-#define RCC_CSR_LSIRDY                  BIT(RCC_CSR_LSIRDY_BIT)
-#define RCC_CSR_LSION                   BIT(RCC_CSR_LSION_BIT)
+#define RCC_CSR_LPWRRSTF                (1U << RCC_CSR_LPWRRSTF_BIT)
+#define RCC_CSR_WWDGRSTF                (1U << RCC_CSR_WWDGRSTF_BIT)
+#define RCC_CSR_IWDGRSTF                (1U << RCC_CSR_IWDGRSTF_BIT)
+#define RCC_CSR_SFTRSTF                 (1U << RCC_CSR_SFTRSTF_BIT)
+#define RCC_CSR_PORRSTF                 (1U << RCC_CSR_PORRSTF_BIT)
+#define RCC_CSR_PINRSTF                 (1U << RCC_CSR_PINRSTF_BIT)
+#define RCC_CSR_RMVF                    (1U << RCC_CSR_RMVF_BIT)
+#define RCC_CSR_LSIRDY                  (1U << RCC_CSR_LSIRDY_BIT)
+#define RCC_CSR_LSION                   (1U << RCC_CSR_LSION_BIT)
 
 /*
  * libmaple-mandated enumeration types.
@@ -577,6 +577,16 @@ typedef struct stm32f1_rcc_pll_data {
  * Deprecated bits.
  */
 
+/**
+ * @brief Deprecated; STM32F1 only.
+ *
+ * Initialize the clock control system. Initializes the system
+ * clock source to use the PLL driven by an external oscillator.
+ *
+ * @param sysclk_src system clock source, must be PLL
+ * @param pll_src pll clock source, must be HSE
+ * @param pll_mul pll multiplier
+ */
 __deprecated
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,

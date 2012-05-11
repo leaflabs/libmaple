@@ -49,7 +49,7 @@ extern "C"{
  * Register map
  */
 
-/** RCC register map type */
+/** STM32F1 RCC register map type */
 typedef struct rcc_reg_map {
     __io uint32 CR;             /**< Clock control register */
     __io uint32 PLLCFGR;        /**< PLL configuration register */
@@ -93,7 +93,6 @@ typedef struct rcc_reg_map {
     __io uint32 PLLI2SCFGR;     /**< PLLI2S configuration register */
 } rcc_reg_map;
 
-/* RCC register map base pointer */
 #define RCC_BASE                        ((struct rcc_reg_map*)0x40023800)
 
 /*
@@ -742,7 +741,7 @@ typedef struct rcc_reg_map {
  */
 
 /**
- * @brief Available clock sources.
+ * @brief STM32F2 clock sources.
  */
 typedef enum rcc_clk {
     RCC_CLK_PLLI2S = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
@@ -764,8 +763,7 @@ typedef enum rcc_clk {
 } rcc_clk;
 
 /**
- * @brief Identifies bus and clock line for a peripheral or peripheral
- *        clock.
+ * @brief STM32F2 rcc_clk_id.
  */
 typedef enum rcc_clk_id {
     RCC_OTGHSULPI,
@@ -832,7 +830,7 @@ typedef enum rcc_clk_id {
 } rcc_clk_id;
 
 /**
- * @brief PLL entry clock source
+ * @brief STM32F2 PLL entry clock source
  * @see rcc_configure_pll()
  */
 typedef enum rcc_pllsrc {
@@ -841,7 +839,7 @@ typedef enum rcc_pllsrc {
 } rcc_pllsrc;
 
 /**
- * @brief Peripheral clock domains.
+ * @brief STM32F2 Peripheral clock domains.
  */
 typedef enum rcc_clk_domain {
     RCC_APB1,
@@ -856,7 +854,7 @@ typedef enum rcc_clk_domain {
  */
 
 /**
- * @brief Prescaler identifiers.
+ * @brief STM32F2 Prescaler identifiers.
  */
 typedef enum rcc_prescaler {
     RCC_PRESCALER_MCO2,
@@ -868,7 +866,7 @@ typedef enum rcc_prescaler {
 } rcc_prescaler;
 
 /**
- * @brief MCO2 prescaler dividers.
+ * @brief STM32F2 MCO2 prescaler dividers.
  */
 typedef enum rcc_mco2_divider {
     RCC_MCO2_DIV_1 = RCC_CFGR_MCO2PRE_DIV_1,
@@ -879,7 +877,7 @@ typedef enum rcc_mco2_divider {
 } rcc_mco2_divider;
 
 /**
- * @brief MCO1 prescaler dividers.
+ * @brief STM32F2 MCO1 prescaler dividers.
  */
 typedef enum rcc_mco1_divider {
     RCC_MCO1_DIV_1 = RCC_CFGR_MCO1PRE_DIV_1,
@@ -890,14 +888,14 @@ typedef enum rcc_mco1_divider {
 } rcc_mco1_divider;
 
 /**
- * @brief RTC prescaler dividers.
+ * @brief STM32F2 RTC prescaler dividers.
  */
 typedef enum rcc_rtc_divider {  /* TODO */
     RCC_RTC_DIV_TODO = 0xFFFFFFFF,
 } rcc_rtc_divider;
 
 /**
- * @brief AP2 prescaler dividers.
+ * @brief STM32F2 AP2 prescaler dividers.
  */
 typedef enum rcc_apb2_divider {
     RCC_APB2_HCLK_DIV_1  = 0,
@@ -908,7 +906,7 @@ typedef enum rcc_apb2_divider {
 } rcc_apb2_divider;
 
 /**
- * @brief AP1 prescaler dividers.
+ * @brief STM32F2 APB1 prescaler dividers.
  */
 typedef enum rcc_apb1_divider {
     RCC_APB1_HCLK_DIV_1  = 0,
@@ -919,7 +917,7 @@ typedef enum rcc_apb1_divider {
 } rcc_apb1_divider;
 
 /**
- * @brief AHB prescaler dividers.
+ * @brief STM32F2 AHB prescaler dividers.
  */
 typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_1   = 0,
@@ -933,15 +931,9 @@ typedef enum rcc_ahb_divider {
     RCC_AHB_SYSCLK_DIV_512 = RCC_CFGR_HPRE_SYSCLK_DIV_512,
 } rcc_ahb_divider;
 
-/*
- * Series-specific PLL configuration.
- */
-
 /**
- * @brief STM32F2-specific PLL configuration values.
- *
- * Use this as the "data" field in a struct rcc_pll_cfg.
- *
+ * @brief STM32F2 PLL configuration values.
+ * Point to one of these with the "data" field in a struct rcc_pll_cfg.
  * @see struct rcc_pll_cfg.
  */
 typedef struct stm32f2_rcc_pll_data {

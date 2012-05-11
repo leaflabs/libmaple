@@ -77,11 +77,26 @@ typedef enum rcc_sysclk_src {
  *
  * - enum rcc_prescaler: And a suitable set of dividers for
  *   rcc_set_prescaler().
+ *
+ * - enum rcc_pllsrc: For each PLL source. Same source, same token.
+ *
+ * - A target-dependent type to be pointed to by the data field in a
+ *   struct rcc_pll_cfg.
  */
+
+#ifdef __DOXYGEN__
+/* RCC register map base pointer */
+#define RCC_BASE
+#endif
 
 /* Clock prescaler management. */
 
-void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
+/**
+ * @brief Set the divider on a peripheral prescaler
+ * @param prescaler prescaler to set
+ * @param divider prescaler divider
+ */
+extern void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider);
 
 /* SYSCLK. */
 
@@ -94,13 +109,20 @@ void rcc_switch_sysclk(rcc_sysclk_src sysclk_src);
  */
 typedef struct rcc_pll_cfg {
     rcc_pllsrc  pllsrc;     /**< PLL source */
-    void       *data;       /**< Series-specific configuration
-                             * data. See the <series/rcc.h> for your
-                             * MCU for more information on what to put
-                             * here. */
+
+    /** Series-specific configuration data. */
+    void       *data;
 } rcc_pll_cfg;
 
-void rcc_configure_pll(rcc_pll_cfg *pll_cfg);
+/**
+ * @brief Configure the main PLL.
+ *
+ * You may only call this function while the PLL is disabled.
+ *
+ * @param pll_cfg Desired PLL configuration. The contents of this
+ *                struct depend entirely on the target.
+ */
+extern void rcc_configure_pll(rcc_pll_cfg *pll_cfg);
 
 /* System and secondary clock sources. */
 
@@ -111,8 +133,23 @@ int rcc_is_clk_ready(rcc_clk clock);
 
 /* Peripheral clock lines and clock domains. */
 
-void rcc_clk_enable(rcc_clk_id id);
-void rcc_reset_dev(rcc_clk_id id);
+/**
+ * @brief Turn on the clock line on a peripheral
+ * @param id Clock ID of the peripheral to turn on.
+ */
+extern void rcc_clk_enable(rcc_clk_id id);
+
+/**
+ * @brief Reset a peripheral.
+ *
+ * Caution: not all rcc_clk_id values refer to a peripheral which can
+ * be reset. (Only rcc_clk_ids for peripherals with bits in an RCC
+ * reset register can be used here.)
+ *
+ * @param id Clock ID of the peripheral to reset.
+ */
+extern void rcc_reset_dev(rcc_clk_id id);
+
 rcc_clk_domain rcc_dev_clk(rcc_clk_id id);
 
 /* Clock security system */

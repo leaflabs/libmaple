@@ -43,7 +43,7 @@ extern "C"{
  * Register map
  */
 
-/** RCC register map type */
+/** STM32F1 RCC register map type */
 typedef struct rcc_reg_map {
     __io uint32 CR;             /**< Clock control register */
     __io uint32 CFGR;           /**< Clock configuration register */
@@ -57,7 +57,6 @@ typedef struct rcc_reg_map {
     __io uint32 CSR;            /**< Control/status register */
 } rcc_reg_map;
 
-/** RCC register map base pointer */
 #define RCC_BASE                        ((struct rcc_reg_map*)0x40021000)
 
 /*
@@ -389,10 +388,7 @@ typedef struct rcc_reg_map {
  */
 
 /**
- * @brief Identifies bus and clock line for a peripheral.
- *
- * Also generally useful as a unique identifier for that peripheral
- * (or its corresponding device struct).
+ * @brief STM32F1 rcc_clk_id.
  */
 typedef enum rcc_clk_id {
     RCC_GPIOA,
@@ -444,7 +440,109 @@ typedef enum rcc_clk_id {
 } rcc_clk_id;
 
 /**
- * @brief Deprecated PLL multipliers, for rcc_clk_init().
+ * @brief STM32F1 PLL clock sources.
+ * @see rcc_configure_pll()
+ */
+typedef enum rcc_pllsrc {
+    RCC_PLLSRC_HSE = (0x1 << 16),
+    RCC_PLLSRC_HSI_DIV_2 = (0x0 << 16)
+} rcc_pllsrc;
+
+/**
+ * @brief STM32F1 clock domains.
+ * @see rcc_dev_clk()
+ */
+typedef enum rcc_clk_domain {
+    RCC_APB1,
+    RCC_APB2,
+    RCC_AHB
+} rcc_clk_domain;
+
+/**
+ * @brief STM32F1 Prescaler identifiers
+ * @see rcc_set_prescaler()
+ */
+typedef enum rcc_prescaler {
+    RCC_PRESCALER_AHB,
+    RCC_PRESCALER_APB1,
+    RCC_PRESCALER_APB2,
+    RCC_PRESCALER_USB,
+    RCC_PRESCALER_ADC
+} rcc_prescaler;
+
+/**
+ * @brief STM32F1 ADC prescaler dividers
+ * @see rcc_set_prescaler()
+ */
+typedef enum rcc_adc_divider {
+    RCC_ADCPRE_PCLK_DIV_2 = 0x0 << 14,
+    RCC_ADCPRE_PCLK_DIV_4 = 0x1 << 14,
+    RCC_ADCPRE_PCLK_DIV_6 = 0x2 << 14,
+    RCC_ADCPRE_PCLK_DIV_8 = 0x3 << 14,
+} rcc_adc_divider;
+
+/**
+ * @brief STM32F1 APB1 prescaler dividers
+ * @see rcc_set_prescaler()
+ */
+typedef enum rcc_apb1_divider {
+    RCC_APB1_HCLK_DIV_1 = 0x0 << 8,
+    RCC_APB1_HCLK_DIV_2 = 0x4 << 8,
+    RCC_APB1_HCLK_DIV_4 = 0x5 << 8,
+    RCC_APB1_HCLK_DIV_8 = 0x6 << 8,
+    RCC_APB1_HCLK_DIV_16 = 0x7 << 8,
+} rcc_apb1_divider;
+
+/**
+ * @brief STM32F1 APB2 prescaler dividers
+ * @see rcc_set_prescaler()
+ */
+typedef enum rcc_apb2_divider {
+    RCC_APB2_HCLK_DIV_1 = 0x0 << 11,
+    RCC_APB2_HCLK_DIV_2 = 0x4 << 11,
+    RCC_APB2_HCLK_DIV_4 = 0x5 << 11,
+    RCC_APB2_HCLK_DIV_8 = 0x6 << 11,
+    RCC_APB2_HCLK_DIV_16 = 0x7 << 11,
+} rcc_apb2_divider;
+
+/**
+ * @brief STM32F1 AHB prescaler dividers
+ * @see rcc_set_prescaler()
+ */
+typedef enum rcc_ahb_divider {
+    RCC_AHB_SYSCLK_DIV_1 = 0x0 << 4,
+    RCC_AHB_SYSCLK_DIV_2 = 0x8 << 4,
+    RCC_AHB_SYSCLK_DIV_4 = 0x9 << 4,
+    RCC_AHB_SYSCLK_DIV_8 = 0xA << 4,
+    RCC_AHB_SYSCLK_DIV_16 = 0xB << 4,
+    RCC_AHB_SYSCLK_DIV_32 = 0xC << 4,
+    RCC_AHB_SYSCLK_DIV_64 = 0xD << 4,
+    RCC_AHB_SYSCLK_DIV_128 = 0xD << 4,
+    RCC_AHB_SYSCLK_DIV_256 = 0xE << 4,
+    RCC_AHB_SYSCLK_DIV_512 = 0xF << 4,
+} rcc_ahb_divider;
+
+/**
+ * @brief STM32F1 clock sources.
+ */
+typedef enum rcc_clk {
+    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
+                                                    HSI or HSE. */
+    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSEON_BIT), /**< High speed external. */
+    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
+                              RCC_CR_HSION_BIT), /**< High speed internal. */
+    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
+                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
+                                                    * (32.768 KHz). */
+    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
+                              RCC_CSR_LSION_BIT), /**< Low-speed internal
+                                                   * (approximately 32 KHz). */
+} rcc_clk;
+
+/**
+ * @brief STM32F1 PLL multipliers.
  */
 typedef enum rcc_pll_multiplier {
     RCC_PLLMUL_2 = (0x0 << 18),
@@ -465,122 +563,22 @@ typedef enum rcc_pll_multiplier {
 } rcc_pll_multiplier;
 
 /**
- * @brief PLL clock sources.
- * @see rcc_configure_pll()
+ * @brief STM32F1 PLL configuration values.
+ * Point to one of these with the "data" field in a struct rcc_pll_cfg.
+ * @see struct rcc_pll_cfg.
  */
-typedef enum rcc_pllsrc {
-    RCC_PLLSRC_HSE = (0x1 << 16),
-    RCC_PLLSRC_HSI_DIV_2 = (0x0 << 16)
-} rcc_pllsrc;
-
-typedef enum rcc_clk_domain {
-    RCC_APB1,
-    RCC_APB2,
-    RCC_AHB
-} rcc_clk_domain;
-
-/**
- * Prescaler identifiers
- * @see rcc_set_prescaler()
- */
-typedef enum rcc_prescaler {
-    RCC_PRESCALER_AHB,
-    RCC_PRESCALER_APB1,
-    RCC_PRESCALER_APB2,
-    RCC_PRESCALER_USB,
-    RCC_PRESCALER_ADC
-} rcc_prescaler;
-
-/**
- * ADC prescaler dividers
- * @see rcc_set_prescaler()
- */
-typedef enum rcc_adc_divider {
-    RCC_ADCPRE_PCLK_DIV_2 = 0x0 << 14,
-    RCC_ADCPRE_PCLK_DIV_4 = 0x1 << 14,
-    RCC_ADCPRE_PCLK_DIV_6 = 0x2 << 14,
-    RCC_ADCPRE_PCLK_DIV_8 = 0x3 << 14,
-} rcc_adc_divider;
-
-/**
- * APB1 prescaler dividers
- * @see rcc_set_prescaler()
- */
-typedef enum rcc_apb1_divider {
-    RCC_APB1_HCLK_DIV_1 = 0x0 << 8,
-    RCC_APB1_HCLK_DIV_2 = 0x4 << 8,
-    RCC_APB1_HCLK_DIV_4 = 0x5 << 8,
-    RCC_APB1_HCLK_DIV_8 = 0x6 << 8,
-    RCC_APB1_HCLK_DIV_16 = 0x7 << 8,
-} rcc_apb1_divider;
-
-/**
- * APB2 prescaler dividers
- * @see rcc_set_prescaler()
- */
-typedef enum rcc_apb2_divider {
-    RCC_APB2_HCLK_DIV_1 = 0x0 << 11,
-    RCC_APB2_HCLK_DIV_2 = 0x4 << 11,
-    RCC_APB2_HCLK_DIV_4 = 0x5 << 11,
-    RCC_APB2_HCLK_DIV_8 = 0x6 << 11,
-    RCC_APB2_HCLK_DIV_16 = 0x7 << 11,
-} rcc_apb2_divider;
-
-/**
- * AHB prescaler dividers
- * @see rcc_set_prescaler()
- */
-typedef enum rcc_ahb_divider {
-    RCC_AHB_SYSCLK_DIV_1 = 0x0 << 4,
-    RCC_AHB_SYSCLK_DIV_2 = 0x8 << 4,
-    RCC_AHB_SYSCLK_DIV_4 = 0x9 << 4,
-    RCC_AHB_SYSCLK_DIV_8 = 0xA << 4,
-    RCC_AHB_SYSCLK_DIV_16 = 0xB << 4,
-    RCC_AHB_SYSCLK_DIV_32 = 0xC << 4,
-    RCC_AHB_SYSCLK_DIV_64 = 0xD << 4,
-    RCC_AHB_SYSCLK_DIV_128 = 0xD << 4,
-    RCC_AHB_SYSCLK_DIV_256 = 0xE << 4,
-    RCC_AHB_SYSCLK_DIV_512 = 0xF << 4,
-} rcc_ahb_divider;
-
-/**
- * @brief Available clock sources.
- */
-typedef enum rcc_clk {
-    RCC_CLK_PLL    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_PLLON_BIT), /**< Main PLL, clocked by
-                                                    HSI or HSE. */
-    RCC_CLK_HSE    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_HSEON_BIT), /**< High speed external. */
-    RCC_CLK_HSI    = (uint16)((offsetof(struct rcc_reg_map, CR) << 8) |
-                              RCC_CR_HSION_BIT), /**< High speed internal. */
-    RCC_CLK_LSE    = (uint16)((offsetof(struct rcc_reg_map, BDCR) << 8) |
-                              RCC_BDCR_LSEON_BIT), /**< Low-speed external
-                                                    * (32.768 KHz). */
-    RCC_CLK_LSI    = (uint16)((offsetof(struct rcc_reg_map, CSR) << 8) |
-                              RCC_CSR_LSION_BIT), /**< Low-speed internal
-                                                   * (approximately 32 KHz). */
-} rcc_clk;
+typedef struct stm32f1_rcc_pll_data {
+     rcc_pll_multiplier pll_mul; /**< PLL multiplication factor. */
+} stm32f1_rcc_pll_data;
 
 /*
- * Series-specific functionality.
+ * Deprecated bits.
  */
 
 __deprecated
 void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul);
-
-/**
- * @brief STM32F1-specific PLL configuration values.
- *
- * Use this as the "data" field in a struct rcc_pll_cfg.
- *
- * @see struct rcc_pll_cfg.
- */
-typedef struct stm32f1_rcc_pll_data {
-     rcc_pll_multiplier pll_mul; /**< PLL multiplication factor. */
-} stm32f1_rcc_pll_data;
 
 #ifdef __cplusplus
 }

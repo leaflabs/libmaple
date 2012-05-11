@@ -96,22 +96,10 @@ const struct rcc_dev_info rcc_dev_table[] = {
 };
 
 /**
- * @brief Deprecated.
+ * @brief Deprecated; STM32F1 only.
  *
  * Initialize the clock control system. Initializes the system
  * clock source to use the PLL driven by an external oscillator.
- *
- * This function is limited and nonportable. Instead of using it,
- * follow this (portable) procedure:
- *
- * 1. Switch to HSI by calling rcc_switch_sysclk(RCC_CLKSRC_HSI).
- * 2. Turn off HSE by calling rcc_turn_off_clk(RCC_CLK_HSE).
- * 3. Turn off the PLL by calling rcc_turn_off_clk(RCC_CLK_HSE).
- * 4. Reconfigure the PLL using rcc_configure_pll().
- * 5. Turn on RCC_CLK_HSE using rcc_turn_on_clk() and wait for it to
- *    become ready by busy-waiting on rcc_is_clk_ready().
- * 6. Turn on RCC_CLK_PLL using the same methods.
- * 7. Switch to the PLL with rcc_switch_sysclk(RCC_CLKSRC_PLL).
  *
  * @param sysclk_src system clock source, must be PLL
  * @param pll_src pll clock source, must be HSE
@@ -141,14 +129,7 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
     rcc_switch_sysclk(RCC_CLKSRC_PLL);
 }
 
-/**
- * @brief Configure the main PLL.
- *
- * You may only call this function while the PLL is disabled.
- *
- * @param pll_cfg Desired PLL configuration. The data field must point
- *                to a valid struct stm32f1_rcc_pll_data.
- */
+/* pll_cfg->data must point to a valid struct stm32f1_rcc_pll_data. */
 void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
     stm32f1_rcc_pll_data *data = pll_cfg->data;
     rcc_pll_multiplier pll_mul = data->pll_mul;
@@ -163,10 +144,6 @@ void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
     RCC_BASE->CFGR = cfgr;
 }
 
-/**
- * @brief Turn on the clock line on a peripheral
- * @param id Clock ID of the peripheral to turn on.
- */
 void rcc_clk_enable(rcc_clk_id id) {
     static __io uint32* enable_regs[] = {
         [APB1] = &RCC_BASE->APB1ENR,
@@ -176,14 +153,6 @@ void rcc_clk_enable(rcc_clk_id id) {
     rcc_do_clk_enable(enable_regs, id);
 }
 
-/**
- * @brief Reset a peripheral.
- *
- * Caution: not all rcc_clk_id values refer to a peripheral which can
- * be reset.
- *
- * @param id Clock ID of the peripheral to reset.
- */
 void rcc_reset_dev(rcc_clk_id id) {
     static __io uint32* reset_regs[] = {
         [APB1] = &RCC_BASE->APB1RSTR,
@@ -192,11 +161,6 @@ void rcc_reset_dev(rcc_clk_id id) {
     rcc_do_reset_dev(reset_regs, id);
 }
 
-/**
- * @brief Set the divider on a peripheral prescaler
- * @param prescaler prescaler to set
- * @param divider prescaler divider
- */
 void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     static const uint32 masks[] = {
         [RCC_PRESCALER_AHB] = RCC_CFGR_HPRE,

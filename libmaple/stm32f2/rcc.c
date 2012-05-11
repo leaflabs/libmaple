@@ -110,10 +110,6 @@ const struct rcc_dev_info rcc_dev_table[] = {
     [RCC_TIMER1]  = DEV_ENTRY(APB2, TIM1),
 };
 
-/**
- * @brief Turn on the clock line on a peripheral
- * @param id Clock ID of the peripheral to turn on.
- */
 void rcc_clk_enable(rcc_clk_id id) {
     static __io uint32* enable_regs[] = {
         [RCC_AHB1] = &RCC_BASE->AHB1ENR,
@@ -125,14 +121,6 @@ void rcc_clk_enable(rcc_clk_id id) {
     rcc_do_clk_enable(enable_regs, id);
 }
 
-/**
- * @brief Reset a peripheral.
- *
- * Caution: not all rcc_clk_id values refer to a peripheral which can
- * be reset.
- *
- * @param id Clock ID of the peripheral to reset.
- */
 void rcc_reset_dev(rcc_clk_id id) {
     static __io uint32* reset_regs[] = {
         [RCC_AHB1] = &RCC_BASE->AHB1RSTR,
@@ -144,11 +132,6 @@ void rcc_reset_dev(rcc_clk_id id) {
     rcc_do_reset_dev(reset_regs, id);
 }
 
-/**
- * @brief Set the divider on a peripheral prescaler
- * @param prescaler prescaler to set
- * @param divider prescaler divider
- */
 void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     static const uint32 masks[] = {
         [RCC_PRESCALER_MCO2] = RCC_CFGR_MCO2PRE,
@@ -161,14 +144,7 @@ void rcc_set_prescaler(rcc_prescaler prescaler, uint32 divider) {
     rcc_do_set_prescaler(masks, prescaler, divider);
 }
 
-/**
- * @brief Configure the main PLL.
- *
- * You may only call this function while the PLL is disabled.
- *
- * @param pll_cfg Desired PLL configuration. The data field must point
- *                to a valid struct stm32f2_rcc_pll_data.
- */
+/* pll_cfg->data must point to a struct stm32f2_rcc_pll_data. */
 void rcc_configure_pll(rcc_pll_cfg *pll_cfg) {
     stm32f2_rcc_pll_data *data = pll_cfg->data;
     uint32 pllcfgr;

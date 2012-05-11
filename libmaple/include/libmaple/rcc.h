@@ -111,9 +111,9 @@ int rcc_is_clk_ready(rcc_clk clock);
 
 /* Peripheral clock lines and clock domains. */
 
-void rcc_clk_enable(rcc_clk_id device);
-void rcc_reset_dev(rcc_clk_id device);
-rcc_clk_domain rcc_dev_clk(rcc_clk_id device);
+void rcc_clk_enable(rcc_clk_id id);
+void rcc_reset_dev(rcc_clk_id id);
+rcc_clk_domain rcc_dev_clk(rcc_clk_id id);
 
 /* Clock security system */
 

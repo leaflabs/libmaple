@@ -90,7 +90,7 @@ void rcc_switch_sysclk(rcc_sysclk_src sysclk_src) {
  * On all known STM32 series, this encoding has the property that
  * adding one to the low byte also gives the bit to check to determine
  * if the clock is ready. For example, on STM32F1, RCC_CR_HSERDY is
- * bit 17. If that's not the case on your ser ies, rcc_is_clk_ready()
+ * bit 17. If that's not the case on your series, rcc_is_clk_ready()
  * won't work for you. */
 
 /* Returns the RCC register which controls the clock source. */

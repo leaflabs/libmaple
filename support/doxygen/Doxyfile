@@ -1375,6 +1375,10 @@ INCLUDE_FILE_PATTERNS  =
 # instead of the = operator.
 
 PREDEFINED             = __attribute__()= \
+                       __deprecated= \
+                       __always_inline= \
+                       __packed = \
+                       __weak = \
                        __cplusplus \
                        STM32_MEDIUM_DENSITY \
                        STM32_HIGH_DENSITY \

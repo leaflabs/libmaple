@@ -113,7 +113,7 @@ static inline uint32 rcc_clk_ready_mask(rcc_clk clock) {
 /**
  * @brief Turn on a clock source.
  *
- * After this routine exists, callers should ensure that the clock
+ * After this routine exits, callers should ensure that the clock
  * source is ready by waiting until rcc_is_clk_ready(clock) returns
  * true.
  *

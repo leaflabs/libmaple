@@ -890,7 +890,7 @@ typedef enum rcc_mco1_divider {
 /**
  * @brief STM32F2 RTC prescaler dividers.
  */
-typedef enum rcc_rtc_divider {  /* TODO */
+typedef enum rcc_rtc_divider {  /* FIXME [0.0.13] TODO */
     RCC_RTC_DIV_TODO = 0xFFFFFFFF,
 } rcc_rtc_divider;
 

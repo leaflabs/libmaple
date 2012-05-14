@@ -37,7 +37,7 @@ extern "C"{
 #endif
 
 /**
- * @brief Interrupt vector table interrupt numbers.
+ * @brief STM32F2 interrupt vector table interrupt numbers.
  */
 typedef enum nvic_irq_num {
     NVIC_NMI                    = -14, /**< Non-maskable interrupt */

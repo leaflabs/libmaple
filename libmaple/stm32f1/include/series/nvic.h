@@ -39,7 +39,7 @@ extern "C"{
 #include <libmaple/libmaple_types.h>
 
 /**
- * @brief Interrupt vector table interrupt numbers.
+ * @brief STM32F1 interrupt vector table interrupt numbers.
  * @see <libmaple/scb.h>
  */
 typedef enum nvic_irq_num {

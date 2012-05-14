@@ -37,6 +37,7 @@ extern "C"{
 #endif
 
 #include <libmaple/libmaple_types.h>
+#include <libmaple/stm32.h>
 
 /**
  * @brief STM32F1 interrupt vector table interrupt numbers.
@@ -156,16 +157,13 @@ typedef enum nvic_irq_num {
 } nvic_irq_num;
 
 static inline void nvic_irq_disable_all(void) {
-    /* Note: This only works up to XL density.  The fix for
-     * connectivity line is:
-     *
-     *     NVIC_BASE->ICER[2] = 0xF;
-     *
-     * We don't support connectivity line devices (yet), so leave it
-     * alone for now.
-     */
+    /* Even low-density devices have over 32 interrupt lines. */
     NVIC_BASE->ICER[0] = 0xFFFFFFFF;
     NVIC_BASE->ICER[1] = 0xFFFFFFFF;
+#if STM32_NR_INTERRUPTS > 64
+    /* Only some have over 64; e.g. connectivity line MCUs. */
+    NVIC_BASE->ICER[2] = 0xFFFFFFFF;
+#endif
 }
 
 #ifdef __cplusplus

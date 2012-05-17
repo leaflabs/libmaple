@@ -1,5 +1,9 @@
 # Try "make help" first
 
+SOURCES = buoy.cpp \
+          ads1282.cpp \
+          main.cpp
+
 .DEFAULT_GOAL := sketch
 
 ##
@@ -37,6 +41,9 @@ MEMORY_TARGET ?= flash
 # $(BOARD)- and $(MEMORY_TARGET)-specific configuration
 include $(MAKEDIR)/target-config.mk
 
+# Define git desc to use as version
+GIT_DESC = \"$(shell git describe --tags --always)\"
+
 ##
 ## Compilation flags
 ##
@@ -45,7 +52,8 @@ GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
 		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
 		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
 		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
-		   -D$(DENSITY)
+		   -D$(DENSITY)															 \
+			 -DGIT_DESC=$(GIT_DESC)
 GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 		   -nostdlib -ffunction-sections -fdata-sections	     \
 		   -Wl,--gc-sections $(GLOBAL_FLAGS)
@@ -54,8 +62,8 @@ GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(GLOBAL_FLAGS)
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
             -mcpu=cortex-m3 -mthumb -Xlinker -L $(LD_FAMILY_PATH)    \
-            --gc-sections --print-gc-sections --march=armv7-m -Wall
-
+            -Xlinker --gc-sections -Xlinker --print-gc-sections \
+						-Xassembler --march=armv7-m -Wall
 ##
 ## Build rules and useful templates
 ##
@@ -91,7 +99,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 ##
 
 # main target
-include $(SRCROOT)/build-targets.mk
+include $(MAKEDIR)/build-targets.mk
 
 .PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
 

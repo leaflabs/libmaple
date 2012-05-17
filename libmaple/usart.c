@@ -102,6 +102,11 @@ void usart_init(usart_dev *dev) {
     rb_init(dev->rb, USART_RX_BUF_SIZE, dev->rx_buf);
     rcc_clk_enable(dev->clk_id);
     nvic_irq_enable(dev->irq_num);
+
+    /* Set to max priority to avoid race condition where register presumably
+     * might change before it can be picked out by USART interrupt and cause
+     * it to lock up. */
+    nvic_irq_set_priority (dev->irq_num, 0);
 }
 
 /**

@@ -309,7 +309,9 @@ static inline void usart_putstr(usart_dev *dev, const char* str) {
  * @see usart_data_available()
  */
 static inline uint8 usart_getc(usart_dev *dev) {
-    return rb_remove(dev->rb);
+    /* Use rb_safe_remove to avoid race in case another interrupt have reset
+     * or cleared the ringbuffer */
+    return rb_safe_remove (dev->rb);
 }
 
 /**

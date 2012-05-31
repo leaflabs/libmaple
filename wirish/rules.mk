@@ -36,7 +36,7 @@ cppSRCS_$(d) := boards.cpp
 # 		ext_interrupts.cpp	 \
 # 		wirish_digital.cpp
 # TODO: Put this back in once we've got the necessary libmaple support back.
-# cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
+cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
 
 sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)

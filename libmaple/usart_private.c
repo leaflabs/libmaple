@@ -32,6 +32,7 @@
 
 #include "usart_private.h"
 #include <libmaple/rcc.h>
+#include <libmaple/stm32.h>
 
 uint32 _usart_clock_freq(usart_dev *dev) {
     rcc_clk_domain domain = rcc_dev_clk(dev->clk_id);

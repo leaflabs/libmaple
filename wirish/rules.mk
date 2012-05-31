@@ -24,13 +24,13 @@ cppSRCS_$(d) := boards.cpp
 cppSRCS_$(d) += cxxabi-compat.cpp
 cppSRCS_$(d) += Print.cpp
 cppSRCS_$(d) +=	wirish_digital.cpp
+cppSRCS_$(d) +=	wirish_math.cpp
 cppSRCS_$(d) +=	wirish_shift.cpp
 cppSRCS_$(d) +=	wirish_time.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
 cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 # TODO: revise these appropriately F2 and put them back in:
-# wirish_math.cpp
 # HardwareSerial.cpp
 # HardwareSPI.cpp
 # HardwareTimer.cpp

@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /*
- * Arduino-compatible digital I/O implementation.
+ * STM32F1 implementations for basic GPIO functionality.
  */
 
 #include <wirish/io.h>
@@ -34,61 +34,56 @@
 #include <libmaple/gpio.h>
 #include <libmaple/timer.h>
 
-#include <wirish/wirish_time.h>
 #include <wirish/boards.h>
 
-uint32 digitalRead(uint8 pin) {
-    if (pin >= BOARD_NR_GPIO_PINS) {
-        return 0;
-    }
+void pinMode(uint8 pin, WiringPinMode mode) {
+    gpio_pin_mode outputMode;
+    bool pwm = false;
 
-    return gpio_read_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit) ?
-        HIGH : LOW;
-}
-
-void digitalWrite(uint8 pin, uint8 val) {
     if (pin >= BOARD_NR_GPIO_PINS) {
         return;
     }
 
-    gpio_write_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, val);
-}
-
-void togglePin(uint8 pin) {
-    if (pin >= BOARD_NR_GPIO_PINS) {
+    switch(mode) {
+    case OUTPUT:
+        outputMode = GPIO_OUTPUT_PP;
+        break;
+    case OUTPUT_OPEN_DRAIN:
+        outputMode = GPIO_OUTPUT_OD;
+        break;
+    case INPUT:
+    case INPUT_FLOATING:
+        outputMode = GPIO_INPUT_FLOATING;
+        break;
+    case INPUT_ANALOG:
+        outputMode = GPIO_INPUT_ANALOG;
+        break;
+    case INPUT_PULLUP:
+        outputMode = GPIO_INPUT_PU;
+        break;
+    case INPUT_PULLDOWN:
+        outputMode = GPIO_INPUT_PD;
+        break;
+    case PWM:
+        outputMode = GPIO_AF_OUTPUT_PP;
+        pwm = true;
+        break;
+    case PWM_OPEN_DRAIN:
+        outputMode = GPIO_AF_OUTPUT_OD;
+        pwm = true;
+        break;
+    default:
+        ASSERT(0);
         return;
     }
 
-    gpio_toggle_bit(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit);
-}
+    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, outputMode);
 
-#define BUTTON_DEBOUNCE_DELAY 1
-
-uint8 isButtonPressed() {
-    if (digitalRead(BOARD_BUTTON_PIN)) {
-        delay(BUTTON_DEBOUNCE_DELAY);
-        while (digitalRead(BOARD_BUTTON_PIN))
-            ;
-        return true;
+    if (PIN_MAP[pin].timer_device != NULL) {
+        /* Enable/disable timer channels if we're switching into or
+         * out of PWM. */
+        timer_set_mode(PIN_MAP[pin].timer_device,
+                       PIN_MAP[pin].timer_channel,
+                       pwm ? TIMER_PWM : TIMER_DISABLED);
     }
-    return false;
-}
-
-uint8 waitForButtonPress(uint32 timeout) {
-    uint32 start = millis();
-    uint32 time;
-    if (timeout == 0) {
-        while (!isButtonPressed())
-            ;
-        return true;
-    }
-    do {
-        time = millis();
-        /* properly handle wrap-around */
-        if ((start > time && time + (0xffffffffU - start) > timeout) ||
-            time - start > timeout) {
-            return false;
-        }
-    } while (!isButtonPressed());
-    return true;
 }

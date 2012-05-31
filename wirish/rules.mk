@@ -21,6 +21,12 @@ CFLAGS_$(d) := $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -I$(d)
 sSRCS_$(d) := start.S
 cSRCS_$(d) := start_c.c
 cppSRCS_$(d) := boards.cpp
+cppSRCS_$(d) += cxxabi-compat.cpp
+cppSRCS_$(d) +=	wirish_digital.cpp
+cppSRCS_$(d) +=	wirish_time.cpp
+cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
+cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
+cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 # TODO: test these on F2 and put them back in:
 # cppSRCS_$(d) := wirish_math.cpp		 \
 #                 Print.cpp		 \
@@ -28,16 +34,10 @@ cppSRCS_$(d) := boards.cpp
 #                 HardwareSPI.cpp		 \
 # 		HardwareTimer.cpp	 \
 #                 usb_serial.cpp		 \
-#                 cxxabi-compat.cpp	 \
 # 		wirish_shift.cpp	 \
 # 		wirish_analog.cpp	 \
-# 		wirish_time.cpp		 \
 # 		pwm.cpp 		 \
-# 		ext_interrupts.cpp	 \
-# 		wirish_digital.cpp
-# TODO: Put this back in once we've got the necessary libmaple support back.
-cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
-cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
+# 		ext_interrupts.cpp
 
 sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)

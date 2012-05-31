@@ -22,6 +22,7 @@ sSRCS_$(d) := start.S
 cSRCS_$(d) := start_c.c
 cppSRCS_$(d) := boards.cpp
 cppSRCS_$(d) += cxxabi-compat.cpp
+cppSRCS_$(d) += Print.cpp
 cppSRCS_$(d) +=	wirish_digital.cpp
 cppSRCS_$(d) +=	wirish_time.cpp
 cppSRCS_$(d) +=	wirish_shift.cpp
@@ -30,7 +31,6 @@ cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
 cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 # TODO: test these on F2 and put them back in:
 # cppSRCS_$(d) := wirish_math.cpp		 \
-#                 Print.cpp		 \
 #                 HardwareSerial.cpp	 \
 #                 HardwareSPI.cpp		 \
 # 		HardwareTimer.cpp	 \

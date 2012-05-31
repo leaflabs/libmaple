@@ -87,7 +87,7 @@ gpio_dev gpiog = {
 gpio_dev* const GPIOG = &gpiog;
 
 gpio_dev gpioh = {
-    .regs      = GPIOG_BASE,
+    .regs      = GPIOH_BASE,
     .clk_id    = RCC_GPIOH,
 };
 /** GPIO port G device. */
@@ -146,13 +146,13 @@ void gpio_set_modef(gpio_dev *dev,
     /* Speed */
     tmp = regs->OSPEEDR;
     tmp &= ~(0x3 << shift);
-    tmp |= (flags >> 1) << shift;
+    tmp |= ((flags >> 1) & 0x3) << shift;
     regs->OSPEEDR = tmp;
 
     /* Pull-up/pull-down */
     tmp = regs->PUPDR;
     tmp &= ~(0x3 << shift);
-    tmp |= (flags >> 2) << shift;
+    tmp |= ((flags >> 3) & 0x3) << shift;
     regs->PUPDR = tmp;
 }
 

@@ -63,7 +63,7 @@ void gpio_set_mode(gpio_dev *dev, uint8 pin, gpio_pin_mode mode);
  * @param val If true, set the pin.  If false, reset the pin.
  */
 static inline void gpio_write_bit(gpio_dev *dev, uint8 pin, uint8 val) {
-    val = !!val;
+    val = !val;          /* "set" bits are lower than "reset" bits  */
     dev->regs->BSRR = BIT(pin) << (16 * val);
 }
 

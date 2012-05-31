@@ -12,14 +12,14 @@ CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
 # Local rules and targets
 cSRCS_$(d) := adc.c
-cSRCS_$(d) += dma.c
+# cSRCS_$(d) += dma.c
 cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += iwdg.c
 cSRCS_$(d) += nvic.c
 cSRCS_$(d) += pwr.c
 cSRCS_$(d) += rcc.c
-cSRCS_$(d) += spi.c
+# cSRCS_$(d) += spi.c
 cSRCS_$(d) += syscalls.c
 cSRCS_$(d) += systick.c
 cSRCS_$(d) += timer.c

@@ -63,6 +63,7 @@ extern "C" {
 
 #if defined(MCU_STM32F207IC) || defined(MCU_STM32F207IG)
 #   define STM32_NR_GPIO_PORTS          9
+#   define STM32_TIMER_MASK             0x7FFE /* TIMER1-TIMER14. */
 #   define STM32_SRAM_END               ((void*)0x20020000)
 #else
 #error "Unrecognized STM32F2 MCU, or no MCU specified."

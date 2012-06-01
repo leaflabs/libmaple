@@ -70,13 +70,35 @@ extern "C" {
 #include <series/stm32.h>
 
 /* Ensure the series header isn't broken. */
-#if (!defined(STM32_PCLK1)         || !defined(STM32_PCLK2)         || \
-     !defined(STM32_MCU_SERIES)    || !defined(STM32_NR_INTERRUPTS) || \
-     !defined(STM32_NR_GPIO_PORTS) || !defined(STM32_DELAY_US_MULT) || \
-     !defined(STM32_SRAM_END)      || !defined(STM32_HAVE_FSMC)     || \
+#if (!defined(STM32_PCLK1)         ||     \
+     !defined(STM32_PCLK2)         ||     \
+     !defined(STM32_MCU_SERIES)    ||     \
+     !defined(STM32_NR_INTERRUPTS) ||     \
+     !defined(STM32_NR_GPIO_PORTS) ||     \
+     !defined(STM32_TIMER_MASK)    ||     \
+     !defined(STM32_DELAY_US_MULT) ||     \
+     !defined(STM32_SRAM_END)      ||     \
+     !defined(STM32_HAVE_FSMC)     ||     \
      !defined(STM32_HAVE_USB))
 #error "Bad STM32F1 configuration. Check <series/stm32.h> header for your MCU."
 #endif
+
+/*
+ * Derived macros
+ */
+
+/* FIXME [0.0.13] add this to ReST API page */
+/**
+ * @brief Statically determine whether a timer is present.
+ *
+ * Given a constant timer number n (starting from 1), this macro has a
+ * nonzero value exactly when TIMERn is available.
+ */
+#define STM32_HAVE_TIMER(n) (STM32_TIMER_MASK & (1 << (n)))
+
+/*
+ * Doxygen for functionality provided by series header.
+ */
 
 #ifdef __DOXYGEN__
 
@@ -127,6 +149,19 @@ extern "C" {
  * Number of GPIO ports.
  */
 #define STM32_NR_GPIO_PORTS
+
+/* FIXME [0.0.13] add this to ReST API page */
+/**
+ * @brief Bitmask of timers available on the MCU.
+ *
+ * That is, if TIMERn is available, then STM32_TIMER_MASK & (1 << n)
+ * will be nonzero. For example, a nonzero value of "STM32_TIMER_MASK
+ * & 0x2" means TIMER1 is available.
+ *
+ * A bitmask is necessary as some STM32 MCUs have "holes" in the range
+ * of available timers.
+ */
+#define STM32_TIMER_MASK
 
 /**
  * @brief Multiplier to convert microseconds into loop iterations

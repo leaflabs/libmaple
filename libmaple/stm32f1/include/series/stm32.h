@@ -94,6 +94,7 @@ extern "C" {
 #elif defined(MCU_STM32F100RB)
 #   define STM32_F1_LINE                STM32_F1_LINE_VALUE
 #   define STM32_NR_GPIO_PORTS          4
+#   define STM32_TIMER_MASK             0x380DE /* Timers: 1-4, 6, 7, 15-17. */
 #   define STM32_SRAM_END               ((void*)0x20002000)
 #   define STM32_MEDIUM_DENSITY
 
@@ -112,9 +113,16 @@ extern "C" {
 
 #    ifdef STM32_MEDIUM_DENSITY
 #       define STM32_NR_INTERRUPTS      43
+#       define STM32_TIMER_MASK         0x1E /* TIMER1--TIMER4 */
 #       define STM32_HAVE_FSMC          0
 #    elif defined(STM32_HIGH_DENSITY)
 #       define STM32_NR_INTERRUPTS      60
+#       define STM32_TIMER_MASK         0x1FE /* TIMER1--TIMER8 */
+#       define STM32_HAVE_FSMC          1
+#    endif
+#    elif defined(STM32_XL_DENSITY)
+#       define STM32_NR_INTERRUPTS      60
+#       define STM32_TIMER_MASK         0x7FFE /* TIMER1--TIMER14 */
 #       define STM32_HAVE_FSMC          1
 #    endif
 

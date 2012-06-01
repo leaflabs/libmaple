@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -34,36 +35,36 @@
 #include <libmaple/libmaple.h>
 #include <libmaple/gpio.h>
 #include <libmaple/timer.h>
+#include <libmaple/usart.h>
 
-#include <wirish/boards.h>
+#define DEFINE_HWSERIAL(name, n)                                   \
+    HardwareSerial name(USART##n,                                  \
+                        BOARD_USART##n##_TX_PIN,                   \
+                        BOARD_USART##n##_RX_PIN)
 
-#define TX1 BOARD_USART1_TX_PIN
-#define RX1 BOARD_USART1_RX_PIN
-#define TX2 BOARD_USART2_TX_PIN
-#define RX2 BOARD_USART2_RX_PIN
-#define TX3 BOARD_USART3_TX_PIN
-#define RX3 BOARD_USART3_RX_PIN
-#if defined STM32_HIGH_DENSITY && !defined(BOARD_maple_RET6)
-#define TX4 BOARD_UART4_TX_PIN
-#define RX4 BOARD_UART4_RX_PIN
-#define TX5 BOARD_UART5_TX_PIN
-#define RX5 BOARD_UART5_RX_PIN
+#if BOARD_HAVE_USART1
+DEFINE_HWSERIAL(Serial1, 1);
 #endif
-
-HardwareSerial Serial1(USART1, TX1, RX1, STM32_PCLK2);
-HardwareSerial Serial2(USART2, TX2, RX2, STM32_PCLK1);
-HardwareSerial Serial3(USART3, TX3, RX3, STM32_PCLK1);
-#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
-HardwareSerial Serial4(UART4,  TX4, RX4, STM32_PCLK1);
-HardwareSerial Serial5(UART5,  TX5, RX5, STM32_PCLK1);
+#if BOARD_HAVE_USART2
+DEFINE_HWSERIAL(Serial2, 2);
+#endif
+#if BOARD_HAVE_USART3
+DEFINE_HWSERIAL(Serial3, 3);
+#endif
+#if BOARD_HAVE_UART4
+DEFINE_HWSERIAL(Serial4, 4);
+#endif
+#if BOARD_HAVE_UART5
+DEFINE_HWSERIAL(Serial5, 5);
+#endif
+#if BOARD_HAVE_USART6
+DEFINE_HWSERIAL(Serial6, 6);
 #endif
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device,
                                uint8 tx_pin,
-                               uint8 rx_pin,
-                               uint32 clock_speed) {
+                               uint8 rx_pin) {
     this->usart_device = usart_device;
-    this->clock_speed = clock_speed;
     this->tx_pin = tx_pin;
     this->rx_pin = rx_pin;
 }
@@ -72,31 +73,44 @@ HardwareSerial::HardwareSerial(usart_dev *usart_device,
  * Set up/tear down
  */
 
-void HardwareSerial::begin(uint32 baud) {
-    ASSERT(baud <= usart_device->max_baud);
+#if STM32_MCU_SERIES == STM32_SERIES_F1
+/* F1 MCUs have no GPIO_AFR[HL], so turn off PWM if there's a conflict
+ * on this GPIO bit. */
+static void disable_timer_if_necessary(timer_dev *dev, uint8 ch) {
+    if (txi->timer_device != NULL) {
+        timer_set_mode(txi->timer_device, txi->timer_channel, TIMER_DISABLED);
+    }
+}
+#elif (STM32_MCU_SERIES == STM32_SERIES_F2) ||    \
+      (STM32_MCU_SERIES == STM32_SERIES_F4)
+#define disable_timer_if_necessary(dev, ch) ((void)0)
+#else
+#warn "Unsupported STM32 series; timer conflicts are possible"
+#endif
 
-    if (baud > usart_device->max_baud) {
+void HardwareSerial::begin(uint32 baud) {
+    ASSERT(baud <= this->usart_device->max_baud);
+
+    if (baud > this->usart_device->max_baud) {
         return;
     }
 
-    const stm32_pin_info *txi = &PIN_MAP[tx_pin];
-    const stm32_pin_info *rxi = &PIN_MAP[rx_pin];
+    const stm32_pin_info *txi = &PIN_MAP[this->tx_pin];
+    const stm32_pin_info *rxi = &PIN_MAP[this->rx_pin];
 
-    gpio_set_mode(txi->gpio_device, txi->gpio_bit, GPIO_AF_OUTPUT_PP);
-    gpio_set_mode(rxi->gpio_device, rxi->gpio_bit, GPIO_INPUT_FLOATING);
+    disable_timer_if_necessary(txi->timer_device, txi->timer_channel);
 
-    if (txi->timer_device != NULL) {
-        /* Turn off any PWM if there's a conflict on this GPIO bit. */
-        timer_set_mode(txi->timer_device, txi->timer_channel, TIMER_DISABLED);
-    }
-
-    usart_init(usart_device);
-    usart_set_baud_rate(usart_device, clock_speed, baud);
-    usart_enable(usart_device);
+    usart_async_gpio_cfg(this->usart_device,
+                         rxi->gpio_device, rxi->gpio_bit,
+                         txi->gpio_device, txi->gpio_bit,
+                         0);
+    usart_init(this->usart_device);
+    usart_set_baud_rate(this->usart_device, USART_USE_PCLK, baud);
+    usart_enable(this->usart_device);
 }
 
 void HardwareSerial::end(void) {
-    usart_disable(usart_device);
+    usart_disable(this->usart_device);
 }
 
 /*
@@ -104,17 +118,17 @@ void HardwareSerial::end(void) {
  */
 
 uint8 HardwareSerial::read(void) {
-    return usart_getc(usart_device);
+    return usart_getc(this->usart_device);
 }
 
 uint32 HardwareSerial::available(void) {
-    return usart_data_available(usart_device);
+    return usart_data_available(this->usart_device);
 }
 
 void HardwareSerial::write(unsigned char ch) {
-    usart_putc(usart_device, ch);
+    usart_putc(this->usart_device, ch);
 }
 
 void HardwareSerial::flush(void) {
-    usart_reset_rx(usart_device);
+    usart_reset_rx(this->usart_device);
 }

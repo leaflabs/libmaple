@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -33,9 +34,9 @@
 #define _WIRISH_HARDWARESERIAL_H_
 
 #include <libmaple/libmaple_types.h>
-#include <libmaple/usart.h>
 
 #include <wirish/Print.h>
+#include <wirish/boards.h>
 
 /*
  * IMPORTANT:
@@ -47,12 +48,13 @@
  * the documentation accordingly.
  */
 
+struct usart_dev;
+
 class HardwareSerial : public Print {
 public:
-    HardwareSerial(usart_dev *usart_device,
+    HardwareSerial(struct usart_dev *usart_device,
                    uint8 tx_pin,
-                   uint8 rx_pin,
-                   uint32 clock_speed);
+                   uint8 rx_pin);
 
     /* Set up/tear down */
     void begin(uint32 baud);
@@ -69,18 +71,28 @@ public:
     int txPin(void) { return this->tx_pin; }
     int rxPin(void) { return this->rx_pin; }
 private:
-    usart_dev *usart_device;
+    struct usart_dev *usart_device;
     uint8 tx_pin;
     uint8 rx_pin;
-    uint32 clock_speed;
 };
 
+#if BOARD_HAVE_USART1
 extern HardwareSerial Serial1;
+#endif
+#if BOARD_HAVE_USART2
 extern HardwareSerial Serial2;
+#endif
+#if BOARD_HAVE_USART3
 extern HardwareSerial Serial3;
-#if defined(STM32_HIGH_DENSITY) && !defined(BOARD_maple_RET6)
+#endif
+#if BOARD_HAVE_UART4
 extern HardwareSerial Serial4;
+#endif
+#if BOARD_HAVE_UART5
 extern HardwareSerial Serial5;
+#endif
+#if BOARD_HAVE_USART6
+extern HardwareSerial Serial6;
 #endif
 
 #endif

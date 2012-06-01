@@ -395,6 +395,7 @@ typedef struct usart_dev {
 
 void usart_init(usart_dev *dev);
 
+/* FIXME document this function */
 struct gpio_dev;                /* forward declaration */
 void usart_async_gpio_cfg(usart_dev *udev,
                           struct gpio_dev *rx_dev, uint8 rx,

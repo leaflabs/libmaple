@@ -27,7 +27,11 @@
 /**
  * @file   wirish/boards/st_stm3220g_eval/include/board/board.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  STM3220G-EVAL board header.
+ * @brief  STM3220G-EVAL board stub header.
+ *
+ * This (and the corresponding board.cpp) needs to be fixed and
+ * fleshed out. Do it later? Maybe someone who wants support for this
+ * board will do it.
  */
 
 #ifndef _BOARD_ST_STM3220G_EVAL_H_
@@ -40,6 +44,12 @@
 #define BOARD_LED_PIN           0
 
 #define BOARD_NR_USARTS         0
+#define BOARD_HAVE_USART1       0
+#define BOARD_HAVE_USART2       0
+#define BOARD_HAVE_USART3       0
+#define BOARD_HAVE_UART4        0
+#define BOARD_HAVE_UART5        0
+#define BOARD_HAVE_USART6       0
 #define BOARD_NR_SPI            0
 #define BOARD_NR_GPIO_PINS      6
 #define BOARD_NR_PWM_PINS       0

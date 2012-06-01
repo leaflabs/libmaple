@@ -39,8 +39,15 @@
 #define BOARD_BUTTON_PIN        38
 #define BOARD_LED_PIN           13
 
-/* Number of USARTs/UARTs whose pins are broken out to headers */
+/* Number of USARTs/UARTs whose pins are broken out to headers, and
+ * macros saying which ones they are. */
 #define BOARD_NR_USARTS         3
+#define BOARD_HAVE_USART1       1
+#define BOARD_HAVE_USART2       1
+#define BOARD_HAVE_USART3       1
+#define BOARD_HAVE_UART4        0
+#define BOARD_HAVE_UART5        0
+#define BOARD_HAVE_USART6       0
 
 /* Default USART pin numbers (not considering AFIO remap) */
 #define BOARD_USART1_TX_PIN     7

@@ -24,6 +24,7 @@ cppSRCS_$(d) := boards.cpp
 cppSRCS_$(d) += cxxabi-compat.cpp
 cppSRCS_$(d) += HardwareSerial.cpp
 cppSRCS_$(d) += Print.cpp
+cppSRCS_$(d) += wirish_analog.cpp
 cppSRCS_$(d) +=	wirish_digital.cpp
 cppSRCS_$(d) +=	wirish_math.cpp
 cppSRCS_$(d) +=	wirish_shift.cpp
@@ -35,7 +36,6 @@ cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 # HardwareSPI.cpp
 # HardwareTimer.cpp
 # usb_serial.cpp
-# wirish_analog.cpp
 # pwm.cpp
 # ext_interrupts.cpp
 

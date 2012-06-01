@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,17 +26,17 @@
  *****************************************************************************/
 
 /**
- *  @brief Arduino-compatible ADC implementation.
+ * @file wirish/wirish_analog.cpp
+ * @brief Wiring-style analogRead() implementation.
  */
 
 #include <wirish/io.h>
-
 #include <libmaple/adc.h>
-
 #include <wirish/boards.h>
 
-/* Assumes that the ADC has been initialized and that the pin is set
- * to INPUT_ANALOG */
+/* Unlike Wiring and Arduino, this assumes that the pin's mode is set
+ * to INPUT_ANALOG. That's faster, but it does require some extra work
+ * on the user's part. Not too much, we think ;). */
 uint16 analogRead(uint8 pin) {
     const adc_dev *dev = PIN_MAP[pin].adc_device;
     if (dev == NULL) {

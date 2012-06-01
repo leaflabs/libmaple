@@ -259,12 +259,12 @@ extern void adc_set_prescaler(adc_prescaler pre);
  */
 extern void adc_foreach(void (*fn)(const adc_dev*));
 
+struct gpio_dev;
 /**
  * @brief Configure a GPIO pin for ADC conversion.
  * @param gdev GPIO device to configure.
  * @param bit Bit on gdev to configure for ADC conversion.
  */
-struct gpio_dev;
 extern void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
 
 /**

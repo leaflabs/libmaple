@@ -44,12 +44,6 @@
 
 /* UART4 and UART5 have pins which aren't broken out :( */
 #define BOARD_NR_USARTS         3
-#define BOARD_HAVE_USART1       1
-#define BOARD_HAVE_USART2       1
-#define BOARD_HAVE_USART3       1
-#define BOARD_HAVE_UART4        0
-#define BOARD_HAVE_UART5        0
-#define BOARD_HAVE_USART6       0
 #define BOARD_USART1_TX_PIN     7
 #define BOARD_USART1_RX_PIN     8
 #define BOARD_USART2_TX_PIN     1

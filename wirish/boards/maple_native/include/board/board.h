@@ -43,12 +43,6 @@
 #define BOARD_BUTTON_PIN        6
 
 #define BOARD_NR_USARTS         5
-#define BOARD_HAVE_USART1       1
-#define BOARD_HAVE_USART2       1
-#define BOARD_HAVE_USART3       1
-#define BOARD_HAVE_UART4        1
-#define BOARD_HAVE_UART5        1
-#define BOARD_HAVE_USART6       0
 #define BOARD_USART1_TX_PIN     24
 #define BOARD_USART1_RX_PIN     25
 #define BOARD_USART2_TX_PIN     50

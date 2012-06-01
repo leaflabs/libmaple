@@ -44,12 +44,6 @@
 #define BOARD_LED_PIN           0
 
 #define BOARD_NR_USARTS         0
-#define BOARD_HAVE_USART1       0
-#define BOARD_HAVE_USART2       0
-#define BOARD_HAVE_USART3       0
-#define BOARD_HAVE_UART4        0
-#define BOARD_HAVE_UART5        0
-#define BOARD_HAVE_USART6       0
 #define BOARD_NR_SPI            0
 #define BOARD_NR_GPIO_PINS      6
 #define BOARD_NR_PWM_PINS       0

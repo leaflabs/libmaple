@@ -114,4 +114,25 @@ bool boardUsesPin(uint8 pin);
 #define CLOCK_SPEED_MHZ                 CYCLES_PER_MICROSECOND
 #define CLOCK_SPEED_HZ                  (CLOCK_SPEED_MHZ * 1000000UL)
 
+/**
+ * @brief Does the board break out a USART/UART's RX and TX pins?
+ *
+ * BOARD_HAVE_USART(n) is nonzero iff USARTn is available. Also see
+ * BOARD_HAVE_USART1, ..., BOARD_HAVE_UART4 (sic), etc.
+ */
+#define BOARD_HAVE_USART(n) (defined(BOARD_USART##n##_TX_PIN) && \
+                             defined(BOARD_USART##n##_RX_PIN))
+/** Feature test: nonzero iff the board has USART1. */
+#define BOARD_HAVE_USART1               BOARD_HAVE_USART(1)
+/** Feature test: nonzero iff the board has USART2, 0 otherwise. */
+#define BOARD_HAVE_USART2               BOARD_HAVE_USART(2)
+/** Feature test: nonzero iff the board has USART3, 0 otherwise. */
+#define BOARD_HAVE_USART3               BOARD_HAVE_USART(3)
+/** Feature test: nonzero iff the board has UART4, 0 otherwise. */
+#define BOARD_HAVE_UART4                BOARD_HAVE_USART(4)
+/** Feature test: nonzero iff the board has UART5, 0 otherwise. */
+#define BOARD_HAVE_UART5                BOARD_HAVE_USART(5)
+/** Feature test: nonzero iff the board has USART6, 0 otherwise. */
+#define BOARD_HAVE_USART6               BOARD_HAVE_USART(6)
+
 #endif

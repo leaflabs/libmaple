@@ -23,6 +23,7 @@ cSRCS_$(d) := start_c.c
 cppSRCS_$(d) := boards.cpp
 cppSRCS_$(d) += cxxabi-compat.cpp
 cppSRCS_$(d) += HardwareSerial.cpp
+cppSRCS_$(d) += HardwareTimer.cpp
 cppSRCS_$(d) += Print.cpp
 cppSRCS_$(d) += wirish_analog.cpp
 cppSRCS_$(d) +=	wirish_digital.cpp
@@ -34,7 +35,6 @@ cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
 cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 # TODO: revise these appropriately F2 and put them back in:
 # HardwareSPI.cpp
-# HardwareTimer.cpp
 # usb_serial.cpp
 # pwm.cpp
 # ext_interrupts.cpp

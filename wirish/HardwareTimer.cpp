@@ -30,33 +30,114 @@
 
 // TODO [0.1.0] Remove deprecated pieces
 
-#ifdef STM32_MEDIUM_DENSITY
-#define NR_TIMERS 4
-#elif defined(STM32_HIGH_DENSITY)
-#define NR_TIMERS 8
-#else
-#error "Unsupported density"
-#endif
-
 #define MAX_RELOAD ((1 << 16) - 1)
 
-HardwareTimer::HardwareTimer(uint8 timerNum) {
-    if (timerNum > NR_TIMERS) {
-        ASSERT(0);
-    }
-    timer_dev *devs[] = {
-        TIMER1,
-        TIMER2,
-        TIMER3,
-        TIMER4,
-#ifdef STM32_HIGH_DENSITY
-        TIMER5,
-        TIMER6,
-        TIMER7,
-        TIMER8,
+/*
+ * Big ugly table of timers available on the MCU. Needed by the
+ * HardwareTimer constructor. Sigh; maybe predefined instances weren't
+ * such a bad idea. Oh well, at least the HardwareTimer interface is
+ * officially unstable since v0.0.12; we can always get rid of this
+ * later.
+ */
+
+#define MAX_NR_TIMERS 17 // No STM32 I've ever heard of has higher than TIMER17
+
+static timer_dev *devs[MAX_NR_TIMERS] = {
+#if STM32_HAVE_TIMER(1)
+    TIMER1,
+#else
+    NULL,
 #endif
-    };
+#if STM32_HAVE_TIMER(2)
+    TIMER2,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(3)
+    TIMER3,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(4)
+    TIMER4,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(5)
+    TIMER5,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(6)
+    TIMER6,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(7)
+    TIMER7,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(8)
+    TIMER8,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(9)
+    TIMER9,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(10)
+    TIMER10,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(11)
+    TIMER11,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(12)
+    TIMER12,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(13)
+    TIMER13,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(14)
+    TIMER14,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(15)
+    TIMER15,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(16)
+    TIMER16,
+#else
+    NULL,
+#endif
+#if STM32_HAVE_TIMER(17)
+    TIMER17,
+#else
+    NULL,
+#endif
+};
+
+/*
+ * HardwareTimer routines
+ */
+
+HardwareTimer::HardwareTimer(uint8 timerNum) {
+    ASSERT(timerNum <= MAX_NR_TIMERS);
     this->dev = devs[timerNum - 1];
+    ASSERT(this->dev != NULL);
 }
 
 void HardwareTimer::pause(void) {

@@ -119,7 +119,6 @@ extern "C" {
 #       define STM32_NR_INTERRUPTS      60
 #       define STM32_TIMER_MASK         0x1FE /* TIMER1--TIMER8 */
 #       define STM32_HAVE_FSMC          1
-#    endif
 #    elif defined(STM32_XL_DENSITY)
 #       define STM32_NR_INTERRUPTS      60
 #       define STM32_TIMER_MASK         0x7FFE /* TIMER1--TIMER14 */

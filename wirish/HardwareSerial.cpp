@@ -77,8 +77,8 @@ HardwareSerial::HardwareSerial(usart_dev *usart_device,
 /* F1 MCUs have no GPIO_AFR[HL], so turn off PWM if there's a conflict
  * on this GPIO bit. */
 static void disable_timer_if_necessary(timer_dev *dev, uint8 ch) {
-    if (txi->timer_device != NULL) {
-        timer_set_mode(txi->timer_device, txi->timer_channel, TIMER_DISABLED);
+    if (dev != NULL) {
+        timer_set_mode(dev, ch, TIMER_DISABLED);
     }
 }
 #elif (STM32_MCU_SERIES == STM32_SERIES_F2) ||    \

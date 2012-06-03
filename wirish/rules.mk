@@ -34,7 +34,7 @@ cppSRCS_$(d) +=	wirish_time.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
 cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
-# TODO: revise these appropriately F2 and put them back in:
+# TODO: revise these appropriately for F2 and put them back in:
 # HardwareSPI.cpp
 # usb_serial.cpp
 # ext_interrupts.cpp

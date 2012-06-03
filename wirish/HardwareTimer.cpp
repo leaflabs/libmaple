@@ -33,8 +33,6 @@
 
 // TODO [0.1.0] Remove deprecated pieces
 
-#define MAX_RELOAD ((1 << 16) - 1)
-
 /*
  * Evil hack to infer this->dev from timerNum in the HardwareTimer
  * constructor. See:
@@ -102,6 +100,7 @@ void HardwareTimer::setCount(uint16 val) {
     timer_set_count(this->dev, min(val, ovf));
 }
 
+#define MAX_RELOAD ((1 << 16) - 1)
 uint16 HardwareTimer::setPeriod(uint32 microseconds) {
     // Not the best way to handle this edge case?
     if (!microseconds) {

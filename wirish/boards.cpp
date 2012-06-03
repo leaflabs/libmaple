@@ -27,22 +27,22 @@
 
 /**
  * @file wirish/boards.cpp
- * @brief Generic board routines.
+ * @brief init() and board routines.
  *
  * This file is mostly interesting for the init() function, which
- * configures Flash, the core sytem clocks, and a variety of other
- * available peripherals on the board so the rest of Wirish doesn't
- * have to turn things on before using them.
+ * configures Flash, the core clocks, and a variety of other available
+ * peripherals on the board so the rest of Wirish doesn't have to turn
+ * things on before using them.
  *
- * How init() does this is chip-specific. See the chip-specific pieces
- * of Wirish (under e.g. wirish/stm32f1/, wirish/stmf32f2) for
- * details.
+ * Prior to returning, init() calls boardInit(), which allows boards
+ * to perform any initialization they need to. This file includes a
+ * weak no-op definition of boardInit(), so boards that don't need any
+ * special initialization don't have to define their own.
  *
- * Finally, prior to returning, init() calls boardInit(), which allows
- * boards to perform any initialization they need to. This file
- * includes a weak no-op definition of boardInit(), so boards that
- * don't need any special initialization don't have to define their
- * own.
+ * How init() works is chip-specific. See the boards_setup.cpp files
+ * under e.g. wirish/stm32f1/, wirish/stmf32f2 for the details, but be
+ * advised: their contents are unstable, and can/will change without
+ * notice.
  */
 
 #include <wirish/boards.h>
@@ -79,7 +79,7 @@ __weak void boardInit(void) {
 }
 
 /* You could farm this out to the files in boards/ if e.g. it takes
- * too long to test on Maple Native (all those FSMC pins...). */
+ * too long to test on boards with lots of pins. */
 bool boardUsesPin(uint8 pin) {
     for (int i = 0; i < BOARD_NR_USED_PINS; i++) {
         if (pin == boardUsedPins[i]) {

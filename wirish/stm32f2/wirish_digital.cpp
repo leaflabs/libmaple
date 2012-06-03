@@ -124,7 +124,6 @@ void pinMode(uint8 pin, WiringPinMode w_mode) {
         }
         timer_set_mode(info->timer_device, info->timer_channel, TIMER_PWM);
         gpio_set_af(info->gpio_device, info->gpio_bit, timer_af);
-    } else {
-        gpio_set_modef(info->gpio_device, info->gpio_bit, mode, flags);
     }
+    gpio_set_modef(info->gpio_device, info->gpio_bit, mode, flags);
 }

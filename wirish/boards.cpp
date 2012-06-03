@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -55,6 +56,7 @@ static void setup_flash(void);
 static void setup_clocks(void);
 static void setup_nvic(void);
 static void setup_adcs(void);
+static void setup_timers(void);
 
 /*
  * Exported functions
@@ -67,7 +69,7 @@ void init(void) {
     systick_init(SYSTICK_RELOAD_VAL);
     wirish::priv::board_setup_gpio();
     setup_adcs();
-    wirish::priv::board_setup_timers();
+    setup_timers();
     wirish::priv::board_setup_usb();
     boardInit();
 }
@@ -156,4 +158,43 @@ static void adc_default_config(const adc_dev *dev) {
 static void setup_adcs(void) {
     adc_set_prescaler(wirish::priv::w_adc_pre);
     adc_foreach(adc_default_config);
+}
+
+static void timer_default_config(timer_dev *dev) {
+    timer_adv_reg_map *regs = (dev->regs).adv;
+    const uint16 full_overflow = 0xFFFF;
+    const uint16 half_duty = 0x8FFF;
+
+    timer_init(dev);
+    timer_pause(dev);
+
+    regs->CR1 = TIMER_CR1_ARPE;
+    regs->PSC = 1;
+    regs->SR = 0;
+    regs->DIER = 0;
+    regs->EGR = TIMER_EGR_UG;
+    switch (dev->type) {
+    case TIMER_ADVANCED:
+        regs->BDTR = TIMER_BDTR_MOE | TIMER_BDTR_LOCK_OFF;
+        // fall-through
+    case TIMER_GENERAL:
+        timer_set_reload(dev, full_overflow);
+        for (uint8 channel = 1; channel <= 4; channel++) {
+            if (timer_has_cc_channel(dev, channel)) {
+                timer_set_compare(dev, channel, half_duty);
+                timer_oc_set_mode(dev, channel, TIMER_OC_MODE_PWM_1,
+                                  TIMER_OC_PE);
+            }
+        }
+        // fall-through
+    case TIMER_BASIC:
+        break;
+    }
+
+    timer_generate_update(dev);
+    timer_resume(dev);
+}
+
+static void setup_timers(void) {
+    timer_foreach(timer_default_config);
 }

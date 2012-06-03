@@ -81,12 +81,8 @@ namespace wirish {
             gpio_init_all();
         }
 
-        void board_setup_timers(void) {
-            // TODO
-        }
-
         void board_setup_usb(void) {
-            // TODO
+            // Nothing to do.
         }
 
     }

@@ -62,8 +62,6 @@ namespace wirish {
         adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_6;
         adc_smp_rate w_adc_smp = ADC_SMPR_55_5;
 
-        static void config_timer(timer_dev*);
-
         void board_reset_pll(void) {
             // TODO
         }
@@ -81,54 +79,11 @@ namespace wirish {
             afio_init();
         }
 
-        void board_setup_timers(void) {
-            timer_foreach(config_timer);
-        }
-
         void board_setup_usb(void) {
 #if 0
 #    if STM32_HAVE_USB
             usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
 #    endif
-#endif
-        }
-
-        /*
-         * Auxiliary routines
-         */
-
-        static void config_timer(timer_dev *dev) {
-#if 0
-            timer_adv_reg_map *regs = (dev->regs).adv;
-            const uint16 full_overflow = 0xFFFF;
-            const uint16 half_duty = 0x8FFF;
-
-            timer_init(dev);
-            timer_pause(dev);
-
-            regs->CR1 = TIMER_CR1_ARPE;
-            regs->PSC = 1;
-            regs->SR = 0;
-            regs->DIER = 0;
-            regs->EGR = TIMER_EGR_UG;
-
-            switch (dev->type) {
-            case TIMER_ADVANCED:
-                regs->BDTR = TIMER_BDTR_MOE | TIMER_BDTR_LOCK_OFF;
-                // fall-through
-            case TIMER_GENERAL:
-                timer_set_reload(dev, full_overflow);
-
-                for (int channel = 1; channel <= 4; channel++) {
-                    timer_set_compare(dev, channel, half_duty);
-                    timer_oc_set_mode(dev, channel, TIMER_OC_MODE_PWM_1, TIMER_OC_PE);
-                }
-                // fall-through
-            case TIMER_BASIC:
-                break;
-            }
-
-            timer_resume(dev);
 #endif
         }
     }

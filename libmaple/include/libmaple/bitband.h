@@ -51,7 +51,7 @@ static inline volatile uint32* __bb_addr(volatile void*,
 
 /**
  * @brief Obtain a pointer to the bit-band address corresponding to a
- * bit in a volatile SRAM address.
+ *        bit in a volatile SRAM address.
  * @param address Address in the bit-banded SRAM region
  * @param bit     Bit in address to bit-band
  */
@@ -83,7 +83,7 @@ static inline void bb_sram_set_bit(volatile void *address,
 
 /**
  * @brief Obtain a pointer to the bit-band address corresponding to a
- * bit in a peripheral address.
+ *        bit in a peripheral address.
  * @param address Address in the bit-banded peripheral region
  * @param bit     Bit in address to bit-band
  */

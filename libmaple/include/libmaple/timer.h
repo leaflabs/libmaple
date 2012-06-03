@@ -599,6 +599,7 @@ void timer_init(timer_dev *dev);
 void timer_disable(timer_dev *dev);
 void timer_set_mode(timer_dev *dev, uint8 channel, timer_mode mode);
 void timer_foreach(void (*fn)(timer_dev*));
+int timer_has_cc_channel(timer_dev *dev, uint8 channel);
 
 /**
  * @brief Timer interrupt number.

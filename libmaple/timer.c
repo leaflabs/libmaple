@@ -101,6 +101,34 @@ void timer_set_mode(timer_dev *dev, uint8 channel, timer_mode mode) {
 }
 
 /**
+ * @brief Determine whether a timer has a particular capture/compare channel.
+ *
+ * Different timers have different numbers of capture/compare channels
+ * (and some have none at all). Use this function to test whether a
+ * given timer/channel combination will work.
+ *
+ * @param dev Timer device
+ * @param channel Capture/compare channel, from 1 to 4
+ * @return Nonzero if dev has channel, zero otherwise.
+ */
+int timer_has_cc_channel(timer_dev *dev, uint8 channel) {
+    /* On all currently supported series: advanced and "full-featured"
+     * general purpose timers have all four channels. Of the
+     * restricted general timers, timers 9 and 12 have channels 1 and
+     * 2; the others have channel 1 only. Basic timers have none. */
+    rcc_clk_id id = dev->clk_id;
+    ASSERT((1 <= channel) && (channel <= 4));
+    if (id <= RCC_TIMER5 || id == RCC_TIMER8) {
+        return 1;     /* 1 and 8 are advanced, 2-5 are "full" general */
+    } else if (id <= RCC_TIMER7) {
+        return 0;     /* 6 and 7 are basic */
+    }
+    /* The rest are restricted general. */
+    return (((id == RCC_TIMER9 || id == RCC_TIMER12) && channel <= 2) ||
+            channel == 1);
+}
+
+/**
  * @brief Attach a timer interrupt.
  * @param dev Timer device
  * @param interrupt Interrupt number to attach to; this may be any

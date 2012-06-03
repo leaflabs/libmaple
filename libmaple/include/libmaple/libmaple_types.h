@@ -55,6 +55,7 @@ typedef void (*voidFuncPtr)(void);
 #define __deprecated __attribute__((__deprecated__))
 #define __weak __attribute__((weak))
 #define __always_inline inline __attribute__((always_inline))
+#define __unused __attribute__((unused))
 
 #ifndef NULL
 #define NULL 0

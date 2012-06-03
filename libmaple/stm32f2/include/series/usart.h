@@ -37,6 +37,8 @@
 extern "C"{
 #endif
 
+#include <libmaple/gpio.h>      /* for gpio_af */
+
 /*
  * Register map base pointers.
  */
@@ -95,6 +97,12 @@ extern struct usart_dev *USART3;
 extern struct usart_dev *UART4;
 extern struct usart_dev *UART5;
 extern struct usart_dev *USART6;
+
+/*
+ * Routines
+ */
+
+gpio_af usart_get_af(struct usart_dev *dev);
 
 #ifdef __cplusplus
 }

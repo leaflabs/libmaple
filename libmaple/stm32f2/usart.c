@@ -111,23 +111,7 @@ void usart_config_gpios_async(usart_dev *udev,
                               gpio_dev *rx_dev, uint8 rx,
                               gpio_dev *tx_dev, uint8 tx,
                               unsigned flags) {
-    gpio_af af;
-    /* TODO: break this out into a user-facing function. */
-    switch (udev->clk_id) {
-    case RCC_USART1:
-    case RCC_USART2:
-    case RCC_USART3:
-        af = GPIO_AF_USART_1_2_3;
-        break;
-    case RCC_UART4:
-    case RCC_UART5:
-    case RCC_USART6:
-        af = GPIO_AF_USART_4_5_6;
-        break;
-    default:
-        ASSERT(0);
-        return;
-    }
+    gpio_af af = usart_get_af(udev);
     gpio_set_modef(rx_dev, rx, GPIO_MODE_AF, 0);
     gpio_set_modef(tx_dev, tx, GPIO_MODE_AF, 0);
     gpio_set_af(rx_dev, rx, af);
@@ -168,6 +152,27 @@ void usart_foreach(void (*fn)(usart_dev*)) {
     fn(UART4);
     fn(UART5);
     fn(USART6);
+}
+
+/**
+ * @brief Get GPIO alternate function mode for a USART.
+ * @param dev USART whose gpio_af to get.
+ * @return gpio_af corresponding to dev.
+ */
+gpio_af usart_get_af(usart_dev *dev) {
+    switch (dev->clk_id) {
+    case RCC_USART1:
+    case RCC_USART2:
+    case RCC_USART3:
+        return GPIO_AF_USART_1_2_3;
+    case RCC_UART4:
+    case RCC_UART5:
+    case RCC_USART6:
+        return GPIO_AF_USART_4_5_6;
+    default:
+        ASSERT(0);              /* Can't happen */
+        return (gpio_af)-1;
+    }
 }
 
 /*

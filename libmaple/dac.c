@@ -92,8 +92,8 @@ void dac_write_channel(const dac_dev *dev, uint8 channel, uint16 val) {
  */
 void dac_enable_channel(const dac_dev *dev, uint8 channel) {
     /*
-     * Setup ANALOG mode on PA4 and PA5. This mapping is consistent across
-     * all STM32 chips with a DAC. See RM0008 12.2.
+     * Setup ANALOG mode on PA4 and PA5. This mapping is consistent
+     * across all supported STM32s with a DAC.
      */
     switch (channel) {
     case 1:

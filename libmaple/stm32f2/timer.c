@@ -114,6 +114,51 @@ void timer_foreach(void (*fn)(timer_dev*)) {
     fn(TIMER14);
 }
 
+/**
+ * @brief Get the GPIO alternate function corresponding to a timer.
+ *
+ * For example, if dev is TIMER1, this function returns
+ * GPIO_AF_TIM_1_2. This is useful for e.g. using gpio_set_af() to set
+ * a pin's alternate function to a timer.
+ *
+ * Note that the timer gpio_afs are shared with other timers (and
+ * sometimes with CAN). For example, timers 1 and 2 both use
+ * GPIO_AF_TIM_1_2. Because of that, it can pay to e.g not point two
+ * timers at the same pin.
+ *
+ * @param dev Timer device, must not be TIMER6 or TIMER7.
+ * @return gpio_af corresponding to dev
+ * @see gpio_set_af
+ * @see gpio_af
+ */
+gpio_af timer_get_af(timer_dev *dev) {
+    rcc_clk_id clk_id = dev->clk_id;
+    /* Timers 6 and 7 don't have any capture/compare, so they can't do
+     * PWM (and in fact have no AF values). */
+    ASSERT(clk_id != RCC_TIMER6 && clk_id != RCC_TIMER7);
+    switch(dev->clk_id) {
+    case RCC_TIMER1:        // fall-through
+    case RCC_TIMER2:
+        return GPIO_AF_TIM_1_2;
+    case RCC_TIMER3:        // fall-through
+    case RCC_TIMER4:        // ...
+    case RCC_TIMER5:
+        return GPIO_AF_TIM_3_4_5;
+    case RCC_TIMER8:        // fall-through
+    case RCC_TIMER9:        // ...
+    case RCC_TIMER10:       // ...
+    case RCC_TIMER11:
+        return GPIO_AF_TIM_8_9_10_11;
+    case RCC_TIMER12:       // fall-through
+    case RCC_TIMER13:       // ...
+    case RCC_TIMER14:
+        return GPIO_AF_CAN_1_2_TIM_12_13_14;
+    default:
+        ASSERT(0);          // Can't happen
+        return (gpio_af)-1;
+    }
+}
+
 /*
  * IRQ handlers
  *

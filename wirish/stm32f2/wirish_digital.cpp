@@ -91,37 +91,7 @@ void pinMode(uint8 pin, WiringPinMode w_mode) {
         if (info->timer_device == NULL) {
             return;
         }
-        gpio_af timer_af;
-        /* TODO make this code a <libmaple/timer.h> convenience
-         * routine for series that support GPIO alternate
-         * functions. */
-        switch(info->timer_device->clk_id) {
-        case RCC_TIMER1:        // fall-through
-        case RCC_TIMER2:
-            timer_af = GPIO_AF_TIM_1_2;
-            break;
-        case RCC_TIMER3:        // fall-through
-        case RCC_TIMER4:        // ...
-        case RCC_TIMER5:
-            timer_af = GPIO_AF_TIM_3_4_5;
-            break;
-        /* Timers 6 and 7 don't have any capture/compare, so they
-         * can't do PWM (and in fact have no AF values). */
-        case RCC_TIMER8:        // fall-through
-        case RCC_TIMER9:        // ...
-        case RCC_TIMER10:       // ...
-        case RCC_TIMER11:
-            timer_af = GPIO_AF_TIM_8_9_10_11;
-            break;
-        case RCC_TIMER12:       // fall-through
-        case RCC_TIMER13:       // ...
-        case RCC_TIMER14:
-            timer_af = GPIO_AF_CAN_1_2_TIM_12_13_14;
-            break;
-        default:
-            ASSERT(0);          // Can't happen
-            return;
-        }
+        gpio_af timer_af = timer_get_af(info->timer_device);
         timer_set_mode(info->timer_device, info->timer_channel, TIMER_PWM);
         gpio_set_af(info->gpio_device, info->gpio_bit, timer_af);
     }

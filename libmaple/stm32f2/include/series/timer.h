@@ -34,6 +34,7 @@
 #define _LIBMAPLE_STM32F2_TIMER_H_
 
 #include <libmaple/libmaple_types.h>
+#include <libmaple/gpio.h>      /* for gpio_af */
 
 /*
  * Register maps and base pointers
@@ -166,5 +167,11 @@ extern struct timer_dev *TIMER11;
 extern struct timer_dev *TIMER12;
 extern struct timer_dev *TIMER13;
 extern struct timer_dev *TIMER14;
+
+/*
+ * Routines
+ */
+
+gpio_af timer_get_af(struct timer_dev *dev);
 
 #endif

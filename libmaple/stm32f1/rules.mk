@@ -7,9 +7,12 @@ BUILDDIRS       += $(BUILD_PATH)/$(d)
 # Local flags
 CFLAGS_$(d) = -I$(d) $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 
+# Extra BUILDDIRS
+BUILDDIRS += $(BUILD_PATH)/$(d)/$(MCU_F1_LINE)
+
 # Local rules and targets
-sSRCS_$(d) := isrs_performance.S
-sSRCS_$(d) += vector_table_performance.S
+sSRCS_$(d) := $(MCU_F1_LINE)/isrs.S
+sSRCS_$(d) += $(MCU_F1_LINE)/vector_table.S
 
 cSRCS_$(d) := adc.c
 cSRCS_$(d) += bkp.c

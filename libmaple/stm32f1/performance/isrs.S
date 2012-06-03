@@ -24,7 +24,7 @@
  * SOFTWARE.
  *****************************************************************************/
 
-/* STM32F1 ISR weak declarations */
+/* STM32F1 performance line ISR weak declarations */
 
 	.thumb
 

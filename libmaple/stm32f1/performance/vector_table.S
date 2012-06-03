@@ -24,7 +24,7 @@
  * SOFTWARE.
  *****************************************************************************/
 
-/* STM32F1 vector table */
+/* STM32F1 performance line vector table */
 
 	.section	".stm32.interrupt_vector"
 

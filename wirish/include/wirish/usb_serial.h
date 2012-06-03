@@ -25,13 +25,14 @@
  *****************************************************************************/
 
 /**
- * @brief Wirish virtual serial port
+ * @brief Wirish USB virtual serial port (SerialUSB).
  */
 
 #ifndef _WIRISH_USB_SERIAL_H_
 #define _WIRISH_USB_SERIAL_H_
 
 #include <wirish/Print.h>
+#include <wirish/boards.h>
 
 /**
  * @brief Virtual serial terminal.
@@ -58,7 +59,9 @@ public:
     uint8 pending();
 };
 
+#if BOARD_HAVE_SERIALUSB
 extern USBSerial SerialUSB;
+#endif
 
 #endif
 

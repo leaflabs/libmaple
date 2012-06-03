@@ -15,9 +15,9 @@ TARGET_FLAGS += -DBOARD_$(BOARD) -DMCU_$(MCU) \
 
 LD_SERIES_PATH := $(LDDIR)/stm32/series/$(MCU_SERIES)
 ifeq ($(MCU_SERIES), stm32f1)
-   # Hack: force F1 to performance line; this will need to change if
-   # you add connectivity etc. line support.
-   LD_SERIES_PATH := $(LD_SERIES_PATH)/performance
+# Due to the Balkanization on F1, we need to specify the line when
+# making linker decisions.
+LD_SERIES_PATH := $(LD_SERIES_PATH)/$(MCU_F1_LINE)
 endif
 LIBMAPLE_MODULE_SERIES := $(LIBMAPLE_PATH)/$(MCU_SERIES)
 

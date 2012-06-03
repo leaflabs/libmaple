@@ -38,9 +38,9 @@
 
 #include <libmaple/gpio.h>
 #include <libmaple/timer.h>
-#include <libmaple/usb_cdcacm.h>
 
-#include <board/board.h>
+#include <wirish/boards.h>
+#include <wirish/usb_serial.h>
 
 // Allow boards to provide a PLL multiplier. This is useful for
 // e.g. STM32F100 value line MCUs, which use slower multipliers.
@@ -80,10 +80,8 @@ namespace wirish {
         }
 
         void board_setup_usb(void) {
-#if 0
-#    if STM32_HAVE_USB
-            usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
-#    endif
+#if BOARD_HAVE_SERIALUSB
+            SerialUSB.begin();
 #endif
         }
     }

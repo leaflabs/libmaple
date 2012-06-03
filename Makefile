@@ -75,7 +75,7 @@ ifeq ($(LIBMAPLE_MODULES),)
 else
 	LIBMAPLE_MODULES += $(SRCROOT)/libmaple
 endif
-# LIBMAPLE_MODULES += $(SRCROOT)/libmaple/usb   # USB FS device
+LIBMAPLE_MODULES += $(SRCROOT)/libmaple/usb   # The USB module is kept separate
 LIBMAPLE_MODULES += $(LIBMAPLE_MODULE_SERIES) # STM32 series submodule in libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
 # Official libraries:

@@ -40,14 +40,21 @@
 #define USB_TIMEOUT 50
 
 USBSerial::USBSerial(void) {
+#if !BOARD_HAVE_SERIALUSB
+    ASSERT(0);
+#endif
 }
 
 void USBSerial::begin(void) {
+#if BOARD_HAVE_SERIALUSB
     usb_cdcacm_enable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+#endif
 }
 
 void USBSerial::end(void) {
+#if BOARD_HAVE_SERIALUSB
     usb_cdcacm_disable(BOARD_USB_DISC_DEV, BOARD_USB_DISC_BIT);
+#endif
 }
 
 void USBSerial::write(uint8 ch) {
@@ -117,4 +124,6 @@ uint8 USBSerial::getRTS(void) {
     return usb_cdcacm_get_rts();
 }
 
+#if BOARD_HAVE_SERIALUSB
 USBSerial SerialUSB;
+#endif

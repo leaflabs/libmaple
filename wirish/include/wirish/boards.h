@@ -117,8 +117,9 @@ bool boardUsesPin(uint8 pin);
 /**
  * @brief Does the board break out a USART/UART's RX and TX pins?
  *
- * BOARD_HAVE_USART(n) is nonzero iff USARTn is available. Also see
- * BOARD_HAVE_USART1, ..., BOARD_HAVE_UART4 (sic), etc.
+ * BOARD_HAVE_USART(n) is nonzero iff USARTn is available (n must be
+ * an integer literal, 1 through 6). Also see BOARD_HAVE_USART1, ...,
+ * BOARD_HAVE_UART4 (sic), etc.
  */
 #define BOARD_HAVE_USART(n) (defined(BOARD_USART##n##_TX_PIN) && \
                              defined(BOARD_USART##n##_RX_PIN))
@@ -134,5 +135,22 @@ bool boardUsesPin(uint8 pin);
 #define BOARD_HAVE_UART5                BOARD_HAVE_USART(5)
 /** Feature test: nonzero iff the board has USART6, 0 otherwise. */
 #define BOARD_HAVE_USART6               BOARD_HAVE_USART(6)
+
+/**
+ * @brief Does the board break out a SPI peripheral's pins?
+ *
+ * BOARD_HAVE_SPI(n) is nonzero iff SPIn is available (n must be an
+ * integer literal: 1, 2, or 3). Also see BOARD_HAVE_SPI1,
+ * BOARD_HAVE_SPI2, BOARD_HAVE_SPI3. */
+#define BOARD_HAVE_SPI(n) (defined(BOARD_SPI##n##_NSS_PIN)  &&          \
+                           defined(BOARD_SPI##n##_SCK_PIN)  &&          \
+                           defined(BOARD_SPI##n##_MISO_PIN) &&          \
+                           defined(BOARD_SPI##n##_MOSI_PIN))
+/** Feature test: nonzero iff the board has SPI1. */
+#define BOARD_HAVE_SPI1 BOARD_HAVE_SPI(1)
+/** Feature test: nonzero iff the board has SPI2. */
+#define BOARD_HAVE_SPI2 BOARD_HAVE_SPI(2)
+/** Feature test: nonzero iff the board has SPI3. */
+#define BOARD_HAVE_SPI3 BOARD_HAVE_SPI(3)
 
 #endif

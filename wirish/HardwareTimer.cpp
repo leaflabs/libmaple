@@ -26,10 +26,10 @@
 
 #include <wirish/HardwareTimer.h>
 
-#include <libmaple/rcc.h>          // for rcc_clk_id
-#include <wirish/boards.h>         // for CYCLES_PER_MICROSECOND
+#include <libmaple/rcc.h>
 #include <wirish/ext_interrupts.h> // for noInterrupts(), interrupts()
 #include <wirish/wirish_math.h>
+#include <board/board.h>           // for CYCLES_PER_MICROSECOND
 
 // TODO [0.1.0] Remove deprecated pieces
 
@@ -112,7 +112,7 @@ uint16 HardwareTimer::setPeriod(uint32 microseconds) {
 
     uint32 period_cyc = microseconds * CYCLES_PER_MICROSECOND;
     uint16 prescaler = (uint16)(period_cyc / MAX_RELOAD + 1);
-    uint16 overflow = (uint16)round(period_cyc / prescaler);
+    uint16 overflow = (uint16)((period_cyc + (prescaler / 2)) / prescaler);
     this->setPrescaleFactor(prescaler);
     this->setOverflow(overflow);
     return overflow;

@@ -153,4 +153,10 @@ bool boardUsesPin(uint8 pin);
 /** Feature test: nonzero iff the board has SPI3. */
 #define BOARD_HAVE_SPI3 BOARD_HAVE_SPI(3)
 
+/**
+ * @brief Feature test: nonzero iff the board has SerialUSB.
+ */
+#define BOARD_HAVE_SERIALUSB (defined(BOARD_USB_DISC_DEV) && \
+                              defined(BOARD_USB_DISC_BIT))
+
 #endif

@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file wirish/ext_interrupts.c
+ * @file wirish/ext_interrupts.cpp
  * @brief Wiring-like interface for external interrupts
  */
 

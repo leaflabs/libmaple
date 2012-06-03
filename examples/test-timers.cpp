@@ -389,7 +389,7 @@ static void _delay(uint32 msec) {
 }
 
 static void init_usart(usart_dev *dev, gpio_dev *gdev, uint8 tx, uint8 rx) {
-    usart_async_gpio_cfg(dev, gdev, rx, gdev, tx, 0);
+    usart_config_gpios_async(dev, gdev, rx, gdev, tx, 0);
     usart_init(dev);
     usart_set_baud_rate(dev, USART_USE_PCLK, COMM_USART_BAUD);
     usart_enable(dev);

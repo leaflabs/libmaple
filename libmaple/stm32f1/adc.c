@@ -99,7 +99,7 @@ void adc_foreach(void (*fn)(const adc_dev*)) {
 #endif
 }
 
-void adc_gpio_cfg(gpio_dev *gdev, uint8 bit) {
+void adc_config_gpio(const adc_dev *ignored, gpio_dev *gdev, uint8 bit) {
     gpio_set_mode(gdev, bit, GPIO_INPUT_ANALOG);
 }
 

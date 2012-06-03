@@ -283,13 +283,9 @@ static void configure_gpios(spi_dev *dev, bool as_master) {
     disable_pwm(misoi);
     disable_pwm(mosii);
 
-    spi_gpio_cfg(as_master,
-                 nssi->gpio_device,
-                 nssi->gpio_bit,
-                 scki->gpio_device,
-                 scki->gpio_bit,
-                 misoi->gpio_bit,
-                 mosii->gpio_bit);
+    spi_config_gpios(dev, as_master, nssi->gpio_device, nssi->gpio_bit,
+                     scki->gpio_device, scki->gpio_bit, misoi->gpio_bit,
+                     mosii->gpio_bit);
 }
 
 static const spi_baud_rate baud_rates[MAX_SPI_FREQS] __FLASH__ = {

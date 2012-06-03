@@ -262,10 +262,14 @@ extern void adc_foreach(void (*fn)(const adc_dev*));
 struct gpio_dev;
 /**
  * @brief Configure a GPIO pin for ADC conversion.
+ * @param dev ADC device to use for conversion (currently ignored on
+ *            all targets).
  * @param gdev GPIO device to configure.
  * @param bit Bit on gdev to configure for ADC conversion.
  */
-extern void adc_gpio_cfg(struct gpio_dev *gdev, uint8 bit);
+extern void adc_config_gpio(const struct adc_dev *dev,
+                            struct gpio_dev *gdev,
+                            uint8 bit);
 
 /**
  * @brief Enable an ADC and configure it for single conversion mode.

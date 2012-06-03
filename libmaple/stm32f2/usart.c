@@ -107,10 +107,10 @@ usart_dev *USART6 = &usart6;
  * Routines
  */
 
-void usart_async_gpio_cfg(usart_dev *udev,
-                          gpio_dev *rx_dev, uint8 rx,
-                          gpio_dev *tx_dev, uint8 tx,
-                          unsigned flags) {
+void usart_config_gpios_async(usart_dev *udev,
+                              gpio_dev *rx_dev, uint8 rx,
+                              gpio_dev *tx_dev, uint8 tx,
+                              unsigned flags) {
     gpio_af af;
     /* TODO: break this out into a user-facing function. */
     switch (udev->clk_id) {

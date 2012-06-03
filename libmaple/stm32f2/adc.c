@@ -74,7 +74,7 @@ void adc_foreach(void (*fn)(const adc_dev*)) {
     fn(ADC3);
 }
 
-void adc_gpio_cfg(gpio_dev *gdev, uint8 bit) {
+void adc_config_gpio(const adc_dev *ignored, gpio_dev *gdev, uint8 bit) {
     gpio_set_modef(gdev, bit, GPIO_MODE_ANALOG, GPIO_MODEF_PUPD_NONE);
 }
 

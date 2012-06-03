@@ -101,10 +101,10 @@ usart_dev *UART5 = &uart5;
  * Routines
  */
 
-void usart_async_gpio_cfg(usart_dev *udev,
-                          gpio_dev *rx_dev, uint8 rx,
-                          gpio_dev *tx_dev, uint8 tx,
-                          unsigned flags) {
+void usart_config_gpios_async(usart_dev *udev,
+                              gpio_dev *rx_dev, uint8 rx,
+                              gpio_dev *tx_dev, uint8 tx,
+                              unsigned flags) {
     gpio_set_mode(rx_dev, rx, GPIO_INPUT_FLOATING);
     gpio_set_mode(tx_dev, tx, GPIO_AF_OUTPUT_PP);
 }

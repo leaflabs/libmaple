@@ -395,12 +395,21 @@ typedef struct usart_dev {
 
 void usart_init(usart_dev *dev);
 
-/* FIXME document this function */
 struct gpio_dev;                /* forward declaration */
-void usart_async_gpio_cfg(usart_dev *udev,
-                          struct gpio_dev *rx_dev, uint8 rx,
-                          struct gpio_dev *tx_dev, uint8 tx,
-                          unsigned flags);
+/* FIXME [PRE 0.0.13] decide if flags are necessary */
+/**
+ * @brief Configure GPIOs for use as USART TX/RX.
+ * @param udev USART device to use
+ * @param rx_dev RX pin gpio_dev
+ * @param rx     RX pin bit on rx_dev
+ * @param tx_dev TX pin gpio_dev
+ * @param tx     TX pin bit on tx_dev
+ * @param flags  Currently ignored
+ */
+extern void usart_config_gpios_async(usart_dev *udev,
+                                     struct gpio_dev *rx_dev, uint8 rx,
+                                     struct gpio_dev *tx_dev, uint8 tx,
+                                     unsigned flags);
 
 #define USART_USE_PCLK 0
 void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud);

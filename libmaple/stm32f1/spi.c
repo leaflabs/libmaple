@@ -69,13 +69,14 @@ spi_dev *SPI3 = &spi3;
  * Routines
  */
 
-void spi_gpio_cfg(uint8 as_master,
-                  gpio_dev *nss_dev,
-                  uint8 nss_bit,
-                  gpio_dev *comm_dev,
-                  uint8 sck_bit,
-                  uint8 miso_bit,
-                  uint8 mosi_bit) {
+void spi_config_gpios(spi_dev *ignored,
+                      uint8 as_master,
+                      gpio_dev *nss_dev,
+                      uint8 nss_bit,
+                      gpio_dev *comm_dev,
+                      uint8 sck_bit,
+                      uint8 miso_bit,
+                      uint8 mosi_bit) {
     if (as_master) {
         gpio_set_mode(nss_dev, nss_bit, GPIO_AF_OUTPUT_PP);
         gpio_set_mode(comm_dev, sck_bit, GPIO_AF_OUTPUT_PP);

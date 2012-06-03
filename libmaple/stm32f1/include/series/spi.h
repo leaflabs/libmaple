@@ -34,6 +34,8 @@
 #ifndef _LIBMAPLE_STM32F1_SPI_H_
 #define _LIBMAPLE_STM32F1_SPI_H_
 
+#include <libmaple/libmaple_types.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -62,6 +64,36 @@ extern struct spi_dev *SPI2;
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 extern struct spi_dev *SPI3;
 #endif
+
+/*
+ * Routines
+ */
+
+/* spi_gpio_cfg(): Backwards compatibility shim to spi_config_gpios() */
+struct gpio_dev;
+extern void spi_config_gpios(struct spi_dev*, uint8,
+                             struct gpio_dev*, uint8,
+                             struct gpio_dev*, uint8, uint8, uint8);
+/**
+ * @brief Deprecated. Use spi_config_gpios() instead.
+ * @see spi_config_gpios()
+ */
+static __always_inline void spi_gpio_cfg(uint8 as_master,
+                                         struct gpio_dev *nss_dev,
+                                         uint8 nss_bit,
+                                         struct gpio_dev *comm_dev,
+                                         uint8 sck_bit,
+                                         uint8 miso_bit,
+                                         uint8 mosi_bit) {
+    /* We switched style globally to foo_config_gpios() and always
+     * taking a foo_dev* argument (that last bit is the important
+     * part) after this function was written.
+     *
+     * However, spi_config_gpios() just ignores the spi_dev* on F1, so
+     * we can still keep this around for older code. */
+    spi_config_gpios(NULL, as_master, nss_dev, nss_bit,
+                     comm_dev, sck_bit, miso_bit, mosi_bit);
+}
 
 #ifdef __cplusplus
 }

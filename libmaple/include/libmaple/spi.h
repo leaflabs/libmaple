@@ -224,13 +224,14 @@ struct gpio_dev;
  * @param miso_bit MISO pin's GPIO bit on comm_dev
  * @param mosi_bit MOSI pin's GPIO bit on comm_dev
  */
-void spi_gpio_cfg(uint8 as_master,
-                  struct gpio_dev *nss_dev,
-                  uint8 nss_bit,
-                  struct gpio_dev *comm_dev,
-                  uint8 sck_bit,
-                  uint8 miso_bit,
-                  uint8 mosi_bit);
+extern void spi_config_gpios(spi_dev *dev,
+                             uint8 as_master,
+                             struct gpio_dev *nss_dev,
+                             uint8 nss_bit,
+                             struct gpio_dev *comm_dev,
+                             uint8 sck_bit,
+                             uint8 miso_bit,
+                             uint8 mosi_bit);
 
 /**
  * @brief SPI mode configuration.

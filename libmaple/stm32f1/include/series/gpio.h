@@ -28,9 +28,7 @@
 /**
  * @file libmaple/stm32f1/include/series/gpio.h
  * @brief STM32F1 GPIO and AFIO support.
- *
- * General purpose I/O (GPIO) and Alternate Function I/O (AFIO)
- * prototypes, defines, and support functions.
+ * General purpose I/O (GPIO) and Alternate Function I/O (AFIO).
  */
 
 #ifndef _LIBMAPLE_STM32F1_GPIO_H_
@@ -119,24 +117,22 @@ extern struct gpio_dev* const GPIOG;
  * use direct register access.
  */
 typedef enum gpio_pin_mode {
-    GPIO_OUTPUT_PP = (GPIO_CR_CNF_OUTPUT_PP |
-                      GPIO_CR_MODE_OUTPUT_50MHZ), /**< Output push-pull. */
-    GPIO_OUTPUT_OD = (GPIO_CR_CNF_OUTPUT_OD |
-                      GPIO_CR_MODE_OUTPUT_50MHZ), /**< Output open-drain. */
-    GPIO_AF_OUTPUT_PP = (GPIO_CR_CNF_AF_OUTPUT_PP |
-                         GPIO_CR_MODE_OUTPUT_50MHZ), /**< Alternate function
-                                                        output push-pull. */
-    GPIO_AF_OUTPUT_OD = (GPIO_CR_CNF_AF_OUTPUT_OD |
-                         GPIO_CR_MODE_OUTPUT_50MHZ), /**< Alternate function
-                                                        output open drain. */
-    GPIO_INPUT_ANALOG = (GPIO_CR_CNF_INPUT_ANALOG |
-                         GPIO_CR_MODE_INPUT), /**< Analog input. */
-    GPIO_INPUT_FLOATING = (GPIO_CR_CNF_INPUT_FLOATING |
-                           GPIO_CR_MODE_INPUT), /**< Input floating. */
-    GPIO_INPUT_PD = (GPIO_CR_CNF_INPUT_PU_PD |
-                     GPIO_CR_MODE_INPUT), /**< Input pull-down. */
-    GPIO_INPUT_PU /**< Input pull-up. */
-    /* GPIO_INPUT_PU treated as a special case, for ODR twiddling */
+    /** Output push-pull. */
+    GPIO_OUTPUT_PP      = GPIO_CR_CNF_OUTPUT_PP | GPIO_CR_MODE_OUTPUT_50MHZ,
+    /** Output open-drain. */
+    GPIO_OUTPUT_OD      = GPIO_CR_CNF_OUTPUT_OD | GPIO_CR_MODE_OUTPUT_50MHZ,
+    /** Alternate function output push-pull. */
+    GPIO_AF_OUTPUT_PP   = GPIO_CR_CNF_AF_OUTPUT_PP | GPIO_CR_MODE_OUTPUT_50MHZ,
+    /** Alternate function output open drain. */
+    GPIO_AF_OUTPUT_OD   = GPIO_CR_CNF_AF_OUTPUT_OD | GPIO_CR_MODE_OUTPUT_50MHZ,
+    /** Analog input. */
+    GPIO_INPUT_ANALOG   = GPIO_CR_CNF_INPUT_ANALOG | GPIO_CR_MODE_INPUT,
+    /** Input floating. */
+    GPIO_INPUT_FLOATING = GPIO_CR_CNF_INPUT_FLOATING | GPIO_CR_MODE_INPUT,
+    /** Input pull-down. */
+    GPIO_INPUT_PD       = GPIO_CR_CNF_INPUT_PU_PD | GPIO_CR_MODE_INPUT,
+    /** Input pull-up. */
+    GPIO_INPUT_PU, /* (treated a special case, for ODR twiddling) */
 } gpio_pin_mode;
 
 /*
@@ -145,19 +141,14 @@ typedef enum gpio_pin_mode {
 
 /** AFIO register map */
 typedef struct afio_reg_map {
-    __io uint32 EVCR;        /**< Event control register.  */
-    __io uint32 MAPR;        /**< AF remap and debug I/O configuration
-                                register. */
-    __io uint32 EXTICR1;     /**< External interrupt configuration
-                                register 1. */
-    __io uint32 EXTICR2;     /**< External interrupt configuration
-                                register 2. */
-    __io uint32 EXTICR3;     /**< External interrupt configuration
-                                register 3. */
-    __io uint32 EXTICR4;     /**< External interrupt configuration
-                                register 4. */
-    __io uint32 MAPR2;       /**< AF remap and debug I/O configuration
-                                register 2. */
+    __io uint32 EVCR;    /**< Event control register.  */
+    __io uint32 MAPR;    /**< AF remap and debug I/O configuration register. */
+    __io uint32 EXTICR1; /**< External interrupt configuration register 1. */
+    __io uint32 EXTICR2; /**< External interrupt configuration register 2. */
+    __io uint32 EXTICR3; /**< External interrupt configuration register 3. */
+    __io uint32 EXTICR4; /**< External interrupt configuration register 4. */
+    __io uint32 MAPR2;   /**<
+                          * AF remap and debug I/O configuration register 2. */
 } afio_reg_map;
 
 /** AFIO register map base pointer. */
@@ -326,62 +317,58 @@ void afio_init(void);
  * @see afio_remap()
  */
 typedef enum afio_remap_peripheral {
-    AFIO_REMAP_ADC2_ETRGREG  = AFIO_MAPR_ADC2_ETRGREG_REMAP, /**<
-        ADC 2 external trigger regular conversion remapping */
-    AFIO_REMAP_ADC2_ETRGINJ  = AFIO_MAPR_ADC2_ETRGINJ_REMAP, /**<
-        ADC 2 external trigger injected conversion remapping */
-    AFIO_REMAP_ADC1_ETRGREG  = AFIO_MAPR_ADC1_ETRGREG_REMAP, /**<
-        ADC 1 external trigger regular conversion remapping */
-    AFIO_REMAP_ADC1_ETRGINJ  = AFIO_MAPR_ADC1_ETRGINJ_REMAP, /**<
-        ADC 1 external trigger injected conversion remapping */
-    AFIO_REMAP_TIM5CH4_I     = AFIO_MAPR_TIM5CH4_IREMAP, /**<
-        Timer 5 channel 4 internal remapping */
-    AFIO_REMAP_PD01          = AFIO_MAPR_PD01_REMAP, /**<
-        Port D0/Port D1 mapping on OSC_IN/OSC_OUT */
-    AFIO_REMAP_CAN_1         = AFIO_MAPR_CAN_REMAP_PB8_PB9, /**<
-        CAN alternate function remapping 1 (RX on PB8, TX on PB9) */
-    AFIO_REMAP_CAN_2         = AFIO_MAPR_CAN_REMAP_PD0_PD1, /**<
-        CAN alternate function remapping 2 (RX on PD0, TX on PD1) */
-    AFIO_REMAP_TIM4          = AFIO_MAPR_TIM4_REMAP, /**<
-        Timer 4 remapping */
-    AFIO_REMAP_TIM3_PARTIAL  = AFIO_MAPR_TIM3_REMAP_PARTIAL, /**<
-        Timer 3 partial remapping */
-    AFIO_REMAP_TIM3_FULL      = AFIO_MAPR_TIM3_REMAP_FULL, /**<
-        Timer 3 full remapping */
-    AFIO_REMAP_TIM2_PARTIAL_1 = AFIO_MAPR_TIM2_REMAP_PA15_PB3_PA2_PA3, /**<
-        Timer 2 partial remapping 1 (CH1 and ETR on PA15, CH2 on PB3, CH3
-        on PA2, CH4 on PA3) */
-    AFIO_REMAP_TIM2_PARTIAL_2 = AFIO_MAPR_TIM2_REMAP_PA0_PA1_PB10_PB11, /**<
-        Timer 2 partial remapping 2 (CH1 and ETR on PA0, CH2 on PA1, CH3
-        on PB10, CH4 on PB11) */
-    AFIO_REMAP_TIM2_FULL      = AFIO_MAPR_TIM2_REMAP_FULL, /**<
-        Timer 2 full remapping */
-    AFIO_REMAP_USART2        = AFIO_MAPR_USART2_REMAP, /**<
-        USART 2 remapping */
-    AFIO_REMAP_USART1        = AFIO_MAPR_USART1_REMAP, /**<
-        USART 1 remapping */
-    AFIO_REMAP_I2C1          = AFIO_MAPR_I2C1_REMAP, /**<
-        I2C 1 remapping */
-    AFIO_REMAP_SPI1          = AFIO_MAPR_SPI1_REMAP, /**<
-        SPI 1 remapping */
-    AFIO_REMAP_FSMC_NADV     = (AFIO_MAPR2_FSMC_NADV |
-                                AFIO_REMAP_USE_MAPR2), /**<
-        NADV signal not connected */
-    AFIO_REMAP_TIM14         = (AFIO_MAPR2_TIM14_REMAP |
-                                AFIO_REMAP_USE_MAPR2), /**<
-        Timer 14 remapping */
-    AFIO_REMAP_TIM13         = (AFIO_MAPR2_TIM13_REMAP |
-                                AFIO_REMAP_USE_MAPR2), /**<
-        Timer 13 remapping */
-    AFIO_REMAP_TIM11         = (AFIO_MAPR2_TIM11_REMAP |
-                                AFIO_REMAP_USE_MAPR2), /**<
-        Timer 11 remapping */
-    AFIO_REMAP_TIM10         = (AFIO_MAPR2_TIM10_REMAP |
-                                AFIO_REMAP_USE_MAPR2), /**<
-        Timer 10 remapping */
-    AFIO_REMAP_TIM9          = (AFIO_MAPR2_TIM9_REMAP |
-                                AFIO_REMAP_USE_MAPR2) /**<
-        Timer 9 */
+     /** ADC 2 external trigger regular conversion remapping */
+    AFIO_REMAP_ADC2_ETRGREG   = AFIO_MAPR_ADC2_ETRGREG_REMAP,
+     /** ADC 2 external trigger injected conversion remapping */
+    AFIO_REMAP_ADC2_ETRGINJ   = AFIO_MAPR_ADC2_ETRGINJ_REMAP,
+    /** ADC 1 external trigger regular conversion remapping */
+    AFIO_REMAP_ADC1_ETRGREG   = AFIO_MAPR_ADC1_ETRGREG_REMAP,
+    /** ADC 1 external trigger injected conversion remapping */
+    AFIO_REMAP_ADC1_ETRGINJ   = AFIO_MAPR_ADC1_ETRGINJ_REMAP,
+    /** Timer 5 channel 4 internal remapping */
+    AFIO_REMAP_TIM5CH4_I      = AFIO_MAPR_TIM5CH4_IREMAP,
+    /** Port D0/Port D1 mapping on OSC_IN/OSC_OUT */
+    AFIO_REMAP_PD01           = AFIO_MAPR_PD01_REMAP,
+    /** CAN alternate function remapping 1 (RX on PB8, TX on PB9) */
+    AFIO_REMAP_CAN_1          = AFIO_MAPR_CAN_REMAP_PB8_PB9,
+    /** CAN alternate function remapping 2 (RX on PD0, TX on PD1) */
+    AFIO_REMAP_CAN_2          = AFIO_MAPR_CAN_REMAP_PD0_PD1,
+    /** Timer 4 remapping */
+    AFIO_REMAP_TIM4           = AFIO_MAPR_TIM4_REMAP,
+    /** Timer 3 partial remapping */
+    AFIO_REMAP_TIM3_PARTIAL   = AFIO_MAPR_TIM3_REMAP_PARTIAL,
+    /** Timer 3 full remapping */
+    AFIO_REMAP_TIM3_FULL      = AFIO_MAPR_TIM3_REMAP_FULL,
+    /**
+     * Timer 2 partial remapping 1 (CH1 and ETR on PA15, CH2 on PB3,
+     * CH3 on                                      PA2, CH4 on PA3) */
+    AFIO_REMAP_TIM2_PARTIAL_1 = AFIO_MAPR_TIM2_REMAP_PA15_PB3_PA2_PA3,
+    /**
+     * Timer 2 partial remapping 2 (CH1 and ETR on PA0, CH2 on PA1,
+     * CH3 on                                      PB10, CH4 on PB11) */
+    AFIO_REMAP_TIM2_PARTIAL_2 = AFIO_MAPR_TIM2_REMAP_PA0_PA1_PB10_PB11,
+    /** Timer 2 full remapping */
+    AFIO_REMAP_TIM2_FULL      = AFIO_MAPR_TIM2_REMAP_FULL,
+    /** USART 2 remapping */
+    AFIO_REMAP_USART2         = AFIO_MAPR_USART2_REMAP,
+    /** USART 1 remapping */
+    AFIO_REMAP_USART1         = AFIO_MAPR_USART1_REMAP,
+    /** I2C 1 remapping */
+    AFIO_REMAP_I2C1           = AFIO_MAPR_I2C1_REMAP,
+    /** SPI 1 remapping */
+    AFIO_REMAP_SPI1           = AFIO_MAPR_SPI1_REMAP,
+    /** NADV signal not connected */
+    AFIO_REMAP_FSMC_NADV      = AFIO_MAPR2_FSMC_NADV | AFIO_REMAP_USE_MAPR2,
+    /** Timer 14 remapping */
+    AFIO_REMAP_TIM14          = AFIO_MAPR2_TIM14_REMAP | AFIO_REMAP_USE_MAPR2,
+    /** Timer 13 remapping */
+    AFIO_REMAP_TIM13          = AFIO_MAPR2_TIM13_REMAP | AFIO_REMAP_USE_MAPR2,
+    /** Timer 11 remapping */
+    AFIO_REMAP_TIM11          = AFIO_MAPR2_TIM11_REMAP | AFIO_REMAP_USE_MAPR2,
+    /** Timer 10 remapping */
+    AFIO_REMAP_TIM10          = AFIO_MAPR2_TIM10_REMAP | AFIO_REMAP_USE_MAPR2,
+    /** Timer 9 remapping */
+    AFIO_REMAP_TIM9           = AFIO_MAPR2_TIM9_REMAP | AFIO_REMAP_USE_MAPR2,
 } afio_remap_peripheral;
 
 void afio_remap(afio_remap_peripheral p);
@@ -395,16 +382,14 @@ void afio_remap(afio_remap_peripheral p);
  * @see afio_cfg_debug_ports()
  */
 typedef enum afio_debug_cfg {
-    AFIO_DEBUG_FULL_SWJ = AFIO_MAPR_SWJ_CFG_FULL_SWJ, /**<
-                                   Full Serial Wire and JTAG debug */
-    AFIO_DEBUG_FULL_SWJ_NO_NJRST = AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST, /**<
-                                   Full Serial Wire and JTAG, but no NJTRST. */
-    AFIO_DEBUG_SW_ONLY = AFIO_MAPR_SWJ_CFG_NO_JTAG_SW, /**<
-                                   Serial Wire debug only (JTAG-DP disabled,
-                                   SW-DP enabled) */
-    AFIO_DEBUG_NONE = AFIO_MAPR_SWJ_CFG_NO_JTAG_NO_SW /**<
-                                   No debug; all JTAG and SW pins are free
-                                   for use as GPIOs. */
+    /** Full Serial Wire and JTAG debug */
+    AFIO_DEBUG_FULL_SWJ          = AFIO_MAPR_SWJ_CFG_FULL_SWJ,
+    /** Full Serial Wire and JTAG, but no NJTRST. */
+    AFIO_DEBUG_FULL_SWJ_NO_NJRST = AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST,
+    /** Serial Wire debug only (JTAG-DP disabled, SW-DP enabled) */
+    AFIO_DEBUG_SW_ONLY           = AFIO_MAPR_SWJ_CFG_NO_JTAG_SW,
+    /** No debug; all JTAG and SW pins are free for use as GPIOs. */
+    AFIO_DEBUG_NONE              = AFIO_MAPR_SWJ_CFG_NO_JTAG_NO_SW,
 } afio_debug_cfg;
 
 /**

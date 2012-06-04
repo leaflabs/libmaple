@@ -135,6 +135,9 @@ typedef enum gpio_pin_mode {
     GPIO_INPUT_PU, /* (treated a special case, for ODR twiddling) */
 } gpio_pin_mode;
 
+/* Hacks for F2: */
+#define GPIO_MODE_ANALOG GPIO_INPUT_ANALOG
+
 /*
  * AFIO register map
  */

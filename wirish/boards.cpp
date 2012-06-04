@@ -71,10 +71,18 @@ void init(void) {
     setup_adcs();
     setup_timers();
     wirish::priv::board_setup_usb();
+    wirish::priv::series_init();
     boardInit();
 }
 
-/* Provide a default boardInit(). */
+/* Provide a default no-op series_init() */
+namespace wirish {
+    namespace priv {
+        __weak void series_init(void) {}
+    }
+}
+
+/* Provide a default no-op boardInit(). */
 __weak void boardInit(void) {
 }
 

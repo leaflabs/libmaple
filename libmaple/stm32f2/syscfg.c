@@ -25,43 +25,54 @@
  *****************************************************************************/
 
 /**
- * @file wirish/boards_private.h
- * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief Private board support header.
- *
- * This file declares chip-specific variables and functions which
- * determine how init() behaves. It is not part of the public Wirish
- * API, and can change without notice.
+ * @file libmaple/stm32f2/syscfg.c
+ * @brief SYSCFG routines.
  */
 
-#ifndef _WIRISH_BOARDS_PRIVATE_H_
-#define _WIRISH_BOARDS_PRIVATE_H_
-
+#include <libmaple/syscfg.h>
+#include <libmaple/bitband.h>
 #include <libmaple/rcc.h>
-#include <libmaple/adc.h>
 
-namespace wirish {
-    namespace priv {
-
-        /*
-         * Chip-specific initialization data
-         */
-
-        extern rcc_pll_cfg w_board_pll_cfg;
-        extern adc_prescaler w_adc_pre;
-        extern adc_smp_rate w_adc_smp;
-
-        /*
-         * Chip-specific initialization routines and helper functions.
-         */
-
-        void board_reset_pll(void);
-        void board_setup_clock_prescalers(void);
-        void board_setup_gpio(void);
-        void board_setup_usb(void);
-        void series_init(void);
-
-    }
+/**
+ * @brief Initialize the SYSCFG peripheral.
+ */
+void syscfg_init(void) {
+    rcc_clk_enable(RCC_SYSCFG);
+    rcc_reset_dev(RCC_SYSCFG);
 }
 
-#endif
+/**
+ * @brief Turn on the I/O compensation cell.
+ *
+ * It's only safe to do this when the supply voltage is between 2.4 V
+ * and 3.6 V.
+ */
+void syscfg_enable_io_compensation(void) {
+    bb_peri_set_bit(&SYSCFG_BASE->CMPCR, SYSCFG_CMPCR_CMP_PD_BIT, 1);
+    while (!(SYSCFG_BASE->CMPCR & SYSCFG_CMPCR_READY))
+        ;
+}
+
+/**
+ * @brief Turn off the I/O compensation cell.
+ */
+void syscfg_disable_io_compensation(void) {
+    bb_peri_set_bit(&SYSCFG_BASE->CMPCR, SYSCFG_CMPCR_CMP_PD_BIT, 0);
+}
+
+/**
+ * @brief Set the memory to be mapped at address 0x00000000.
+ *
+ * This function can be used to override the BOOT pin
+ * configuration. Some restrictions apply; see your chip's reference
+ * manual for the details.
+ *
+ * @param mode Mode to set
+ * @see syscfg_mem_mode
+ */
+void syscfg_set_mem_mode(syscfg_mem_mode mode) {
+    uint32 memrmp = SYSCFG_BASE->MEMRMP;
+    memrmp &= ~SYSCFG_MEMRMP_MEM_MODE;
+    memrmp |= (uint32)mode;
+    SYSCFG_BASE->MEMRMP = memrmp;
+}

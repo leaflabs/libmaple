@@ -37,6 +37,7 @@
 #include "boards_private.h"
 
 #include <libmaple/gpio.h>
+#include <libmaple/syscfg.h>
 #include <wirish/wirish_types.h>
 
 // PLL configuration for 25 MHz external oscillator --> 120 MHz SYSCLK.
@@ -83,6 +84,11 @@ namespace wirish {
 
         void board_setup_usb(void) {
             // Nothing to do.
+        }
+
+        void series_init(void) {
+            // We need SYSCFG for external interrupts
+            syscfg_init();
         }
 
     }

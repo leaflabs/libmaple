@@ -15,6 +15,7 @@ cSRCS_$(d) := adc.c
 cSRCS_$(d) += fsmc.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += rcc.c
+cSRCS_$(d) += syscfg.c
 cSRCS_$(d) += timer.c
 cSRCS_$(d) += usart.c
 

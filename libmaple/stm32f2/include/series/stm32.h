@@ -60,6 +60,7 @@ extern "C" {
 #define STM32_NR_INTERRUPTS             81
 #define STM32_HAVE_FSMC                 1
 #define STM32_HAVE_USB                  1
+#define STM32_HAVE_DAC                  1
 
 #if defined(MCU_STM32F207IC) || defined(MCU_STM32F207IG)
 #   define STM32_NR_GPIO_PORTS          9

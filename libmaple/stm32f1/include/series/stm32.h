@@ -115,14 +115,17 @@ extern "C" {
 #       define STM32_NR_INTERRUPTS      43
 #       define STM32_TIMER_MASK         0x1E /* TIMER1--TIMER4 */
 #       define STM32_HAVE_FSMC          0
+#       define STM32_HAVE_DAC           0
 #    elif defined(STM32_HIGH_DENSITY)
 #       define STM32_NR_INTERRUPTS      60
 #       define STM32_TIMER_MASK         0x1FE /* TIMER1--TIMER8 */
 #       define STM32_HAVE_FSMC          1
+#       define STM32_HAVE_DAC           1
 #    elif defined(STM32_XL_DENSITY)
 #       define STM32_NR_INTERRUPTS      60
 #       define STM32_TIMER_MASK         0x7FFE /* TIMER1--TIMER14 */
 #       define STM32_HAVE_FSMC          1
+#       define STM32_HAVE_DAC           1
 #    endif
 
 #elif STM32_F1_LINE == STM32_F1_LINE_VALUE
@@ -132,11 +135,13 @@ extern "C" {
 #    ifdef STM32_MEDIUM_DENSITY
 #        define STM32_NR_INTERRUPTS     56
 #        define STM32_HAVE_FSMC         0
+#        define STM32_HAVE_DAC          1
 #    elif defined(STM32_HIGH_DENSITY)
          /* 61 interrupts here counts the possibility for a remapped
           * DMA2 channel 5 IRQ occurring at NVIC index 60.  */
 #        define STM32_NR_INTERRUPTS     61
 #        define STM32_HAVE_FSMC         1
+#        define STM32_HAVE_DAC          1
 #    endif
 
 #endif

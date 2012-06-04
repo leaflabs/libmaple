@@ -78,6 +78,7 @@ extern "C" {
      !defined(STM32_TIMER_MASK)    ||     \
      !defined(STM32_DELAY_US_MULT) ||     \
      !defined(STM32_SRAM_END)      ||     \
+     !defined(STM32_HAVE_DAC)      ||     \
      !defined(STM32_HAVE_FSMC)     ||     \
      !defined(STM32_HAVE_USB))
 #error "Bad STM32F1 configuration. Check <series/stm32.h> header for your MCU."
@@ -178,6 +179,11 @@ extern "C" {
  * SRAM address.
  */
 #define STM32_SRAM_END
+
+/**
+ * @brief 1 if the target MCU has a DAC, and 0 otherwise.
+ */
+#define STM32_HAVE_DAC
 
 /**
  * @brief 1 if the target MCU has the FSMC peripheral, and 0 otherwise.

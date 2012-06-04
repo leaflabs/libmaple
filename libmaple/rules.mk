@@ -13,6 +13,7 @@ CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 # Local rules and targets
 cSRCS_$(d) := adc.c
 # cSRCS_$(d) += dma.c
+cSRCS_$(d) += exti.c
 cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += iwdg.c
@@ -28,7 +29,6 @@ cSRCS_$(d) += usart_private.c
 cSRCS_$(d) += util.c
 # These still need to be brought back for F1:
 # cSRCS_$(d) += dac.c
-# cSRCS_$(d) += exti.c
 # cSRCS_$(d) += i2c.c
 
 sSRCS_$(d) := exc.S

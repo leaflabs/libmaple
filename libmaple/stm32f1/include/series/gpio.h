@@ -2,7 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -27,7 +27,7 @@
 
 /**
  * @file libmaple/stm32f1/include/series/gpio.h
- * @brief STM32F1 GPIO support.
+ * @brief STM32F1 GPIO and AFIO support.
  *
  * General purpose I/O (GPIO) and Alternate Function I/O (AFIO)
  * prototypes, defines, and support functions.
@@ -40,8 +40,9 @@
 extern "C"{
 #endif
 
-#include <libmaple/libmaple.h>
-#include <libmaple/rcc.h>
+#include <libmaple/stm32.h>
+#include <libmaple/libmaple_types.h>
+#include <libmaple/exti.h>
 
 /*
  * GPIO register maps and devices
@@ -58,46 +59,22 @@ typedef struct gpio_reg_map {
     __io uint32 LCKR;     /**< Port configuration lock register */
 } gpio_reg_map;
 
-/**
- * @brief External interrupt line port selector.
- *
- * Used to determine which GPIO port to map an external interrupt line
- * onto. */
-/* (See AFIO sections, below) */
-typedef enum afio_exti_port {
-    AFIO_EXTI_PA,               /**< Use port A (PAx) pin. */
-    AFIO_EXTI_PB,               /**< Use port B (PBx) pin. */
-    AFIO_EXTI_PC,               /**< Use port C (PCx) pin. */
-    AFIO_EXTI_PD,               /**< Use port D (PDx) pin. */
+struct gpio_dev;
+extern struct gpio_dev gpioa;
+extern struct gpio_dev* const GPIOA;
+extern struct gpio_dev gpiob;
+extern struct gpio_dev* const GPIOB;
+extern struct gpio_dev gpioc;
+extern struct gpio_dev* const GPIOC;
+extern struct gpio_dev gpiod;
+extern struct gpio_dev* const GPIOD;
 #ifdef STM32_HIGH_DENSITY
-    AFIO_EXTI_PE,               /**< Use port E (PEx) pin. */
-    AFIO_EXTI_PF,               /**< Use port F (PFx) pin. */
-    AFIO_EXTI_PG,               /**< Use port G (PGx) pin. */
-#endif
-} afio_exti_port;
-
-/** GPIO device type */
-typedef struct gpio_dev {
-    gpio_reg_map *regs;       /**< Register map */
-    rcc_clk_id clk_id;        /**< RCC clock information */
-    afio_exti_port exti_port; /**< AFIO external interrupt port value */
-} gpio_dev;
-
-extern gpio_dev gpioa;
-extern gpio_dev* const GPIOA;
-extern gpio_dev gpiob;
-extern gpio_dev* const GPIOB;
-extern gpio_dev gpioc;
-extern gpio_dev* const GPIOC;
-extern gpio_dev gpiod;
-extern gpio_dev* const GPIOD;
-#ifdef STM32_HIGH_DENSITY
-extern gpio_dev gpioe;
-extern gpio_dev* const GPIOE;
-extern gpio_dev gpiof;
-extern gpio_dev* const GPIOF;
-extern gpio_dev gpiog;
-extern gpio_dev* const GPIOG;
+extern struct gpio_dev gpioe;
+extern struct gpio_dev* const GPIOE;
+extern struct gpio_dev gpiof;
+extern struct gpio_dev* const GPIOF;
+extern struct gpio_dev gpiog;
+extern struct gpio_dev* const GPIOG;
 #endif
 
 /** GPIO port A register map base pointer */
@@ -108,14 +85,12 @@ extern gpio_dev* const GPIOG;
 #define GPIOC_BASE                      ((struct gpio_reg_map*)0x40011000)
 /** GPIO port D register map base pointer */
 #define GPIOD_BASE                      ((struct gpio_reg_map*)0x40011400)
-#ifdef STM32_HIGH_DENSITY
 /** GPIO port E register map base pointer */
 #define GPIOE_BASE                      ((struct gpio_reg_map*)0x40011800)
 /** GPIO port F register map base pointer */
 #define GPIOF_BASE                      ((struct gpio_reg_map*)0x40011C00)
 /** GPIO port G register map base pointer */
 #define GPIOG_BASE                      ((struct gpio_reg_map*)0x40012000)
-#endif
 
 /*
  * GPIO register bit definitions
@@ -138,7 +113,7 @@ extern gpio_dev* const GPIOG;
 #define GPIO_CR_MODE_OUTPUT_50MHZ       0x3
 
 /**
- * @brief GPIO Pin modes.
+ * @brief GPIO pin modes.
  *
  * These only allow for 50MHZ max output speeds; if you want slower,
  * use direct register access.
@@ -163,14 +138,6 @@ typedef enum gpio_pin_mode {
     GPIO_INPUT_PU /**< Input pull-up. */
     /* GPIO_INPUT_PU treated as a special case, for ODR twiddling */
 } gpio_pin_mode;
-
-/**
- * @brief Get a GPIO port's corresponding afio_exti_port.
- * @param dev GPIO device whose afio_exti_port to return.
- */
-static inline afio_exti_port gpio_exti_port(gpio_dev *dev) {
-    return dev->exti_port;
-}
 
 /*
  * AFIO register map
@@ -232,17 +199,17 @@ typedef struct afio_reg_map {
 #define AFIO_MAPR_SWJ_CFG_FULL_SWJ_NO_NJRST    (0x1 << 24)
 #define AFIO_MAPR_SWJ_CFG_NO_JTAG_SW           (0x2 << 24)
 #define AFIO_MAPR_SWJ_CFG_NO_JTAG_NO_SW        (0x4 << 24)
-#define AFIO_MAPR_ADC2_ETRGREG_REMAP           BIT(20)
-#define AFIO_MAPR_ADC2_ETRGINJ_REMAP           BIT(19)
-#define AFIO_MAPR_ADC1_ETRGREG_REMAP           BIT(18)
-#define AFIO_MAPR_ADC1_ETRGINJ_REMAP           BIT(17)
-#define AFIO_MAPR_TIM5CH4_IREMAP               BIT(16)
-#define AFIO_MAPR_PD01_REMAP                   BIT(15)
+#define AFIO_MAPR_ADC2_ETRGREG_REMAP           (1U << 20)
+#define AFIO_MAPR_ADC2_ETRGINJ_REMAP           (1U << 19)
+#define AFIO_MAPR_ADC1_ETRGREG_REMAP           (1U << 18)
+#define AFIO_MAPR_ADC1_ETRGINJ_REMAP           (1U << 17)
+#define AFIO_MAPR_TIM5CH4_IREMAP               (1U << 16)
+#define AFIO_MAPR_PD01_REMAP                   (1U << 15)
 #define AFIO_MAPR_CAN_REMAP                    (0x3 << 13)
 #define AFIO_MAPR_CAN_REMAP_NONE               (0x0 << 13)
 #define AFIO_MAPR_CAN_REMAP_PB8_PB9            (0x2 << 13)
 #define AFIO_MAPR_CAN_REMAP_PD0_PD1            (0x3 << 13)
-#define AFIO_MAPR_TIM4_REMAP                   BIT(12)
+#define AFIO_MAPR_TIM4_REMAP                   (1U << 12)
 #define AFIO_MAPR_TIM3_REMAP                   (0x3 << 10)
 #define AFIO_MAPR_TIM3_REMAP_NONE              (0x0 << 10)
 #define AFIO_MAPR_TIM3_REMAP_PARTIAL           (0x2 << 10)
@@ -260,10 +227,10 @@ typedef struct afio_reg_map {
 #define AFIO_MAPR_USART3_REMAP_NONE            (0x0 << 4)
 #define AFIO_MAPR_USART3_REMAP_PARTIAL         (0x1 << 4)
 #define AFIO_MAPR_USART3_REMAP_FULL            (0x3 << 4)
-#define AFIO_MAPR_USART2_REMAP                 BIT(3)
-#define AFIO_MAPR_USART1_REMAP                 BIT(2)
-#define AFIO_MAPR_I2C1_REMAP                   BIT(1)
-#define AFIO_MAPR_SPI1_REMAP                   BIT(0)
+#define AFIO_MAPR_USART2_REMAP                 (1U << 3)
+#define AFIO_MAPR_USART1_REMAP                 (1U << 2)
+#define AFIO_MAPR_I2C1_REMAP                   (1U << 1)
+#define AFIO_MAPR_SPI1_REMAP                   (1U << 0)
 
 /* External interrupt configuration register 1 */
 
@@ -337,12 +304,12 @@ typedef struct afio_reg_map {
 
 /* AF remap and debug I/O configuration register 2 */
 
-#define AFIO_MAPR2_FSMC_NADV            BIT(10)
-#define AFIO_MAPR2_TIM14_REMAP          BIT(9)
-#define AFIO_MAPR2_TIM13_REMAP          BIT(8)
-#define AFIO_MAPR2_TIM11_REMAP          BIT(7)
-#define AFIO_MAPR2_TIM10_REMAP          BIT(6)
-#define AFIO_MAPR2_TIM9_REMAP           BIT(5)
+#define AFIO_MAPR2_FSMC_NADV            (1U << 10)
+#define AFIO_MAPR2_TIM14_REMAP          (1U << 9)
+#define AFIO_MAPR2_TIM13_REMAP          (1U << 8)
+#define AFIO_MAPR2_TIM11_REMAP          (1U << 7)
+#define AFIO_MAPR2_TIM10_REMAP          (1U << 6)
+#define AFIO_MAPR2_TIM9_REMAP           (1U << 5)
 
 /*
  * AFIO convenience routines
@@ -350,33 +317,9 @@ typedef struct afio_reg_map {
 
 void afio_init(void);
 
-/**
- * External interrupt line numbers.
- */
-typedef enum afio_exti_num {
-    AFIO_EXTI_0,                /**< External interrupt line 0. */
-    AFIO_EXTI_1,                /**< External interrupt line 1. */
-    AFIO_EXTI_2,                /**< External interrupt line 2. */
-    AFIO_EXTI_3,                /**< External interrupt line 3. */
-    AFIO_EXTI_4,                /**< External interrupt line 4. */
-    AFIO_EXTI_5,                /**< External interrupt line 5. */
-    AFIO_EXTI_6,                /**< External interrupt line 6. */
-    AFIO_EXTI_7,                /**< External interrupt line 7. */
-    AFIO_EXTI_8,                /**< External interrupt line 8. */
-    AFIO_EXTI_9,                /**< External interrupt line 9. */
-    AFIO_EXTI_10,               /**< External interrupt line 10. */
-    AFIO_EXTI_11,               /**< External interrupt line 11. */
-    AFIO_EXTI_12,               /**< External interrupt line 12. */
-    AFIO_EXTI_13,               /**< External interrupt line 13. */
-    AFIO_EXTI_14,               /**< External interrupt line 14. */
-    AFIO_EXTI_15,               /**< External interrupt line 15. */
-} afio_exti_num;
-
-void afio_exti_select(afio_exti_num exti, afio_exti_port gpio_port);
-
 /* HACK: Use upper bit to denote MAPR2, Bit 31 is reserved and
  * not used in either MAPR or MAPR2 */
-#define AFIO_REMAP_USE_MAPR2            (1 << 31)
+#define AFIO_REMAP_USE_MAPR2            (1U << 31)
 
 /**
  * @brief Available peripheral remaps.
@@ -472,6 +415,86 @@ typedef enum afio_debug_cfg {
 static inline void afio_cfg_debug_ports(afio_debug_cfg config) {
     __io uint32 *mapr = &AFIO_BASE->MAPR;
     *mapr = (*mapr & ~AFIO_MAPR_SWJ_CFG) | config;
+}
+
+/*
+ * Deprecated bits
+ */
+
+/**
+ * @brief Deprecated. Use exti_cfg instead.
+ *
+ * In previous versions of libmaple, exti_attach_interrupt() took an
+ * afio_exti_port argument; afio_exti_port was also a member of struct
+ * gpio_dev. This isn't portable, so we now use exti_cfg
+ * instead. This typedef (and the macros AFIO_EXTI_PA, ...,
+ * AFIO_EXTI_PG) exist to preserve backwards compatibility.
+ */
+typedef exti_cfg afio_exti_port;
+
+/** Deprecated. Use EXTI_PA instead. */
+#define AFIO_EXTI_PA EXTI_PA
+/** Deprecated. Use EXTI_PB instead. */
+#define AFIO_EXTI_PB EXTI_PB
+/** Deprecated. Use EXTI_PC instead. */
+#define AFIO_EXTI_PC EXTI_PC
+/** Deprecated. Use EXTI_PD instead. */
+#define AFIO_EXTI_PD EXTI_PD
+/** Deprecated. Use EXTI_PE instead. */
+#define AFIO_EXTI_PE EXTI_PE
+/** Deprecated. Use EXTI_PF instead. */
+#define AFIO_EXTI_PF EXTI_PF
+/** Deprecated. Use EXTI_PG instead. */
+#define AFIO_EXTI_PG EXTI_PG
+
+/**
+ * @brief Deprecated. Use exti_num instead.
+ *
+ * In previous versions of libmaple, exti_attach_interrupt() took an
+ * afio_exti_num argument. This isn't portable, so we use exti_num
+ * instead. This typedef (and the macros AFIO_EXTI_0, ...,
+ * AFIO_EXTI_15) exist to preserve backwards compatibility.
+ */
+typedef exti_num afio_exti_num;
+
+/** Deprecated. Use EXTI0 instead. */
+#define AFIO_EXTI_0 EXTI0
+/** Deprecated. Use EXTI1 instead. */
+#define AFIO_EXTI_1 EXTI1
+/** Deprecated. Use EXTI2 instead. */
+#define AFIO_EXTI_2 EXTI2
+/** Deprecated. Use EXTI3 instead. */
+#define AFIO_EXTI_3 EXTI3
+/** Deprecated. Use EXTI4 instead. */
+#define AFIO_EXTI_4 EXTI4
+/** Deprecated. Use EXTI5 instead. */
+#define AFIO_EXTI_5 EXTI5
+/** Deprecated. Use EXTI6 instead. */
+#define AFIO_EXTI_6 EXTI6
+/** Deprecated. Use EXTI7 instead. */
+#define AFIO_EXTI_7 EXTI7
+/** Deprecated. Use EXTI8 instead. */
+#define AFIO_EXTI_8 EXTI8
+/** Deprecated. Use EXTI9 instead. */
+#define AFIO_EXTI_9 EXTI9
+/** Deprecated. Use EXTI10 instead. */
+#define AFIO_EXTI_10 EXTI10
+/** Deprecated. Use EXTI11 instead. */
+#define AFIO_EXTI_11 EXTI11
+/** Deprecated. Use EXTI12 instead. */
+#define AFIO_EXTI_12 EXTI12
+/** Deprecated. Use EXTI13 instead. */
+#define AFIO_EXTI_13 EXTI13
+/** Deprecated. Use EXTI14 instead. */
+#define AFIO_EXTI_14 EXTI14
+/** Deprecated. Use EXTI15 instead. */
+#define AFIO_EXTI_15 EXTI15
+
+/**
+ * @brief Deprecated. Use exti_select(exti, port) instead.
+ */
+static __always_inline void afio_exti_select(exti_num exti, exti_cfg port) {
+    exti_select(exti, port);
 }
 
 #ifdef __cplusplus

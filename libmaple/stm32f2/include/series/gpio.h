@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -36,8 +36,7 @@
 extern "C"{
 #endif
 
-#include <libmaple/libmaple.h>
-#include <libmaple/rcc.h>
+#include <libmaple/libmaple_types.h>
 
 /*
  * GPIO register maps and devices
@@ -76,30 +75,25 @@ typedef struct gpio_reg_map {
 /** GPIO port I register map base pointer */
 #define GPIOI_BASE                      ((struct gpio_reg_map*)0x40022000)
 
-/** GPIO device type */
-typedef struct gpio_dev {
-    gpio_reg_map *regs;
-    rcc_clk_id clk_id;
-} gpio_dev;
-
-extern gpio_dev* const GPIOA;
-extern gpio_dev gpioa;
-extern gpio_dev* const GPIOB;
-extern gpio_dev gpiob;
-extern gpio_dev* const GPIOC;
-extern gpio_dev gpioc;
-extern gpio_dev* const GPIOD;
-extern gpio_dev gpiod;
-extern gpio_dev* const GPIOE;
-extern gpio_dev gpioe;
-extern gpio_dev* const GPIOF;
-extern gpio_dev gpiof;
-extern gpio_dev* const GPIOG;
-extern gpio_dev gpiog;
-extern gpio_dev* const GPIOH;
-extern gpio_dev gpioh;
-extern gpio_dev* const GPIOI;
-extern gpio_dev gpioi;
+struct gpio_dev;
+extern struct gpio_dev* const GPIOA;
+extern struct gpio_dev gpioa;
+extern struct gpio_dev* const GPIOB;
+extern struct gpio_dev gpiob;
+extern struct gpio_dev* const GPIOC;
+extern struct gpio_dev gpioc;
+extern struct gpio_dev* const GPIOD;
+extern struct gpio_dev gpiod;
+extern struct gpio_dev* const GPIOE;
+extern struct gpio_dev gpioe;
+extern struct gpio_dev* const GPIOF;
+extern struct gpio_dev gpiof;
+extern struct gpio_dev* const GPIOG;
+extern struct gpio_dev gpiog;
+extern struct gpio_dev* const GPIOH;
+extern struct gpio_dev gpioh;
+extern struct gpio_dev* const GPIOI;
+extern struct gpio_dev gpioi;
 
 /*
  * Register bit definitions
@@ -215,7 +209,7 @@ typedef enum gpio_mode_flags {
     GPIO_MODEF_PUPD_PD = GPIO_PUPDR_PD << 3, /**< Pull-down */
 } gpio_mode_flags;
 
-void gpio_set_modef(gpio_dev *dev,
+void gpio_set_modef(struct gpio_dev *dev,
                     uint8 bit,
                     gpio_pin_mode mode,
                     unsigned flags);
@@ -231,7 +225,7 @@ void gpio_set_modef(gpio_dev *dev,
  * @param pin Pin on the device whose mode to set, 0--15.
  * @param mode Mode to set the pin to.
  */
-static inline void gpio_set_mode(gpio_dev *dev,
+static inline void gpio_set_mode(struct gpio_dev *dev,
                                  uint8 bit,
                                  gpio_pin_mode mode) {
     gpio_set_modef(dev, bit, mode, GPIO_MODEF_SPEED_HIGH);
@@ -261,7 +255,7 @@ typedef enum gpio_af {
     GPIO_AF_EVENTOUT             = 15, /**< EVENTOUT. */
 } gpio_af;
 
-void gpio_set_af(gpio_dev *dev, uint8 bit, gpio_af af);
+void gpio_set_af(struct gpio_dev *dev, uint8 bit, gpio_af af);
 
 #ifdef __cplusplus
 }

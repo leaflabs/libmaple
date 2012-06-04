@@ -40,6 +40,7 @@
 gpio_dev gpioa = {
     .regs      = GPIOA_BASE,
     .clk_id    = RCC_GPIOA,
+    .exti_port = EXTI_PA,
 };
 /** GPIO port A device. */
 gpio_dev* const GPIOA = &gpioa;
@@ -47,6 +48,7 @@ gpio_dev* const GPIOA = &gpioa;
 gpio_dev gpiob = {
     .regs      = GPIOB_BASE,
     .clk_id    = RCC_GPIOB,
+    .exti_port = EXTI_PB,
 };
 /** GPIO port B device. */
 gpio_dev* const GPIOB = &gpiob;
@@ -54,6 +56,7 @@ gpio_dev* const GPIOB = &gpiob;
 gpio_dev gpioc = {
     .regs      = GPIOC_BASE,
     .clk_id    = RCC_GPIOC,
+    .exti_port = EXTI_PC,
 };
 /** GPIO port C device. */
 gpio_dev* const GPIOC = &gpioc;
@@ -61,6 +64,7 @@ gpio_dev* const GPIOC = &gpioc;
 gpio_dev gpiod = {
     .regs      = GPIOD_BASE,
     .clk_id    = RCC_GPIOD,
+    .exti_port = EXTI_PD,
 };
 /** GPIO port D device. */
 gpio_dev* const GPIOD = &gpiod;
@@ -68,6 +72,7 @@ gpio_dev* const GPIOD = &gpiod;
 gpio_dev gpioe = {
     .regs      = GPIOE_BASE,
     .clk_id    = RCC_GPIOE,
+    .exti_port = EXTI_PE,
 };
 /** GPIO port E device. */
 gpio_dev* const GPIOE = &gpioe;
@@ -75,6 +80,7 @@ gpio_dev* const GPIOE = &gpioe;
 gpio_dev gpiof = {
     .regs      = GPIOF_BASE,
     .clk_id    = RCC_GPIOF,
+    .exti_port = EXTI_PF,
 };
 /** GPIO port F device. */
 gpio_dev* const GPIOF = &gpiof;
@@ -82,6 +88,7 @@ gpio_dev* const GPIOF = &gpiof;
 gpio_dev gpiog = {
     .regs      = GPIOG_BASE,
     .clk_id    = RCC_GPIOG,
+    .exti_port = EXTI_PG,
 };
 /** GPIO port G device. */
 gpio_dev* const GPIOG = &gpiog;
@@ -89,6 +96,7 @@ gpio_dev* const GPIOG = &gpiog;
 gpio_dev gpioh = {
     .regs      = GPIOH_BASE,
     .clk_id    = RCC_GPIOH,
+    .exti_port = EXTI_PH,
 };
 /** GPIO port G device. */
 gpio_dev* const GPIOH = &gpioh;
@@ -96,6 +104,7 @@ gpio_dev* const GPIOH = &gpioh;
 gpio_dev gpioi = {
     .regs      = GPIOI_BASE,
     .clk_id    = RCC_GPIOI,
+    .exti_port = EXTI_PI,
 };
 /** GPIO port G device. */
 gpio_dev* const GPIOI = &gpioi;

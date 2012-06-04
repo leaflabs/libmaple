@@ -136,11 +136,6 @@ void exti_detach_interrupt(exti_num num) {
     exti_channels[num].handler = NULL;
 }
 
-/* Weak default exti_select(), until we get F2 support */
-__weak void exti_select(exti_num num, exti_cfg port) {
-    ASSERT(0);
-}
-
 /*
  * Private routines
  */

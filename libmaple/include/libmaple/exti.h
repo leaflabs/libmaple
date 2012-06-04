@@ -38,6 +38,7 @@
 extern "C"{
 #endif
 
+#include <series/exti.h>        /* provides EXTI_BASE */
 #include <libmaple/libmaple_types.h>
 
 /*
@@ -53,9 +54,6 @@ typedef struct exti_reg_map {
     __io uint32 SWIER; /**< Software interrupt event register */
     __io uint32 PR;    /**< Pending register */
 } exti_reg_map;
-
-/** EXTI register map base pointer */
-#define EXTI_BASE                       ((struct exti_reg_map*)0x40010400)
 
 /*
  * Types: exti_num, exti_cfg, exti_trigger_mode.

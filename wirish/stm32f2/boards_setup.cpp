@@ -40,13 +40,27 @@
 #include <libmaple/syscfg.h>
 #include <libmaple/libmaple_types.h>
 #include <wirish/wirish_types.h>
+#include <board/board.h>
 
-// PLL configuration for 25 MHz external oscillator --> 120 MHz SYSCLK.
-#define PLL_Q 5
-#define PLL_P 2
-#define PLL_N 240
-#define PLL_M 25
-static stm32f2_rcc_pll_data pll_data = {PLL_Q, PLL_P, PLL_N, PLL_M};
+// PLL config for 25 MHz external crystal --> 120 MHz SYSCLK, with
+// 48 MHz PLL48CK.
+#ifndef BOARD_PLL_Q
+#define BOARD_PLL_Q 5
+#endif
+#ifndef BOARD_PLL_P
+#define BOARD_PLL_P 2
+#endif
+#ifndef BOARD_PLL_N
+#define BOARD_PLL_N 240
+#endif
+#ifndef BOARD_PLL_M
+#define BOARD_PLL_M 25
+#endif
+
+static stm32f2_rcc_pll_data pll_data = {BOARD_PLL_Q,
+                                        BOARD_PLL_P,
+                                        BOARD_PLL_N,
+                                        BOARD_PLL_M};
 
 namespace wirish {
     namespace priv {

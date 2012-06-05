@@ -67,7 +67,7 @@ extern "C" {
 #   define STM32_TIMER_MASK             0x7FFE /* TIMER1-TIMER14. */
 #   define STM32_SRAM_END               ((void*)0x20020000)
 #else
-#error "Unrecognized STM32F2 MCU, or no MCU specified."
+#warning "Unsupported or unspecified STM32F2 MCU."
 #endif
 
 #ifdef __cplusplus

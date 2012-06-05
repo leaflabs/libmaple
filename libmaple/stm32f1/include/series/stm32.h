@@ -99,8 +99,7 @@ extern "C" {
 #   define STM32_MEDIUM_DENSITY
 
 #else
-#error "Unrecognized STM32F1 MCU, or no MCU specified. Add something like " \
-       "-DMCU_STM32F103RB to your compiler arguments."
+#warning "Unsupported or unspecified STM32F1 MCU."
 #endif
 
 /*

@@ -38,6 +38,7 @@
 
 #include <libmaple/gpio.h>
 #include <libmaple/syscfg.h>
+#include <libmaple/libmaple_types.h>
 #include <wirish/wirish_types.h>
 
 // PLL configuration for 25 MHz external oscillator --> 120 MHz SYSCLK.
@@ -50,43 +51,50 @@ static stm32f2_rcc_pll_data pll_data = {PLL_Q, PLL_P, PLL_N, PLL_M};
 namespace wirish {
     namespace priv {
         // PLL clocked off of HSE, with above configuration data.
-        rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
-        // As f_APB2 = 60 MHz (see board_setup_clock_prescalers),
-        // we need f_ADC = f_PCLK2 / 2 to get the (maximum)
-        // f_ADC = 30 MHz.
-        adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_2;
-        // With clocks as specified here (i.e. f_ADC = 30 MHz), this
-        // ADC sample rate allows for error less than 1/4 LSB with a
-        // 50 KOhm input impedance, assuming an internal sample and
-        // hold capacitance C_ADC at most 8.8 pF. See Equation 1 and
-        // Table 61 in the F2 datasheet for more details.
-        adc_smp_rate w_adc_smp = ADC_SMPR_144;
+        __weak rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
 
-        void board_reset_pll(void) {
+        // Global ADC prescaler
+        //
+        // On F2, with f_APB2 = 60 MHz, we need f_ADC = f_PCLK2 / 2 to
+        // get the (maximum) f_ADC = 30 MHz.
+        __weak adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_2;
+
+        // Conservative ADC sample rate. Goal is error less than 1/4
+        // LSB with 50 KOhm input impedance.
+        //
+        // On F2, with f_ADC = 30 MHz, error is acceptable assuming an
+        // internal sample and hold capacitance C_ADC at most 8.8 pF
+        // (ST doesn't specify the maximum C_ADC, so we had to take a
+        // guess). See Equation 1 and Table 61 in the F2 datasheet for
+        // more details.
+        __weak adc_smp_rate w_adc_smp = ADC_SMPR_144;
+
+        __weak void board_reset_pll(void) {
             // Set PLLCFGR to its reset value.
             RCC_BASE->PLLCFGR = 0x24003010; // FIXME lose the magic number.
         }
 
-        void board_setup_clock_prescalers(void) {
-            // With f_SYSCLK = 120 MHz (as determined by board_pll_cfg),
+        __weak void board_setup_clock_prescalers(void) {
+            // On F2, with f_SYSCLK = 120 MHz (as determined by
+            // board_pll_cfg),
             //
-            // f_AHB = f_SYSCLK / 1 = 120 MHz
+            // f_AHB  = f_SYSCLK / 1 = 120 MHz
+            // f_APB1 = f_AHB / 4    =  30 MHz
+            // f_APB2 = f_AHB / 2    =  60 MHz
             rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
-            // f_APB1 = f_AHB / 4 = 30 MHz
             rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_4);
-            // f_APB2 = f_AHB / 2 = 60 MHz
             rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_2);
         }
 
-        void board_setup_gpio(void) {
+        __weak void board_setup_gpio(void) {
             gpio_init_all();
         }
 
-        void board_setup_usb(void) {
+        __weak void board_setup_usb(void) {
             // Nothing to do.
         }
 
-        void series_init(void) {
+        __weak void series_init(void) {
             // We need SYSCFG for external interrupts
             syscfg_init();
             // Turn on the I/O compensation cell, since we drive the

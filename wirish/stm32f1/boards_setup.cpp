@@ -55,31 +55,31 @@ namespace wirish {
     namespace priv {
 
         static stm32f1_rcc_pll_data pll_data = {BOARD_RCC_PLLMUL};
-        rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
-        adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_6;
-        adc_smp_rate w_adc_smp = ADC_SMPR_55_5;
+        __weak rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSE, &pll_data};
+        __weak adc_prescaler w_adc_pre = ADC_PRE_PCLK2_DIV_6;
+        __weak adc_smp_rate w_adc_smp = ADC_SMPR_55_5;
 
-        void board_reset_pll(void) {
+        __weak void board_reset_pll(void) {
             // TODO
         }
 
-        void board_setup_clock_prescalers(void) {
+        __weak void board_setup_clock_prescalers(void) {
             rcc_set_prescaler(RCC_PRESCALER_AHB, RCC_AHB_SYSCLK_DIV_1);
             rcc_set_prescaler(RCC_PRESCALER_APB1, RCC_APB1_HCLK_DIV_2);
             rcc_set_prescaler(RCC_PRESCALER_APB2, RCC_APB2_HCLK_DIV_1);
         }
 
-        void board_setup_gpio(void) {
+        __weak void board_setup_gpio(void) {
             gpio_init_all();
         }
 
-        void board_setup_usb(void) {
+        __weak void board_setup_usb(void) {
 #if BOARD_HAVE_SERIALUSB
             SerialUSB.begin();
 #endif
         }
 
-        void series_init(void) {
+        __weak void series_init(void) {
             // Initialize AFIO here, too, so peripheral remaps and external
             // interrupts work out of the box.
             afio_init();

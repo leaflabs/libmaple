@@ -36,9 +36,19 @@
 #include <libmaple/timer.h>
 #include <wirish/wirish_types.h>
 
+// boardInit(): nothing special to do for Maple.
+//
+// When defining your own board.cpp, you can put extra code in this
+// function if you have anything you want done on reset, before main()
+// or setup() are called.
 void boardInit(void) {
 }
 
+// Pin map: this lets the basic I/O functions (digitalWrite(),
+// analogRead(), pwmWrite()) translate from pin numbers to STM32
+// peripherals.
+//
+// See <wirish/wirish_types.h> for what goes in an stm32_pin_info.
 extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 
     /* Top header */
@@ -98,14 +108,20 @@ extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
     {GPIOB,   NULL, NULL,  4, 0, ADCx}, /* D43/PB4  */
 };
 
+// Array of pins you can use for pwmWrite(). Keep it in Flash because
+// it doesn't change, and so we don't waste RAM.
 extern const uint8 boardPWMPins[] __FLASH__ = {
     0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 27, 28
 };
 
+// Array of pins you can use for analogRead().
 extern const uint8 boardADCPins[] __FLASH__ = {
     0, 1, 2, 3, 10, 11, 12, 15, 16, 17, 18, 19, 20, 27, 28
 };
 
+// Array of pins that the board uses for something special. Other than
+// the button and the LED, it's usually best to leave these pins alone
+// unless you know what you're doing.
 extern const uint8 boardUsedPins[] __FLASH__ = {
     BOARD_LED_PIN, BOARD_BUTTON_PIN, BOARD_JTMS_SWDIO_PIN,
     BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN

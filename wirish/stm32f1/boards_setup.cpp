@@ -71,9 +71,6 @@ namespace wirish {
 
         void board_setup_gpio(void) {
             gpio_init_all();
-            // Initialize AFIO here, too, so peripheral remaps and external
-            // interrupts work out of the box.
-            afio_init();
         }
 
         void board_setup_usb(void) {
@@ -81,5 +78,12 @@ namespace wirish {
             SerialUSB.begin();
 #endif
         }
+
+        void series_init(void) {
+            // Initialize AFIO here, too, so peripheral remaps and external
+            // interrupts work out of the box.
+            afio_init();
+        }
+
     }
 }

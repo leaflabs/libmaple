@@ -75,13 +75,6 @@ void init(void) {
     boardInit();
 }
 
-/* Provide a default no-op series_init() */
-namespace wirish {
-    namespace priv {
-        __weak void series_init(void) {}
-    }
-}
-
 /* Provide a default no-op boardInit(). */
 __weak void boardInit(void) {
 }

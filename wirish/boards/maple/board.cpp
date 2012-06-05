@@ -43,8 +43,13 @@
 // When defining your own board.cpp, you can put extra code in this
 // function if you have anything you want done on reset, before main()
 // or setup() are called.
+//
+// If there's nothing special you need done, feel free to leave this
+// function out, as we do here.
+/*
 void boardInit(void) {
 }
+*/
 
 // Pin map: this lets the basic I/O functions (digitalWrite(),
 // analogRead(), pwmWrite()) translate from pin numbers to STM32

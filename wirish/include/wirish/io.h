@@ -181,7 +181,8 @@ static inline void toggleLED() {
  *
  * @see pinMode()
  */
-uint8 isButtonPressed();
+uint8 isButtonPressed(uint8 pin=BOARD_BUTTON_PIN,
+                      uint32 pressedLevel=BOARD_BUTTON_PRESSED_LEVEL);
 
 /**
  * Wait until the button is pressed and released, timing out if no

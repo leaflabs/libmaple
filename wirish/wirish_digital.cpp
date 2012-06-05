@@ -64,10 +64,10 @@ void togglePin(uint8 pin) {
 
 #define BUTTON_DEBOUNCE_DELAY 1
 
-uint8 isButtonPressed() {
-    if (digitalRead(BOARD_BUTTON_PIN) == BOARD_BUTTON_PRESSED_LEVEL) {
+uint8 isButtonPressed(uint8 pin, uint32 pressedLevel) {
+    if (digitalRead(pin) == pressedLevel) {
         delay(BUTTON_DEBOUNCE_DELAY);
-        while (digitalRead(BOARD_BUTTON_PIN) == BOARD_BUTTON_PRESSED_LEVEL)
+        while (digitalRead(pin) == pressedLevel)
             ;
         return true;
     }

@@ -51,9 +51,6 @@
 #define BOARD_RCC_PLLMUL RCC_PLLMUL_9
 #endif
 
-/* FIXME: Reintroduce all "#if 0"'ed blocks once libmaple provides
- * these definitions again. */
-
 namespace wirish {
     namespace priv {
 

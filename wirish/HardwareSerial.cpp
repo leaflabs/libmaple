@@ -85,7 +85,7 @@ static void disable_timer_if_necessary(timer_dev *dev, uint8 ch) {
       (STM32_MCU_SERIES == STM32_SERIES_F4)
 #define disable_timer_if_necessary(dev, ch) ((void)0)
 #else
-#warn "Unsupported STM32 series; timer conflicts are possible"
+#warning "Unsupported STM32 series; timer conflicts are possible"
 #endif
 
 void HardwareSerial::begin(uint32 baud) {

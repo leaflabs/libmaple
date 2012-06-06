@@ -4,3 +4,4 @@ ERROR_LED_PORT := GPIOC
 ERROR_LED_PIN  := 9
 MCU_SERIES := stm32f1
 MCU_F1_LINE := value
+LD_MEM_DIR := sram_8k_flash_128k

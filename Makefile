@@ -19,6 +19,7 @@ SUPPORT_PATH := $(SRCROOT)/support
 LDDIR := $(SUPPORT_PATH)/ld
 # Support files for this Makefile
 MAKEDIR := $(SUPPORT_PATH)/make
+BOARD_INCLUDE_DIR := $(MAKEDIR)/board-includes
 
 ##
 ## Target-specific configuration.  This determines some compiler and
@@ -92,7 +93,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 # main target
 include $(SRCROOT)/build-targets.mk
 
-.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper
+.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper list-boards
 
 # Target upload commands
 # USB ID for DFU upload -- FIXME: do something smarter with this
@@ -182,3 +183,7 @@ jtag:
 
 doxygen:
 	doxygen $(SUPPORT_PATH)/doxygen/Doxyfile
+
+# This output is kind of ugly, but I don't understand make very well.
+list-boards:
+	@echo " $(addsuffix "\\n",$(basename $(notdir $(wildcard $(BOARD_INCLUDE_DIR)/*.mk))))"

@@ -5,7 +5,7 @@ TARGET_FLAGS :=
 # Board-specific configuration values. Punt these to board-specific
 # include files.
 
-include $(MAKEDIR)/board-includes/$(BOARD).mk
+include $(BOARD_INCLUDE_DIR)/$(BOARD).mk
 
 TARGET_FLAGS += -DBOARD_$(BOARD) -DMCU_$(MCU) \
                 -DERROR_LED_PORT=$(ERROR_LED_PORT) \

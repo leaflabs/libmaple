@@ -58,8 +58,8 @@
 #define NR_BAS_HANDLERS                 1
 
 /* For declaring advanced timers. */
-#define DECLARE_ADVANCED_TIMER(name, num)                               \
-    timer_dev name = {                                                  \
+#define ADVANCED_TIMER(num)                                             \
+    {                                                                   \
         .regs = { .adv = TIMER##num##_BASE },                           \
         .clk_id = RCC_TIMER##num,                                       \
         .type = TIMER_ADVANCED,                                         \
@@ -67,8 +67,8 @@
     }
 
 /* For declaring full-featured general purpose timers. */
-#define DECLARE_GENERAL_TIMER(name, num)                                \
-    timer_dev name = {                                                  \
+#define GENERAL_TIMER(num)                                              \
+    {                                                                   \
         .regs = { .gen = TIMER##num##_BASE },                           \
         .clk_id = RCC_TIMER##num,                                       \
         .type = TIMER_GENERAL,                                          \
@@ -78,8 +78,8 @@
 /* For declaring general purpose timers with limited interrupt
  * capability (e.g. timers 9 through 14 on STM32F2 and XL-density
  * STM32F1). */
-#define DECLARE_RESTRICTED_GENERAL_TIMER(name, num, max_dier_bit)       \
-    timer_dev name = {                                                  \
+#define RESTRICTED_GENERAL_TIMER(num, max_dier_bit)                     \
+    {                                                                   \
         .regs = { .gen = TIMER##num##_BASE },                           \
         .clk_id = RCC_TIMER##num,                                       \
         .type = TIMER_GENERAL,                                          \
@@ -87,8 +87,8 @@
     }
 
 /* For declaring basic timers (e.g. TIM6 and TIM7). */
-#define DECLARE_BASIC_TIMER(name, num)                                  \
-    timer_dev name = {                                                  \
+#define BASIC_TIMER(num)                                                \
+    {                                                                   \
         .regs = { .bas = TIMER##num##_BASE },                           \
         .clk_id = RCC_TIMER##num,                                       \
         .type = TIMER_BASIC,                                            \

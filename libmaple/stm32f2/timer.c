@@ -39,26 +39,26 @@
  * Defer to the timer_private API for declaring these.
  */
 
-static DECLARE_ADVANCED_TIMER(timer1, 1);
-static DECLARE_GENERAL_TIMER(timer2, 2);
-static DECLARE_GENERAL_TIMER(timer3, 3);
-static DECLARE_GENERAL_TIMER(timer4, 4);
-static DECLARE_GENERAL_TIMER(timer5, 5);
-static DECLARE_BASIC_TIMER(timer6, 6);
-static DECLARE_BASIC_TIMER(timer7, 7);
-static DECLARE_ADVANCED_TIMER(timer8, 8);
+static timer_dev timer1 = ADVANCED_TIMER(1);
+static timer_dev timer2 = GENERAL_TIMER(2);
+static timer_dev timer3 = GENERAL_TIMER(3);
+static timer_dev timer4 = GENERAL_TIMER(4);
+static timer_dev timer5 = GENERAL_TIMER(5);
+static timer_dev timer6 = BASIC_TIMER(6);
+static timer_dev timer7 = BASIC_TIMER(7);
+static timer_dev timer8 = ADVANCED_TIMER(8);
 /* TIM9 has UIE, CC1IE, CC2IE, TIE bits in DIER. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer9, 9, TIMER_DIER_TIE_BIT);
+static timer_dev timer9 = RESTRICTED_GENERAL_TIMER(9, TIMER_DIER_TIE_BIT);
 /* TIM10 has UIE, CC1IE. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer10, 10, TIMER_DIER_CC1IE_BIT);
+static timer_dev timer10 = RESTRICTED_GENERAL_TIMER(10, TIMER_DIER_CC1IE_BIT);
 /* TIM11 has UIE, CC1IE. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer11, 11, TIMER_DIER_CC1IE_BIT);
+static timer_dev timer11 = RESTRICTED_GENERAL_TIMER(11, TIMER_DIER_CC1IE_BIT);
 /* TIM12 has UIE, CC1IE, CC2IE, TIE. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer12, 12, TIMER_DIER_TIE_BIT);
+static timer_dev timer12 = RESTRICTED_GENERAL_TIMER(12, TIMER_DIER_TIE_BIT);
 /* TIM13 has UIE, CC1IE. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer13, 13, TIMER_DIER_CC1IE_BIT);
+static timer_dev timer13 = RESTRICTED_GENERAL_TIMER(13, TIMER_DIER_CC1IE_BIT);
 /* TIM14 has UIE, CC1IE. */
-static DECLARE_RESTRICTED_GENERAL_TIMER(timer14, 14, TIMER_DIER_CC1IE_BIT);
+static timer_dev timer14 = RESTRICTED_GENERAL_TIMER(14, TIMER_DIER_CC1IE_BIT);
 
 /** Timer 1 device (advanced) */
 timer_dev *TIMER1 = &timer1;
@@ -120,11 +120,6 @@ void timer_foreach(void (*fn)(timer_dev*)) {
  * For example, if dev is TIMER1, this function returns
  * GPIO_AF_TIM_1_2. This is useful for e.g. using gpio_set_af() to set
  * a pin's alternate function to a timer.
- *
- * Note that the timer gpio_afs are shared with other timers (and
- * sometimes with CAN). For example, timers 1 and 2 both use
- * GPIO_AF_TIM_1_2. Because of that, it can pay to e.g not point two
- * timers at the same pin.
  *
  * @param dev Timer device, must not be TIMER6 or TIMER7.
  * @return gpio_af corresponding to dev

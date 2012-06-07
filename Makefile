@@ -152,13 +152,13 @@ help:
 	@echo ""
 	@echo "Other targets:"
 	@echo "    clean: Remove all build and object files"
-	@echo "    help: Show this message"
 	@echo "    doxygen: Build Doxygen HTML and XML documentation"
+	@echo "    help: Show this message"
 	@echo "    mrproper: Remove all generated files"
 	@echo ""
 
 cscope:
-	rm -rf *.cscope
+	rm -rf cscope.*
 	find . -name '*.[hcS]' -o -name '*.cpp' | xargs cscope -b
 
 tags:

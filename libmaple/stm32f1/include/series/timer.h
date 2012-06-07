@@ -64,7 +64,6 @@ typedef struct timer_gen_reg_map {
 } timer_gen_reg_map;
 
 struct timer_adv_reg_map;
-struct timer_gen_reg_map;
 struct timer_bas_reg_map;
 
 /** Timer 1 register map base pointer */

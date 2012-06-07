@@ -20,6 +20,7 @@ CFLAGS_$(d) := $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -I$(d)
 # Local rules and targets
 sSRCS_$(d) := start.S
 cSRCS_$(d) := start_c.c
+cSRCS_$(d) += syscalls.c
 cppSRCS_$(d) := boards.cpp
 cppSRCS_$(d) += cxxabi-compat.cpp
 cppSRCS_$(d) += ext_interrupts.cpp

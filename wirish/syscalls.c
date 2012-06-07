@@ -25,11 +25,11 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/syscalls.c
+ * @file wirish/syscalls.c
  * @brief newlib stubs
  *
- * Low level system routines used by Newlib for basic I/O and memory
- * allocation.
+ * Low level system routines used by newlib for basic I/O and memory
+ * allocation. You can override most of these.
  */
 
 #include <libmaple/libmaple.h>

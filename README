@@ -122,7 +122,6 @@ Repository Layout
     gdb/              GDB scripts.
     ld/               Linker scripts.
     make/             Additional scripts used by the top-level Makefile.
-    openocd/          OpenOCD scripts for JTAG debugging.
     scripts/          Miscellany.
     doxygen/          Doxygen configuration.
     stm32loader.py    Script for uploading via the built-in USART bootloader.

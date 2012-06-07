@@ -192,17 +192,17 @@ extern timer_dev *TIMER14;
 #define TIMER_CR1_CKD_1TCKINT           (0x0 << 8)
 #define TIMER_CR1_CKD_2TCKINT           (0x1 << 8)
 #define TIMER_CR1_CKD_4TICKINT          (0x2 << 8)
-#define TIMER_CR1_ARPE                  BIT(TIMER_CR1_ARPE_BIT)
+#define TIMER_CR1_ARPE                  (1U << TIMER_CR1_ARPE_BIT)
 #define TIMER_CR1_CKD_CMS               (0x3 << 5)
 #define TIMER_CR1_CKD_CMS_EDGE          (0x0 << 5)
 #define TIMER_CR1_CKD_CMS_CENTER1       (0x1 << 5)
 #define TIMER_CR1_CKD_CMS_CENTER2       (0x2 << 5)
 #define TIMER_CR1_CKD_CMS_CENTER3       (0x3 << 5)
-#define TIMER_CR1_DIR                   BIT(TIMER_CR1_DIR_BIT)
-#define TIMER_CR1_OPM                   BIT(TIMER_CR1_OPM_BIT)
-#define TIMER_CR1_URS                   BIT(TIMER_CR1_URS_BIT)
-#define TIMER_CR1_UDIS                  BIT(TIMER_CR1_UDIS_BIT)
-#define TIMER_CR1_CEN                   BIT(TIMER_CR1_CEN_BIT)
+#define TIMER_CR1_DIR                   (1U << TIMER_CR1_DIR_BIT)
+#define TIMER_CR1_OPM                   (1U << TIMER_CR1_OPM_BIT)
+#define TIMER_CR1_URS                   (1U << TIMER_CR1_URS_BIT)
+#define TIMER_CR1_UDIS                  (1U << TIMER_CR1_UDIS_BIT)
+#define TIMER_CR1_CEN                   (1U << TIMER_CR1_CEN_BIT)
 
 /* Control register 2 (CR2) */
 
@@ -218,14 +218,14 @@ extern timer_dev *TIMER14;
 #define TIMER_CR2_CCUS_BIT              2
 #define TIMER_CR2_CCPC_BIT              0
 
-#define TIMER_CR2_OIS4                  BIT(TIMER_CR2_OIS4_BIT)
-#define TIMER_CR2_OIS3N                 BIT(TIMER_CR2_OIS3N_BIT)
-#define TIMER_CR2_OIS3                  BIT(TIMER_CR2_OIS3_BIT)
-#define TIMER_CR2_OIS2N                 BIT(TIMER_CR2_OIS2N_BIT)
-#define TIMER_CR2_OIS2                  BIT(TIMER_CR2_OIS2_BIT)
-#define TIMER_CR2_OIS1N                 BIT(TIMER_CR2_OIS1N_BIT)
-#define TIMER_CR2_OIS1                  BIT(TIMER_CR2_OIS1_BIT)
-#define TIMER_CR2_TI1S                  BIT(TIMER_CR2_TI1S_BIT)
+#define TIMER_CR2_OIS4                  (1U << TIMER_CR2_OIS4_BIT)
+#define TIMER_CR2_OIS3N                 (1U << TIMER_CR2_OIS3N_BIT)
+#define TIMER_CR2_OIS3                  (1U << TIMER_CR2_OIS3_BIT)
+#define TIMER_CR2_OIS2N                 (1U << TIMER_CR2_OIS2N_BIT)
+#define TIMER_CR2_OIS2                  (1U << TIMER_CR2_OIS2_BIT)
+#define TIMER_CR2_OIS1N                 (1U << TIMER_CR2_OIS1N_BIT)
+#define TIMER_CR2_OIS1                  (1U << TIMER_CR2_OIS1_BIT)
+#define TIMER_CR2_TI1S                  (1U << TIMER_CR2_TI1S_BIT)
 #define TIMER_CR2_MMS                   (0x7 << 4)
 #define TIMER_CR2_MMS_RESET             (0x0 << 4)
 #define TIMER_CR2_MMS_ENABLE            (0x1 << 4)
@@ -235,9 +235,9 @@ extern timer_dev *TIMER14;
 #define TIMER_CR2_MMS_COMPARE_OC2REF    (0x5 << 4)
 #define TIMER_CR2_MMS_COMPARE_OC3REF    (0x6 << 4)
 #define TIMER_CR2_MMS_COMPARE_OC4REF    (0x7 << 4)
-#define TIMER_CR2_CCDS                  BIT(TIMER_CR2_CCDS_BIT)
-#define TIMER_CR2_CCUS                  BIT(TIMER_CR2_CCUS_BIT)
-#define TIMER_CR2_CCPC                  BIT(TIMER_CR2_CCPC_BIT)
+#define TIMER_CR2_CCDS                  (1U << TIMER_CR2_CCDS_BIT)
+#define TIMER_CR2_CCUS                  (1U << TIMER_CR2_CCUS_BIT)
+#define TIMER_CR2_CCPC                  (1U << TIMER_CR2_CCPC_BIT)
 
 /* Slave mode control register (SMCR) */
 
@@ -245,15 +245,15 @@ extern timer_dev *TIMER14;
 #define TIMER_SMCR_ECE_BIT              14
 #define TIMER_SMCR_MSM_BIT              7
 
-#define TIMER_SMCR_ETP                  BIT(TIMER_SMCR_ETP_BIT)
-#define TIMER_SMCR_ECE                  BIT(TIMER_SMCR_ECE_BIT)
+#define TIMER_SMCR_ETP                  (1U << TIMER_SMCR_ETP_BIT)
+#define TIMER_SMCR_ECE                  (1U << TIMER_SMCR_ECE_BIT)
 #define TIMER_SMCR_ETPS                 (0x3 << 12)
 #define TIMER_SMCR_ETPS_OFF             (0x0 << 12)
 #define TIMER_SMCR_ETPS_DIV2            (0x1 << 12)
 #define TIMER_SMCR_ETPS_DIV4            (0x2 << 12)
 #define TIMER_SMCR_ETPS_DIV8            (0x3 << 12)
 #define TIMER_SMCR_ETF                  (0xF << 12)
-#define TIMER_SMCR_MSM                  BIT(TIMER_SMCR_MSM_BIT)
+#define TIMER_SMCR_MSM                  (1U << TIMER_SMCR_MSM_BIT)
 #define TIMER_SMCR_TS                   (0x3 << 4)
 #define TIMER_SMCR_TS_ITR0              (0x0 << 4)
 #define TIMER_SMCR_TS_ITR1              (0x1 << 4)
@@ -291,21 +291,21 @@ extern timer_dev *TIMER14;
 #define TIMER_DIER_CC1IE_BIT            1
 #define TIMER_DIER_UIE_BIT              0
 
-#define TIMER_DIER_TDE                  BIT(TIMER_DIER_TDE_BIT)
-#define TIMER_DIER_COMDE                BIT(TIMER_DIER_COMDE_BIT)
-#define TIMER_DIER_CC4DE                BIT(TIMER_DIER_CC4DE_BIT)
-#define TIMER_DIER_CC3DE                BIT(TIMER_DIER_CC3DE_BIT)
-#define TIMER_DIER_CC2DE                BIT(TIMER_DIER_CC2DE_BIT)
-#define TIMER_DIER_CC1DE                BIT(TIMER_DIER_CC1DE_BIT)
-#define TIMER_DIER_UDE                  BIT(TIMER_DIER_UDE_BIT)
-#define TIMER_DIER_BIE                  BIT(TIMER_DIER_BIE_BIT)
-#define TIMER_DIER_TIE                  BIT(TIMER_DIER_TIE_BIT)
-#define TIMER_DIER_COMIE                BIT(TIMER_DIER_COMIE_BIT)
-#define TIMER_DIER_CC4IE                BIT(TIMER_DIER_CC4IE_BIT)
-#define TIMER_DIER_CC3IE                BIT(TIMER_DIER_CC3IE_BIT)
-#define TIMER_DIER_CC2IE                BIT(TIMER_DIER_CC2IE_BIT)
-#define TIMER_DIER_CC1IE                BIT(TIMER_DIER_CC1IE_BIT)
-#define TIMER_DIER_UIE                  BIT(TIMER_DIER_UIE_BIT)
+#define TIMER_DIER_TDE                  (1U << TIMER_DIER_TDE_BIT)
+#define TIMER_DIER_COMDE                (1U << TIMER_DIER_COMDE_BIT)
+#define TIMER_DIER_CC4DE                (1U << TIMER_DIER_CC4DE_BIT)
+#define TIMER_DIER_CC3DE                (1U << TIMER_DIER_CC3DE_BIT)
+#define TIMER_DIER_CC2DE                (1U << TIMER_DIER_CC2DE_BIT)
+#define TIMER_DIER_CC1DE                (1U << TIMER_DIER_CC1DE_BIT)
+#define TIMER_DIER_UDE                  (1U << TIMER_DIER_UDE_BIT)
+#define TIMER_DIER_BIE                  (1U << TIMER_DIER_BIE_BIT)
+#define TIMER_DIER_TIE                  (1U << TIMER_DIER_TIE_BIT)
+#define TIMER_DIER_COMIE                (1U << TIMER_DIER_COMIE_BIT)
+#define TIMER_DIER_CC4IE                (1U << TIMER_DIER_CC4IE_BIT)
+#define TIMER_DIER_CC3IE                (1U << TIMER_DIER_CC3IE_BIT)
+#define TIMER_DIER_CC2IE                (1U << TIMER_DIER_CC2IE_BIT)
+#define TIMER_DIER_CC1IE                (1U << TIMER_DIER_CC1IE_BIT)
+#define TIMER_DIER_UIE                  (1U << TIMER_DIER_UIE_BIT)
 
 /* Status register (SR) */
 
@@ -322,18 +322,18 @@ extern timer_dev *TIMER14;
 #define TIMER_SR_CC1IF_BIT              1
 #define TIMER_SR_UIF_BIT                0
 
-#define TIMER_SR_CC4OF                  BIT(TIMER_SR_CC4OF_BIT)
-#define TIMER_SR_CC3OF                  BIT(TIMER_SR_CC3OF_BIT)
-#define TIMER_SR_CC2OF                  BIT(TIMER_SR_CC2OF_BIT)
-#define TIMER_SR_CC1OF                  BIT(TIMER_SR_CC1OF_BIT)
-#define TIMER_SR_BIF                    BIT(TIMER_SR_BIF_BIT)
-#define TIMER_SR_TIF                    BIT(TIMER_SR_TIF_BIT)
-#define TIMER_SR_COMIF                  BIT(TIMER_SR_COMIF_BIT)
-#define TIMER_SR_CC4IF                  BIT(TIMER_SR_CC4IF_BIT)
-#define TIMER_SR_CC3IF                  BIT(TIMER_SR_CC3IF_BIT)
-#define TIMER_SR_CC2IF                  BIT(TIMER_SR_CC2IF_BIT)
-#define TIMER_SR_CC1IF                  BIT(TIMER_SR_CC1IF_BIT)
-#define TIMER_SR_UIF                    BIT(TIMER_SR_UIF_BIT)
+#define TIMER_SR_CC4OF                  (1U << TIMER_SR_CC4OF_BIT)
+#define TIMER_SR_CC3OF                  (1U << TIMER_SR_CC3OF_BIT)
+#define TIMER_SR_CC2OF                  (1U << TIMER_SR_CC2OF_BIT)
+#define TIMER_SR_CC1OF                  (1U << TIMER_SR_CC1OF_BIT)
+#define TIMER_SR_BIF                    (1U << TIMER_SR_BIF_BIT)
+#define TIMER_SR_TIF                    (1U << TIMER_SR_TIF_BIT)
+#define TIMER_SR_COMIF                  (1U << TIMER_SR_COMIF_BIT)
+#define TIMER_SR_CC4IF                  (1U << TIMER_SR_CC4IF_BIT)
+#define TIMER_SR_CC3IF                  (1U << TIMER_SR_CC3IF_BIT)
+#define TIMER_SR_CC2IF                  (1U << TIMER_SR_CC2IF_BIT)
+#define TIMER_SR_CC1IF                  (1U << TIMER_SR_CC1IF_BIT)
+#define TIMER_SR_UIF                    (1U << TIMER_SR_UIF_BIT)
 
 /* Event generation register (EGR) */
 
@@ -346,14 +346,14 @@ extern timer_dev *TIMER14;
 #define TIMER_EGR_CC1G_BIT              1
 #define TIMER_EGR_UG_BIT                0
 
-#define TIMER_EGR_BG                    BIT(TIMER_EGR_BG_BIT)
-#define TIMER_EGR_TG                    BIT(TIMER_EGR_TG_BIT)
-#define TIMER_EGR_COMG                  BIT(TIMER_EGR_COMG_BIT)
-#define TIMER_EGR_CC4G                  BIT(TIMER_EGR_CC4G_BIT)
-#define TIMER_EGR_CC3G                  BIT(TIMER_EGR_CC3G_BIT)
-#define TIMER_EGR_CC2G                  BIT(TIMER_EGR_CC2G_BIT)
-#define TIMER_EGR_CC1G                  BIT(TIMER_EGR_CC1G_BIT)
-#define TIMER_EGR_UG                    BIT(TIMER_EGR_UG_BIT)
+#define TIMER_EGR_BG                    (1U << TIMER_EGR_BG_BIT)
+#define TIMER_EGR_TG                    (1U << TIMER_EGR_TG_BIT)
+#define TIMER_EGR_COMG                  (1U << TIMER_EGR_COMG_BIT)
+#define TIMER_EGR_CC4G                  (1U << TIMER_EGR_CC4G_BIT)
+#define TIMER_EGR_CC3G                  (1U << TIMER_EGR_CC3G_BIT)
+#define TIMER_EGR_CC2G                  (1U << TIMER_EGR_CC2G_BIT)
+#define TIMER_EGR_CC1G                  (1U << TIMER_EGR_CC1G_BIT)
+#define TIMER_EGR_UG                    (1U << TIMER_EGR_UG_BIT)
 
 /* Capture/compare mode registers, common values */
 
@@ -371,22 +371,22 @@ extern timer_dev *TIMER14;
 #define TIMER_CCMR1_OC1PE_BIT           3
 #define TIMER_CCMR1_OC1FE_BIT           2
 
-#define TIMER_CCMR1_OC2CE               BIT(TIMER_CCMR1_OC2CE_BIT)
+#define TIMER_CCMR1_OC2CE               (1U << TIMER_CCMR1_OC2CE_BIT)
 #define TIMER_CCMR1_OC2M                (0x3 << 12)
 #define TIMER_CCMR1_IC2F                (0xF << 12)
-#define TIMER_CCMR1_OC2PE               BIT(TIMER_CCMR1_OC2PE_BIT)
-#define TIMER_CCMR1_OC2FE               BIT(TIMER_CCMR1_OC2FE_BIT)
+#define TIMER_CCMR1_OC2PE               (1U << TIMER_CCMR1_OC2PE_BIT)
+#define TIMER_CCMR1_OC2FE               (1U << TIMER_CCMR1_OC2FE_BIT)
 #define TIMER_CCMR1_IC2PSC              (0x3 << 10)
 #define TIMER_CCMR1_CC2S                (0x3 << 8)
 #define TIMER_CCMR1_CC2S_OUTPUT         (TIMER_CCMR_CCS_OUTPUT << 8)
 #define TIMER_CCMR1_CC2S_INPUT_TI1      (TIMER_CCMR_CCS_INPUT_TI1 << 8)
 #define TIMER_CCMR1_CC2S_INPUT_TI2      (TIMER_CCMR_CCS_INPUT_TI2 << 8)
 #define TIMER_CCMR1_CC2S_INPUT_TRC      (TIMER_CCMR_CCS_INPUT_TRC << 8)
-#define TIMER_CCMR1_OC1CE               BIT(TIMER_CCMR1_OC1CE_BIT)
+#define TIMER_CCMR1_OC1CE               (1U << TIMER_CCMR1_OC1CE_BIT)
 #define TIMER_CCMR1_OC1M                (0x3 << 4)
 #define TIMER_CCMR1_IC1F                (0xF << 4)
-#define TIMER_CCMR1_OC1PE               BIT(TIMER_CCMR1_OC1PE_BIT)
-#define TIMER_CCMR1_OC1FE               BIT(TIMER_CCMR1_OC1FE_BIT)
+#define TIMER_CCMR1_OC1PE               (1U << TIMER_CCMR1_OC1PE_BIT)
+#define TIMER_CCMR1_OC1FE               (1U << TIMER_CCMR1_OC1FE_BIT)
 #define TIMER_CCMR1_IC1PSC              (0x3 << 2)
 #define TIMER_CCMR1_CC1S                0x3
 #define TIMER_CCMR1_CC1S_OUTPUT         TIMER_CCMR_CCS_OUTPUT
@@ -403,22 +403,22 @@ extern timer_dev *TIMER14;
 #define TIMER_CCMR2_OC3PE_BIT           3
 #define TIMER_CCMR2_OC3FE_BIT           2
 
-#define TIMER_CCMR2_OC4CE               BIT(TIMER_CCMR2_OC4CE_BIT)
+#define TIMER_CCMR2_OC4CE               (1U << TIMER_CCMR2_OC4CE_BIT)
 #define TIMER_CCMR2_OC4M                (0x3 << 12)
 #define TIMER_CCMR2_IC4F                (0xF << 12)
-#define TIMER_CCMR2_OC4PE               BIT(TIMER_CCMR2_OC4PE_BIT)
-#define TIMER_CCMR2_OC4FE               BIT(TIMER_CCMR2_OC4FE_BIT)
+#define TIMER_CCMR2_OC4PE               (1U << TIMER_CCMR2_OC4PE_BIT)
+#define TIMER_CCMR2_OC4FE               (1U << TIMER_CCMR2_OC4FE_BIT)
 #define TIMER_CCMR2_IC4PSC              (0x3 << 10)
 #define TIMER_CCMR2_CC4S                (0x3 << 8)
 #define TIMER_CCMR2_CC4S_OUTPUT         (TIMER_CCMR_CCS_OUTPUT << 8)
 #define TIMER_CCMR2_CC4S_INPUT_TI1      (TIMER_CCMR_CCS_INPUT_TI1 << 8)
 #define TIMER_CCMR2_CC4S_INPUT_TI2      (TIMER_CCMR_CCS_INPUT_TI2 << 8)
 #define TIMER_CCMR2_CC4S_INPUT_TRC      (TIMER_CCMR_CCS_INPUT_TRC << 8)
-#define TIMER_CCMR2_OC3CE               BIT(TIMER_CCMR2_OC3CE_BIT)
+#define TIMER_CCMR2_OC3CE               (1U << TIMER_CCMR2_OC3CE_BIT)
 #define TIMER_CCMR2_OC3M                (0x3 << 4)
 #define TIMER_CCMR2_IC3F                (0xF << 4)
-#define TIMER_CCMR2_OC3PE               BIT(TIMER_CCMR2_OC3PE_BIT)
-#define TIMER_CCMR2_OC3FE               BIT(TIMER_CCMR2_OC3FE_BIT)
+#define TIMER_CCMR2_OC3PE               (1U << TIMER_CCMR2_OC3PE_BIT)
+#define TIMER_CCMR2_OC3FE               (1U << TIMER_CCMR2_OC3FE_BIT)
 #define TIMER_CCMR2_IC3PSC              (0x3 << 2)
 #define TIMER_CCMR2_CC3S                0x3
 #define TIMER_CCMR2_CC3S_OUTPUT         TIMER_CCMR_CCS_OUTPUT
@@ -443,20 +443,20 @@ extern timer_dev *TIMER14;
 #define TIMER_CCER_CC1P_BIT             1
 #define TIMER_CCER_CC1E_BIT             0
 
-#define TIMER_CCER_CC4P                 BIT(TIMER_CCER_CC4P_BIT)
-#define TIMER_CCER_CC4E                 BIT(TIMER_CCER_CC4E_BIT)
-#define TIMER_CCER_CC3NP                BIT(TIMER_CCER_CC3NP_BIT)
-#define TIMER_CCER_CC3NE                BIT(TIMER_CCER_CC3NE_BIT)
-#define TIMER_CCER_CC3P                 BIT(TIMER_CCER_CC3P_BIT)
-#define TIMER_CCER_CC3E                 BIT(TIMER_CCER_CC3E_BIT)
-#define TIMER_CCER_CC2NP                BIT(TIMER_CCER_CC2NP_BIT)
-#define TIMER_CCER_CC2NE                BIT(TIMER_CCER_CC2NE_BIT)
-#define TIMER_CCER_CC2P                 BIT(TIMER_CCER_CC2P_BIT)
-#define TIMER_CCER_CC2E                 BIT(TIMER_CCER_CC2E_BIT)
-#define TIMER_CCER_CC1NP                BIT(TIMER_CCER_CC1NP_BIT)
-#define TIMER_CCER_CC1NE                BIT(TIMER_CCER_CC1NE_BIT)
-#define TIMER_CCER_CC1P                 BIT(TIMER_CCER_CC1P_BIT)
-#define TIMER_CCER_CC1E                 BIT(TIMER_CCER_CC1E_BIT)
+#define TIMER_CCER_CC4P                 (1U << TIMER_CCER_CC4P_BIT)
+#define TIMER_CCER_CC4E                 (1U << TIMER_CCER_CC4E_BIT)
+#define TIMER_CCER_CC3NP                (1U << TIMER_CCER_CC3NP_BIT)
+#define TIMER_CCER_CC3NE                (1U << TIMER_CCER_CC3NE_BIT)
+#define TIMER_CCER_CC3P                 (1U << TIMER_CCER_CC3P_BIT)
+#define TIMER_CCER_CC3E                 (1U << TIMER_CCER_CC3E_BIT)
+#define TIMER_CCER_CC2NP                (1U << TIMER_CCER_CC2NP_BIT)
+#define TIMER_CCER_CC2NE                (1U << TIMER_CCER_CC2NE_BIT)
+#define TIMER_CCER_CC2P                 (1U << TIMER_CCER_CC2P_BIT)
+#define TIMER_CCER_CC2E                 (1U << TIMER_CCER_CC2E_BIT)
+#define TIMER_CCER_CC1NP                (1U << TIMER_CCER_CC1NP_BIT)
+#define TIMER_CCER_CC1NE                (1U << TIMER_CCER_CC1NE_BIT)
+#define TIMER_CCER_CC1P                 (1U << TIMER_CCER_CC1P_BIT)
+#define TIMER_CCER_CC1E                 (1U << TIMER_CCER_CC1E_BIT)
 
 /* Break and dead-time register (BDTR) */
 
@@ -467,12 +467,12 @@ extern timer_dev *TIMER14;
 #define TIMER_BDTR_OSSR_BIT             11
 #define TIMER_BDTR_OSSI_BIT             10
 
-#define TIMER_BDTR_MOE                  BIT(TIMER_BDTR_MOE_BIT)
-#define TIMER_BDTR_AOE                  BIT(TIMER_BDTR_AOE_BIT)
-#define TIMER_BDTR_BKP                  BIT(TIMER_BDTR_BKP_BIT)
-#define TIMER_BDTR_BKE                  BIT(TIMER_BDTR_BKE_BIT)
-#define TIMER_BDTR_OSSR                 BIT(TIMER_BDTR_OSSR_BIT)
-#define TIMER_BDTR_OSSI                 BIT(TIMER_BDTR_OSSI_BIT)
+#define TIMER_BDTR_MOE                  (1U << TIMER_BDTR_MOE_BIT)
+#define TIMER_BDTR_AOE                  (1U << TIMER_BDTR_AOE_BIT)
+#define TIMER_BDTR_BKP                  (1U << TIMER_BDTR_BKP_BIT)
+#define TIMER_BDTR_BKE                  (1U << TIMER_BDTR_BKE_BIT)
+#define TIMER_BDTR_OSSR                 (1U << TIMER_BDTR_OSSR_BIT)
+#define TIMER_BDTR_OSSI                 (1U << TIMER_BDTR_OSSI_BIT)
 #define TIMER_BDTR_LOCK                 (0x3 << 8)
 #define TIMER_BDTR_LOCK_OFF             (0x0 << 8)
 #define TIMER_BDTR_LOCK_LEVEL1          (0x1 << 8)
@@ -1006,9 +1006,9 @@ typedef enum timer_oc_mode {
  * @see timer_oc_set_mode()
  */
 typedef enum timer_oc_mode_flags {
-    TIMER_OC_CE = BIT(7),       /**< Output compare clear enable. */
-    TIMER_OC_PE = BIT(3),       /**< Output compare preload enable. */
-    TIMER_OC_FE = BIT(2)        /**< Output compare fast enable. */
+    TIMER_OC_CE = 1U << 7,       /**< Output compare clear enable. */
+    TIMER_OC_PE = 1U << 3,       /**< Output compare preload enable. */
+    TIMER_OC_FE = 1U << 2,       /**< Output compare fast enable. */
 } timer_oc_mode_flags;
 
 /**

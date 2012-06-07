@@ -134,6 +134,48 @@ typedef struct timer_dev {
                                  * @see timer_detach_interrupt() */
 } timer_dev;
 
+#if STM32_HAVE_TIMER(1)
+extern timer_dev *TIMER1;
+#endif
+#if STM32_HAVE_TIMER(2)
+extern timer_dev *TIMER2;
+#endif
+#if STM32_HAVE_TIMER(3)
+extern timer_dev *TIMER3;
+#endif
+#if STM32_HAVE_TIMER(4)
+extern timer_dev *TIMER4;
+#endif
+#if STM32_HAVE_TIMER(5)
+extern timer_dev *TIMER5;
+#endif
+#if STM32_HAVE_TIMER(6)
+extern timer_dev *TIMER6;
+#endif
+#if STM32_HAVE_TIMER(7)
+extern timer_dev *TIMER7;
+#endif
+#if STM32_HAVE_TIMER(8)
+extern timer_dev *TIMER8;
+#endif
+#if STM32_HAVE_TIMER(9)
+extern timer_dev *TIMER9;
+#endif
+#if STM32_HAVE_TIMER(10)
+extern timer_dev *TIMER10;
+#endif
+#if STM32_HAVE_TIMER(11)
+extern timer_dev *TIMER11;
+#endif
+#if STM32_HAVE_TIMER(12)
+extern timer_dev *TIMER12;
+#endif
+#if STM32_HAVE_TIMER(13)
+extern timer_dev *TIMER13;
+#endif
+#if STM32_HAVE_TIMER(14)
+extern timer_dev *TIMER14;
+#endif
 
 /*
  * Register bit definitions

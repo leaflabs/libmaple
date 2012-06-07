@@ -34,85 +34,8 @@
 #include "timer_private.h"
 
 /*
- * Devices
- *
- * Defer to the timer_private API for declaring these.
- */
-
-static timer_dev timer1 = ADVANCED_TIMER(1);
-static timer_dev timer2 = GENERAL_TIMER(2);
-static timer_dev timer3 = GENERAL_TIMER(3);
-static timer_dev timer4 = GENERAL_TIMER(4);
-static timer_dev timer5 = GENERAL_TIMER(5);
-static timer_dev timer6 = BASIC_TIMER(6);
-static timer_dev timer7 = BASIC_TIMER(7);
-static timer_dev timer8 = ADVANCED_TIMER(8);
-/* TIM9 has UIE, CC1IE, CC2IE, TIE bits in DIER. */
-static timer_dev timer9 = RESTRICTED_GENERAL_TIMER(9, TIMER_DIER_TIE_BIT);
-/* TIM10 has UIE, CC1IE. */
-static timer_dev timer10 = RESTRICTED_GENERAL_TIMER(10, TIMER_DIER_CC1IE_BIT);
-/* TIM11 has UIE, CC1IE. */
-static timer_dev timer11 = RESTRICTED_GENERAL_TIMER(11, TIMER_DIER_CC1IE_BIT);
-/* TIM12 has UIE, CC1IE, CC2IE, TIE. */
-static timer_dev timer12 = RESTRICTED_GENERAL_TIMER(12, TIMER_DIER_TIE_BIT);
-/* TIM13 has UIE, CC1IE. */
-static timer_dev timer13 = RESTRICTED_GENERAL_TIMER(13, TIMER_DIER_CC1IE_BIT);
-/* TIM14 has UIE, CC1IE. */
-static timer_dev timer14 = RESTRICTED_GENERAL_TIMER(14, TIMER_DIER_CC1IE_BIT);
-
-/** Timer 1 device (advanced) */
-timer_dev *TIMER1 = &timer1;
-/** Timer 2 device (general-purpose) */
-timer_dev *TIMER2 = &timer2;
-/** Timer 3 device (general-purpose) */
-timer_dev *TIMER3 = &timer3;
-/** Timer 4 device (general-purpose) */
-timer_dev *TIMER4 = &timer4;
-/** Timer 5 device (general-purpose) */
-timer_dev *TIMER5 = &timer5;
-/** Timer 6 device (basic) */
-timer_dev *TIMER6 = &timer6;
-/** Timer 7 device (basic) */
-timer_dev *TIMER7 = &timer7;
-/** Timer 8 device (advanced) */
-timer_dev *TIMER8 = &timer8;
-/** Timer 9 device (general-purpose) */
-timer_dev *TIMER9 = &timer9;
-/** Timer 10 device (general-purpose) */
-timer_dev *TIMER10 = &timer10;
-/** Timer 11 device (general-purpose) */
-timer_dev *TIMER11 = &timer11;
-/** Timer 12 device (general-purpose) */
-timer_dev *TIMER12 = &timer12;
-/** Timer 13 device (general-purpose) */
-timer_dev *TIMER13 = &timer13;
-/** Timer 14 device (general-purpose) */
-timer_dev *TIMER14 = &timer14;
-
-/*
  * Routines
  */
-
-/**
- * @brief Call a function on timer devices.
- * @param fn Function to call on each timer device.
- */
-void timer_foreach(void (*fn)(timer_dev*)) {
-    fn(TIMER1);
-    fn(TIMER2);
-    fn(TIMER3);
-    fn(TIMER4);
-    fn(TIMER5);
-    fn(TIMER6);
-    fn(TIMER7);
-    fn(TIMER8);
-    fn(TIMER9);
-    fn(TIMER10);
-    fn(TIMER11);
-    fn(TIMER12);
-    fn(TIMER13);
-    fn(TIMER14);
-}
 
 /**
  * @brief Get the GPIO alternate function corresponding to a timer.

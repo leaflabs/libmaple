@@ -215,7 +215,7 @@ extern timer_dev *TIMER14;
 #define TIMER_CR2_OIS2_BIT              10
 #define TIMER_CR2_OIS1N_BIT             9
 #define TIMER_CR2_OIS1_BIT              8
-#define TIMER_CR2_TI1S_BIT              7 /* tills? yikes */
+#define TIMER_CR2_TI1S_BIT              7
 #define TIMER_CR2_CCDS_BIT              3
 #define TIMER_CR2_CCUS_BIT              2
 #define TIMER_CR2_CCPC_BIT              0

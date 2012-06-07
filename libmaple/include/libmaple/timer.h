@@ -596,27 +596,32 @@ extern timer_dev *TIMER14;
  */
 
 /**
- * Used to configure the behavior of a timer channel.  Note that not
- * all timers can be configured in every mode.
+ * @brief Used to configure the behavior of a timer channel.
+ *
+ * Be careful: not all timers can be configured in every mode.
  */
-/* TODO TIMER_PWM_CENTER_ALIGNED, TIMER_INPUT_CAPTURE, TIMER_ONE_PULSE */
 typedef enum timer_mode {
-    TIMER_DISABLED, /**< In this mode, the timer stops counting,
-                         channel interrupts are detached, and no state
-                         changes are output. */
-    TIMER_PWM, /**< PWM output mode. This is the default mode for pins
-                    after initialization. */
-    /* TIMER_PWM_CENTER_ALIGNED, /\**< Center-aligned PWM output mode. *\/ */
-    TIMER_OUTPUT_COMPARE, /**< In this mode, the timer counts from 0
-                               to its reload value repeatedly; every
-                               time the counter value reaches one of
-                               the channel compare values, the
-                               corresponding interrupt is fired. */
-    /* TIMER_INPUT_CAPTURE, /\**< In this mode, the timer can measure the */
-    /*                           pulse lengths of input signals. *\/ */
-    /* TIMER_ONE_PULSE /\**< In this mode, the timer can generate a single */
-    /*                      pulse on a GPIO pin for a specified amount of */
-    /*                      time. *\/ */
+    /**
+     * The timer stops counting, channel interrupts are detached, and
+     * no state changes are output. */
+    TIMER_DISABLED,
+
+    /** PWM output. */
+    TIMER_PWM,
+
+    /* TIMER_PWM_CENTER_ALIGNED, TODO: Center-aligned PWM output mode. */
+
+    /**
+     * The timer counts from 0 to its reload value repeatedly; every
+     * time the counter value reaches one of the channel compare
+     * values, the corresponding interrupt is fired. */
+    TIMER_OUTPUT_COMPARE,
+
+    /* TIMER_INPUT_CAPTURE, TODO: In this mode, the timer can measure the
+     *                            pulse lengths of input signals */
+    /* TIMER_ONE_PULSE, TODO: In this mode, the timer can generate a single
+     *                        pulse on a GPIO pin for a specified amount of
+     *                        time. */
 } timer_mode;
 
 /** Timer channel numbers */
@@ -646,23 +651,21 @@ int timer_has_cc_channel(timer_dev *dev, uint8 channel);
 /**
  * @brief Timer interrupt number.
  *
- * Not all timers support all of these values. General purpose timers
- * can be a special nuisance in this regard.
+ * Not all timers support all of these values. All timers support
+ * TIMER_UPDATE_INTERRUPT. "General purpose" timers can be a special
+ * nuisance in this regard, as they individually support different
+ * subsets of the available interupts. Consult your target's reference
+ * manual for the details.
  */
 typedef enum timer_interrupt_id {
-    TIMER_UPDATE_INTERRUPT, /**< Update interrupt, available on all timers. */
-    TIMER_CC1_INTERRUPT, /**< Capture/compare 1 interrupt, available
-                              on general and advanced timers only. */
-    TIMER_CC2_INTERRUPT, /**< Capture/compare 2 interrupt, general and
-                              advanced timers only. */
-    TIMER_CC3_INTERRUPT, /**< Capture/compare 3 interrupt, general and
-                              advanced timers only. */
-    TIMER_CC4_INTERRUPT, /**< Capture/compare 4 interrupt, general and
-                              advanced timers only. */
-    TIMER_COM_INTERRUPT, /**< COM interrupt, advanced timers only */
-    TIMER_TRG_INTERRUPT, /**< Trigger interrupt, general and advanced
-                              timers only */
-    TIMER_BREAK_INTERRUPT /**< Break interrupt, advanced timers only. */
+    TIMER_UPDATE_INTERRUPT,     /**< Update interrupt. */
+    TIMER_CC1_INTERRUPT,        /**< Capture/compare 1 interrupt. */
+    TIMER_CC2_INTERRUPT,        /**< Capture/compare 2 interrupt. */
+    TIMER_CC3_INTERRUPT,        /**< Capture/compare 3 interrupt. */
+    TIMER_CC4_INTERRUPT,        /**< Capture/compare 4 interrupt. */
+    TIMER_COM_INTERRUPT,        /**< COM interrupt. */
+    TIMER_TRG_INTERRUPT,        /**< Trigger interrupt. */
+    TIMER_BREAK_INTERRUPT,      /**< Break interrupt. */
 } timer_interrupt_id;
 
 void timer_attach_interrupt(timer_dev *dev,
@@ -957,41 +960,46 @@ static inline void timer_dma_set_burst_len(timer_dev *dev, uint8 length) {
  * Defines the base address for DMA transfers.
  */
 typedef enum timer_dma_base_addr {
-    TIMER_DMA_BASE_CR1 = TIMER_DCR_DBA_CR1, /**< Base is control register 1 */
-    TIMER_DMA_BASE_CR2 = TIMER_DCR_DBA_CR2, /**< Base is control register 2 */
-    TIMER_DMA_BASE_SMCR = TIMER_DCR_DBA_SMCR, /**< Base is slave mode
-                                                   control register */
-    TIMER_DMA_BASE_DIER = TIMER_DCR_DBA_DIER, /**< Base is DMA interrupt enable
-                                                   register */
-    TIMER_DMA_BASE_SR = TIMER_DCR_DBA_SR, /**< Base is status register */
-    TIMER_DMA_BASE_EGR = TIMER_DCR_DBA_EGR, /**< Base is event generation
-                                                 register */
-    TIMER_DMA_BASE_CCMR1 = TIMER_DCR_DBA_CCMR1, /**< Base is capture/compare
-                                                     mode register 1 */
-    TIMER_DMA_BASE_CCMR2 = TIMER_DCR_DBA_CCMR2, /**< Base is capture/compare
-                                                     mode register 2 */
-    TIMER_DMA_BASE_CCER = TIMER_DCR_DBA_CCER,   /**< Base is capture/compare
-                                                     enable register */
-    TIMER_DMA_BASE_CNT = TIMER_DCR_DBA_CNT,     /**< Base is counter */
-    TIMER_DMA_BASE_PSC = TIMER_DCR_DBA_PSC,     /**< Base is prescaler */
-    TIMER_DMA_BASE_ARR = TIMER_DCR_DBA_ARR,     /**< Base is auto-reload
-                                                     register */
-    TIMER_DMA_BASE_RCR = TIMER_DCR_DBA_RCR,     /**< Base is repetition
-                                                     counter register */
-    TIMER_DMA_BASE_CCR1 = TIMER_DCR_DBA_CCR1,   /**< Base is capture/compare
-                                                     register 1 */
-    TIMER_DMA_BASE_CCR2 = TIMER_DCR_DBA_CCR2,   /**< Base is capture/compare
-                                                     register 2 */
-    TIMER_DMA_BASE_CCR3 = TIMER_DCR_DBA_CCR3,   /**< Base is capture/compare
-                                                     register 3 */
-    TIMER_DMA_BASE_CCR4 = TIMER_DCR_DBA_CCR4,   /**< Base is capture/compare
-                                                     register 4 */
-    TIMER_DMA_BASE_BDTR = TIMER_DCR_DBA_BDTR,   /**< Base is break and
-                                                     dead-time register */
-    TIMER_DMA_BASE_DCR = TIMER_DCR_DBA_DCR,     /**< Base is DMA control
-                                                     register */
-    TIMER_DMA_BASE_DMAR = TIMER_DCR_DBA_DMAR    /**< Base is DMA address for
-                                                     full transfer */
+    /** Base is control register 1 */
+    TIMER_DMA_BASE_CR1 = TIMER_DCR_DBA_CR1,
+    /** Base is control register 2 */
+    TIMER_DMA_BASE_CR2 = TIMER_DCR_DBA_CR2,
+    /** Base is slave mode control register */
+    TIMER_DMA_BASE_SMCR = TIMER_DCR_DBA_SMCR,
+    /** Base is DMA interrupt enable register */
+    TIMER_DMA_BASE_DIER  = TIMER_DCR_DBA_DIER,
+    /** Base is status register */
+    TIMER_DMA_BASE_SR = TIMER_DCR_DBA_SR,
+    /** Base is event generation register */
+    TIMER_DMA_BASE_EGR = TIMER_DCR_DBA_EGR,
+    /** Base is capture/compare mode register 1 */
+    TIMER_DMA_BASE_CCMR1 = TIMER_DCR_DBA_CCMR1,
+    /** Base is capture/compare mode register 2 */
+    TIMER_DMA_BASE_CCMR2 = TIMER_DCR_DBA_CCMR2,
+    /** Base is capture/compare enable register */
+    TIMER_DMA_BASE_CCER = TIMER_DCR_DBA_CCER,
+    /** Base is counter */
+    TIMER_DMA_BASE_CNT = TIMER_DCR_DBA_CNT,
+    /** Base is prescaler */
+    TIMER_DMA_BASE_PSC = TIMER_DCR_DBA_PSC,
+    /** Base is auto-reload register */
+    TIMER_DMA_BASE_ARR = TIMER_DCR_DBA_ARR,
+    /** Base is repetition counter register */
+    TIMER_DMA_BASE_RCR = TIMER_DCR_DBA_RCR,
+    /** Base is capture/compare register 1 */
+    TIMER_DMA_BASE_CCR1 = TIMER_DCR_DBA_CCR1,
+    /** Base is capture/compare register 2 */
+    TIMER_DMA_BASE_CCR2 = TIMER_DCR_DBA_CCR2,
+    /** Base is capture/compare register 3 */
+    TIMER_DMA_BASE_CCR3 = TIMER_DCR_DBA_CCR3,
+    /** Base is capture/compare register 4 */
+    TIMER_DMA_BASE_CCR4 = TIMER_DCR_DBA_CCR4,
+    /** Base is break and dead-time register */
+    TIMER_DMA_BASE_BDTR = TIMER_DCR_DBA_BDTR,
+    /** Base is DMA control register */
+    TIMER_DMA_BASE_DCR = TIMER_DCR_DBA_DCR,
+    /** Base is DMA address for full transfer */
+    TIMER_DMA_BASE_DMAR = TIMER_DCR_DBA_DMAR,
 } timer_dma_base_addr;
 
 /**
@@ -1027,35 +1035,38 @@ static inline void timer_dma_set_base_addr(timer_dev *dev,
  * Timer output compare modes.
  */
 typedef enum timer_oc_mode {
-    TIMER_OC_MODE_FROZEN = 0 << 4, /**< Frozen: comparison between output
-                                      compare register and counter has no
-                                      effect on the outputs. */
-    TIMER_OC_MODE_ACTIVE_ON_MATCH = 1 << 4, /**< OCxREF signal is forced
-                                               high when the count matches
-                                               the channel capture/compare
-                                               register. */
-    TIMER_OC_MODE_INACTIVE_ON_MATCH = 2 << 4, /**< OCxREF signal is forced
-                                                 low when the counter matches
-                                                 the channel capture/compare
-                                                 register. */
-    TIMER_OC_MODE_TOGGLE = 3 << 4, /**< OCxREF toggles when counter
-                                      matches the cannel capture/compare
-                                      register. */
-    TIMER_OC_MODE_FORCE_INACTIVE = 4 << 4, /**< OCxREF is forced low. */
-    TIMER_OC_MODE_FORCE_ACTIVE = 5 << 4, /**< OCxREF is forced high. */
-    TIMER_OC_MODE_PWM_1 = 6 << 4, /**< PWM mode 1.  In upcounting, channel is
-                                     active as long as count is less than
-                                     channel capture/compare register, else
-                                     inactive.  In downcounting, channel is
-                                     inactive as long as count exceeds
-                                     capture/compare register, else
-                                     active. */
-    TIMER_OC_MODE_PWM_2 = 7 << 4  /**< PWM mode 2. In upcounting, channel is
-                                     inactive as long as count is less than
-                                     capture/compare register, else active.
-                                     In downcounting, channel is active as
-                                     long as count exceeds capture/compare
-                                     register, else inactive. */
+    /**
+     * Frozen: comparison between output compare register and counter
+     * has no effect on the outputs. */
+    TIMER_OC_MODE_FROZEN = 0 << 4,
+    /**
+     * OCxREF signal is forced high when the count matches the channel
+     * capture/compare register. */
+    TIMER_OC_MODE_ACTIVE_ON_MATCH = 1 << 4,
+    /**
+     * OCxREF signal is forced low when the counter matches the
+     * channel capture/compare register. */
+    TIMER_OC_MODE_INACTIVE_ON_MATCH = 2 << 4,
+    /**
+     * OCxREF toggles when counter matches the channel capture/compare
+     * register. */
+    TIMER_OC_MODE_TOGGLE = 3 << 4,
+    /** OCxREF is forced low. */
+    TIMER_OC_MODE_FORCE_INACTIVE = 4 << 4,
+    /** OCxREF is forced high. */
+    TIMER_OC_MODE_FORCE_ACTIVE = 5 << 4,
+    /**
+     * PWM mode 1.  In upcounting, channel is active as long as count
+     * is less than channel capture/compare register, else inactive.
+     * In downcounting, channel is inactive as long as count exceeds
+     * capture/compare register, else active. */
+    TIMER_OC_MODE_PWM_1 = 6 << 4,
+    /**
+     * PWM mode 2. In upcounting, channel is inactive as long as count
+     * is less than capture/compare register, else active.  In
+     * downcounting, channel is active as long as count exceeds
+     * capture/compare register, else inactive. */
+    TIMER_OC_MODE_PWM_2 = 7 << 4,
 } timer_oc_mode;
 
 /**

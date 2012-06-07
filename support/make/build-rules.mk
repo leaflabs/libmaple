@@ -9,7 +9,6 @@ DISAS    := arm-none-eabi-objdump
 OBJDUMP  := arm-none-eabi-objdump
 SIZE     := arm-none-eabi-size
 DFU      := dfu-util
-OPENOCD_WRAPPER  := support/scripts/openocd-wrapper.sh
 
 # Suppress annoying output unless V is set
 ifndef V

@@ -93,7 +93,7 @@ $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))
 # main target
 include $(SRCROOT)/build-targets.mk
 
-.PHONY: install sketch clean help debug cscope tags ctags ram flash jtag doxygen mrproper list-boards
+.PHONY: install sketch clean help cscope tags ctags ram flash jtag doxygen mrproper list-boards
 
 # Target upload commands
 # USB ID for DFU upload -- FIXME: do something smarter with this
@@ -105,7 +105,6 @@ UPLOAD_ram   := $(SUPPORT_PATH)/scripts/reset.py && \
 UPLOAD_flash := $(SUPPORT_PATH)/scripts/reset.py && \
                 sleep 1                  && \
                 $(DFU) -a1 -d $(BOARD_USB_VENDOR_ID):$(BOARD_USB_PRODUCT_ID) -D $(BUILD_PATH)/$(BOARD).bin -R
-UPLOAD_jtag  := $(OPENOCD_WRAPPER) flash
 
 # Conditionally upload to whatever the last build was
 install: INSTALL_TARGET = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
@@ -150,15 +149,11 @@ help:
 	@echo "    jtag:   Compile for JTAG/SWD upload (overwrites bootloader)"
 	@echo ""
 	@echo "Other targets:"
-	@echo "    debug:  Start OpenOCD gdb server on port 3333, telnet on port 4444"
 	@echo "    clean: Remove all build and object files"
 	@echo "    help: Show this message"
 	@echo "    doxygen: Build Doxygen HTML and XML documentation"
 	@echo "    mrproper: Remove all generated files"
 	@echo ""
-
-debug:
-	$(OPENOCD_WRAPPER) debug
 
 cscope:
 	rm -rf *.cscope

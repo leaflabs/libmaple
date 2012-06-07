@@ -52,7 +52,7 @@ typedef struct timer_adv_reg_map {
     __io uint32 CR1;            /**< Control register 1 */
     __io uint32 CR2;            /**< Control register 2 */
     __io uint32 SMCR;           /**< Slave mode control register */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
+    __io uint32 DIER;           /**< DMA/interrupt enable register */
     __io uint32 SR;             /**< Status register */
     __io uint32 EGR;            /**< Event generation register  */
     __io uint32 CCMR1;          /**< Capture/compare mode register 1 */
@@ -81,7 +81,7 @@ typedef struct timer_bas_reg_map {
     __io uint32 CR1;            /**< Control register 1 */
     __io uint32 CR2;            /**< Control register 2 */
     const uint32 RESERVED1;     /**< Reserved */
-    __io uint32 DIER;           /**< DMA/Interrupt enable register */
+    __io uint32 DIER;           /**< DMA/interrupt enable register */
     __io uint32 SR;             /**< Status register */
     __io uint32 EGR;            /**< Event generation register  */
     const uint32 RESERVED2;     /**< Reserved */

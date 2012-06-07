@@ -426,33 +426,6 @@ extern timer_dev *TIMER14;
 #define TIMER_CCMR2_CC3S_INPUT_TI2      TIMER_CCMR_CCS_INPUT_TI2
 #define TIMER_CCMR2_CC3S_INPUT_TRC      TIMER_CCMR_CCS_INPUT_TRC
 
-/* Old, copy-paste error CCMR2 bit definitions from previous releases,
- * kept for backwards compatibility: */
-/** Deprecated. Use TIMER_CCMR1_CC4S_OUTPUT instead. */
-#define TIMER_CCMR1_CC4S_OUTPUT    TIMER_CCMR2_CC4S_OUTPUT
-/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI1 instead. */
-#define TIMER_CCMR1_CC4S_INPUT_TI1 TIMER_CCMR2_CC4S_INPUT_TI1
-/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI2 instead. */
-#define TIMER_CCMR1_CC4S_INPUT_TI2 TIMER_CCMR2_CC4S_INPUT_TI2
-/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TRC instead. */
-#define TIMER_CCMR1_CC4S_INPUT_TRC TIMER_CCMR2_CC4S_INPUT_TRC
-/** Deprecated. Use TIMER_CCMR2_IC4F instead. */
-#define TIMER_CCMR2_IC2F           TIMER_CCMR2_IC4F
-/** Deprecated. Use TIMER_CCMR2_IC4PSC instead. */
-#define TIMER_CCMR2_IC2PSC         TIMER_CCMR2_IC4PSC
-/** Deprecated. Use TIMER_CCMR2_IC3F instead. */
-#define TIMER_CCMR2_IC1F           TIMER_CCMR2_IC3F
-/** Deprecated. Use TIMER_CCMR2_IC3PSC instead. */
-#define TIMER_CCMR2_IC1PSC         TIMER_CCMR2_IC3PSC
-/** Deprecated. Use TIMER_CCMR1_CC3S_OUTPUT instead. */
-#define TIMER_CCMR1_CC3S_OUTPUT    TIMER_CCMR2_CC3S_OUTPUT
-/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI1 instead. */
-#define TIMER_CCMR1_CC3S_INPUT_TI1 TIMER_CCMR2_CC3S_INPUT_TI1
-/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI2 instead. */
-#define TIMER_CCMR1_CC3S_INPUT_TI2 TIMER_CCMR2_CC3S_INPUT_TI2
-/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TRC instead. */
-#define TIMER_CCMR1_CC3S_INPUT_TRC TIMER_CCMR2_CC3S_INPUT_TRC
-
 /* Capture/compare enable register (CCER) */
 
 #define TIMER_CCER_CC4P_BIT             13
@@ -549,45 +522,6 @@ extern timer_dev *TIMER14;
 #define TIMER_DCR_DBA_BDTR              0x11
 #define TIMER_DCR_DBA_DCR               0x12
 #define TIMER_DCR_DBA_DMAR              0x13
-
-/* Old, erroneous bit definitions from previous releases, kept for
- * backwards compatibility: */
-/** Deprecated. Use TIMER_DCR_DBL_1_XFER instead. */
-#define TIMER_DCR_DBL_1BYTE  TIMER_DCR_DBL_1_XFER
-/** Deprecated. Use TIMER_DCR_DBL_2_XFER instead. */
-#define TIMER_DCR_DBL_2BYTE  TIMER_DCR_DBL_2_XFER
-/** Deprecated. Use TIMER_DCR_DBL_3_XFER instead. */
-#define TIMER_DCR_DBL_3BYTE  TIMER_DCR_DBL_3_XFER
-/** Deprecated. Use TIMER_DCR_DBL_4_XFER instead. */
-#define TIMER_DCR_DBL_4BYTE  TIMER_DCR_DBL_4_XFER
-/** Deprecated. Use TIMER_DCR_DBL_5_XFER instead. */
-#define TIMER_DCR_DBL_5BYTE  TIMER_DCR_DBL_5_XFER
-/** Deprecated. Use TIMER_DCR_DBL_6_XFER instead. */
-#define TIMER_DCR_DBL_6BYTE  TIMER_DCR_DBL_6_XFER
-/** Deprecated. Use TIMER_DCR_DBL_7_XFER instead. */
-#define TIMER_DCR_DBL_7BYTE  TIMER_DCR_DBL_7_XFER
-/** Deprecated. Use TIMER_DCR_DBL_8_XFER instead. */
-#define TIMER_DCR_DBL_8BYTE  TIMER_DCR_DBL_8_XFER
-/** Deprecated. Use TIMER_DCR_DBL_9_XFER instead. */
-#define TIMER_DCR_DBL_9BYTE  TIMER_DCR_DBL_9_XFER
-/** Deprecated. Use TIMER_DCR_DBL_10_XFER instead. */
-#define TIMER_DCR_DBL_10BYTE TIMER_DCR_DBL_10_XFER
-/** Deprecated. Use TIMER_DCR_DBL_11_XFER instead. */
-#define TIMER_DCR_DBL_11BYTE TIMER_DCR_DBL_11_XFER
-/** Deprecated. Use TIMER_DCR_DBL_12_XFER instead. */
-#define TIMER_DCR_DBL_12BYTE TIMER_DCR_DBL_12_XFER
-/** Deprecated. Use TIMER_DCR_DBL_13_XFER instead. */
-#define TIMER_DCR_DBL_13BYTE TIMER_DCR_DBL_13_XFER
-/** Deprecated. Use TIMER_DCR_DBL_14_XFER instead. */
-#define TIMER_DCR_DBL_14BYTE TIMER_DCR_DBL_14_XFER
-/** Deprecated. Use TIMER_DCR_DBL_15_XFER instead. */
-#define TIMER_DCR_DBL_15BYTE TIMER_DCR_DBL_15_XFER
-/** Deprecated. Use TIMER_DCR_DBL_16_XFER instead. */
-#define TIMER_DCR_DBL_16BYTE TIMER_DCR_DBL_16_XFER
-/** Deprecated. Use TIMER_DCR_DBL_17_XFER instead. */
-#define TIMER_DCR_DBL_17BYTE TIMER_DCR_DBL_17_XFER
-/** Deprecated. Use TIMER_DCR_DBL_18_XFER instead. */
-#define TIMER_DCR_DBL_18BYTE TIMER_DCR_DBL_18_XFER
 
 /*
  * Convenience routines
@@ -1101,6 +1035,73 @@ static inline void timer_oc_set_mode(timer_dev *dev,
     tmp |= (mode | flags | TIMER_CCMR_CCS_OUTPUT) << shift;
     *ccmr = tmp;
 }
+
+/*
+ * Old, erroneous bit definitions from previous releases, kept for
+ * backwards compatibility:
+ */
+
+/** Deprecated. Use TIMER_CCMR1_CC4S_OUTPUT instead. */
+#define TIMER_CCMR1_CC4S_OUTPUT    TIMER_CCMR2_CC4S_OUTPUT
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI1 instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TI1 TIMER_CCMR2_CC4S_INPUT_TI1
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TI2 instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TI2 TIMER_CCMR2_CC4S_INPUT_TI2
+/** Deprecated. Use TIMER_CCMR1_CC4S_INPUT_TRC instead. */
+#define TIMER_CCMR1_CC4S_INPUT_TRC TIMER_CCMR2_CC4S_INPUT_TRC
+/** Deprecated. Use TIMER_CCMR2_IC4F instead. */
+#define TIMER_CCMR2_IC2F           TIMER_CCMR2_IC4F
+/** Deprecated. Use TIMER_CCMR2_IC4PSC instead. */
+#define TIMER_CCMR2_IC2PSC         TIMER_CCMR2_IC4PSC
+/** Deprecated. Use TIMER_CCMR2_IC3F instead. */
+#define TIMER_CCMR2_IC1F           TIMER_CCMR2_IC3F
+/** Deprecated. Use TIMER_CCMR2_IC3PSC instead. */
+#define TIMER_CCMR2_IC1PSC         TIMER_CCMR2_IC3PSC
+/** Deprecated. Use TIMER_CCMR1_CC3S_OUTPUT instead. */
+#define TIMER_CCMR1_CC3S_OUTPUT    TIMER_CCMR2_CC3S_OUTPUT
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI1 instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TI1 TIMER_CCMR2_CC3S_INPUT_TI1
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TI2 instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TI2 TIMER_CCMR2_CC3S_INPUT_TI2
+/** Deprecated. Use TIMER_CCMR1_CC3S_INPUT_TRC instead. */
+#define TIMER_CCMR1_CC3S_INPUT_TRC TIMER_CCMR2_CC3S_INPUT_TRC
+
+/** Deprecated. Use TIMER_DCR_DBL_1_XFER instead. */
+#define TIMER_DCR_DBL_1BYTE  TIMER_DCR_DBL_1_XFER
+/** Deprecated. Use TIMER_DCR_DBL_2_XFER instead. */
+#define TIMER_DCR_DBL_2BYTE  TIMER_DCR_DBL_2_XFER
+/** Deprecated. Use TIMER_DCR_DBL_3_XFER instead. */
+#define TIMER_DCR_DBL_3BYTE  TIMER_DCR_DBL_3_XFER
+/** Deprecated. Use TIMER_DCR_DBL_4_XFER instead. */
+#define TIMER_DCR_DBL_4BYTE  TIMER_DCR_DBL_4_XFER
+/** Deprecated. Use TIMER_DCR_DBL_5_XFER instead. */
+#define TIMER_DCR_DBL_5BYTE  TIMER_DCR_DBL_5_XFER
+/** Deprecated. Use TIMER_DCR_DBL_6_XFER instead. */
+#define TIMER_DCR_DBL_6BYTE  TIMER_DCR_DBL_6_XFER
+/** Deprecated. Use TIMER_DCR_DBL_7_XFER instead. */
+#define TIMER_DCR_DBL_7BYTE  TIMER_DCR_DBL_7_XFER
+/** Deprecated. Use TIMER_DCR_DBL_8_XFER instead. */
+#define TIMER_DCR_DBL_8BYTE  TIMER_DCR_DBL_8_XFER
+/** Deprecated. Use TIMER_DCR_DBL_9_XFER instead. */
+#define TIMER_DCR_DBL_9BYTE  TIMER_DCR_DBL_9_XFER
+/** Deprecated. Use TIMER_DCR_DBL_10_XFER instead. */
+#define TIMER_DCR_DBL_10BYTE TIMER_DCR_DBL_10_XFER
+/** Deprecated. Use TIMER_DCR_DBL_11_XFER instead. */
+#define TIMER_DCR_DBL_11BYTE TIMER_DCR_DBL_11_XFER
+/** Deprecated. Use TIMER_DCR_DBL_12_XFER instead. */
+#define TIMER_DCR_DBL_12BYTE TIMER_DCR_DBL_12_XFER
+/** Deprecated. Use TIMER_DCR_DBL_13_XFER instead. */
+#define TIMER_DCR_DBL_13BYTE TIMER_DCR_DBL_13_XFER
+/** Deprecated. Use TIMER_DCR_DBL_14_XFER instead. */
+#define TIMER_DCR_DBL_14BYTE TIMER_DCR_DBL_14_XFER
+/** Deprecated. Use TIMER_DCR_DBL_15_XFER instead. */
+#define TIMER_DCR_DBL_15BYTE TIMER_DCR_DBL_15_XFER
+/** Deprecated. Use TIMER_DCR_DBL_16_XFER instead. */
+#define TIMER_DCR_DBL_16BYTE TIMER_DCR_DBL_16_XFER
+/** Deprecated. Use TIMER_DCR_DBL_17_XFER instead. */
+#define TIMER_DCR_DBL_17BYTE TIMER_DCR_DBL_17_XFER
+/** Deprecated. Use TIMER_DCR_DBL_18_XFER instead. */
+#define TIMER_DCR_DBL_18BYTE TIMER_DCR_DBL_18_XFER
 
 #ifdef __cplusplus
 } // extern "C"

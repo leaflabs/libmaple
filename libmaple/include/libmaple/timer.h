@@ -127,9 +127,7 @@ typedef struct timer_dev {
     rcc_clk_id clk_id;          /**< RCC clock information */
     timer_type type;            /**< Timer's type */
     voidFuncPtr handlers[];     /**<
-                                 * @brief User IRQ handlers
-                                 * It's not a good idea to touch these
-                                 * directly.
+                                 * Don't touch these. Use these instead:
                                  * @see timer_attach_interrupt()
                                  * @see timer_detach_interrupt() */
 } timer_dev;

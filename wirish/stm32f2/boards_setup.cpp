@@ -112,7 +112,7 @@ namespace wirish {
             // We need SYSCFG for external interrupts
             syscfg_init();
             // Turn on the I/O compensation cell, since we drive the
-            // GPIOs quickly be default.
+            // GPIOs quickly by default.
             syscfg_enable_io_compensation();
         }
 

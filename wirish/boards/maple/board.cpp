@@ -30,13 +30,13 @@
  * @brief  Maple board file.
  */
 
-#include <board/board.h>
+#include <board/board.h>         // For this board's header file
 
-#include <libmaple/gpio.h>
-#include <libmaple/timer.h>
-#include <wirish/wirish_types.h>
+#include <wirish/wirish_types.h> // For stm32_pin_info and its contents
+                                 // (these go into PIN_MAP).
 
-#include "boards_private.h"     // for PMAP_ROW()
+#include "boards_private.h"      // For PMAP_ROW(), which makes
+                                 // PIN_MAP easier to read.
 
 // boardInit(): nothing special to do for Maple.
 //

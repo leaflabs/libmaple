@@ -236,19 +236,24 @@ extern void spi_config_gpios(spi_dev *dev,
 /**
  * @brief SPI mode configuration.
  *
- * Determines a combination of clock polarity (CPOL), which determines
- * idle state of the clock line, and clock phase (CPHA), which
- * determines which clock edge triggers data capture.
+ * A SPI mode determines a combination of the idle state of the clock
+ * line (the clock polarity, or "CPOL"), and which clock edge triggers
+ * data capture (the clock phase, or "CPHA").
  */
 typedef enum spi_mode {
-    SPI_MODE_0,  /**< Clock line idles low (0), data capture on first
-                    clock transition. */
-    SPI_MODE_1,  /**< Clock line idles low (0), data capture on second
-                    clock transition */
-    SPI_MODE_2,  /**< Clock line idles high (1), data capture on first
-                    clock transition. */
-    SPI_MODE_3,  /**< Clock line idles high (1), data capture on
-                    second clock transition. */
+    /** Clock idles low, data captured on rising edge (first transition) */
+    SPI_MODE_LOW_RISING = 0,
+    /** Clock idles low, data captured on falling edge (second transition) */
+    SPI_MODE_LOW_FALLING = 1,
+    /** Clock idles high, data captured on falling edge (first transition) */
+    SPI_MODE_HIGH_FALLING = 2,
+    /** Clock idles high, data captured on rising edge (second transition) */
+    SPI_MODE_HIGH_RISING = 3,
+
+    SPI_MODE_0 = SPI_MODE_LOW_RISING,   /**< Same as SPI_MODE_LOW_RISING */
+    SPI_MODE_1 = SPI_MODE_LOW_FALLING,  /**< Same as SPI_MODE_LOW_FALLING */
+    SPI_MODE_2 = SPI_MODE_HIGH_FALLING, /**< Same as SPI_MODE_HIGH_FALLING */
+    SPI_MODE_3 = SPI_MODE_HIGH_RISING,  /**< Same as SPI_MODE_HIGH_RISING */
 } spi_mode;
 
 /**

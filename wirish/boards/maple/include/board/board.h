@@ -33,16 +33,19 @@
 #ifndef _BOARD_MAPLE_H_
 #define _BOARD_MAPLE_H_
 
+/* 72 MHz -> 72 cycles per microsecond. */
 #define CYCLES_PER_MICROSECOND  72
-#define SYSTICK_RELOAD_VAL      71999 /* takes a cycle to reload */
 
+/* Pin number for the built-in button. */
 #define BOARD_BUTTON_PIN        38
+
+/* Pin number for the built-in LED. */
 #define BOARD_LED_PIN           13
 
 /* Number of USARTs/UARTs whose pins are broken out to headers. */
 #define BOARD_NR_USARTS         3
 
-/* Default USART pin numbers (not considering AFIO remap) */
+/* USART pin numbers. */
 #define BOARD_USART1_TX_PIN     7
 #define BOARD_USART1_RX_PIN     8
 #define BOARD_USART2_TX_PIN     1
@@ -50,10 +53,10 @@
 #define BOARD_USART3_TX_PIN     29
 #define BOARD_USART3_RX_PIN     30
 
-/* Number of SPI ports */
+/* Number of SPI ports broken out to headers. */
 #define BOARD_NR_SPI            2
 
-/* Default SPI pin numbers (not considering AFIO remap) */
+/* SPI pin numbers. */
 #define BOARD_SPI1_NSS_PIN      10
 #define BOARD_SPI1_MOSI_PIN     11
 #define BOARD_SPI1_MISO_PIN     12
@@ -64,20 +67,22 @@
 #define BOARD_SPI2_SCK_PIN      32
 
 /* Total number of GPIO pins that are broken out to headers and
- * intended for general use. */
+ * intended for use. This includes pins like the LED, button, and
+ * debug port (JTAG/SWD) pins. */
 #define BOARD_NR_GPIO_PINS      44
 
-/* Number of pins capable of PWM output */
+/* Number of pins capable of PWM output. */
 #define BOARD_NR_PWM_PINS       15
 
-/* Number of pins capable of ADC conversion */
+/* Number of pins capable of ADC conversion. */
 #define BOARD_NR_ADC_PINS       15
 
 /* Number of pins already connected to external hardware.  For Maple,
- * these are just BOARD_LED_PIN and BOARD_BUTTON_PIN. */
+ * these are just BOARD_LED_PIN, BOARD_BUTTON_PIN, and the debug port
+ * pins (see below). */
 #define BOARD_NR_USED_PINS       7
 
-/* Debug port pins */
+/* Debug port pins. */
 #define BOARD_JTMS_SWDIO_PIN    39
 #define BOARD_JTCK_SWCLK_PIN    40
 #define BOARD_JTDI_PIN          41

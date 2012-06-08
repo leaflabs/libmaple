@@ -39,7 +39,7 @@
 #include <wirish/bit_constants.h>
 #include <wirish/pwm.h>
 #include <wirish/ext_interrupts.h>
-/* FIXME put this back when you can #include <wirish/wirish_debug.h> */
+#include <wirish/wirish_debug.h>
 #include <wirish/wirish_math.h>
 #include <wirish/wirish_time.h>
 /* FIXME put this back when you can #include <wirish/HardwareSPI.h> */

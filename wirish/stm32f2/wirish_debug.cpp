@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,33 +25,36 @@
  *****************************************************************************/
 
 /**
- * @file wirish/include/wirish/wirish_debug.h
+ * @file wirish/stm32f2/wirish_debug.cpp
  * @brief High level debug port configuration
  */
 
-#ifndef _WIRISH_WIRISH_DEBUG_H_
-#define _WIRISH_WIRISH_DEBUG_H_
-
+#include <wirish/wirish_debug.h>
 #include <libmaple/gpio.h>
 
-/**
- * @brief Disable the JTAG and Serial Wire (SW) debug ports.
- *
- * You can call this function in order to use the JTAG and SW debug
- * pins as ordinary GPIOs.
- *
- * @see enableDebugPorts()
- */
-void disableDebugPorts(void);
+// TODO is it worth optimizing these into raw MODER and AFR[LH] writes?
 
-/**
- * @brief Enable the JTAG and Serial Wire (SW) debug ports.
- *
- * After you call this function, the JTAG and SW debug pins will no
- * longer be usable as GPIOs.
- *
- * @see disableDebugPorts()
- */
-void enableDebugPorts(void);
+void disableDebugPorts(void) {
+    // PA13-PA15 and PB3-PB4 are in system alternate function mode on
+    // reset, to support JTAG. Just put them in input mode to release
+    // them.
+    gpio_set_mode(GPIOA, 13, GPIO_MODE_INPUT);
+    gpio_set_mode(GPIOA, 14, GPIO_MODE_INPUT);
+    gpio_set_mode(GPIOA, 15, GPIO_MODE_INPUT);
+    gpio_set_mode(GPIOB, 3, GPIO_MODE_INPUT);
+    gpio_set_mode(GPIOB, 4, GPIO_MODE_INPUT);
+}
 
-#endif
+void enableDebugPorts(void) {
+    // Put PA13-PA15 and PB3-PB4 back in system AF mode.
+    gpio_set_mode(GPIOA, 13, GPIO_MODE_AF);
+    gpio_set_mode(GPIOA, 14, GPIO_MODE_AF);
+    gpio_set_mode(GPIOA, 15, GPIO_MODE_AF);
+    gpio_set_mode(GPIOB, 3, GPIO_MODE_AF);
+    gpio_set_mode(GPIOB, 4, GPIO_MODE_AF);
+    gpio_set_af(GPIOA, 13, GPIO_AF_SYS);
+    gpio_set_af(GPIOA, 14, GPIO_AF_SYS);
+    gpio_set_af(GPIOA, 15, GPIO_AF_SYS);
+    gpio_set_af(GPIOB, 3, GPIO_AF_SYS);
+    gpio_set_af(GPIOB, 4, GPIO_AF_SYS);
+}

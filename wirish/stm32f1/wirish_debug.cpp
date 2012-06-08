@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011 LeafLabs, LLC.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,33 +25,17 @@
  *****************************************************************************/
 
 /**
- * @file wirish/include/wirish/wirish_debug.h
+ * @file wirish/stm32f1/wirish_debug.cpp
  * @brief High level debug port configuration
  */
 
-#ifndef _WIRISH_WIRISH_DEBUG_H_
-#define _WIRISH_WIRISH_DEBUG_H_
-
+#include <wirish/wirish_debug.h>
 #include <libmaple/gpio.h>
 
-/**
- * @brief Disable the JTAG and Serial Wire (SW) debug ports.
- *
- * You can call this function in order to use the JTAG and SW debug
- * pins as ordinary GPIOs.
- *
- * @see enableDebugPorts()
- */
-void disableDebugPorts(void);
+void disableDebugPorts(void) {
+    afio_cfg_debug_ports(AFIO_DEBUG_NONE);
+}
 
-/**
- * @brief Enable the JTAG and Serial Wire (SW) debug ports.
- *
- * After you call this function, the JTAG and SW debug pins will no
- * longer be usable as GPIOs.
- *
- * @see disableDebugPorts()
- */
-void enableDebugPorts(void);
-
-#endif
+void enableDebugPorts(void) {
+    afio_cfg_debug_ports(AFIO_DEBUG_FULL_SWJ);
+}

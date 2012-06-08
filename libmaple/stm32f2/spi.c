@@ -1,8 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011, 2012 LeafLabs, LLC.
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,13 +25,12 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f1/spi.c
+ * @file libmaple/stm32f2/spi.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief STM32F1 SPI/I2S.
+ * @brief STM32F2 SPI/I2S.
  */
 
 #include <libmaple/spi.h>
-#include <libmaple/gpio.h>
 #include "spi_private.h"
 
 /*
@@ -41,20 +39,17 @@
 
 static spi_dev spi1 = SPI_DEV(1);
 static spi_dev spi2 = SPI_DEV(2);
+static spi_dev spi3 = SPI_DEV(3);
 
 spi_dev *SPI1 = &spi1;
 spi_dev *SPI2 = &spi2;
-
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
-static spi_dev spi3 = SPI_DEV(3);
 spi_dev *SPI3 = &spi3;
-#endif
 
 /*
  * Routines
  */
 
-void spi_config_gpios(spi_dev *ignored,
+void spi_config_gpios(spi_dev *dev,
                       uint8 as_master,
                       gpio_dev *nss_dev,
                       uint8 nss_bit,
@@ -62,23 +57,32 @@ void spi_config_gpios(spi_dev *ignored,
                       uint8 sck_bit,
                       uint8 miso_bit,
                       uint8 mosi_bit) {
-    if (as_master) {
-        gpio_set_mode(nss_dev, nss_bit, GPIO_AF_OUTPUT_PP);
-        gpio_set_mode(comm_dev, sck_bit, GPIO_AF_OUTPUT_PP);
-        gpio_set_mode(comm_dev, miso_bit, GPIO_INPUT_FLOATING);
-        gpio_set_mode(comm_dev, mosi_bit, GPIO_AF_OUTPUT_PP);
-    } else {
-        gpio_set_mode(nss_dev, nss_bit, GPIO_INPUT_FLOATING);
-        gpio_set_mode(comm_dev, sck_bit, GPIO_INPUT_FLOATING);
-        gpio_set_mode(comm_dev, miso_bit, GPIO_AF_OUTPUT_PP);
-        gpio_set_mode(comm_dev, mosi_bit, GPIO_INPUT_FLOATING);
-    }
+    gpio_af dev_af = spi_get_af(dev);
+    gpio_set_mode(nss_dev, nss_bit, GPIO_MODE_AF);
+    gpio_set_mode(comm_dev, sck_bit, GPIO_MODE_AF);
+    gpio_set_mode(comm_dev, miso_bit, GPIO_MODE_AF);
+    gpio_set_mode(comm_dev, mosi_bit, GPIO_MODE_AF);
+    gpio_set_af(nss_dev, nss_bit, dev_af);
+    gpio_set_af(comm_dev, sck_bit, dev_af);
+    gpio_set_af(comm_dev, miso_bit, dev_af);
+    gpio_set_af(comm_dev, mosi_bit, dev_af);
 }
 
 void spi_foreach(void (*fn)(spi_dev*)) {
     fn(SPI1);
     fn(SPI2);
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
     fn(SPI3);
-#endif
+}
+
+gpio_af spi_get_af(spi_dev *dev) {
+    switch (dev->clk_id) {
+    case RCC_SPI1:              /* Fall through */
+    case RCC_SPI2:
+        return GPIO_AF_SPI_1_2;
+    case RCC_SPI3:
+        return GPIO_AF_SPI3;
+    default:
+        ASSERT(0);              /* Can't happen */
+        return (gpio_af)-1;
+    }
 }

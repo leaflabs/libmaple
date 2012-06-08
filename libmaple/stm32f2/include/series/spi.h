@@ -1,8 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2011, 2012 LeafLabs, LLC.
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,15 +25,15 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/stm32f1/include/series/spi.h
+ * @file libmaple/stm32f2/include/series/spi.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief STM32F1 SPI/I2S series header.
+ * @brief STM32F2 SPI/I2S series header.
  */
 
-#ifndef _LIBMAPLE_STM32F1_SPI_H_
-#define _LIBMAPLE_STM32F1_SPI_H_
+#ifndef _LIBMAPLE_STM32F2_SPI_H_
+#define _LIBMAPLE_STM32F2_SPI_H_
 
-#include <libmaple/libmaple_types.h>
+#include <libmaple/gpio.h>      /* for gpio_af */
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,6 +50,22 @@ struct spi_reg_map;
 #define SPI3_BASE                       ((struct spi_reg_map*)0x40003C00)
 
 /*
+ * Register bit definitions
+ */
+
+/* Control register 2 */
+
+#define SPI_CR2_FRF_BIT                 4
+
+#define SPI_CR2_FRF                     (1U << SPI_CR2_FRF_BIT)
+
+/* Status register */
+
+#define SPI_SR_TIFRFE_BIT               8
+
+#define SPI_SR_TIFRFE                   (1U << SPI_SR_TIFRFE_BIT)
+
+/*
  * Device pointers
  */
 
@@ -58,39 +73,13 @@ struct spi_dev;
 
 extern struct spi_dev *SPI1;
 extern struct spi_dev *SPI2;
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 extern struct spi_dev *SPI3;
-#endif
 
 /*
  * Routines
  */
 
-/* spi_gpio_cfg(): Backwards compatibility shim to spi_config_gpios() */
-struct gpio_dev;
-extern void spi_config_gpios(struct spi_dev*, uint8,
-                             struct gpio_dev*, uint8,
-                             struct gpio_dev*, uint8, uint8, uint8);
-/**
- * @brief Deprecated. Use spi_config_gpios() instead.
- * @see spi_config_gpios()
- */
-static __always_inline void spi_gpio_cfg(uint8 as_master,
-                                         struct gpio_dev *nss_dev,
-                                         uint8 nss_bit,
-                                         struct gpio_dev *comm_dev,
-                                         uint8 sck_bit,
-                                         uint8 miso_bit,
-                                         uint8 mosi_bit) {
-    /* We switched style globally to foo_config_gpios() and always
-     * taking a foo_dev* argument (that last bit is the important
-     * part) after this function was written.
-     *
-     * However, spi_config_gpios() just ignores the spi_dev* on F1, so
-     * we can still keep this around for older code. */
-    spi_config_gpios(NULL, as_master, nss_dev, nss_bit,
-                     comm_dev, sck_bit, miso_bit, mosi_bit);
-}
+gpio_af spi_get_af(struct spi_dev *dev);
 
 #ifdef __cplusplus
 }

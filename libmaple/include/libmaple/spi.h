@@ -307,7 +307,7 @@ uint32 spi_tx(spi_dev *dev, const void *buf, uint32 len);
  * @brief Call a function on each SPI port
  * @param fn Function to call.
  */
-void spi_foreach(void (*fn)(spi_dev*));
+extern void spi_foreach(void (*fn)(spi_dev*));
 
 void spi_peripheral_enable(spi_dev *dev);
 void spi_peripheral_disable(spi_dev *dev);

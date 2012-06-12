@@ -13,7 +13,9 @@ CFLAGS_$(d) = $(LIBMAPLE_PRIVATE_INCLUDES) $(LIBMAPLE_INCLUDES) -Wall -Werror
 # Local rules and targets
 cSRCS_$(d) := adc.c
 cSRCS_$(d) += dac.c
-# cSRCS_$(d) += dma.c
+ifeq ($(MCU_SERIES),stm32f1)	# FIXME add F2 support
+cSRCS_$(d) += dma.c
+endif
 cSRCS_$(d) += exti.c
 cSRCS_$(d) += flash.c
 cSRCS_$(d) += gpio.c

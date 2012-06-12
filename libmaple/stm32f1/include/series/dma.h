@@ -29,7 +29,7 @@
  * @file libmaple/stm32f1/include/series/dma.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>;
  *         Original implementation by Michael Hope
- * @brief STM32F1 Direct Memory Access header
+ * @brief STM32F1 DMA series header.
  */
 
 /*
@@ -44,13 +44,14 @@ extern "C"{
 #endif
 
 #include <libmaple/libmaple_types.h>
+#include <libmaple/dma_common.h>
 
 /*
- * Register map and base pointers
+ * Register maps and base pointers
  */
 
 /**
- * @brief DMA register map type.
+ * @brief STM32F1 DMA register map type.
  *
  * Note that DMA controller 2 (register map base pointer DMA2_BASE)
  * only supports channels 1--5.
@@ -99,6 +100,44 @@ typedef struct dma_reg_map {
 #define DMA1_BASE                       ((struct dma_reg_map*)0x40020000)
 /** DMA controller 2 register map base pointer */
 #define DMA2_BASE                       ((struct dma_reg_map*)0x40020400)
+
+/**
+ * @brief STM32F1 DMA channel (i.e. tube) register map type.
+ * Provides access to an individual channel's registers.
+ * @see dma_tube_regs()
+ */
+typedef struct dma_tube_reg_map {
+    __io uint32 CCR;           /**< Channel configuration register */
+    __io uint32 CNDTR;         /**< Channel number of data register */
+    __io uint32 CPAR;          /**< Channel peripheral address register */
+    __io uint32 CMAR;          /**< Channel memory address register */
+} dma_tube_reg_map;
+
+/** DMA1 channel 1 register map base pointer */
+#define DMA1CH1_BASE                ((struct dma_tube_reg_map*)0x40020008)
+/** DMA1 channel 2 register map base pointer */
+#define DMA1CH2_BASE                ((struct dma_tube_reg_map*)0x4002001C)
+/** DMA1 channel 3 register map base pointer */
+#define DMA1CH3_BASE                ((struct dma_tube_reg_map*)0x40020030)
+/** DMA1 channel 4 register map base pointer */
+#define DMA1CH4_BASE                ((struct dma_tube_reg_map*)0x40020044)
+/** DMA1 channel 5 register map base pointer */
+#define DMA1CH5_BASE                ((struct dma_tube_reg_map*)0x40020058)
+/** DMA1 channel 6 register map base pointer */
+#define DMA1CH6_BASE                ((struct dma_tube_reg_map*)0x4002006C)
+/** DMA1 channel 7 register map base pointer */
+#define DMA1CH7_BASE                ((struct dma_tube_reg_map*)0x40020080)
+
+/** DMA2 channel 1 register map base pointer */
+#define DMA2CH1_BASE                ((struct dma_tube_reg_map*)0x40020408)
+/** DMA2 channel 2 register map base pointer */
+#define DMA2CH2_BASE                ((struct dma_tube_reg_map*)0x4002041C)
+/** DMA2 channel 3 register map base pointer */
+#define DMA2CH3_BASE                ((struct dma_tube_reg_map*)0x40020430)
+/** DMA2 channel 4 register map base pointer */
+#define DMA2CH4_BASE                ((struct dma_tube_reg_map*)0x40020444)
+/** DMA2 channel 5 register map base pointer */
+#define DMA2CH5_BASE                ((struct dma_tube_reg_map*)0x40020458)
 
 /*
  * Register bit definitions
@@ -263,21 +302,235 @@ typedef struct dma_reg_map {
  * Devices
  */
 
-struct dma_dev;
-extern struct dma_dev *DMA1;
+extern dma_dev *DMA1;
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
-extern struct dma_dev *DMA2;
+extern dma_dev *DMA2;
 #endif
+
+/*
+ * Other types needed by, or useful for, <libmaple/dma.h>.
+ */
+
+/**
+ * @brief STM32F1 dma_tube.
+ * On STM32F1, DMA tubes are just channels.
+ */
+#define dma_tube dma_channel
+
+/**
+ * @brief On STM32F1, dma_channel_reg_map is an alias for dma_tube_reg_map.
+ * This is for backwards compatibility. */
+#define dma_channel_reg_map dma_tube_reg_map
+
+/**
+ * @brief STM32F1 configuration flags for dma_tube_config
+ * @see struct dma_tube_config
+ */
+typedef enum dma_cfg_flags {
+    /**
+     * Source address increment mode
+     *
+     * If this flag is set, the source address is incremented (by the
+     * source size) after each DMA transfer.
+     */
+    DMA_CFG_SRC_INC = 1U << 31,
+
+    /**
+     * Destination address increment mode
+     *
+     * If this flag is set, the destination address is incremented (by
+     * the destination size) after each DMA transfer.
+     */
+    DMA_CFG_DST_INC = 1U << 30,
+
+    /**
+     * Circular mode
+     *
+     * This mode is not available for memory-to-memory transfers.
+     */
+    DMA_CFG_CIRC = DMA_CCR_CIRC,
+
+    /** Transfer complete interrupt enable */
+    DMA_CFG_CMPLT_IE      = DMA_CCR_TCIE,
+    /** Transfer half-complete interrupt enable  */
+    DMA_CFG_HALF_CMPLT_IE = DMA_CCR_HTIE,
+    /** Transfer error interrupt enable */
+    DMA_CFG_ERR_IE        = DMA_CCR_TEIE,
+} dma_cfg_flags;
+
+/**
+ * @brief STM32F1 DMA request sources.
+ *
+ * IMPORTANT:
+ *
+ * 1. On STM32F1, each dma_request_src can only be used by a
+ * particular tube on a particular DMA controller. For example,
+ * DMA_REQ_SRC_ADC1 belongs to DMA1, tube 1. DMA2 cannot serve
+ * requests from ADC1, nor can DMA1 tube 2, etc. If you try to use a
+ * request source with the wrong DMA controller or tube on STM32F1,
+ * dma_tube_cfg() will fail.
+ *
+ * 2. In general, a DMA tube can only serve a single request source at
+ * a time, and on STM32F1, Terrible Super-Bad Things will happen if
+ * two request sources are active for a single tube.
+ *
+ * To make all this easier to sort out, these dma_request_src
+ * enumerators are grouped by DMA controller and tube.
+ *
+ * @see struct dma_tube_config
+ * @see dma_tube_cfg()
+ */
+typedef enum dma_request_src {
+    /* Each request source encodes the DMA controller and channel it
+     * belongs to, for error checking in dma_tube_cfg(). */
+
+    /* DMA1 request sources */
+
+    /**@{*/
+    /** (DMA1, tube 1) */
+    DMA_REQ_SRC_ADC1      = (RCC_DMA1 << 3) | 1,
+    DMA_REQ_SRC_TIM2_CH3  = (RCC_DMA1 << 3) | 1,
+    DMA_REQ_SRC_TIM4_CH1  = (RCC_DMA1 << 3) | 1,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA1, tube 2)*/
+    DMA_REQ_SRC_SPI1_RX   = (RCC_DMA1 << 3) | 2,
+    DMA_REQ_SRC_USART3_TX = (RCC_DMA1 << 3) | 2,
+    DMA_REQ_SRC_TIM1_CH1  = (RCC_DMA1 << 3) | 2,
+    DMA_REQ_SRC_TIM2_UP   = (RCC_DMA1 << 3) | 2,
+    DMA_REQ_SRC_TIM3_CH3  = (RCC_DMA1 << 3) | 2,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA1, tube 3)*/
+    DMA_REQ_SRC_SPI1_TX   = (RCC_DMA1 << 3) | 3,
+    DMA_REQ_SRC_USART3_RX = (RCC_DMA1 << 3) | 3,
+    DMA_REQ_SRC_TIM1_CH2  = (RCC_DMA1 << 3) | 3,
+    DMA_REQ_SRC_TIM3_CH4  = (RCC_DMA1 << 3) | 3,
+    DMA_REQ_SRC_TIM3_UP   = (RCC_DMA1 << 3) | 3,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA1, tube 4)*/
+    DMA_REQ_SRC_SPI2_RX   = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_I2S2_RX   = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_USART1_TX = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_I2C2_TX   = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_TIM1_CH4  = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_TIM1_TRIG = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_TIM1_COM  = (RCC_DMA1 << 3) | 4,
+    DMA_REQ_SRC_TIM4_CH2  = (RCC_DMA1 << 3) | 4,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA1, tube 5)*/
+    DMA_REQ_SRC_SPI2_TX   = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_I2S2_TX   = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_USART1_RX = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_I2C2_RX   = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_TIM1_UP   = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_TIM2_CH1  = (RCC_DMA1 << 3) | 5,
+    DMA_REQ_SRC_TIM4_CH3  = (RCC_DMA1 << 3) | 5,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA1, tube 6)*/
+    DMA_REQ_SRC_USART2_RX = (RCC_DMA1 << 3) | 6,
+    DMA_REQ_SRC_I2C1_TX   = (RCC_DMA1 << 3) | 6,
+    DMA_REQ_SRC_TIM1_CH3  = (RCC_DMA1 << 3) | 6,
+    DMA_REQ_SRC_TIM3_CH1  = (RCC_DMA1 << 3) | 6,
+    DMA_REQ_SRC_TIM3_TRIG = (RCC_DMA1 << 3) | 6,
+    /**@}*/
+
+    /**@{*/
+    /* Tube 7 */
+    DMA_REQ_SRC_USART2_TX = (RCC_DMA1 << 3) | 7,
+    DMA_REQ_SRC_I2C1_RX   = (RCC_DMA1 << 3) | 7,
+    DMA_REQ_SRC_TIM2_CH2  = (RCC_DMA1 << 3) | 7,
+    DMA_REQ_SRC_TIM2_CH4  = (RCC_DMA1 << 3) | 7,
+    DMA_REQ_SRC_TIM4_UP   = (RCC_DMA1 << 3) | 7,
+    /**@}*/
+
+    /* DMA2 request sources */
+
+    /**@{*/
+    /** (DMA2, tube 1)*/
+    DMA_REQ_SRC_SPI3_RX   = (RCC_DMA2 << 3) | 1,
+    DMA_REQ_SRC_I2S3_RX   = (RCC_DMA2 << 3) | 1,
+    DMA_REQ_SRC_TIM5_CH4  = (RCC_DMA2 << 3) | 1,
+    DMA_REQ_SRC_TIM5_TRIG = (RCC_DMA2 << 3) | 1,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA2, tube 2)*/
+    DMA_REQ_SRC_SPI3_TX   = (RCC_DMA2 << 3) | 2,
+    DMA_REQ_SRC_I2S3_TX   = (RCC_DMA2 << 3) | 2,
+    DMA_REQ_SRC_TIM5_CH3  = (RCC_DMA2 << 3) | 2,
+    DMA_REQ_SRC_TIM5_UP   = (RCC_DMA2 << 3) | 2,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA2, tube 3)*/
+    DMA_REQ_SRC_UART4_RX  = (RCC_DMA2 << 3) | 3,
+    DMA_REQ_SRC_TIM6_UP   = (RCC_DMA2 << 3) | 3,
+    DMA_REQ_SRC_DAC_CH1   = (RCC_DMA2 << 3) | 3,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA2, tube 4)*/
+    DMA_REQ_SRC_SDIO      = (RCC_DMA2 << 3) | 4,
+    DMA_REQ_SRC_TIM5_CH2  = (RCC_DMA2 << 3) | 4,
+    /**@}*/
+
+    /**@{*/
+    /** (DMA2, tube 5)*/
+    DMA_REQ_SRC_ADC3      = (RCC_DMA2 << 3) | 5,
+    DMA_REQ_SRC_UART4_TX  = (RCC_DMA2 << 3) | 5,
+    DMA_REQ_SRC_TIM5_CH1  = (RCC_DMA2 << 3) | 5,
+    /**@}*/
+} dma_request_src;
 
 /*
  * Convenience routines.
  */
 
-/* This hack is due to a circular dependency between us and
- * <libmaple/dma.h>. */
-static __always_inline dma_reg_map* _dma_dev_regs(struct dma_dev*);
+/**
+ * @brief On STM32F1, dma_is_channel_enabled() is an alias for
+ *        dma_is_enabled().
+ * This is for backwards compatibility.
+ */
+#define dma_is_channel_enabled dma_is_enabled
 
-/** Flags for DMA transfer configuration. */
+#define DMA_CHANNEL_NREGS 5     /* accounts for reserved word */
+static inline dma_tube_reg_map* dma_tube_regs(dma_dev *dev, dma_tube tube) {
+    __io uint32 *ccr1 = &dev->regs->CCR1;
+    return (dma_channel_reg_map*)(ccr1 + DMA_CHANNEL_NREGS * (tube - 1));
+}
+
+/**
+ * @brief On STM32F1, dma_channel_regs() is an alias for dma_tube_regs().
+ * This is for backwards compatibility. */
+#define dma_channel_regs(dev, ch) dma_tube_regs(dev, ch)
+
+static inline uint8 dma_is_enabled(dma_dev *dev, dma_tube tube) {
+    return (uint8)(dma_tube_regs(dev, tube)->CCR & DMA_CCR_EN);
+}
+
+static inline uint8 dma_get_isr_bits(dma_dev *dev, dma_tube tube) {
+    uint8 shift = (tube - 1) * 4;
+    return (dev->regs->ISR >> shift) & 0xF;
+}
+
+static inline void dma_clear_isr_bits(dma_dev *dev, dma_tube tube) {
+    dev->regs->IFCR = (1U << (4 * (tube - 1)));
+}
+
+/**
+ * @brief Deprecated
+ * STM32F1 mode flags for dma_setup_xfer(). Use dma_tube_cfg() instead.
+ * @see dma_tube_cfg()
+ */
 typedef enum dma_mode_flags {
     DMA_MEM_2_MEM  = 1 << 14, /**< Memory to memory mode */
     DMA_MINC_MODE  = 1 << 7,  /**< Auto-increment memory address */
@@ -289,147 +542,19 @@ typedef enum dma_mode_flags {
     DMA_TRNS_CMPLT = 1 << 1   /**< Interrupt on transfer completion */
 } dma_mode_flags;
 
-/** Source and destination transfer sizes. */
-typedef enum dma_xfer_size {
-    DMA_SIZE_8BITS  = 0,        /**< 8-bit transfers */
-    DMA_SIZE_16BITS = 1,        /**< 16-bit transfers */
-    DMA_SIZE_32BITS = 2         /**< 32-bit transfers */
-} dma_xfer_size;
-
-/** DMA channel */
-typedef enum dma_channel {
-    DMA_CH1 = 1,                /**< Channel 1 */
-    DMA_CH2 = 2,                /**< Channel 2 */
-    DMA_CH3 = 3,                /**< Channel 3 */
-    DMA_CH4 = 4,                /**< Channel 4 */
-    DMA_CH5 = 5,                /**< Channel 5 */
-    DMA_CH6 = 6,                /**< Channel 6 */
-    DMA_CH7 = 7,                /**< Channel 7 */
-} dma_channel;
-
-void dma_setup_transfer(struct dma_dev *dev,
-                        dma_channel     channel,
-                        __io void      *peripheral_address,
-                        dma_xfer_size   peripheral_size,
-                        __io void      *memory_address,
-                        dma_xfer_size   memory_size,
-                        uint32          mode);
-
-void dma_set_num_transfers(struct dma_dev *dev,
-                           dma_channel channel,
-                           uint16 num_transfers);
-
-/** DMA transfer priority. */
-typedef enum dma_priority {
-    DMA_PRIORITY_LOW       = DMA_CCR_PL_LOW,      /**< Low priority */
-    DMA_PRIORITY_MEDIUM    = DMA_CCR_PL_MEDIUM,   /**< Medium priority */
-    DMA_PRIORITY_HIGH      = DMA_CCR_PL_HIGH,     /**< High priority */
-    DMA_PRIORITY_VERY_HIGH = DMA_CCR_PL_VERY_HIGH /**< Very high priority */
-} dma_priority;
-
-void dma_set_priority(struct dma_dev *dev,
-                      dma_channel channel,
-                      dma_priority priority);
-
-void dma_attach_interrupt(struct dma_dev *dev,
-                          dma_channel channel,
-                          void (*handler)(void));
-void dma_detach_interrupt(struct dma_dev *dev, dma_channel channel);
-
-/**
- * Encodes the reason why a DMA interrupt was called.
- * @see dma_get_irq_cause()
- */
-typedef enum dma_irq_cause {
-    DMA_TRANSFER_COMPLETE,      /**< Transfer is complete. */
-    DMA_TRANSFER_HALF_COMPLETE, /**< Transfer is half complete. */
-    DMA_TRANSFER_ERROR,         /**< Error occurred during transfer. */
-} dma_irq_cause;
-
-dma_irq_cause dma_get_irq_cause(struct dma_dev *dev, dma_channel channel);
-
-void dma_enable(struct dma_dev *dev, dma_channel channel);
-void dma_disable(struct dma_dev *dev, dma_channel channel);
-
-void dma_set_mem_addr(struct dma_dev *dev,
-                      dma_channel channel,
-                      __io void *address);
-void dma_set_per_addr(struct dma_dev *dev,
-                      dma_channel channel,
-                      __io void *address);
-
-/**
- * @brief DMA channel register map type.
+/* Keep this around for backwards compatibility, but it's deprecated.
+ * New code should use dma_tube_cfg() instead.
  *
- * Provides access to an individual channel's registers.
- */
-typedef struct dma_channel_reg_map {
-    __io uint32 CCR;           /**< Channel configuration register */
-    __io uint32 CNDTR;         /**< Channel number of data register */
-    __io uint32 CPAR;          /**< Channel peripheral address register */
-    __io uint32 CMAR;          /**< Channel memory address register */
-} dma_channel_reg_map;
-
-#define DMA_CHANNEL_NREGS 5
-
-/**
- * @brief Obtain a pointer to an individual DMA channel's registers.
- *
- * For example, dma_channel_regs(DMA1, DMA_CH1)->CCR is DMA1_BASE->CCR1.
- *
- * @param dev DMA device
- * @param channel DMA channel whose channel register map to obtain.
- */
-static inline dma_channel_reg_map* dma_channel_regs(struct dma_dev *dev,
-                                                    dma_channel channel) {
-    __io uint32 *ccr1 = &_dma_dev_regs(dev)->CCR1;
-    return (dma_channel_reg_map*)(ccr1 + DMA_CHANNEL_NREGS * (channel - 1));
-}
-
-/**
- * @brief Check if a DMA channel is enabled
- * @param dev DMA device
- * @param channel Channel whose enabled bit to check.
- */
-static inline uint8 dma_is_channel_enabled(struct dma_dev *dev,
-                                           dma_channel channel) {
-    return (uint8)(dma_channel_regs(dev, channel)->CCR & DMA_CCR_EN);
-}
-
-/**
- * @brief Get the ISR status bits for a DMA channel.
- *
- * The bits are returned right-aligned, in the following order:
- * transfer error flag, half-transfer flag, transfer complete flag,
- * global interrupt flag.
- *
- * If you're attempting to figure out why a DMA interrupt fired; you
- * may find dma_get_irq_cause() more convenient.
- *
- * @param dev DMA device
- * @param channel Channel whose ISR bits to return.
- * @see dma_get_irq_cause().
- */
-static inline uint8 dma_get_isr_bits(struct dma_dev *dev,
-                                     dma_channel channel) {
-    uint8 shift = (channel - 1) * 4;
-    return (_dma_dev_regs(dev)->ISR >> shift) & 0xF;
-}
-
-/**
- * @brief Clear the ISR status bits for a given DMA channel.
- *
- * If you're attempting to clean up after yourself in a DMA interrupt,
- * you may find dma_get_irq_cause() more convenient.
- *
- * @param dev DMA device
- * @param channel Channel whose ISR bits to clear.
- * @see dma_get_irq_cause()
- */
-static inline void dma_clear_isr_bits(struct dma_dev *dev,
-                                      dma_channel channel) {
-    _dma_dev_regs(dev)->IFCR = (1U << (4 * (channel - 1)));
-}
+ * (It's not possible to fully configure a DMA stream on F2 with just
+ * this information, so this interface is too tied to the F1.) */
+__deprecated
+void dma_setup_transfer(dma_dev       *dev,
+                        dma_channel    channel,
+                        __io void     *peripheral_address,
+                        dma_xfer_size  peripheral_size,
+                        __io void     *memory_address,
+                        dma_xfer_size  memory_size,
+                        uint32         mode);
 
 #ifdef __cplusplus
 } // extern "C"

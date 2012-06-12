@@ -35,6 +35,10 @@
 #include <libmaple/dma.h>
 #include <libmaple/bitband.h>
 
+/* Hack to ensure inlining in dma_irq_handler() */
+#define DMA_GET_HANDLER(dev, tube) (dev->handlers[tube - 1].handler)
+#include "dma_private.h"
+
 /*
  * Devices
  */
@@ -50,7 +54,7 @@ static dma_dev dma1 = {
                  { .handler = NULL, .irq_line = NVIC_DMA_CH6 },
                  { .handler = NULL, .irq_line = NVIC_DMA_CH7 }},
 };
-/** DMA1 device */
+/** STM32F1 DMA1 device */
 dma_dev *DMA1 = &dma1;
 
 #if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
@@ -63,16 +67,199 @@ static dma_dev dma2 = {
                  { .handler = NULL, .irq_line = NVIC_DMA2_CH_4_5 },
                  { .handler = NULL, .irq_line = NVIC_DMA2_CH_4_5 }}, /* !@#$ */
 };
-/** DMA2 device */
+/** STM32F1 DMA2 device */
 dma_dev *DMA2 = &dma2;
 #endif
+
+/*
+ * Auxiliary routines
+ */
+
+/* Can channel serve cfg->tube_req_src? */
+static int cfg_req_ok(dma_channel channel, dma_tube_config *cfg) {
+    return (cfg->tube_req_src & 0x7) == channel;
+}
+
+/* Can dev serve cfg->tube_req_src? */
+static int cfg_dev_ok(dma_dev *dev, dma_tube_config *cfg) {
+    return (rcc_clk_id)(cfg->tube_req_src >> 3) == dev->clk_id;
+}
+
+/* Is addr acceptable for use as DMA src/dst? */
+static int cfg_mem_ok(__io void *addr) {
+    enum dma_atype atype = _dma_addr_type(addr);
+    return atype == DMA_ATYPE_MEM || atype == DMA_ATYPE_PER;
+}
+
+/* Is the direction implied by src->dst supported? */
+static int cfg_dir_ok(dma_tube_config *cfg) {
+    /* We can't do peripheral->peripheral transfers. */
+    return ((_dma_addr_type(cfg->tube_src) == DMA_ATYPE_MEM) ||
+            (_dma_addr_type(cfg->tube_dst) == DMA_ATYPE_MEM));
+}
+
+static int preconfig_check(dma_dev *dev, dma_channel channel,
+                           dma_tube_config *cfg) {
+    if (!cfg_req_ok(channel, cfg)) {
+        return -DMA_TUBE_CFG_EREQ;
+    }
+    if (cfg->tube_nr_xfers > 65535) {
+        return -DMA_TUBE_CFG_ENDATA;
+    }
+    if (!cfg_dev_ok(dev, cfg)) {
+        return -DMA_TUBE_CFG_EDEV;
+    }
+    if (!cfg_mem_ok(cfg->tube_src)) {
+        return -DMA_TUBE_CFG_ESRC;
+    }
+    if (!cfg_mem_ok(cfg->tube_dst)) {
+        return -DMA_TUBE_CFG_EDST;
+    }
+    if (!cfg_dir_ok(cfg)) {
+        return -DMA_TUBE_CFG_EDIR;
+    }
+    return DMA_TUBE_CFG_SUCCESS;
+}
+
+/* Configure chregs according to cfg, where cfg->tube_dst is peripheral. */
+static int config_to_per(dma_tube_reg_map *chregs, dma_tube_config *cfg) {
+    return -DMA_TUBE_CFG_ECFG;    /* FIXME implement */
+}
+
+/* Configure chregs according to cfg, where cfg->tube_dst is memory. */
+static int config_to_mem(dma_tube_reg_map *chregs, dma_tube_config *cfg) {
+    return -DMA_TUBE_CFG_ECFG;    /* FIXME implement */
+}
 
 /*
  * Routines
  */
 
+int dma_tube_cfg(dma_dev *dev, dma_channel channel, dma_tube_config *cfg) {
+    dma_tube_reg_map *chregs;
+    int ret = preconfig_check(dev, channel, cfg);
+
+    if (ret < 0) {
+        return ret;
+    }
+
+    chregs = dma_tube_regs(dev, channel);
+    switch (_dma_addr_type(cfg->tube_dst)) {
+    case DMA_ATYPE_PER:
+        return config_to_per(chregs, cfg);
+    case DMA_ATYPE_MEM:
+        return config_to_mem(chregs, cfg);
+    default:
+        /* Can't happen */
+        ASSERT(0);
+        return -DMA_TUBE_CFG_ECFG;
+    }
+}
+
+void dma_set_priority(dma_dev *dev,
+                      dma_channel channel,
+                      dma_priority priority) {
+    dma_channel_reg_map *channel_regs;
+    uint32 ccr;
+
+    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
+
+    channel_regs = dma_channel_regs(dev, channel);
+    ccr = channel_regs->CCR;
+    ccr &= ~DMA_CCR_PL;
+    ccr |= (priority << 12);
+    channel_regs->CCR = ccr;
+}
+
+void dma_set_num_transfers(dma_dev *dev,
+                           dma_channel channel,
+                           uint16 num_transfers) {
+    dma_channel_reg_map *channel_regs;
+
+    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
+
+    channel_regs = dma_channel_regs(dev, channel);
+    channel_regs->CNDTR = num_transfers;
+}
+
+void dma_attach_interrupt(dma_dev *dev, dma_channel channel,
+                          void (*handler)(void)) {
+    DMA_GET_HANDLER(dev, channel) = handler;
+    nvic_irq_enable(dev->handlers[channel - 1].irq_line);
+}
+
+void dma_detach_interrupt(dma_dev *dev, dma_channel channel) {
+    /* Don't use nvic_irq_disable()! Think about DMA2 channels 4 and 5. */
+    dma_channel_regs(dev, channel)->CCR &= ~0xF;
+    DMA_GET_HANDLER(dev, channel) = NULL;
+}
+
+void dma_enable(dma_dev *dev, dma_channel channel) {
+    dma_channel_reg_map *chan_regs = dma_channel_regs(dev, channel);
+    bb_peri_set_bit(&chan_regs->CCR, DMA_CCR_EN_BIT, 1);
+}
+
+void dma_disable(dma_dev *dev, dma_channel channel) {
+    dma_channel_reg_map *chan_regs = dma_channel_regs(dev, channel);
+    bb_peri_set_bit(&chan_regs->CCR, DMA_CCR_EN_BIT, 0);
+}
+
+dma_irq_cause dma_get_irq_cause(dma_dev *dev, dma_channel channel) {
+    /* Grab and clear the ISR bits. */
+    uint8 status_bits = dma_get_isr_bits(dev, channel);
+    dma_clear_isr_bits(dev, channel);
+
+    /* If the channel global interrupt flag is cleared, then
+     * something's very wrong. */
+    ASSERT(status_bits & 0x1);
+    /* If GIF is set, then some other flag should be set, barring
+     * something unexpected (e.g. the user making an unforeseen IFCR
+     * write). */
+    ASSERT(status_bits != 0x1);
+
+    /* ISR flags get set even if the corresponding interrupt enable
+     * bits in the channel's configuration register are cleared, so we
+     * can't use a switch here.
+     *
+     * Don't change the order of these if statements. */
+    if (status_bits & 0x8) {
+        return DMA_TRANSFER_ERROR;
+    } else if (status_bits & 0x2) {
+        return DMA_TRANSFER_COMPLETE;
+    } else if (status_bits & 0x4) {
+        return DMA_TRANSFER_HALF_COMPLETE;
+    }
+
+    /* If we get here, one of our assumptions has been violated, but
+     * the debug level is too low for the above ASSERTs() to have had
+     * any effect. In order to fail fast, mimic the DMA controller's
+     * behavior when an error occurs. */
+    dma_disable(dev, channel);
+    return DMA_TRANSFER_ERROR;
+}
+
+void dma_set_mem_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
+    dma_channel_reg_map *chan_regs;
+
+    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
+
+    chan_regs = dma_channel_regs(dev, channel);
+    chan_regs->CMAR = (uint32)addr;
+}
+
+void dma_set_per_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
+    dma_channel_reg_map *chan_regs;
+
+    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
+
+    chan_regs = dma_channel_regs(dev, channel);
+    chan_regs->CPAR = (uint32)addr;
+}
+
 /**
- * @brief Set up a DMA transfer.
+ * @brief Deprecated. Use dma_tube_cfg() instead.
+ *
+ * Set up a DMA transfer.
  *
  * The channel will be disabled before being reconfigured.  The
  * transfer will have low priority by default.  You may choose another
@@ -88,6 +275,9 @@ dma_dev *DMA2 = &dma2;
  * @param memory_address Base memory address involved in the transfer.
  * @param memory_size Memory data transfer size.
  * @param mode Logical OR of dma_mode_flags
+ *
+ * @see dma_tube_cfg()
+ *
  * @sideeffect Disables the given DMA channel.
  * @see dma_xfer_size
  * @see dma_mode_flags
@@ -96,6 +286,7 @@ dma_dev *DMA2 = &dma2;
  * @see dma_attach_interrupt()
  * @see dma_enable()
  */
+__deprecated
 void dma_setup_transfer(dma_dev       *dev,
                         dma_channel    channel,
                         __io void     *peripheral_address,
@@ -111,261 +302,57 @@ void dma_setup_transfer(dma_dev       *dev,
     channel_regs->CPAR = (uint32)peripheral_address;
 }
 
-/**
- * @brief Set the number of data to be transferred on a DMA channel.
- *
- * You may not call this function while the channel is enabled.
- *
- * @param dev DMA device
- * @param channel Channel through which the transfer occurs.
- * @param num_transfers
- */
-void dma_set_num_transfers(dma_dev *dev,
-                           dma_channel channel,
-                           uint16 num_transfers) {
-    dma_channel_reg_map *channel_regs;
-
-    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
-
-    channel_regs = dma_channel_regs(dev, channel);
-    channel_regs->CNDTR = num_transfers;
-}
-
-/**
- * @brief Set the priority of a DMA transfer.
- *
- * You may not call this function while the channel is enabled.
- *
- * @param dev DMA device
- * @param channel DMA channel
- * @param priority priority to set.
- */
-void dma_set_priority(dma_dev *dev,
-                      dma_channel channel,
-                      dma_priority priority) {
-    dma_channel_reg_map *channel_regs;
-    uint32 ccr;
-
-    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
-
-    channel_regs = dma_channel_regs(dev, channel);
-    ccr = channel_regs->CCR;
-    ccr &= ~DMA_CCR_PL;
-    ccr |= priority;
-    channel_regs->CCR = ccr;
-}
-
-/**
- * @brief Attach an interrupt to a DMA transfer.
- *
- * Interrupts are enabled using appropriate mode flags in
- * dma_setup_transfer().
- *
- * @param dev DMA device
- * @param channel Channel to attach handler to
- * @param handler Interrupt handler to call when channel interrupt fires.
- * @see dma_setup_transfer()
- * @see dma_get_irq_cause()
- * @see dma_detach_interrupt()
- */
-void dma_attach_interrupt(dma_dev *dev,
-                          dma_channel channel,
-                          void (*handler)(void)) {
-    dev->handlers[channel - 1].handler = handler;
-    nvic_irq_enable(dev->handlers[channel - 1].irq_line);
-}
-
-/**
- * @brief Detach a DMA transfer interrupt handler.
- *
- * After calling this function, the given channel's interrupts will be
- * disabled.
- *
- * @param dev DMA device
- * @param channel Channel whose handler to detach
- * @sideeffect Clears interrupt enable bits in the channel's CCR register.
- * @see dma_attach_interrupt()
- */
-void dma_detach_interrupt(dma_dev *dev, dma_channel channel) {
-    /* Don't use nvic_irq_disable()! Think about DMA2 channels 4 and 5. */
-    dma_channel_regs(dev, channel)->CCR &= ~0xF;
-    dev->handlers[channel - 1].handler = NULL;
-}
-
-/**
- * @brief Discover the reason why a DMA interrupt was called.
- *
- * You may only call this function within an attached interrupt
- * handler for the given channel.
- *
- * This function resets the internal DMA register state which encodes
- * the cause of the interrupt; consequently, it can only be called
- * once per interrupt handler invocation.
- *
- * @param dev DMA device
- * @param channel Channel whose interrupt is being handled.
- * @return Reason why the interrupt fired.
- * @sideeffect Clears channel status flags in dev->regs->ISR.
- * @see dma_attach_interrupt()
- * @see dma_irq_cause
- */
-dma_irq_cause dma_get_irq_cause(dma_dev *dev, dma_channel channel) {
-    uint8 status_bits = dma_get_isr_bits(dev, channel);
-
-    /* If the channel global interrupt flag is cleared, then
-     * something's very wrong. */
-    ASSERT(status_bits & BIT(0));
-
-    dma_clear_isr_bits(dev, channel);
-
-    /* ISR flags get set even if the corresponding interrupt enable
-     * bits in the channel's configuration register are cleared, so we
-     * can't use a switch here.
-     *
-     * Don't change the order of these if statements. */
-    if (status_bits & BIT(3)) {
-        return DMA_TRANSFER_ERROR;
-    } else if (status_bits & BIT(1)) {
-        return DMA_TRANSFER_COMPLETE;
-    } else if (status_bits & BIT(2)) {
-        return DMA_TRANSFER_HALF_COMPLETE;
-    } else if (status_bits & BIT(0)) {
-        /* Shouldn't happen (unless someone messed up an IFCR write). */
-        throb();
-    }
-#if DEBUG_LEVEL < DEBUG_ALL
-    else {
-        /* We shouldn't have been called, but the debug level is too
-         * low for the above ASSERT() to have had any effect.  In
-         * order to fail fast, mimic the DMA controller's behavior
-         * when an error occurs. */
-        dma_disable(dev, channel);
-    }
-#endif
-    return DMA_TRANSFER_ERROR;
-}
-
-/**
- * @brief Enable a DMA channel.
- * @param dev DMA device
- * @param channel Channel to enable
- */
-void dma_enable(dma_dev *dev, dma_channel channel) {
-    dma_channel_reg_map *chan_regs = dma_channel_regs(dev, channel);
-    bb_peri_set_bit(&chan_regs->CCR, DMA_CCR_EN_BIT, 1);
-}
-
-/**
- * @brief Disable a DMA channel.
- * @param dev DMA device
- * @param channel Channel to disable
- */
-void dma_disable(dma_dev *dev, dma_channel channel) {
-    dma_channel_reg_map *chan_regs = dma_channel_regs(dev, channel);
-    bb_peri_set_bit(&chan_regs->CCR, DMA_CCR_EN_BIT, 0);
-}
-
-/**
- * @brief Set the base memory address where data will be read from or
- *        written to.
- *
- * You must not call this function while the channel is enabled.
- *
- * If the DMA memory size is 16 bits, the address is automatically
- * aligned to a half-word.  If the DMA memory size is 32 bits, the
- * address is aligned to a word.
- *
- * @param dev DMA Device
- * @param channel Channel whose base memory address to set.
- * @param addr Memory base address to use.
- */
-void dma_set_mem_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
-    dma_channel_reg_map *chan_regs;
-
-    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
-
-    chan_regs = dma_channel_regs(dev, channel);
-    chan_regs->CMAR = (uint32)addr;
-}
-
-/**
- * @brief Set the base peripheral address where data will be read from
- *        or written to.
- *
- * You must not call this function while the channel is enabled.
- *
- * If the DMA peripheral size is 16 bits, the address is automatically
- * aligned to a half-word.  If the DMA peripheral size is 32 bits, the
- * address is aligned to a word.
- *
- * @param dev DMA Device
- * @param channel Channel whose peripheral data register base address to set.
- * @param addr Peripheral memory base address to use.
- */
-void dma_set_per_addr(dma_dev *dev, dma_channel channel, __io void *addr) {
-    dma_channel_reg_map *chan_regs;
-
-    ASSERT_FAULT(!dma_is_channel_enabled(dev, channel));
-
-    chan_regs = dma_channel_regs(dev, channel);
-    chan_regs->CPAR = (uint32)addr;
-}
-
 /*
  * IRQ handlers
  */
 
-static __always_inline void dispatch_handler(dma_dev *dev, int channel) {
-    void (*handler)(void) = dev->handlers[channel - 1].handler;
-    if (handler) {
-        handler();
-        dma_clear_isr_bits(dev, channel); /* in case handler doesn't */
-    }
-}
-
 void __irq_dma1_channel1(void) {
-    dispatch_handler(DMA1, DMA_CH1);
+    dma_irq_handler(DMA1, DMA_CH1);
 }
 
 void __irq_dma1_channel2(void) {
-    dispatch_handler(DMA1, DMA_CH2);
+    dma_irq_handler(DMA1, DMA_CH2);
 }
 
 void __irq_dma1_channel3(void) {
-    dispatch_handler(DMA1, DMA_CH3);
+    dma_irq_handler(DMA1, DMA_CH3);
 }
 
 void __irq_dma1_channel4(void) {
-    dispatch_handler(DMA1, DMA_CH4);
+    dma_irq_handler(DMA1, DMA_CH4);
 }
 
 void __irq_dma1_channel5(void) {
-    dispatch_handler(DMA1, DMA_CH5);
+    dma_irq_handler(DMA1, DMA_CH5);
 }
 
 void __irq_dma1_channel6(void) {
-    dispatch_handler(DMA1, DMA_CH6);
+    dma_irq_handler(DMA1, DMA_CH6);
 }
 
 void __irq_dma1_channel7(void) {
-    dispatch_handler(DMA1, DMA_CH7);
+    dma_irq_handler(DMA1, DMA_CH7);
 }
 
-#ifdef STM32_HIGH_DENSITY
+#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
 void __irq_dma2_channel1(void) {
-    dispatch_handler(DMA2, DMA_CH1);
+    dma_irq_handler(DMA2, DMA_CH1);
 }
 
 void __irq_dma2_channel2(void) {
-    dispatch_handler(DMA2, DMA_CH2);
+    dma_irq_handler(DMA2, DMA_CH2);
 }
 
 void __irq_dma2_channel3(void) {
-    dispatch_handler(DMA2, DMA_CH3);
+    dma_irq_handler(DMA2, DMA_CH3);
 }
 
 void __irq_dma2_channel4_5(void) {
-    dispatch_handler(DMA2, DMA_CH4);
-    dispatch_handler(DMA2, DMA_CH5);
+    if ((DMA2_BASE->CCR4 & DMA_CCR_EN) && (DMA2_BASE->ISR & DMA_ISR_GIF4)) {
+        dma_irq_handler(DMA2, DMA_CH4);
+    }
+    if ((DMA2_BASE->CCR5 & DMA_CCR_EN) && (DMA2_BASE->ISR & DMA_ISR_GIF5)) {
+        dma_irq_handler(DMA2, DMA_CH5);
+    }
 }
 #endif

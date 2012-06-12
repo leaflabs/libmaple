@@ -33,6 +33,8 @@
  */
 
 #include <libmaple/dma.h>
+#include "dma_private.h"
+#include "stm32_private.h"
 
 /*
  * Convenience routines
@@ -44,4 +46,37 @@
  */
 void dma_init(dma_dev *dev) {
     rcc_clk_enable(dev->clk_id);
+}
+
+/*
+ * Private API
+ */
+
+enum dma_atype _dma_addr_type(__io void *addr) {
+    switch (stm32_block_purpose((void*)addr)) {
+    /* Notice we're treating the code block as memory here.  That's
+     * correct for addresses in Flash and in [0x0, 0x7FFFFFF]
+     * (provided that those addresses are aliased to Flash, SRAM, or
+     * FSMC, depending on BOOT[01] and possibly SYSCFG_MEMRMP). It's
+     * not correct for other addresses in the code block, but those
+     * will (hopefully) just fail-fast with transfer or bus errors. If
+     * lots of people get confused, it might be worth being more
+     * careful here. */
+    case STM32_BLOCK_CODE:      /* Fall through */
+    case STM32_BLOCK_SRAM:      /* ... */
+    case STM32_BLOCK_FSMC_1_2:  /* ... */
+    case STM32_BLOCK_FSMC_3_4:
+        return DMA_ATYPE_MEM;
+    case STM32_BLOCK_PERIPH:
+        return DMA_ATYPE_PER;
+    case STM32_BLOCK_FSMC_REG:        /* Fall through */
+        /* Is this right? I can't think of a reason to DMA into or out
+         * of the FSMC registers. [mbolivar]  */
+    case STM32_BLOCK_UNUSED:          /* ... */
+    case STM32_BLOCK_CORTEX_INTERNAL: /* ... */
+        return DMA_ATYPE_OTHER;
+    default:
+        ASSERT(0);              /* Can't happen */
+        return DMA_ATYPE_OTHER;
+    }
 }

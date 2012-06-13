@@ -121,14 +121,57 @@ static int preconfig_check(dma_dev *dev, dma_channel channel,
     return DMA_TUBE_CFG_SUCCESS;
 }
 
+static inline void set_ccr(dma_tube_reg_map *chregs,
+                           dma_xfer_size msize, int minc,
+                           dma_xfer_size psize, int pinc,
+                           uint32 other_flags) {
+    chregs->CCR = ((msize << 10) | (psize << 8) |
+                   (minc ? DMA_CCR_MINC : 0) | (pinc ? DMA_CCR_PINC : 0) |
+                   other_flags);
+}
+
+static inline uint32 cfg_ccr_flags(unsigned tube_flags) {
+    /* DMA_CFG_SRC_INC and DMA_CFG_DST_INC are special */
+    return tube_flags & ~(DMA_CFG_SRC_INC | DMA_CFG_DST_INC);
+}
+
 /* Configure chregs according to cfg, where cfg->tube_dst is peripheral. */
 static int config_to_per(dma_tube_reg_map *chregs, dma_tube_config *cfg) {
-    return -DMA_TUBE_CFG_ECFG;    /* FIXME implement */
+    /* Check that ->tube_src is memory (if it's anything else, we
+     * shouldn't have been called). */
+    ASSERT(_dma_addr_type(cfg->tube_src) == DMA_ATYPE_MEM);
+
+    set_ccr(chregs,
+            cfg->tube_src_size, cfg->tube_flags & DMA_CFG_SRC_INC,
+            cfg->tube_dst_size, cfg->tube_flags & DMA_CFG_DST_INC,
+            (cfg_ccr_flags(cfg->tube_flags) | DMA_CCR_DIR_FROM_MEM));
+    chregs->CMAR = (uint32)cfg->tube_src;
+    chregs->CPAR = (uint32)cfg->tube_dst;
+    return DMA_TUBE_CFG_SUCCESS;
 }
 
 /* Configure chregs according to cfg, where cfg->tube_dst is memory. */
 static int config_to_mem(dma_tube_reg_map *chregs, dma_tube_config *cfg) {
-    return -DMA_TUBE_CFG_ECFG;    /* FIXME implement */
+    uint32 mem2mem;
+
+    if ((_dma_addr_type(cfg->tube_src) == DMA_ATYPE_MEM) &&
+        (cfg->tube_flags & DMA_CFG_CIRC)) {
+        /* Can't do mem-to-mem and circular mode */
+        return -DMA_TUBE_CFG_ECFG;
+    }
+
+    mem2mem = (_dma_addr_type(cfg->tube_src) == DMA_ATYPE_MEM ?
+               DMA_CCR_MEM2MEM : 0);
+    set_ccr(chregs,
+            cfg->tube_dst_size, cfg->tube_flags & DMA_CFG_DST_INC,
+            cfg->tube_src_size, cfg->tube_flags & DMA_CFG_SRC_INC,
+            (cfg_ccr_flags(cfg->tube_flags) |
+             DMA_CCR_DIR_FROM_PER |
+             mem2mem));
+    chregs->CNDTR = cfg->tube_nr_xfers;
+    chregs->CMAR = (uint32)cfg->tube_dst;
+    chregs->CPAR = (uint32)cfg->tube_src;
+    return DMA_TUBE_CFG_SUCCESS;
 }
 
 /*
@@ -143,17 +186,28 @@ int dma_tube_cfg(dma_dev *dev, dma_channel channel, dma_tube_config *cfg) {
         return ret;
     }
 
+    dma_disable(dev, channel);        /* Must disable before reconfiguring */
+    dma_clear_isr_bits(dev, channel); /* For sanity and consistency
+                                       * with STM32F2. */
+
     chregs = dma_tube_regs(dev, channel);
     switch (_dma_addr_type(cfg->tube_dst)) {
     case DMA_ATYPE_PER:
-        return config_to_per(chregs, cfg);
+        ret = config_to_per(chregs, cfg);
+        break;
     case DMA_ATYPE_MEM:
-        return config_to_mem(chregs, cfg);
+        ret = config_to_mem(chregs, cfg);
+        break;
     default:
         /* Can't happen */
         ASSERT(0);
         return -DMA_TUBE_CFG_ECFG;
     }
+    if (ret < 0) {
+        return ret;
+    }
+    chregs->CNDTR = cfg->tube_nr_xfers;
+    return DMA_TUBE_CFG_SUCCESS;
 }
 
 void dma_set_priority(dma_dev *dev,

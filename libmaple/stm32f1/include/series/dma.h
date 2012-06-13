@@ -293,6 +293,8 @@ typedef struct dma_tube_reg_map {
 #define DMA_CCR_PINC                    (1U << DMA_CCR_PINC_BIT)
 #define DMA_CCR_CIRC                    (1U << DMA_CCR_CIRC_BIT)
 #define DMA_CCR_DIR                     (1U << DMA_CCR_DIR_BIT)
+#define DMA_CCR_DIR_FROM_PER            (0U << DMA_CCR_DIR_BIT)
+#define DMA_CCR_DIR_FROM_MEM            (1U << DMA_CCR_DIR_BIT)
 #define DMA_CCR_TEIE                    (1U << DMA_CCR_TEIE_BIT)
 #define DMA_CCR_HTIE                    (1U << DMA_CCR_HTIE_BIT)
 #define DMA_CCR_TCIE                    (1U << DMA_CCR_TCIE_BIT)

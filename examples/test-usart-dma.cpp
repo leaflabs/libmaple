@@ -14,7 +14,9 @@
  * particular, since the buffer keeps filling (DMA_CIRC_MODE is set),
  * if you keep sending characters after filling the buffer, you'll
  * overwrite earlier bytes; this may happen before those earlier bytes
- * are done printing.
+ * are done printing. (Typing quickly and seeing how it affects the
+ * output is a fun way to make sense of how the interrupts and the
+ * main thread of execution interleave.)
  *
  * This code is released into the public domain.
  */
@@ -33,8 +35,17 @@
 // your purposes.
 HardwareSerial *serial = &Serial2;
 #define USART_DMA_DEV DMA1
-#define USART_RX_DMA_CHANNEL DMA_CH6
+// On STM32F1 microcontrollers (like what's on Maple and Maple Mini),
+// dma tubes are channels.
+#define USART_RX_DMA_TUBE DMA_CH6
+// The serial port will make a DMA request each time it receives data.
+// This is the dma_request_src we use to tell the DMA tube to handle
+// that DMA request.
+#define USART_DMA_REQ_SRC DMA_REQ_SRC_USART2_RX
 #define BAUD 9600
+
+// This will store the DMA configuration for USART RX.
+dma_tube_config tube_config;
 
 // This will store received USART characters.
 #define BUF_SIZE 20
@@ -54,7 +65,7 @@ volatile uint32 isr = 0;
 // This is our DMA interrupt handler.
 void rx_dma_irq(void) {
     irq_fired = 1;
-    isr = dma_get_isr_bits(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
+    isr = dma_get_isr_bits(USART_DMA_DEV, USART_RX_DMA_TUBE);
 }
 
 // Configure the USART receiver for use with DMA:
@@ -66,17 +77,53 @@ void setup_usart(void) {
     serial_dev->regs->CR3 = USART_CR3_DMAR;
 }
 
+// Set up our dma_tube_config structure. (We could have done this
+// above, when we declared tube_config, but having this function makes
+// it easier to explain what's going on).
+void setup_tube_config(void) {
+    // We're receiving from the USART data register. serial->c_dev()
+    // returns a pointer to the libmaple usart_dev for that serial
+    // port, so this is a pointer to its data register.
+    tube_config.tube_src = &serial->c_dev()->regs->DR;
+    // We're only interested in the bottom 8 bits of that data register.
+    tube_config.tube_src_size = DMA_SIZE_8BITS;
+    // We're storing to rx_buf.
+    tube_config.tube_dst = rx_buf;
+    // rx_buf is a char array, and a "char" takes up 8 bits on STM32.
+    tube_config.tube_dst_size = DMA_SIZE_8BITS;
+    // Only fill BUF_SIZE - 1 characters, to leave a null byte at the end.
+    tube_config.tube_nr_xfers = BUF_SIZE - 1;
+    // Flags:
+    // - DMA_CFG_DST_INC so we start at the beginning of rx_buf and
+    //   fill towards the end.
+    // - DMA_CFG_CIRC so we go back to the beginning and start over when
+    //   rx_buf fills up.
+    // - DMA_CFG_CMPLT_IE to turn on interrupts on transfer completion.
+    tube_config.tube_flags = DMA_CFG_DST_INC | DMA_CFG_CIRC | DMA_CFG_CMPLT_IE;
+    // Target data: none. It's important to set this to NULL if you
+    // don't have any special (microcontroller-specific) configuration
+    // in mind, which we don't.
+    tube_config.target_data = NULL;
+    // DMA request source.
+    tube_config.tube_req_src = USART_DMA_REQ_SRC;
+}
+
 // Configure the DMA controller to serve DMA requests from the USART.
 void setup_dma_xfer(void) {
+    // First, turn it on.
     dma_init(USART_DMA_DEV);
-    dma_setup_transfer(USART_DMA_DEV, USART_RX_DMA_CHANNEL,
-                       &serial->c_dev()->regs->DR, DMA_SIZE_8BITS,
-                       rx_buf,                     DMA_SIZE_8BITS,
-                       (DMA_MINC_MODE | DMA_CIRC_MODE | DMA_TRNS_CMPLT));
-    dma_set_num_transfers(USART_DMA_DEV, USART_RX_DMA_CHANNEL,
-                          BUF_SIZE - 1);
-    dma_attach_interrupt(USART_DMA_DEV, USART_RX_DMA_CHANNEL, rx_dma_irq);
-    dma_enable(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
+    // Next, configure it by calling dma_tube_cfg(), and check to make
+    // sure it succeeded. DMA tubes have many restrictions on their
+    // configuration, and there are configurations which work on some
+    // types of STM32 but not others. libmaple tries hard to make
+    // things just work, but checking the return status is important!
+    int status = dma_tube_cfg(USART_DMA_DEV, USART_RX_DMA_TUBE, &tube_config);
+    ASSERT(status == DMA_TUBE_CFG_SUCCESS);
+    // Now we'll perform any other configuration we want. For this
+    // example, we attach an interrupt handler.
+    dma_attach_interrupt(USART_DMA_DEV, USART_RX_DMA_TUBE, rx_dma_irq);
+    // Turn on the DMA tube. It will now begin serving requests.
+    dma_enable(USART_DMA_DEV, USART_RX_DMA_TUBE);
 }
 
 /*
@@ -85,6 +132,7 @@ void setup_dma_xfer(void) {
 
 void setup(void) {
     pinMode(BOARD_LED_PIN, OUTPUT);
+    setup_tube_config();
     setup_dma_xfer();
     setup_usart();
 }
@@ -121,7 +169,7 @@ void loop(void) {
     serial->print("[");
     serial->print(millis());
     serial->print("]\tISR bits: 0x");
-    uint8 isr_bits = dma_get_isr_bits(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
+    uint8 isr_bits = dma_get_isr_bits(USART_DMA_DEV, USART_RX_DMA_TUBE);
     serial->print(isr_bits, HEX);
 
     // Print the contents of rx_buf. If you keep typing after it fills
@@ -132,7 +180,7 @@ void loop(void) {
     serial->println("'");
     if (isr_bits == 0x7) {
         serial->println("** Clearing ISR bits.");
-        dma_clear_isr_bits(USART_DMA_DEV, USART_RX_DMA_CHANNEL);
+        dma_clear_isr_bits(USART_DMA_DEV, USART_RX_DMA_TUBE);
     }
 }
 

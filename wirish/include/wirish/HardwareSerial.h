@@ -70,6 +70,10 @@ public:
     /* Pin accessors */
     int txPin(void) { return this->tx_pin; }
     int rxPin(void) { return this->rx_pin; }
+
+    /* Escape hatch into libmaple */
+    /* FIXME [0.0.13] documentation */
+    struct usart_dev* c_dev(void) { return this->usart_device; }
 private:
     struct usart_dev *usart_device;
     uint8 tx_pin;

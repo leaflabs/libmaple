@@ -29,8 +29,8 @@
  * Configuration and state
  */
 
-// USART and DMA configuration. You can change these to suit your
-// purposes.
+// Serial port and DMA configuration. You can change these to suit
+// your purposes.
 HardwareSerial *serial = &Serial2;
 #define USART_DMA_DEV DMA1
 #define USART_RX_DMA_CHANNEL DMA_CH6
@@ -42,8 +42,9 @@ char rx_buf[BUF_SIZE];
 
 // The interrupt handler, rx_dma_irq(), sets this to 1.
 volatile uint32 irq_fired = 0;
-// Used to store the ISR bits inside rx_dma_irq(). This helps explain
-// what's going on inside loop(); see comments below.
+// Used to store DMA interrupt status register (ISR) bits inside
+// rx_dma_irq(). This helps explain what's going on inside loop(); see
+// comments below.
 volatile uint32 isr = 0;
 
 /*
@@ -59,14 +60,14 @@ void rx_dma_irq(void) {
 // Configure the USART receiver for use with DMA:
 // 1. Turn it on.
 // 2. Set the "DMA request on RX" bit in USART_CR3 (USART_CR3_DMAR).
-void init_usart(void) {
+void setup_usart(void) {
     serial->begin(BAUD);
     usart_dev *serial_dev = serial->c_dev();
     serial_dev->regs->CR3 = USART_CR3_DMAR;
 }
 
 // Configure the DMA controller to serve DMA requests from the USART.
-void init_dma_xfer(void) {
+void setup_dma_xfer(void) {
     dma_init(USART_DMA_DEV);
     dma_setup_transfer(USART_DMA_DEV, USART_RX_DMA_CHANNEL,
                        &serial->c_dev()->regs->DR, DMA_SIZE_8BITS,
@@ -84,9 +85,8 @@ void init_dma_xfer(void) {
 
 void setup(void) {
     pinMode(BOARD_LED_PIN, OUTPUT);
-    rx_buf[BUF_SIZE - 1] = '\0'; // null-terminate rx_buf so we can print it
-    init_dma_xfer();
-    init_usart();
+    setup_dma_xfer();
+    setup_usart();
 }
 
 void loop(void) {
@@ -97,18 +97,19 @@ void loop(void) {
     // checked.
     if (irq_fired) {
         serial->println("** IRQ **");
-        // Notice how the ISR bits show transfer complete _and_
-        // half-complete here, but the ISR bits we print next will be
-        // zero. That's because the variable "isr" gets set _inside_
-        // rx_dma_irq(). After it exits, libmaple cleans up by
-        // clearing the ISR bits. (If it didn't, and we forgot to, the
-        // interrupt would repeatedly fire forever.)
+        // Notice how the interrupt status register (ISR) bits show
+        // transfer complete _and_ half-complete here, but the ISR
+        // bits we print next will be zero. That's because the
+        // variable "isr" gets set _inside_ rx_dma_irq(). After it
+        // exits, libmaple cleans up by clearing the tube's ISR
+        // bits. (If it didn't, and we forgot to, the interrupt would
+        // repeatedly fire forever.)
         serial->print("ISR bits: 0x");
         serial->println(isr, HEX);
         irq_fired = 0;
     }
 
-    // Print the ISR (interrupt status register) bits.
+    // Print the ISR bits.
     //
     // Notice that the "transfer half-complete" ISR flag gets set when
     // we reach the rx_buf half-way point. This is true even though we

@@ -184,6 +184,14 @@ public:
      */
     uint8 nssPin(void);
 
+    /* Escape hatch */
+
+    /**
+     * @brief Get a pointer to the underlying libmaple spi_dev for
+     *        this HardwareSPI instance.
+     */
+    spi_dev* c_dev(void) { return this->spi_d; }
+
     /* -- The following methods are deprecated --------------------------- */
 
     /**

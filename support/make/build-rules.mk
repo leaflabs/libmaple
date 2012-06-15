@@ -13,14 +13,14 @@ OPENOCD_WRAPPER  := support/scripts/openocd-wrapper.sh
 
 # Suppress annoying output unless V is set
 ifndef V
-   SILENT_CC       = @echo '  [CC]       ' $(@:$(BUILD_PATH)/%.o=%.c);
-   SILENT_AS       = @echo '  [AS]       ' $(@:$(BUILD_PATH)/%.o=%.S);
-   SILENT_CXX      = @echo '  [CXX]      ' $(@:$(BUILD_PATH)/%.o=%.cpp);
-   SILENT_LD       = @echo '  [LD]       ' $(@F);
+   SILENT_CC       = @echo '  [CC]       ' $(@:$(BUILD_PATH)/%.o=%.c) $(COMMANDSEP)
+   SILENT_AS       = @echo '  [AS]       ' $(@:$(BUILD_PATH)/%.o=%.S) $(COMMANDSEP)
+   SILENT_CXX      = @echo '  [CXX]      ' $(@:$(BUILD_PATH)/%.o=%.cpp) $(COMMANDSEP)
+   SILENT_LD       = @echo '  [LD]       ' $(@F) $(COMMANDSEP)
    SILENT_AR       = @echo '  [AR]       '
-   SILENT_OBJCOPY  = @echo '  [OBJCOPY]  ' $(@F);
-   SILENT_DISAS    = @echo '  [DISAS]    ' $(@:$(BUILD_PATH)/%.bin=%).disas;
-   SILENT_OBJDUMP  = @echo '  [OBJDUMP]  ' $(OBJDUMP);
+   SILENT_OBJCOPY  = @echo '  [OBJCOPY]  ' $(@F) $(COMMANDSEP)
+   SILENT_DISAS    = @echo '  [DISAS]    ' $(@:$(BUILD_PATH)/%.bin=%).disas $(COMMANDSEP)
+   SILENT_OBJDUMP  = @echo '  [OBJDUMP]  ' $(OBJDUMP) $(COMMANDSEP)
 endif
 
 BUILDDIRS :=

@@ -24,6 +24,26 @@ MAKEDIR := $(SUPPORT_PATH)/make
 VENDOR_ID  := 1EAF
 PRODUCT_ID := 0003
 
+# Current Platform (only 'windows' currently does anything special)
+# If you are not on windows, set this to whatever (linux, unicorns, cake etc.)
+PLATFORM := windows
+
+# Decide on a proper rm/delete command
+ifeq ($(PLATFORM), windows)
+	# This assumes you have the code sourcery build tools for windows.
+	# You can get them here: http://static.leaflabs.com/pub/codesourcery/
+	DELETECMD := cs-rm
+else
+	DELETECMD := rm
+endif
+
+# Decide on a proper delimiter for chaining together commands
+ifeq ($(PLATFORM), windows)
+	COMMANDSEP := &&
+else
+	COMMANDSEP := ;
+endif
+
 ##
 ## Target-specific configuration.  This determines some compiler and
 ## linker options/flags.
@@ -41,19 +61,19 @@ include $(MAKEDIR)/target-config.mk
 ## Compilation flags
 ##
 
-GLOBAL_FLAGS    := -D$(VECT_BASE_ADDR)					     \
-		   -DBOARD_$(BOARD) -DMCU_$(MCU)			     \
-		   -DERROR_LED_PORT=$(ERROR_LED_PORT)			     \
-		   -DERROR_LED_PIN=$(ERROR_LED_PIN)			     \
-		   -D$(DENSITY)
-GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
-		   -nostdlib -ffunction-sections -fdata-sections	     \
-		   -Wl,--gc-sections $(GLOBAL_FLAGS)
-GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
-GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
-		   -x assembler-with-cpp $(GLOBAL_FLAGS)
-LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
-            -mcpu=cortex-m3 -mthumb -Xlinker -L $(LD_FAMILY_PATH)    \
+GLOBAL_FLAGS    := 	-D$(VECT_BASE_ADDR)						\
+					-DBOARD_$(BOARD) -DMCU_$(MCU)			\
+					-DERROR_LED_PORT=$(ERROR_LED_PORT)		\
+					-DERROR_LED_PIN=$(ERROR_LED_PIN)		\
+					-D$(DENSITY)
+GLOBAL_CFLAGS   := 	-Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m 	\
+					-nostdlib -ffunction-sections -fdata-sections				\
+					-Wl,--gc-sections $(GLOBAL_FLAGS)
+GLOBAL_CXXFLAGS := 	-fno-rtti -fno-exceptions -Wall $(GLOBAL_FLAGS)
+GLOBAL_ASFLAGS  := 	-mcpu=cortex-m3 -march=armv7-m -mthumb						\
+					-x assembler-with-cpp $(GLOBAL_FLAGS)
+LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    								\
+            -mcpu=cortex-m3 -mthumb -Xlinker -L $(LD_FAMILY_PATH)    			\
             --gc-sections --print-gc-sections --march=armv7-m -Wall
 
 ##
@@ -114,16 +134,16 @@ install: $(BUILD_PATH)/$(BOARD).bin
 PREV_BUILD_TYPE = $(shell cat $(BUILD_PATH)/build-type 2>/dev/null)
 build-check:
 ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))
-	$(shell rm -rf $(BUILD_PATH))
+	$(shell $(DELETECMD) -rf $(BUILD_PATH))
 endif
 
 sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
 
 clean:
-	rm -rf build
+	$(DELETECMD) -rf build
 
 mrproper: clean
-	rm -rf doxygen
+	$(DELETECMD) -rf doxygen
 
 help:
 	@echo ""
@@ -158,7 +178,7 @@ debug:
 	$(OPENOCD_WRAPPER) debug
 
 cscope:
-	rm -rf *.cscope
+	$(DELETECMD) -rf *.cscope
 	find . -name '*.[hcS]' -o -name '*.cpp' | xargs cscope -b
 
 tags:

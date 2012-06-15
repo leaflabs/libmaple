@@ -55,7 +55,7 @@ GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 LDFLAGS  = -T$(LDDIR)/$(LDSCRIPT) -L$(LDDIR)    \
             -mcpu=cortex-m3 -mthumb -Xlinker -L $(LD_FAMILY_PATH)    \
             -Xlinker --gc-sections -Xlinker --print-gc-sections \
-						-Xassembler --march=armv7-m -Wall
+            -Xassembler --march=armv7-m -Wall
 ##
 ## Build rules and useful templates
 ##

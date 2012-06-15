@@ -1,5 +1,5 @@
 # main project target
-$(BUILD_PATH)/main.o: main.cpp
+$(BUILD_PATH)/main.o: $(SRCROOT)/main.cpp
 	$(SILENT_CXX) $(CXX) $(CFLAGS) $(CXXFLAGS) $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -o $@ -c $< 
 
 $(BUILD_PATH)/libmaple.a: $(BUILDDIRS) $(TGT_BIN)

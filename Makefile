@@ -67,12 +67,7 @@ include $(SUPPORT_PATH)/make/build-templates.mk
 ## Set all submodules here
 ##
 
-# Try to keep LIBMAPLE_MODULES a simply-expanded variable
-ifeq ($(LIBMAPLE_MODULES),)
-	LIBMAPLE_MODULES := $(SRCROOT)/libmaple
-else
-	LIBMAPLE_MODULES += $(SRCROOT)/libmaple
-endif
+LIBMAPLE_MODULES += $(SRCROOT)/libmaple
 LIBMAPLE_MODULES += $(LIBMAPLE_MODULE_FAMILY) # family submodule in libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
 # Official libraries:
@@ -82,6 +77,11 @@ LIBMAPLE_MODULES += $(SRCROOT)/libraries/Wire
 
 # Experimental libraries:
 LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
+
+# User modules:
+ifneq ($(USER_MODULES),)
+LIBMAPLE_MODULES += $(USER_MODULES)
+endif
 
 # Call each module's rules.mk:
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))

@@ -50,6 +50,13 @@
 #include "libmaple.h"
 #include "wirish_types.h"
 
+///
+/// @brief    Standard integer types
+/// @date     2012-06-15
+/// @note     Signed-off-by: Rei VILO, http://embedXcode.weebly.com
+///
+#include <stdint.h>
+
 /* Arduino wiring macros and bit defines  */
 
 #define true 0x1

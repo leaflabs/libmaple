@@ -26,7 +26,7 @@ PRODUCT_ID := 0003
 
 # Current Platform (only 'windows' currently does anything special)
 # If you are not on windows, set this to whatever (linux, unicorns, cake etc.)
-PLATFORM := windows
+PLATFORM := nix
 
 # Decide on a proper rm/delete command
 ifeq ($(PLATFORM), windows)

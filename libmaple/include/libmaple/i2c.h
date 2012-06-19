@@ -133,7 +133,7 @@ extern i2c_dev* const I2C2;
 #define I2C_CR2_ITBUFEN         (1U << 10)    // Buffer interrupt enable
 #define I2C_CR2_ITEVTEN         (1U << 9)     // Event interupt enable
 #define I2C_CR2_ITERREN         (1U << 8)     // Error interupt enable
-#define I2C_CR2_FREQ            0xFFF         // Peripheral input frequency
+#define I2C_CR2_FREQ            0x3F          // Peripheral input frequency
 
 /* Clock control register */
 

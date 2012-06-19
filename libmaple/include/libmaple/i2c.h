@@ -158,12 +158,6 @@ extern i2c_dev* const I2C2;
 #define I2C_OAR2_ADD2           0xFE          // Interface address
 #define I2C_OAR2_ENDUAL         1U            // Dual addressing mode enable
 
-/* Clock control register */
-
-#define I2C_CCR_FS              (1U << 15)    // Fast mode selection
-#define I2C_CCR_DUTY            (1U << 14)    // 16/9 duty ratio
-#define I2C_CCR_CCR             0xFFF         // Clock control bits
-
 /* Status register 1 */
 
 #define I2C_SR1_SMBALERT        (1U << 15)    // SMBus alert
@@ -191,6 +185,12 @@ extern i2c_dev* const I2C2;
 #define I2C_SR2_TRA             (1U << 2)     // Transmitter/receiver
 #define I2C_SR2_BUSY            (1U << 1)     // Bus busy
 #define I2C_SR2_MSL             (1U << 0)     // Master/slave
+
+/* Clock control register */
+
+#define I2C_CCR_FS              (1U << 15)    // Fast mode selection
+#define I2C_CCR_DUTY            (1U << 14)    // 16/9 duty ratio
+#define I2C_CCR_CCR             0xFFF         // Clock control bits
 
 /*
  * Convenience routines

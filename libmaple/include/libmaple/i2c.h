@@ -166,31 +166,31 @@ extern i2c_dev* const I2C2;
 
 /* Status register 1 */
 
-#define I2C_SR1_SB              (1U << 0)     // Start bit
-#define I2C_SR1_ADDR            (1U << 1)     // Address sent/matched
-#define I2C_SR1_BTF             (1U << 2)     // Byte transfer finished
-#define I2C_SR1_ADD10           (1U << 3)     // 10-bit header sent
-#define I2C_SR1_STOPF           (1U << 4)     // Stop detection
-#define I2C_SR1_RXNE            (1U << 6)     // Data register not empty
-#define I2C_SR1_TXE             (1U << 7)     // Data register empty
-#define I2C_SR1_BERR            (1U << 8)     // Bus error
-#define I2C_SR1_ARLO            (1U << 9)     // Arbitration lost
-#define I2C_SR1_AF              (1U << 10)    // Acknowledge failure
-#define I2C_SR1_OVR             (1U << 11)    // Overrun/underrun
-#define I2C_SR1_PECERR          (1U << 12)    // PEC Error in reception
-#define I2C_SR1_TIMEOUT         (1U << 14)    // Timeout or Tlow error
 #define I2C_SR1_SMBALERT        (1U << 15)    // SMBus alert
+#define I2C_SR1_TIMEOUT         (1U << 14)    // Timeout or Tlow error
+#define I2C_SR1_PECERR          (1U << 12)    // PEC Error in reception
+#define I2C_SR1_OVR             (1U << 11)    // Overrun/underrun
+#define I2C_SR1_AF              (1U << 10)    // Acknowledge failure
+#define I2C_SR1_ARLO            (1U << 9)     // Arbitration lost
+#define I2C_SR1_BERR            (1U << 8)     // Bus error
+#define I2C_SR1_TXE             (1U << 7)     // Data register empty
+#define I2C_SR1_RXNE            (1U << 6)     // Data register not empty
+#define I2C_SR1_STOPF           (1U << 4)     // Stop detection
+#define I2C_SR1_ADD10           (1U << 3)     // 10-bit header sent
+#define I2C_SR1_BTF             (1U << 2)     // Byte transfer finished
+#define I2C_SR1_ADDR            (1U << 1)     // Address sent/matched
+#define I2C_SR1_SB              (1U << 0)     // Start bit
 
 /* Status register 2 */
 
-#define I2C_SR2_MSL             (1U << 0)     // Master/slave
-#define I2C_SR2_BUSY            (1U << 1)     // Bus busy
-#define I2C_SR2_TRA             (1U << 2)     // Transmitter/receiver
-#define I2C_SR2_GENCALL         (1U << 4)     // General call address
-#define I2C_SR2_SMBDEFAULT      (1U << 5)     // SMBus device default address
-#define I2C_SR2_SMBHOST         (1U << 6)     // SMBus host header
-#define I2C_SR2_DUALF           (1U << 7)     // Dual flag
 #define I2C_SR2_PEC             0xFF00        // Packet error checking register
+#define I2C_SR2_DUALF           (1U << 7)     // Dual flag
+#define I2C_SR2_SMBHOST         (1U << 6)     // SMBus host header
+#define I2C_SR2_SMBDEFAULT      (1U << 5)     // SMBus device default address
+#define I2C_SR2_GENCALL         (1U << 4)     // General call address
+#define I2C_SR2_TRA             (1U << 2)     // Transmitter/receiver
+#define I2C_SR2_BUSY            (1U << 1)     // Bus busy
+#define I2C_SR2_MSL             (1U << 0)     // Master/slave
 
 /*
  * Convenience routines

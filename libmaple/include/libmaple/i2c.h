@@ -122,8 +122,8 @@ extern i2c_dev* const I2C2;
 #define I2C_CR1_PEC             (1U << 12)    // Packet error checking
 #define I2C_CR1_POS             (1U << 11)    // Acknowledge/PEC position
 #define I2C_CR1_ACK             (1U << 10)    // Acknowledge enable
-#define I2C_CR1_START           (1U << 8)     // Start generation
 #define I2C_CR1_STOP            (1U << 9)     // Stop generation
+#define I2C_CR1_START           (1U << 8)     // Start generation
 #define I2C_CR1_PE              (1U << 0)     // Peripheral Enable
 
 /* Control register 2 */

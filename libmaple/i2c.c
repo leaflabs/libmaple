@@ -488,7 +488,6 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     dev->state = I2C_STATE_IDLE;
 }
 
-
 /**
  * @brief Process an i2c transaction.
  *
@@ -530,7 +529,6 @@ int32 i2c_master_xfer(i2c_dev *dev,
 out:
     return rc;
 }
-
 
 /**
  * @brief Wait for an I2C event, or time out in case of error.

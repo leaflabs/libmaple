@@ -125,6 +125,16 @@ extern i2c_dev* const I2C2;
 #define I2C_CR1_ACK             (1U << 10)    // Acknowledge enable
 #define I2C_CR1_STOP            (1U << 9)     // Stop generation
 #define I2C_CR1_START           (1U << 8)     // Start generation
+#define I2C_CR1_NOSTRETCH       (1U << 7)     // Clock stretching disable
+#define I2C_CR1_ENGC            (1U << 6)     // General call enable
+#define I2C_CR1_ENPEC           (1U << 5)     // PEC enable
+#define I2C_CR1_ENARP           (1U << 4)     // ARP enable
+#define I2C_CR1_SMBTYPE         (1U << 3)     // SMBus type
+#define I2C_CR1_SMBTYPE_DEVICE  (0U << 3)     //     SMBus type: device
+#define I2C_CR1_SMBTYPE_HOST    (1U << 3)     //     SMBus type: host
+#define I2C_CR1_SMBUS           (1U << 1)     // SMBus mode
+#define I2C_CR1_SMBUS_I2C       (0U << 1)     //     SMBus mode: I2C
+#define I2C_CR1_SMBUS_SMBUS     (1U << 1)     //     SMBus mode: SMBus
 #define I2C_CR1_PE              (1U << 0)     // Peripheral Enable
 
 /* Control register 2 */
@@ -135,6 +145,18 @@ extern i2c_dev* const I2C2;
 #define I2C_CR2_ITEVTEN         (1U << 9)     // Event interupt enable
 #define I2C_CR2_ITERREN         (1U << 8)     // Error interupt enable
 #define I2C_CR2_FREQ            0x3F          // Peripheral input frequency
+
+/* Own address register 1 */
+
+#define I2C_OAR1_ADDMODE        (1U << 15)    // Addressing mode
+#define I2C_OAR1_ADDMODE_7_BIT  (0U << 15)    //     Addressing mode: 7-bit
+#define I2C_OAR1_ADDMODE_10_BIT (1U << 15)    //     Addressing mode: 10-bit
+#define I2C_OAR1_ADD            0x3FF         // Interface address
+
+/* Own address register 2 */
+
+#define I2C_OAR2_ADD2           0xFE          // Interface address
+#define I2C_OAR2_ENDUAL         1U            // Dual addressing mode enable
 
 /* Clock control register */
 

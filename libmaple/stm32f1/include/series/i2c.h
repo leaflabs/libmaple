@@ -33,6 +33,8 @@
 #ifndef _LIBMAPLE_STM32F1_I2C_H_
 #define _LIBMAPLE_STM32F1_I2C_H_
 
+#include <libmaple/i2c_common.h>
+
 /*
  * Register maps
  */
@@ -48,9 +50,7 @@ struct i2c_reg_map;
  * Devices
  */
 
-struct i2c_dev;
-
-extern struct i2c_dev* const I2C1;
-extern struct i2c_dev* const I2C2;
+extern i2c_dev* const I2C1;
+extern i2c_dev* const I2C2;
 
 #endif  /* _LIBMAPLE_STM32F1_I2C_H_ */

@@ -193,7 +193,7 @@ void _i2c_irq_handler(i2c_dev *dev) {
             /*
              * This should be impossible...
              */
-            throb();
+            ASSERT(0);
         }
         sr1 = sr2 = 0;
     }

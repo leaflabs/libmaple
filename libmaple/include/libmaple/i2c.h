@@ -259,7 +259,6 @@ static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
     dev->regs->CCR = ccr;
 }
 
-
 /**
  * @brief Set SCL rise time
  * @param dev I2C device
@@ -270,6 +269,7 @@ static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
 }
 
+/* Start/stop conditions */
 
 /**
  * @brief Generate a start condition on the bus.
@@ -305,6 +305,8 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
 
 }
 
+/* IRQ enable/disable */
+
 /**
  * @brief Enable one or more I2C interrupts
  * @param dev I2C device
@@ -332,6 +334,7 @@ static inline void i2c_disable_irq(i2c_dev *dev, uint32 irqs) {
     dev->regs->CR2 &= ~irqs;
 }
 
+/* ACK/NACK */
 
 /**
  * @brief Enable I2C acknowledgment

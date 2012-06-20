@@ -20,6 +20,7 @@ cSRCS_$(d) += dma.c
 cSRCS_$(d) += exti.c
 cSRCS_$(d) += fsmc.c
 cSRCS_$(d) += gpio.c
+cSRCS_$(d) += i2c.c
 cSRCS_$(d) += rcc.c
 cSRCS_$(d) += spi.c
 cSRCS_$(d) += timer.c

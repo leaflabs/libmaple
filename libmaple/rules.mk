@@ -27,10 +27,11 @@ cSRCS_$(d) += timer.c
 cSRCS_$(d) += usart.c
 cSRCS_$(d) += usart_private.c
 cSRCS_$(d) += util.c
-# These still need to be brought back for F1:
-# cSRCS_$(d) += i2c.c
-
 sSRCS_$(d) := exc.S
+# I2C support must be ported to F2:
+ifeq ($(MCU_SERIES),stm32f1)
+cSRCS_$(d) += i2c.c
+endif
 
 cFILES_$(d) := $(cSRCS_$(d):%=$(d)/%)
 sFILES_$(d) := $(sSRCS_$(d):%=$(d)/%)

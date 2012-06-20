@@ -37,6 +37,7 @@
 extern "C" {
 #endif
 
+#include <series/i2c.h>
 #include <libmaple/libmaple_types.h>
 #include <libmaple/rcc.h>
 #include <libmaple/nvic.h>
@@ -95,22 +96,6 @@ typedef struct i2c_dev {
     nvic_irq_num er_nvic_line;  /**< Error IRQ number */
     volatile i2c_state state;   /**< Device state */
 } i2c_dev;
-
-/*
- * Devices
- */
-
-extern i2c_dev* const I2C1;
-extern i2c_dev* const I2C2;
-
-/*
- * Register map base pointers
- */
-
-/** I2C1 register map base pointer */
-#define I2C1_BASE               ((struct i2c_reg_map*)0x40005400)
-/** I2C2 register map base pointer */
-#define I2C2_BASE               ((struct i2c_reg_map*)0x40005800)
 
 /*
  * Register bit definitions

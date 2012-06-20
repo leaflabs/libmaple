@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -39,32 +40,6 @@
 #include <libmaple/systick.h>
 
 #include <string.h>
-
-static i2c_dev i2c_dev1 = {
-    .regs         = I2C1_BASE,
-    .gpio_port    = &gpiob,
-    .sda_pin      = 7,
-    .scl_pin      = 6,
-    .clk_id       = RCC_I2C1,
-    .ev_nvic_line = NVIC_I2C1_EV,
-    .er_nvic_line = NVIC_I2C1_ER,
-    .state        = I2C_STATE_DISABLED
-};
-/** I2C1 device */
-i2c_dev* const I2C1 = &i2c_dev1;
-
-static i2c_dev i2c_dev2 = {
-    .regs         = I2C2_BASE,
-    .gpio_port    = &gpiob,
-    .sda_pin      = 11,
-    .scl_pin      = 10,
-    .clk_id       = RCC_I2C2,
-    .ev_nvic_line = NVIC_I2C2_EV,
-    .er_nvic_line = NVIC_I2C2_ER,
-    .state        = I2C_STATE_DISABLED
-};
-/** I2C2 device */
-i2c_dev* const I2C2 = &i2c_dev2;
 
 static inline int32 wait_for_state_change(i2c_dev *dev,
                                           i2c_state state,
@@ -129,7 +104,7 @@ enum {
  * @brief IRQ handler for I2C master. Handles transmission/reception.
  * @param dev I2C device
  */
-static void i2c_irq_handler(i2c_dev *dev) {
+void _i2c_irq_handler(i2c_dev *dev) {
     i2c_msg *msg = dev->msg;
 
     uint8 read = msg->flags & I2C_MSG_READ;
@@ -289,20 +264,12 @@ static void i2c_irq_handler(i2c_dev *dev) {
     }
 }
 
-void __irq_i2c1_ev(void) {
-   i2c_irq_handler(&i2c_dev1);
-}
-
-void __irq_i2c2_ev(void) {
-   i2c_irq_handler(&i2c_dev2);
-}
-
 /**
  * @brief Interrupt handler for I2C error conditions
  * @param dev I2C device
  * @sideeffect Aborts any pending I2C transactions
  */
-static void i2c_irq_error_handler(i2c_dev *dev) {
+void _i2c_irq_error_handler(i2c_dev *dev) {
     I2C_CRUMB(ERROR_ENTRY, dev->regs->SR1, dev->regs->SR2);
 
     dev->error_flags = dev->regs->SR2 & (I2C_SR1_BERR |
@@ -316,14 +283,6 @@ static void i2c_irq_error_handler(i2c_dev *dev) {
     i2c_stop_condition(dev);
     i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
     dev->state = I2C_STATE_ERROR;
-}
-
-void __irq_i2c1_er(void) {
-    i2c_irq_error_handler(&i2c_dev1);
-}
-
-void __irq_i2c2_er(void) {
-    i2c_irq_error_handler(&i2c_dev2);
 }
 
 /**

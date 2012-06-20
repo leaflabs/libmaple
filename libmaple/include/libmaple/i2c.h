@@ -28,6 +28,13 @@
 /**
  * @file libmaple/include/libmaple/i2c.h
  * @brief Inter-Integrated Circuit (I2C) peripheral support
+ *
+ * Currently master-only. Usage notes:
+ *
+ * - Enable an I2C device with i2c_master_enable().
+ * - Initialize an array of struct i2c_msg to suit the bus
+ *   transactions (reads/writes) you wish to perform.
+ * - Call i2c_master_xfer() to do the work.
  */
 
 #ifndef _LIBMAPLE_I2C_H_
@@ -72,10 +79,15 @@ typedef struct i2c_reg_map {
  */
 typedef struct i2c_msg {
     uint16 addr;                /**< Address */
+
 #define I2C_MSG_READ            0x1
 #define I2C_MSG_10BIT_ADDR      0x2
-    uint16 flags;               /**< Bitwise OR of I2C_MSG_READ and
-                                     I2C_MSG_10BIT_ADDR */
+    /**
+     * Bitwise OR of:
+     * - I2C_MSG_READ (write is default)
+     * - I2C_MSG_10BIT_ADDR (7-bit is default) */
+    uint16 flags;
+
     uint16 length;              /**< Message length */
     uint16 xferred;             /**< Messages transferred */
     uint8 *data;                /**< Data */
@@ -164,6 +176,8 @@ typedef struct i2c_msg {
 /*
  * Convenience routines
  */
+
+/* Main I2C API */
 
 /* I2C enable options */
 #define I2C_FAST_MODE           0x1           // 400 khz

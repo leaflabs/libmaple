@@ -105,6 +105,9 @@ enum {
  * @param dev I2C device
  */
 void _i2c_irq_handler(i2c_dev *dev) {
+    /* WTFs:
+     * - Where is I2C_MSG_10BIT_ADDR handled?
+     */
     i2c_msg *msg = dev->msg;
 
     uint8 read = msg->flags & I2C_MSG_READ;

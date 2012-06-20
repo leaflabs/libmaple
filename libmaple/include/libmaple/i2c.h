@@ -237,7 +237,10 @@ static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
 }
 
 /**
- * @brief Set I2C clock control register. See RM008
+ * @brief Set I2C clock control register.
+ *
+ * See the chip reference manual for the details.
+ *
  * @param dev I2C device
  * @param val Value to use for clock control register (in
  *            Fast/Standard mode)
@@ -252,8 +255,8 @@ static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
 /**
  * @brief Set SCL rise time
  * @param dev I2C device
- * @param trise Maximum rise time in fast/standard mode (see RM0008
- *              for relevant formula).
+ * @param trise Maximum rise time in fast/standard mode (see chip
+ *              reference manual for the relevant formulas).
  */
 static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;

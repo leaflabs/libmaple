@@ -34,6 +34,7 @@
 #define _LIBMAPLE_STM32F1_I2C_H_
 
 #include <libmaple/i2c_common.h>
+#include <libmaple/stm32.h>
 
 /*
  * Register maps
@@ -52,5 +53,14 @@ struct i2c_reg_map;
 
 extern i2c_dev* const I2C1;
 extern i2c_dev* const I2C2;
+
+/*
+ * For internal use
+ */
+
+static inline uint32 _i2c_bus_clk(i2c_dev *dev) {
+    /* Both I2C peripherals are on APB1 */
+    return STM32_PCLK1 / (1000 * 1000);
+}
 
 #endif  /* _LIBMAPLE_STM32F1_I2C_H_ */

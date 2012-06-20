@@ -37,6 +37,15 @@
 extern "C" {
 #endif
 
+/*
+ * Series header must provide:
+ *
+ * - uint32 _i2c_bus_clk(i2c_dev*): Clock frequency of dev's bus, in
+ *   MHz. (This is for internal use only).
+ *
+ * - Reg. map base pointers, device pointer declarations.
+ */
+
 #include <series/i2c.h>
 #include <libmaple/i2c_common.h>
 
@@ -212,13 +221,19 @@ static inline void i2c_write(i2c_dev *dev, uint8 byte) {
 /**
  * @brief Set input clock frequency, in MHz
  * @param dev I2C device
- * @param freq Frequency in megahertz (2-36)
+ * @param freq Frequency, in MHz. This must be at least 2, and at most
+ *             the APB frequency of dev's bus. (For example, if
+ *             rcc_dev_clk(dev) == RCC_APB1, freq must be at most
+ *             PCLK1, in MHz). There is an additional limit of 46 MHz.
  */
 static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
+#define I2C_MAX_FREQ_MHZ 46
+    ASSERT(2 <= freq && freq <= _i2c_bus_clk(dev) && freq <= I2C_MAX_FREQ_MHZ);
     uint32 cr2 = dev->regs->CR2;
     cr2 &= ~I2C_CR2_FREQ;
     cr2 |= freq;
     dev->regs->CR2 = freq;
+#undef I2C_MAX_FREQ_MHZ
 }
 
 /**

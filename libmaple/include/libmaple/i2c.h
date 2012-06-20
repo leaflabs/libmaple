@@ -165,8 +165,6 @@ typedef struct i2c_msg {
  * Convenience routines
  */
 
-void i2c_init(i2c_dev *dev);
-
 /* I2C enable options */
 #define I2C_FAST_MODE           0x1           // 400 khz
 #define I2C_DUTY_16_9           0x2           // 16/9 duty ratio
@@ -191,75 +189,6 @@ void i2c_bus_reset(const i2c_dev *dev);
 static inline void i2c_disable(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_PE;
     dev->state = I2C_STATE_DISABLED;
-}
-
-/**
- * @brief Turn on an I2C peripheral
- * @param dev Device to enable
- */
-static inline void i2c_peripheral_enable(i2c_dev *dev) {
-    dev->regs->CR1 |= I2C_CR1_PE;
-}
-
-/**
- * @brief Turn off an I2C peripheral
- * @param dev Device to turn off
- */
-static inline void i2c_peripheral_disable(i2c_dev *dev) {
-    dev->regs->CR1 &= ~I2C_CR1_PE;
-}
-
-/**
- * @brief Fill transmit register
- * @param dev I2C device
- * @param byte Byte to write
- */
-static inline void i2c_write(i2c_dev *dev, uint8 byte) {
-    dev->regs->DR = byte;
-}
-
-/**
- * @brief Set input clock frequency, in MHz
- * @param dev I2C device
- * @param freq Frequency, in MHz. This must be at least 2, and at most
- *             the APB frequency of dev's bus. (For example, if
- *             rcc_dev_clk(dev) == RCC_APB1, freq must be at most
- *             PCLK1, in MHz). There is an additional limit of 46 MHz.
- */
-static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
-#define I2C_MAX_FREQ_MHZ 46
-    ASSERT(2 <= freq && freq <= _i2c_bus_clk(dev) && freq <= I2C_MAX_FREQ_MHZ);
-    uint32 cr2 = dev->regs->CR2;
-    cr2 &= ~I2C_CR2_FREQ;
-    cr2 |= freq;
-    dev->regs->CR2 = freq;
-#undef I2C_MAX_FREQ_MHZ
-}
-
-/**
- * @brief Set I2C clock control register.
- *
- * See the chip reference manual for the details.
- *
- * @param dev I2C device
- * @param val Value to use for clock control register (in
- *            Fast/Standard mode)
- */
-static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
-    uint32 ccr = dev->regs->CCR;
-    ccr &= ~I2C_CCR_CCR;
-    ccr |= val;
-    dev->regs->CCR = ccr;
-}
-
-/**
- * @brief Set SCL rise time
- * @param dev I2C device
- * @param trise Maximum rise time in fast/standard mode (see chip
- *              reference manual for the relevant formulas).
- */
-static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
-    dev->regs->TRISE = trise;
 }
 
 /* Start/stop conditions */
@@ -343,6 +272,79 @@ static inline void i2c_enable_ack(i2c_dev *dev) {
  */
 static inline void i2c_disable_ack(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_ACK;
+}
+
+/* Miscellaneous low-level routines */
+
+void i2c_init(i2c_dev *dev);
+
+/**
+ * @brief Turn on an I2C peripheral
+ * @param dev Device to enable
+ */
+static inline void i2c_peripheral_enable(i2c_dev *dev) {
+    dev->regs->CR1 |= I2C_CR1_PE;
+}
+
+/**
+ * @brief Turn off an I2C peripheral
+ * @param dev Device to turn off
+ */
+static inline void i2c_peripheral_disable(i2c_dev *dev) {
+    dev->regs->CR1 &= ~I2C_CR1_PE;
+}
+
+/**
+ * @brief Fill transmit register
+ * @param dev I2C device
+ * @param byte Byte to write
+ */
+static inline void i2c_write(i2c_dev *dev, uint8 byte) {
+    dev->regs->DR = byte;
+}
+
+/**
+ * @brief Set input clock frequency, in MHz
+ * @param dev I2C device
+ * @param freq Frequency, in MHz. This must be at least 2, and at most
+ *             the APB frequency of dev's bus. (For example, if
+ *             rcc_dev_clk(dev) == RCC_APB1, freq must be at most
+ *             PCLK1, in MHz). There is an additional limit of 46 MHz.
+ */
+static inline void i2c_set_input_clk(i2c_dev *dev, uint32 freq) {
+#define I2C_MAX_FREQ_MHZ 46
+    ASSERT(2 <= freq && freq <= _i2c_bus_clk(dev) && freq <= I2C_MAX_FREQ_MHZ);
+    uint32 cr2 = dev->regs->CR2;
+    cr2 &= ~I2C_CR2_FREQ;
+    cr2 |= freq;
+    dev->regs->CR2 = freq;
+#undef I2C_MAX_FREQ_MHZ
+}
+
+/**
+ * @brief Set I2C clock control register.
+ *
+ * See the chip reference manual for the details.
+ *
+ * @param dev I2C device
+ * @param val Value to use for clock control register (in
+ *            Fast/Standard mode)
+ */
+static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
+    uint32 ccr = dev->regs->CCR;
+    ccr &= ~I2C_CCR_CCR;
+    ccr |= val;
+    dev->regs->CCR = ccr;
+}
+
+/**
+ * @brief Set SCL rise time
+ * @param dev I2C device
+ * @param trise Maximum rise time in fast/standard mode (see chip
+ *              reference manual for the relevant formulas).
+ */
+static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
+    dev->regs->TRISE = trise;
 }
 
 #ifdef __cplusplus

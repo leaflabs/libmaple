@@ -27,6 +27,7 @@
 
 /**
  * @file libmaple/i2c.c
+ * @author Perry Hung <perry@leaflabs.com>
  * @brief Inter-Integrated Circuit (I2C) support.
  *
  * Currently, only master mode is supported.

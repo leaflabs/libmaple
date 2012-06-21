@@ -243,6 +243,9 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
 
 /* IRQ enable/disable */
 
+#define I2C_IRQ_ERROR              I2C_CR2_ITERREN
+#define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
+#define I2C_IRQ_BUFFER             I2C_CR2_ITBUFEN
 /**
  * @brief Enable one or more I2C interrupts
  * @param dev I2C device
@@ -251,9 +254,6 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
  *             I2C_IRQ_EVENT (event interrupt), and
  *             I2C_IRQ_BUFFER (buffer interrupt).
  */
-#define I2C_IRQ_ERROR              I2C_CR2_ITERREN
-#define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
-#define I2C_IRQ_BUFFER             I2C_CR2_ITBUFEN
 static inline void i2c_enable_irq(i2c_dev *dev, uint32 irqs) {
     dev->regs->CR2 |= irqs;
 }

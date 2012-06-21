@@ -27,10 +27,15 @@
 #ifndef _LIBMAPLE_I2C_PRIVATE_H_
 #define _LIBMAPLE_I2C_PRIVATE_H_
 
-#define I2C_DEV(num, port, sda, scl)              \
+#include <libmaple/i2c_common.h>
+
+/* For old-style definitions (SDA/SCL on same GPIO device) */
+#define I2C_DEV_OLD(num, port, sda, scl)          \
     {                                             \
         .regs         = I2C##num##_BASE,          \
         .gpio_port    = port,                     \
+        .scl_port     = NULL,                     \
+        .sda_port     = NULL,                     \
         .sda_pin      = sda,                      \
         .scl_pin      = scl,                      \
         .clk_id       = RCC_I2C##num,             \
@@ -39,9 +44,33 @@
         .state        = I2C_STATE_DISABLED,       \
     }
 
-struct i2c_dev;
-void _i2c_irq_handler(struct i2c_dev *dev);
-void _i2c_irq_error_handler(struct i2c_dev *dev);
+/* For new-style definitions (SDA/SCL may be on different GPIO devices) */
+#define I2C_DEV_NEW(num, sdaport, sdabit, sclport, sclbit)          \
+    {                                                               \
+        .regs         = I2C##num##_BASE,                            \
+        .gpio_port    = NULL,                                       \
+        .scl_port     = sclport,                                    \
+        .scl_pin      = sclbit,                                     \
+        .sda_port     = sdaport,                                    \
+        .sda_pin      = sdabit,                                     \
+        .clk_id       = RCC_I2C##num,                               \
+        .ev_nvic_line = NVIC_I2C##num##_EV,                         \
+        .er_nvic_line = NVIC_I2C##num##_ER,                         \
+        .state        = I2C_STATE_DISABLED,                         \
+    }
+
+void _i2c_irq_handler(i2c_dev *dev);
+void _i2c_irq_error_handler(i2c_dev *dev);
+
+struct gpio_dev;
+
+static inline struct gpio_dev* scl_port(const i2c_dev *dev) {
+    return (dev->gpio_port == NULL) ? dev->scl_port : dev->gpio_port;
+}
+
+static inline struct gpio_dev* sda_port(const i2c_dev *dev) {
+    return (dev->gpio_port == NULL) ? dev->sda_port : dev->gpio_port;
+}
 
 /* Auxiliary procedure for enabling an I2C peripheral; `flags' as for
  * i2c_master_enable(). */

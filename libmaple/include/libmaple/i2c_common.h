@@ -65,7 +65,24 @@ typedef struct i2c_dev {
     struct i2c_msg *msg;        /**< Messages */
     uint32 error_flags;         /**< Error flags, set on I2C error condition */
     volatile uint32 timestamp;  /**< For internal use */
-    struct gpio_dev *gpio_port; /**< SDA, SCL pins' GPIO port */
+
+    /**
+     * @brief Deprecated. Use .scl_port or .sda_port instead.
+     * If non-null, this will be used as SDA, SCL pins' GPIO port. If
+     * null, then .sda_port will be used for SDA, and .sda_port for
+     * SDA. */
+    struct gpio_dev *gpio_port;
+
+    /**
+     * @brief SDA GPIO device (but see .gpio_port).
+     */
+    struct gpio_dev *sda_port;
+
+    /**
+     * @brief SCL GPIO device (but see .gpio_port).
+     */
+    struct gpio_dev *scl_port;
+
     uint16 msgs_left;           /**< Messages left */
     uint8 sda_pin;              /**< SDA bit on gpio_port */
     uint8 scl_pin;              /**< SCL bit on gpio_port */

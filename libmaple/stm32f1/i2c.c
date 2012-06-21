@@ -44,6 +44,10 @@ i2c_dev* const I2C2 = &i2c2;
  */
 
 void i2c_config_gpios(const i2c_dev *dev) {
+    if ((dev->clk_id == RCC_I2C1) &&
+        (dev->sda_pin == 9) && (dev->scl_pin == 8)) {
+        afio_remap(AFIO_REMAP_I2C1);
+    }
     gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_AF_OUTPUT_OD);
     gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_AF_OUTPUT_OD);
 }

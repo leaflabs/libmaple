@@ -193,7 +193,7 @@ typedef struct i2c_msg {
 /* I2C enable options */
 #define I2C_FAST_MODE           0x1           // 400 khz
 #define I2C_DUTY_16_9           0x2           // 16/9 duty ratio
-#define I2C_REMAP               0x4           // Use alternate pin mapping
+/* Flag 0x4 is reserved; DO NOT USE. */
 #define I2C_BUS_RESET           0x8           // Perform a bus reset
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 

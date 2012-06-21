@@ -153,6 +153,11 @@ void i2c_init(i2c_dev *dev) {
     rcc_clk_enable(dev->clk_id);
 }
 
+/* Hack for deprecated bit of STM32F1 functionality */
+#ifndef _I2C_HAVE_DEPRECATED_I2C_REMAP
+#define _i2c_handle_remap(dev, flags) ((void)0)
+#endif
+
 /**
  * @brief Initialize an I2C device as bus master
  * @param dev Device to enable
@@ -163,7 +168,8 @@ void i2c_init(i2c_dev *dev) {
  *              I2C_BUS_RESET: Reset the bus and clock out any hung slaves on
  *                             initialization,
  *              I2C_10BIT_ADDRESSING: Enable 10-bit addressing,
- *              I2C_REMAP: Remap I2C1 to SCL/PB8 SDA/PB9.
+ *              I2C_REMAP: (deprecated, STM32F1 only) Remap I2C1 to SCL/PB8
+ *                         SDA/PB9.
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 #define I2C_CLK                (STM32_PCLK1/1000000)
@@ -173,11 +179,8 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     /* PE must be disabled to configure the device */
     ASSERT(!(dev->regs->CR1 & I2C_CR1_PE));
 
-    if ((dev == I2C1) && (flags & I2C_REMAP)) {
-        afio_remap(AFIO_REMAP_I2C1);
-        I2C1->sda_pin = 9;
-        I2C1->scl_pin = 8;
-    }
+    /* Ugh */
+    _i2c_handle_remap(dev, flags);
 
     /* Reset the bus. Clock out any hung slaves. */
     if (flags & I2C_BUS_RESET) {

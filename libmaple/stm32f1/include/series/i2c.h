@@ -34,6 +34,7 @@
 #define _LIBMAPLE_STM32F1_I2C_H_
 
 #include <libmaple/i2c_common.h>
+#include <libmaple/gpio.h>
 #include <libmaple/stm32.h>
 
 /*
@@ -65,5 +66,20 @@ static inline uint32 _i2c_bus_clk(i2c_dev *dev) {
 
 #define _I2C_HAVE_IRQ_FIXUP 1
 void _i2c_irq_priority_fixup(i2c_dev *dev);
+
+/*
+ * Deprecated functionality
+ */
+
+/* Flag to use alternate pin mapping in i2c_master_enable(). */
+#define _I2C_HAVE_DEPRECATED_I2C_REMAP 1
+#define I2C_REMAP 0x4
+static inline void _i2c_handle_remap(i2c_dev *dev, uint32 flags) {
+    if ((dev == I2C1) && (flags & I2C_REMAP)) {
+        afio_remap(AFIO_REMAP_I2C1);
+        I2C1->sda_pin = 9;
+        I2C1->scl_pin = 8;
+    }
+}
 
 #endif  /* _LIBMAPLE_STM32F1_I2C_H_ */

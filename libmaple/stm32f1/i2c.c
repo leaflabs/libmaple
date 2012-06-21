@@ -24,6 +24,11 @@
  * SOFTWARE.
  *****************************************************************************/
 
+/**
+ * @file libmaple/stm32f1/i2c.c
+ * @brief STM32F1 I2C support
+ */
+
 #include "i2c_private.h"
 #include <libmaple/i2c.h>
 

@@ -299,10 +299,7 @@ void _i2c_irq_error_handler(i2c_dev *dev) {
  */
 void i2c_bus_reset(const i2c_dev *dev) {
     /* Release both lines */
-    gpio_write_bit(dev->gpio_port, dev->scl_pin, 1);
-    gpio_write_bit(dev->gpio_port, dev->sda_pin, 1);
-    gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_OUTPUT_OD);
-    gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_OUTPUT_OD);
+    i2c_master_release_bus(dev);
 
     /*
      * Make sure the bus is free by clocking it until any slaves release the
@@ -376,8 +373,7 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
 
     /* Turn on clock and set GPIO modes */
     i2c_init(dev);
-    gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_AF_OUTPUT_OD);
-    gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_AF_OUTPUT_OD);
+    i2c_config_gpios(dev);
 
     /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
     i2c_set_input_clk(dev, I2C_CLK);

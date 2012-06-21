@@ -288,6 +288,31 @@ static inline void i2c_disable_ack(i2c_dev *dev) {
     dev->regs->CR1 &= ~I2C_CR1_ACK;
 }
 
+/* GPIO control */
+
+/**
+ * @brief Configure device GPIOs.
+ *
+ * Configure GPIO bits dev->sda_pin and dev->scl_pin on GPIO device
+ * dev->gpio_port for use with I2C device dev.
+ *
+ * @param dev I2C Device
+ * @see i2c_release_gpios()
+ */
+extern void i2c_config_gpios(const i2c_dev *dev);
+
+/**
+ * @brief Release GPIOs controlling an I2C bus
+ *
+ * Releases the I2C bus controlled by dev as master, and disconnects
+ * GPIO bits dev->sda_pin and dev->scl_pin on GPIO device
+ * dev->gpio_port from I2C device dev.
+ *
+ * @param dev I2C device
+ * @see i2c_config_gpios()
+ */
+extern void i2c_master_release_bus(const i2c_dev *dev);
+
 /* Miscellaneous low-level routines */
 
 void i2c_init(i2c_dev *dev);

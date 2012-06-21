@@ -40,6 +40,22 @@ i2c_dev* const I2C1 = &i2c1;
 i2c_dev* const I2C2 = &i2c2;
 
 /*
+ * Routines
+ */
+
+void i2c_config_gpios(const i2c_dev *dev) {
+    gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_AF_OUTPUT_OD);
+    gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_AF_OUTPUT_OD);
+}
+
+void i2c_master_release_bus(const i2c_dev *dev) {
+    gpio_write_bit(dev->gpio_port, dev->scl_pin, 1);
+    gpio_write_bit(dev->gpio_port, dev->sda_pin, 1);
+    gpio_set_mode(dev->gpio_port, dev->scl_pin, GPIO_OUTPUT_OD);
+    gpio_set_mode(dev->gpio_port, dev->sda_pin, GPIO_OUTPUT_OD);
+}
+
+/*
  * IRQ handlers
  */
 

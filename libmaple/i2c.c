@@ -33,6 +33,8 @@
  * Currently, only master mode is supported.
  */
 
+#include "i2c_private.h"
+
 #include <libmaple/libmaple.h>
 #include <libmaple/rcc.h>
 #include <libmaple/gpio.h>
@@ -172,10 +174,6 @@ void i2c_init(i2c_dev *dev) {
  *                         SDA/PB9.
  */
 void i2c_master_enable(i2c_dev *dev, uint32 flags) {
-#define I2C_CLK                (STM32_PCLK1/1000000)
-    uint32 ccr   = 0;
-    uint32 trise = 0;
-
     /* PE must be disabled to configure the device */
     ASSERT(!(dev->regs->CR1 & I2C_CR1_PE));
 
@@ -191,35 +189,8 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     i2c_init(dev);
     i2c_config_gpios(dev);
 
-    /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
-    i2c_set_input_clk(dev, I2C_CLK);
-
-    if (flags & I2C_FAST_MODE) {
-        ccr |= I2C_CCR_FS;
-
-        if (flags & I2C_DUTY_16_9) {
-            /* Tlow/Thigh = 16/9 */
-            ccr |= I2C_CCR_DUTY;
-            ccr |= STM32_PCLK1/(400000 * 25);
-        } else {
-            /* Tlow/Thigh = 2 */
-            ccr |= STM32_PCLK1/(400000 * 3);
-        }
-
-        trise = (300 * (I2C_CLK)/1000) + 1;
-    } else {
-        /* Tlow/Thigh = 1 */
-        ccr = STM32_PCLK1/(100000 * 2);
-        trise = I2C_CLK + 1;
-    }
-
-    /* Set minimum required value if CCR < 1*/
-    if ((ccr & I2C_CCR_CCR) == 0) {
-        ccr |= 0x1;
-    }
-
-    i2c_set_clk_control(dev, ccr);
-    i2c_set_trise(dev, trise);
+    /* Configure clock and rise time */
+    _i2c_set_ccr_trise(dev, flags);
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);

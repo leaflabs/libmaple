@@ -43,4 +43,8 @@ struct i2c_dev;
 void _i2c_irq_handler(struct i2c_dev *dev);
 void _i2c_irq_error_handler(struct i2c_dev *dev);
 
+/* Auxiliary procedure for enabling an I2C peripheral; `flags' as for
+ * i2c_master_enable(). */
+void _i2c_set_ccr_trise(i2c_dev *dev, uint32 flags);
+
 #endif  /* _LIBMAPLE_I2C_PRIVATE_H_ */

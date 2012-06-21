@@ -110,3 +110,39 @@ void _i2c_irq_priority_fixup(i2c_dev *dev) {
     nvic_irq_set_priority(dev->ev_nvic_line, 0);
     nvic_irq_set_priority(dev->er_nvic_line, 0);
 }
+
+void _i2c_set_ccr_trise(i2c_dev *dev, uint32 flags) {
+#define I2C_CLK                (STM32_PCLK1/1000000)
+    uint32 ccr   = 0;
+    uint32 trise = 0;
+
+    /* I2C1 and I2C2 are fed from APB1, clocked at 36MHz */
+    i2c_set_input_clk(dev, I2C_CLK);
+
+    if (flags & I2C_FAST_MODE) {
+        ccr |= I2C_CCR_FS;
+
+        if (flags & I2C_DUTY_16_9) {
+            /* Tlow/Thigh = 16/9 */
+            ccr |= I2C_CCR_DUTY;
+            ccr |= STM32_PCLK1/(400000 * 25);
+        } else {
+            /* Tlow/Thigh = 2 */
+            ccr |= STM32_PCLK1/(400000 * 3);
+        }
+
+        trise = (300 * (I2C_CLK)/1000) + 1;
+    } else {
+        /* Tlow/Thigh = 1 */
+        ccr = STM32_PCLK1/(100000 * 2);
+        trise = I2C_CLK + 1;
+    }
+
+    /* Set minimum required value if CCR < 1*/
+    if ((ccr & I2C_CCR_CCR) == 0) {
+        ccr |= 0x1;
+    }
+
+    i2c_set_clk_control(dev, ccr);
+    i2c_set_trise(dev, trise);
+}

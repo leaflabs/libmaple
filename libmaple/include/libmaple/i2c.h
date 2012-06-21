@@ -50,6 +50,17 @@ extern "C" {
  * - uint32 _i2c_bus_clk(i2c_dev*): Clock frequency of dev's bus, in
  *   MHz. (This is for internal use only).
  *
+ * - (optional) _I2C_HAVE_IRQ_FIXUP: Leave undefined, or define to 1.
+ *   This is for internal use only. It's a hack to work around a
+ *   silicon bug related to I2C IRQ pre-emption on some targets. If 1,
+ *   the series header must also declare and implement a routine with
+ *   this signature (it may also be provided as a macro):
+ *
+ *       void _i2c_irq_priority_fixup(i2c_dev*)
+ *
+ *   This will be called by i2c_enable_irq() before actually enabling
+ *   I2C interrupts.
+ *
  * - Reg. map base pointers, device pointer declarations.
  */
 
@@ -243,6 +254,12 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
 
 /* IRQ enable/disable */
 
+#ifndef _I2C_HAVE_IRQ_FIXUP
+/* The series header provides this if _I2C_HAVE_IRQ_FIXUP is defined,
+ * but we need it either way. */
+#define _i2c_irq_priority_fixup(dev) ((void)0)
+#endif
+
 #define I2C_IRQ_ERROR              I2C_CR2_ITERREN
 #define I2C_IRQ_EVENT              I2C_CR2_ITEVTEN
 #define I2C_IRQ_BUFFER             I2C_CR2_ITBUFEN
@@ -255,6 +272,7 @@ static inline void i2c_stop_condition(i2c_dev *dev) {
  *             I2C_IRQ_BUFFER (buffer interrupt).
  */
 static inline void i2c_enable_irq(i2c_dev *dev, uint32 irqs) {
+    _i2c_irq_priority_fixup(dev);
     dev->regs->CR2 |= irqs;
 }
 

@@ -63,4 +63,7 @@ static inline uint32 _i2c_bus_clk(i2c_dev *dev) {
     return STM32_PCLK1 / (1000 * 1000);
 }
 
+#define _I2C_HAVE_IRQ_FIXUP 1
+void _i2c_irq_priority_fixup(i2c_dev *dev);
+
 #endif  /* _LIBMAPLE_STM32F1_I2C_H_ */

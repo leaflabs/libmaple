@@ -74,3 +74,39 @@ void __irq_i2c1_er(void) {
 void __irq_i2c2_er(void) {
     _i2c_irq_error_handler(I2C2);
 }
+
+/*
+ * Internal APIs
+ */
+
+void _i2c_irq_priority_fixup(i2c_dev *dev) {
+    /*
+     * Important STM32 Errata:
+     *
+     * See STM32F10xx8 and STM32F10xxB Errata sheet (Doc ID 14574 Rev 8),
+     * Section 2.11.1, 2.11.2.
+     *
+     * 2.11.1:
+     * When the EV7, EV7_1, EV6_1, EV6_3, EV2, EV8, and EV3 events are not
+     * managed before the current byte is being transferred, problems may be
+     * encountered such as receiving an extra byte, reading the same data twice
+     * or missing data.
+     *
+     * 2.11.2:
+     * In Master Receiver mode, when closing the communication using
+     * method 2, the content of the last read data can be corrupted.
+     *
+     * If the user software is not able to read the data N-1 before the STOP
+     * condition is generated on the bus, the content of the shift register
+     * (data N) will be corrupted. (data N is shifted 1-bit to the left).
+     *
+     * ----------------------------------------------------------------------
+     *
+     * In order to ensure that events are not missed, the i2c interrupt must
+     * not be preempted. We set the i2c interrupt priority to be the highest
+     * interrupt in the system (priority level 0). All other interrupts have
+     * been initialized to priority level 16. See nvic_init().
+     */
+    nvic_irq_set_priority(dev->ev_nvic_line, 0);
+    nvic_irq_set_priority(dev->er_nvic_line, 0);
+}

@@ -102,194 +102,6 @@ enum {
 };
 
 /**
- * @brief IRQ handler for I2C master. Handles transmission/reception.
- * @param dev I2C device
- */
-void _i2c_irq_handler(i2c_dev *dev) {
-    /* WTFs:
-     * - Where is I2C_MSG_10BIT_ADDR handled?
-     */
-    i2c_msg *msg = dev->msg;
-
-    uint8 read = msg->flags & I2C_MSG_READ;
-
-    uint32 sr1 = dev->regs->SR1;
-    uint32 sr2 = dev->regs->SR2;
-    I2C_CRUMB(IRQ_ENTRY, sr1, sr2);
-
-    /*
-     * Reset timeout counter
-     */
-    dev->timestamp = systick_uptime();
-
-    /*
-     * EV5: Start condition sent
-     */
-    if (sr1 & I2C_SR1_SB) {
-        msg->xferred = 0;
-        i2c_enable_irq(dev, I2C_IRQ_BUFFER);
-
-        /*
-         * Master receiver
-         */
-        if (read) {
-            i2c_enable_ack(dev);
-        }
-
-        i2c_send_slave_addr(dev, msg->addr, read);
-        sr1 = sr2 = 0;
-    }
-
-    /*
-     * EV6: Slave address sent
-     */
-    if (sr1 & I2C_SR1_ADDR) {
-        /*
-         * Special case event EV6_1 for master receiver.
-         * Generate NACK and restart/stop condition after ADDR
-         * is cleared.
-         */
-        if (read) {
-            if (msg->length == 1) {
-                i2c_disable_ack(dev);
-                if (dev->msgs_left > 1) {
-                    i2c_start_condition(dev);
-                    I2C_CRUMB(RX_ADDR_START, 0, 0);
-                } else {
-                    i2c_stop_condition(dev);
-                    I2C_CRUMB(RX_ADDR_STOP, 0, 0);
-                }
-            }
-        } else {
-            /*
-             * Master transmitter: write first byte to fill shift
-             * register.  We should get another TXE interrupt
-             * immediately to fill DR again.
-             */
-            if (msg->length != 1) {
-                i2c_write(dev, msg->data[msg->xferred++]);
-            }
-        }
-        sr1 = sr2 = 0;
-    }
-
-    /*
-     * EV8: Master transmitter
-     * Transmit buffer empty, but we haven't finished transmitting the last
-     * byte written.
-     */
-    if ((sr1 & I2C_SR1_TXE) && !(sr1 & I2C_SR1_BTF)) {
-        I2C_CRUMB(TXE_ONLY, 0, 0);
-        if (dev->msgs_left) {
-            i2c_write(dev, msg->data[msg->xferred++]);
-            if (msg->xferred == msg->length) {
-                /*
-                 * End of this message. Turn off TXE/RXNE and wait for
-                 * BTF to send repeated start or stop condition.
-                 */
-                i2c_disable_irq(dev, I2C_IRQ_BUFFER);
-                dev->msgs_left--;
-            }
-        } else {
-            /*
-             * This should be impossible...
-             */
-            ASSERT(0);
-        }
-        sr1 = sr2 = 0;
-    }
-
-    /*
-     * EV8_2: Master transmitter
-     * Last byte sent, program repeated start/stop
-     */
-    if ((sr1 & I2C_SR1_TXE) && (sr1 & I2C_SR1_BTF)) {
-        I2C_CRUMB(TXE_BTF, 0, 0);
-        if (dev->msgs_left) {
-            I2C_CRUMB(TEST, 0, 0);
-            /*
-             * Repeated start insanity: We can't disable ITEVTEN or else SB
-             * won't interrupt, but if we don't disable ITEVTEN, BTF will
-             * continually interrupt us. What the fuck ST?
-             */
-            i2c_start_condition(dev);
-            while (!(dev->regs->SR1 & I2C_SR1_SB))
-                ;
-            dev->msg++;
-        } else {
-            i2c_stop_condition(dev);
-
-            /*
-             * Turn off event interrupts to keep BTF from firing until
-             * the end of the stop condition. Why on earth they didn't
-             * have a start/stop condition request clear BTF is beyond
-             * me.
-             */
-            i2c_disable_irq(dev, I2C_IRQ_EVENT);
-            I2C_CRUMB(STOP_SENT, 0, 0);
-            dev->state = I2C_STATE_XFER_DONE;
-        }
-        sr1 = sr2 = 0;
-    }
-
-    /*
-     * EV7: Master Receiver
-     */
-    if (sr1 & I2C_SR1_RXNE) {
-        I2C_CRUMB(RXNE_ONLY, 0, 0);
-        msg->data[msg->xferred++] = dev->regs->DR;
-
-        /*
-         * EV7_1: Second to last byte in the reception? Set NACK and generate
-         * stop/restart condition in time for the last byte. We'll get one more
-         * RXNE interrupt before shutting things down.
-         */
-        if (msg->xferred == (msg->length - 1)) {
-            i2c_disable_ack(dev);
-            if (dev->msgs_left > 2) {
-                i2c_start_condition(dev);
-                I2C_CRUMB(RXNE_START_SENT, 0, 0);
-            } else {
-                i2c_stop_condition(dev);
-                I2C_CRUMB(RXNE_STOP_SENT, 0, 0);
-            }
-        } else if (msg->xferred == msg->length) {
-            dev->msgs_left--;
-            if (dev->msgs_left == 0) {
-                /*
-                 * We're done.
-                 */
-                I2C_CRUMB(RXNE_DONE, 0, 0);
-                dev->state = I2C_STATE_XFER_DONE;
-            } else {
-                dev->msg++;
-            }
-        }
-    }
-}
-
-/**
- * @brief Interrupt handler for I2C error conditions
- * @param dev I2C device
- * @sideeffect Aborts any pending I2C transactions
- */
-void _i2c_irq_error_handler(i2c_dev *dev) {
-    I2C_CRUMB(ERROR_ENTRY, dev->regs->SR1, dev->regs->SR2);
-
-    dev->error_flags = dev->regs->SR2 & (I2C_SR1_BERR |
-                                         I2C_SR1_ARLO |
-                                         I2C_SR1_AF |
-                                         I2C_SR1_OVR);
-    /* Clear flags */
-    dev->regs->SR1 = 0;
-    dev->regs->SR2 = 0;
-
-    i2c_stop_condition(dev);
-    i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
-    dev->state = I2C_STATE_ERROR;
-}
-
-/**
  * @brief Reset an I2C bus.
  *
  * Reset is accomplished by clocking out pulses until any hung slaves
@@ -520,4 +332,194 @@ static inline int32 wait_for_state_change(i2c_dev *dev,
             }
         }
     }
+}
+
+/*
+ * Private API
+ */
+
+/*
+ * IRQ handler for I2C master. Handles transmission/reception.
+ */
+void _i2c_irq_handler(i2c_dev *dev) {
+    /* WTFs:
+     * - Where is I2C_MSG_10BIT_ADDR handled?
+     */
+    i2c_msg *msg = dev->msg;
+
+    uint8 read = msg->flags & I2C_MSG_READ;
+
+    uint32 sr1 = dev->regs->SR1;
+    uint32 sr2 = dev->regs->SR2;
+    I2C_CRUMB(IRQ_ENTRY, sr1, sr2);
+
+    /*
+     * Reset timeout counter
+     */
+    dev->timestamp = systick_uptime();
+
+    /*
+     * EV5: Start condition sent
+     */
+    if (sr1 & I2C_SR1_SB) {
+        msg->xferred = 0;
+        i2c_enable_irq(dev, I2C_IRQ_BUFFER);
+
+        /*
+         * Master receiver
+         */
+        if (read) {
+            i2c_enable_ack(dev);
+        }
+
+        i2c_send_slave_addr(dev, msg->addr, read);
+        sr1 = sr2 = 0;
+    }
+
+    /*
+     * EV6: Slave address sent
+     */
+    if (sr1 & I2C_SR1_ADDR) {
+        /*
+         * Special case event EV6_1 for master receiver.
+         * Generate NACK and restart/stop condition after ADDR
+         * is cleared.
+         */
+        if (read) {
+            if (msg->length == 1) {
+                i2c_disable_ack(dev);
+                if (dev->msgs_left > 1) {
+                    i2c_start_condition(dev);
+                    I2C_CRUMB(RX_ADDR_START, 0, 0);
+                } else {
+                    i2c_stop_condition(dev);
+                    I2C_CRUMB(RX_ADDR_STOP, 0, 0);
+                }
+            }
+        } else {
+            /*
+             * Master transmitter: write first byte to fill shift
+             * register.  We should get another TXE interrupt
+             * immediately to fill DR again.
+             */
+            if (msg->length != 1) {
+                i2c_write(dev, msg->data[msg->xferred++]);
+            }
+        }
+        sr1 = sr2 = 0;
+    }
+
+    /*
+     * EV8: Master transmitter
+     * Transmit buffer empty, but we haven't finished transmitting the last
+     * byte written.
+     */
+    if ((sr1 & I2C_SR1_TXE) && !(sr1 & I2C_SR1_BTF)) {
+        I2C_CRUMB(TXE_ONLY, 0, 0);
+        if (dev->msgs_left) {
+            i2c_write(dev, msg->data[msg->xferred++]);
+            if (msg->xferred == msg->length) {
+                /*
+                 * End of this message. Turn off TXE/RXNE and wait for
+                 * BTF to send repeated start or stop condition.
+                 */
+                i2c_disable_irq(dev, I2C_IRQ_BUFFER);
+                dev->msgs_left--;
+            }
+        } else {
+            /*
+             * This should be impossible...
+             */
+            ASSERT(0);
+        }
+        sr1 = sr2 = 0;
+    }
+
+    /*
+     * EV8_2: Master transmitter
+     * Last byte sent, program repeated start/stop
+     */
+    if ((sr1 & I2C_SR1_TXE) && (sr1 & I2C_SR1_BTF)) {
+        I2C_CRUMB(TXE_BTF, 0, 0);
+        if (dev->msgs_left) {
+            I2C_CRUMB(TEST, 0, 0);
+            /*
+             * Repeated start insanity: We can't disable ITEVTEN or else SB
+             * won't interrupt, but if we don't disable ITEVTEN, BTF will
+             * continually interrupt us. What the fuck ST?
+             */
+            i2c_start_condition(dev);
+            while (!(dev->regs->SR1 & I2C_SR1_SB))
+                ;
+            dev->msg++;
+        } else {
+            i2c_stop_condition(dev);
+
+            /*
+             * Turn off event interrupts to keep BTF from firing until
+             * the end of the stop condition. Why on earth they didn't
+             * have a start/stop condition request clear BTF is beyond
+             * me.
+             */
+            i2c_disable_irq(dev, I2C_IRQ_EVENT);
+            I2C_CRUMB(STOP_SENT, 0, 0);
+            dev->state = I2C_STATE_XFER_DONE;
+        }
+        sr1 = sr2 = 0;
+    }
+
+    /*
+     * EV7: Master Receiver
+     */
+    if (sr1 & I2C_SR1_RXNE) {
+        I2C_CRUMB(RXNE_ONLY, 0, 0);
+        msg->data[msg->xferred++] = dev->regs->DR;
+
+        /*
+         * EV7_1: Second to last byte in the reception? Set NACK and generate
+         * stop/restart condition in time for the last byte. We'll get one more
+         * RXNE interrupt before shutting things down.
+         */
+        if (msg->xferred == (msg->length - 1)) {
+            i2c_disable_ack(dev);
+            if (dev->msgs_left > 2) {
+                i2c_start_condition(dev);
+                I2C_CRUMB(RXNE_START_SENT, 0, 0);
+            } else {
+                i2c_stop_condition(dev);
+                I2C_CRUMB(RXNE_STOP_SENT, 0, 0);
+            }
+        } else if (msg->xferred == msg->length) {
+            dev->msgs_left--;
+            if (dev->msgs_left == 0) {
+                /*
+                 * We're done.
+                 */
+                I2C_CRUMB(RXNE_DONE, 0, 0);
+                dev->state = I2C_STATE_XFER_DONE;
+            } else {
+                dev->msg++;
+            }
+        }
+    }
+}
+
+/*
+ * Interrupt handler for I2C error conditions. Aborts any pending I2C
+ * transactions.
+ */
+void _i2c_irq_error_handler(i2c_dev *dev) {
+    I2C_CRUMB(ERROR_ENTRY, dev->regs->SR1, dev->regs->SR2);
+
+    dev->error_flags = dev->regs->SR2 & (I2C_SR1_BERR |
+                                         I2C_SR1_ARLO |
+                                         I2C_SR1_AF |
+                                         I2C_SR1_OVR);
+    /* Clear flags */
+    dev->regs->SR1 = 0;
+    dev->regs->SR2 = 0;
+
+    i2c_stop_condition(dev);
+    i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
+    dev->state = I2C_STATE_ERROR;
 }

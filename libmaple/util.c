@@ -37,6 +37,8 @@
 #include <libmaple/adc.h>
 #include <libmaple/timer.h>
 
+/* FIXME [0.0.13] put this stuff back in some form. Move to Wirish? */
+
 /* Failed ASSERT()s send out a message using this USART config. */
 #ifndef ERROR_USART
 #define ERROR_USART            USART2

@@ -149,13 +149,13 @@ void abort() {
  * @sideeffect Sets output push-pull on ERROR_LED_PIN.
  */
 void throb(void) {
-#if 0
+#ifdef HAVE_ERROR_LED
     int32  slope   = 1;
     uint32 CC      = 0x0000;
     uint32 TOP_CNT = 0x0200;
     uint32 i       = 0;
 
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_OUTPUT_PP);
+    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT);
     /* Error fade. */
     while (1) {
         if (CC == TOP_CNT)  {

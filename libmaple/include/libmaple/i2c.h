@@ -181,7 +181,9 @@ typedef struct i2c_msg {
 /* Clock control register */
 
 #define I2C_CCR_FS              (1U << 15)    // Fast mode selection
-#define I2C_CCR_DUTY            (1U << 14)    // 16/9 duty ratio
+#define I2C_CCR_DUTY            (1U << 14)    // Fast mode duty cycle
+#define I2C_CCR_DUTY_2_1        (0U << 14)    //     Fast mode duty: 2/1
+#define I2C_CCR_DUTY_16_9       (1U << 14)    //     Fast mode duty: 16/9
 #define I2C_CCR_CCR             0xFFF         // Clock control bits
 
 /*

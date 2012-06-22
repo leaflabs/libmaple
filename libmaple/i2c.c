@@ -47,6 +47,7 @@
 static inline int32 wait_for_state_change(i2c_dev *dev,
                                           i2c_state state,
                                           uint32 timeout);
+static void set_ccr_trise(i2c_dev *dev, uint32 flags);
 
 /**
  * @brief Fill data register with slave address
@@ -190,7 +191,7 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     i2c_config_gpios(dev);
 
     /* Configure clock and rise time */
-    _i2c_set_ccr_trise(dev, flags);
+    set_ccr_trise(dev, flags);
 
     /* Enable event and buffer interrupts */
     nvic_irq_enable(dev->ev_nvic_line);
@@ -466,4 +467,43 @@ void _i2c_irq_error_handler(i2c_dev *dev) {
     i2c_stop_condition(dev);
     i2c_disable_irq(dev, I2C_IRQ_BUFFER | I2C_IRQ_EVENT | I2C_IRQ_ERROR);
     dev->state = I2C_STATE_ERROR;
+}
+
+/*
+ * CCR/TRISE configuration helper
+ */
+static void set_ccr_trise(i2c_dev *dev, uint32 flags) {
+    uint32 ccr     = 0;
+    uint32 trise   = 0;
+    uint32 clk_mhz = _i2c_bus_clk(dev);
+    uint32 clk_hz  = clk_mhz * (1000 * 1000);
+
+    i2c_set_input_clk(dev, clk_mhz);
+
+    if (flags & I2C_FAST_MODE) {
+        ccr |= I2C_CCR_FS;
+
+        if (flags & I2C_DUTY_16_9) {
+            /* Tlow/Thigh = 16/9 */
+            ccr |= I2C_CCR_DUTY_16_9;
+            ccr |= clk_hz / (400000 * 25);
+        } else {
+            /* Tlow/Thigh = 2 */
+            ccr |= clk_hz / (400000 * 3);
+        }
+
+        trise = (300 * clk_mhz / 1000) + 1;
+    } else {
+        /* Tlow/Thigh = 1 */
+        ccr = clk_hz / (100000 * 2);
+        trise = clk_mhz + 1;
+    }
+
+    /* Set minimum required value if CCR < 1*/
+    if ((ccr & I2C_CCR_CCR) == 0) {
+        ccr |= 0x1;
+    }
+
+    i2c_set_clk_control(dev, ccr);
+    i2c_set_trise(dev, trise);
 }

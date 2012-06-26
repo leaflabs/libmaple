@@ -31,6 +31,7 @@ cppSRCS_$(d) += Print.cpp
 cppSRCS_$(d) += pwm.cpp
 ifeq ($(MCU_SERIES), stm32f1)
 cppSRCS_$(d) += usb_serial.cpp	# HACK: this is currently STM32F1 only.
+cppSRCS_$(d) += HardwareSPI.cpp	# FIXME: port to F2 and fix wirish.h
 endif
 cppSRCS_$(d) += wirish_analog.cpp
 cppSRCS_$(d) +=	wirish_digital.cpp
@@ -41,8 +42,6 @@ cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
 cppSRCS_$(d) += $(MCU_SERIES)/wirish_debug.cpp
 cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
-# TODO: revise these appropriately for F2 and put them back in:
-# HardwareSPI.cpp
 
 sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)

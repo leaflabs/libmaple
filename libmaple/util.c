@@ -27,7 +27,7 @@
 /**
  * @file libmaple/util.c
  * @brief Utility procedures for debugging, mostly an error LED fade
- * and messages dumped over a UART for failed asserts.
+ *        and messages dumped over a UART for failed asserts.
  */
 
 #include <libmaple/libmaple.h>

@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Bryan Newbold.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,25 +26,20 @@
  *****************************************************************************/
 
 /**
- * @file dac.c
+ * @file libmaple/dac.c
  * @brief Digital to analog converter support.
  */
 
-#include "libmaple.h"
-#include "gpio.h"
-#include "dac.h"
+#include <libmaple/dac.h>
+#include <libmaple/libmaple.h>
+#include <libmaple/gpio.h>
 
-#ifdef STM32_HIGH_DENSITY
-
-/**
- * @brief DAC peripheral routines.
- */
-
+#if STM32_HAVE_DAC
 dac_dev dac = {
     .regs = DAC_BASE,
 };
-/** DAC device. */
 const dac_dev *DAC = &dac;
+#endif
 
 /**
  * @brief Initialize the digital to analog converter
@@ -92,16 +88,16 @@ void dac_write_channel(const dac_dev *dev, uint8 channel, uint16 val) {
  */
 void dac_enable_channel(const dac_dev *dev, uint8 channel) {
     /*
-     * Setup ANALOG mode on PA4 and PA5. This mapping is consistent across
-     * all STM32 chips with a DAC. See RM0008 12.2.
+     * Setup ANALOG mode on PA4 and PA5. This mapping is consistent
+     * across all supported STM32s with a DAC.
      */
     switch (channel) {
     case 1:
-        gpio_set_mode(GPIOA, 4, GPIO_INPUT_ANALOG);
+        gpio_set_mode(GPIOA, 4, GPIO_MODE_ANALOG);
         dev->regs->CR |= DAC_CR_EN1;
         break;
     case 2:
-        gpio_set_mode(GPIOA, 5, GPIO_INPUT_ANALOG);
+        gpio_set_mode(GPIOA, 5, GPIO_MODE_ANALOG);
         dev->regs->CR |= DAC_CR_EN2;
         break;
     }
@@ -122,5 +118,3 @@ void dac_disable_channel(const dac_dev *dev, uint8 channel) {
         break;
     }
 }
-
-#endif  /* STM32_HIGH_DENSITY */

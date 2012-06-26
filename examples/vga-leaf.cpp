@@ -32,7 +32,7 @@
 
 // FIXME: generalize for Native and Mini
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 // Pinouts -- you also must change the GPIO macros below if you change
 // these

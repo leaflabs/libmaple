@@ -1,7 +1,7 @@
 // Sample main.cpp file. Blinks the built-in LED, sends a message out
 // USART2, and turns on PWM on pin 2.
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 #define PWM_PIN  2
 

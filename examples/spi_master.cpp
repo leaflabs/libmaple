@@ -33,7 +33,7 @@
  * Pin 10 is used as slave select.
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 #define NSS 10
 

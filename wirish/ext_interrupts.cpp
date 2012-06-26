@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,17 +26,16 @@
  *****************************************************************************/
 
 /**
- *  @file ext_interrupts.c
- *
- *  @brief Wiring-like interface for external interrupts
+ * @file wirish/ext_interrupts.cpp
+ * @brief Wiring-like interface for external interrupts
  */
 
-#include "ext_interrupts.h"
+#include <wirish/ext_interrupts.h>
 
-#include "gpio.h"
-#include "exti.h"
+#include <libmaple/gpio.h>
+#include <libmaple/exti.h>
 
-#include "boards.h"
+#include <wirish/boards.h>
 
 static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
 
@@ -53,7 +53,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
 
     exti_trigger_mode outMode = exti_out_mode(mode);
 
-    exti_attach_interrupt((afio_exti_num)(PIN_MAP[pin].gpio_bit),
+    exti_attach_interrupt((exti_num)(PIN_MAP[pin].gpio_bit),
                           gpio_exti_port(PIN_MAP[pin].gpio_device),
                           handler,
                           outMode);
@@ -68,7 +68,7 @@ void detachInterrupt(uint8 pin) {
         return;
     }
 
-    exti_detach_interrupt((afio_exti_num)(PIN_MAP[pin].gpio_bit));
+    exti_detach_interrupt((exti_num)(PIN_MAP[pin].gpio_bit));
 }
 
 static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode) {

@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -28,66 +29,13 @@
  * Arduino-compatible digital I/O implementation.
  */
 
-#include "io.h"
+#include <wirish/io.h>
 
-#include "gpio.h"
-#include "timer.h"
+#include <libmaple/gpio.h>
+#include <libmaple/timer.h>
 
-#include "wirish_time.h"
-#include "boards.h"
-
-void pinMode(uint8 pin, WiringPinMode mode) {
-    gpio_pin_mode outputMode;
-    bool pwm = false;
-
-    if (pin >= BOARD_NR_GPIO_PINS) {
-        return;
-    }
-
-    switch(mode) {
-    case OUTPUT:
-        outputMode = GPIO_OUTPUT_PP;
-        break;
-    case OUTPUT_OPEN_DRAIN:
-        outputMode = GPIO_OUTPUT_OD;
-        break;
-    case INPUT:
-    case INPUT_FLOATING:
-        outputMode = GPIO_INPUT_FLOATING;
-        break;
-    case INPUT_ANALOG:
-        outputMode = GPIO_INPUT_ANALOG;
-        break;
-    case INPUT_PULLUP:
-        outputMode = GPIO_INPUT_PU;
-        break;
-    case INPUT_PULLDOWN:
-        outputMode = GPIO_INPUT_PD;
-        break;
-    case PWM:
-        outputMode = GPIO_AF_OUTPUT_PP;
-        pwm = true;
-        break;
-    case PWM_OPEN_DRAIN:
-        outputMode = GPIO_AF_OUTPUT_OD;
-        pwm = true;
-        break;
-    default:
-        ASSERT(0);
-        return;
-    }
-
-    gpio_set_mode(PIN_MAP[pin].gpio_device, PIN_MAP[pin].gpio_bit, outputMode);
-
-    if (PIN_MAP[pin].timer_device != NULL) {
-        /* Enable/disable timer channels if we're switching into or
-         * out of PWM. */
-        timer_set_mode(PIN_MAP[pin].timer_device,
-                       PIN_MAP[pin].timer_channel,
-                       pwm ? TIMER_PWM : TIMER_DISABLED);
-    }
-}
-
+#include <wirish/wirish_time.h>
+#include <wirish/boards.h>
 
 uint32 digitalRead(uint8 pin) {
     if (pin >= BOARD_NR_GPIO_PINS) {
@@ -116,10 +64,10 @@ void togglePin(uint8 pin) {
 
 #define BUTTON_DEBOUNCE_DELAY 1
 
-uint8 isButtonPressed() {
-    if (digitalRead(BOARD_BUTTON_PIN)) {
+uint8 isButtonPressed(uint8 pin, uint32 pressedLevel) {
+    if (digitalRead(pin) == pressedLevel) {
         delay(BUTTON_DEBOUNCE_DELAY);
-        while (digitalRead(BOARD_BUTTON_PIN))
+        while (digitalRead(pin) == pressedLevel)
             ;
         return true;
     }

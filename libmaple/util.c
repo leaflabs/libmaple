@@ -25,26 +25,18 @@
  *****************************************************************************/
 
 /**
- * @file util.c
- * @brief Utility procedures for debugging, mostly an error LED fade
- * and messages dumped over a UART for failed asserts.
+ * @file libmaple/util.c
+ * @brief Utility procedures for debugging
  */
 
-#include "libmaple.h"
-#include "usart.h"
-#include "gpio.h"
-#include "nvic.h"
-#include "adc.h"
-#include "timer.h"
+#include <libmaple/libmaple.h>
+#include <libmaple/usart.h>
+#include <libmaple/gpio.h>
+#include <libmaple/nvic.h>
 
-/* Failed ASSERT()s send out a message using this USART config. */
-#ifndef ERROR_USART
-#define ERROR_USART            USART2
-#define ERROR_USART_CLK_SPEED  STM32_PCLK1
-#define ERROR_USART_BAUD       9600
-#define ERROR_TX_PORT          GPIOA
-#define ERROR_TX_PIN           2
-#endif
+/* (Undocumented) hooks used by Wirish to direct our behavior here */
+extern __weak void __lm_error(void);
+extern __weak usart_dev* __lm_enable_error_usart(void);
 
 /* If you define ERROR_LED_PORT and ERROR_LED_PIN, then a failed
  * ASSERT() will also throb() an LED connected to that port and pin.
@@ -53,105 +45,82 @@
 #define HAVE_ERROR_LED
 #endif
 
-/**
- * @brief Disables all peripheral interrupts except USB and fades the
- *        error LED.
- */
 /* (Called from exc.S with global interrupts disabled.) */
-void __error(void) {
-    /* Turn off peripheral interrupts */
-    nvic_irq_disable_all();
-
-    /* Turn off timers */
-    timer_disable_all();
-
-    /* Turn off ADC */
-    adc_disable_all();
-
-    /* Turn off all USARTs */
-    usart_disable_all();
-
-    /* Turn the USB interrupt back on so the bootloader keeps on functioning */
-    nvic_irq_enable(NVIC_USB_HP_CAN_TX);
-    nvic_irq_enable(NVIC_USB_LP_CAN_RX0);
-
+__attribute__((noreturn)) void __error(void) {
+    if (__lm_error) {
+        __lm_error();
+    }
     /* Reenable global interrupts */
     nvic_globalirq_enable();
     throb();
 }
 
-/**
- * @brief Enable the error USART for writing.
- * @sideeffect Configures ERROR_USART appropriately for writing.
- */
-void _enable_error_usart() {
-    gpio_set_mode(ERROR_TX_PORT, ERROR_TX_PIN, GPIO_AF_OUTPUT_PP);
-    usart_init(ERROR_USART);
-    usart_set_baud_rate(ERROR_USART, ERROR_USART_CLK_SPEED, ERROR_USART_BAUD);
-}
-
-/**
- * @brief Print an error message on a UART upon a failed assertion
- *        and throb the error LED, if there is one defined.
+/*
+ * Print an error message on a UART upon a failed assertion (if one is
+ * available), and punt to __error().
+ *
  * @param file Source file of failed assertion
  * @param line Source line of failed assertion
  * @param exp String representation of failed assertion
  * @sideeffect Turns of all peripheral interrupts except USB.
  */
 void _fail(const char* file, int line, const char* exp) {
-    /* Initialize the error USART */
-    _enable_error_usart();
+    if (__lm_enable_error_usart) {
+        /* Initialize the error USART */
+        usart_dev *err_usart = __lm_enable_error_usart();
 
-    /* Print failed assert message */
-    usart_putstr(ERROR_USART, "ERROR: FAILED ASSERT(");
-    usart_putstr(ERROR_USART, exp);
-    usart_putstr(ERROR_USART, "): ");
-    usart_putstr(ERROR_USART, file);
-    usart_putstr(ERROR_USART, ": ");
-    usart_putudec(ERROR_USART, line);
-    usart_putc(ERROR_USART, '\n');
-    usart_putc(ERROR_USART, '\r');
-
+        /* Print failed assert message */
+        usart_putstr(err_usart, "ERROR: FAILED ASSERT(");
+        usart_putstr(err_usart, exp);
+        usart_putstr(err_usart, "): ");
+        usart_putstr(err_usart, file);
+        usart_putstr(err_usart, ": ");
+        usart_putudec(err_usart, line);
+        usart_putc(err_usart, '\n');
+        usart_putc(err_usart, '\r');
+    }
     /* Shutdown and error fade */
     __error();
 }
 
-/**
- * @brief Provide an __assert_func handler to libc so that calls to assert() get
- *        redirected to _fail.
+/*
+ * Provide an __assert_func handler to libc so that calls to assert()
+ * get redirected to _fail.
  */
 void __assert_func(const char* file, int line, const char* method,
                    const char* expression) {
     _fail(file, line, expression);
 }
 
-/**
- * @brief Provide an abort() implementation that aborts execution and enters an
- *        error state with the throbbing LED indicator.
+/*
+ * Provide an abort() implementation that aborts execution and punts
+ * to __error().
  */
 void abort() {
-    /* Initialize the error USART */
-    _enable_error_usart();
-
-    /* Print abort message. */
-    usart_putstr(ERROR_USART, "ERROR: PROGRAM ABORTED VIA abort()\n\r");
+    if (__lm_enable_error_usart) {
+        /* Initialize the error USART */
+        usart_dev *err_usart = __lm_enable_error_usart();
+        /* Print abort message. */
+        usart_putstr(err_usart, "ERROR: PROGRAM ABORTED VIA abort()\r\n");
+    }
 
     /* Shutdown and error fade */
     __error();
 }
 
+/* This was public as of v0.0.12, so we've got to keep it public. */
 /**
  * @brief Fades the error LED on and off
  * @sideeffect Sets output push-pull on ERROR_LED_PIN.
  */
-void throb(void) {
+__attribute__((noreturn)) void throb(void) {
 #ifdef HAVE_ERROR_LED
     int32  slope   = 1;
     uint32 CC      = 0x0000;
     uint32 TOP_CNT = 0x0200;
     uint32 i       = 0;
 
-    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_OUTPUT_PP);
+    gpio_set_mode(ERROR_LED_PORT, ERROR_LED_PIN, GPIO_MODE_OUTPUT);
     /* Error fade. */
     while (1) {
         if (CC == TOP_CNT)  {

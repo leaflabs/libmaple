@@ -6,8 +6,8 @@
  * This file is released into the public domain.
  */
 
-#include "wirish.h"
-#include "dac.h"
+#include <wirish/wirish.h>
+#include <libmaple/dac.h>
 
 uint16 count = 0;
 

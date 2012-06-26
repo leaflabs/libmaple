@@ -25,30 +25,24 @@
  *****************************************************************************/
 
 /**
- * @file flash.c
+ * @file libmaple/flash.c
  * @brief Flash management functions
  */
 
-#include "libmaple.h"
-#include "flash.h"
-#include "bitband.h"
-
-/**
- * @brief Turn on the hardware prefetcher.
- */
-void flash_enable_prefetch(void) {
-    *bb_perip(&FLASH_BASE->ACR, FLASH_ACR_PRFTBE_BIT) = 1;
-}
+#include <libmaple/libmaple_types.h>
+#include <libmaple/flash.h>
 
 /**
  * @brief Set flash wait states
  *
- * See ST PM0042, section 3.1 for restrictions on the acceptable value
- * of wait_states for a given SYSCLK configuration.
+ * Note that not all wait states are available on every MCU. See the
+ * Flash programming manual for your MCU for restrictions on the
+ * allowed value of wait_states for a given system clock (SYSCLK)
+ * frequency.
  *
  * @param wait_states number of wait states (one of
  *                    FLASH_WAIT_STATE_0, FLASH_WAIT_STATE_1,
- *                    FLASH_WAIT_STATE_2).
+ *                    ..., FLASH_WAIT_STATE_7).
  */
 void flash_set_latency(uint32 wait_states) {
     uint32 val = FLASH_BASE->ACR;

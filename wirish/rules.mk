@@ -3,37 +3,45 @@ sp              := $(sp).x
 dirstack_$(sp)  := $(d)
 d               := $(dir)
 BUILDDIRS       += $(BUILD_PATH)/$(d)
-BUILDDIRS       += $(BUILD_PATH)/$(d)/comm
-BUILDDIRS       += $(BUILD_PATH)/$(d)/boards
 
-WIRISH_INCLUDES := -I$(d) -I$(d)/comm -I$(d)/boards
+# Add board directory and MCU-specific directory to BUILDDIRS. These
+# are in subdirectories, but they're logically part of the Wirish
+# submodule.
+WIRISH_BOARD_PATH := boards/$(BOARD)
+BUILDDIRS += $(BUILD_PATH)/$(d)/$(WIRISH_BOARD_PATH)
+BUILDDIRS += $(BUILD_PATH)/$(d)/$(MCU_SERIES)
 
-# Local flags
-CFLAGS_$(d) := $(WIRISH_INCLUDES) $(LIBMAPLE_INCLUDES)
+# Safe includes for Wirish.
+WIRISH_INCLUDES := -I$(d)/include -I$(d)/$(WIRISH_BOARD_PATH)/include
+
+# Local flags. Add -I$(d) to allow for private includes.
+CFLAGS_$(d) := $(LIBMAPLE_INCLUDES) $(WIRISH_INCLUDES) -I$(d)
 
 # Local rules and targets
-
 sSRCS_$(d) := start.S
 cSRCS_$(d) := start_c.c
-cppSRCS_$(d) := wirish_math.cpp		 \
-                Print.cpp		 \
-		boards.cpp               \
-                boards/maple.cpp	 \
-                boards/maple_mini.cpp	 \
-                boards/maple_native.cpp	 \
-                boards/maple_RET6.cpp	 \
-                boards/olimex_stm32_h103.cpp \
-                comm/HardwareSerial.cpp	 \
-                comm/HardwareSPI.cpp	 \
-		HardwareTimer.cpp	 \
-                usb_serial.cpp		 \
-                cxxabi-compat.cpp	 \
-		wirish_shift.cpp	 \
-		wirish_analog.cpp	 \
-		wirish_time.cpp		 \
-		pwm.cpp 		 \
-		ext_interrupts.cpp	 \
-		wirish_digital.cpp
+cSRCS_$(d) += syscalls.c
+cSRCS_$(d) += $(MCU_SERIES)/util_hooks.c
+cppSRCS_$(d) := boards.cpp
+cppSRCS_$(d) += cxxabi-compat.cpp
+cppSRCS_$(d) += ext_interrupts.cpp
+cppSRCS_$(d) += HardwareSerial.cpp
+cppSRCS_$(d) += HardwareTimer.cpp
+cppSRCS_$(d) += Print.cpp
+cppSRCS_$(d) += pwm.cpp
+ifeq ($(MCU_SERIES), stm32f1)
+cppSRCS_$(d) += usb_serial.cpp	# HACK: this is currently STM32F1 only.
+cppSRCS_$(d) += HardwareSPI.cpp	# FIXME: port to F2 and fix wirish.h
+endif
+cppSRCS_$(d) += wirish_analog.cpp
+cppSRCS_$(d) +=	wirish_digital.cpp
+cppSRCS_$(d) +=	wirish_math.cpp
+cppSRCS_$(d) +=	wirish_shift.cpp
+cppSRCS_$(d) +=	wirish_time.cpp
+cppSRCS_$(d) += $(MCU_SERIES)/boards_setup.cpp
+cppSRCS_$(d) += $(MCU_SERIES)/wirish_digital.cpp
+cppSRCS_$(d) += $(MCU_SERIES)/wirish_debug.cpp
+cppSRCS_$(d) += $(WIRISH_BOARD_PATH)/board.cpp
 
 sFILES_$(d)   := $(sSRCS_$(d):%=$(d)/%)
 cFILES_$(d)   := $(cSRCS_$(d):%=$(d)/%)

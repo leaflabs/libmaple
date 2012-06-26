@@ -8,7 +8,7 @@
  * This file is released into the public domain.
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 #undef min
 #undef max
 

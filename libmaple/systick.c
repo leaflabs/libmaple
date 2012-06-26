@@ -25,11 +25,11 @@
  *****************************************************************************/
 
 /**
- * @file systick.c
- * @brief System timer interrupt handler and initialization routines
+ * @file libmaple/systick.c
+ * @brief System timer (SysTick).
  */
 
-#include "systick.h"
+#include <libmaple/systick.h>
 
 volatile uint32 systick_uptime_millis;
 static void (*systick_user_callback)(void);

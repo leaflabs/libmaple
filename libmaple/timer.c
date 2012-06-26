@@ -25,108 +25,150 @@
  *****************************************************************************/
 
 /**
- * @file   timer.c
+ * @file   libmaple/timer.c
  * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  New-style timer interface
+ * @brief  Portable timer routines.
  */
 
-#include "timer.h"
-
-/* Just like the corresponding DIER bits:
- * [0] = Update handler;
- * [1,2,3,4] = capture/compare 1,2,3,4 handlers, respectively;
- * [5] = COM;
- * [6] = TRG;
- * [7] = BRK. */
-#define NR_ADV_HANDLERS                 8
-/* Update, capture/compare 1,2,3,4; <junk>; trigger. */
-#define NR_GEN_HANDLERS                 7
-/* Update only. */
-#define NR_BAS_HANDLERS                 1
-
-static timer_dev timer1 = {
-    .regs         = { .adv = TIMER1_BASE },
-    .clk_id       = RCC_TIMER1,
-    .type         = TIMER_ADVANCED,
-    .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
-};
-/** Timer 1 device (advanced) */
-timer_dev *TIMER1 = &timer1;
-
-static timer_dev timer2 = {
-    .regs         = { .gen = TIMER2_BASE },
-    .clk_id       = RCC_TIMER2,
-    .type         = TIMER_GENERAL,
-    .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
-};
-/** Timer 2 device (general-purpose) */
-timer_dev *TIMER2 = &timer2;
-
-static timer_dev timer3 = {
-    .regs         = { .gen = TIMER3_BASE },
-    .clk_id       = RCC_TIMER3,
-    .type         = TIMER_GENERAL,
-    .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
-};
-/** Timer 3 device (general-purpose) */
-timer_dev *TIMER3 = &timer3;
-
-static timer_dev timer4 = {
-    .regs         = { .gen = TIMER4_BASE },
-    .clk_id       = RCC_TIMER4,
-    .type         = TIMER_GENERAL,
-    .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
-};
-/** Timer 4 device (general-purpose) */
-timer_dev *TIMER4 = &timer4;
-
-#ifdef STM32_HIGH_DENSITY
-static timer_dev timer5 = {
-    .regs         = { .gen = TIMER5_BASE },
-    .clk_id       = RCC_TIMER5,
-    .type         = TIMER_GENERAL,
-    .handlers     = { [NR_GEN_HANDLERS - 1] = 0 },
-};
-/** Timer 5 device (general-purpose) */
-timer_dev *TIMER5 = &timer5;
-
-static timer_dev timer6 = {
-    .regs         = { .bas = TIMER6_BASE },
-    .clk_id       = RCC_TIMER6,
-    .type         = TIMER_BASIC,
-    .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
-};
-/** Timer 6 device (basic) */
-timer_dev *TIMER6 = &timer6;
-
-static timer_dev timer7 = {
-    .regs         = { .bas = TIMER7_BASE },
-    .clk_id       = RCC_TIMER7,
-    .type         = TIMER_BASIC,
-    .handlers     = { [NR_BAS_HANDLERS - 1] = 0 },
-};
-/** Timer 7 device (basic) */
-timer_dev *TIMER7 = &timer7;
-
-static timer_dev timer8 = {
-    .regs         = { .adv = TIMER8_BASE },
-    .clk_id       = RCC_TIMER8,
-    .type         = TIMER_ADVANCED,
-    .handlers     = { [NR_ADV_HANDLERS - 1] = 0 },
-};
-/** Timer 8 device (advanced) */
-timer_dev *TIMER8 = &timer8;
-#endif
-
-/*
- * Convenience routines
- */
+#include <libmaple/timer.h>
+#include <libmaple/stm32.h>
+#include "timer_private.h"
 
 static void disable_channel(timer_dev *dev, uint8 channel);
 static void pwm_mode(timer_dev *dev, uint8 channel);
 static void output_compare_mode(timer_dev *dev, uint8 channel);
 
 static inline void enable_irq(timer_dev *dev, uint8 interrupt);
+
+/*
+ * Devices
+ *
+ * Defer to the timer_private API for declaring these.
+ */
+
+#if STM32_HAVE_TIMER(1)
+static timer_dev timer1 = ADVANCED_TIMER(1);
+/** Timer 1 device (advanced) */
+timer_dev *TIMER1 = &timer1;
+#endif
+#if STM32_HAVE_TIMER(2)
+static timer_dev timer2 = GENERAL_TIMER(2);
+/** Timer 2 device (general-purpose) */
+timer_dev *TIMER2 = &timer2;
+#endif
+#if STM32_HAVE_TIMER(3)
+static timer_dev timer3 = GENERAL_TIMER(3);
+/** Timer 3 device (general-purpose) */
+timer_dev *TIMER3 = &timer3;
+#endif
+#if STM32_HAVE_TIMER(4)
+static timer_dev timer4 = GENERAL_TIMER(4);
+/** Timer 4 device (general-purpose) */
+timer_dev *TIMER4 = &timer4;
+#endif
+#if STM32_HAVE_TIMER(5)
+static timer_dev timer5 = GENERAL_TIMER(5);
+/** Timer 5 device (general-purpose) */
+timer_dev *TIMER5 = &timer5;
+#endif
+#if STM32_HAVE_TIMER(6)
+static timer_dev timer6 = BASIC_TIMER(6);
+/** Timer 6 device (basic) */
+timer_dev *TIMER6 = &timer6;
+#endif
+#if STM32_HAVE_TIMER(7)
+static timer_dev timer7 = BASIC_TIMER(7);
+/** Timer 7 device (basic) */
+timer_dev *TIMER7 = &timer7;
+#endif
+#if STM32_HAVE_TIMER(8)
+static timer_dev timer8 = ADVANCED_TIMER(8);
+/** Timer 8 device (advanced) */
+timer_dev *TIMER8 = &timer8;
+#endif
+#if STM32_HAVE_TIMER(9)
+static timer_dev timer9 = RESTRICTED_GENERAL_TIMER(9, TIMER_DIER_TIE_BIT);
+/** Timer 9 device (general-purpose) */
+timer_dev *TIMER9 = &timer9;
+#endif
+#if STM32_HAVE_TIMER(10)
+static timer_dev timer10 = RESTRICTED_GENERAL_TIMER(10, TIMER_DIER_CC1IE_BIT);
+/** Timer 10 device (general-purpose) */
+timer_dev *TIMER10 = &timer10;
+#endif
+#if STM32_HAVE_TIMER(11)
+static timer_dev timer11 = RESTRICTED_GENERAL_TIMER(11, TIMER_DIER_CC1IE_BIT);
+/** Timer 11 device (general-purpose) */
+timer_dev *TIMER11 = &timer11;
+#endif
+#if STM32_HAVE_TIMER(12)
+static timer_dev timer12 = RESTRICTED_GENERAL_TIMER(12, TIMER_DIER_TIE_BIT);
+/** Timer 12 device (general-purpose) */
+timer_dev *TIMER12 = &timer12;
+#endif
+#if STM32_HAVE_TIMER(13)
+static timer_dev timer13 = RESTRICTED_GENERAL_TIMER(13, TIMER_DIER_CC1IE_BIT);
+/** Timer 13 device (general-purpose) */
+timer_dev *TIMER13 = &timer13;
+#endif
+#if STM32_HAVE_TIMER(14)
+static timer_dev timer14 = RESTRICTED_GENERAL_TIMER(14, TIMER_DIER_CC1IE_BIT);
+/** Timer 14 device (general-purpose) */
+timer_dev *TIMER14 = &timer14;
+#endif
+
+/*
+ * Routines
+ */
+
+/**
+ * @brief Call a function on timer devices.
+ * @param fn Function to call on each timer device.
+ */
+void timer_foreach(void (*fn)(timer_dev*)) {
+#if STM32_HAVE_TIMER(1)
+    fn(TIMER1);
+#endif
+#if STM32_HAVE_TIMER(2)
+    fn(TIMER2);
+#endif
+#if STM32_HAVE_TIMER(3)
+    fn(TIMER3);
+#endif
+#if STM32_HAVE_TIMER(4)
+    fn(TIMER4);
+#endif
+#if STM32_HAVE_TIMER(5)
+    fn(TIMER5);
+#endif
+#if STM32_HAVE_TIMER(6)
+    fn(TIMER6);
+#endif
+#if STM32_HAVE_TIMER(7)
+    fn(TIMER7);
+#endif
+#if STM32_HAVE_TIMER(8)
+    fn(TIMER8);
+#endif
+#if STM32_HAVE_TIMER(9)
+    fn(TIMER9);
+#endif
+#if STM32_HAVE_TIMER(10)
+    fn(TIMER10);
+#endif
+#if STM32_HAVE_TIMER(11)
+    fn(TIMER11);
+#endif
+#if STM32_HAVE_TIMER(12)
+    fn(TIMER12);
+#endif
+#if STM32_HAVE_TIMER(13)
+    fn(TIMER13);
+#endif
+#if STM32_HAVE_TIMER(14)
+    fn(TIMER14);
+#endif
+}
 
 /**
  * Initialize a timer, and reset its register map.
@@ -191,20 +233,31 @@ void timer_set_mode(timer_dev *dev, uint8 channel, timer_mode mode) {
 }
 
 /**
- * @brief Call a function on timer devices.
- * @param fn Function to call on each timer device.
+ * @brief Determine whether a timer has a particular capture/compare channel.
+ *
+ * Different timers have different numbers of capture/compare channels
+ * (and some have none at all). Use this function to test whether a
+ * given timer/channel combination will work.
+ *
+ * @param dev Timer device
+ * @param channel Capture/compare channel, from 1 to 4
+ * @return Nonzero if dev has channel, zero otherwise.
  */
-void timer_foreach(void (*fn)(timer_dev*)) {
-    fn(TIMER1);
-    fn(TIMER2);
-    fn(TIMER3);
-    fn(TIMER4);
-#ifdef STM32_HIGH_DENSITY
-    fn(TIMER5);
-    fn(TIMER6);
-    fn(TIMER7);
-    fn(TIMER8);
-#endif
+int timer_has_cc_channel(timer_dev *dev, uint8 channel) {
+    /* On all currently supported series: advanced and "full-featured"
+     * general purpose timers have all four channels. Of the
+     * restricted general timers, timers 9 and 12 have channels 1 and
+     * 2; the others have channel 1 only. Basic timers have none. */
+    rcc_clk_id id = dev->clk_id;
+    ASSERT((1 <= channel) && (channel <= 4));
+    if (id <= RCC_TIMER5 || id == RCC_TIMER8) {
+        return 1;     /* 1 and 8 are advanced, 2-5 are "full" general */
+    } else if (id <= RCC_TIMER7) {
+        return 0;     /* 6 and 7 are basic */
+    }
+    /* The rest are restricted general. */
+    return (((id == RCC_TIMER9 || id == RCC_TIMER12) && channel <= 2) ||
+            channel == 1);
 }
 
 /**
@@ -240,164 +293,6 @@ void timer_detach_interrupt(timer_dev *dev, uint8 interrupt) {
 }
 
 /*
- * IRQ handlers
- */
-
-static inline void dispatch_adv_brk(timer_dev *dev);
-static inline void dispatch_adv_up(timer_dev *dev);
-static inline void dispatch_adv_trg_com(timer_dev *dev);
-static inline void dispatch_adv_cc(timer_dev *dev);
-static inline void dispatch_general(timer_dev *dev);
-static inline void dispatch_basic(timer_dev *dev);
-
-void __irq_tim1_brk(void) {
-    dispatch_adv_brk(TIMER1);
-}
-
-void __irq_tim1_up(void) {
-    dispatch_adv_up(TIMER1);
-}
-
-void __irq_tim1_trg_com(void) {
-    dispatch_adv_trg_com(TIMER1);
-}
-
-void __irq_tim1_cc(void) {
-    dispatch_adv_cc(TIMER1);
-}
-
-void __irq_tim2(void) {
-    dispatch_general(TIMER2);
-}
-
-void __irq_tim3(void) {
-    dispatch_general(TIMER3);
-}
-
-void __irq_tim4(void) {
-    dispatch_general(TIMER4);
-}
-
-#if defined(STM32_HIGH_DENSITY) || defined(STM32_XL_DENSITY)
-
-void __irq_tim5(void) {
-    dispatch_general(TIMER5);
-}
-
-void __irq_tim6(void) {
-    dispatch_basic(TIMER6);
-}
-
-void __irq_tim7(void) {
-    dispatch_basic(TIMER7);
-}
-
-void __irq_tim8_brk(void) {
-    dispatch_adv_brk(TIMER8);
-}
-
-void __irq_tim8_up(void) {
-    dispatch_adv_up(TIMER8);
-}
-
-void __irq_tim8_trg_com(void) {
-    dispatch_adv_trg_com(TIMER8);
-}
-
-void __irq_tim8_cc(void) {
-    dispatch_adv_cc(TIMER8);
-}
-#endif
-
-/* Note: the following dispatch routines make use of the fact that
- * DIER interrupt enable bits and SR interrupt flags have common bit
- * positions.  Thus, ANDing DIER and SR lets us check if an interrupt
- * is enabled and if it has occurred simultaneously.
- */
-
-/* A special-case dispatch routine for single-interrupt NVIC lines.
- * This function assumes that the interrupt corresponding to `iid' has
- * in fact occurred (i.e., it doesn't check DIER & SR). */
-static inline void dispatch_single_irq(timer_dev *dev,
-                                       timer_interrupt_id iid,
-                                       uint32 irq_mask) {
-    timer_bas_reg_map *regs = (dev->regs).bas;
-    void (*handler)(void) = dev->handlers[iid];
-    if (handler) {
-        handler();
-        regs->SR &= ~irq_mask;
-    }
-}
-
-/* For dispatch routines which service multiple interrupts. */
-#define handle_irq(dier_sr, irq_mask, handlers, iid, handled_irq) do {  \
-        if ((dier_sr) & (irq_mask)) {                                   \
-            void (*__handler)(void) = (handlers)[iid];                  \
-            if (__handler) {                                            \
-                __handler();                                            \
-                handled_irq |= (irq_mask);                              \
-            }                                                           \
-        }                                                               \
-    } while (0)
-
-static inline void dispatch_adv_brk(timer_dev *dev) {
-    dispatch_single_irq(dev, TIMER_BREAK_INTERRUPT, TIMER_SR_BIF);
-}
-
-static inline void dispatch_adv_up(timer_dev *dev) {
-    dispatch_single_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
-}
-
-static inline void dispatch_adv_trg_com(timer_dev *dev) {
-    timer_adv_reg_map *regs = (dev->regs).adv;
-    uint32 dsr = regs->DIER & regs->SR;
-    void (**hs)(void) = dev->handlers;
-    uint32 handled = 0; /* Logical OR of SR interrupt flags we end up
-                         * handling.  We clear these.  User handlers
-                         * must clear overcapture flags, to avoid
-                         * wasting time in output mode. */
-
-    handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT, handled);
-    handle_irq(dsr, TIMER_SR_COMIF, hs, TIMER_COM_INTERRUPT, handled);
-
-    regs->SR &= ~handled;
-}
-
-static inline void dispatch_adv_cc(timer_dev *dev) {
-    timer_adv_reg_map *regs = (dev->regs).adv;
-    uint32 dsr = regs->DIER & regs->SR;
-    void (**hs)(void) = dev->handlers;
-    uint32 handled = 0;
-
-    handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT, handled);
-    handle_irq(dsr, TIMER_SR_CC3IF, hs, TIMER_CC3_INTERRUPT, handled);
-    handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT, handled);
-    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT, handled);
-
-    regs->SR &= ~handled;
-}
-
-static inline void dispatch_general(timer_dev *dev) {
-    timer_gen_reg_map *regs = (dev->regs).gen;
-    uint32 dsr = regs->DIER & regs->SR;
-    void (**hs)(void) = dev->handlers;
-    uint32 handled = 0;
-
-    handle_irq(dsr, TIMER_SR_TIF,   hs, TIMER_TRG_INTERRUPT,    handled);
-    handle_irq(dsr, TIMER_SR_CC4IF, hs, TIMER_CC4_INTERRUPT,    handled);
-    handle_irq(dsr, TIMER_SR_CC3IF, hs, TIMER_CC3_INTERRUPT,    handled);
-    handle_irq(dsr, TIMER_SR_CC2IF, hs, TIMER_CC2_INTERRUPT,    handled);
-    handle_irq(dsr, TIMER_SR_CC1IF, hs, TIMER_CC1_INTERRUPT,    handled);
-    handle_irq(dsr, TIMER_SR_UIF,   hs, TIMER_UPDATE_INTERRUPT, handled);
-
-    regs->SR &= ~handled;
-}
-
-static inline void dispatch_basic(timer_dev *dev) {
-    dispatch_single_irq(dev, TIMER_UPDATE_INTERRUPT, TIMER_SR_UIF);
-}
-
-/*
  * Utilities
  */
 
@@ -417,64 +312,101 @@ static void output_compare_mode(timer_dev *dev, uint8 channel) {
     timer_cc_enable(dev, channel);
 }
 
-static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id);
-static void enable_nonmuxed_irq(timer_dev *dev);
+static void enable_adv_irq(timer_dev *dev, timer_interrupt_id id);
+static void enable_bas_gen_irq(timer_dev *dev);
 
 static inline void enable_irq(timer_dev *dev, timer_interrupt_id iid) {
     if (dev->type == TIMER_ADVANCED) {
-        enable_advanced_irq(dev, iid);
+        enable_adv_irq(dev, iid);
     } else {
-        enable_nonmuxed_irq(dev);
+        enable_bas_gen_irq(dev);
     }
 }
 
-static void enable_advanced_irq(timer_dev *dev, timer_interrupt_id id) {
-    uint8 is_timer1 = dev->clk_id == RCC_TIMER1;
-
+/* Advanced control timers have several IRQ lines corresponding to
+ * different timer interrupts.
+ *
+ * Note: This function assumes that the only advanced timers are TIM1
+ * and TIM8, and needs the obvious changes if that assumption is
+ * violated by a later STM32 series. */
+static void enable_adv_irq(timer_dev *dev, timer_interrupt_id id) {
+    uint8 is_tim1 = dev->clk_id == RCC_TIMER1;
+    nvic_irq_num irq_num;
     switch (id) {
     case TIMER_UPDATE_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_UP : NVIC_TIMER8_UP);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_UP_TIMER10 :
+                   NVIC_TIMER8_UP_TIMER13);
         break;
-    case TIMER_CC1_INTERRUPT:
-    case TIMER_CC2_INTERRUPT:
-    case TIMER_CC3_INTERRUPT:
+    case TIMER_CC1_INTERRUPT:   /* Fall through */
+    case TIMER_CC2_INTERRUPT:   /* ... */
+    case TIMER_CC3_INTERRUPT:   /* ... */
     case TIMER_CC4_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_CC : NVIC_TIMER8_CC);
+        irq_num = is_tim1 ? NVIC_TIMER1_CC : NVIC_TIMER8_CC;
         break;
-    case TIMER_COM_INTERRUPT:
+    case TIMER_COM_INTERRUPT:   /* Fall through */
     case TIMER_TRG_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_TRG_COM : NVIC_TIMER8_TRG_COM);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_TRG_COM_TIMER11 :
+                   NVIC_TIMER8_TRG_COM_TIMER14);
         break;
     case TIMER_BREAK_INTERRUPT:
-        nvic_irq_enable(is_timer1 ? NVIC_TIMER1_BRK : NVIC_TIMER8_BRK);
+        irq_num = (is_tim1 ?
+                   NVIC_TIMER1_BRK_TIMER9 :
+                   NVIC_TIMER8_BRK_TIMER12);
         break;
+    default:
+        /* Can't happen, but placate the compiler */
+        ASSERT(0);
+        return;
     }
+    nvic_irq_enable(irq_num);
 }
 
-static void enable_nonmuxed_irq(timer_dev *dev) {
+/* Basic and general purpose timers have a single IRQ line, which is
+ * shared by all interrupts supported by a particular timer. */
+static void enable_bas_gen_irq(timer_dev *dev) {
+    nvic_irq_num irq_num;
     switch (dev->clk_id) {
     case RCC_TIMER2:
-        nvic_irq_enable(NVIC_TIMER2);
+        irq_num = NVIC_TIMER2;
         break;
     case RCC_TIMER3:
-        nvic_irq_enable(NVIC_TIMER3);
+        irq_num = NVIC_TIMER3;
         break;
     case RCC_TIMER4:
-        nvic_irq_enable(NVIC_TIMER4);
+        irq_num = NVIC_TIMER4;
         break;
-#ifdef STM32_HIGH_DENSITY
     case RCC_TIMER5:
-        nvic_irq_enable(NVIC_TIMER5);
+        irq_num = NVIC_TIMER5;
         break;
     case RCC_TIMER6:
-        nvic_irq_enable(NVIC_TIMER6);
+        irq_num = NVIC_TIMER6;
         break;
     case RCC_TIMER7:
-        nvic_irq_enable(NVIC_TIMER7);
+        irq_num = NVIC_TIMER7;
         break;
-#endif
+    case RCC_TIMER9:
+        irq_num = NVIC_TIMER1_BRK_TIMER9;
+        break;
+    case RCC_TIMER10:
+        irq_num = NVIC_TIMER1_UP_TIMER10;
+        break;
+    case RCC_TIMER11:
+        irq_num = NVIC_TIMER1_TRG_COM_TIMER11;
+        break;
+    case RCC_TIMER12:
+        irq_num = NVIC_TIMER8_BRK_TIMER12;
+        break;
+    case RCC_TIMER13:
+        irq_num = NVIC_TIMER8_UP_TIMER13;
+        break;
+    case RCC_TIMER14:
+        irq_num = NVIC_TIMER8_TRG_COM_TIMER14;
+        break;
     default:
         ASSERT_FAULT(0);
-        break;
+        return;
     }
+    nvic_irq_enable(irq_num);
 }

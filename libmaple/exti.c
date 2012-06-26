@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2011, 2012 LeafLabs, LLC.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -25,14 +26,14 @@
  *****************************************************************************/
 
 /**
- * @file exti.c
+ * @file libmaple/exti.c
  * @brief External interrupt control routines
  */
 
-#include "exti.h"
-#include "libmaple.h"
-#include "nvic.h"
-#include "bitband.h"
+#include <libmaple/exti.h>
+#include <libmaple/libmaple.h>
+#include <libmaple/nvic.h>
+#include <libmaple/bitband.h>
 
 static inline void dispatch_single_exti(uint32 exti_num);
 static inline void dispatch_extis(uint32 start, uint32 stop);
@@ -66,7 +67,7 @@ static exti_channel exti_channels[] = {
 };
 
 /*
- * Convenience routines
+ * Portable routines
  */
 
 /**
@@ -80,13 +81,13 @@ static exti_channel exti_channels[] = {
  * @param handler Function handler to execute when interrupt is triggered.
  * @param mode    Type of transition to trigger on, one of:
  *                EXTI_RISING, EXTI_FALLING, EXTI_RISING_FALLING.
- * @see afio_exti_num
- * @see afio_exti_port
+ * @see exti_num
+ * @see exti_cfg
  * @see voidFuncPtr
  * @see exti_trigger_mode
  */
-void exti_attach_interrupt(afio_exti_num num,
-                           afio_exti_port port,
+void exti_attach_interrupt(exti_num num,
+                           exti_cfg port,
                            voidFuncPtr handler,
                            exti_trigger_mode mode) {
     ASSERT(handler);
@@ -108,8 +109,8 @@ void exti_attach_interrupt(afio_exti_num num,
         break;
     }
 
-    /* Map num to port */
-    afio_exti_select(num, port);
+    /* Use the chip-specific exti_select() to map num to port */
+    exti_select(num, port);
 
     /* Unmask external interrupt request */
     bb_peri_set_bit(&EXTI_BASE->IMR, num, 1);
@@ -120,10 +121,10 @@ void exti_attach_interrupt(afio_exti_num num,
 
 /**
  * @brief Unregister an external interrupt handler
- * @param num Number of the external interrupt line to disable.
- * @see afio_exti_num
+ * @param num External interrupt line to disable.
+ * @see exti_num
  */
-void exti_detach_interrupt(afio_exti_num num) {
+void exti_detach_interrupt(exti_num num) {
     /* First, mask the interrupt request */
     bb_peri_set_bit(&EXTI_BASE->IMR, num, 0);
 
@@ -136,27 +137,39 @@ void exti_detach_interrupt(afio_exti_num num) {
 }
 
 /*
+ * Private routines
+ */
+
+void exti_do_select(__io uint32 *exti_cr, exti_num num, exti_cfg port) {
+    uint32 shift = 4 * (num % 4);
+    uint32 cr = *exti_cr;
+    cr &= ~(0xF << shift);
+    cr |= port << shift;
+    *exti_cr = cr;
+}
+
+/*
  * Interrupt handlers
  */
 
 void __irq_exti0(void) {
-    dispatch_single_exti(AFIO_EXTI_0);
+    dispatch_single_exti(EXTI0);
 }
 
 void __irq_exti1(void) {
-    dispatch_single_exti(AFIO_EXTI_1);
+    dispatch_single_exti(EXTI1);
 }
 
 void __irq_exti2(void) {
-    dispatch_single_exti(AFIO_EXTI_2);
+    dispatch_single_exti(EXTI2);
 }
 
 void __irq_exti3(void) {
-    dispatch_single_exti(AFIO_EXTI_3);
+    dispatch_single_exti(EXTI3);
 }
 
 void __irq_exti4(void) {
-    dispatch_single_exti(AFIO_EXTI_4);
+    dispatch_single_exti(EXTI4);
 }
 
 void __irq_exti9_5(void) {
@@ -177,7 +190,7 @@ void __irq_exti15_10(void) {
  * won't actually be cleared in time and the ISR will fire again.  To
  * compensate, this function NOPs for 2 cycles after clearing the
  * pending bits to ensure it takes effect. */
-static inline void clear_pending_msk(uint32 exti_msk) {
+static __always_inline void clear_pending_msk(uint32 exti_msk) {
     EXTI_BASE->PR = exti_msk;
     asm volatile("nop");
     asm volatile("nop");
@@ -185,7 +198,7 @@ static inline void clear_pending_msk(uint32 exti_msk) {
 
 /* This dispatch routine is for non-multiplexed EXTI lines only; i.e.,
  * it doesn't check EXTI_PR. */
-static inline void dispatch_single_exti(uint32 exti) {
+static __always_inline void dispatch_single_exti(uint32 exti) {
     voidFuncPtr handler = exti_channels[exti].handler;
 
     if (!handler) {
@@ -193,18 +206,18 @@ static inline void dispatch_single_exti(uint32 exti) {
     }
 
     handler();
-    clear_pending_msk(BIT(exti));
+    clear_pending_msk(1U << exti);
 }
 
 /* Dispatch routine for EXTIs which share an IRQ. */
-static inline void dispatch_extis(uint32 start, uint32 stop) {
+static __always_inline void dispatch_extis(uint32 start, uint32 stop) {
     uint32 pr = EXTI_BASE->PR;
     uint32 handled_msk = 0;
     uint32 exti;
 
     /* Dispatch user handlers for pending EXTIs. */
     for (exti = start; exti <= stop; exti++) {
-        uint32 eb = BIT(exti);
+        uint32 eb = (1U << exti);
         if (pr & eb) {
             voidFuncPtr handler = exti_channels[exti].handler;
             if (handler) {

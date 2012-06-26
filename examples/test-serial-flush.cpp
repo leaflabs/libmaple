@@ -2,7 +2,7 @@
  * Tests the "flush" Serial function.
  */
 
-#include "wirish.h"
+#include <wirish/wirish.h>
 
 void setup() {
     Serial1.begin(9600);

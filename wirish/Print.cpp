@@ -1,6 +1,7 @@
 /*
  * Print.cpp - Base class that provides print() and println()
  * Copyright (c) 2008 David A. Mellis.  All right reserved.
+ * Copyright (c) 2011 LeafLabs, LLC.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public License
@@ -21,8 +22,9 @@
  * Modified 12 April 2011 by Marti Bolivar <mbolivar@leaflabs.com>
  */
 
-#include "Print.h"
+#include <wirish/Print.h>
 
+#include <wirish/wirish_math.h>
 #include <limits.h>
 
 #ifndef LLONG_MAX
@@ -39,8 +41,6 @@
  */
 #define LLONG_MAX 9223372036854775807LL
 #endif
-
-#include "wirish_math.h"
 
 /*
  * Public methods

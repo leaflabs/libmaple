@@ -74,13 +74,13 @@ endif
 LIBMAPLE_MODULES += $(SRCROOT)/libmaple/usb   # The USB module is kept separate
 LIBMAPLE_MODULES += $(LIBMAPLE_MODULE_SERIES) # STM32 series submodule in libmaple
 LIBMAPLE_MODULES += $(SRCROOT)/wirish
-# Official libraries:
-# LIBMAPLE_MODULES += $(SRCROOT)/libraries/Servo
-# LIBMAPLE_MODULES += $(SRCROOT)/libraries/LiquidCrystal
-# LIBMAPLE_MODULES += $(SRCROOT)/libraries/Wire
+Official libraries:
+LIBMAPLE_MODULES += $(SRCROOT)/libraries/Servo
+LIBMAPLE_MODULES += $(SRCROOT)/libraries/LiquidCrystal
+LIBMAPLE_MODULES += $(SRCROOT)/libraries/Wire
 
-# Experimental libraries:
-# LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
+Experimental libraries:
+LIBMAPLE_MODULES += $(SRCROOT)/libraries/FreeRTOS
 
 # Call each module's rules.mk:
 $(foreach m,$(LIBMAPLE_MODULES),$(eval $(call LIBMAPLE_MODULE_template,$(m))))

@@ -1,0 +1,9 @@
+Read this before submitting patches:
+
+    http://leaflabs.com/docs/libmaple/contributing.html
+
+In particular, patches without sign-off lines will not be accepted.
+
+LeafLabs is a small shop.  Please help us merge your patches
+efficiently by getting formatting nits etc. out of the way before
+submitting.

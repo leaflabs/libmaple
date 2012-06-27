@@ -52,8 +52,10 @@ GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(TARGET_FLAGS)
 GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(TARGET_FLAGS)
 LDFLAGS  = $(TARGET_LDFLAGS) -mcpu=cortex-m3 -mthumb \
-           -Xlinker --gc-sections -Xlinker --print-gc-sections \
+           -Xlinker --gc-sections \
            -Xassembler --march=armv7-m -Wall
+#          -Xlinker --print-gc-sections \
+
 ##
 ## Build rules and useful templates
 ##

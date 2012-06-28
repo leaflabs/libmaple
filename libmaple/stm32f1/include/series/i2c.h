@@ -26,7 +26,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/include/stm32f1/include/series/i2c.h
+ * @file libmaple/stm32f1/include/series/i2c.h
  * @brief STM32F1 I2C
  */
 

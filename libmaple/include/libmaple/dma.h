@@ -294,7 +294,7 @@ extern void dma_set_mem_addr(dma_dev *dev, dma_tube tube, __io void *address);
  *
  * @param dev DMA Device
  * @param tube Tube whose peripheral data register base address to set.
- * @param addr Peripheral memory base address to use.
+ * @param address Peripheral memory base address to use.
  */
 extern void dma_set_per_addr(dma_dev *dev, dma_tube tube, __io void *address);
 

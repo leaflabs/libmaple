@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/usb/usb_cdcacm.c
+ * @file libmaple/usb/stm32f1/usb_cdcacm.c
  * @brief USB CDC ACM (a.k.a. virtual serial terminal, VCOM).
  *
  * FIXME: this works on the STM32F1 USB peripherals, and probably no

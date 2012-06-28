@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file   wirish/boards/maple_native/include/board/board.h.
+ * @file   wirish/boards/maple_native/include/board/board.h
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief  Maple Native board header file.
  *

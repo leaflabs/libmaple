@@ -30,11 +30,9 @@
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief This file is an implementation detail
  *
- * WARNING: CONTENTS UNSTABLE
- *
- * The existence of this file is an implementation detail.  Its
- * contents are not stable, so never include it directly.  If you need
- * something from here, #include <libmaple/i2c.h> instead.
+ * CONTENTS UNSTABLE. The existence of this file is an implementation
+ * detail.  Never include it directly.  If you need something from
+ * here, include <libmaple/i2c.h> instead.
  */
 
 #ifndef _LIBMAPLE_I2C_COMMON_H_

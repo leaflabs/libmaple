@@ -29,11 +29,9 @@
  * @author Marti Bolivar <mbolivar@leaflabs.com>
  * @brief Common DMA sub-header for <series/dma.h> and <libmaple/dma.h>.
  *
- * WARNING: CONTENTS UNSTABLE
- *
- * The existence of this file is an implementation detail.  Its
- * contents are not stable, so never include it directly.  If you need
- * something from here, #include <libmaple/dma.h> instead.
+ * CONTENTS UNSTABLE. The existence of this file is an implementation
+ * detail.  Never include it directly.  If you need something from
+ * here, include <libmaple/dma.h> instead.
  */
 
 /*

@@ -222,7 +222,7 @@ void gpio_set_modef(struct gpio_dev *dev,
  * default speed.
  *
  * @param dev GPIO device.
- * @param pin Pin on the device whose mode to set, 0--15.
+ * @param bit Bit on the device whose mode to set, 0--15.
  * @param mode Mode to set the pin to.
  */
 static inline void gpio_set_mode(struct gpio_dev *dev,

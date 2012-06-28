@@ -564,7 +564,7 @@ WARN_IF_DOC_ERROR      = YES
 # wrong or incomplete parameter documentation, but not about the absence of 
 # documentation.
 
-WARN_NO_PARAMDOC       = YES
+WARN_NO_PARAMDOC       = NO
 
 # The WARN_FORMAT tag determines the format of the warning messages that 
 # doxygen can produce. The string should contain the $file, $line, and $text 
@@ -621,9 +621,8 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-# FIXME The USB thing needs to get redone (ST code stripped out,
-# etc.).  Until then, just ignore it.
-EXCLUDE                = ../libmaple/usb/
+# We include the FreeRTOS sources. That's probably a mistake. Oh well.
+EXCLUDE                = ./libraries/FreeRTOS/
 
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
@@ -1351,13 +1350,13 @@ EXPAND_ONLY_PREDEF     = YES
 # If the SEARCH_INCLUDES tag is set to YES (the default) the includes files 
 # in the INCLUDE_PATH (see below) will be search if a #include is found.
 
-SEARCH_INCLUDES        = YES
+SEARCH_INCLUDES        = NO
 
 # The INCLUDE_PATH tag can be used to specify one or more directories that 
 # contain include files that are not input files but should be processed by 
 # the preprocessor.
 
-INCLUDE_PATH           = 
+INCLUDE_PATH           =
 
 # You can use the INCLUDE_FILE_PATTERNS tag to specify one or more wildcard 
 # patterns (like *.h and *.hpp) to filter out the header-files in the 
@@ -1383,6 +1382,9 @@ PREDEFINED             = __attribute__()= \
                        STM32_MEDIUM_DENSITY \
                        STM32_HIGH_DENSITY \
                        STM32_XL_DENSITY \
+                       PCLK1=0 STM32_PCLK1=0 \
+                       PCLK2=0 STM32_PCLK2=0 \
+                       STM32_HAVE_TIMER(x)=1 \
                        __DOXYGEN__
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 

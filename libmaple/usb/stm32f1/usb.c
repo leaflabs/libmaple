@@ -25,7 +25,7 @@
  *****************************************************************************/
 
 /**
- * @file libmaple/usb/usb.c
+ * @file libmaple/usb/stm32f1/usb.c
  * @brief USB support.
  *
  * This is a mess. What we need almost amounts to a ground-up rewrite.

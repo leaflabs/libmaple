@@ -215,11 +215,12 @@ void spi_init(spi_dev *dev);
 struct gpio_dev;
 /**
  * @brief Configure GPIO bit modes for use as a SPI port's pins.
- * @param as_master If true, configure bits for use as a bus master.
- *                  Otherwise, configure bits for use as slave.
+ *
+ * @param dev SPI device
+ * @param as_master If true, configure as bus master; otherwise, as slave.
  * @param nss_dev NSS pin's GPIO device
- * @param comm_dev SCK, MISO, MOSI pins' GPIO device
  * @param nss_bit NSS pin's GPIO bit on nss_dev
+ * @param comm_dev SCK, MISO, MOSI pins' GPIO device
  * @param sck_bit SCK pin's GPIO bit on comm_dev
  * @param miso_bit MISO pin's GPIO bit on comm_dev
  * @param mosi_bit MOSI pin's GPIO bit on comm_dev

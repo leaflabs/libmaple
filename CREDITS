@@ -1,0 +1,79 @@
+        This is at least a partial credits-file of people that have
+        contributed to libmaple (it was originally drawn from the
+        commit logs, so it e.g. leaves out contributions that didn't
+        come in the form of patches).  It's formatted the same way as
+        the Linux kernel CREDITS: sorted by name and formatted for
+        easy processing.
+
+        The fields are: name (N), email (E), web-address (W),
+        description (D). Feel free to add any other fields present in
+        the Linux CREDITS file.
+
+            LeafLabs
+
+----------
+
+N: Marti Bolivar
+E: mbolivar@leaflabs.com
+D: Current libmaple maintainer
+D: Random libmaple hacks
+
+N: Anton Eltchaninov
+E: anton.eltchaninov@gmail.com
+D: STM32F1 value line support
+
+N: Victor G Estevez
+E: sphing@sphing.net
+D: Makefile tweak
+
+N: Gaute Hope
+E: eg@gaute.vetsj.com
+W: http://gaute.vetsj.com/
+D: Makefile fixes
+
+N: Michael Hope
+E: michaelh@juju.net.nz
+D: Documentation (!)
+D: IWDG support
+D: Original DMA support
+D: miscellaneous fixes and improvements
+
+N: Perry Hung
+E: iperry@alum.mit.edu
+D: Original libmaple hacker
+
+N: David Kiliani
+E: mail@davidkiliani.de
+D: Olimex STM32-H103 support
+
+N: Andrew Meyer
+E: ajm@leaflabs.com
+D: USB stack and CDC ACM driver
+D: reset.py
+
+N: Bryan Newbold
+E: bnewbold@robocracy.org
+D: Original libmaple hacker
+W: robocracy.org
+
+N: Bruce Perens
+E: bruce@perens.com
+D: Makefile library target
+W: http://perens.com
+
+N: Hanspeter Portner
+E: agenthp@users.sf.net
+D: reset.py Python3 fixups
+
+N: RJ Ryan
+E: rryan@mit.edu
+D: USB fixups
+
+N: Nis Sarup
+E: nis@sarup.dk
+D: FreeRTOS support
+W: http://sarup.dk/index.html
+
+N: Andy Scott ("xttocs")
+E: andy.g.scott@gmail.com
+D: LiquidCrystal library

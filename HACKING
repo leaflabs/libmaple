@@ -7,3 +7,8 @@ In particular, patches without sign-off lines will not be accepted.
 LeafLabs is a small shop.  Please help us merge your patches
 efficiently by getting formatting nits etc. out of the way before
 submitting.
+
+When writing your patch, feel free to add yourself to the CREDITS
+file.  If you can't write your name in ASCII (or choose not to
+romanize it), then use UTF-8, and use your best judgement for how it
+should sort compared to the other names in the file.

@@ -4,6 +4,10 @@ Read this before submitting patches:
 
 In particular, patches without sign-off lines will not be accepted.
 
+If your patch is formatted very differently from the libmaple style,
+you may find the astyle options file in contrib/astylerc useful for
+auto-formatting it roughly in the libmaple style.
+
 LeafLabs is a small shop.  Please help us merge your patches
 efficiently by getting formatting nits etc. out of the way before
 submitting.

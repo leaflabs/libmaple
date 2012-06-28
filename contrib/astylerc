@@ -1,0 +1,22 @@
+# This is an astyle (http://astyle.sourceforge.net/) options file you
+# can use to autoformat code roughly along the lines of libmaple's
+# style guidelines. "Roughly" in the sense that if you use it on code
+# that wildly differs from the libmaple style, the patch stands a much
+# better chance of not getting held up for trivial reasons.
+#
+# Use it like this:
+#
+#     $ astyle --options=contrib/astylerc <your_source_file>
+#
+# It needs astyle version 2; versions 1.x are missing some of these
+# options.
+
+--indent=spaces=4
+--style=attach
+--indent-namespaces
+--pad-oper
+--pad-header
+--unpad-paren
+--align-pointer=name
+--indent-preprocessor
+--lineend=linux

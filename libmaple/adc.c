@@ -101,7 +101,7 @@ uint16 adc_read(const adc_dev *dev, uint8 channel) {
 
     regs->SQR3 = channel;
     regs->CR2 |= ADC_CR2_SWSTART;
-    while(!(regs->SR & ADC_SR_EOC))
+    while (!(regs->SR & ADC_SR_EOC))
         ;
 
     return (uint16)(regs->DR & ADC_DR_DATA);

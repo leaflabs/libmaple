@@ -38,12 +38,11 @@
  * whether it is I2C hardware or emulating software.
  */
 
-#include "wirish.h"
-
 #ifndef _WIREBASE_H_
 #define _WIREBASE_H_
 
-#include "i2c.h"
+#include <wirish/wirish.h>
+#include <libmaple/i2c.h>
 
 #define WIRE_BUFSIZ 32
 
@@ -88,14 +87,14 @@ public:
     void beginTransmission(int);
 
     /*
-     * Call the process function to process the message if the TX buffer has not
-     * overflowed.
+     * Call the process function to process the message if the TX
+     * buffer has not overflowed.
      */
     uint8 endTransmission(void);
 
     /*
-     * Request bytes from a slave device and process the request, storing into the
-     * receiving buffer.
+     * Request bytes from a slave device and process the request,
+     * storing into the receiving buffer.
      */
     uint8 requestFrom(uint8, int);
 

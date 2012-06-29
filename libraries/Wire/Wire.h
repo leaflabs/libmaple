@@ -37,11 +37,11 @@
  * modifications by gke and ala42.
  */
 
-#include "wirish.h"
-#include "WireBase.h"
-
 #ifndef _WIRE_H_
 #define _WIRE_H_
+
+#include "WireBase.h"
+#include <wirish/wirish.h>
 
 /*
  * On the Maple, let the default pins be in the same location as the Arduino
@@ -113,14 +113,15 @@ class TwoWire : public WireBase {
     uint8 process();
  public:
     /*
-     * Accept pin numbers for SCL and SDA lines. Set the delay needed to create the
-     * timing for I2C's Standard Mode and Fast Mode.
+     * Accept pin numbers for SCL and SDA lines. Set the delay needed
+     * to create the timing for I2C's Standard Mode and Fast Mode.
      */
     TwoWire(uint8 = SCL, uint8 = SDA, uint8 = SOFT_STANDARD);
 
     /*
-     * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as master. This
-     * function overwrites the default behaviour of .begin(uint8) in WireBase
+     * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as
+     * master. This function overwrites the default behaviour of
+     * .begin(uint8) in WireBase
      */
     void begin(uint8 = 0x00);
 

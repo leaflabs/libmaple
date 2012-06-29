@@ -36,13 +36,12 @@
  * users easy interaction with the I2C Hardware in a familiar method.
  */
 
-#include "wirish.h"
-#include "WireBase.h"
-
 #ifndef _HARDWIRE_H_
 #define _HARDWIRE_H_
 
-#include "i2c.h"
+#include "WireBase.h"
+#include <wirish/wirish.h>
+#include <libmaple/i2c.h>
 
 class HardWire : public WireBase {
 private:
@@ -50,8 +49,8 @@ private:
     uint8    dev_flags;
 protected:
     /*
-     * Processes the incoming I2C message defined by WireBase to the hardware. If
-     * an error occured, restart the I2C device.
+     * Processes the incoming I2C message defined by WireBase to the
+     * hardware. If an error occured, restart the I2C device.
      */
     uint8 process();
 public:

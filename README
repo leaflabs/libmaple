@@ -22,11 +22,9 @@ microcontrollers.  It has a pure C layer, libmaple proper, which does
 most of the work, and a C++ layer, Wirish, which provides high-level
 convenience functions and a Wiring/Arduino-compatible interface.
 
-libmaple's primary purpose is for use with LeafLabs' Maple line of
-microcontroller development boards (hence the name). However, it is
-portable across a variety of medium- and high-density STM32F1xx chips.
-For example, libmaple has successfully been ported to the ST Discovery
-kits.
+libmaple is designed for portability, and currently runs on a variety
+of STM32F1 performance and value line MCUs, with experimental support
+for STM32F2 MCUs.
 
 Using libmaple
 ------------------------------------------------------------------------------
@@ -39,8 +37,7 @@ compilation and upload toolchain:
     http://leaflabs.com/docs/maple-ide-install.html
 
 Additionally, a HOWTO on setting up this library for use from the
-command line in a Unix environment is available in our online HTML
-documentation:
+command line in a Unix environment is available here:
 
     http://leaflabs.com/docs/unix-toolchain.html
 
@@ -59,14 +56,6 @@ leaflabs-docs repository.  In order to obtain the leaflabs-docs
 repository, visit:
 
     http://github.com/leaflabs/leaflabs-docs/
-
-Our bugtracker is available at:
-
-    http://code.google.com/p/leaflabs/issues/list
-
-For changes that block official releases, see our wiki:
-
-    http://wiki.leaflabs.com/index.php?title=Blocking_Changes
 
 Repository Layout
 ------------------------------------------------------------------------------
@@ -107,7 +96,9 @@ Repository Layout
 
 /Makefile
 
-    libmaple build instructions for GNU Make.
+    libmaple build instructions for GNU Make. (This is supplemented by
+    build-targets.mk, the rules.mk files throughout the tree, and the
+    files in support/make/).
 
 /notes/
 
@@ -115,7 +106,7 @@ Repository Layout
 
 /README
 
-    This file.
+    This file ;).
 
 /support/
 
@@ -123,10 +114,10 @@ Repository Layout
 
     gdb/              GDB scripts.
     ld/               Linker scripts.
-    make/             Additional scripts used by the top-level Makefile.
+    make/             Additional files used by the top-level Makefile.
     scripts/          Miscellany.
     doxygen/          Doxygen configuration.
-    stm32loader.py    Script for uploading via the built-in USART bootloader.
+    stm32loader.py    Upload script for the STM32's built-in USART bootloader.
 
 /wirish/
 

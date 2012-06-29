@@ -77,3 +77,7 @@ W: http://sarup.dk/index.html
 N: Andy Scott ("xttocs")
 E: andy.g.scott@gmail.com
 D: LiquidCrystal library
+
+N: Trystan Jones ("crenn")
+E: crenn6977@gmail.com
+D: New Wire library

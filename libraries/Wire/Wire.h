@@ -25,77 +25,111 @@
  *****************************************************************************/
 
 /**
- *  @brief Wire library, ported from Arduino. Provides a lean
- *  interface to I2C (two-wire) communication.
+ * @file Wire.h
+ * @author Trystan Jones <crenn6977@gmail.com>
+ * @brief Wire library, uses the WireBase to create the primary interface
+ *        while keeping low level interactions invisible to the user.
  */
+
+/*
+ * Library updated by crenn to follow new Wire system.
+ * Code was derived from the original Wire for maple code by leaflabs and the
+ * modifications by gke and ala42.
+ */
+
+#include "wirish.h"
+#include "WireBase.h"
 
 #ifndef _WIRE_H_
 #define _WIRE_H_
 
-#include <wirish/wirish.h>
+/*
+ * On the Maple, let the default pins be in the same location as the Arduino
+ * pins
+ */
+#define SDA 19
+#define SCL 20
 
-typedef struct {
-  uint8 scl;
-  uint8 sda;
-} Port;
+//#define I2C_DELAY(x) {uint32 time=micros(); while(time>(micros()+x));}
+#define I2C_DELAY(x) do{for(int i=0;i<x;i++) {asm volatile("nop");}}while(0)
+#define SOFT_STANDARD 25
+#define SOFT_FAST 7
 
-/* You must update the online docs if you change this value. */
-#define WIRE_BUFSIZ 32
-
-/* return codes from endTransmission() */
-#define SUCCESS   0        /* transmission was successful */
-#define EDATA     1        /* too much data */
-#define ENACKADDR 2        /* received nack on transmit of address */
-#define ENACKTRNS 3        /* received nack on transmit of data */
-#define EOTHER    4        /* other error */
-
-#define SDA 20
-#define SCL 21
-
-#define I2C_WRITE 0
-#define I2C_READ  1
-
-#define I2C_DELAY do{for(int i=0;i<50;i++) {asm volatile("nop");}}while(0)
-
-class TwoWire {
+class TwoWire : public WireBase {
  private:
-    uint8 rx_buf[WIRE_BUFSIZ];      /* receive buffer */
-    uint8 rx_buf_idx;               /* first unread idx in rx_buf */
-    uint8 rx_buf_len;               /* number of bytes read */
+    const uint8 i2c_delay;
+    uint8       scl_pin;
+    uint8       sda_pin;
 
-    uint8 tx_addr;                  /* address transmitting to */
-    uint8 tx_buf[WIRE_BUFSIZ];      /* transmit buffer */
-    uint8 tx_buf_idx;  /* next idx available in tx_buf, -1 overflow */
-    boolean tx_buf_overflow;
-    Port port;
-    uint8 writeOneByte(uint8);
-    uint8 readOneByte(uint8, uint8*);
+    /*
+     * Sets the SCL line to HIGH/LOW and allow for clock stretching by slave
+     * devices
+     */
+    void set_scl(bool);
+
+    /*
+     * Sets the SDA line to HIGH/LOW
+     */
+    void set_sda(bool);
+
+    /*
+     * Creates a Start condition on the bus
+     */
+    void i2c_start();
+
+    /*
+     * Creates a Stop condition on the bus
+     */
+    void  i2c_stop();
+
+    /*
+     * Gets an ACK condition from a slave device on the bus
+     */
+    bool i2c_get_ack();
+
+    /*
+     * Creates a ACK condition on the bus
+     */
+    void i2c_send_ack();
+
+    /*
+     * Creates a NACK condition on the bus
+     */
+    void i2c_send_nack();
+
+    /*
+     * Shifts in the data through SDA and clocks SCL for the slave device
+     */
+    uint8 i2c_shift_in();
+
+    /*
+     * Shifts out the data through SDA and clocks SCL for the slave device
+     */
+    void i2c_shift_out(uint8);
+ protected:
+    /*
+     * Processes the incoming I2C message defined by WireBase
+     */
+    uint8 process();
  public:
-    TwoWire();
-    void begin();
-    void begin(uint8, uint8);
-    void beginTransmission(uint8);
-    void beginTransmission(int);
-    uint8 endTransmission(void);
-    uint8 requestFrom(uint8, int);
-    uint8 requestFrom(int, int);
-    void send(uint8);
-    void send(uint8*, int);
-    void send(int);
-    void send(int*, int);
-    void send(char*);
-    uint8 available();
-    uint8 receive();
+    /*
+     * Accept pin numbers for SCL and SDA lines. Set the delay needed to create the
+     * timing for I2C's Standard Mode and Fast Mode.
+     */
+    TwoWire(uint8 = SCL, uint8 = SDA, uint8 = SOFT_STANDARD);
+
+    /*
+     * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as master. This
+     * function overwrites the default behaviour of .begin(uint8) in WireBase
+     */
+    void begin(uint8 = 0x00);
+
+    /*
+     * If object is destroyed, set pin numbers to 0.
+     */
+    ~TwoWire();
 };
 
-void    i2c_start(Port port);
-void    i2c_stop(Port port);
-boolean i2c_get_ack(Port port);
-void    i2c_send_ack(Port port);
-void    i2c_send_nack(Port port);
-uint8   i2c_shift_in(Port port);
-void    i2c_shift_out(Port port, uint8 val);
-
-extern TwoWire Wire;
+extern TwoWire Wire();
 
 #endif // _WIRE_H_

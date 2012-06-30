@@ -322,10 +322,14 @@ typedef enum adc_smp_rate {
  * @brief STM32F2 ADC prescalers, as divisors of PCLK2.
  */
 typedef enum adc_prescaler {
-    ADC_PRE_PCLK2_DIV_2 = ADC_CCR_ADCPRE_PCLK2_DIV_2, /** PCLK2 divided by 2 */
-    ADC_PRE_PCLK2_DIV_4 = ADC_CCR_ADCPRE_PCLK2_DIV_4, /** PCLK2 divided by 4 */
-    ADC_PRE_PCLK2_DIV_6 = ADC_CCR_ADCPRE_PCLK2_DIV_6, /** PCLK2 divided by 6 */
-    ADC_PRE_PCLK2_DIV_8 = ADC_CCR_ADCPRE_PCLK2_DIV_8, /** PCLK2 divided by 8 */
+    /** PCLK2 divided by 2 */
+    ADC_PRE_PCLK2_DIV_2 = ADC_CCR_ADCPRE_PCLK2_DIV_2,
+    /** PCLK2 divided by 4 */
+    ADC_PRE_PCLK2_DIV_4 = ADC_CCR_ADCPRE_PCLK2_DIV_4,
+    /** PCLK2 divided by 6 */
+    ADC_PRE_PCLK2_DIV_6 = ADC_CCR_ADCPRE_PCLK2_DIV_6,
+    /** PCLK2 divided by 8 */
+    ADC_PRE_PCLK2_DIV_8 = ADC_CCR_ADCPRE_PCLK2_DIV_8,
 } adc_prescaler;
 
 #endif

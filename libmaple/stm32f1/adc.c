@@ -68,6 +68,9 @@ const adc_dev *ADC3 = &adc3;
 
 /**
  * @brief Calibrate an ADC peripheral
+ *
+ * Availability: STM32F1.
+ *
  * @param dev adc device
  */
 void adc_calibrate(const adc_dev *dev) {

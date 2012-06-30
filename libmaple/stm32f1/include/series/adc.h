@@ -53,11 +53,11 @@ extern const struct adc_dev *ADC3;
  * Register map base pointers
  */
 
-/** ADC1 register map base pointer. */
+/** STM32F1 ADC1 register map base pointer. */
 #define ADC1_BASE                       ((struct adc_reg_map*)0x40012400)
-/** ADC2 register map base pointer. */
+/** STM32F1 ADC2 register map base pointer. */
 #define ADC2_BASE                       ((struct adc_reg_map*)0x40012800)
-/** ADC3 register map base pointer. */
+/** STM32F1 ADC3 register map base pointer. */
 #define ADC3_BASE                       ((struct adc_reg_map*)0x40013C00)
 
 /*
@@ -205,11 +205,6 @@ typedef enum adc_extsel_event {
  * @brief STM32F1 sample times, in ADC clock cycles.
  *
  * These control the amount of time spent sampling the input voltage.
- *
- * IMPORTANT: maximum external impedance must be below 0.4kOhms for
- * 1.5 cycle sampling time. At 55.5 cycles/sample, the external input
- * impedance must be at most 50kOhms. See your device's datasheet for
- * more information.
  */
 typedef enum adc_smp_rate {
     ADC_SMPR_1_5,               /**< 1.5 ADC cycles */
@@ -226,10 +221,14 @@ typedef enum adc_smp_rate {
  * @brief STM32F1 ADC prescalers, as divisors of PCLK2.
  */
 typedef enum adc_prescaler {
-    ADC_PRE_PCLK2_DIV_2 = RCC_ADCPRE_PCLK_DIV_2, /** PCLK2 divided by 2 */
-    ADC_PRE_PCLK2_DIV_4 = RCC_ADCPRE_PCLK_DIV_4, /** PCLK2 divided by 4 */
-    ADC_PRE_PCLK2_DIV_6 = RCC_ADCPRE_PCLK_DIV_6, /** PCLK2 divided by 6 */
-    ADC_PRE_PCLK2_DIV_8 = RCC_ADCPRE_PCLK_DIV_8, /** PCLK2 divided by 8 */
+    /** PCLK2 divided by 2 */
+    ADC_PRE_PCLK2_DIV_2 = RCC_ADCPRE_PCLK_DIV_2,
+    /** PCLK2 divided by 4 */
+    ADC_PRE_PCLK2_DIV_4 = RCC_ADCPRE_PCLK_DIV_4,
+    /** PCLK2 divided by 6 */
+    ADC_PRE_PCLK2_DIV_6 = RCC_ADCPRE_PCLK_DIV_6,
+    /** PCLK2 divided by 8 */
+    ADC_PRE_PCLK2_DIV_8 = RCC_ADCPRE_PCLK_DIV_8,
 } adc_prescaler;
 
 /*

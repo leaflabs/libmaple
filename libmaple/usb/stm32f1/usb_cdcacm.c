@@ -506,21 +506,22 @@ static void vcomDataRxCb(void) {
     newBytes = usb_get_ep_rx_count(VCOM_RX_ENDP);
     usb_set_ep_rx_stat(VCOM_RX_ENDP, USB_EP_STAT_RX_NAK);
 
-    /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
-    uint8 chkBuf[4];
-    uint8 cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
     if (reset_state == DTR_NEGEDGE) {
         reset_state = DTR_LOW;
 
-        if  (newBytes >= 4) {
-            unsigned int target = (unsigned int)wait_reset | 0x1;
+        /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
+        static const uint8 magic[4] = {0x31, 0x45, 0x41, 0x46};
 
-            usb_copy_from_pma(chkBuf, 4, VCOM_RX_ADDR);
+        if  (newBytes >= sizeof(magic)) {
+            unsigned int target = (unsigned int)wait_reset | 0x1;
+            uint8 chkBuf[sizeof(magic)];
+
+            usb_copy_from_pma(chkBuf, sizeof(chkBuf), VCOM_RX_ADDR);
 
             int i;
             USB_Bool cmpMatch = TRUE;
-            for (i = 0; i < 4; i++) {
-                if (chkBuf[i] != cmpBuf[i]) {
+            for (i = 0; i < sizeof(magic); i++) {
+                if (chkBuf[i] != magic[i]) {
                     cmpMatch = FALSE;
                 }
             }

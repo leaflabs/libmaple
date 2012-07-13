@@ -30,6 +30,10 @@
  * @brief System control block header
  */
 
+/*
+ * FIXME: STM32F2?
+ */
+
 #ifndef _LIBMAPLE_SCB_H_
 #define _LIBMAPLE_SCB_H_
 

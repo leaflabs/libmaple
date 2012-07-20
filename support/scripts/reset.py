@@ -64,8 +64,6 @@ def choose_among_options(options):
 plat_sys = platform.system()
 plat_bits = platform.architecture()[0]
 if plat_sys == 'Linux':
-    if plat_bits == '64bit':
-        print('You are using 64-bit Linux. Let us know if this works.')
     maple_path = unix_get_maple_path('ttyACM')
     # fall back on /dev/maple if that doesn't work
     if maple_path is None:

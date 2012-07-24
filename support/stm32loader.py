@@ -371,14 +371,6 @@ def read(filename):
 
 if __name__ == "__main__":
 
-    # Import Psyco if available
-    try:
-        import psyco
-        psyco.full()
-        print("Using Psyco...")
-    except ImportError:
-        pass
-
     conf = {
             'port': 'auto',
             'baud': 115200,

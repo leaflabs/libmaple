@@ -50,7 +50,7 @@ def mdebug(level, message):
 class CmdException(Exception):
     pass
 
-class CommandInterface:
+class CommandInterface(object):
     def open(self, aport='/dev/tty.usbserial-FTD3TMCH', abaudrate=115200) :
         self.sp = serial.Serial(
             port=aport,

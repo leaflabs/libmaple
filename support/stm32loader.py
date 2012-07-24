@@ -425,8 +425,6 @@ if __name__ == "__main__":
             conf['address'] = eval(a)
         elif o == '-l':
             conf['len'] = eval(a)
-#        elif o == '-f':
-#            conf['fname'] = a
         else:
             assert False, "unhandled option"
 
@@ -471,12 +469,6 @@ if __name__ == "__main__":
         if len(id) < 2 or id[0] != 0x04:
             raise Exception('Unrecognised chip ID')
 
-#    cmd.cmdGetVersion()
-#    cmd.cmdGetID()
-#    cmd.cmdReadoutUnprotect()
-#    cmd.cmdWriteUnprotect()
-#    cmd.cmdWriteProtect([0, 1])
-
         if conf['erase']:
             cmd.cmdEraseMemory()
 
@@ -496,10 +488,8 @@ if __name__ == "__main__":
 
         if not conf['write'] and conf['read']:
             rdata = cmd.readMemory(conf['address'], conf['len'])
-#            file(conf['fname'], 'wb').write(rdata)
             file(args[0], 'wb').write(''.join(map(chr,rdata)))
 
-#    cmd.cmdGo(addr + 0x04)
     finally:
         cmd.releaseChip()
 

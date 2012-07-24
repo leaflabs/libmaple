@@ -448,7 +448,7 @@ if __name__ == "__main__":
         try:
             cmd.initChip()
         except CmdException:
-            print("Can't init. Ensure that BOOT0 is enabled and reset device")
+            print("Can't init. Ensure BOOT0=1, BOOT1=0, and reset device")
 
         bootversion = cmd.cmdGet()
 

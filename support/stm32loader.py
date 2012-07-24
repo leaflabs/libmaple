@@ -46,6 +46,17 @@ def mdebug(level, message):
     if(QUIET >= level):
         print(message, file=sys.stderr)
 
+# Takes chip IDs (obtained via Get ID command) to human-readable names
+CHIP_ID_STRS = {0x410: 'STM32F1, performance, medium-density',
+                0x411: 'STM32F2',
+                0x412: 'STM32F1, performance, low-density',
+                0x413: 'STM32F4',
+                0x414: 'STM32F1, performance, high-density',
+                0x416: 'STM32L1, performance, medium-density',
+                0x418: 'STM32F1, connectivity',
+                0x420: 'STM32F1, value, medium-density',
+                0x428: 'STM32F1, value, high-density',
+                0x430: 'STM32F1, performance, XL-density'}
 
 class CmdException(Exception):
     pass
@@ -64,8 +75,13 @@ class CommandInterface(object):
         )
 
 
-    def _wait_for_ask(self, info = ""):
-        got = self.sp.read(1)
+    def _wait_for_ask(self, info="", timeout=0):
+        stop = time.time() + timeout
+        got = None
+        while not got:
+            got = self.sp.read(1)
+            if time.time() > stop:
+                break
 
         if not got:
             raise CmdException("No response to %s" % info)
@@ -227,6 +243,24 @@ class CommandInterface(object):
             mdebug(10, "    Erase memory done")
         else:
             raise CmdException("Erase memory (0x43) failed")
+
+
+    # TODO support for non-global mass erase
+    GLOBAL_ERASE_TIMEOUT_SECONDS = 20   # This takes a while
+    def cmdExtendedEraseMemory(self):
+        if self.cmdGeneric(0x44):
+            mdebug(10, "*** Extended erase memory command")
+            # Global mass erase
+            self.sp.write(chr(0xFF))
+            self.sp.write(chr(0xFF))
+            # Checksum
+            self.sp.write(chr(0x00))
+            self._wait_for_ask("0x44 extended erase failed",
+                               timeout=self.GLOBAL_ERASE_TIMEOUT_SECONDS)
+            mdebug(10, "    Extended erase memory done")
+        else:
+            raise CmdException("Extended erase memory (0x44) failed")
+
 
     def cmdWriteProtect(self, sectors):
         if self.cmdGeneric(0x63):
@@ -457,14 +491,24 @@ if __name__ == "__main__":
         if bootversion < 20 or bootversion >= 100:
             raise Exception('Unreasonable bootloader version %d' % bootversion)
 
-        id = [ord(x) for x in cmd.cmdGetID()]
-        mdebug(0, "Chip id '%s'" % ' '.join('0x%x' % x for x in id))
+        chip_id = cmd.cmdGetID()
+        assert len(chip_id) == 2, "Unreasonable chip id: %s" % repr(chip_id)
+        chip_id_num = (ord(chip_id[0]) << 8) | ord(chip_id[1])
+        chip_id_str = CHIP_ID_STRS.get(chip_id_num, None)
 
-        if len(id) < 2 or id[0] != 0x04:
-            raise Exception('Unrecognised chip ID')
+        if chip_id_str is None:
+            mdebug(0, 'Warning: unrecognised chip ID 0x%x' % chip_id_num)
+        else:
+            mdebug(0, "Chip id 0x%x, %s" % (chip_id_num, chip_id_str))
 
         if conf['erase']:
-            cmd.cmdEraseMemory()
+            # Pre-3.0 bootloaders use the erase memory
+            # command. Starting with 3.0, extended erase memory
+            # replaced this command.
+            if bootversion < 0x30:
+                cmd.cmdEraseMemory()
+            else:
+                cmd.cmdExtendedEraseMemory()
 
         if conf['write']:
             cmd.writeMemory(conf['address'], data)

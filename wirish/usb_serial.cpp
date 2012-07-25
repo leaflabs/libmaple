@@ -58,8 +58,7 @@ void USBSerial::end(void) {
 }
 
 void USBSerial::write(uint8 ch) {
-    const uint8 buf[] = {ch};
-    this->write(buf, 1);
+    this->write(&ch, 1);
 }
 
 void USBSerial::write(const char *str) {

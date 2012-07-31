@@ -94,6 +94,19 @@ uint16 usb_cdcacm_get_pending(void);
 uint8 usb_cdcacm_get_dtr(void);
 uint8 usb_cdcacm_get_rts(void);
 
+/*
+ * Hack: hooks for bootloader reset signalling
+ */
+
+#define USB_CDCACM_HOOK_RX 0x1
+#define USB_CDCACM_HOOK_IFACE_SETUP 0x2
+
+void usb_cdcacm_set_hooks(unsigned hook_flags, void (*hook)(unsigned, void*));
+
+static __always_inline void usb_cdcacm_remove_hooks(unsigned hook_flags) {
+    usb_cdcacm_set_hooks(hook_flags, 0);
+}
+
 #ifdef __cplusplus
 }
 #endif

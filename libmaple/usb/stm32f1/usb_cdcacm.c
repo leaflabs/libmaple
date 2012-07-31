@@ -354,6 +354,22 @@ USER_STANDARD_REQUESTS User_Standard_Requests = {
 };
 
 /*
+ * User hooks
+ */
+
+static void (*rx_hook)(unsigned, void*) = 0;
+static void (*iface_setup_hook)(unsigned, void*) = 0;
+
+void usb_cdcacm_set_hooks(unsigned hook_flags, void (*hook)(unsigned, void*)) {
+    if (hook_flags & USB_CDCACM_HOOK_RX) {
+        rx_hook = hook;
+    }
+    if (hook_flags & USB_CDCACM_HOOK_IFACE_SETUP) {
+        iface_setup_hook = hook;
+    }
+}
+
+/*
  * CDC ACM interface
  */
 
@@ -522,6 +538,10 @@ static void vcomDataRxCb(void) {
     }
 
     usb_copy_from_pma(vcomBufferRx, newBytes, USB_CDCACM_RX_ADDR);
+
+    if (rx_hook) {
+        rx_hook(USB_CDCACM_HOOK_RX, 0);
+    }
 }
 
 static uint8* vcomGetSetLineCoding(uint16 length) {
@@ -607,6 +627,12 @@ static RESULT usbDataSetup(uint8 request) {
     CopyRoutine = NULL;
 
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
+        /* Call the user hook first. */
+        if (iface_setup_hook) {
+            uint8 req_copy = request;
+            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
+        }
+
         switch (request) {
         case (USB_CDCACM_GET_LINE_CODING):
             CopyRoutine = vcomGetSetLineCoding;
@@ -636,6 +662,11 @@ static RESULT usbNoDataSetup(uint8 request) {
 
     /* we support set com feature but dont handle it */
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
+        /* Call the user hook first. */
+        if (iface_setup_hook) {
+            uint8 req_copy = request;
+            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
+        }
 
         switch (request) {
         case (USB_CDCACM_SET_COMM_FEATURE):

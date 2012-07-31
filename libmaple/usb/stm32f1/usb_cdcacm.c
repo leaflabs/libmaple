@@ -393,17 +393,19 @@ USER_STANDARD_REQUESTS User_Standard_Requests = {
  */
 
 void usb_cdcacm_enable(gpio_dev *disc_dev, uint8 disc_bit) {
-    /* Present ourselves to the host */
+    /* Present ourselves to the host. Writing 0 to "disc" pin must
+     * pull USB_DP pin up while leaving USB_DM pulled down by the
+     * transceiver. See USB 2.0 spec, section 7.1.7.3. */
     gpio_set_mode(disc_dev, disc_bit, GPIO_OUTPUT_PP);
-    gpio_write_bit(disc_dev, disc_bit, 0); // presents us to the host
+    gpio_write_bit(disc_dev, disc_bit, 0);
 
-    /* initialize USB peripheral */
+    /* Initialize the USB peripheral. */
     usb_init_usblib(USBLIB, ep_int_in, ep_int_out);
 }
 
 void usb_cdcacm_disable(gpio_dev *disc_dev, uint8 disc_bit) {
-    // These are just guesses about how to do this, but it seems to work.
-    // TODO: verify this with USB spec
+    /* Turn off the interrupt and signal disconnect (see e.g. USB 2.0
+     * spec, section 7.1.7.3). */
     nvic_irq_disable(NVIC_USB_LP_CAN_RX0);
     gpio_write_bit(disc_dev, disc_bit, 1);
 }

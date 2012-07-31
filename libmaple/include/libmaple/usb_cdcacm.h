@@ -27,6 +27,8 @@
 /**
  * @file libmaple/include/libmaple/usb_cdcacm.h
  * @brief USB CDC ACM (virtual serial terminal) support
+ *
+ * IMPORTANT: this API is unstable, and may change without notice.
  */
 
 #ifndef _LIBMAPLE_USB_CDCACM_H_
@@ -38,6 +40,46 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*
+ * Exposed configuration
+ */
+
+#define USB_CDCACM_CTRL_EPNUM           0x00
+#define USB_CDCACM_CTRL_RX_ADDR         0x40
+#define USB_CDCACM_CTRL_TX_ADDR         0x80
+#define USB_CDCACM_CTRL_EPSIZE          0x40
+
+#define USB_CDCACM_TX_ENDP              1
+#define USB_CDCACM_TX_EPNUM             0x01
+#define USB_CDCACM_TX_ADDR              0xC0
+#define USB_CDCACM_TX_EPSIZE            0x40
+
+#define USB_CDCACM_NOTIFICATION_ENDP    2
+#define USB_CDCACM_NOTIFICATION_EPNUM   0x02
+#define USB_CDCACM_NOTIFICATION_ADDR    0x100
+#define USB_CDCACM_NOTIFICATION_EPSIZE  0x40
+
+#define USB_CDCACM_RX_ENDP              3
+#define USB_CDCACM_RX_EPNUM             0x03
+#define USB_CDCACM_RX_ADDR              0x110
+#define USB_CDCACM_RX_EPSIZE            0x40
+#define USB_CDCACM_RX_BUFLEN            (USB_CDCACM_RX_EPSIZE*3)
+
+/*
+ * CDC ACM Requests
+ */
+
+#define USB_CDCACM_SET_LINE_CODING        0x20
+#define USB_CDCACM_GET_LINE_CODING        0x21
+#define USB_CDCACM_SET_COMM_FEATURE       0x02
+#define USB_CDCACM_SET_CONTROL_LINE_STATE 0x22
+#define USB_CDCACM_CONTROL_LINE_DTR       (0x01)
+#define USB_CDCACM_CONTROL_LINE_RTS       (0x02)
+
+/*
+ * CDC ACM interface
+ */
 
 void usb_cdcacm_enable(gpio_dev*, uint8);
 void usb_cdcacm_disable(gpio_dev*, uint8);

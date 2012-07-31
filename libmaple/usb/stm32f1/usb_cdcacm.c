@@ -85,42 +85,6 @@ static void usbSetDeviceAddress(void);
 static void wait_reset(void);
 
 /*
- * VCOM config
- */
-
-#define VCOM_CTRL_EPNUM           0x00
-#define VCOM_CTRL_RX_ADDR         0x40
-#define VCOM_CTRL_TX_ADDR         0x80
-#define VCOM_CTRL_EPSIZE          0x40
-
-#define VCOM_TX_ENDP              1
-#define VCOM_TX_EPNUM             0x01
-#define VCOM_TX_ADDR              0xC0
-#define VCOM_TX_EPSIZE            0x40
-
-#define VCOM_NOTIFICATION_ENDP    2
-#define VCOM_NOTIFICATION_EPNUM   0x02
-#define VCOM_NOTIFICATION_ADDR    0x100
-#define VCOM_NOTIFICATION_EPSIZE  0x40
-
-#define VCOM_RX_ENDP              3
-#define VCOM_RX_EPNUM             0x03
-#define VCOM_RX_ADDR              0x110
-#define VCOM_RX_EPSIZE            0x40
-#define VCOM_RX_BUFLEN            (VCOM_RX_EPSIZE*3)
-
-/*
- * CDC ACM Requests
- */
-
-#define SET_LINE_CODING        0x20
-#define GET_LINE_CODING        0x21
-#define SET_COMM_FEATURE       0x02
-#define SET_CONTROL_LINE_STATE 0x22
-#define CONTROL_LINE_DTR       (0x01)
-#define CONTROL_LINE_RTS       (0x02)
-
-/*
  * Descriptors
  */
 
@@ -203,9 +167,9 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
         .bLength          = sizeof(USB_Descriptor_Endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN |
-                             VCOM_NOTIFICATION_EPNUM),
+                             USB_CDCACM_NOTIFICATION_EPNUM),
         .bmAttributes     = EP_TYPE_INTERRUPT,
-        .wMaxPacketSize   = VCOM_NOTIFICATION_EPSIZE,
+        .wMaxPacketSize   = USB_CDCACM_NOTIFICATION_EPSIZE,
         .bInterval        = 0xFF,
     },
 
@@ -224,18 +188,19 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
     .DataOutEndpoint = {
         .bLength          = sizeof(USB_Descriptor_Endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
-        .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_OUT | VCOM_RX_EPNUM),
+        .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_OUT |
+                             USB_CDCACM_RX_EPNUM),
         .bmAttributes     = EP_TYPE_BULK,
-        .wMaxPacketSize   = VCOM_RX_EPSIZE,
+        .wMaxPacketSize   = USB_CDCACM_RX_EPSIZE,
         .bInterval        = 0x00,
     },
 
     .DataInEndpoint = {
         .bLength          = sizeof(USB_Descriptor_Endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
-        .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN | VCOM_TX_EPNUM),
+        .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN | USB_CDCACM_TX_EPNUM),
         .bmAttributes     = EP_TYPE_BULK,
-        .wMaxPacketSize   = VCOM_TX_EPSIZE,
+        .wMaxPacketSize   = USB_CDCACM_TX_EPSIZE,
         .bInterval        = 0x00,
     },
 };
@@ -319,11 +284,11 @@ USB_Line_Coding line_coding = {
     .paritytype = 0x00,
     .datatype = 0x08
 };
-uint8 vcomBufferRx[VCOM_RX_BUFLEN];
+uint8 vcomBufferRx[USB_CDCACM_RX_BUFLEN];
 volatile uint32 countTx    = 0;
 volatile uint32 recvBufIn  = 0;
 volatile uint32 recvBufOut = 0;
-volatile uint32 maxNewBytes   = VCOM_RX_BUFLEN;
+volatile uint32 maxNewBytes   = USB_CDCACM_RX_BUFLEN;
 volatile uint32 newBytes = 0;
 RESET_STATE reset_state = DTR_UNSET;
 uint8       line_dtr_rts = 0;
@@ -426,18 +391,18 @@ uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
         return 0;
     }
 
-    // We can only put VCOM_TX_EPSIZE bytes in the buffer
+    // We can only put USB_CDCACM_TX_EPSIZE bytes in the buffer
     /* FIXME then why are we only copying half as many? */
-    if (len > VCOM_TX_EPSIZE / 2) {
-        len = VCOM_TX_EPSIZE / 2;
+    if (len > USB_CDCACM_TX_EPSIZE / 2) {
+        len = USB_CDCACM_TX_EPSIZE / 2;
     }
 
     // Try to load some bytes if we can
     if (len) {
-        usb_copy_to_pma(buf, len, VCOM_TX_ADDR);
-        usb_set_ep_tx_count(VCOM_TX_ENDP, len);
+        usb_copy_to_pma(buf, len, USB_CDCACM_TX_ADDR);
+        usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, len);
         countTx += len;
-        usb_set_ep_tx_stat(VCOM_TX_ENDP, USB_EP_STAT_TX_VALID);
+        usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_VALID);
     }
 
     return len;
@@ -473,8 +438,8 @@ uint32 usb_cdcacm_rx(uint8* buf, uint32 len) {
 
     /* Re-enable the RX endpoint, which we had set to receive 0 bytes */
     if (newBytes == 0) {
-        usb_set_ep_rx_count(VCOM_RX_ENDP, VCOM_RX_EPSIZE);
-        usb_set_ep_rx_stat(VCOM_RX_ENDP, USB_EP_STAT_RX_VALID);
+        usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_EPSIZE);
+        usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
         offset = 0;
     }
 
@@ -482,11 +447,11 @@ uint32 usb_cdcacm_rx(uint8* buf, uint32 len) {
 }
 
 uint8 usb_cdcacm_get_dtr() {
-    return ((line_dtr_rts & CONTROL_LINE_DTR) != 0);
+    return ((line_dtr_rts & USB_CDCACM_CONTROL_LINE_DTR) != 0);
 }
 
 uint8 usb_cdcacm_get_rts() {
-    return ((line_dtr_rts & CONTROL_LINE_RTS) != 0);
+    return ((line_dtr_rts & USB_CDCACM_CONTROL_LINE_RTS) != 0);
 }
 
 /*
@@ -507,8 +472,8 @@ static void vcomDataRxCb(void) {
 
     /* setEPRxCount on the previous cycle should garuntee
        we havnt received more bytes than we can fit */
-    newBytes = usb_get_ep_rx_count(VCOM_RX_ENDP);
-    usb_set_ep_rx_stat(VCOM_RX_ENDP, USB_EP_STAT_RX_NAK);
+    newBytes = usb_get_ep_rx_count(USB_CDCACM_RX_ENDP);
+    usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_NAK);
 
     /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
     uint8 chkBuf[4];
@@ -519,7 +484,7 @@ static void vcomDataRxCb(void) {
         if  (newBytes >= 4) {
             unsigned int target = (unsigned int)wait_reset | 0x1;
 
-            usb_copy_from_pma(chkBuf, 4, VCOM_RX_ADDR);
+            usb_copy_from_pma(chkBuf, 4, USB_CDCACM_RX_ADDR);
 
             int i;
             USB_Bool cmpMatch = TRUE;
@@ -556,7 +521,7 @@ static void vcomDataRxCb(void) {
         }
     }
 
-    usb_copy_from_pma(vcomBufferRx, newBytes, VCOM_RX_ADDR);
+    usb_copy_from_pma(vcomBufferRx, newBytes, USB_CDCACM_RX_ADDR);
 }
 
 static uint8* vcomGetSetLineCoding(uint16 length) {
@@ -599,32 +564,33 @@ static void usbReset(void) {
     /* setup control endpoint 0 */
     usb_set_ep_type(USB_EP0, USB_EP_EP_TYPE_CONTROL);
     usb_set_ep_tx_stat(USB_EP0, USB_EP_STAT_TX_STALL);
-    usb_set_ep_rx_addr(USB_EP0, VCOM_CTRL_RX_ADDR);
-    usb_set_ep_tx_addr(USB_EP0, VCOM_CTRL_TX_ADDR);
+    usb_set_ep_rx_addr(USB_EP0, USB_CDCACM_CTRL_RX_ADDR);
+    usb_set_ep_tx_addr(USB_EP0, USB_CDCACM_CTRL_TX_ADDR);
     usb_clear_status_out(USB_EP0);
 
     usb_set_ep_rx_count(USB_EP0, pProperty->MaxPacketSize);
     usb_set_ep_rx_stat(USB_EP0, USB_EP_STAT_RX_VALID);
 
     /* setup management endpoint 1  */
-    usb_set_ep_type(VCOM_NOTIFICATION_ENDP, USB_EP_EP_TYPE_INTERRUPT);
-    usb_set_ep_tx_addr(VCOM_NOTIFICATION_ENDP, VCOM_NOTIFICATION_ADDR);
-    usb_set_ep_tx_stat(VCOM_NOTIFICATION_ENDP, USB_EP_STAT_TX_NAK);
-    usb_set_ep_rx_stat(VCOM_NOTIFICATION_ENDP, USB_EP_STAT_RX_DISABLED);
+    usb_set_ep_type(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_EP_TYPE_INTERRUPT);
+    usb_set_ep_tx_addr(USB_CDCACM_NOTIFICATION_ENDP,
+                       USB_CDCACM_NOTIFICATION_ADDR);
+    usb_set_ep_tx_stat(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_STAT_TX_NAK);
+    usb_set_ep_rx_stat(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_STAT_RX_DISABLED);
 
     /* TODO figure out differences in style between RX/TX EP setup */
 
     /* set up data endpoint OUT (RX) */
-    usb_set_ep_type(VCOM_RX_ENDP, USB_EP_EP_TYPE_BULK);
-    usb_set_ep_rx_addr(VCOM_RX_ENDP, 0x110);
-    usb_set_ep_rx_count(VCOM_RX_ENDP, 64);
-    usb_set_ep_rx_stat(VCOM_RX_ENDP, USB_EP_STAT_RX_VALID);
+    usb_set_ep_type(USB_CDCACM_RX_ENDP, USB_EP_EP_TYPE_BULK);
+    usb_set_ep_rx_addr(USB_CDCACM_RX_ENDP, 0x110);
+    usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, 64);
+    usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
 
     /* set up data endpoint IN (TX)  */
-    usb_set_ep_type(VCOM_TX_ENDP, USB_EP_EP_TYPE_BULK);
-    usb_set_ep_tx_addr(VCOM_TX_ENDP, VCOM_TX_ADDR);
-    usb_set_ep_tx_stat(VCOM_TX_ENDP, USB_EP_STAT_TX_NAK);
-    usb_set_ep_rx_stat(VCOM_TX_ENDP, USB_EP_STAT_RX_DISABLED);
+    usb_set_ep_type(USB_CDCACM_TX_ENDP, USB_EP_EP_TYPE_BULK);
+    usb_set_ep_tx_addr(USB_CDCACM_TX_ENDP, USB_CDCACM_TX_ADDR);
+    usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_NAK);
+    usb_set_ep_rx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_RX_DISABLED);
 
     USBLIB->state = USB_ATTACHED;
     SetDeviceAddress(0);
@@ -632,7 +598,7 @@ static void usbReset(void) {
     /* reset the rx fifo */
     recvBufIn   = 0;
     recvBufOut  = 0;
-    maxNewBytes = VCOM_RX_EPSIZE;
+    maxNewBytes = USB_CDCACM_RX_EPSIZE;
     countTx     = 0;
 }
 
@@ -642,13 +608,13 @@ static RESULT usbDataSetup(uint8 request) {
 
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
         switch (request) {
-        case (GET_LINE_CODING):
+        case (USB_CDCACM_GET_LINE_CODING):
             CopyRoutine = vcomGetSetLineCoding;
-            last_request = GET_LINE_CODING;
+            last_request = USB_CDCACM_GET_LINE_CODING;
             break;
-        case (SET_LINE_CODING):
+        case (USB_CDCACM_SET_LINE_CODING):
             CopyRoutine = vcomGetSetLineCoding;
-            last_request = SET_LINE_CODING;
+            last_request = USB_CDCACM_SET_LINE_CODING;
             break;
         default:
             break;
@@ -672,19 +638,20 @@ static RESULT usbNoDataSetup(uint8 request) {
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
 
         switch (request) {
-        case (SET_COMM_FEATURE):
+        case (USB_CDCACM_SET_COMM_FEATURE):
             return USB_SUCCESS;
-        case (SET_CONTROL_LINE_STATE):
+        case (USB_CDCACM_SET_CONTROL_LINE_STATE):
             /* to reset the board, pull both dtr and rts low
                then pulse dtr by itself */
             new_signal = (pInformation->USBwValues.bw.bb0 &
-                          (CONTROL_LINE_DTR | CONTROL_LINE_RTS));
+                          (USB_CDCACM_CONTROL_LINE_DTR |
+                           USB_CDCACM_CONTROL_LINE_RTS));
             line_dtr_rts = new_signal & 0x03;
 
             switch (reset_state) {
                 /* no default, covered enum */
             case DTR_UNSET:
-                if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
                     reset_state = DTR_LOW;
                 } else {
                     reset_state = DTR_HIGH;
@@ -692,7 +659,7 @@ static RESULT usbNoDataSetup(uint8 request) {
                 break;
 
             case DTR_HIGH:
-                if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
                     reset_state = DTR_NEGEDGE;
                 } else {
                     reset_state = DTR_HIGH;
@@ -700,7 +667,7 @@ static RESULT usbNoDataSetup(uint8 request) {
                 break;
 
             case DTR_NEGEDGE:
-                if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
                     reset_state = DTR_LOW;
                 } else {
                     reset_state = DTR_HIGH;
@@ -708,7 +675,7 @@ static RESULT usbNoDataSetup(uint8 request) {
                 break;
 
             case DTR_LOW:
-                if ((new_signal & CONTROL_LINE_DTR) == 0 ) {
+                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
                     reset_state = DTR_LOW;
                 } else {
                     reset_state = DTR_HIGH;

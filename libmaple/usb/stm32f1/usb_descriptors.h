@@ -123,19 +123,6 @@ typedef struct {
 } __packed USB_Descriptor_Endpoint;
 
 typedef struct {
-    USB_Descriptor_Config_Header Config_Header;
-    USB_Descriptor_Interface     CCI_Interface;
-    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_IntHeader;
-    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_CallManagement;
-    CDC_FUNCTIONAL_DESCRIPTOR(1) CDC_Functional_ACM;
-    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_Union;
-    USB_Descriptor_Endpoint      ManagementEndpoint;
-    USB_Descriptor_Interface     DCI_Interface;
-    USB_Descriptor_Endpoint      DataOutEndpoint;
-    USB_Descriptor_Endpoint      DataInEndpoint;
-} __packed USB_Descriptor_Config;
-
-typedef struct {
     uint8  bLength;
     uint8  bDescriptorType;
     uint16 bString[];

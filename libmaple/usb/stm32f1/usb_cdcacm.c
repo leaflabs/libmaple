@@ -107,6 +107,19 @@ const USB_Descriptor_Device usbVcomDescriptor_Device = {
     .bNumConfigurations = 0x01,
 };
 
+typedef struct {
+    USB_Descriptor_Config_Header Config_Header;
+    USB_Descriptor_Interface     CCI_Interface;
+    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_IntHeader;
+    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_CallManagement;
+    CDC_FUNCTIONAL_DESCRIPTOR(1) CDC_Functional_ACM;
+    CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_Union;
+    USB_Descriptor_Endpoint      ManagementEndpoint;
+    USB_Descriptor_Interface     DCI_Interface;
+    USB_Descriptor_Endpoint      DataOutEndpoint;
+    USB_Descriptor_Endpoint      DataInEndpoint;
+} __packed USB_Descriptor_Config;
+
 #define MAX_POWER (100 >> 1)
 const USB_Descriptor_Config usbVcomDescriptor_Config = {
     .Config_Header = {
@@ -268,8 +281,8 @@ typedef struct {
   uint8  datatype;
 } USB_Line_Coding;
 
-uint8 last_request = 0;
-USB_Line_Coding line_coding = {
+static uint8 last_request = 0;
+static USB_Line_Coding line_coding = {
     .bitrate = 115200,
     .format = 0x00, /* stop bits-1 */
     .paritytype = 0x00,

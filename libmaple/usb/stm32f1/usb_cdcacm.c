@@ -495,6 +495,8 @@ uint8 usb_cdcacm_get_rts() {
 
 static void vcomDataTxCb(void) {
     /* assumes tx transactions are atomic 64 bytes (nearly certain they are) */
+    /* TODO determine if TX txns. are actually "atomic 64 bytes",
+     * whatever that means. */
     countTx = 0;
 }
 

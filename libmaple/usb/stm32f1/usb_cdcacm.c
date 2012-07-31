@@ -82,8 +82,6 @@ static uint8* usbGetStringDescriptor(uint16 length);
 static void usbSetConfiguration(void);
 static void usbSetDeviceAddress(void);
 
-static void wait_reset(void);
-
 /*
  * Descriptors
  */
@@ -263,13 +261,6 @@ ONE_DESCRIPTOR String_Descriptor[3] = {
  * Etc.
  */
 
-typedef enum {
-  DTR_UNSET,
-  DTR_HIGH,
-  DTR_NEGEDGE,
-  DTR_LOW
-} RESET_STATE;
-
 typedef struct {
   uint32 bitrate;
   uint8  format;
@@ -284,7 +275,6 @@ USB_Line_Coding line_coding = {
     .paritytype = 0x00,
     .datatype = 0x08
 };
-RESET_STATE reset_state = DTR_UNSET;
 
 static volatile uint8 vcomBufferRx[USB_CDCACM_RX_BUFLEN];
 static volatile uint32 rx_offset = 0;
@@ -492,64 +482,13 @@ static void vcomDataTxCb(void) {
     countTx = 0;
 }
 
-#define EXC_RETURN 0xFFFFFFF9
-#define DEFAULT_CPSR 0x61000000
 static void vcomDataRxCb(void) {
-    /* FIXME this is mad buggy */
-
     /* This following is safe since sizeof(vcomBufferRx) exceeds the
      * largest possible USB_CDCACM_RX_EPSIZE, and we set to NAK after
      * each data packet. Only when all bytes have been read is the RX
      * endpoint set back to VALID. */
     newBytes = usb_get_ep_rx_count(USB_CDCACM_RX_ENDP);
     usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_NAK);
-
-    /* magic number, {0x31, 0x45, 0x41, 0x46} is "1EAF" */
-    uint8 chkBuf[4];
-    uint8 cmpBuf[4] = {0x31, 0x45, 0x41, 0x46};
-    if (reset_state == DTR_NEGEDGE) {
-        reset_state = DTR_LOW;
-
-        if  (newBytes >= 4) {
-            unsigned int target = (unsigned int)wait_reset | 0x1;
-
-            usb_copy_from_pma(chkBuf, 4, USB_CDCACM_RX_ADDR);
-
-            int i;
-            USB_Bool cmpMatch = TRUE;
-            for (i = 0; i < 4; i++) {
-                if (chkBuf[i] != cmpBuf[i]) {
-                    cmpMatch = FALSE;
-                }
-            }
-
-            if (cmpMatch) {
-                asm volatile("mov r0, %[stack_top]      \n\t" // Reset stack
-                             "mov sp, r0                \n\t"
-                             "mov r0, #1                \n\t"
-                             "mov r1, %[target_addr]    \n\t"
-                             "mov r2, %[cpsr]           \n\t"
-                             "push {r2}                 \n\t" // Fake xPSR
-                             "push {r1}                 \n\t" // PC target addr
-                             "push {r0}                 \n\t" // Fake LR
-                             "push {r0}                 \n\t" // Fake R12
-                             "push {r0}                 \n\t" // Fake R3
-                             "push {r0}                 \n\t" // Fake R2
-                             "push {r0}                 \n\t" // Fake R1
-                             "push {r0}                 \n\t" // Fake R0
-                             "mov lr, %[exc_return]     \n\t"
-                             "bx lr"
-                             :
-                             : [stack_top] "r" (STACK_TOP),
-                               [target_addr] "r" (target),
-                               [exc_return] "r" (EXC_RETURN),
-                               [cpsr] "r" (DEFAULT_CPSR)
-                             : "r0", "r1", "r2");
-                /* should never get here */
-            }
-        }
-    }
-
     usb_copy_from_pma((uint8*)vcomBufferRx, newBytes, USB_CDCACM_RX_ADDR);
 
     if (rx_hook) {
@@ -634,27 +573,26 @@ static void usbReset(void) {
 }
 
 static RESULT usbDataSetup(uint8 request) {
-    uint8 *(*CopyRoutine)(uint16);
-    CopyRoutine = NULL;
+    uint8* (*CopyRoutine)(uint16) = 0;
 
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
-        /* Call the user hook first. */
-        if (iface_setup_hook) {
-            uint8 req_copy = request;
-            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
-        }
-
         switch (request) {
-        case (USB_CDCACM_GET_LINE_CODING):
+        case USB_CDCACM_GET_LINE_CODING:
             CopyRoutine = vcomGetSetLineCoding;
             last_request = USB_CDCACM_GET_LINE_CODING;
             break;
-        case (USB_CDCACM_SET_LINE_CODING):
+        case USB_CDCACM_SET_LINE_CODING:
             CopyRoutine = vcomGetSetLineCoding;
             last_request = USB_CDCACM_SET_LINE_CODING;
             break;
         default:
             break;
+        }
+
+        /* Call the user hook. */
+        if (iface_setup_hook) {
+            uint8 req_copy = request;
+            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
         }
     }
 
@@ -669,66 +607,32 @@ static RESULT usbDataSetup(uint8 request) {
 }
 
 static RESULT usbNoDataSetup(uint8 request) {
+    RESULT ret = USB_UNSUPPORT;
     uint8 new_signal;
 
-    /* we support set com feature but dont handle it */
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
-        /* Call the user hook first. */
-        if (iface_setup_hook) {
-            uint8 req_copy = request;
-            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
-        }
-
         switch (request) {
-        case (USB_CDCACM_SET_COMM_FEATURE):
-            return USB_SUCCESS;
-        case (USB_CDCACM_SET_CONTROL_LINE_STATE):
-            /* to reset the board, pull both dtr and rts low
-               then pulse dtr by itself */
+        case USB_CDCACM_SET_COMM_FEATURE:
+            /* We support set comm. feature, but don't handle it. */
+            ret = USB_SUCCESS;
+            break;
+        case USB_CDCACM_SET_CONTROL_LINE_STATE:
+            /* Track changes to DTR and RTS. */
             new_signal = (pInformation->USBwValues.bw.bb0 &
                           (USB_CDCACM_CONTROL_LINE_DTR |
                            USB_CDCACM_CONTROL_LINE_RTS));
             line_dtr_rts = new_signal & 0x03;
+            ret = USB_SUCCESS;
+            break;
+        }
 
-            switch (reset_state) {
-                /* no default, covered enum */
-            case DTR_UNSET:
-                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
-                    reset_state = DTR_LOW;
-                } else {
-                    reset_state = DTR_HIGH;
-                }
-                break;
-
-            case DTR_HIGH:
-                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
-                    reset_state = DTR_NEGEDGE;
-                } else {
-                    reset_state = DTR_HIGH;
-                }
-                break;
-
-            case DTR_NEGEDGE:
-                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
-                    reset_state = DTR_LOW;
-                } else {
-                    reset_state = DTR_HIGH;
-                }
-                break;
-
-            case DTR_LOW:
-                if ((new_signal & USB_CDCACM_CONTROL_LINE_DTR) == 0 ) {
-                    reset_state = DTR_LOW;
-                } else {
-                    reset_state = DTR_HIGH;
-                }
-                break;
-            }
-
-            return USB_SUCCESS;
+        /* Call the user hook. */
+        if (iface_setup_hook) {
+            uint8 req_copy = request;
+            iface_setup_hook(USB_CDCACM_HOOK_IFACE_SETUP, &req_copy);
         }
     }
-    return USB_UNSUPPORT;
+    return ret;
 }
 
 static RESULT usbGetInterfaceSetting(uint8 interface, uint8 alt_setting) {
@@ -766,10 +670,4 @@ static void usbSetConfiguration(void) {
 
 static void usbSetDeviceAddress(void) {
     USBLIB->state = USB_ADDRESSED;
-}
-
-#define RESET_DELAY                     100000
-static void wait_reset(void) {
-  delay_us(RESET_DELAY);
-  nvic_sys_reset();
 }

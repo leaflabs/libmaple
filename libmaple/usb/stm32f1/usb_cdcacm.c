@@ -602,8 +602,8 @@ static void usbReset(void) {
 
     /* set up data endpoint OUT (RX) */
     usb_set_ep_type(USB_CDCACM_RX_ENDP, USB_EP_EP_TYPE_BULK);
-    usb_set_ep_rx_addr(USB_CDCACM_RX_ENDP, 0x110);
-    usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, 64);
+    usb_set_ep_rx_addr(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_ADDR);
+    usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_EPSIZE);
     usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
 
     /* set up data endpoint IN (TX)  */

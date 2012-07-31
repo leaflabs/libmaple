@@ -284,14 +284,14 @@ USB_Line_Coding line_coding = {
     .paritytype = 0x00,
     .datatype = 0x08
 };
-uint8 vcomBufferRx[USB_CDCACM_RX_BUFLEN];
-volatile uint32 countTx    = 0;
-volatile uint32 recvBufIn  = 0;
-volatile uint32 recvBufOut = 0;
-volatile uint32 maxNewBytes   = USB_CDCACM_RX_BUFLEN;
-volatile uint32 newBytes = 0;
 RESET_STATE reset_state = DTR_UNSET;
-uint8       line_dtr_rts = 0;
+
+static volatile uint8 vcomBufferRx[USB_CDCACM_RX_BUFLEN];
+static volatile uint32 rx_offset = 0;
+static volatile uint32 countTx = 0;
+static volatile uint32 newBytes = 0;
+
+static volatile uint8 line_dtr_rts = 0;
 
 /*
  * Endpoint callbacks
@@ -438,7 +438,28 @@ uint16 usb_cdcacm_get_pending() {
  * Copies up to len bytes from our private data buffer (*NOT* the PMA)
  * into buf and deq's the FIFO. */
 uint32 usb_cdcacm_rx(uint8* buf, uint32 len) {
-    static int offset = 0;
+    /* Copy bytes to buffer. */
+    uint32 n_copied = usb_cdcacm_peek(buf, len);
+
+    /* Mark bytes as read. */
+    newBytes -= n_copied;
+    rx_offset += n_copied;
+
+    /* If all bytes have been read, re-enable the RX endpoint, which
+     * was set to NAK when the current batch of bytes was received. */
+    if (newBytes == 0) {
+        usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_EPSIZE);
+        usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
+        rx_offset = 0;
+    }
+
+    return n_copied;
+}
+
+/* Nonblocking byte lookahead.
+ *
+ * Looks at unread bytes without marking them as read. */
+uint32 usb_cdcacm_peek(uint8* buf, uint32 len) {
     int i;
 
     if (len > newBytes) {
@@ -446,17 +467,7 @@ uint32 usb_cdcacm_rx(uint8* buf, uint32 len) {
     }
 
     for (i = 0; i < len; i++) {
-        buf[i] = vcomBufferRx[i + offset];
-    }
-
-    newBytes -= len;
-    offset += len;
-
-    /* Re-enable the RX endpoint, which we had set to receive 0 bytes */
-    if (newBytes == 0) {
-        usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_EPSIZE);
-        usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
-        offset = 0;
+        buf[i] = vcomBufferRx[i + rx_offset];
     }
 
     return len;
@@ -486,8 +497,10 @@ static void vcomDataTxCb(void) {
 static void vcomDataRxCb(void) {
     /* FIXME this is mad buggy */
 
-    /* setEPRxCount on the previous cycle should garuntee
-       we havnt received more bytes than we can fit */
+    /* This following is safe since sizeof(vcomBufferRx) exceeds the
+     * largest possible USB_CDCACM_RX_EPSIZE, and we set to NAK after
+     * each data packet. Only when all bytes have been read is the RX
+     * endpoint set back to VALID. */
     newBytes = usb_get_ep_rx_count(USB_CDCACM_RX_ENDP);
     usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_NAK);
 
@@ -537,7 +550,7 @@ static void vcomDataRxCb(void) {
         }
     }
 
-    usb_copy_from_pma(vcomBufferRx, newBytes, USB_CDCACM_RX_ADDR);
+    usb_copy_from_pma((uint8*)vcomBufferRx, newBytes, USB_CDCACM_RX_ADDR);
 
     if (rx_hook) {
         rx_hook(USB_CDCACM_HOOK_RX, 0);
@@ -615,11 +628,9 @@ static void usbReset(void) {
     USBLIB->state = USB_ATTACHED;
     SetDeviceAddress(0);
 
-    /* reset the rx fifo */
-    recvBufIn   = 0;
-    recvBufOut  = 0;
-    maxNewBytes = USB_CDCACM_RX_EPSIZE;
-    countTx     = 0;
+    /* Reset the RX/TX state */
+    countTx = 0;
+    rx_offset = 0;
 }
 
 static RESULT usbDataSetup(uint8 request) {

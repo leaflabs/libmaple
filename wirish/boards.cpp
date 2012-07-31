@@ -139,6 +139,18 @@ static void setup_clocks(void) {
     rcc_switch_sysclk(RCC_CLKSRC_PLL);
 }
 
+/*
+ * These addresses are where usercode starts when a bootloader is
+ * present. If no bootloader is present, the user NVIC usually starts
+ * at the Flash base address, 0x08000000.
+ *
+ * FIXME Let the build specify the vector table address numerically to
+ * avoid having these magic values -- some people have been fixing up
+ * the bootloader so it uses less space.
+ */
+#define USER_ADDR_ROM 0x08005000
+#define USER_ADDR_RAM 0x20000C00
+
 static void setup_nvic(void) {
 #ifdef VECT_TAB_FLASH
     nvic_init(USER_ADDR_ROM, 0);

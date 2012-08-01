@@ -178,9 +178,9 @@ const USB_Descriptor_Config usbVcomDescriptor_Config = {
         .bLength          = sizeof(USB_Descriptor_Endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN |
-                             USB_CDCACM_NOTIFICATION_EPNUM),
+                             USB_CDCACM_MANAGEMENT_EPNUM),
         .bmAttributes     = EP_TYPE_INTERRUPT,
-        .wMaxPacketSize   = USB_CDCACM_NOTIFICATION_EPSIZE,
+        .wMaxPacketSize   = USB_CDCACM_MANAGEMENT_EPSIZE,
         .bInterval        = 0xFF,
     },
 
@@ -557,11 +557,11 @@ static void usbReset(void) {
     usb_set_ep_rx_stat(USB_EP0, USB_EP_STAT_RX_VALID);
 
     /* setup management endpoint 1  */
-    usb_set_ep_type(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_EP_TYPE_INTERRUPT);
-    usb_set_ep_tx_addr(USB_CDCACM_NOTIFICATION_ENDP,
-                       USB_CDCACM_NOTIFICATION_ADDR);
-    usb_set_ep_tx_stat(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_STAT_TX_NAK);
-    usb_set_ep_rx_stat(USB_CDCACM_NOTIFICATION_ENDP, USB_EP_STAT_RX_DISABLED);
+    usb_set_ep_type(USB_CDCACM_MANAGEMENT_ENDP, USB_EP_EP_TYPE_INTERRUPT);
+    usb_set_ep_tx_addr(USB_CDCACM_MANAGEMENT_ENDP,
+                       USB_CDCACM_MANAGEMENT_ADDR);
+    usb_set_ep_tx_stat(USB_CDCACM_MANAGEMENT_ENDP, USB_EP_STAT_TX_NAK);
+    usb_set_ep_rx_stat(USB_CDCACM_MANAGEMENT_ENDP, USB_EP_STAT_RX_DISABLED);
 
     /* TODO figure out differences in style between RX/TX EP setup */
 

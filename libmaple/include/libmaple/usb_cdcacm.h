@@ -36,6 +36,7 @@
 
 #include <libmaple/libmaple_types.h>
 #include <libmaple/gpio.h>
+#include <libmaple/usb.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,6 +71,26 @@ extern "C" {
 #define USB_INTERFACE_CLASS_CDC           0x02
 #define USB_INTERFACE_SUBCLASS_CDC_ACM    0x02
 #define USB_INTERFACE_CLASS_DIC           0x0A
+
+#ifndef __cplusplus
+#define USB_CDCACM_DECLARE_DEV_DESC(vid, pid)                           \
+  {                                                                     \
+      .bLength            = sizeof(usb_descriptor_device),              \
+      .bDescriptorType    = USB_DESCRIPTOR_TYPE_DEVICE,                 \
+      .bcdUSB             = 0x0200,                                     \
+      .bDeviceClass       = USB_DEVICE_CLASS_CDC,                       \
+      .bDeviceSubClass    = USB_DEVICE_SUBCLASS_CDC,                    \
+      .bDeviceProtocol    = 0x00,                                       \
+      .bMaxPacketSize0    = 0x40,                                       \
+      .idVendor           = vid,                                        \
+      .idProduct          = pid,                                        \
+      .bcdDevice          = 0x0200,                                     \
+      .iManufacturer      = 0x01,                                       \
+      .iProduct           = 0x02,                                       \
+      .iSerialNumber      = 0x00,                                       \
+      .bNumConfigurations = 0x01,                                       \
+ }
+#endif
 
 /*
  * CDC ACM interface

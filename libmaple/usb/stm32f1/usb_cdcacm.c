@@ -111,8 +111,8 @@ static void usbSetDeviceAddress(void);
 #define USB_DEVICE_SUBCLASS_CDC           0x00
 #define LEAFLABS_ID_VENDOR                0x1EAF
 #define MAPLE_ID_PRODUCT                  0x0004
-static const USB_Descriptor_Device usbVcomDescriptor_Device = {
-    .bLength            = sizeof(USB_Descriptor_Device),
+static const usb_descriptor_device usbVcomDescriptor_Device = {
+    .bLength            = sizeof(usb_descriptor_device),
     .bDescriptorType    = USB_DESCRIPTOR_TYPE_DEVICE,
     .bcdUSB             = 0x0200,
     .bDeviceClass       = USB_DEVICE_CLASS_CDC,
@@ -129,24 +129,24 @@ static const USB_Descriptor_Device usbVcomDescriptor_Device = {
 };
 
 typedef struct {
-    USB_Descriptor_Config_Header Config_Header;
-    USB_Descriptor_Interface     CCI_Interface;
+    usb_descriptor_config_header Config_Header;
+    usb_descriptor_interface     CCI_Interface;
     CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_IntHeader;
     CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_CallManagement;
     CDC_FUNCTIONAL_DESCRIPTOR(1) CDC_Functional_ACM;
     CDC_FUNCTIONAL_DESCRIPTOR(2) CDC_Functional_Union;
-    USB_Descriptor_Endpoint      ManagementEndpoint;
-    USB_Descriptor_Interface     DCI_Interface;
-    USB_Descriptor_Endpoint      DataOutEndpoint;
-    USB_Descriptor_Endpoint      DataInEndpoint;
-} __packed USB_Descriptor_Config;
+    usb_descriptor_endpoint      ManagementEndpoint;
+    usb_descriptor_interface     DCI_Interface;
+    usb_descriptor_endpoint      DataOutEndpoint;
+    usb_descriptor_endpoint      DataInEndpoint;
+} __packed usb_descriptor_config;
 
 #define MAX_POWER (100 >> 1)
-static const USB_Descriptor_Config usbVcomDescriptor_Config = {
+static const usb_descriptor_config usbVcomDescriptor_Config = {
     .Config_Header = {
-        .bLength              = sizeof(USB_Descriptor_Config_Header),
+        .bLength              = sizeof(usb_descriptor_config_header),
         .bDescriptorType      = USB_DESCRIPTOR_TYPE_CONFIGURATION,
-        .wTotalLength         = sizeof(USB_Descriptor_Config),
+        .wTotalLength         = sizeof(usb_descriptor_config),
         .bNumInterfaces       = 0x02,
         .bConfigurationValue  = 0x01,
         .iConfiguration       = 0x00,
@@ -156,7 +156,7 @@ static const USB_Descriptor_Config usbVcomDescriptor_Config = {
     },
 
     .CCI_Interface = {
-        .bLength            = sizeof(USB_Descriptor_Interface),
+        .bLength            = sizeof(usb_descriptor_interface),
         .bDescriptorType    = USB_DESCRIPTOR_TYPE_INTERFACE,
         .bInterfaceNumber   = 0x00,
         .bAlternateSetting  = 0x00,
@@ -196,17 +196,17 @@ static const USB_Descriptor_Config usbVcomDescriptor_Config = {
     },
 
     .ManagementEndpoint = {
-        .bLength          = sizeof(USB_Descriptor_Endpoint),
+        .bLength          = sizeof(usb_descriptor_endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN |
                              USB_CDCACM_MANAGEMENT_ENDP),
-        .bmAttributes     = EP_TYPE_INTERRUPT,
+        .bmAttributes     = USB_EP_TYPE_INTERRUPT,
         .wMaxPacketSize   = USB_CDCACM_MANAGEMENT_EPSIZE,
         .bInterval        = 0xFF,
     },
 
     .DCI_Interface = {
-        .bLength            = sizeof(USB_Descriptor_Interface),
+        .bLength            = sizeof(usb_descriptor_interface),
         .bDescriptorType    = USB_DESCRIPTOR_TYPE_INTERFACE,
         .bInterfaceNumber   = 0x01,
         .bAlternateSetting  = 0x00,
@@ -218,20 +218,20 @@ static const USB_Descriptor_Config usbVcomDescriptor_Config = {
     },
 
     .DataOutEndpoint = {
-        .bLength          = sizeof(USB_Descriptor_Endpoint),
+        .bLength          = sizeof(usb_descriptor_endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_OUT |
                              USB_CDCACM_RX_ENDP),
-        .bmAttributes     = EP_TYPE_BULK,
+        .bmAttributes     = USB_EP_TYPE_BULK,
         .wMaxPacketSize   = USB_CDCACM_RX_EPSIZE,
         .bInterval        = 0x00,
     },
 
     .DataInEndpoint = {
-        .bLength          = sizeof(USB_Descriptor_Endpoint),
+        .bLength          = sizeof(usb_descriptor_endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN | USB_CDCACM_TX_ENDP),
-        .bmAttributes     = EP_TYPE_BULK,
+        .bmAttributes     = USB_EP_TYPE_BULK,
         .wMaxPacketSize   = USB_CDCACM_TX_EPSIZE,
         .bInterval        = 0x00,
     },
@@ -277,12 +277,12 @@ static const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = {
 
 static ONE_DESCRIPTOR Device_Descriptor = {
     (uint8*)&usbVcomDescriptor_Device,
-    sizeof(USB_Descriptor_Device)
+    sizeof(usb_descriptor_device)
 };
 
 static ONE_DESCRIPTOR Config_Descriptor = {
     (uint8*)&usbVcomDescriptor_Config,
-    sizeof(USB_Descriptor_Config)
+    sizeof(usb_descriptor_config)
 };
 
 static ONE_DESCRIPTOR String_Descriptor[3] = {

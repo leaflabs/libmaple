@@ -53,6 +53,25 @@ extern "C" {
 #define USB_CDCACM_CONTROL_LINE_RTS       (0x02)
 
 /*
+ * Descriptors, etc.
+ */
+
+#define CDC_FUNCTIONAL_DESCRIPTOR_SIZE(DataSize) (3 + DataSize)
+#define CDC_FUNCTIONAL_DESCRIPTOR(DataSize)     \
+  struct {                                      \
+      uint8 bLength;                            \
+      uint8 bDescriptorType;                    \
+      uint8 SubType;                            \
+      uint8 Data[DataSize];                     \
+  } __packed
+
+#define USB_DEVICE_CLASS_CDC              0x02
+#define USB_DEVICE_SUBCLASS_CDC           0x00
+#define USB_INTERFACE_CLASS_CDC           0x02
+#define USB_INTERFACE_SUBCLASS_CDC_ACM    0x02
+#define USB_INTERFACE_CLASS_DIC           0x0A
+
+/*
  * CDC ACM interface
  */
 

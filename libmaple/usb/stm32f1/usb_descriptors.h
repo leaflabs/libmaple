@@ -24,10 +24,24 @@
  * SOFTWARE.
  *****************************************************************************/
 
-#ifndef _USB_DESCRIPTORS_H_
-#define _USB_DESCRIPTORS_H_
+#ifndef _LIBMAPLE_USB_DESCRIPTORS_H_
+#define _LIBMAPLE_USB_DESCRIPTORS_H_
 
-#include <libmaple/libmaple.h>
+/*
+ * USB descriptors and associated paraphernalia.
+ *
+ * IMPORTANT: this API is unstable, and may change without notice.
+ */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <libmaple/libmaple_types.h>
+
+/*
+ * Descriptor types
+ */
 
 #define USB_DESCRIPTOR_TYPE_DEVICE        0x01
 #define USB_DESCRIPTOR_TYPE_CONFIGURATION 0x02
@@ -35,27 +49,11 @@
 #define USB_DESCRIPTOR_TYPE_INTERFACE     0x04
 #define USB_DESCRIPTOR_TYPE_ENDPOINT      0x05
 
-#define USB_DEVICE_CLASS_CDC              0x02
-#define USB_DEVICE_SUBCLASS_CDC           0x00
-#define USB_INTERFACE_CLASS_CDC           0x02
-/* CDC Abstract Control Model */
-#define USB_INTERFACE_SUBCLASS_CDC_ACM    0x02
-#define USB_INTERFACE_CLASS_DIC           0x0A
-
-#define USB_CONFIG_ATTR_BUSPOWERED        0b10000000
-#define USB_CONFIG_ATTR_SELF_POWERED      0b11000000
-
-#define EP_TYPE_INTERRUPT                 0x03
-#define EP_TYPE_BULK                      0x02
-
-#define USB_DESCRIPTOR_ENDPOINT_IN        0x80
-#define USB_DESCRIPTOR_ENDPOINT_OUT       0x00
+/*
+ * Descriptors and declaration helpers
+ */
 
 #define USB_DESCRIPTOR_STRING_LEN(x) (2 + (x << 1))
-
-#if defined(__cplusplus)
-extern "C" {
-#endif
 
 #define USB_DESCRIPTOR_STRING(len)              \
   struct {                                      \
@@ -64,16 +62,7 @@ extern "C" {
       uint16 bString[len];                      \
   } __packed
 
-#define CDC_FUNCTIONAL_DESCRIPTOR_SIZE(DataSize) (3 + DataSize)
-#define CDC_FUNCTIONAL_DESCRIPTOR(DataSize)     \
-  struct {                                      \
-      uint8 bLength;                            \
-      uint8 bDescriptorType;                    \
-      uint8 SubType;                            \
-      uint8 Data[DataSize];                     \
-  } __packed
-
-typedef struct {
+typedef struct usb_descriptor_device {
     uint8  bLength;
     uint8  bDescriptorType;
     uint16 bcdUSB;
@@ -88,9 +77,9 @@ typedef struct {
     uint8  iProduct;
     uint8  iSerialNumber;
     uint8  bNumConfigurations;
-} __packed USB_Descriptor_Device;
+} __packed usb_descriptor_device;
 
-typedef struct {
+typedef struct usb_descriptor_config_header {
     uint8  bLength;
     uint8  bDescriptorType;
     uint16 wTotalLength;
@@ -99,9 +88,9 @@ typedef struct {
     uint8  iConfiguration;
     uint8  bmAttributes;
     uint8  bMaxPower;
-} __packed USB_Descriptor_Config_Header;
+} __packed usb_descriptor_config_header;
 
-typedef struct {
+typedef struct usb_descriptor_interface {
     uint8 bLength;
     uint8 bDescriptorType;
     uint8 bInterfaceNumber;
@@ -111,22 +100,35 @@ typedef struct {
     uint8 bInterfaceSubClass;
     uint8 bInterfaceProtocol;
     uint8 iInterface;
-} __packed USB_Descriptor_Interface;
+} __packed usb_descriptor_interface;
 
-typedef struct {
+typedef struct usb_descriptor_endpoint {
     uint8  bLength;
     uint8  bDescriptorType;
     uint8  bEndpointAddress;
     uint8  bmAttributes;
     uint16 wMaxPacketSize;
     uint8  bInterval;
-} __packed USB_Descriptor_Endpoint;
+} __packed usb_descriptor_endpoint;
 
-typedef struct {
+typedef struct usb_descriptor_string {
     uint8  bLength;
     uint8  bDescriptorType;
     uint16 bString[];
-} USB_Descriptor_String;
+} usb_descriptor_string;
+
+/*
+ * Common values that go inside descriptors
+ */
+
+#define USB_CONFIG_ATTR_BUSPOWERED        0b10000000
+#define USB_CONFIG_ATTR_SELF_POWERED      0b11000000
+
+#define USB_EP_TYPE_INTERRUPT             0x03
+#define USB_EP_TYPE_BULK                  0x02
+
+#define USB_DESCRIPTOR_ENDPOINT_IN        0x80
+#define USB_DESCRIPTOR_ENDPOINT_OUT       0x00
 
 #if defined(__cplusplus)
 }

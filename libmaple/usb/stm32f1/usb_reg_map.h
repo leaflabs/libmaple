@@ -377,7 +377,9 @@ static inline uint32* usb_ep_tx_count_ptr(uint8 ep) {
 }
 
 static inline uint16 usb_get_ep_tx_count(uint8 ep) {
-    return (uint16)*usb_ep_tx_count_ptr(ep);
+    /* FIXME: this is broken somehow; calling it seems to
+     * confuse/crash the chip. */
+    return (uint16)(*usb_ep_tx_count_ptr(ep) & 0x3FF);
 }
 
 static inline void usb_set_ep_tx_count(uint8 ep, uint16 count) {

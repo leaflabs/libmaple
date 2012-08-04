@@ -70,6 +70,33 @@ uint16 usb_cdcacm_get_pending(void);
 uint8 usb_cdcacm_get_dtr(void);
 uint8 usb_cdcacm_get_rts(void);
 
+typedef struct usb_cdcacm_line_coding {
+    uint32 dwDTERate;           /* Baud rate */
+
+#define USB_CDCACM_STOP_BITS_1   0
+#define USB_CDCACM_STOP_BITS_1_5 1
+#define USB_CDCACM_STOP_BITS_2   2
+    uint8 bCharFormat;          /* Stop bits */
+
+#define USB_CDCACM_PARITY_NONE  0
+#define USB_CDCACM_PARITY_ODD   1
+#define USB_CDCACM_PARITY_EVEN  2
+#define USB_CDCACM_PARITY_MARK  3
+#define USB_CDCACM_PARITY_SPACE 4
+    uint8 bParityType;          /* Parity type */
+
+    uint8 bDataBits;            /* Data bits: 5, 6, 7, 8, or 16 */
+} __packed usb_cdcacm_line_coding;
+
+/* Retrieve a copy of the current line coding structure. */
+void usb_cdcacm_get_line_coding(usb_cdcacm_line_coding*);
+
+/* Line coding conveniences. */
+int usb_cdcacm_get_baud(void);        /* dwDTERate */
+int usb_cdcacm_get_stop_bits(void);   /* bCharFormat */
+int usb_cdcacm_get_parity(void);      /* bParityType */
+int usb_cdcacm_get_n_data_bits(void); /* bDataBits */
+
 /*
  * Hack: hooks for bootloader reset signalling
  */

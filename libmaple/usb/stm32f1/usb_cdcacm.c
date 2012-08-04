@@ -308,29 +308,11 @@ static volatile uint32 n_unread_bytes = 0;
 
 /* Other state (line coding, DTR/RTS) */
 
-typedef struct usb_line_coding {
-    uint32 dwDTERate;           /* Baud rate */
-
-#define STOP_BITS_1   0
-#define STOP_BITS_1_5 1
-#define STOP_BITS_2   2
-    uint8 bCharFormat;          /* Stop bits */
-
-#define PARITY_NONE  0
-#define PARITY_ODD   1
-#define PARITY_EVEN  2
-#define PARITY_MARK  3
-#define PARITY_SPACE 4
-    uint8 bParityType;          /* Parity type */
-
-    uint8 bDataBits;            /* Data bits: 5, 6, 7, 8, or 16 */
-} usb_line_coding;
-
-static volatile usb_line_coding line_coding = {
+static volatile usb_cdcacm_line_coding line_coding = {
     /* This default is 115200 baud, 8N1. */
     .dwDTERate   = 115200,
-    .bCharFormat = STOP_BITS_1,
-    .bParityType = PARITY_NONE,
+    .bCharFormat = USB_CDCACM_STOP_BITS_1,
+    .bParityType = USB_CDCACM_PARITY_NONE,
     .bDataBits   = 8,
 };
 
@@ -526,6 +508,30 @@ uint8 usb_cdcacm_get_rts() {
     return ((line_dtr_rts & USB_CDCACM_CONTROL_LINE_RTS) != 0);
 }
 
+void usb_cdcacm_get_line_coding(usb_cdcacm_line_coding *ret) {
+    ret->dwDTERate = line_coding.dwDTERate;
+    ret->bCharFormat = line_coding.bCharFormat;
+    ret->bParityType = line_coding.bParityType;
+    ret->bDataBits = line_coding.bDataBits;
+}
+
+int usb_cdcacm_get_baud(void) {
+    return line_coding.dwDTERate;
+}
+
+int usb_cdcacm_get_stop_bits(void) {
+    return line_coding.bCharFormat;
+}
+
+int usb_cdcacm_get_parity(void) {
+    return line_coding.bParityType;
+}
+
+int usb_cdcacm_get_n_data_bits(void) {
+    return line_coding.bDataBits;
+}
+
+
 /*
  * Callbacks
  */
@@ -555,7 +561,7 @@ static void vcomDataRxCb(void) {
 
 static uint8* vcomGetSetLineCoding(uint16 length) {
     if (length == 0) {
-        pInformation->Ctrl_Info.Usb_wLength = sizeof(struct usb_line_coding);
+        pInformation->Ctrl_Info.Usb_wLength = sizeof(struct usb_cdcacm_line_coding);
     }
     return (uint8*)&line_coding;
 }

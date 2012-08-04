@@ -42,31 +42,6 @@ extern "C" {
 #endif
 
 /*
- * Exposed configuration
- */
-
-#define USB_CDCACM_CTRL_EPNUM           0x00
-#define USB_CDCACM_CTRL_RX_ADDR         0x40
-#define USB_CDCACM_CTRL_TX_ADDR         0x80
-#define USB_CDCACM_CTRL_EPSIZE          0x40
-
-#define USB_CDCACM_TX_ENDP              1
-#define USB_CDCACM_TX_EPNUM             0x01
-#define USB_CDCACM_TX_ADDR              0xC0
-#define USB_CDCACM_TX_EPSIZE            0x40
-
-#define USB_CDCACM_MANAGEMENT_ENDP      2
-#define USB_CDCACM_MANAGEMENT_EPNUM     0x02
-#define USB_CDCACM_MANAGEMENT_ADDR      0x100
-#define USB_CDCACM_MANAGEMENT_EPSIZE    0x40
-
-#define USB_CDCACM_RX_ENDP              3
-#define USB_CDCACM_RX_EPNUM             0x03
-#define USB_CDCACM_RX_ADDR              0x110
-#define USB_CDCACM_RX_EPSIZE            0x40
-#define USB_CDCACM_RX_BUFLEN            (USB_CDCACM_RX_EPSIZE*3)
-
-/*
  * CDC ACM Requests
  */
 

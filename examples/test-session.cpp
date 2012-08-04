@@ -4,6 +4,8 @@
 // Useful for testing Maple features and troubleshooting.
 // Communicates over SerialUSB.
 
+#include <string.h>
+
 #include <wirish/wirish.h>
 
 // ASCII escape character
@@ -17,8 +19,8 @@
 
 uint8 gpio_state[BOARD_NR_GPIO_PINS];
 
-const char* dummy_data = ("qwertyuiopasdfghjklzxcvbnmmmmmm,./1234567890-="
-                          "qwertyuiopasdfghjklzxcvbnm,./1234567890");
+const char* dummy_data = ("123456789012345678901234567890\r\n"
+                          "123456789012345678901234567890\r\n");
 
 // Commands
 void cmd_print_help(void);
@@ -155,11 +157,24 @@ void loop () {
             }
             break;
 
-        case 'U':
+        case 'U': {
             SerialUSB.println("Dumping data to USB. Press any key.");
+            int nprints = 0;
+            int start = millis();
             while (!SerialUSB.available()) {
                 SerialUSB.print(dummy_data);
+                nprints++;
             }
+            int elapsed = millis() - start;
+            SerialUSB.read();   // consume available character
+            size_t nbytes = nprints * strlen(dummy_data);
+            SerialUSB.println();
+            SerialUSB.print("Sent ");
+            SerialUSB.print(nbytes);
+            SerialUSB.print(" bytes (");
+            SerialUSB.print((nbytes / (double)elapsed) * (1000.0 / 1024.0));
+            SerialUSB.println(" kB/sec)");
+        }
             break;
 
         case 'g':
@@ -270,7 +285,8 @@ void cmd_print_help(void) {
                       "(delay)");
     SerialUSB.println("\tp: test all PWM channels sequentially");
     SerialUSB.println("\tW: dump data as fast as possible on all 3 USARTS");
-    SerialUSB.println("\tU: dump data as fast as possible on USB");
+    SerialUSB.println("\tU: dump data as fast as possible over USB"
+                      " and measure data rate");
     SerialUSB.println("\tg: toggle GPIOs sequentially");
     SerialUSB.println("\tG: toggle GPIOs at the same time");
     SerialUSB.println("\tj: toggle debug port GPIOs sequentially");

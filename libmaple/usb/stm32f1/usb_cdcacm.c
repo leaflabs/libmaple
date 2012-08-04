@@ -440,7 +440,7 @@ uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
         len = USB_CDCACM_TX_EPSIZE / 2;
     }
 
-    // Queue bytes for sending
+    /* Queue bytes for sending */
     if (len) {
         usb_copy_to_pma(buf, len, USB_CDCACM_TX_ADDR);
         usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, len);

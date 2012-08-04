@@ -106,26 +106,11 @@ static void usbSetDeviceAddress(void);
  * Descriptors
  */
 
-#define USB_DEVICE_CLASS_CDC              0x02
-#define USB_DEVICE_SUBCLASS_CDC           0x00
+/* FIXME move to Wirish */
 #define LEAFLABS_ID_VENDOR                0x1EAF
 #define MAPLE_ID_PRODUCT                  0x0004
-static const usb_descriptor_device usbVcomDescriptor_Device = {
-    .bLength            = sizeof(usb_descriptor_device),
-    .bDescriptorType    = USB_DESCRIPTOR_TYPE_DEVICE,
-    .bcdUSB             = 0x0200,
-    .bDeviceClass       = USB_DEVICE_CLASS_CDC,
-    .bDeviceSubClass    = USB_DEVICE_SUBCLASS_CDC,
-    .bDeviceProtocol    = 0x00,
-    .bMaxPacketSize0    = 0x40,
-    .idVendor           = LEAFLABS_ID_VENDOR,
-    .idProduct          = MAPLE_ID_PRODUCT,
-    .bcdDevice          = 0x0200,
-    .iManufacturer      = 0x01,
-    .iProduct           = 0x02,
-    .iSerialNumber      = 0x00,
-    .bNumConfigurations = 0x01,
-};
+static const usb_descriptor_device usbVcomDescriptor_Device =
+    USB_CDCACM_DECLARE_DEV_DESC(LEAFLABS_ID_VENDOR, MAPLE_ID_PRODUCT);
 
 typedef struct {
     usb_descriptor_config_header Config_Header;
@@ -237,7 +222,7 @@ static const usb_descriptor_config usbVcomDescriptor_Config = {
 };
 
 /*
-  String Identifiers:
+  String Descriptors:
 
   we may choose to specify any or none of the following string
   identifiers:
@@ -249,29 +234,29 @@ static const usb_descriptor_config usbVcomDescriptor_Config = {
   iInterface(CCI):  NONE
   iInterface(DCI):  NONE
 
-  additionally we must provide the unicode language identifier,
-  which is 0x0409 for US English
 */
 
-static const uint8 usbVcomDescriptor_LangID[USB_DESCRIPTOR_STRING_LEN(1)] = {
-    USB_DESCRIPTOR_STRING_LEN(1),
-    USB_DESCRIPTOR_TYPE_STRING,
-    0x09,
-    0x04,
+/* Unicode language identifier: 0x0409 is US English */
+/* FIXME move to Wirish */
+static const usb_descriptor_string usbVcomDescriptor_LangID = {
+    .bLength         = USB_DESCRIPTOR_STRING_LEN(1),
+    .bDescriptorType = USB_DESCRIPTOR_TYPE_STRING,
+    .bString         = {0x09, 0x04},
 };
 
-static const uint8 usbVcomDescriptor_iManufacturer[USB_DESCRIPTOR_STRING_LEN(8)] = {
-    USB_DESCRIPTOR_STRING_LEN(8),
-    USB_DESCRIPTOR_TYPE_STRING,
-    'L', 0, 'e', 0, 'a', 0, 'f', 0,
-    'L', 0, 'a', 0, 'b', 0, 's', 0,
+/* FIXME move to Wirish */
+static const usb_descriptor_string usbVcomDescriptor_iManufacturer = {
+    .bLength = USB_DESCRIPTOR_STRING_LEN(8),
+    .bDescriptorType = USB_DESCRIPTOR_TYPE_STRING,
+    .bString = {'L', 0, 'e', 0, 'a', 0, 'f', 0,
+                'L', 0, 'a', 0, 'b', 0, 's', 0},
 };
 
-static const uint8 usbVcomDescriptor_iProduct[USB_DESCRIPTOR_STRING_LEN(8)] = {
-    USB_DESCRIPTOR_STRING_LEN(8),
-    USB_DESCRIPTOR_TYPE_STRING,
-    'M', 0, 'a', 0, 'p', 0, 'l', 0,
-    'e', 0, ' ', 0, ' ', 0, ' ', 0
+/* FIXME move to Wirish */
+static const usb_descriptor_string usbVcomDescriptor_iProduct = {
+    .bLength = USB_DESCRIPTOR_STRING_LEN(5),
+    .bDescriptorType = USB_DESCRIPTOR_TYPE_STRING,
+    .bString = {'M', 0, 'a', 0, 'p', 0, 'l', 0, 'e', 0},
 };
 
 static ONE_DESCRIPTOR Device_Descriptor = {
@@ -284,10 +269,11 @@ static ONE_DESCRIPTOR Config_Descriptor = {
     sizeof(usb_descriptor_config)
 };
 
-static ONE_DESCRIPTOR String_Descriptor[3] = {
+#define N_STRING_DESCRIPTORS 3
+static ONE_DESCRIPTOR String_Descriptor[N_STRING_DESCRIPTORS] = {
     {(uint8*)&usbVcomDescriptor_LangID,       USB_DESCRIPTOR_STRING_LEN(1)},
     {(uint8*)&usbVcomDescriptor_iManufacturer,USB_DESCRIPTOR_STRING_LEN(8)},
-    {(uint8*)&usbVcomDescriptor_iProduct,     USB_DESCRIPTOR_STRING_LEN(8)}
+    {(uint8*)&usbVcomDescriptor_iProduct,     USB_DESCRIPTOR_STRING_LEN(5)}
 };
 
 /*
@@ -710,7 +696,7 @@ static uint8* usbGetConfigDescriptor(uint16 length) {
 static uint8* usbGetStringDescriptor(uint16 length) {
     uint8 wValue0 = pInformation->USBwValue0;
 
-    if (wValue0 > 2) {
+    if (wValue0 > N_STRING_DESCRIPTORS) {
         return NULL;
     }
     return Standard_GetDescriptorData(length, &String_Descriptor[wValue0]);

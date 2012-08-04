@@ -40,7 +40,6 @@
 #include <libmaple/delay.h>
 
 /* Private headers */
-#include "usb_descriptors.h"
 #include "usb_lib_globals.h"
 #include "usb_reg_map.h"
 

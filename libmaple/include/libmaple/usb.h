@@ -111,9 +111,9 @@ typedef struct usb_descriptor_endpoint {
 } __packed usb_descriptor_endpoint;
 
 typedef struct usb_descriptor_string {
-    uint8  bLength;
-    uint8  bDescriptorType;
-    uint16 bString[];
+    uint8 bLength;
+    uint8 bDescriptorType;
+    uint8 bString[];
 } usb_descriptor_string;
 
 /* Common values that go inside descriptors */

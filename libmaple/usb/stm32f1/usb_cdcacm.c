@@ -434,10 +434,9 @@ uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
         return 0;
     }
 
-    // We can only put USB_CDCACM_TX_EPSIZE bytes in the buffer
-    /* FIXME then why are we only copying half as many? */
-    if (len > USB_CDCACM_TX_EPSIZE / 2) {
-        len = USB_CDCACM_TX_EPSIZE / 2;
+    /* We can only put USB_CDCACM_TX_EPSIZE bytes in the buffer. */
+    if (len > USB_CDCACM_TX_EPSIZE) {
+        len = USB_CDCACM_TX_EPSIZE;
     }
 
     /* Queue bytes for sending */

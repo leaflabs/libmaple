@@ -540,11 +540,11 @@ static void vcomDataTxCb(void) {
 }
 
 static void vcomDataRxCb(void) {
-    /* This following is safe since we set the RX endpoint to NAK
-     * after each data packet received, and only set it to VALID when
-     * all bytes have been read. */
-    n_unread_bytes = usb_get_ep_rx_count(USB_CDCACM_RX_ENDP);
     usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_NAK);
+    n_unread_bytes = usb_get_ep_rx_count(USB_CDCACM_RX_ENDP);
+    /* This copy won't overwrite unread bytes, since we've set the RX
+     * endpoint to NAK, and will only set it to VALID when all bytes
+     * have been read. */
     usb_copy_from_pma((uint8*)vcomBufferRx, n_unread_bytes,
                       USB_CDCACM_RX_ADDR);
 

@@ -274,26 +274,50 @@ ONE_DESCRIPTOR String_Descriptor[3] = {
  * Etc.
  */
 
-typedef struct {
-  uint32 bitrate;
-  uint8  format;
-  uint8  paritytype;
-  uint8  datatype;
-} USB_Line_Coding;
+/* I/O state */
 
-static uint8 last_request = 0;
-static USB_Line_Coding line_coding = {
-    .bitrate = 115200,
-    .format = 0x00, /* stop bits-1 */
-    .paritytype = 0x00,
-    .datatype = 0x08
-};
-
+/* Received data */
 static volatile uint8 vcomBufferRx[USB_CDCACM_RX_BUFLEN];
+/* Read index into vcomBufferRx */
 static volatile uint32 rx_offset = 0;
+/* Number of bytes left to transmit */
 static volatile uint32 countTx = 0;
+/* Number of unread bytes */
 static volatile uint32 newBytes = 0;
 
+/* Other state (line coding, DTR/RTS) */
+
+typedef struct usb_line_coding {
+    uint32 dwDTERate;           /* Baud rate */
+
+#define STOP_BITS_1   0
+#define STOP_BITS_1_5 1
+#define STOP_BITS_2   2
+    uint8 bCharFormat;          /* Stop bits */
+
+#define PARITY_NONE  0
+#define PARITY_ODD   1
+#define PARITY_EVEN  2
+#define PARITY_MARK  3
+#define PARITY_SPACE 4
+    uint8 bParityType;          /* Parity type */
+
+    uint8 bDataBits;            /* Data bits: 5, 6, 7, 8, or 16 */
+} usb_line_coding;
+
+static volatile usb_line_coding line_coding = {
+    /* This default is 115200 baud, 8N1. */
+    .dwDTERate   = 115200,
+    .bCharFormat = STOP_BITS_1,
+    .bParityType = PARITY_NONE,
+    .bDataBits   = 8,
+};
+
+/* Which of USB_CDCACM_GET_LINE_CODING and USB_CDCACM_SET_LINE_CODING
+ * we've most recently received. */
+static volatile uint8 last_request = 0;
+
+/* DTR in bit 0, RTS in bit 1. */
 static volatile uint8 line_dtr_rts = 0;
 
 /*
@@ -416,11 +440,11 @@ uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
         len = USB_CDCACM_TX_EPSIZE / 2;
     }
 
-    // Try to load some bytes if we can
+    // Queue bytes for sending
     if (len) {
         usb_copy_to_pma(buf, len, USB_CDCACM_TX_ADDR);
         usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, len);
-        countTx += len;
+        countTx = len;
         usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_VALID);
     }
 
@@ -511,7 +535,7 @@ static void vcomDataRxCb(void) {
 
 static uint8* vcomGetSetLineCoding(uint16 length) {
     if (length == 0) {
-        pInformation->Ctrl_Info.Usb_wLength = sizeof(USB_Line_Coding);
+        pInformation->Ctrl_Info.Usb_wLength = sizeof(struct usb_line_coding);
     }
     return (uint8*)&line_coding;
 }

@@ -316,10 +316,6 @@ static volatile usb_cdcacm_line_coding line_coding = {
     .bDataBits   = 8,
 };
 
-/* Which of USB_CDCACM_GET_LINE_CODING and USB_CDCACM_SET_LINE_CODING
- * we've most recently received. */
-static volatile uint8 last_request = 0;
-
 /* DTR in bit 0, RTS in bit 1. */
 static volatile uint8 line_dtr_rts = 0;
 
@@ -642,11 +638,9 @@ static RESULT usbDataSetup(uint8 request) {
         switch (request) {
         case USB_CDCACM_GET_LINE_CODING:
             CopyRoutine = vcomGetSetLineCoding;
-            last_request = USB_CDCACM_GET_LINE_CODING;
             break;
         case USB_CDCACM_SET_LINE_CODING:
             CopyRoutine = vcomGetSetLineCoding;
-            last_request = USB_CDCACM_SET_LINE_CODING;
             break;
         default:
             break;
@@ -671,7 +665,6 @@ static RESULT usbDataSetup(uint8 request) {
 
 static RESULT usbNoDataSetup(uint8 request) {
     RESULT ret = USB_UNSUPPORT;
-    uint8 new_signal;
 
     if (Type_Recipient == (CLASS_REQUEST | INTERFACE_RECIPIENT)) {
         switch (request) {
@@ -681,10 +674,9 @@ static RESULT usbNoDataSetup(uint8 request) {
             break;
         case USB_CDCACM_SET_CONTROL_LINE_STATE:
             /* Track changes to DTR and RTS. */
-            new_signal = (pInformation->USBwValues.bw.bb0 &
-                          (USB_CDCACM_CONTROL_LINE_DTR |
-                           USB_CDCACM_CONTROL_LINE_RTS));
-            line_dtr_rts = new_signal & 0x03;
+            line_dtr_rts = (pInformation->USBwValues.bw.bb0 &
+                            (USB_CDCACM_CONTROL_LINE_DTR |
+                             USB_CDCACM_CONTROL_LINE_RTS));
             ret = USB_SUCCESS;
             break;
         }

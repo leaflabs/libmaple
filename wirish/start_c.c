@@ -50,8 +50,9 @@ extern int main(int, char**, char**);
 
 extern void exit(int) __attribute__((noreturn, weak));
 
-extern char _data, _edata;
-extern char _bss, _ebss;
+/* The linker must ensure that these are at least 4-byte aligned. */
+extern char __data_start__, __data_end__;
+extern char __bss_start__, __bss_end__;
 
 struct rom_img_cfg {
     int *img_start;
@@ -62,20 +63,20 @@ extern char _lm_rom_img_cfgp;
 void __attribute__((noreturn)) start_c(void) {
     struct rom_img_cfg *img_cfg = (struct rom_img_cfg*)&_lm_rom_img_cfgp;
     int *src = img_cfg->img_start;
-    int *dst = (int*)&_data;
+    int *dst = (int*)&__data_start__;
     int exit_code;
 
     /* Initialize .data, if necessary. */
     if (src != dst) {
-        int *end = (int*)&_edata;
+        int *end = (int*)&__data_end__;
         while (dst < end) {
             *dst++ = *src++;
         }
     }
 
     /* Zero .bss. */
-    dst = (int*)&_bss;
-    while (dst < (int*)&_ebss) {
+    dst = (int*)&__bss_start__;
+    while (dst < (int*)&__bss_end__) {
         *dst++ = 0;
     }
 

@@ -5,12 +5,20 @@
  */
 
 OUTPUT_FORMAT ("elf32-littlearm", "elf32-bigarm", "elf32-littlearm")
-ENTRY(_start)
 
 /*
- * Link against libgcc, libc, and libm
+ * Configure other libraries we want in the link.
+ *
+ * libgcc, libc, and libm are common across supported toolchains.
+ * However, some toolchains require additional archives which aren't
+ * present everywhere (e.g. ARM's gcc-arm-embedded releases).
+ *
+ * To hack around this, we let the build system specify additional
+ * archives by putting the right extra_libs.inc (in a directory under
+ * toolchains/) in our search path.
  */
 GROUP(libgcc.a libc.a libm.a)
+INCLUDE extra_libs.inc
 
 /*
  * These force the linker to search for vector table symbols.
@@ -35,8 +43,9 @@ EXTERN(__msp_init)
 PROVIDE(__msp_init = ORIGIN(ram) + LENGTH(ram));
 
 /* Reset vector and chip reset entry point */
-EXTERN(_start)
-PROVIDE(__exc_reset = _start);
+EXTERN(__start__)
+ENTRY(__start__)
+PROVIDE(__exc_reset = __start__);
 
 /* Heap boundaries, for libmaple */
 EXTERN(_lm_heap_start);
@@ -44,10 +53,9 @@ EXTERN(_lm_heap_end);
 
 SECTIONS
 {
-    /* TODO pull out rodata and stick into separate sections  */
     .text :
       {
-        _text = .;
+        __text_start__ = .;
         /*
          * STM32 vector table.  Leave this here.  Yes, really.
          */
@@ -107,7 +115,7 @@ SECTIONS
     .text.align :
       {
         . = ALIGN(8);
-        _etext = .;
+        __text_end__ = .;
       } > REGION_TEXT
 
     /*
@@ -126,13 +134,13 @@ SECTIONS
     .data :
       {
         . = ALIGN(8);
-        _data = .;
+        __data_start__ = .;
 
         *(.got.plt) *(.got)
         *(.data .data.* .gnu.linkonce.d.*)
 
         . = ALIGN(8);
-        _edata = .;
+        __data_end__ = .;
       } > REGION_DATA AT> REGION_RODATA
 
     /*
@@ -166,12 +174,12 @@ SECTIONS
     .bss :
       {
         . = ALIGN(8);
-        _bss = .;
+        __bss_start__ = .;
         *(.bss .bss.* .gnu.linkonce.b.*)
         *(COMMON)
         . = ALIGN (8);
-        _ebss = .;
-        _end = _ebss;
+        __bss_end__ = .;
+        _end = __bss_end__;
       } > REGION_BSS
 
     /*

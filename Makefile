@@ -58,7 +58,7 @@ GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2  -mcpu=cortex-m3 -mthumb -march=armv7-m \
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(TARGET_FLAGS)
 GLOBAL_ASFLAGS  := -mcpu=cortex-m3 -march=armv7-m -mthumb		     \
 		   -x assembler-with-cpp $(TARGET_FLAGS)
-LDFLAGS  = $(TARGET_LDFLAGS) -mcpu=cortex-m3 -mthumb \
+LDFLAGS  = $(TARGET_LDFLAGS) $(TOOLCHAIN_LDFLAGS) -mcpu=cortex-m3 -mthumb \
            -Xlinker --gc-sections \
            -Xassembler --march=armv7-m -Wall
 #          -Xlinker --print-gc-sections \

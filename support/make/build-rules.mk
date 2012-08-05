@@ -22,12 +22,25 @@ ifndef V
    SILENT_OBJDUMP  = @echo '  [OBJDUMP]  ' $(OBJDUMP);
 endif
 
+# Extra build configuration
+
 BUILDDIRS :=
 TGT_BIN   :=
 
 CFLAGS   = $(GLOBAL_CFLAGS) $(TGT_CFLAGS)
 CXXFLAGS = $(GLOBAL_CXXFLAGS) $(TGT_CXXFLAGS)
 ASFLAGS  = $(GLOBAL_ASFLAGS) $(TGT_ASFLAGS)
+
+# Hacks to determine extra libraries we need to link against based on
+# the toolchain. The default specifies no extra libraries, but it can
+# be overridden.
+LD_TOOLCHAIN_PATH := $(LDDIR)/toolchains/generic
+ifneq ($(findstring ARM/embedded,$(shell $(CC) --version)),)
+# GCC ARM Embedded, https://launchpad.net/gcc-arm-embedded/
+LD_TOOLCHAIN_PATH := $(LDDIR)/toolchains/gcc-arm-embedded
+endif
+# Add toolchain directory to LD search path
+TOOLCHAIN_LDFLAGS := -L $(LD_TOOLCHAIN_PATH)
 
 # General directory independent build rules, generate dependency information
 $(BUILD_PATH)/%.o: %.c

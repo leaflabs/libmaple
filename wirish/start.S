@@ -44,9 +44,9 @@
         .code 16
         .thumb_func
 
-        .globl _start
-        .type _start, %function
-_start:
+        .globl __start__
+        .type __start__, %function
+__start__:
         .fnstart
         ldr r1,=__msp_init
         mov sp,r1

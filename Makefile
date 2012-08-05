@@ -35,6 +35,13 @@ MEMORY_TARGET ?= flash
 include $(MAKEDIR)/target-config.mk
 
 ##
+## Build rules and useful templates
+##
+
+include $(MAKEDIR)/build-rules.mk
+include $(MAKEDIR)/build-templates.mk
+
+##
 ## Compilation flags
 ##
 
@@ -55,13 +62,6 @@ LDFLAGS  = $(TARGET_LDFLAGS) -mcpu=cortex-m3 -mthumb \
            -Xlinker --gc-sections \
            -Xassembler --march=armv7-m -Wall
 #          -Xlinker --print-gc-sections \
-
-##
-## Build rules and useful templates
-##
-
-include $(MAKEDIR)/build-rules.mk
-include $(MAKEDIR)/build-templates.mk
 
 ##
 ## Set all submodules here

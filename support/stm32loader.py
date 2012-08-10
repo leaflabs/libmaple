@@ -422,7 +422,7 @@ if __name__ == "__main__":
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "hqVewvrp:b:a:l:")
-    except getopt.GetoptError, err:
+    except getopt.GetoptError as err:
         # print help information and exit:
         print(str(err)) # will print something like "option -a not recognized"
         usage()

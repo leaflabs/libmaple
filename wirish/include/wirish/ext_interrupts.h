@@ -41,12 +41,12 @@
  */
 typedef enum ExtIntTriggerMode {
     RISING, /**< To trigger an interrupt when the pin transitions LOW
-               to HIGH */
+                 to HIGH */
     FALLING, /**< To trigger an interrupt when the pin transitions
-                HIGH to LOW */
+                  HIGH to LOW */
     CHANGE /**< To trigger an interrupt when the pin transitions from
-              LOW to HIGH or HIGH to LOW (i.e., when the pin
-              changes). */
+                LOW to HIGH or HIGH to LOW (i.e., when the pin
+                changes). */
 } ExtIntTriggerMode;
 
 /**
@@ -57,9 +57,10 @@ typedef enum ExtIntTriggerMode {
  *  context.  The new handler will replace whatever handler is
  *  currently registered for the pin, if any.
  *
- *  @param pin Maple pin number
+ *  @param pin Pin number
  *  @param handler Function to run upon external interrupt trigger.
- *  The handler should take no arguments, and have void return type.
+ *                 The handler should take no arguments, and have void
+ *                 return type.
  *  @param mode Type of transition to trigger on, e.g. falling, rising, etc.
  *
  *  @sideeffect Registers a handler

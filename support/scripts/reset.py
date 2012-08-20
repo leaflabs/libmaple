@@ -111,9 +111,10 @@ try:
         ser.setDTR(0)
         time.sleep(0.01)
         ser.write("1EAF".encode("ascii"))
+        ser.flush()
 
-        # Windows quirk: delay a bit before proceeding
-        if plat_sys == 'Windows': time.sleep(0.5)
+        # Delay a bit before proceeding
+        time.sleep(0.1)
     finally:
         # ok we're done here
         ser.close()

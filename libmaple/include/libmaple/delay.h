@@ -50,12 +50,12 @@ static inline void delay_us(uint32 us) {
 
     /* fudge for function call overhead  */
     us--;
-    asm volatile("1: subs %[us], #1         \n\t"
+    asm volatile("   mov r0, %[us]          \n\t"
+                 "1: subs r0, #1            \n\t"
                  "   bhi 1b                 \n\t"
-                 : [us] "=r" (us)
-                 : "[us]" (us)
                  :
-                 );
+                 : [us] "r" (us)
+                 : "r0");
 }
 
 #ifdef __cplusplus

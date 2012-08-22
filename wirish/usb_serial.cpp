@@ -31,6 +31,7 @@
 #include <wirish/usb_serial.h>
 
 #include <string.h>
+#include <stdint.h>
 
 #include <libmaple/nvic.h>
 #include <libmaple/usb_cdcacm.h>
@@ -199,46 +200,44 @@ static void rxHook(unsigned hook, void *ignored) {
 
         if (usb_cdcacm_data_available() >= 4) {
             // The magic reset sequence is "1EAF".
-            uint8 cmpBuf[4] = {'1', 'E', 'A', 'F'};
+            static const uint8 magic[4] = {'1', 'E', 'A', 'F'};
             uint8 chkBuf[4];
 
-            // Peek at the waiting bytes, looking for reset sequence.
+            // Peek at the waiting bytes, looking for reset sequence,
+            // bailing on mismatch.
             usb_cdcacm_peek(chkBuf, 4);
-            bool cmpMatch = true;
-            for (int i = 0; i < 4; i++) {
-                if (chkBuf[i] != cmpBuf[i]) {
-                    cmpMatch = false;
-                    break;
+            for (unsigned i = 0; i < sizeof(magic); i++) {
+                if (chkBuf[i] != magic[i]) {
+                    return;
                 }
             }
 
-            // Got the magic sequence? Reset, presumably into the bootloader.
-            if (cmpMatch) {
-                // Return address is wait_reset, but we must set the thumb bit.
-                unsigned int target = (unsigned int)wait_reset | 0x1;
-                asm volatile("mov r0, %[stack_top]      \n\t" // Reset stack
-                             "mov sp, r0                \n\t"
-                             "mov r0, #1                \n\t"
-                             "mov r1, %[target_addr]    \n\t"
-                             "mov r2, %[cpsr]           \n\t"
-                             "push {r2}                 \n\t" // Fake xPSR
-                             "push {r1}                 \n\t" // PC target addr
-                             "push {r0}                 \n\t" // Fake LR
-                             "push {r0}                 \n\t" // Fake R12
-                             "push {r0}                 \n\t" // Fake R3
-                             "push {r0}                 \n\t" // Fake R2
-                             "push {r0}                 \n\t" // Fake R1
-                             "push {r0}                 \n\t" // Fake R0
-                             "mov lr, %[exc_return]     \n\t"
-                             "bx lr"
-                             :
-                             : [stack_top] "r" (STACK_TOP),
-                               [target_addr] "r" (target),
-                               [exc_return] "r" (EXC_RETURN),
-                               [cpsr] "r" (DEFAULT_CPSR)
-                             : "r0", "r1", "r2");
-                /* should never get here */
-            }
+            // Got the magic sequence -> reset, presumably into the bootloader.
+            // Return address is wait_reset, but we must set the thumb bit.
+            uintptr_t target = (uintptr_t)wait_reset | 0x1;
+            asm volatile("mov r0, %[stack_top]      \n\t" // Reset stack
+                         "mov sp, r0                \n\t"
+                         "mov r0, #1                \n\t"
+                         "mov r1, %[target_addr]    \n\t"
+                         "mov r2, %[cpsr]           \n\t"
+                         "push {r2}                 \n\t" // Fake xPSR
+                         "push {r1}                 \n\t" // PC target addr
+                         "push {r0}                 \n\t" // Fake LR
+                         "push {r0}                 \n\t" // Fake R12
+                         "push {r0}                 \n\t" // Fake R3
+                         "push {r0}                 \n\t" // Fake R2
+                         "push {r0}                 \n\t" // Fake R1
+                         "push {r0}                 \n\t" // Fake R0
+                         "mov lr, %[exc_return]     \n\t"
+                         "bx lr"
+                         :
+                         : [stack_top] "r" (STACK_TOP),
+                           [target_addr] "r" (target),
+                           [exc_return] "r" (EXC_RETURN),
+                           [cpsr] "r" (DEFAULT_CPSR)
+                         : "r0", "r1", "r2");
+            /* Can't happen. */
+            ASSERT_FAULT(0);
         }
     }
 }

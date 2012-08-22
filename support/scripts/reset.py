@@ -11,12 +11,20 @@ from struct import pack
 
 def unix_get_maple_path(file_prefix):
     """Try to find the device file for the Maple on *nix; assuming
-    that it looks like /dev/<file_prefix>*.  If there are multiple
-    possibilities, ask the user what to do.  If the user chooses not
-    to say, returns None."""
+    that it looks like /dev/<file_prefix>* and has the correct ID in
+    the /sys tree.  If there are multiple possibilities, ask the user
+    what to do.  If the user chooses not to say, returns None."""
     possible_paths = [os.path.join('/dev', x) for x in os.listdir('/dev') \
-                          if x.startswith(file_prefix)]
+                          if (x.startswith(file_prefix) and tty_is_maple(x))]
     return choose_path(possible_paths)
+
+def tty_is_maple(device):
+    try:
+        sysfile = open("/sys/class/tty/%s/device/uevent" % device, "r")
+        text = "".join(sysfile.readlines())
+        return "PRODUCT=1eaf/4" in text
+    except IOError: # no udev info available
+        return True
 
 def windows_get_maple_path():
     """Similar to unix_get_maple_path(), but on Windows."""

@@ -9,14 +9,34 @@ import sys
 import time
 from struct import pack
 
-def unix_get_maple_path(file_prefix):
-    """Try to find the device file for the Maple on *nix; assuming
-    that it looks like /dev/<file_prefix>*.  If there are multiple
-    possibilities, ask the user what to do.  If the user chooses not
-    to say, returns None."""
+def unix_get_maple_path(file_prefix, dev_is_maple=lambda dev: True):
+    """Try to find the device file for the Maple on *nix.
+
+    This function works assuming that the device file globs like
+    '/dev/<file_prefix>*'. The caller may pass an additional
+    dev_is_maple predicate if the platform supports additional tests
+    to determine if a device is a Maple.
+
+    If there are multiple possibilities, ask the user what to do.  If
+    the user chooses not to say, returns None."""
     possible_paths = [os.path.join('/dev', x) for x in os.listdir('/dev') \
-                          if x.startswith(file_prefix)]
+                      if x.startswith(file_prefix) and dev_is_maple(x)]
     return choose_path(possible_paths)
+
+def linux_get_maple_path(file_prefix='ttyACM'):
+    """Specialized unix_get_maple_path() for Linux.
+
+    Attempts to check that a candidate device has the correct ID in
+    the /sys tree when deciding if it's a Maple."""
+    return unix_get_maple_path(file_prefix, linux_tty_is_maple)
+
+def linux_tty_is_maple(device):
+    try:
+        sysfile = open("/sys/class/tty/%s/device/uevent" % device, "r")
+        text = "".join(sysfile.readlines())
+        return "PRODUCT=1eaf/4" in text
+    except IOError: # no udev info available
+        return True
 
 def windows_get_maple_path():
     """Similar to unix_get_maple_path(), but on Windows."""
@@ -64,7 +84,7 @@ def choose_among_options(options):
 plat_sys = platform.system()
 plat_bits = platform.architecture()[0]
 if plat_sys == 'Linux':
-    maple_path = unix_get_maple_path('ttyACM')
+    maple_path = linux_get_maple_path()
     # fall back on /dev/maple if that doesn't work
     if maple_path is None:
         maple_path = '/dev/maple'

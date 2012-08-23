@@ -36,7 +36,7 @@ libmaple proper interfaces.
 --------------------------------
 
 The libmaple proper interfaces all use functions named
-foo_attach_interrupt(). So tehre's the exti_attach_interrupt() and
+foo_attach_interrupt(). So there's the exti_attach_interrupt() and
 timer_attach_interrupt() routines that have already been mentioned,
 but there are also some others which (at time of writing) don't have
 Wirish equivalents, like dma_attach_interrupt().
@@ -48,28 +48,28 @@ the user's function gets called exactly when that interrupt occurs.
 
 This in itself is a useful abstraction above the hardware. To
 understand why, here's a bullet-point primer on how interrupts work on
-STM32/Cortex M3 (read about the NVIC in a Cortex M3s book to
-understand all the details; these are just the basics):
+STM32/Cortex M3 (read about the NVIC in a Cortex M3 book to understand
+all the details; these are just the basics):
 
-- Each of the series of STM32 microcontroller specifies a certain
-  number of IRQs (the libmaple type which enumerates the IRQs is
-  nvic_irq_num; see the libmaple/nvic.h documentation for all the
-  details).
+- Each series of STM32 microcontroller (STM32F1, STM32F2, etc.)
+  specifies a certain number of IRQs (the libmaple type which
+  enumerates the IRQs is nvic_irq_num; see the libmaple/nvic.h
+  documentation for all the details).
 
 - Each IRQ has a number, which corresponds to a real, physical
   interrupt line inside the processor. When you talk about an "IRQ",
   you usually mean one of these interrupt lines.
 
 - The interrupt hardware can be configured to call a single function
-  per IRQ line when the interrupt associated with the IRQ has happened
+  per IRQ line when an interrupt associated with the IRQ has happened
   (e.g. when a pin changes from low to high for an external
   interrupt).
 
-- However, sometimes, various interrupts /share/ an IRQ line. For
+- However, sometimes, various interrupts share an IRQ line. For
   example, on Maple, external interrupts 5 through 9 all share a
   single IRQ line (which has nvic_irq_num NVIC_EXTI_9_5). That means
-  that when any one of those interrupts occurs, the _same_ function
-  (the IRQ handler for NVIC_EXTI_9_5) gets called.
+  that when any one (or any subset!) of those interrupts occurs, the
+  _same_ function (the IRQ handler for NVIC_EXTI_9_5) gets called.
 
   When that happens, your IRQ handler has to figure out which
   interrupt(s) it needs to handle (usually by looking at bitfields in
@@ -89,8 +89,7 @@ hit, but the convenience is usually worth it.
 
 As noted above, for each nvic_irq_num, there's an IRQ line, and for
 each IRQ line, you can set up a single function to call. This section
-explains where libmaple keep these functions, what they're called, and
-how you can write your own.
+explains where libmaple keeps these functions and what they're called.
 
 You typically will only need the information in this section if
 there's no foo_attach_interrupt() routine for the kind of interrupt
@@ -111,13 +110,12 @@ You can find the names libmaple expects for IRQ handlers by looking in
 the vector table file for the microcontroller you're interested
 in. This file is always named vector_table.S, but there are multiple
 such files throughout the libmaple source tree. This is because the
-different STM32 series (like STM32F1, STM32F2) and even lines and
-densities within a series (like the value and performance lines and
-low/medium/high/XL-densities for STM32F1) each have different sets of
-IRQs.
+different STM32 series and even lines and densities within a series
+(like the value and performance lines and low/medium/high/XL-densities
+for STM32F1) each have different sets of IRQs.
 
-For portability, then, the various vector_table.S must live somewhere
-where nonportable code goes: somewhere under libmaple/stm32f1/,
+For portability, then, the vector table files must live somewhere
+where nonportable code goes, namely, under libmaple/stm32f1/,
 libmaple/stm32f2/, etc. as appropriate. The libmaple build system
 knows which one to use for each board.
 
@@ -155,9 +153,9 @@ to make sure which IRQ line a function is associated with.
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The vector table file is just an assembly stub which defines the
-actual vector table (i.e., the stack table and table of function
-pointers that go at address 0x0), but it doesn't define the interrupts
-themselves. It leaves that up to the rest of libmaple.
+actual vector table (i.e., the initial stack pointer and table of
+function pointers that go at address 0x0), but it doesn't define the
+interrupts themselves. It leaves that up to the rest of libmaple.
 
 Though it doesn't handle them all, libmaple does provide many
 interrupt handlers when it can provide some useful default
@@ -199,9 +197,9 @@ These aren't complicated; read the source to see how they work.
 -------------------------------------
 
 When adding an interrupt handler (or overriding a default one), you
-need to decide whether you want it for a particular program, or
-whether what you're writing is general-purpose enough that it should
-live in libmaple itself.
+need to decide whether you want it for a particular program, or if
+what you're writing is general-purpose enough that it should live in
+libmaple itself.
 
 4.1 Adding a special-purpose interrupt handler
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -278,10 +276,10 @@ that require special-purpose workarounds. When in doubt, leave your
 handler in the series directory you can test. It can always be moved
 later.
 
-After you've added the handler, you need to add an IRQ enable and
-disable routines for the peripheral. At the very least, this needs to
-take a pointer to the peripheral's device and an argument specifying
-which IRQ or IRQs to enable. For example, here are some timer IRQ
+After you've added the handler, you need to add IRQ enable and disable
+routines for the peripheral. At the very least, this needs to take a
+pointer to the peripheral's device and an argument specifying which
+IRQ or IRQs to enable. For example, here are some timer IRQ
 enable/disable routines present in <libmaple/timer.h>:
 
     /**

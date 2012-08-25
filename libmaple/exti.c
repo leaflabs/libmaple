@@ -43,27 +43,27 @@ static inline void dispatch_extis(uint32 start, uint32 stop);
  */
 
 typedef struct exti_channel {
-    void (*handler)(void);
+    Callback callback;
     uint32 irq_line;
 } exti_channel;
 
 static exti_channel exti_channels[] = {
-    { .handler = NULL, .irq_line = NVIC_EXTI0      },  // EXTI0
-    { .handler = NULL, .irq_line = NVIC_EXTI1      },  // EXTI1
-    { .handler = NULL, .irq_line = NVIC_EXTI2      },  // EXTI2
-    { .handler = NULL, .irq_line = NVIC_EXTI3      },  // EXTI3
-    { .handler = NULL, .irq_line = NVIC_EXTI4      },  // EXTI4
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI5
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI6
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI7
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI8
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI9
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI10
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI11
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI12
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI13
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI14
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI15
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI0      },  // EXTI0
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI1      },  // EXTI1
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI2      },  // EXTI2
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI3      },  // EXTI3
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI4      },  // EXTI4
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_9_5   },  // EXTI5
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_9_5   },  // EXTI6
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_9_5   },  // EXTI7
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_9_5   },  // EXTI8
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_9_5   },  // EXTI9
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI10
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI11
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI12
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI13
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI14
+    { .handler = INVALID_CALLBACK, .irq_line = NVIC_EXTI_15_10 },  // EXTI15
 };
 
 /*
@@ -76,11 +76,11 @@ static exti_channel exti_channels[] = {
  * This function assumes that the interrupt request corresponding to
  * the given external interrupt is masked.
  *
- * @param num     External interrupt line number.
- * @param port    Port to use as source input for external interrupt.
- * @param handler Function handler to execute when interrupt is triggered.
- * @param mode    Type of transition to trigger on, one of:
- *                EXTI_RISING, EXTI_FALLING, EXTI_RISING_FALLING.
+ * @param num      External interrupt line number.
+ * @param port     Port to use as source input for external interrupt.
+ * @param callback Function handler to execute when interrupt is triggered.
+ * @param mode     Type of transition to trigger on, one of:
+ *                 EXTI_RISING, EXTI_FALLING, EXTI_RISING_FALLING.
  * @see exti_num
  * @see exti_cfg
  * @see voidFuncPtr
@@ -88,12 +88,19 @@ static exti_channel exti_channels[] = {
  */
 void exti_attach_interrupt(exti_num num,
                            exti_cfg port,
-                           voidFuncPtr handler,
+                           Callback callback,
                            exti_trigger_mode mode) {
-    ASSERT(handler);
+    if(callback.instance)
+	{
+		ASSERT(callback.classFunction);
+	}
+	else
+	{
+		ASSERT(callback.function);
+	}
 
     /* Register the handler */
-    exti_channels[num].handler = handler;
+    exti_channels[num].callback = callback;
 
     /* Set trigger mode */
     switch (mode) {
@@ -133,7 +140,7 @@ void exti_detach_interrupt(exti_num num) {
     bb_peri_set_bit(&EXTI_BASE->RTSR, num, 0);
 
     /* Finally, unregister the user's handler */
-    exti_channels[num].handler = NULL;
+    exti_channels[num].callback.isValid = 0;
 }
 
 /*
@@ -199,13 +206,20 @@ static __always_inline void clear_pending_msk(uint32 exti_msk) {
 /* This dispatch routine is for non-multiplexed EXTI lines only; i.e.,
  * it doesn't check EXTI_PR. */
 static __always_inline void dispatch_single_exti(uint32 exti) {
-    voidFuncPtr handler = exti_channels[exti].handler;
+    Callback callback = exti_channels[exti].callback;
 
-    if (!handler) {
+    if (callback.isValid == 0) {
         return;
     }
 
-    handler();
+	if(callback.instance == NULL)
+	{
+		callback.function();
+	}
+	else
+	{
+		callback.classFunction(callback.instance);
+	}
     clear_pending_msk(1U << exti);
 }
 
@@ -219,11 +233,18 @@ static __always_inline void dispatch_extis(uint32 start, uint32 stop) {
     for (exti = start; exti <= stop; exti++) {
         uint32 eb = (1U << exti);
         if (pr & eb) {
-            voidFuncPtr handler = exti_channels[exti].handler;
-            if (handler) {
-                handler();
-                handled_msk |= eb;
-            }
+			Callback callback = exti_channels[exti].callback;
+			if (callback.isValid == 1) {
+				if(callback.instance == NULL)
+				{
+					callback.function();
+				}
+				else
+				{
+					callback.classFunction(callback.instance);
+				}
+				handled_msk |= eb;
+			}
         }
     }
 

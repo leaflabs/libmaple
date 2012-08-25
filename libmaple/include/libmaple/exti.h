@@ -113,7 +113,7 @@ typedef enum exti_trigger_mode {
 
 void exti_attach_interrupt(exti_num num,
                            exti_cfg port,
-                           voidFuncPtr handler,
+                           Callback callback,
                            exti_trigger_mode mode);
 void exti_detach_interrupt(exti_num num);
 

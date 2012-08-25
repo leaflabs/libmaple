@@ -1,7 +1,7 @@
 /******************************************************************************
  * The MIT License
  *
- * Copyright (c) 2010 Perry Hung.
+ * Copyright (c) 2010 Aditya Gaddam
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -24,26 +24,21 @@
  * SOFTWARE.
  *****************************************************************************/
 
-/**
- *  @file libmaple/include/libmaple/libmaple.h
- *  @brief General include file for libmaple
- */
+#ifndef INTERRUPT_CALLBACK_H
+#define INTERRUPT_CALLBACK_H
 
-#ifndef _LIBMAPLE_LIBMAPLE_H_
-#define _LIBMAPLE_LIBMAPLE_H_
+#include "libmaple_types.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+typedef void (*voidClassFuncPtr)(void *);
 
-#include <libmaple/libmaple_types.h>
-#include <libmaple/stm32.h>
-#include <libmaple/util.h>
-#include <libmaple/delay.h>
-#include <libmaple/callback.h>
+typedef struct
+{
+	void * 				instance;
+	voidClassFuncPtr	classFunction;
+	voidFuncPtr			function;
+	unsigned char		isValid;
+}Callback;
 
-#ifdef __cplusplus
-}
-#endif
+#define INVALID_CALLBACK { .isValid = 0 }
 
 #endif

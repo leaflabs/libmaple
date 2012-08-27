@@ -57,11 +57,6 @@ typedef enum SPIFrequency {
 
 #define MAX_SPI_FREQS 8
 
-#if CYCLES_PER_MICROSECOND != 72
-/* TODO [0.2.0?] something smarter than this */
-#warning "Unexpected clock speed; SPI frequency calculation will be incorrect"
-#endif
-
 /**
  * @brief Wirish SPI interface.
  *

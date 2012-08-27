@@ -38,6 +38,11 @@
 #include <wirish/wirish.h>
 #include <wirish/boards.h>
 
+#if CYCLES_PER_MICROSECOND != 72
+/* TODO [0.2.0?] something smarter than this */
+#warning "Unexpected clock speed; SPI frequency calculation will be incorrect"
+#endif
+
 struct spi_pins {
     uint8 nss;
     uint8 sck;

@@ -43,8 +43,10 @@
  * Hooks used for bootloader reset signalling
  */
 
+#if BOARD_HAVE_SERIALUSB
 static void rxHook(unsigned, void*);
 static void ifaceSetupHook(unsigned, void*);
+#endif
 
 /*
  * USBSerial interface
@@ -147,6 +149,8 @@ USBSerial SerialUSB;
  * Bootloader hook implementations
  */
 
+#if BOARD_HAVE_SERIALUSB
+
 enum reset_state_t {
     DTR_UNSET,
     DTR_HIGH,
@@ -241,3 +245,5 @@ static void rxHook(unsigned hook, void *ignored) {
         }
     }
 }
+
+#endif  // BOARD_HAVE_SERIALUSB

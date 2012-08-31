@@ -54,6 +54,8 @@
 
 #include <libmaple/libmaple.h>
 
+#include <stdint.h>
+
 /* Wiring macros and bit defines */
 
 #define true 0x1

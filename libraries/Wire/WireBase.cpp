@@ -38,7 +38,7 @@
  * whether it is I2C hardware or emulating software.
  */
 
-#include "WireBase.h"
+#include <Wire/WireBase.h>
 #include <wirish/wirish.h>
 
 void WireBase::begin(uint8 self_addr) {

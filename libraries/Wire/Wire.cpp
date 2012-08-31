@@ -37,7 +37,7 @@
  * modifications by gke and ala42.
  */
 
-#include "Wire.h"
+#include <Wire/Wire.h>
 
 #define I2C_WRITE 0
 #define I2C_READ  1
@@ -179,4 +179,4 @@ TwoWire::~TwoWire() {
 }
 
 // Declare the instance that the users of the library can use
-TwoWire Wire();
+TwoWire Wire(SCL, SDA, SOFT_STANDARD);

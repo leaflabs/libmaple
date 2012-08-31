@@ -36,7 +36,7 @@
  * users easy interaction with the I2C Hardware in a familiar method.
  */
 
-#include "HardWire.h"
+#include <Wire/HardWire.h>
 
 uint8 HardWire::process() {
     int8 res = i2c_master_xfer(sel_hard, &itc_msg, 1, 0);

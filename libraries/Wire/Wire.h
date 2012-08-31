@@ -40,7 +40,7 @@
 #ifndef _WIRE_H_
 #define _WIRE_H_
 
-#include "WireBase.h"
+#include <Wire/WireBase.h>
 #include <wirish/wirish.h>
 
 /*
@@ -116,7 +116,7 @@ class TwoWire : public WireBase {
      * Accept pin numbers for SCL and SDA lines. Set the delay needed
      * to create the timing for I2C's Standard Mode and Fast Mode.
      */
-    TwoWire(uint8 = SCL, uint8 = SDA, uint8 = SOFT_STANDARD);
+    TwoWire(uint8 scl=SCL, uint8 sda=SDA, uint8 delay=SOFT_STANDARD);
 
     /*
      * Sets pins SDA and SCL to OUPTUT_OPEN_DRAIN, joining I2C bus as
@@ -131,6 +131,6 @@ class TwoWire : public WireBase {
     ~TwoWire();
 };
 
-extern TwoWire Wire();
+extern TwoWire Wire;
 
 #endif // _WIRE_H_

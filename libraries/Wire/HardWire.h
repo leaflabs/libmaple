@@ -39,7 +39,7 @@
 #ifndef _HARDWIRE_H_
 #define _HARDWIRE_H_
 
-#include "WireBase.h"
+#include <Wire/WireBase.h>
 #include <wirish/wirish.h>
 #include <libmaple/i2c.h>
 

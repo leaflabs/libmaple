@@ -92,7 +92,7 @@ void exti_attach_interrupt(exti_num num,
                            exti_trigger_mode mode) {
     
     // Call callback version with arg being null
-    exti_attach_callback(num, port, handler, NULL, mode);
+    exti_attach_callback(num, port, (voidArgumentFuncPtr)handler, NULL, mode);
 }
 
 /**
@@ -114,14 +114,14 @@ void exti_attach_interrupt(exti_num num,
  */
 void exti_attach_callback(exti_num num,
                           exti_cfg port,
-                          voidFuncPtr handler,
+                          voidArgumentFuncPtr handler,
                           void *arg,
                           exti_trigger_mode mode) {
                           
     ASSERT(handler);
 
     /* Register the handler */
-    exti_channels[num].handler = (voidArgumentFuncPtr)handler;
+    exti_channels[num].handler = handler;
     exti_channels[num].arg = arg;
 
     /* Set trigger mode */

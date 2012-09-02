@@ -73,7 +73,7 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
  *  @sideeffect Registers a handler
  *  @see detachInterrupt()
  */
-void attachInterrupt(uint8 pin, voidFuncPtr handler, void *arg, ExtIntTriggerMode mode) {
+void attachInterrupt(uint8 pin, voidArgumentFuncPtr handler, void *arg, ExtIntTriggerMode mode) {
     if (pin >= BOARD_NR_GPIO_PINS || !handler) {
         return;
     }

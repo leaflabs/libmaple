@@ -43,27 +43,27 @@ static inline void dispatch_extis(uint32 start, uint32 stop);
  */
 
 typedef struct exti_channel {
-    void (*handler)(void);
-    uint32 irq_line;
+    void (*handler)(void *);
+    void *arg;
 } exti_channel;
 
 static exti_channel exti_channels[] = {
-    { .handler = NULL, .irq_line = NVIC_EXTI0      },  // EXTI0
-    { .handler = NULL, .irq_line = NVIC_EXTI1      },  // EXTI1
-    { .handler = NULL, .irq_line = NVIC_EXTI2      },  // EXTI2
-    { .handler = NULL, .irq_line = NVIC_EXTI3      },  // EXTI3
-    { .handler = NULL, .irq_line = NVIC_EXTI4      },  // EXTI4
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI5
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI6
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI7
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI8
-    { .handler = NULL, .irq_line = NVIC_EXTI_9_5   },  // EXTI9
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI10
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI11
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI12
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI13
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI14
-    { .handler = NULL, .irq_line = NVIC_EXTI_15_10 },  // EXTI15
+    { .handler = NULL, .arg = NULL },  // EXTI0
+    { .handler = NULL, .arg = NULL },  // EXTI1
+    { .handler = NULL, .arg = NULL },  // EXTI2
+    { .handler = NULL, .arg = NULL },  // EXTI3
+    { .handler = NULL, .arg = NULL },  // EXTI4
+    { .handler = NULL, .arg = NULL },  // EXTI5
+    { .handler = NULL, .arg = NULL },  // EXTI6
+    { .handler = NULL, .arg = NULL },  // EXTI7
+    { .handler = NULL, .arg = NULL },  // EXTI8
+    { .handler = NULL, .arg = NULL },  // EXTI9
+    { .handler = NULL, .arg = NULL },  // EXTI10
+    { .handler = NULL, .arg = NULL },  // EXTI11
+    { .handler = NULL, .arg = NULL },  // EXTI12
+    { .handler = NULL, .arg = NULL },  // EXTI13
+    { .handler = NULL, .arg = NULL },  // EXTI14
+    { .handler = NULL, .arg = NULL },  // EXTI15
 };
 
 /*
@@ -90,10 +90,37 @@ void exti_attach_interrupt(exti_num num,
                            exti_cfg port,
                            voidFuncPtr handler,
                            exti_trigger_mode mode) {
+    // Call callback version with arg being null
+    exti_attach_callback(num, port, (voidArgumentFuncPtr)handler, NULL, mode);
+}
+
+/**
+ * @brief Register a handler with an argument to run upon external interrupt.
+ *
+ * This function assumes that the interrupt request corresponding to
+ * the given external interrupt is masked.
+ *
+ * @param num     External interrupt line number.
+ * @param port    Port to use as source input for external interrupt.
+ * @param handler Function handler to execute when interrupt is triggered.
+ * @param arg     Argument to pass to the interrupt handler.
+ * @param mode    Type of transition to trigger on, one of:
+ *                EXTI_RISING, EXTI_FALLING, EXTI_RISING_FALLING.
+ * @see exti_num
+ * @see exti_cfg
+ * @see voidFuncPtr
+ * @see exti_trigger_mode
+ */
+void exti_attach_callback(exti_num num,
+                          exti_cfg port,
+                          voidArgumentFuncPtr handler,
+                          void *arg,
+                          exti_trigger_mode mode) {
     ASSERT(handler);
 
     /* Register the handler */
     exti_channels[num].handler = handler;
+    exti_channels[num].arg = arg;
 
     /* Set trigger mode */
     switch (mode) {
@@ -116,7 +143,39 @@ void exti_attach_interrupt(exti_num num,
     bb_peri_set_bit(&EXTI_BASE->IMR, num, 1);
 
     /* Enable the interrupt line */
-    nvic_irq_enable(exti_channels[num].irq_line);
+    switch(num)
+    {
+        case 0:
+            nvic_irq_enable(NVIC_EXTI0);
+            break;
+        case 1:
+            nvic_irq_enable(NVIC_EXTI1);
+            break;
+        case 2:
+            nvic_irq_enable(NVIC_EXTI2);
+            break;
+        case 3:
+            nvic_irq_enable(NVIC_EXTI3);
+            break;
+        case 4:
+            nvic_irq_enable(NVIC_EXTI4);
+            break;
+        case 5:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            nvic_irq_enable(NVIC_EXTI_9_5);
+            break;
+        case 10:
+        case 11:
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+            nvic_irq_enable(NVIC_EXTI_15_10);
+            break;
+    }
 }
 
 /**
@@ -134,6 +193,7 @@ void exti_detach_interrupt(exti_num num) {
 
     /* Finally, unregister the user's handler */
     exti_channels[num].handler = NULL;
+    exti_channels[num].arg = NULL;
 }
 
 /*
@@ -199,13 +259,13 @@ static __always_inline void clear_pending_msk(uint32 exti_msk) {
 /* This dispatch routine is for non-multiplexed EXTI lines only; i.e.,
  * it doesn't check EXTI_PR. */
 static __always_inline void dispatch_single_exti(uint32 exti) {
-    voidFuncPtr handler = exti_channels[exti].handler;
+    voidArgumentFuncPtr handler = exti_channels[exti].handler;
 
     if (!handler) {
         return;
     }
 
-    handler();
+    handler(exti_channels[exti].arg);
     clear_pending_msk(1U << exti);
 }
 
@@ -219,9 +279,9 @@ static __always_inline void dispatch_extis(uint32 start, uint32 stop) {
     for (exti = start; exti <= stop; exti++) {
         uint32 eb = (1U << exti);
         if (pr & eb) {
-            voidFuncPtr handler = exti_channels[exti].handler;
+            voidArgumentFuncPtr handler = exti_channels[exti].handler;
             if (handler) {
-                handler();
+                handler(exti_channels[exti].arg);
                 handled_msk |= eb;
             }
         }

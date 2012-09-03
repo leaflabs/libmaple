@@ -39,13 +39,6 @@
 
 static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
 
-/**
- * @brief Attach an interrupt handler to a pin, triggering on the given mode.
- * @param pin     Pin to attach an interrupt handler onto.
- * @param handler Function to call when the external interrupt is triggered.
- * @param mode    Trigger mode for the given interrupt.
- * @see ExtIntTriggerMode
- */
 void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
     if (pin >= BOARD_NR_GPIO_PINS || !handler) {
         return;
@@ -59,10 +52,21 @@ void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
                           outMode);
 }
 
-/**
- * @brief Disable any external interrupt attached to a pin.
- * @param pin Pin number to detach any interrupt from.
- */
+void attachInterrupt(uint8 pin, voidArgumentFuncPtr handler, void *arg,
+                     ExtIntTriggerMode mode) {
+    if (pin >= BOARD_NR_GPIO_PINS || !handler) {
+        return;
+    }
+
+    exti_trigger_mode outMode = exti_out_mode(mode);
+
+    exti_attach_callback((exti_num)(PIN_MAP[pin].gpio_bit),
+                          gpio_exti_port(PIN_MAP[pin].gpio_device),
+                          handler,
+                          arg,
+                          outMode);
+}
+
 void detachInterrupt(uint8 pin) {
     if (pin >= BOARD_NR_GPIO_PINS) {
         return;

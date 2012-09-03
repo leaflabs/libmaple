@@ -40,6 +40,23 @@
 static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
 
 /**
+ * Helper attachInterrupt function
+ *
+ */
+static void attachInterrupt(uint8 pin, Callback callback, ExtIntTriggerMode mode) {
+	if (pin >= BOARD_NR_GPIO_PINS || callback.isValid == 0) {
+        return;
+    }
+
+    exti_trigger_mode outMode = exti_out_mode(mode);
+
+    exti_attach_interrupt((afio_exti_num)(PIN_MAP[pin].gpio_bit),
+                          gpio_exti_port(PIN_MAP[pin].gpio_device),
+                          callback,
+                          outMode);
+}
+
+/**
  * @brief Attach an interrupt handler to a pin, triggering on the given mode.
  * @param pin     Pin to attach an interrupt handler onto.
  * @param handler Function to call when the external interrupt is triggered.
@@ -47,16 +64,29 @@ static inline exti_trigger_mode exti_out_mode(ExtIntTriggerMode mode);
  * @see ExtIntTriggerMode
  */
 void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode) {
-    if (pin >= BOARD_NR_GPIO_PINS || !handler) {
-        return;
-    }
+	Callback callback;
+	callback.instance = NULL;
+	callback.function = handler;
+	callback.isValid  = 1;
+	attachInterrupt(pin, callback, mode);
+}
 
-    exti_trigger_mode outMode = exti_out_mode(mode);
-
-    exti_attach_interrupt((exti_num)(PIN_MAP[pin].gpio_bit),
-                          gpio_exti_port(PIN_MAP[pin].gpio_device),
-                          handler,
-                          outMode);
+/**
+ * @brief Attach an interrupt handler that is a class member
+ *        to a pin, triggering on the given mode.
+ *
+ * @param pin     			Pin to attach an interrupt handler onto.
+ * @param instance 			Class instance
+ * @param classFunction 	Class member function
+ * @param mode    			Trigger mode for the given interrupt.
+ * @see ExtIntTriggerMode
+ */
+void attachInterrupt(uint8 pin, void *instance, voidClassFuncPtr classFunction, ExtIntTriggerMode mode) {
+    Callback callback;
+	callback.instance 		= instance;
+	callback.classFunction  = classFunction;
+	callback.isValid  		= 1;
+	attachInterrupt(pin, callback, mode);
 }
 
 /**

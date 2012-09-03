@@ -69,6 +69,23 @@ typedef enum ExtIntTriggerMode {
 void attachInterrupt(uint8 pin, voidFuncPtr handler, ExtIntTriggerMode mode);
 
 /**
+ * @brief Attach an interrupt handler that is a class member
+ *        to a pin, triggering on the given mode.
+ *
+ *  The interrupt will be triggered on a given transition on the pin,
+ *  as specified by the mode parameter.  The handler runs in interrupt
+ *  context.  The new handler will replace whatever handler is
+ *  currently registered for the pin, if any.
+ *
+ * @param pin     			Pin to attach an interrupt handler onto.
+ * @param instance 			Class instance
+ * @param classFunction 	Class member function
+ * @param mode    			Trigger mode for the given interrupt.
+ * @see ExtIntTriggerMode
+ */
+void attachInterrupt(uint8 pin, void *instance, voidClassFuncPtr memberFunction, ExtIntTriggerMode mode);
+
+/**
  * @brief Disable any registered external interrupt.
  * @param pin Maple pin number
  * @sideeffect unregisters external interrupt handler

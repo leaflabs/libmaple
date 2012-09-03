@@ -173,9 +173,8 @@ void HardwareSPI::write(uint8 byte) {
 
 void HardwareSPI::write(const uint8 *data, uint32 length) {
     uint32 txed = 0;
-    while (txed < length) {
-        txed += spi_tx(this->spi_d, data + txed, length - txed);
-    }
+    spi_tx(this->spi_d, data + txed, length - txed);
+    spi_rx_reg(this->spi_d);
 }
 
 uint8 HardwareSPI::transfer(uint8 byte) {

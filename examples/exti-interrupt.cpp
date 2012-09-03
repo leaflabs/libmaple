@@ -1,10 +1,10 @@
 // Toggles the built-in LED when the built in button
 // on the Maple is pushed in. This uses the attachInterrupt function to
 // setup the interrupt handler for the button being pressed.
-// 
-// More about attachInterrupt: 
+//
+// More about attachInterrupt:
 // http://leaflabs.com/docs/lang/api/attachinterrupt.html
-// 
+//
 
 #include <wirish/wirish.h>
 
@@ -16,7 +16,7 @@ void interruptHandler() {
     // Set LED
     isLEDOn = !isLEDOn;
     digitalWrite(BOARD_LED_PIN, isLEDOn);
-    
+
     // Delay slightly for switch debouncing.
     delay(20);
 }
@@ -25,13 +25,13 @@ void interruptHandler() {
 void setup() {
     pinMode(BOARD_BUTTON_PIN, INPUT);
     pinMode(BOARD_LED_PIN, OUTPUT);
-    
+
     attachInterrupt(BOARD_BUTTON_PIN, interruptHandler, RISING);
 }
 
 // Loop. Does nothing in this example.
 void loop() {
-    
+
 }
 
 // Force init to be called *first*, i.e. before static object allocation.

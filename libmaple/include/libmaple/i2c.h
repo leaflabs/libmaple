@@ -93,6 +93,7 @@ typedef struct i2c_msg {
 
 #define I2C_MSG_READ            0x1
 #define I2C_MSG_10BIT_ADDR      0x2
+
     /**
      * Bitwise OR of:
      * - I2C_MSG_READ (write is default)
@@ -197,6 +198,10 @@ typedef struct i2c_msg {
 #define I2C_DUTY_16_9           0x2           // 16/9 duty ratio
 /* Flag 0x4 is reserved; DO NOT USE. */
 #define I2C_BUS_RESET           0x8           // Perform a bus reset
+#define I2C_SLAVE_USE_RX_BUFFER 0x10          // Use a buffered message when doing a slave recv
+#define I2C_SLAVE_USE_TX_BUFFER 0x20          // Use a buffered message when doing a slave transmit
+#define I2C_SLAVE_DUAL_ADDRESS  0x40          // Enable the dual slave address scheme
+#define I2C_SLAVE_GENERAL_CALL  0x80          // Enable the dual slave address scheme
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 
 #define I2C_ERROR_PROTOCOL      (-1)
@@ -404,6 +409,53 @@ static inline void i2c_set_clk_control(i2c_dev *dev, uint32 val) {
  */
 static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
+}
+
+/* Barry Carter
+ * Slave support
+ */
+
+/**
+ * @brief Enable Dual addressing mode to allow peripheral to have 2 addresses
+ * @param dev I2C device
+  */
+static inline void i2c_slave_dual_address_enable(i2c_dev *dev) {
+    dev->regs->OAR2 |= I2C_OAR2_ENDUAL;
+}
+
+/**
+ * @brief Enable General Call to allow the  unit to respond on addr 0x00
+ * @param dev I2C device
+  */
+static inline void i2c_slave_general_call_enable(i2c_dev *dev) {
+    dev->regs->CR1 |= I2C_CR1_ENGC;
+}
+
+/* callback functions */
+/* Callback handler for data received over the bus */
+void i2c_slave_attach_recv_handler(i2c_dev *dev, i2c_msg *msg, i2c_slave_recv_callback_func func);
+
+/* Callback handler for data being requested over the bus
+ * The callback function must call i2c_write to get the data over the bus
+ */
+void i2c_slave_attach_transmit_handler(i2c_dev *dev, i2c_msg *msg, i2c_slave_transmit_callback_func func);
+
+/**
+ * @brief Set the primary I2c slave address
+ * @param dev I2C device
+ * @param address the 8 or 10 bit i2c address
+  */
+static inline void i2c_slave_set_own_address(i2c_dev *dev, uint16 address) {
+    dev->regs->OAR1 = address <<1;
+}
+
+/**
+ * @brief Set the secondary I2c slave address
+ * @param dev I2C device
+ * @param address the 8 or 10 bit i2c address
+  */
+static inline void i2c_slave_set_own_address2(i2c_dev *dev, uint16 address) {
+dev->regs->OAR2 = (address <<1 ) | I2C_OAR2_ENDUAL;
 }
 
 #ifdef __cplusplus

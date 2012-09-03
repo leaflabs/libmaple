@@ -81,3 +81,9 @@ W: http://sarup.dk/index.html
 N: Andy Scott ("xttocs")
 E: andy.g.scott@gmail.com
 D: LiquidCrystal library
+
+N: Barry Carter ("ginge")
+E: barry.carter@gmail.com
+D: Added i2C slave support
+W: headfuzz.co.uk
+ 

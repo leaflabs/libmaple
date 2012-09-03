@@ -145,34 +145,34 @@ void exti_attach_callback(exti_num num,
     /* Enable the interrupt line */
     switch(num)
     {
-        case 0:
+        case EXTI0:
             nvic_irq_enable(NVIC_EXTI0);
             break;
-        case 1:
+        case EXTI1:
             nvic_irq_enable(NVIC_EXTI1);
             break;
-        case 2:
+        case EXTI2:
             nvic_irq_enable(NVIC_EXTI2);
             break;
-        case 3:
+        case EXTI3:
             nvic_irq_enable(NVIC_EXTI3);
             break;
-        case 4:
+        case EXTI4:
             nvic_irq_enable(NVIC_EXTI4);
             break;
-        case 5:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
+        case EXTI5:
+        case EXTI6:
+        case EXTI7:
+        case EXTI8:
+        case EXTI9:
             nvic_irq_enable(NVIC_EXTI_9_5);
             break;
-        case 10:
-        case 11:
-        case 12:
-        case 13:
-        case 14:
-        case 15:
+        case EXTI10:
+        case EXTI11:
+        case EXTI12:
+        case EXTI13:
+        case EXTI14:
+        case EXTI15:
             nvic_irq_enable(NVIC_EXTI_15_10);
             break;
     }

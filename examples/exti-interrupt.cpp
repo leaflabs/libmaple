@@ -12,19 +12,18 @@
 bool isLEDOn = false;
 
 // Interrupt handler takes in nothing and returns nothing.
-void interruptHandler()
-{
-	// Set LED
-	isLEDOn = !isLEDOn;
-	digitalWrite(BOARD_LED_PIN, isLEDOn);
-	
-	// Delay slightly for switch debouncing.
-	delay(20);
+void interruptHandler() {
+    // Set LED
+    isLEDOn = !isLEDOn;
+    digitalWrite(BOARD_LED_PIN, isLEDOn);
+    
+    // Delay slightly for switch debouncing.
+    delay(20);
 }
 
 // Setup pin modes and the interrupt handler
 void setup() {
-	pinMode(BOARD_BUTTON_PIN, INPUT);
+    pinMode(BOARD_BUTTON_PIN, INPUT);
     pinMode(BOARD_LED_PIN, OUTPUT);
     
     attachInterrupt(BOARD_BUTTON_PIN, interruptHandler, RISING);

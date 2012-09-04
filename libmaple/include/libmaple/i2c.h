@@ -210,6 +210,7 @@ typedef struct i2c_msg {
 #define I2C_SLAVE_DUAL_ADDRESS  0x40          // Enable the dual slave address scheme
 #define I2C_SLAVE_GENERAL_CALL  0x80          // Enable the general call on address 0x00
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
+void i2c_slave_enable(i2c_dev *dev, uint32 flags);
 
 #define I2C_ERROR_PROTOCOL      (-1)
 #define I2C_ERROR_TIMEOUT       (-2)

@@ -93,7 +93,7 @@ typedef struct i2c_dev {
     volatile i2c_state state;   /**< Device state */
     uint32 config_flags;        /**< Configuration flags */
 
-    /* Barry Carter
+    /*
      * Slave implementation. Callback functions in this struct allow
      * for a separate callback function for each I2C unit available onboard
      */

@@ -26,6 +26,8 @@
 
 /* STM32F1 performance line vector table */
 
+#include <libmaple/stm32.h>
+
 	.section	".stm32.interrupt_vector"
 
 	.globl	__stm32_vector_table

@@ -26,6 +26,8 @@
 
 /* STM32F1 performance line ISR weak declarations */
 
+#include <libmaple/stm32.h>
+
 	.thumb
 
 /* Default handler for all non-overridden interrupts and exceptions */

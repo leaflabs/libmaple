@@ -535,6 +535,13 @@ static void vcomDataRxCb(void) {
     usb_copy_from_pma((uint8*)vcomBufferRx, n_unread_bytes,
                       USB_CDCACM_RX_ADDR);
 
+
+    if (n_unread_bytes == 0) {
+        usb_set_ep_rx_count(USB_CDCACM_RX_ENDP, USB_CDCACM_RX_EPSIZE);
+        usb_set_ep_rx_stat(USB_CDCACM_RX_ENDP, USB_EP_STAT_RX_VALID);
+        rx_offset = 0;
+    }
+
     if (rx_hook) {
         rx_hook(USB_CDCACM_HOOK_RX, 0);
     }

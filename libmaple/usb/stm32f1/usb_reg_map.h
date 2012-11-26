@@ -70,7 +70,7 @@ typedef struct usb_reg_map {
 #define USB_EP_CTR_RX_BIT              15
 #define USB_EP_DTOG_RX_BIT             14
 #define USB_EP_SETUP_BIT               11
-#define USB_EP_EP_KIND_BIT             8
+#define USB_EP_EP_KIND_DBL_BUF_BIT     8
 #define USB_EP_CTR_TX_BIT              7
 #define USB_EP_DTOG_TX_BIT             6
 
@@ -87,8 +87,8 @@ typedef struct usb_reg_map {
 #define USB_EP_EP_TYPE_CONTROL         (0x1 << 9)
 #define USB_EP_EP_TYPE_ISO             (0x2 << 9)
 #define USB_EP_EP_TYPE_INTERRUPT       (0x3 << 9)
-#define USB_EP_EP_KIND                 BIT(USB_EP_EP_KIND_BIT)
-#define USB_EP_EP_DBL_BUF              USB_EP_EP_KIND
+#define USB_EP_EP_KIND_DBL_BUF         BIT(USB_EP_EP_KIND_DBL_BUF_BIT)
+#define USB_EP_EP_DBL_BUF              USB_EP_EP_KIND_DBL_BUF
 #define USB_EP_CTR_TX                  BIT(USB_EP_CTR_TX_BIT)
 #define USB_EP_DTOG_TX                 BIT(USB_EP_DTOG_TX_BIT)
 #define USB_EP_STAT_TX                 (0x3 << 4)
@@ -193,7 +193,7 @@ typedef struct usb_reg_map {
 
 #define __EP_CTR_NOP                    (USB_EP_CTR_RX | USB_EP_CTR_TX)
 #define __EP_NONTOGGLE                  (USB_EP_CTR_RX | USB_EP_SETUP |    \
-                                         USB_EP_EP_TYPE | USB_EP_EP_KIND | \
+                                         USB_EP_EP_TYPE | USB_EP_EP_KIND_DBL_BUF | \
                                          USB_EP_CTR_TX | USB_EP_EA)
 
 static inline void usb_clear_ctr_rx(uint8 ep) {
@@ -311,7 +311,7 @@ static inline void usb_set_ep_type(uint8 ep, uint32 type) {
 
 static inline void usb_set_ep_kind(uint8 ep, uint32 kind) {
     uint32 epr = USB_BASE->EP[ep];
-    epr &= ~USB_EP_EP_KIND & __EP_NONTOGGLE;
+    epr &= ~USB_EP_EP_KIND_DBL_BUF & __EP_NONTOGGLE;
     epr |= kind;
     USB_BASE->EP[ep] = epr;
 }

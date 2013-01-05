@@ -39,6 +39,10 @@ ifneq ($(findstring ARM/embedded,$(shell $(CC) --version)),)
 # GCC ARM Embedded, https://launchpad.net/gcc-arm-embedded/
 LD_TOOLCHAIN_PATH := $(LDDIR)/toolchains/gcc-arm-embedded
 endif
+ifneq ($(findstring Linaro GCC,$(shell $(CC) --version)),)
+# Summon/Linaro GCC ARM Embedded, https://github.com/esden/summon-arm-toolchain
+LD_TOOLCHAIN_PATH := $(LDDIR)/toolchains/gcc-arm-embedded
+endif
 # Add toolchain directory to LD search path
 TOOLCHAIN_LDFLAGS := -L $(LD_TOOLCHAIN_PATH)
 

@@ -145,6 +145,7 @@ static int config_to_per(dma_tube_reg_map *chregs, dma_tube_config *cfg) {
             cfg->tube_src_size, cfg->tube_flags & DMA_CFG_SRC_INC,
             cfg->tube_dst_size, cfg->tube_flags & DMA_CFG_DST_INC,
             (cfg_ccr_flags(cfg->tube_flags) | DMA_CCR_DIR_FROM_MEM));
+    chregs->CNDTR = cfg->tube_nr_xfers;
     chregs->CMAR = (uint32)cfg->tube_src;
     chregs->CPAR = (uint32)cfg->tube_dst;
     return DMA_TUBE_CFG_SUCCESS;

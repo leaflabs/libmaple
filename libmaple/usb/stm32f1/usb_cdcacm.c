@@ -394,7 +394,7 @@ void usb_cdcacm_putc(char ch) {
  * buffer, and returns the number of bytes copied. */
 uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
     /* Last transmission hasn't finished, so abort. */
-    if (n_unsent_bytes) {
+    if (usb_cdcacm_is_transmitting()) {
         return 0;
     }
 
@@ -406,17 +406,14 @@ uint32 usb_cdcacm_tx(const uint8* buf, uint32 len) {
     /* Queue bytes for sending. */
     if (len) {
         usb_copy_to_pma(buf, len, USB_CDCACM_TX_ADDR);
-        usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, len);
-        n_unsent_bytes = len;
-        usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_VALID);
-        transmitting = 1;
-    } else {
-        usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, 0);
-        usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_VALID);
-        // actually block here waiting for interrupt, even though we sent 0 bytes
-        n_unsent_bytes = 0;
-        transmitting = 1;
     }
+    // We still need to wait for the interrupt, even if we're sending
+    // zero bytes. (Sending zero-size packets is useful for flushing
+    // host-side buffers.)
+    usb_set_ep_tx_count(USB_CDCACM_TX_ENDP, len);
+    n_unsent_bytes = len;
+    transmitting = 1;
+    usb_set_ep_tx_stat(USB_CDCACM_TX_ENDP, USB_EP_STAT_TX_VALID);
 
     return len;
 }

@@ -104,9 +104,16 @@ usart_dev *UART5 = &uart5;
 void usart_config_gpios_async(usart_dev *udev,
                               gpio_dev *rx_dev, uint8 rx,
                               gpio_dev *tx_dev, uint8 tx,
+                              uint8 rts, uint8 cts,
                               unsigned flags) {
-    gpio_set_mode(rx_dev, rx, GPIO_INPUT_FLOATING);
     gpio_set_mode(tx_dev, tx, GPIO_AF_OUTPUT_PP);
+    gpio_set_mode(tx_dev, rts, GPIO_AF_OUTPUT_PP);
+
+    // XXX: marti!
+    if (cts != -1 && rts != -1) {
+        gpio_set_mode(tx_dev, cts, GPIO_INPUT_FLOATING);
+        gpio_set_mode(rx_dev, rx, GPIO_INPUT_FLOATING);
+    }
 }
 
 void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud) {

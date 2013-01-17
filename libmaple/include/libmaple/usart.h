@@ -409,12 +409,13 @@ struct gpio_dev;                /* forward declaration */
 extern void usart_config_gpios_async(usart_dev *udev,
                                      struct gpio_dev *rx_dev, uint8 rx,
                                      struct gpio_dev *tx_dev, uint8 tx,
-                                     unsigned flags);
+                                     uint8 rts, uint8 cts, unsigned flags);
 
 #define USART_USE_PCLK 0
+#define USART_USE_FLOW_CONTROL 1
 void usart_set_baud_rate(usart_dev *dev, uint32 clock_speed, uint32 baud);
 
-void usart_enable(usart_dev *dev);
+void usart_enable(usart_dev *dev, int flags);
 void usart_disable(usart_dev *dev);
 void usart_foreach(void (*fn)(usart_dev *dev));
 uint32 usart_tx(usart_dev *dev, const uint8 *buf, uint32 len);

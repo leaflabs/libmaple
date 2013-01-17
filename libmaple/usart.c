@@ -55,10 +55,15 @@ void usart_init(usart_dev *dev) {
  * @param dev Serial port to enable.
  * @see usart_set_baud_rate()
  */
-void usart_enable(usart_dev *dev) {
+void usart_enable(usart_dev *dev, int flags) {
     usart_reg_map *regs = dev->regs;
     regs->CR1 = (USART_CR1_TE | USART_CR1_RE | USART_CR1_RXNEIE |
                  USART_CR1_M_8N1);
+
+    if (flags & USART_USE_FLOW_CONTROL) {
+        regs->CR3 |= USART_CR3_RTSE | USART_CR3_CTSE;
+    }
+
     regs->CR1 |= USART_CR1_UE;
 }
 

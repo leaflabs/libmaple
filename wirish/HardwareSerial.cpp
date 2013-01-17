@@ -40,7 +40,9 @@
 #define DEFINE_HWSERIAL(name, n)                                   \
     HardwareSerial name(USART##n,                                  \
                         BOARD_USART##n##_TX_PIN,                   \
-                        BOARD_USART##n##_RX_PIN)
+                        BOARD_USART##n##_RX_PIN,                   \
+                        BOARD_USART##n##_RTS_PIN,                  \
+                        BOARD_USART##n##_CTS_PIN)
 
 #if BOARD_HAVE_USART1
 DEFINE_HWSERIAL(Serial1, 1);
@@ -63,10 +65,14 @@ DEFINE_HWSERIAL(Serial6, 6);
 
 HardwareSerial::HardwareSerial(usart_dev *usart_device,
                                uint8 tx_pin,
-                               uint8 rx_pin) {
+                               uint8 rx_pin,
+                               uint8 rts_pin,
+                               uint8 cts_pin) {
     this->usart_device = usart_device;
     this->tx_pin = tx_pin;
     this->rx_pin = rx_pin;
+    this->rts_pin = rts_pin;
+    this->cts_pin = cts_pin;
 }
 
 /*
@@ -88,7 +94,8 @@ static void disable_timer_if_necessary(timer_dev *dev, uint8 ch) {
 #warning "Unsupported STM32 series; timer conflicts are possible"
 #endif
 
-void HardwareSerial::begin(uint32 baud) {
+void HardwareSerial::begin(uint32 baud, int flags) {
+    int opts = 0;
     ASSERT(baud <= this->usart_device->max_baud);
 
     if (baud > this->usart_device->max_baud) {
@@ -97,16 +104,27 @@ void HardwareSerial::begin(uint32 baud) {
 
     const stm32_pin_info *txi = &PIN_MAP[this->tx_pin];
     const stm32_pin_info *rxi = &PIN_MAP[this->rx_pin];
+    const stm32_pin_info *rts = &PIN_MAP[this->rts_pin];
+    const stm32_pin_info *cts = &PIN_MAP[this->cts_pin];
 
     disable_timer_if_necessary(txi->timer_device, txi->timer_channel);
 
     usart_config_gpios_async(this->usart_device,
                              rxi->gpio_device, rxi->gpio_bit,
                              txi->gpio_device, txi->gpio_bit,
-                             0);
+                             rts->gpio_bit, cts->gpio_bit, 0);
     usart_init(this->usart_device);
     usart_set_baud_rate(this->usart_device, USART_USE_PCLK, baud);
-    usart_enable(this->usart_device);
+
+    if (flags & USART_FLOW_CONTROL) {
+        opts |= USART_USE_FLOW_CONTROL;
+    }
+
+    usart_enable(this->usart_device, flags);
+}
+
+void HardwareSerial::begin(uint32 baud) {
+    begin(baud, 0);
 }
 
 void HardwareSerial::end(void) {

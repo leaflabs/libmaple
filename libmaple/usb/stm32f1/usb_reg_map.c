@@ -78,7 +78,7 @@ static void usb_set_ep_rx_count_common(uint32 *rxc, uint16 count) {
 }
 
 void usb_set_ep_rx_buf0_count(uint8 ep, uint16 count) {
-    uint32 *rxc = usb_ep_tx_count_ptr(ep);
+    uint32 *rxc = usb_ep_rx_buf0_ptr(ep);
     usb_set_ep_rx_count_common(rxc, count);
 }
 

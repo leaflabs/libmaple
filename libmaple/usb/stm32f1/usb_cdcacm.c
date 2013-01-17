@@ -24,6 +24,8 @@
  * SOFTWARE.
  *****************************************************************************/
 
+#ifndef DISABLE_SERIALUSB
+
 /**
  * @file libmaple/usb/stm32f1/usb_cdcacm.c
  * @brief USB CDC ACM (a.k.a. virtual serial terminal, VCOM).
@@ -718,3 +720,5 @@ static void usbSetConfiguration(void) {
 static void usbSetDeviceAddress(void) {
     USBLIB->state = USB_ADDRESSED;
 }
+
+#endif

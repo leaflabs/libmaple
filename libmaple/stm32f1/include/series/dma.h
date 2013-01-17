@@ -145,6 +145,16 @@ typedef struct dma_tube_reg_map {
 
 /* Interrupt status register */
 
+#define DMA_ISR_TEIF_BIT 3
+#define DMA_ISR_HTIF_BIT 2
+#define DMA_ISR_TCIF_BIT 1
+#define DMA_ISR_GIF_BIT  0
+
+#define DMA_ISR_TEIF (1 << DMA_ISR_TEIF_BIT)
+#define DMA_ISR_HTIF (1 << DMA_ISR_HTIF_BIT)
+#define DMA_ISR_TCID (1 << DMA_ISR_TCIF_BIT)
+#define DMA_ISR_GIF  (1 << DMA_ISR_GIF_BIT)
+
 #define DMA_ISR_TEIF7_BIT               27
 #define DMA_ISR_HTIF7_BIT               26
 #define DMA_ISR_TCIF7_BIT               25

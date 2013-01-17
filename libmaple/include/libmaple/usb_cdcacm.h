@@ -127,6 +127,7 @@ uint32 usb_cdcacm_peek(uint8* buf, uint32 len);
 
 uint32 usb_cdcacm_data_available(void); /* in RX buffer */
 uint16 usb_cdcacm_get_pending(void);
+uint8 usb_cdcacm_is_transmitting(void);
 
 uint8 usb_cdcacm_get_dtr(void);
 uint8 usb_cdcacm_get_rts(void);

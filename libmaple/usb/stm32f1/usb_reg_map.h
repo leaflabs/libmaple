@@ -88,6 +88,7 @@ typedef struct usb_reg_map {
 #define USB_EP_EP_TYPE_ISO             (0x2 << 9)
 #define USB_EP_EP_TYPE_INTERRUPT       (0x3 << 9)
 #define USB_EP_EP_KIND                 BIT(USB_EP_EP_KIND_BIT)
+#define USB_EP_EP_KIND_DBL_BUF         (0x1 << USB_EP_EP_KIND_BIT)
 #define USB_EP_CTR_TX                  BIT(USB_EP_CTR_TX_BIT)
 #define USB_EP_DTOG_TX                 BIT(USB_EP_DTOG_TX_BIT)
 #define USB_EP_STAT_TX                 (0x3 << 4)
@@ -205,6 +206,86 @@ static inline void usb_clear_ctr_tx(uint8 ep) {
     USB_BASE->EP[ep] = epr & ~USB_EP_CTR_TX & __EP_NONTOGGLE;
 }
 
+static inline uint32 usb_get_ep_dtog_tx(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    return epr & USB_EP_DTOG_TX;
+}
+
+static inline uint32 usb_get_ep_dtog_rx(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    return epr & USB_EP_DTOG_RX;
+}
+
+static inline uint32 usb_get_ep_tx_sw_buf(uint8 ep) {
+    return usb_get_ep_dtog_rx(ep);
+}
+
+static inline uint32 usb_get_ep_rx_sw_buf(uint8 ep) {
+    return usb_get_ep_dtog_tx(ep);
+}
+
+static inline void usb_toggle_ep_dtog_tx(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    epr &= __EP_NONTOGGLE;
+    epr |= USB_EP_DTOG_TX;
+    USB_BASE->EP[ep] = epr;
+}
+
+static inline void usb_toggle_ep_dtog_rx(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    epr &= __EP_NONTOGGLE;
+    epr |= USB_EP_DTOG_RX;
+    USB_BASE->EP[ep] = epr;
+}
+
+static inline void usb_clear_ep_dtog_tx(uint8 ep) {
+    if (usb_get_ep_dtog_tx(ep) != 0) {
+        usb_toggle_ep_dtog_tx(ep);
+    }
+}
+
+static inline void usb_clear_ep_dtog_rx(uint8 ep) {
+    if (usb_get_ep_dtog_rx(ep) != 0) {
+        usb_toggle_ep_dtog_rx(ep);
+    }
+}
+
+static inline void usb_set_ep_dtog_tx(uint8 ep) {
+    if (usb_get_ep_dtog_tx(ep) == 0) {
+        usb_toggle_ep_dtog_tx(ep);
+    }
+}
+
+static inline void usb_set_ep_dtog_rx(uint8 ep) {
+    if (usb_get_ep_dtog_rx(ep) == 0) {
+        usb_toggle_ep_dtog_rx(ep);
+    }
+}
+
+static inline void usb_toggle_ep_rx_sw_buf(uint8 ep) {
+    usb_toggle_ep_dtog_tx(ep);
+}
+
+static inline void usb_toggle_ep_tx_sw_buf(uint8 ep) {
+    usb_toggle_ep_dtog_rx(ep);
+}
+
+static inline void usb_clear_ep_rx_sw_buf(uint8 ep) {
+    usb_clear_ep_dtog_tx(ep);
+}
+
+static inline void usb_clear_ep_tx_sw_buf(uint8 ep) {
+    usb_clear_ep_dtog_rx(ep);
+}
+
+static inline void usb_set_ep_rx_sw_buf(uint8 ep) {
+    usb_set_ep_dtog_tx(ep);
+}
+
+static inline void usb_set_ep_tx_sw_buf(uint8 ep) {
+    usb_set_ep_dtog_rx(ep);
+}
+
 static inline void usb_set_ep_rx_stat(uint8 ep, uint32 status) {
     uint32 epr = USB_BASE->EP[ep];
     epr &= ~(USB_EP_STAT_TX | USB_EP_DTOG_RX | USB_EP_DTOG_TX);
@@ -234,6 +315,17 @@ static inline void usb_set_ep_kind(uint8 ep, uint32 kind) {
     epr |= kind;
     USB_BASE->EP[ep] = epr;
 }
+
+static inline uint32 usb_get_ep_type(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    return epr & USB_EP_EP_TYPE;
+}
+
+static inline uint32 usb_get_ep_kind(uint8 ep) {
+    uint32 epr = USB_BASE->EP[ep];
+    return epr & USB_EP_EP_TYPE;
+}
+
 
 static inline void usb_clear_status_out(uint8 ep) {
     usb_set_ep_kind(ep, 0);
@@ -275,42 +367,42 @@ union usb_btable_ent;
 
 /* Bidirectional endpoint BTABLE entry */
 typedef struct usb_btable_bidi {
-        __io uint16 addr_tx;     const uint16 PAD1;
-        __io uint16 count_tx;    const uint16 PAD2;
-        __io uint16 addr_rx;     const uint16 PAD3;
-        __io uint16 count_rx;    const uint16 PAD4;
+    __io uint16 addr_tx;     const uint16 PAD1;
+    __io uint16 count_tx;    const uint16 PAD2;
+    __io uint16 addr_rx;     const uint16 PAD3;
+    __io uint16 count_rx;    const uint16 PAD4;
 } usb_btable_bidi;
 
 /* Unidirectional receive-only endpoint BTABLE entry */
 typedef struct usb_btable_uni_rx {
-        __io uint16 empty1;      const uint16 PAD1;
-        __io uint16 empty2;      const uint16 PAD2;
-        __io uint16 addr_rx;     const uint16 PAD3;
-        __io uint16 count_rx;    const uint16 PAD4;
+    __io uint16 empty1;      const uint16 PAD1;
+    __io uint16 empty2;      const uint16 PAD2;
+    __io uint16 addr_rx;     const uint16 PAD3;
+    __io uint16 count_rx;    const uint16 PAD4;
 } usb_btable_uni_rx;
 
 /* Unidirectional transmit-only endpoint BTABLE entry */
 typedef struct usb_btable_uni_tx {
-        __io uint16 addr_tx;     const uint16 PAD1;
-        __io uint16 count_tx;    const uint16 PAD2;
-        __io uint16 empty1;      const uint16 PAD3;
-        __io uint16 empty2;      const uint16 PAD4;
+    __io uint16 addr_tx;     const uint16 PAD1;
+    __io uint16 count_tx;    const uint16 PAD2;
+    __io uint16 empty1;      const uint16 PAD3;
+    __io uint16 empty2;      const uint16 PAD4;
 } usb_btable_uni_tx;
 
 /* Double-buffered transmission endpoint BTABLE entry */
 typedef struct usb_btable_dbl_tx {
-        __io uint16 addr_tx0;     const uint16 PAD1;
-        __io uint16 count_tx0;    const uint16 PAD2;
-        __io uint16 addr_tx1;     const uint16 PAD3;
-        __io uint16 count_tx1;    const uint16 PAD4;
+    __io uint16 addr_tx0;     const uint16 PAD1;
+    __io uint16 count_tx0;    const uint16 PAD2;
+    __io uint16 addr_tx1;     const uint16 PAD3;
+    __io uint16 count_tx1;    const uint16 PAD4;
 } usb_btable_dbl_tx;
 
 /* Double-buffered reception endpoint BTABLE entry */
 typedef struct usb_btable_dbl_rx {
-        __io uint16 addr_rx0;     const uint16 PAD1;
-        __io uint16 count_rx0;    const uint16 PAD2;
-        __io uint16 addr_rx1;     const uint16 PAD3;
-        __io uint16 count_rx1;    const uint16 PAD4;
+    __io uint16 addr_rx0;     const uint16 PAD1;
+    __io uint16 count_rx0;    const uint16 PAD2;
+    __io uint16 addr_rx1;     const uint16 PAD3;
+    __io uint16 count_rx1;    const uint16 PAD4;
 } usb_btable_dbl_rx;
 
 /* TODO isochronous endpoint entries */
@@ -334,10 +426,6 @@ typedef union usb_btable_ent {
 
 static inline uint32* usb_btable_ptr(uint32 offset) {
     return (uint32*)usb_pma_ptr(USB_BASE->BTABLE + offset);
-}
-
-static inline usb_btable_ent *usb_btable(void) {
-    return (usb_btable_ent*)usb_btable_ptr(0);
 }
 
 /* TX address */
@@ -398,6 +486,100 @@ static inline uint16 usb_get_ep_rx_count(uint8 ep) {
 }
 
 void usb_set_ep_rx_count(uint8 ep, uint16 count);
+
+/* double buffer definitions */
+static inline uint32* usb_get_ep_tx_buf0_addr_ptr(uint8 ep) {
+    return usb_ep_tx_addr_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_tx_buf0_addr(uint8 ep) {
+    return usb_get_ep_tx_addr(ep);
+}
+
+static inline void usb_set_ep_tx_buf0_addr(uint8 ep, uint16 addr) {
+    usb_set_ep_tx_addr(ep, addr);
+}
+
+static inline uint32* usb_get_ep_tx_buf1_addr_ptr(uint8 ep) {
+    return usb_ep_rx_addr_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_tx_buf1_addr(uint8 ep)  {
+    return usb_get_ep_rx_addr(ep);
+}
+
+static inline void usb_set_ep_tx_buf1_addr(uint8 ep, uint16 addr) {
+    usb_set_ep_rx_addr(ep, addr);
+}
+
+static inline uint32* usb_ep_tx_buf0_count_ptr(uint8 ep) {
+    return usb_ep_tx_count_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_tx_buf0_count(uint8 ep) {
+    return usb_get_ep_tx_count(ep);
+}
+
+static inline void usb_set_ep_tx_buf0_count(uint8 ep, uint16 count) {
+    usb_set_ep_tx_count(ep, count);
+}
+
+static inline uint32* usb_ep_tx_buf1_count_ptr(uint8 ep) {
+    return usb_ep_rx_count_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_tx_buf1_count(uint8 ep) {
+    return usb_get_ep_rx_count(ep);
+}
+
+static inline void usb_set_ep_tx_buf1_count(uint8 ep, uint16 count) {
+    usb_set_ep_rx_count(ep, count);
+}
+static inline uint32* usb_get_ep_rx_buf0_addr_ptr(uint8 ep) {
+    return usb_ep_tx_addr_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_rx_buf0_addr(uint8 ep) {
+    return usb_get_ep_tx_addr(ep);
+}
+
+static inline void usb_set_ep_rx_buf0_addr(uint8 ep, uint16 addr) {
+    usb_set_ep_tx_addr(ep, addr);
+}
+
+static inline uint32* usb_get_ep_rx_buf1_addr_ptr(uint8 ep) {
+    return usb_ep_rx_addr_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_rx_buf1_addr(uint8 ep) {
+    return usb_get_ep_rx_addr(ep);
+}
+
+static inline void usb_set_ep_rx_buf1_addr(uint8 ep, uint16 addr) {
+    usb_set_ep_rx_addr(ep, addr);
+}
+
+static inline uint32* usb_ep_rx_buf0_count_ptr(uint8 ep) {
+    return usb_ep_tx_count_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_rx_buf0_count(uint8 ep) {
+    return usb_get_ep_tx_count(ep);
+}
+
+void usb_set_ep_rx_buf0_count(uint8 ep, uint16 count);
+
+static inline uint32* usb_ep_rx_buf1_count_ptr(uint8 ep) {
+    return usb_ep_rx_count_ptr(ep);
+}
+
+static inline uint16 usb_get_ep_rx_buf1_count(uint8 ep) {
+    return usb_get_ep_rx_count(ep);
+}
+
+static inline void usb_set_ep_rx_buf1_count(uint8 ep, uint16 count) {
+    usb_set_ep_rx_count(ep, count);
+}
 
 /*
  * Misc. types

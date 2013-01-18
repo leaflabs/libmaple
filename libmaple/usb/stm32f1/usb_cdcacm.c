@@ -309,16 +309,19 @@ static void (*ep_int_out[7])(void) =
 
 /*
  * Globals required by usb_lib/
+ *
+ * Mark these weak so they can be overriden to implement other USB
+ * functionality.
  */
 
 #define NUM_ENDPTS                0x04
-DEVICE Device_Table = {
+__weak DEVICE Device_Table = {
     .Total_Endpoint      = NUM_ENDPTS,
     .Total_Configuration = 1
 };
 
 #define MAX_PACKET_SIZE            0x40  /* 64B, maximum for USB FS Devices */
-DEVICE_PROP Device_Property = {
+__weak DEVICE_PROP Device_Property = {
     .Init                        = usbInit,
     .Reset                       = usbReset,
     .Process_Status_IN           = NOP_Process,
@@ -333,7 +336,7 @@ DEVICE_PROP Device_Property = {
     .MaxPacketSize               = MAX_PACKET_SIZE
 };
 
-USER_STANDARD_REQUESTS User_Standard_Requests = {
+__weak USER_STANDARD_REQUESTS User_Standard_Requests = {
     .User_GetConfiguration   = NOP_Process,
     .User_SetConfiguration   = usbSetConfiguration,
     .User_GetInterface       = NOP_Process,

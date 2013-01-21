@@ -54,7 +54,8 @@ include $(MAKEDIR)/build-templates.mk
 TARGET_FLAGS    += -I$(LIBMAPLE_PATH)/include/libmaple                       \
                    -I$(WIRISH_PATH)/include/wirish
 TARGET_FLAGS += -I$(LIBRARIES_PATH) # for internal lib. includes, e.g. <Wire/WireBase.h>
-GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2 -nostdlib \
+GLOBAL_CFLAGS   := $(GLOBAL_CFLAGS) \
+                   -Os -g3 -gdwarf-2 -nostdlib \
                    -ffunction-sections -fdata-sections \
 		   -Wl,--gc-sections $(TARGET_FLAGS)
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(TARGET_FLAGS)

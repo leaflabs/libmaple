@@ -19,6 +19,7 @@ cSRCS_$(d) := adc.c
 cSRCS_$(d) += bkp.c
 cSRCS_$(d) += dma.c
 cSRCS_$(d) += exti.c
+cSRCS_$(d) += flash.c
 cSRCS_$(d) += fsmc.c
 cSRCS_$(d) += gpio.c
 cSRCS_$(d) += i2c.c

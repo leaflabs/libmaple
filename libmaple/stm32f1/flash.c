@@ -30,7 +30,7 @@
  * @brief STM32F1 Flash writing support.
  */
 
-#include "flash.h"
+#include "series/flash.h"
 
 #define FLASH_KEY1     0x45670123
 #define FLASH_KEY2     0xCDEF89AB

@@ -99,3 +99,18 @@ uint8 flash_write_word(uint32 address, uint32 word) {
 
     return 1;
 }
+
+uint16 flash_write(uint32 address, void *buf, uint16 count) {
+    uint32 *_buf = (uint32 *)buf;
+    count /= 4;
+
+    int i;
+    for (i = 0; i < count; i++) {
+        if (!flash_write_word(address, _buf[i])) {
+            break;
+        }
+        address += 4;
+    }
+
+    return i;
+}

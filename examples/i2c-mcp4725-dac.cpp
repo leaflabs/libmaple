@@ -42,7 +42,7 @@ static i2c_msg read_msg;
 
 void mcp_i2c_setup(void) {
     write_msg.addr = MCP_ADDR;
-    write_msg.flags = 0; // write, 7 bit address
+    write_msg.flags = I2C_MSG_WRITE; // write, 7 bit address
     write_msg.length = sizeof(write_msg_data);
     write_msg.xferred = 0;
     write_msg.data = write_msg_data;

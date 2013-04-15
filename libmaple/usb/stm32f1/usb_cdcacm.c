@@ -609,6 +609,7 @@ static void usbReset(void) {
     n_unread_bytes = 0;
     n_unsent_bytes = 0;
     rx_offset = 0;
+    transmitting = 0;
 }
 
 static RESULT usbDataSetup(uint8 request) {

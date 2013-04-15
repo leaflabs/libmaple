@@ -63,7 +63,7 @@
 #if !(defined(BOARD_maple) || defined(BOARD_maple_RET6) ||      \
       defined(BOARD_maple_mini) || defined(BOARD_maple_native))
 #warning USB CDC ACM relies on LeafLabs board-specific configuration.\
-    You may have problems on non-LeafLabs boards.
+You may have problems on non - LeafLabs boards.
 #endif
 
 static void vcomDataTxCb(void);
@@ -114,7 +114,7 @@ static const usb_descriptor_config usbVcomDescriptor_Config = {
         .bConfigurationValue  = 0x01,
         .iConfiguration       = 0x00,
         .bmAttributes         = (USB_CONFIG_ATTR_BUSPOWERED |
-                                 USB_CONFIG_ATTR_SELF_POWERED),
+        USB_CONFIG_ATTR_SELF_POWERED),
         .bMaxPower            = MAX_POWER,
     },
 
@@ -162,7 +162,7 @@ static const usb_descriptor_config usbVcomDescriptor_Config = {
         .bLength          = sizeof(usb_descriptor_endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_IN |
-                             USB_CDCACM_MANAGEMENT_ENDP),
+        USB_CDCACM_MANAGEMENT_ENDP),
         .bmAttributes     = USB_EP_TYPE_INTERRUPT,
         .wMaxPacketSize   = USB_CDCACM_MANAGEMENT_EPSIZE,
         .bInterval        = 0xFF,
@@ -184,7 +184,7 @@ static const usb_descriptor_config usbVcomDescriptor_Config = {
         .bLength          = sizeof(usb_descriptor_endpoint),
         .bDescriptorType  = USB_DESCRIPTOR_TYPE_ENDPOINT,
         .bEndpointAddress = (USB_DESCRIPTOR_ENDPOINT_OUT |
-                             USB_CDCACM_RX_ENDP),
+        USB_CDCACM_RX_ENDP),
         .bmAttributes     = USB_EP_TYPE_BULK,
         .wMaxPacketSize   = USB_CDCACM_RX_EPSIZE,
         .bInterval        = 0x00,
@@ -228,7 +228,8 @@ static const usb_descriptor_string usbVcomDescriptor_iManufacturer = {
     .bLength = USB_DESCRIPTOR_STRING_LEN(8),
     .bDescriptorType = USB_DESCRIPTOR_TYPE_STRING,
     .bString = {'L', 0, 'e', 0, 'a', 0, 'f', 0,
-                'L', 0, 'a', 0, 'b', 0, 's', 0},
+        'L', 0, 'a', 0, 'b', 0, 's', 0
+    },
 };
 
 /* FIXME move to Wirish */
@@ -251,7 +252,7 @@ static ONE_DESCRIPTOR Config_Descriptor = {
 #define N_STRING_DESCRIPTORS 3
 static ONE_DESCRIPTOR String_Descriptor[N_STRING_DESCRIPTORS] = {
     {(uint8*)&usbVcomDescriptor_LangID,       USB_DESCRIPTOR_STRING_LEN(1)},
-    {(uint8*)&usbVcomDescriptor_iManufacturer,USB_DESCRIPTOR_STRING_LEN(8)},
+    {(uint8*)&usbVcomDescriptor_iManufacturer, USB_DESCRIPTOR_STRING_LEN(8)},
     {(uint8*)&usbVcomDescriptor_iProduct,     USB_DESCRIPTOR_STRING_LEN(5)}
 };
 
@@ -289,23 +290,25 @@ static volatile uint8 line_dtr_rts = 0;
  * Endpoint callbacks
  */
 
-static void (*ep_int_in[7])(void) =
-    {vcomDataTxCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
+static void (*ep_int_in[7])(void) = {
+    vcomDataTxCb,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process
+};
 
-static void (*ep_int_out[7])(void) =
-    {NOP_Process,
-     NOP_Process,
-     vcomDataRxCb,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process,
-     NOP_Process};
+static void (*ep_int_out[7])(void) = {
+    NOP_Process,
+    NOP_Process,
+    vcomDataRxCb,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process,
+    NOP_Process
+};
 
 /*
  * Globals required by usb_lib/
@@ -609,6 +612,7 @@ static void usbReset(void) {
     n_unread_bytes = 0;
     n_unsent_bytes = 0;
     rx_offset = 0;
+    transmitting = 0;
 }
 
 static RESULT usbDataSetup(uint8 request) {

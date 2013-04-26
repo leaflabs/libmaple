@@ -76,6 +76,7 @@ struct {
 static usblib_dev usblib = {
     .irq_mask = USB_ISR_MSK,
     .state = USB_UNCONNECTED,
+    .prevState = USB_UNCONNECTED,
     .clk_id = RCC_USB,
 };
 usblib_dev *USBLIB = &usblib;
@@ -115,6 +116,7 @@ static void usb_suspend(void) {
   cntr |= USB_CNTR_LP_MODE;
   USB_BASE->CNTR = cntr;
 
+  USBLIB->prevState = USBLIB->state;
   USBLIB->state = USB_SUSPENDED;
 }
 
@@ -132,14 +134,15 @@ static void usb_resume_init(void) {
 static void usb_resume(RESUME_STATE eResumeSetVal) {
   uint16 cntr;
 
-  if (eResumeSetVal != RESUME_ESOF)
-    ResumeS.eState = eResumeSetVal;
+  if (eResumeSetVal != RESUME_ESOF) {
+    ResumeS.eState = eResumeSetVal
+  }
 
-  switch (ResumeS.eState)
-    {
+  switch (ResumeS.eState) {
     case RESUME_EXTERNAL:
       usb_resume_init();
       ResumeS.eState = RESUME_OFF;
+      USBLIB->state = USBLIB->prevState;
       break;
     case RESUME_INTERNAL:
       usb_resume_init();
@@ -151,8 +154,9 @@ static void usb_resume(RESUME_STATE eResumeSetVal) {
       break;
     case RESUME_WAIT:
       ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0)
+      if (ResumeS.bESOFcnt == 0) {
         ResumeS.eState = RESUME_START;
+      }
       break;
     case RESUME_START:
       cntr = USB_BASE->CNTR;
@@ -167,6 +171,7 @@ static void usb_resume(RESUME_STATE eResumeSetVal) {
           cntr = USB_BASE->CNTR;
           cntr &= ~USB_CNTR_RESUME;
           USB_BASE->CNTR = cntr;
+          USBLIB->state = USBLIB->prevState;
           ResumeS.eState = RESUME_OFF;
       }
       break;
@@ -175,7 +180,7 @@ static void usb_resume(RESUME_STATE eResumeSetVal) {
     default:
       ResumeS.eState = RESUME_OFF;
       break;
-    }
+  }
 }
 
 #define SUSPEND_ENABLED 1
@@ -274,8 +279,9 @@ static void dispatch_ctr_lp() {
              * once we're done serving endpoint zero, but not okay if
              * there are multiple nonzero endpoint transfers to
              * handle. */
-            if (dispatch_endpt_zero(istr & USB_ISTR_DIR))
+            if (dispatch_endpt_zero(istr & USB_ISTR_DIR)) {
                 return;
+            }
         } else {
             dispatch_endpt(ep_id);
         }

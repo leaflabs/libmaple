@@ -151,6 +151,7 @@ typedef struct usblib_dev {
     void (**ep_int_in)(void);
     void (**ep_int_out)(void);
     usb_dev_state state;
+    usb_dev_state prevState;
     rcc_clk_id clk_id;
 } usblib_dev;
 

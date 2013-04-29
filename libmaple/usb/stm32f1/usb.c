@@ -135,7 +135,7 @@ static void usb_resume(RESUME_STATE eResumeSetVal) {
   uint16 cntr;
 
   if (eResumeSetVal != RESUME_ESOF) {
-    ResumeS.eState = eResumeSetVal
+    ResumeS.eState = eResumeSetVal;
   }
 
   switch (ResumeS.eState) {

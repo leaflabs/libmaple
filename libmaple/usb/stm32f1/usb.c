@@ -28,7 +28,7 @@
  * @file libmaple/usb/stm32f1/usb.c
  * @brief USB support.
  *
- * This is a mess. What we need almost amounts to a ground-up rewrite.
+ * This is a mess.
  */
 
 #include <libmaple/usb.h>
@@ -69,8 +69,8 @@ typedef enum {
 } RESUME_STATE;
 
 struct {
-  volatile RESUME_STATE eState;
-  volatile uint8 bESOFcnt;
+    volatile RESUME_STATE eState;
+    volatile uint8 bESOFcnt;
 } ResumeS;
 
 static usblib_dev usblib = {
@@ -106,151 +106,151 @@ void usb_init_usblib(usblib_dev *dev,
 }
 
 static void usb_suspend(void) {
-  uint16 cntr;
+    uint16 cntr;
 
-  /* TODO decide if read/modify/write is really what we want
-   * (e.g. usb_resume_init() reconfigures CNTR). */
-  cntr = USB_BASE->CNTR;
-  cntr |= USB_CNTR_FSUSP;
-  USB_BASE->CNTR = cntr;
-  cntr |= USB_CNTR_LP_MODE;
-  USB_BASE->CNTR = cntr;
+    /* TODO decide if read/modify/write is really what we want
+     * (e.g. usb_resume_init() reconfigures CNTR). */
+    cntr = USB_BASE->CNTR;
+    cntr |= USB_CNTR_FSUSP;
+    USB_BASE->CNTR = cntr;
+    cntr |= USB_CNTR_LP_MODE;
+    USB_BASE->CNTR = cntr;
 
-  USBLIB->prevState = USBLIB->state;
-  USBLIB->state = USB_SUSPENDED;
+    USBLIB->prevState = USBLIB->state;
+    USBLIB->state = USB_SUSPENDED;
 }
 
 static void usb_resume_init(void) {
-  uint16 cntr;
+    uint16 cntr;
 
-  cntr = USB_BASE->CNTR;
-  cntr &= ~USB_CNTR_LP_MODE;
-  USB_BASE->CNTR = cntr;
+    cntr = USB_BASE->CNTR;
+    cntr &= ~USB_CNTR_LP_MODE;
+    USB_BASE->CNTR = cntr;
 
-  /* Enable interrupt lines */
-  USB_BASE->CNTR = USB_ISR_MSK;
+    /* Enable interrupt lines */
+    USB_BASE->CNTR = USB_ISR_MSK;
 }
 
 static void usb_resume(RESUME_STATE eResumeSetVal) {
-  uint16 cntr;
+    uint16 cntr;
 
-  if (eResumeSetVal != RESUME_ESOF) {
-    ResumeS.eState = eResumeSetVal;
-  }
+    if (eResumeSetVal != RESUME_ESOF) {
+        ResumeS.eState = eResumeSetVal;
+    }
 
-  switch (ResumeS.eState) {
+    switch (ResumeS.eState) {
     case RESUME_EXTERNAL:
-      usb_resume_init();
-      ResumeS.eState = RESUME_OFF;
-      USBLIB->state = USBLIB->prevState;
-      break;
+        usb_resume_init();
+        ResumeS.eState = RESUME_OFF;
+        USBLIB->state = USBLIB->prevState;
+        break;
     case RESUME_INTERNAL:
-      usb_resume_init();
-      ResumeS.eState = RESUME_START;
-      break;
-    case RESUME_LATER:
-      ResumeS.bESOFcnt = 2;
-      ResumeS.eState = RESUME_WAIT;
-      break;
-    case RESUME_WAIT:
-      ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0) {
+        usb_resume_init();
         ResumeS.eState = RESUME_START;
-      }
-      break;
+        break;
+    case RESUME_LATER:
+        ResumeS.bESOFcnt = 2;
+        ResumeS.eState = RESUME_WAIT;
+        break;
+    case RESUME_WAIT:
+        ResumeS.bESOFcnt--;
+        if (ResumeS.bESOFcnt == 0) {
+            ResumeS.eState = RESUME_START;
+        }
+        break;
     case RESUME_START:
-      cntr = USB_BASE->CNTR;
-      cntr |= USB_CNTR_RESUME;
-      USB_BASE->CNTR = cntr;
-      ResumeS.eState = RESUME_ON;
-      ResumeS.bESOFcnt = 10;
-      break;
+        cntr = USB_BASE->CNTR;
+        cntr |= USB_CNTR_RESUME;
+        USB_BASE->CNTR = cntr;
+        ResumeS.eState = RESUME_ON;
+        ResumeS.bESOFcnt = 10;
+        break;
     case RESUME_ON:
-      ResumeS.bESOFcnt--;
-      if (ResumeS.bESOFcnt == 0) {
-          cntr = USB_BASE->CNTR;
-          cntr &= ~USB_CNTR_RESUME;
-          USB_BASE->CNTR = cntr;
-          USBLIB->state = USBLIB->prevState;
-          ResumeS.eState = RESUME_OFF;
-      }
-      break;
+        ResumeS.bESOFcnt--;
+        if (ResumeS.bESOFcnt == 0) {
+            cntr = USB_BASE->CNTR;
+            cntr &= ~USB_CNTR_RESUME;
+            USB_BASE->CNTR = cntr;
+            USBLIB->state = USBLIB->prevState;
+            ResumeS.eState = RESUME_OFF;
+        }
+        break;
     case RESUME_OFF:
     case RESUME_ESOF:
     default:
-      ResumeS.eState = RESUME_OFF;
-      break;
-  }
+        ResumeS.eState = RESUME_OFF;
+        break;
+    }
 }
 
 #define SUSPEND_ENABLED 1
 void __irq_usb_lp_can_rx0(void) {
-  uint16 istr = USB_BASE->ISTR;
+    uint16 istr = USB_BASE->ISTR;
 
-  /* Use USB_ISR_MSK to only include code for bits we care about. */
+    /* Use USB_ISR_MSK to only include code for bits we care about. */
 
 #if (USB_ISR_MSK & USB_ISTR_RESET)
-  if (istr & USB_ISTR_RESET & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_RESET;
-    pProperty->Reset();
-  }
+    if (istr & USB_ISTR_RESET & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_RESET;
+        pProperty->Reset();
+    }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_PMAOVR)
-  if (istr & ISTR_PMAOVR & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_PMAOVR;
-  }
+    if (istr & ISTR_PMAOVR & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_PMAOVR;
+    }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_ERR)
-  if (istr & USB_ISTR_ERR & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_ERR;
-  }
+    if (istr & USB_ISTR_ERR & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_ERR;
+    }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_WKUP)
-  if (istr & USB_ISTR_WKUP & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_WKUP;
-    usb_resume(RESUME_EXTERNAL);
-  }
+    if (istr & USB_ISTR_WKUP & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_WKUP;
+        usb_resume(RESUME_EXTERNAL);
+    }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_SUSP)
-  if (istr & USB_ISTR_SUSP & USBLIB->irq_mask) {
-    /* check if SUSPEND is possible */
-    if (SUSPEND_ENABLED) {
-        usb_suspend();
-    } else {
-        /* if not possible then resume after xx ms */
-        usb_resume(RESUME_LATER);
+    if (istr & USB_ISTR_SUSP & USBLIB->irq_mask) {
+        /* check if SUSPEND is possible */
+        if (SUSPEND_ENABLED) {
+            usb_suspend();
+        } else {
+            /* if not possible then resume after xx ms */
+            usb_resume(RESUME_LATER);
+        }
+        /* clear of the ISTR bit must be done after setting of CNTR_FSUSP */
+        USB_BASE->ISTR = ~USB_ISTR_SUSP;
     }
-    /* clear of the ISTR bit must be done after setting of CNTR_FSUSP */
-    USB_BASE->ISTR = ~USB_ISTR_SUSP;
-}
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_SOF)
-  if (istr & USB_ISTR_SOF & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_SOF;
-  }
+    if (istr & USB_ISTR_SOF & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_SOF;
+    }
 #endif
 
 #if (USB_ISR_MSK & USB_ISTR_ESOF)
-  if (istr & USB_ISTR_ESOF & USBLIB->irq_mask) {
-    USB_BASE->ISTR = ~USB_ISTR_ESOF;
-    /* resume handling timing is made with ESOFs */
-    usb_resume(RESUME_ESOF); /* request without change of the machine state */
-  }
+    if (istr & USB_ISTR_ESOF & USBLIB->irq_mask) {
+        USB_BASE->ISTR = ~USB_ISTR_ESOF;
+        /* resume handling timing is made with ESOFs */
+        usb_resume(RESUME_ESOF); /* request without change of the machine state */
+    }
 #endif
 
-  /*
-   * Service the correct transfer interrupt.
-   */
+    /*
+     * Service the correct transfer interrupt.
+     */
 
 #if (USB_ISR_MSK & USB_ISTR_CTR)
-  if (istr & USB_ISTR_CTR & USBLIB->irq_mask) {
-    dispatch_ctr_lp();
-  }
+    if (istr & USB_ISTR_CTR & USBLIB->irq_mask) {
+        dispatch_ctr_lp();
+    }
 #endif
 }
 

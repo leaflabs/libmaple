@@ -168,3 +168,8 @@ __weak char *fgets(char *s, int bufsize, void *f) {
     cgets(s, bufsize);
     return s;
 }
+
+__weak void _exit(int exitcode) {
+    while (1)
+        ;
+}

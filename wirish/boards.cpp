@@ -143,13 +143,10 @@ static void setup_clocks(void) {
  * These addresses are where usercode starts when a bootloader is
  * present. If no bootloader is present, the user NVIC usually starts
  * at the Flash base address, 0x08000000.
- *
- * FIXME Let the build specify the vector table address numerically to
- * avoid having these magic values -- some people have been fixing up
- * the bootloader so it uses less space.
  */
 #define USER_ADDR_ROM 0x08005000
 #define USER_ADDR_RAM 0x20000C00
+extern char __text_start__;
 
 static void setup_nvic(void) {
 #ifdef VECT_TAB_FLASH
@@ -158,8 +155,13 @@ static void setup_nvic(void) {
     nvic_init(USER_ADDR_RAM, 0);
 #elif defined VECT_TAB_BASE
     nvic_init((uint32)0x08000000, 0);
+#elif defined VECT_TAB_ADDR
+    // A numerically supplied value
+    nvic_init((uint32)VECT_TAB_ADDR, 0);
 #else
-#error "You must select a base address for the vector table."
+    // Use the __text_start__ value from the linker script; this
+    // should be the start of the vector table.
+    nvic_init((uint32)&__text_start__, 0);
 #endif
 }
 

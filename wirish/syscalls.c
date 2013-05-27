@@ -37,17 +37,18 @@
 
 #include <sys/stat.h>
 #include <errno.h>
+#include <stddef.h>
 
 /* If CONFIG_HEAP_START (or CONFIG_HEAP_END) isn't defined, then
  * assume _lm_heap_start (resp. _lm_heap_end) is appropriately set by
  * the linker */
 #ifndef CONFIG_HEAP_START
 extern char _lm_heap_start;
-#define CONFIG_HEAP_START               ((caddr_t)&_lm_heap_start)
+#define CONFIG_HEAP_START               ((void *)&_lm_heap_start)
 #endif
 #ifndef CONFIG_HEAP_END
 extern char _lm_heap_end;
-#define CONFIG_HEAP_END                 ((caddr_t)&_lm_heap_end)
+#define CONFIG_HEAP_END                 ((void *)&_lm_heap_end)
 #endif
 
 /*
@@ -56,9 +57,9 @@ extern char _lm_heap_end;
  * Get incr bytes more RAM (for use by the heap).  malloc() and
  * friends call this function behind the scenes.
  */
-caddr_t _sbrk(int incr) {
-    static caddr_t pbreak = NULL; /* current program break */
-    caddr_t ret;
+void *_sbrk(int incr) {
+    static void * pbreak = NULL; /* current program break */
+    void * ret;
 
     if (pbreak == NULL) {
         pbreak = CONFIG_HEAP_START;
@@ -67,7 +68,7 @@ caddr_t _sbrk(int incr) {
     if ((CONFIG_HEAP_END - pbreak < incr) ||
         (pbreak - CONFIG_HEAP_START < -incr)) {
         errno = ENOMEM;
-        return (caddr_t)-1;
+        return (void *)-1;
     }
 
     ret = pbreak;

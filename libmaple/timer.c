@@ -38,7 +38,7 @@ static void disable_channel(timer_dev *dev, uint8 channel);
 static void pwm_mode(timer_dev *dev, uint8 channel);
 static void output_compare_mode(timer_dev *dev, uint8 channel);
 
-static inline void enable_irq(timer_dev *dev, uint8 interrupt);
+static inline void enable_irq(timer_dev *dev, timer_interrupt_id iid);
 
 /*
  * Devices

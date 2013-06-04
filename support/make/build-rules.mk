@@ -1,13 +1,15 @@
 # Useful tools
-CC       := arm-none-eabi-gcc
-CXX      := arm-none-eabi-g++
-LD       := arm-none-eabi-ld -v
-AR       := arm-none-eabi-ar
-AS       := arm-none-eabi-gcc
-OBJCOPY  := arm-none-eabi-objcopy
-DISAS    := arm-none-eabi-objdump
-OBJDUMP  := arm-none-eabi-objdump
-SIZE     := arm-none-eabi-size
+CROSS_COMPILE ?= arm-none-eabi-
+
+CC       := $(CROSS_COMPILE)gcc
+CXX      := $(CROSS_COMPILE)g++
+LD       := $(CROSS_COMPILE)ld -v
+AR       := $(CROSS_COMPILE)ar
+AS       := $(CROSS_COMPILE)gcc
+OBJCOPY  := $(CROSS_COMPILE)objcopy
+DISAS    := $(CROSS_COMPILE)objdump
+OBJDUMP  := $(CROSS_COMPILE)objdump
+SIZE     := $(CROSS_COMPILE)size
 DFU      := dfu-util
 
 # Suppress annoying output unless V is set

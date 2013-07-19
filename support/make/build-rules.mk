@@ -10,7 +10,7 @@ OBJCOPY  := $(CROSS_COMPILE)objcopy
 DISAS    := $(CROSS_COMPILE)objdump
 OBJDUMP  := $(CROSS_COMPILE)objdump
 SIZE     := $(CROSS_COMPILE)size
-DFU      := dfu-util
+DFU      ?= dfu-util
 
 # Suppress annoying output unless V is set
 ifndef V

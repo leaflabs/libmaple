@@ -18,6 +18,11 @@ E: mbolivar@leaflabs.com
 D: Current libmaple maintainer
 D: Random libmaple hacks
 
+N: Barry Carter ("ginge")
+E: barry.carter@gmail.com
+D: Added I2C slave support
+W: headfuzz.co.uk
+
 N: Anton Eltchaninov
 E: anton.eltchaninov@gmail.com
 D: STM32F1 value line support
@@ -81,3 +86,4 @@ W: http://sarup.dk/index.html
 N: Andy Scott ("xttocs")
 E: andy.g.scott@gmail.com
 D: LiquidCrystal library
+ 

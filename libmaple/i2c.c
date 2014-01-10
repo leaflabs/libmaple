@@ -458,10 +458,6 @@ void _i2c_irq_handler(i2c_dev *dev) {
         if (sr1 & I2C_SR1_RXNE) {
             if (dev->config_flags & I2C_SLAVE_USE_RX_BUFFER) {
                 /* Fill the buffer with the contents of the data register */
-                /* These is potential for buffer overflow here, so we should
-                 * really store the size of the array. This is expensive in
-                 * the ISR so left out for now. We must trust the implementor!
-                 */
                 dev->i2c_slave_msg->data[dev->i2c_slave_msg->xferred++] = dev->regs->DR;
                 dev->i2c_slave_msg->length++;
             }

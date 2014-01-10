@@ -28,11 +28,9 @@
 /**
  * @file libmaple/i2c.c
  * @author Perry Hung <perry@leaflabs.com>
- * @author Barry Carter <barry.carter@gmail.com>
  * @brief Inter-Integrated Circuit (I2C) support.
  *
- * Master and Slave supported
- * Slave code added Barry Carter 2012
+ * Currently, only master mode is supported.
  */
 
 #include "i2c_private.h"
@@ -220,26 +218,6 @@ void i2c_master_enable(i2c_dev *dev, uint32 flags) {
     dev->state = I2C_STATE_IDLE;
 }
 
-/**
- * @brief Initialize an I2C device as slave (and master)
- * @param dev Device to enable
- * @param flags Bitwise or of the following I2C options:
- *              I2C_FAST_MODE: 400 khz operation,
- *              I2C_DUTY_16_9: 16/9 Tlow/Thigh duty cycle (only applicable for
- *                             fast mode),
- *              I2C_BUS_RESET: Reset the bus and clock out any hung slaves on
- *                             initialization,
- *              I2C_10BIT_ADDRESSING: Enable 10-bit addressing,
- *              I2C_REMAP: (deprecated, STM32F1 only) Remap I2C1 to SCL/PB8
- *                         SDA/PB9.
- *              I2C_SLAVE_DUAL_ADDRESS: Slave can respond on 2 i2C addresses
- *              I2C_SLAVE_GENERAL_CALL: SLA+W broadcast to all general call
- *                                      listeners on bus. Addr 0x00
- *              I2C_SLAVE_USE_RX_BUFFER: Use a buffer to receive the incoming
- *                                       data. Callback at end of recv
- *              I2C_SLAVE_USE_TX_BUFFER: Use a buffer to transmit data.
- *                                       Callback will be called before tx
- */
 void i2c_slave_enable(i2c_dev *dev, uint32 flags) {
     i2c_disable(dev);
     i2c_master_enable(dev, dev->config_flags | flags);
@@ -344,10 +322,11 @@ void _i2c_irq_handler(i2c_dev *dev) {
      */
     dev->timestamp = systick_uptime();
 
-    /*
-     * Add Slave support
+    /* Add Slave support
+     * Barry Carter 2012
+     * barry.carter@gmail.com
      */
-
+    
     /* Check to see if MSL master slave bit is set */
     if ((sr2 & I2C_SR2_MSL) != I2C_SR2_MSL) { /* 0 = slave mode 1 = master */
 
@@ -480,15 +459,6 @@ void _i2c_irq_handler(i2c_dev *dev) {
                 /* The callback with the data will happen on a NACK of the last data byte.
                  * This is handled in the error IRQ (AF bit)
                  */
-                /* Handle the case where the master misbehaves by sending no NACK */
-                if (dev->state != I2C_STATE_IDLE) {
-                    if (dev->state == I2C_STATE_SL_RX) {
-                        if (dev->i2c_slave_recv_callback != NULL) (*(dev->i2c_slave_recv_callback))(dev->i2c_slave_msg);
-                    }
-                    else {
-                        if (dev->i2c_slave_transmit_callback != NULL) (*(dev->i2c_slave_transmit_callback))(dev->i2c_slave_msg);
-                    }
-                }
             }
 
             sr1 = sr2 = 0;

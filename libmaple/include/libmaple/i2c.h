@@ -29,19 +29,12 @@
  * @file libmaple/include/libmaple/i2c.h
  * @brief Inter-Integrated Circuit (I2C) peripheral support
  *
- * Supports Master and Slave.
- *  Master Usage notes:
+ * Currently master-only. Usage notes:
  *
  * - Enable an I2C device with i2c_master_enable().
  * - Initialize an array of struct i2c_msg to suit the bus
  *   transactions (reads/writes) you wish to perform.
  * - Call i2c_master_xfer() to do the work.
- *
- * Slave Usage notes:
- * - Enable I2C slave by calling i2c_slave_enable().
- *   Check flags for usage. Enabling master also enabled slave.
- * - initialise the i2c_msg struct and the data buffer
- * - initialise the callback functions
  */
 
 #ifndef _LIBMAPLE_I2C_H_
@@ -208,7 +201,7 @@ typedef struct i2c_msg {
 #define I2C_SLAVE_USE_RX_BUFFER 0x10          // Use a buffered message when doing a slave recv
 #define I2C_SLAVE_USE_TX_BUFFER 0x20          // Use a buffered message when doing a slave transmit
 #define I2C_SLAVE_DUAL_ADDRESS  0x40          // Enable the dual slave address scheme
-#define I2C_SLAVE_GENERAL_CALL  0x80          // Enable the general call on address 0x00
+#define I2C_SLAVE_GENERAL_CALL  0x80          // Enable the dual slave address scheme
 void i2c_master_enable(i2c_dev *dev, uint32 flags);
 
 #define I2C_ERROR_PROTOCOL      (-1)
@@ -418,7 +411,7 @@ static inline void i2c_set_trise(i2c_dev *dev, uint32 trise) {
     dev->regs->TRISE = trise;
 }
 
-/*
+/* Barry Carter
  * Slave support
  */
 

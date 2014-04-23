@@ -32,6 +32,9 @@ BOARD_INCLUDE_DIR := $(MAKEDIR)/board-includes
 BOARD ?= maple
 MEMORY_TARGET ?= flash
 
+# Chooses the bootloader, available: maple and robotis
+BOOTLOADER ?= maple
+
 # $(BOARD)- and $(MEMORY_TARGET)-specific configuration
 include $(MAKEDIR)/target-config.mk
 
@@ -56,7 +59,8 @@ TARGET_FLAGS    += -I$(LIBMAPLE_PATH)/include/libmaple                       \
 TARGET_FLAGS += -I$(LIBRARIES_PATH) # for internal lib. includes, e.g. <Wire/WireBase.h>
 GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2 -nostdlib \
                    -ffunction-sections -fdata-sections \
-		   -Wl,--gc-sections $(TARGET_FLAGS)
+		   -Wl,--gc-sections $(TARGET_FLAGS) \
+		   -DBOOTLOADER_$(BOOTLOADER)
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(TARGET_FLAGS)
 GLOBAL_ASFLAGS  := -x assembler-with-cpp $(TARGET_FLAGS)
 LDFLAGS  = $(TARGET_LDFLAGS) $(TOOLCHAIN_LDFLAGS) -mcpu=cortex-m3 -mthumb \

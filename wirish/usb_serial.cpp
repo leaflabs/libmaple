@@ -36,6 +36,7 @@
 #include <libmaple/nvic.h>
 #include <libmaple/usb_cdcacm.h>
 #include <libmaple/usb.h>
+#include <libmaple/iwdg.h>
 
 #include <wirish/wirish.h>
 
@@ -179,6 +180,7 @@ static void ifaceSetupHook(unsigned hook, void *requestvp) {
         return;
     }
 
+#if defined(BOOTLOADER_maple)
     // We need to see a negative edge on DTR before we start looking
     // for the in-band magic reset byte sequence.
     uint8 dtr = usb_cdcacm_get_dtr();
@@ -196,13 +198,25 @@ static void ifaceSetupHook(unsigned hook, void *requestvp) {
         reset_state = dtr ? DTR_HIGH : DTR_LOW;
         break;
     }
+#endif
+
+#if defined(BOOTLOADER_robotis)
+    uint8 dtr = usb_cdcacm_get_dtr();
+    uint8 rts = usb_cdcacm_get_rts();
+
+    if (rts && !dtr) {
+        reset_state = DTR_NEGEDGE;
+    }
+#endif
 }
 
 #define RESET_DELAY 100000
+#if defined(BOOTLOADER_maple)
 static void wait_reset(void) {
   delay_us(RESET_DELAY);
   nvic_sys_reset();
 }
+#endif
 
 #define STACK_TOP 0x20000800
 #define EXC_RETURN 0xFFFFFFF9
@@ -215,7 +229,12 @@ static void rxHook(unsigned hook, void *ignored) {
 
         if (usb_cdcacm_data_available() >= 4) {
             // The magic reset sequence is "1EAF".
+#if defined(BOOTLOADER_maple)
             static const uint8 magic[4] = {'1', 'E', 'A', 'F'};
+#endif
+#if defined(BOOTLOADER_robotis)
+            static const uint8 magic[4] = {'C', 'M', '9', 'X'};
+#endif
             uint8 chkBuf[4];
 
             // Peek at the waiting bytes, looking for reset sequence,
@@ -227,6 +246,7 @@ static void rxHook(unsigned hook, void *ignored) {
                 }
             }
 
+#if defined(BOOTLOADER_maple)
             // Got the magic sequence -> reset, presumably into the bootloader.
             // Return address is wait_reset, but we must set the thumb bit.
             uintptr_t target = (uintptr_t)wait_reset | 0x1;
@@ -251,6 +271,12 @@ static void rxHook(unsigned hook, void *ignored) {
                            [exc_return] "r" (EXC_RETURN),
                            [cpsr] "r" (DEFAULT_CPSR)
                          : "r0", "r1", "r2");
+#endif
+
+#if defined(BOOTLOADER_robotis)
+            iwdg_init(IWDG_PRE_4, 10);
+#endif
+
             /* Can't happen. */
             ASSERT_FAULT(0);
         }

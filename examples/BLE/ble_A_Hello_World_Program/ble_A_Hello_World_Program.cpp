@@ -40,12 +40,11 @@ The following instructions describe the steps to be made on the Windows PC:
   -# You can use the nRF UART app in the Apple iOS app store and Google Play for Android 4.3 for Samsung Galaxy S4
     with this UART template app
 
-  -# You can send data from the Arduino serial monitor, maximum length of a string is 19 bytes
+  -# You can send data from the Maple serial monitor, maximum length of a string is 19 bytes
     Set the line ending to "Newline" in the Serial monitor (The newline is also sent over the air
 
  *
- * Click on the "Serial Monitor" button on the Arduino IDE to reset the Arduino and start the application.
- * The setup() function is called first and is called only once for each reset of the Arduino.
+ * The setup() function is called first and is called only once for each reset of the Maple.
  * The loop() function as the name implies is called in a loop.
  *
  * The setup() and loop() function are called in this way.
@@ -59,7 +58,7 @@ The following instructions describe the steps to be made on the Windows PC:
  * }
  *
  */
-#include <SPI.h>
+#include <wirish/wirish.h>
 #include <BLE/lib_aci.h>
 #include <BLE/aci_setup.h>
 #include "uart_over_ble.h"
@@ -152,9 +151,10 @@ void setup(void)
 {
   Serial2.begin(115200);
   //Wait until the serial port is available 
-  while (!Serial2.available());
+  delay(1000);
 
-  SerialUSB.println(F("Arduino setup"));
+
+  SerialUSB.println(F("Maple setup"));
   SerialUSB.println(F("Set line ending to newline to send data from the serial monitor"));
 
   /**
@@ -177,20 +177,19 @@ void setup(void)
   The Active pin is optional and can be marked UNUSED
   */
   aci_state.aci_pins.board_name = BOARD_DEFAULT; //See board.h for details REDBEARLAB_SHIELD_V1_1 or BOARD_DEFAULT
-  aci_state.aci_pins.reqn_pin   = 9; //SS for Nordic board, 9 for REDBEARLAB_SHIELD_V1_1
-  aci_state.aci_pins.rdyn_pin   = 8; //3 for Nordic board, 8 for REDBEARLAB_SHIELD_V1_1
-  aci_state.aci_pins.mosi_pin   = MOSI;
-  aci_state.aci_pins.miso_pin   = MISO;
-  aci_state.aci_pins.sck_pin    = SCK;
+  aci_state.aci_pins.reqn_pin   = 9; 
+  aci_state.aci_pins.rdyn_pin   = 8;
+  aci_state.aci_pins.mosi_pin   = BOARD_SPI1_MOSI_PIN;
+  aci_state.aci_pins.miso_pin   = BOARD_SPI1_MISO_PIN;
+  aci_state.aci_pins.sck_pin    = BOARD_SPI1_SCK_PIN;
 
-  aci_state.aci_pins.spi_clock_divider      = SPI_CLOCK_DIV8;//SPI_CLOCK_DIV8  = 2MHz SPI speed
-                                                             //SPI_CLOCK_DIV16 = 1MHz SPI speed
+  aci_state.aci_pins.spi_clock_divider      = SPI_2_25MHZ;
   
-  aci_state.aci_pins.reset_pin              = 4; //4 for Nordic board, UNUSED for REDBEARLAB_SHIELD_V1_1
+  aci_state.aci_pins.reset_pin              = 7; 
   aci_state.aci_pins.active_pin             = UNUSED;
   aci_state.aci_pins.optional_chip_sel_pin  = UNUSED;
 
-  aci_state.aci_pins.interface_is_interrupt = false; //Interrupts still not available in Chipkit
+  aci_state.aci_pins.interface_is_interrupt = false; //Interrupts disabled for Maple board
   aci_state.aci_pins.interrupt_number       = 1;
 
   //We reset the nRF8001 here by toggling the RESET line connected to the nRF8001
@@ -481,7 +480,7 @@ void aci_loop()
   {
     //SerialUSB.println(F("No ACI Events available"));
     // No event in the ACI Event queue and if there is no event in the ACI command queue the arduino can go to sleep
-    // Arduino can go to sleep now
+    // Maple Board can go to sleep now
     // Wakeup from sleep from the RDYN line
   }
 
@@ -529,13 +528,11 @@ void loop() {
     stringIndex    = 0;
     stringComplete = false;
   }
-  //For ChipKit you have to call the function that reads from Serial
-  #if defined (__PIC32MX__)
-    if (SerialUSB.available())
-    {
-      serialEvent();
-    }
-  #endif
+  //For Maple Board you have to call the function that reads from Serial
+  if (SerialUSB.available())
+  {
+    serialEvent();
+  }
 }
 
 /*
@@ -578,3 +575,22 @@ void serialEvent() {
     }
   }
 }
+
+// -- init() and main() ---------------------------------------------
+
+__attribute__((constructor)) void premain()
+{
+  init();
+}
+
+int main(void)
+{
+  setup();
+
+  while (true)
+  {
+    loop();
+  }
+  return 0;
+}
+

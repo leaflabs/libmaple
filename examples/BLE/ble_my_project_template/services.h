@@ -34,8 +34,8 @@
 #ifndef SETUP_MESSAGES_H__
 #define SETUP_MESSAGES_H__
 
-#include "hal_platform.h" 
-#include "aci.h"
+#include "BLE/hal_platform.h" 
+#include "BLE/aci.h"
 
 
 #define SETUP_ID 0

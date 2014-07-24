@@ -231,6 +231,8 @@ void hal_aci_tl_pin_reset(void)
 
 bool hal_aci_tl_event_peek(hal_aci_data_t *p_aci_data)
 {
+  m_aci_event_check();
+
   if (aci_queue_peek(&aci_rx_q, p_aci_data))
   {
     return true;

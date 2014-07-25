@@ -117,7 +117,7 @@ uint8_t do_aci_setup(aci_state_t *aci_stat)
     }
 
     
-    if (lib_aci_event_peek(aci_stat, aci_data))
+    if (lib_aci_event_peek(aci_data))
     {
       aci_evt = &(aci_data->evt);
       

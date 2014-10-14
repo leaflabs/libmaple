@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Perry Hung.
+ * Copyright 2014 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -59,22 +60,31 @@ static void enable_device(spi_dev *dev,
                           spi_mode mode);
 
 static const spi_pins board_spi_pins[] __FLASH__ = {
+#if BOARD_HAVE_SPI1
     {BOARD_SPI1_NSS_PIN,
      BOARD_SPI1_SCK_PIN,
      BOARD_SPI1_MISO_PIN,
      BOARD_SPI1_MOSI_PIN},
+#else
+    {0, 0, 0, 0},
+#endif
+#if BOARD_HAVE_SPI2
     {BOARD_SPI2_NSS_PIN,
      BOARD_SPI2_SCK_PIN,
      BOARD_SPI2_MISO_PIN,
      BOARD_SPI2_MOSI_PIN},
-#ifdef STM32_HIGH_DENSITY
+#else
+    {0, 0, 0, 0},
+#endif
+#if BOARD_HAVE_SPI3
     {BOARD_SPI3_NSS_PIN,
      BOARD_SPI3_SCK_PIN,
      BOARD_SPI3_MISO_PIN,
      BOARD_SPI3_MOSI_PIN},
+#else
+    {0, 0, 0, 0},
 #endif
 };
-
 
 /*
  * Constructor
@@ -235,12 +245,26 @@ static spi_baud_rate determine_baud_rate(spi_dev *dev, SPIFrequency freq);
 
 static const spi_pins* dev_to_spi_pins(spi_dev *dev) {
     switch (dev->clk_id) {
-    case RCC_SPI1: return board_spi_pins;
-    case RCC_SPI2: return board_spi_pins + 1;
-#ifdef STM32_HIGH_DENSITY
-    case RCC_SPI3: return board_spi_pins + 2;
+    case RCC_SPI1:
+#if BOARD_HAVE_SPI1
+        return board_spi_pins;
+#else
+        return NULL;
 #endif
-    default:       return NULL;
+    case RCC_SPI2:
+#if BOARD_HAVE_SPI2
+        return board_spi_pins + 1;
+#else
+        return NULL;
+#endif
+    case RCC_SPI3:
+#if BOARD_HAVE_SPI3
+        return board_spi_pins + 2;
+#else
+        return NULL;
+#endif
+    default:
+        return NULL;
     }
 }
 

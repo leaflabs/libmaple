@@ -69,6 +69,8 @@ extern "C" {
  */
 #include <series/stm32.h>
 
+/* FIXME: need an STM32_USART_MASK to parallel STM32_TIMER_MASK */
+
 /* Ensure the series header isn't broken. */
 #if (!defined(STM32_PCLK1)         ||     \
      !defined(STM32_PCLK2)         ||     \

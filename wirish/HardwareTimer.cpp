@@ -2,6 +2,7 @@
  * The MIT License
  *
  * Copyright (c) 2010 Bryan Newbold.
+ * Copyright 2014 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -26,6 +27,7 @@
 
 #include <wirish/HardwareTimer.h>
 
+#include <libmaple/stm32.h>
 #include <libmaple/rcc.h>
 #include <wirish/ext_interrupts.h> // for noInterrupts(), interrupts()
 #include <wirish/wirish_math.h>
@@ -144,13 +146,27 @@ void HardwareTimer::refresh(void) {
 
 /* -- Deprecated predefined instances -------------------------------------- */
 
+#if STM32_TIMER_MASK & (1 << 1)
 HardwareTimer Timer1(1);
+#endif
+#if STM32_TIMER_MASK & (1 << 2)
 HardwareTimer Timer2(2);
+#endif
+#if STM32_TIMER_MASK & (1 << 3)
 HardwareTimer Timer3(3);
+#endif
+#if STM32_TIMER_MASK & (1 << 4)
 HardwareTimer Timer4(4);
-#ifdef STM32_HIGH_DENSITY
+#endif
+#if STM32_TIMER_MASK & (1 << 5)
 HardwareTimer Timer5(5);
+#endif
+#if STM32_TIMER_MASK & (1 << 6)
 HardwareTimer Timer6(6);
+#endif
+#if STM32_TIMER_MASK & (1 << 7)
 HardwareTimer Timer7(7);
+#endif
+#if STM32_TIMER_MASK & (1 << 8)
 HardwareTimer Timer8(8);
 #endif

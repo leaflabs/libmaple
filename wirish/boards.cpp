@@ -3,6 +3,7 @@
  *
  * Copyright (c) 2010 Perry Hung.
  * Copyright (c) 2011, 2012 LeafLabs, LLC.
+ * Copyright 2014 Google, Inc.
  *
  * Permission is hereby granted, free of charge, to any person
  * obtaining a copy of this software and associated documentation
@@ -52,24 +53,16 @@
 #include <libmaple/systick.h>
 #include "boards_private.h"
 
-static void setup_flash(void);
-static void setup_clocks(void);
 static void setup_nvic(void);
-static void setup_adcs(void);
-static void setup_timers(void);
-
-/*
- * Exported functions
- */
 
 void init(void) {
-    setup_flash();
-    setup_clocks();
+    wirish::priv::board_setup_flash();
+    wirish::priv::board_setup_clocks();
     setup_nvic();
     systick_init(SYSTICK_RELOAD_VAL);
     wirish::priv::board_setup_gpio();
-    setup_adcs();
-    setup_timers();
+    wirish::priv::board_setup_adcs();
+    wirish::priv::board_setup_timers();
     wirish::priv::board_setup_usb();
     wirish::priv::series_init();
     boardInit();
@@ -91,20 +84,52 @@ bool boardUsesPin(uint8 pin) {
 }
 
 /*
- * Auxiliary routines
+ * These addresses are where usercode starts when a bootloader is
+ * present. If no bootloader is present, the user NVIC usually starts
+ * at the Flash base address, 0x08000000.
+ */
+#if defined(BOOTLOADER_maple)
+#define USER_ADDR_ROM 0x08005000
+#elif defined(BOOTLOADER_robotis)
+#define USER_ADDR_ROM 0x08003000
+#endif
+#define USER_ADDR_RAM 0x20000C00
+extern char __text_start__;
+
+static void setup_nvic(void) {
+#ifdef VECT_TAB_FLASH
+    nvic_init(USER_ADDR_ROM, 0);
+#elif defined VECT_TAB_RAM
+    nvic_init(USER_ADDR_RAM, 0);
+#elif defined VECT_TAB_BASE
+    nvic_init((uint32)0x08000000, 0);
+#elif defined VECT_TAB_ADDR
+    // A numerically supplied value
+    nvic_init((uint32)VECT_TAB_ADDR, 0);
+#else
+    // Use the __text_start__ value from the linker script; this
+    // should be the start of the vector table.
+    nvic_init((uint32)&__text_start__, 0);
+#endif
+}
+
+/*
+ * Default implementations for some board-specific routines.
  */
 
-static void setup_flash(void) {
+namespace wirish {
+namespace priv {
+
+__weak void board_setup_flash(void) {
     // Turn on as many Flash "go faster" features as
     // possible. flash_enable_features() just ignores any flags it
     // can't support.
     flash_enable_features(FLASH_PREFETCH | FLASH_ICACHE | FLASH_DCACHE);
-    // Configure the wait states, assuming we're operating at "close
-    // enough" to 3.3V.
+    // FLASH_SAFE_WAIT_STATES is a hack that needs to go away.
     flash_set_latency(FLASH_SAFE_WAIT_STATES);
 }
 
-static void setup_clocks(void) {
+__weak void board_setup_clocks(void) {
     // Turn on HSI. We'll switch to and run off of this while we're
     // setting up the main PLL.
     rcc_turn_on_clk(RCC_CLK_HSI);
@@ -139,42 +164,12 @@ static void setup_clocks(void) {
     rcc_switch_sysclk(RCC_CLKSRC_PLL);
 }
 
-/*
- * These addresses are where usercode starts when a bootloader is
- * present. If no bootloader is present, the user NVIC usually starts
- * at the Flash base address, 0x08000000.
- */
-#if defined(BOOTLOADER_maple)
-#define USER_ADDR_ROM 0x08005000
-#elif defined(BOOTLOADER_robotis)
-#define USER_ADDR_ROM 0x08003000
-#endif
-#define USER_ADDR_RAM 0x20000C00
-extern char __text_start__;
-
-static void setup_nvic(void) {
-#ifdef VECT_TAB_FLASH
-    nvic_init(USER_ADDR_ROM, 0);
-#elif defined VECT_TAB_RAM
-    nvic_init(USER_ADDR_RAM, 0);
-#elif defined VECT_TAB_BASE
-    nvic_init((uint32)0x08000000, 0);
-#elif defined VECT_TAB_ADDR
-    // A numerically supplied value
-    nvic_init((uint32)VECT_TAB_ADDR, 0);
-#else
-    // Use the __text_start__ value from the linker script; this
-    // should be the start of the vector table.
-    nvic_init((uint32)&__text_start__, 0);
-#endif
-}
-
 static void adc_default_config(const adc_dev *dev) {
     adc_enable_single_swstart(dev);
     adc_set_sample_rate(dev, wirish::priv::w_adc_smp);
 }
 
-static void setup_adcs(void) {
+__weak void board_setup_adcs(void) {
     adc_set_prescaler(wirish::priv::w_adc_pre);
     adc_foreach(adc_default_config);
 }
@@ -214,6 +209,9 @@ static void timer_default_config(timer_dev *dev) {
     timer_resume(dev);
 }
 
-static void setup_timers(void) {
+__weak void board_setup_timers(void) {
     timer_foreach(timer_default_config);
+}
+
+}
 }

@@ -48,7 +48,7 @@ namespace wirish {
     namespace priv {
 
         /*
-         * Chip-specific initialization data
+         * Chip- and board-specific initialization data
          */
 
         extern rcc_pll_cfg w_board_pll_cfg;
@@ -56,13 +56,21 @@ namespace wirish {
         extern adc_smp_rate w_adc_smp;
 
         /*
-         * Chip-specific initialization routines and helper functions.
+         * Chip- and board-specific initialization routines and helper
+         * functions.
+         *
+         * Some of these have default (weak) implementations in
+         * boards.cpp; define them in your board file to override.
          */
 
         void board_reset_pll(void);
         void board_setup_clock_prescalers(void);
         void board_setup_gpio(void);
         void board_setup_usb(void);
+        void board_setup_flash(void);
+        void board_setup_adcs(void);
+        void board_setup_timers(void);
+        void board_setup_clocks(void);
         void series_init(void);
 
     }

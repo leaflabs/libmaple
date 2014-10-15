@@ -24,16 +24,26 @@ include $(BOARD_INCLUDE_DIR)/$(BOARD).mk
 
 # Configuration derived from $(BOARD).mk
 
-LD_SERIES_PATH := $(LDDIR)/stm32/series/$(MCU_SERIES)
-LD_MEM_PATH := $(LDDIR)/stm32/mem/$(LD_MEM_DIR)
-ifeq ($(MCU_SERIES), stm32f1)
-# Due to the Balkanization on F1, we need to specify the line when
-# making linker decisions.
-LD_SERIES_PATH := $(LD_SERIES_PATH)/$(MCU_F1_LINE)
+TARGET_SERIES_MODULE := $(MCU_SERIES)
+
+# Override TARGET_SERIES_MODULE for STM32F2 and STM32F4, which are
+# basically the same and thus share a module.
+ifeq ($(MCU_SERIES), stm32f2)
+TARGET_SERIES_MODULE := stm32f2-f4
 endif
+ifeq ($(MCU_SERIES), stm32f4)
+TARGET_SERIES_MODULE := stm32f2-f4
+endif
+
+LIBMAPLE_MODULE_SERIES := $(LIBMAPLE_PATH)/$(TARGET_SERIES_MODULE)
+LD_SERIES_PATH := $(LDDIR)/stm32/series/$(TARGET_SERIES_MODULE)
+LD_MEM_PATH := $(LDDIR)/stm32/mem/$(LD_MEM_DIR)
 
 ifeq ($(MCU_SERIES), stm32f1)
 TARGET_FLAGS += -mcpu=cortex-m3 -march=armv7-m
+# Due to the Balkanization on F1, we need to specify the line when
+# making linker decisions.
+LD_SERIES_PATH := $(LD_SERIES_PATH)/$(MCU_F1_LINE)
 endif
 ifeq ($(MCU_SERIES), stm32f2)
 TARGET_FLAGS += -mcpu=cortex-m3 -march=armv7-m
@@ -50,5 +60,3 @@ TARGET_FLAGS += -mthumb -DBOARD_$(BOARD) -DMCU_$(MCU) \
                 -DERROR_LED_PORT=$(ERROR_LED_PORT) \
                 -DERROR_LED_PIN=$(ERROR_LED_PIN) \
                 -D$(VECT_BASE_ADDR)
-
-LIBMAPLE_MODULE_SERIES := $(LIBMAPLE_PATH)/$(MCU_SERIES)

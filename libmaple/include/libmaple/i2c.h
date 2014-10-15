@@ -47,6 +47,8 @@ extern "C" {
 /*
  * Series header must provide:
  *
+ * - struct i2c_reg_map
+ *
  * - uint32 _i2c_bus_clk(i2c_dev*): Clock frequency of dev's bus, in
  *   MHz. (This is for internal use only).
  *
@@ -71,19 +73,6 @@ extern "C" {
 #include <libmaple/rcc.h>
 #include <libmaple/nvic.h>
 #include <libmaple/gpio.h>
-
-/** I2C register map type */
-typedef struct i2c_reg_map {
-    __io uint32 CR1;            /**< Control register 1 */
-    __io uint32 CR2;            /**< Control register 2 */
-    __io uint32 OAR1;           /**< Own address register 1 */
-    __io uint32 OAR2;           /**< Own address register 2 */
-    __io uint32 DR;             /**< Data register */
-    __io uint32 SR1;            /**< Status register 1 */
-    __io uint32 SR2;            /**< Status register 2 */
-    __io uint32 CCR;            /**< Clock control register */
-    __io uint32 TRISE;          /**< TRISE (rise time) register */
-} i2c_reg_map;
 
 /**
  * @brief I2C message type

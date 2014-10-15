@@ -52,6 +52,7 @@ namespace wirish {
          */
 
         extern rcc_pll_cfg w_board_pll_cfg;
+        extern rcc_clk w_board_pll_in_clk;
         extern adc_prescaler w_adc_pre;
         extern adc_smp_rate w_adc_smp;
 

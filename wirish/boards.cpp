@@ -120,6 +120,8 @@ static void setup_nvic(void) {
 namespace wirish {
 namespace priv {
 
+__weak rcc_clk w_board_pll_in_clk = RCC_CLK_HSE;
+
 __weak void board_setup_flash(void) {
     // Turn on as many Flash "go faster" features as
     // possible. flash_enable_features() just ignores any flags it
@@ -140,15 +142,17 @@ __weak void board_setup_clocks(void) {
     RCC_BASE->CFGR = 0x00000000;
     rcc_disable_css();
     rcc_turn_off_clk(RCC_CLK_PLL);
-    rcc_turn_off_clk(RCC_CLK_HSE);
+    if (w_board_pll_in_clk != RCC_CLK_HSI) {
+        rcc_turn_off_clk(w_board_pll_in_clk);
+    }
     wirish::priv::board_reset_pll();
     // Clear clock readiness interrupt flags and turn off clock
     // readiness interrupts.
     RCC_BASE->CIR = 0x00000000;
 
-    // Enable HSE, and wait until it's ready.
-    rcc_turn_on_clk(RCC_CLK_HSE);
-    while (!rcc_is_clk_ready(RCC_CLK_HSE))
+    // Enable the PLL input clock, and wait until it's ready.
+    rcc_turn_on_clk(w_board_pll_in_clk);
+    while (!rcc_is_clk_ready(w_board_pll_in_clk))
         ;
 
     // Configure AHBx, APBx, etc. prescalers and the main PLL.

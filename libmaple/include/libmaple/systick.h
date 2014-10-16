@@ -87,6 +87,7 @@ static inline uint32 systick_uptime(void) {
 void systick_init(uint32 reload_val);
 void systick_disable();
 void systick_enable();
+void systick_attach_callback(void (*)(void));
 
 /**
  * @brief Returns the current value of the SysTick counter.

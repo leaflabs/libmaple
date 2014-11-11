@@ -148,6 +148,8 @@ static void setup_clocks(void) {
 #define USER_ADDR_ROM 0x08005000
 #elif defined(BOOTLOADER_robotis)
 #define USER_ADDR_ROM 0x08003000
+#elif defined(BOOTLOADER_none)
+#define USER_ADDR8ROM 0x08000000
 #endif
 #define USER_ADDR_RAM 0x20000C00
 extern char __text_start__;

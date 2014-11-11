@@ -160,6 +160,7 @@ extern "C" {
  */
 
 #if STM32_F1_LINE == STM32_F1_LINE_PERFORMANCE
+#ifdef HAS_EXTERNAL_OSC
 #    ifndef STM32_PCLK1
 #    define STM32_PCLK1                     36000000U
 #    endif
@@ -169,6 +170,17 @@ extern "C" {
 #    ifndef STM32_DELAY_US_MULT
 #    define STM32_DELAY_US_MULT             12 /* FIXME: value is incorrect. */
 #    endif
+#else
+#    ifndef STM32_PCLK1
+#    define STM32_PCLK1                     18000000U
+#    endif
+#    ifndef STM32_PCLK2
+#    define STM32_PCLK2                     36000000U
+#    endif
+#    ifndef STM32_DELAY_US_MULT
+#    define STM32_DELAY_US_MULT             6 /* FIXME: value is incorrect. */
+#    endif
+#endif
 #elif STM32_F1_LINE == STM32_F1_LINE_VALUE        /* TODO */
 #    ifndef STM32_PCLK1
 #    define STM32_PCLK1                     12000000U

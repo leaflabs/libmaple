@@ -29,11 +29,14 @@ BOARD_INCLUDE_DIR := $(MAKEDIR)/board-includes
 
 # Try "make help" for more information on BOARD and MEMORY_TARGET;
 # these default to a Maple Flash build.
-BOARD ?= maple
+BOARD ?= nucleo
 MEMORY_TARGET ?= flash
 
 # Chooses the bootloader, available: maple and robotis
-BOOTLOADER ?= maple
+BOOTLOADER ?= none
+
+# Does the board have external oscillator?
+HAS_EXTERNAL_OSC ?= no
 
 # This is the serial port used by robotis bootloader
 ROBOTIS_PORT ?= /dev/ttyACM0
@@ -64,6 +67,9 @@ GLOBAL_CFLAGS   := -Os -g3 -gdwarf-2 -nostdlib \
                    -ffunction-sections -fdata-sections \
 		   -Wl,--gc-sections $(TARGET_FLAGS) \
 		   -DBOOTLOADER_$(BOOTLOADER)
+ifeq ($(HAS_EXTERNAL_OSC),yes)
+GLOBAL_CFLAGS 	+= -DHAS_EXTERNAL_OSC
+endif
 GLOBAL_CXXFLAGS := -fno-rtti -fno-exceptions -Wall $(TARGET_FLAGS)
 GLOBAL_ASFLAGS  := -x assembler-with-cpp $(TARGET_FLAGS)
 LDFLAGS  = $(TARGET_LDFLAGS) $(TOOLCHAIN_LDFLAGS) -mcpu=cortex-m3 -mthumb \

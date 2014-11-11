@@ -100,16 +100,27 @@ void rcc_clk_init(rcc_sysclk_src sysclk_src,
                   rcc_pllsrc pll_src,
                   rcc_pll_multiplier pll_mul) {
     /* Assume that we're going to clock the chip off the PLL, fed by
-     * the HSE */
+     * the HSE/HSI */
+#ifdef HAS_EXTERNAL_OSC
     ASSERT(sysclk_src == RCC_CLKSRC_PLL &&
            pll_src    == RCC_PLLSRC_HSE);
+#else
+    ASSERT(sysclk_src == RCC_CLKSRC_PLL &&
+           pll_src    == RCC_PLLSRC_HSI_DIV_2);
+#endif
 
     RCC_BASE->CFGR = pll_src | pll_mul;
 
-    /* Turn on, and wait for, HSE. */
+    /* Turn on, and wait for, HSE/HSI. */
+#ifdef HAS_EXTERNAL_OSC
     rcc_turn_on_clk(RCC_CLK_HSE);
     while (!rcc_is_clk_ready(RCC_CLK_HSE))
         ;
+#else
+    rcc_turn_on_clk(RCC_CLK_HSI);
+    while (!rcc_is_clk_ready(RCC_CLK_HSI))
+        ;
+#endif
 
     /* Do the same for the main PLL. */
     rcc_turn_on_clk(RCC_CLK_PLL);

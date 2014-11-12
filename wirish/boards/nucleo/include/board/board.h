@@ -44,7 +44,7 @@
 #endif
 
 /* Pin number for the built-in button. */
-#define BOARD_BUTTON_PIN        38
+#define BOARD_BUTTON_PIN        27
 
 /* Pin number for the built-in LED. */
 #define BOARD_LED_PIN           13
@@ -79,22 +79,15 @@
 #define BOARD_NR_GPIO_PINS      44
 
 /* Number of pins capable of PWM output. */
-#define BOARD_NR_PWM_PINS       15
+#define BOARD_NR_PWM_PINS       8
 
 /* Number of pins capable of ADC conversion. */
-#define BOARD_NR_ADC_PINS       15
+#define BOARD_NR_ADC_PINS       6
 
 /* Number of pins already connected to external hardware.  For Maple,
  * these are just BOARD_LED_PIN, BOARD_BUTTON_PIN, and the debug port
  * pins (see below). */
-#define BOARD_NR_USED_PINS       7
-
-/* Debug port pins. */
-#define BOARD_JTMS_SWDIO_PIN    39
-#define BOARD_JTCK_SWCLK_PIN    40
-#define BOARD_JTDI_PIN          41
-#define BOARD_JTDO_PIN          42
-#define BOARD_NJTRST_PIN        43
+#define BOARD_NR_USED_PINS       2
 
 /**
  * Note: there is no USB in this board.

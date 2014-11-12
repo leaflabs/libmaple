@@ -25,9 +25,15 @@
  *****************************************************************************/
 
 /**
- * @file   wirish/boards/maple/board.cpp
- * @author Marti Bolivar <mbolivar@leaflabs.com>
- * @brief  Maple board file.
+ * @file   wirish/boards/nucleo/board.cpp
+ * @author Grégoire Passault <g.passault@gmail.com>
+ * @brief  Nucleo board file
+ *
+ * This mapping was done using the NUCLEO documentation and may be incomplete
+ * or contains error
+ *
+ * If you want to use the PWM outputs, consider understanding all the remapping
+ * process that can be involved. You may have to tweak this file regarding your goals.
  */
 
 #include <board/board.h>         // For this board's header file
@@ -38,18 +44,11 @@
 #include "boards_private.h"      // For PMAP_ROW(), which makes
                                  // PIN_MAP easier to read.
 
-// boardInit(): nothing special to do for Maple.
-//
-// When defining your own board.cpp, you can put extra code in this
-// function if you have anything you want done on reset, before main()
-// or setup() are called.
-//
-// If there's nothing special you need done, feel free to leave this
-// function out, as we do here.
-/*
+// boardInit(): NUCLEO rely on some remapping
 void boardInit(void) {
+    afio_remap(AFIO_REMAP_TIM2_FULL);
+    afio_remap(AFIO_REMAP_TIM3_PARTIAL);
 }
-*/
 
 // Pin map: this lets the basic I/O functions (digitalWrite(),
 // analogRead(), pwmWrite()) translate from pin numbers to STM32
@@ -66,78 +65,77 @@ void boardInit(void) {
 // - ADC channel, or ADCx if none
 extern const stm32_pin_info PIN_MAP[BOARD_NR_GPIO_PINS] = {
 
-    /* Top header */
+    /* Arduino-like header, right connectors */
 
-    PMAP_ROW(GPIOA,   3, TIMER2,  4, ADC1,    3), /* D0/PA3 */
-    PMAP_ROW(GPIOA,   2, TIMER2,  3, ADC1,    2), /* D1/PA2 */
-    PMAP_ROW(GPIOA,   0, TIMER2,  1, ADC1,    0), /* D2/PA0 */
-    PMAP_ROW(GPIOA,   1, TIMER2,  2, ADC1,    1), /* D3/PA1 */
+    PMAP_ROW(GPIOA,   3,   NULL,  0, ADC1,    3), /* D0/PA3 */
+    PMAP_ROW(GPIOA,   2,   NULL,  0, ADC1,    2), /* D1/PA2 */
+    PMAP_ROW(GPIOA,  10,   NULL,  0, NULL, ADCx), /* D2/PA10 */
+    PMAP_ROW(GPIOB,   3, TIMER2,  2, NULL, ADCx), /* D3/PB3     REMAPPED */
     PMAP_ROW(GPIOB,   5,   NULL,  0, NULL, ADCx), /* D4/PB5 */
-    PMAP_ROW(GPIOB,   6, TIMER4,  1, NULL, ADCx), /* D5/PB6 */
-    PMAP_ROW(GPIOA,   8, TIMER1,  1, NULL, ADCx), /* D6/PA8 */
-    PMAP_ROW(GPIOA,   9, TIMER1,  2, NULL, ADCx), /* D7/PA9 */
-    PMAP_ROW(GPIOA,  10, TIMER1,  3, NULL, ADCx), /* D8/PA10 */
-    PMAP_ROW(GPIOB,   7, TIMER4,  2, NULL, ADCx), /* D9/PB7 */
-    PMAP_ROW(GPIOA,   4,   NULL,  0, ADC1,    4), /* D10/PA4 */
+    PMAP_ROW(GPIOB,   4, TIMER3,  1, NULL, ADCx), /* D5/PB4     REMAPPED */
+    PMAP_ROW(GPIOB,  10, TIMER2,  3, NULL, ADCx), /* D6/PB10    REMAPPED */
+    PMAP_ROW(GPIOA,   8,   NULL,  0, NULL, ADCx), /* D7/PA8 */
+
+    PMAP_ROW(GPIOA,   9,   NULL,  0, NULL, ADCx), /* D8/PA9  */
+    PMAP_ROW(GPIOC,   7,   NULL,  0, NULL, ADCx), /* D9/PC7  */
+    PMAP_ROW(GPIOB,   6, TIMER4,  1, NULL, ADCx), /* D10/PB6 */
     PMAP_ROW(GPIOA,   7, TIMER3,  2, ADC1,    7), /* D11/PA7 */
-    PMAP_ROW(GPIOA,   6, TIMER3,  1, ADC1,    6), /* D12/PA6 */
-    PMAP_ROW(GPIOA,   5,   NULL,  0, ADC1,    5), /* D13/PA5 (LED) */
-    PMAP_ROW(GPIOB,   8, TIMER4,  3, NULL, ADCx), /* D14/PB8 */
+    PMAP_ROW(GPIOA,   6,   NULL,  0, ADC1,    6), /* D12/PA6 */
+    PMAP_ROW(GPIOA,   5,   NULL,  0, ADC1,    5), /* D13/PA5 LED*/
+    PMAP_ROW(GPIOB,   9,   NULL,  0, NULL, ADCx), /* D14/PB9 */
+    PMAP_ROW(GPIOB,   8,   NULL,  0, NULL, ADCx), /* D15/PB8 */
+    
+    /* Arduino-like header, left connectors */
 
-    /* Little header */
+    PMAP_ROW(GPIOA,   0, TIMER2,  1, ADC1,    0), /* D16/A0/PA0 */
+    PMAP_ROW(GPIOA,   1, TIMER2,  2, ADC1,    1), /* D17/A1/PA1 */
+    PMAP_ROW(GPIOA,   4,   NULL,  0, ADC1,    4), /* D18/A2/PA4 */
+    PMAP_ROW(GPIOB,   0, TIMER3,  3, ADC1,    8), /* D19/A3/PB0 */
+    PMAP_ROW(GPIOC,   1,   NULL,  0, ADC1,   11), /* D20/A4/PC1 */
+    PMAP_ROW(GPIOC,   0,   NULL,  0, ADC1,   10), /* D21/A5/PC0 */
 
-    PMAP_ROW(GPIOC,   0,   NULL,  0, ADC1,   10), /* D15/PC0 */
-    PMAP_ROW(GPIOC,   1,   NULL,  0, ADC1,   11), /* D16/PC1 */
-    PMAP_ROW(GPIOC,   2,   NULL,  0, ADC1,   12), /* D17/PC2 */
-    PMAP_ROW(GPIOC,   3,   NULL,  0, ADC1,   13), /* D18/PC3 */
-    PMAP_ROW(GPIOC,   4,   NULL,  0, ADC1,   14), /* D19/PC4 */
-    PMAP_ROW(GPIOC,   5,   NULL,  0, ADC1,   15), /* D20/PC5 */
+    /* Other pins */
 
-    /* External header */
+    PMAP_ROW(GPIOB,   7,   NULL,  0, NULL, ADCx), /* D22/PB7 */
+    PMAP_ROW(GPIOC,   2,   NULL,  0, ADC1,   12), /* D23/PC2 */
+    PMAP_ROW(GPIOC,   3,   NULL,  0, ADC1,   13), /* D24/PC3 */
+    PMAP_ROW(GPIOC,   4,   NULL,  0, ADC1,   14), /* D25/PC4 */
+    PMAP_ROW(GPIOC,   5,   NULL,  0, ADC1,   15), /* D26/PC5 */
 
-    PMAP_ROW(GPIOC,  13,   NULL,  0, NULL, ADCx), /* D21/PC13 */
-    PMAP_ROW(GPIOC,  14,   NULL,  0, NULL, ADCx), /* D22/PC14 */
-    PMAP_ROW(GPIOC,  15,   NULL,  0, NULL, ADCx), /* D23/PC15 */
-    PMAP_ROW(GPIOB,   9, TIMER4,  4, NULL, ADCx), /* D24/PB9 */
-    PMAP_ROW(GPIOD,   2,   NULL,  0, NULL, ADCx), /* D25/PD2 */
-    PMAP_ROW(GPIOC,  10,   NULL,  0, NULL, ADCx), /* D26/PC10 */
-    PMAP_ROW(GPIOB,   0, TIMER3,  3, ADC1,    8), /* D27/PB0 */
-    PMAP_ROW(GPIOB,   1, TIMER3,  4, ADC1,    9), /* D28/PB1 */
-    PMAP_ROW(GPIOB,  10,   NULL,  0, NULL, ADCx), /* D29/PB10 */
-    PMAP_ROW(GPIOB,  11,   NULL,  0, NULL, ADCx), /* D30/PB11 */
-    PMAP_ROW(GPIOB,  12,   NULL,  0, NULL, ADCx), /* D31/PB12 */
-    PMAP_ROW(GPIOB,  13,   NULL,  0, NULL, ADCx), /* D32/PB13 */
-    PMAP_ROW(GPIOB,  14,   NULL,  0, NULL, ADCx), /* D33/PB14 */
-    PMAP_ROW(GPIOB,  15,   NULL,  0, NULL, ADCx), /* D34/PB15 */
-    PMAP_ROW(GPIOC,   6,   NULL,  0, NULL, ADCx), /* D35/PC6 */
-    PMAP_ROW(GPIOC,   7,   NULL,  0, NULL, ADCx), /* D36/PC7 */
-    PMAP_ROW(GPIOC,   8,   NULL,  0, NULL, ADCx), /* D37/PC8 */
-    PMAP_ROW(GPIOC,   9,   NULL,  0, NULL, ADCx), /* D38/PC9 (BUT) */
+    PMAP_ROW(GPIOC,  13,   NULL,  0, NULL, ADCx), /* D27/PC13 USER BLUE BUTTON */
+    PMAP_ROW(GPIOC,  14,   NULL,  0, NULL, ADCx), /* D28/PC14 */
+    PMAP_ROW(GPIOC,  15,   NULL,  0, NULL, ADCx), /* D29/PC15 */
+    PMAP_ROW(GPIOD,   2,   NULL,  0, NULL, ADCx), /* D30/PD2 */
+    PMAP_ROW(GPIOC,  10,   NULL,  0, NULL, ADCx), /* D31/PC10 */
+    PMAP_ROW(GPIOB,   1,   NULL,  0, ADC1,    9), /* D32/PB1 */
+    PMAP_ROW(GPIOB,  11,   NULL,  0, NULL, ADCx), /* D33/PB11 */
+    PMAP_ROW(GPIOB,  12,   NULL,  0, NULL, ADCx), /* D34/PB12 */
+    PMAP_ROW(GPIOB,  13,   NULL,  0, NULL, ADCx), /* D35/PB13 */
+    PMAP_ROW(GPIOB,  14,   NULL,  0, NULL, ADCx), /* D36/PB14 */
+    PMAP_ROW(GPIOB,  15,   NULL,  0, NULL, ADCx), /* D37/PB15 */
+    PMAP_ROW(GPIOC,   6,   NULL,  0, NULL, ADCx), /* D38/PC6 */
+    PMAP_ROW(GPIOC,   8,   NULL,  0, NULL, ADCx), /* D39/PC8 */
+    PMAP_ROW(GPIOC,   9,   NULL,  0, NULL, ADCx), /* D40/PC9 */
 
-    /* JTAG header */
-
-    PMAP_ROW(GPIOA,  13,   NULL,  0, NULL, ADCx), /* D39/PA13 */
-    PMAP_ROW(GPIOA,  14,   NULL,  0, NULL, ADCx), /* D40/PA14 */
-    PMAP_ROW(GPIOA,  15,   NULL,  0, NULL, ADCx), /* D41/PA15 */
-    PMAP_ROW(GPIOB,   3,   NULL,  0, NULL, ADCx), /* D42/PB3  */
-    PMAP_ROW(GPIOB,   4,   NULL,  0, NULL, ADCx), /* D43/PB4  */
+    PMAP_ROW(GPIOA,  13,   NULL,  0, NULL, ADCx), /* D41/PA13 */
+    PMAP_ROW(GPIOA,  14,   NULL,  0, NULL, ADCx), /* D42/PA14 */
+    PMAP_ROW(GPIOA,  15,   NULL,  0, NULL, ADCx), /* D43/PA15 */
 };
 
 // Array of pins you can use for pwmWrite(). Keep it in Flash because
 // it doesn't change, and so we don't waste RAM.
 extern const uint8 boardPWMPins[] __FLASH__ = {
-    0, 1, 2, 3, 5, 6, 7, 8, 9, 11, 12, 14, 24, 27, 28
+    3, 5, 6, 10, 11, 16, 17, 19
 };
 
 // Array of pins you can use for analogRead().
 extern const uint8 boardADCPins[] __FLASH__ = {
-    0, 1, 2, 3, 10, 11, 12, 15, 16, 17, 18, 19, 20, 27, 28
+    16, 17, 18, 19, 20, 21
 };
 
 // Array of pins that the board uses for something special. Other than
 // the button and the LED, it's usually best to leave these pins alone
 // unless you know what you're doing.
 extern const uint8 boardUsedPins[] __FLASH__ = {
-    BOARD_LED_PIN, BOARD_BUTTON_PIN, BOARD_JTMS_SWDIO_PIN,
-    BOARD_JTCK_SWCLK_PIN, BOARD_JTDI_PIN, BOARD_JTDO_PIN, BOARD_NJTRST_PIN
+    BOARD_LED_PIN, BOARD_BUTTON_PIN
 };

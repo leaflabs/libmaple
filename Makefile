@@ -29,14 +29,14 @@ BOARD_INCLUDE_DIR := $(MAKEDIR)/board-includes
 
 # Try "make help" for more information on BOARD and MEMORY_TARGET;
 # these default to a Maple Flash build.
-BOARD ?= nucleo
+BOARD ?= maple
 MEMORY_TARGET ?= flash
 
 # Chooses the bootloader, available: maple and robotis
-BOOTLOADER ?= none
+BOOTLOADER ?= maple
 
 # Does the board have external oscillator?
-HAS_EXTERNAL_OSC ?= no
+HAS_EXTERNAL_OSC ?= yes
 
 # This is the serial port used by robotis bootloader
 ROBOTIS_PORT ?= /dev/ttyACM0
@@ -141,7 +141,7 @@ ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))
 	$(shell rm -rf $(BUILD_PATH))
 endif
 
-sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
+sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin $(BUILD_PATH)/$(BOARD).hex
 
 clean:
 	rm -rf build

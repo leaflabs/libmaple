@@ -115,16 +115,26 @@ static void setup_clocks(void) {
     RCC_BASE->CFGR = 0x00000000;
     rcc_disable_css();
     rcc_turn_off_clk(RCC_CLK_PLL);
+#ifdef HAS_EXTERNAL_OSC
     rcc_turn_off_clk(RCC_CLK_HSE);
+#else
+    rcc_turn_off_clk(RCC_CLK_HSI);
+#endif
     wirish::priv::board_reset_pll();
     // Clear clock readiness interrupt flags and turn off clock
     // readiness interrupts.
     RCC_BASE->CIR = 0x00000000;
 
-    // Enable HSE, and wait until it's ready.
+    // Enable HSE/HSI, and wait until it's ready.
+#ifdef HAS_EXTERNAL_OSC
     rcc_turn_on_clk(RCC_CLK_HSE);
     while (!rcc_is_clk_ready(RCC_CLK_HSE))
         ;
+#else
+    rcc_turn_on_clk(RCC_CLK_HSI);
+    while (!rcc_is_clk_ready(RCC_CLK_HSI))
+        ;
+#endif
 
     // Configure AHBx, APBx, etc. prescalers and the main PLL.
     wirish::priv::board_setup_clock_prescalers();
@@ -148,6 +158,8 @@ static void setup_clocks(void) {
 #define USER_ADDR_ROM 0x08005000
 #elif defined(BOOTLOADER_robotis)
 #define USER_ADDR_ROM 0x08003000
+#elif defined(BOOTLOADER_none)
+#define USER_ADDR_ROM 0x08000000
 #endif
 #define USER_ADDR_RAM 0x20000C00
 extern char __text_start__;

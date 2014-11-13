@@ -107,16 +107,12 @@ void nvic_sys_reset();
 /**
  * Enables interrupts and configurable fault handlers (clear PRIMASK).
  */
-static __always_inline void nvic_globalirq_enable() {
-    asm volatile("cpsie i");
-}
+#define nvic_globalirq_enable() do { asm volatile("cpsie i"); } while (0)
 
 /**
  * Disable interrupts and configurable fault handlers (set PRIMASK).
  */
-static __always_inline void nvic_globalirq_disable() {
-    asm volatile("cpsid i");
-}
+#define nvic_globalirq_disable() do { asm volatile("cpsid i"); } while (0)
 
 /**
  * @brief Enable interrupt irq_num

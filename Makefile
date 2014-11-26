@@ -71,6 +71,9 @@ LDFLAGS  = $(TARGET_LDFLAGS) $(TOOLCHAIN_LDFLAGS) -mcpu=cortex-m3 -mthumb \
            -Xassembler --march=armv7-m -Wall
 #          -Xlinker --print-gc-sections \
 
+# You can uncomment and customize this line to specify the clocks you are using
+# GLOBAL_CFLAGS  += -DSTM32_PCLK1=18000000 -DSTM32_PCLK2=36000000 -DSTM32_DELAY_US_MULT=6
+
 ##
 ## Set all submodules here
 ##
@@ -135,7 +138,7 @@ ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))
 	$(shell rm -rf $(BUILD_PATH))
 endif
 
-sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
+sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin $(BUILD_PATH)/$(BOARD).hex
 
 clean:
 	rm -rf build

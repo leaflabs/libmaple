@@ -135,7 +135,7 @@ ifneq ($(PREV_BUILD_TYPE), $(MEMORY_TARGET))
 	$(shell rm -rf $(BUILD_PATH))
 endif
 
-sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin
+sketch: build-check MSG_INFO $(BUILD_PATH)/$(BOARD).bin $(BUILD_PATH)/$(BOARD).hex
 
 clean:
 	rm -rf build

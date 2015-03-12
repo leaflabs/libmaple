@@ -48,10 +48,16 @@
 /* USART pin numbers. */
 #define BOARD_USART1_TX_PIN     7
 #define BOARD_USART1_RX_PIN     8
+#define BOARD_USART1_RTS_PIN   -1
+#define BOARD_USART1_CTS_PIN   -1
 #define BOARD_USART2_TX_PIN     1
 #define BOARD_USART2_RX_PIN     0
+#define BOARD_USART2_RTS_PIN    2
+#define BOARD_USART2_CTS_PIN    3
 #define BOARD_USART3_TX_PIN     29
 #define BOARD_USART3_RX_PIN     30
+#define BOARD_USART3_RTS_PIN    33
+#define BOARD_USART3_CTS_PIN    32
 
 /* Number of SPI ports broken out to headers. */
 #define BOARD_NR_SPI            2

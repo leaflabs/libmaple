@@ -50,14 +50,19 @@
 
 struct usart_dev;
 
+#define USART_FLOW_CONTROL 0x1
+
 class HardwareSerial : public Print {
 public:
     HardwareSerial(struct usart_dev *usart_device,
                    uint8 tx_pin,
-                   uint8 rx_pin);
+                   uint8 rx_pin,
+                   uint8 rts_pin,
+                   uint8 cts_pin);
 
     /* Set up/tear down */
     void begin(uint32 baud);
+    void begin(uint32 baud, int flags);
     void end(void);
 
     /* I/O */
@@ -78,6 +83,8 @@ private:
     struct usart_dev *usart_device;
     uint8 tx_pin;
     uint8 rx_pin;
+    uint8 rts_pin;
+    uint8 cts_pin;
 };
 
 #if BOARD_HAVE_USART1

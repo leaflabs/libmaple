@@ -49,7 +49,7 @@ void boardInit(void) {
     afio_remap(AFIO_REMAP_TIM2_FULL);
     afio_remap(AFIO_REMAP_TIM3_PARTIAL);
 }
-
+ 
 // Pin map: this lets the basic I/O functions (digitalWrite(),
 // analogRead(), pwmWrite()) translate from pin numbers to STM32
 // peripherals.

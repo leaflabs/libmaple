@@ -621,9 +621,6 @@ RECURSIVE              = YES
 # excluded from the INPUT source files. This way you can easily exclude a 
 # subdirectory from a directory tree whose root is specified with the INPUT tag.
 
-# We include the FreeRTOS sources. That's probably a mistake. Oh well.
-EXCLUDE                = ./libraries/FreeRTOS/
-
 # The EXCLUDE_SYMLINKS tag can be used select whether or not files or 
 # directories that are symbolic links (a Unix filesystem feature) are excluded 
 # from the input.

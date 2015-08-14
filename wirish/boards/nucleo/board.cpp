@@ -50,14 +50,6 @@ void boardInit(void) {
     afio_remap(AFIO_REMAP_TIM3_PARTIAL);
 }
 
-namespace wirish {
-namespace priv {
-static stm32f1_rcc_pll_data pll_data = {RCC_PLLMUL_9};
-rcc_clk w_board_pll_in_clk = RCC_CLK_HSI;
-rcc_pll_cfg w_board_pll_cfg = {RCC_PLLSRC_HSI_DIV_2, &pll_data};
-}
-}
-
 // Pin map: this lets the basic I/O functions (digitalWrite(),
 // analogRead(), pwmWrite()) translate from pin numbers to STM32
 // peripherals.

@@ -37,7 +37,7 @@
 #define _LIBMAPLE_STM32F1_FLASH_H_
 
 #ifdef __cplusplus
-extern "C"{
+extern "C" {
 #endif
 
 #include <libmaple/libmaple_types.h>
@@ -141,6 +141,21 @@ enum {
     FLASH_ICACHE     = 0x0,     /* Not available on STM32F1 */
     FLASH_DCACHE     = 0x0,     /* Not available on STM32F1 */
 };
+
+#ifdef STM32_HIGH_DENSITY
+#define FLASH_PAGE_SIZE 0x800
+#endif
+
+#ifndef STM32_HIGH_DENSITY
+#define FLASH_PAGE_SIZE 0x400
+#endif
+
+void flash_unlock();
+void flash_lock();
+uint8 flash_erase_page(uint32 page_address);
+uint8 flash_erase_pages(uint32 page_address, uint16 n);
+uint8 flash_write_word(uint32 address, uint32 word);
+uint16 flash_write(uint32 address, void *buf, uint16 n);
 
 #ifdef __cplusplus
 }

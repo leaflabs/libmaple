@@ -80,6 +80,7 @@ extern "C" {
 typedef struct i2c_msg {
     uint16 addr;                /**< Address */
 
+#define I2C_MSG_WRITE           0x0
 #define I2C_MSG_READ            0x1
 #define I2C_MSG_10BIT_ADDR      0x2
     /**
